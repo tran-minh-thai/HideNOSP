@@ -1,5 +1,10 @@
 # Giai đoạn 1: SC1 và SC2 trên dữ liệu thật
 
+> **Đã chạy lại ngày 12/09/2026 ở ℓ_max = 4**, sau khi `protocol.yaml` chốt giá trị đó, và toàn bộ
+> qua `tools/run.py` nên mỗi tệp mang dấu phiên bản `2f63b567ccf1`. Bảng ρ_rep và β thay thế nằm ở
+> `khao_sat_bo_du_lieu.md`. Bộ số ℓ_max = 3 dưới đây giữ lại để đối chiếu; nó **không còn khớp
+> giao thức** vì §11.4 dòng 5 đòi mọi phương pháp dùng cùng ℓ_max.
+
 Ngày chạy: 2026-09-12. Máy: máy phát triển (mọi số ở đây bất biến theo máy, nên điều đó không
 ảnh hưởng). Mã: xem dấu định danh ở đầu từng tệp CSV trong thư mục này.
 

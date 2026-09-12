@@ -34,6 +34,38 @@ nếu cần thì rời rạc hoá một bộ của kho UCR.
 Cột cuối tách theo μ(P): trung bình ρ_rep của mẫu **không lặp mục** (μ = 1, lớp mà P1 và P2 áp
 dụng) so với mẫu **lặp mục** (μ ≥ 2, lớp chỉ có cận P3).
 
+> **Đo lại ngày 12/09/2026 ở ℓ_max = 4.** Bộ số dưới đây đo ở ℓ_max = 3 và lấy **trung bình**.
+> Sau khi `protocol.yaml` chốt ℓ_max = 4, toàn bộ SC2 đã chạy lại trên 25 cấu hình và lấy
+> **trung vị** theo đúng quy ước đã chốt. Bảng thay thế nằm ngay dưới; bảng cũ giữ lại để đối
+> chiếu. Kết luận phân nhóm **không đổi**; chi tiết đổi thì ghi rõ ở phần sau.
+
+### Bảng thay thế: ℓ_max = 4, trung vị, 25 cấu hình
+
+| Bộ | Cấu hình | Mẫu | ρ_rep trung vị (nhỏ–lớn) | β trung vị (nhỏ–lớn) | ρ_rep μ=1 / μ≥2 |
+|---|---|---|---|---|---|
+| **dna_mt745584** | 6 | 84 | **0,873** (0,803–0,940) | 0,223 (0,016–0,681) | 0,845 / 0,878 |
+| **msnbc** | 9 | 180 | **0,324** (0,021–0,684) | 0,210 (0,005–0,736) | 0,218 / 0,364 |
+| leviathan | 2 | 38 | 0,130 (0,068–0,964) | **0,574** (0,018–0,825) | 0,112 / 0,360 |
+| bible | 2 | 40 | 0,127 (0,001–0,408) | **0,549** (0,001–0,828) | 0,117 / 0,238 |
+| fifa | 2 | 28 | 0,008 (0,003–0,960) | 0,316 (0,055–0,467) | 0,008 / **0,952** |
+| sign | 2 | 23 | 0,000 | 0,172 (0,000–0,480) | 0,000 / — |
+| bms1 | 2 | 40 | 0,000 | 0,053 (0,000–0,582) | 0,000 / — |
+
+Ba điều đổi so với bộ số ℓ_max = 3:
+
+1. **Phân nhóm không lật.** Hai ngưỡng đã chốt (0,20 và 0,05) vẫn nằm trong khe thưa của phân bố:
+   khe 0,010 → 0,120 rộng 0,110, và khe 0,181 → 0,265 rộng 0,084.
+2. **msnbc σ = 1000 rơi xuống nhóm trung gian** (ρ_rep 0,172–0,181 < 0,20). MSNBC chỉ là bộ nhóm
+   chính từ σ = 2000 trở lên. Chi tiết này chỉ lộ ra vì ngưỡng được áp trên **cấu hình**.
+3. **Chiều của so sánh μ(P) đảo lại.** Ở ℓ_max = 3 lấy trung bình, dna cho μ=1 (0,806) cao hơn
+   μ≥2 (0,773). Ở ℓ_max = 4 lấy trung vị thì ngược: 0,845 so với 0,878. Kết luận giữ phạm vi
+   μ(P) = 1 **không đổi**, nhưng lý do đổi từ "lớp không lặp mục lặp nhiều hơn" thành "hai lớp gần
+   bằng nhau trên bộ mạnh nhất, chênh 0,033". Xem đính chính ở `../config/preregistration.md` §1.
+   Thêm một quan sát mới: trên FIFA, mẫu lặp mục đạt trung vị ρ_rep **0,952** so với 0,008 của mẫu
+   không lặp mục — toàn bộ tỉ lệ lặp của bộ đó nằm ở lớp lặp mục.
+
+### Bảng cũ, ℓ_max = 3, trung bình (giữ để đối chiếu)
+
 | Bộ | Cấu hình | Mẫu | ρ_rep nhỏ/tb/lớn | β nhỏ/tb/lớn | ρ_rep μ=1 / μ≥2 |
 |---|---|---|---|---|---|
 | **dna_mt745584** | 3 | 30 | **0,602 / 0,786 / 0,924** | 0,225 / 0,467 / 0,722 | **0,806 / 0,773** |

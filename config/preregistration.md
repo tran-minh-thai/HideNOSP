@@ -25,9 +25,28 @@ việc đó gây thiên lệch là δ_L và hai biên tương đương ở §3; 
 P6(b) và lời giải chính xác đều đứng vững.
 
 Mẫu lặp mục (μ(P) ≥ 2) báo cáo ở một mục riêng, dùng cận P3 và bộ giải chính xác trên thực thể
-nhỏ, và khai rõ độ khó là câu hỏi mở. Phần hạn chế phải ghi rằng trên MSNBC thì lớp lặp mục mới
-là lớp có tỉ lệ lặp cao hơn (ρ_rep trung bình 0,434 so với 0,218), còn trên bộ gen MT745584 thì
-ngược lại (0,806 so với 0,773).
+nhỏ, và khai rõ độ khó là câu hỏi mở.
+
+Phần hạn chế phải ghi đúng con số sau, đo ở ℓ_max = 4 và lấy trung vị:
+
+| Bộ | ρ_rep μ(P) = 1 | ρ_rep μ(P) ≥ 2 | Chênh |
+|---|---|---|---|
+| dna_mt745584 | 0,845 | 0,878 | 0,033 |
+| msnbc | 0,218 | 0,364 | 0,146 |
+| fifa | 0,008 | 0,952 | 0,944 |
+
+Đọc bảng: trên **cả ba** bộ, lớp lặp mục có tỉ lệ lặp cao hơn. Điều biện minh cho việc giữ phạm
+vi ở μ(P) = 1 **không** phải là lớp không lặp mục lặp nhiều hơn, mà là trên bộ nhóm chính mạnh
+nhất (dna) hai lớp **gần bằng nhau**: 0,845 so với 0,878, chênh 0,033. Nghĩa là ở đó, thu phạm vi
+về μ(P) = 1 gần như không mất gì. Trên MSNBC thì cái giá lớn hơn (chênh 0,146), và trên FIFA thì
+toàn bộ tỉ lệ lặp nằm ở lớp lặp mục (0,952 so với 0,008) — nhưng FIFA là đối chứng suy biến nên
+điều đó không đổi kết luận.
+
+> **Đính chính.** Bản đầu của tệp này ghi "trên bộ gen MT745584 thì ngược lại (0,806 so với
+> 0,773)", tức lớp không lặp mục lặp nhiều hơn. Con số đó đo ở ℓ_max = 3 và lấy **trung bình**;
+> đo lại ở ℓ_max = 4 đã chốt và lấy **trung vị** thì chiều đảo lại. Kết luận giữ μ(P) = 1 không
+> đổi, nhưng lý do biện minh đổi từ "cao hơn" thành "gần bằng nhau", và phần hạn chế phải viết
+> theo bảng trên chứ không theo câu cũ.
 
 Trọng số nút khi μ(P) ≥ 2: gán trọng số vị trí cho mọi nút của vị trí đó. Đây là **lựa chọn cài
 đặt**, không phải hệ quả của mệnh đề nào, vì P1 và P2 không áp dụng ở đó.
@@ -110,17 +129,36 @@ Không dùng trung bình, vì phân bố lệch: msnbc [0,3] σ=2000 trải 0,10
 **Nhóm trung gian không dùng để kiểm H2 hay H3.** Nó chỉ để minh hoạ rằng ρ_rep và β là hai đại
 lượng độc lập: bible và leviathan có ρ_rep quanh 0,15 nhưng β tới 0,50–0,61.
 
-**Vì sao 0,05 và 0,20.** Trung vị ρ_rep đo được, sắp tăng dần: 0,000 (sign, bms1), 0,008 (fifa),
-0,052 (bike), 0,153 (bible), 0,154 (leviathan), 0,323 (msnbc), 0,786 (dna). Hai ngưỡng rơi vào hai
-**khe thưa** của phân bố, nên phân nhóm không nhạy với việc xê dịch ngưỡng vài phần trăm.
+**Vì sao 0,05 và 0,20.** Trung vị ρ_rep của 25 cấu hình, đo ở ℓ_max = 4, sắp tăng dần cho thấy
+hai **khe thưa** rõ rệt:
+
+- từ 0,010 (fifa) nhảy lên 0,120 (bible) — khe rộng 0,110, ngưỡng **0,05** nằm giữa;
+- từ 0,181 (msnbc σ=1000) nhảy lên 0,265 (msnbc σ=2000) — khe rộng 0,084, ngưỡng **0,20** nằm giữa.
+
+Ngưỡng đặt ở chỗ thưa nên phân nhóm không nhạy với việc xê dịch vài phần trăm.
+
+> **Ghi chú về việc đo lại.** Hai ngưỡng này chốt dựa trên số đo ở ℓ_max = 3. Sau khi protocol
+> chốt ℓ_max = 4, toàn bộ SC2 đã chạy lại và hai ngưỡng **vẫn nằm trong khe thưa**, nên chúng
+> không bị sửa. Đây là đo lại để kiểm, không phải chọn lại sau khi thấy kết quả.
 
 **Phân nhóm suy ra từ dữ liệu đã đo:**
 
-| Nhóm | Bộ |
-|---|---|
-| Chính | **dna_mt745584, msnbc** |
-| Trung gian | bible, leviathan |
-| Suy biến | sign, bms1, fifa, bike |
+Áp trên **cấu hình** (25 cấu hình, ℓ_max = 4, trung vị):
+
+| Nhóm | Số cấu hình | Gồm |
+|---|---|---|
+| Chính | 12 | dna ở cả 6 cấu hình; msnbc ở σ ∈ {2000, 5000} |
+| Trung gian | 7 | **msnbc σ=1000** (cả ba khoảng cách), bible, leviathan |
+| Suy biến | 6 | sign, bms1, fifa |
+
+**Lưu ý quan trọng nảy ra từ việc áp ngưỡng trên cấu hình:** msnbc ở σ = 1000 có trung vị ρ_rep
+0,172–0,181, tức **dưới** 0,20, nên ba cấu hình đó thuộc nhóm trung gian chứ không phải nhóm chính.
+MSNBC chỉ là bộ nhóm chính từ σ = 2000 trở lên. Nếu áp ngưỡng trên "bộ" thay vì trên "cấu hình"
+thì chi tiết này biến mất — đó chính là lý do đơn vị áp ngưỡng được chốt là cấu hình.
+
+Ngoài ra, mọi cấu hình khoảng cách [0,10] đều có β ≤ 0,085 (dna σ=4000 thì β = 0,044), tức thuộc
+**đối chứng ràng buộc suy biến** dù ρ_rep rất cao. Chúng dùng để cho thấy ràng buộc khoảng cách
+mất hiệu lực khi nới rộng, không dùng làm bằng chứng cho đóng góp về ràng buộc.
 
 Phân nhóm này chốt tại đây và **không sửa** sau khi thấy kết quả SC3 (quy tắc 2.3.10). Bộ dữ liệu
 mới thêm sau ngày chốt phải được xếp nhóm bằng đúng hai ngưỡng trên, trước khi chạy SC3 trên nó.

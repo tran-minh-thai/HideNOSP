@@ -1,0 +1,98 @@
+# Bảng giao thức 9 dòng (§11.7, quy tắc 2.6.1).
+# Quy tắc 2.6.2: điền ngay ở bản nháp đầu, không đợi tới lúc nộp.
+# Ô nào mã tự sinh được thì đã có sẵn ở đầu mỗi tệp kết quả; chép từ đó sang.
+# Ô để trống có nghĩa là CHƯA CHỐT, không phải là không áp dụng.
+
+dong_1_nguong_va_pham_vi:
+  # Dải sigma, l_max, [g-, g+] và |S| cho TỪNG bộ dữ liệu.
+  mac_dinh_ma:
+    l_max: 3
+    gap: "[0, 3]"
+    sensitive_size: [1, 5, 10, 20]   # §11.5
+    sensitive_sets_moi_o: 20         # §11.5
+  theo_bo:
+    msnbc:     {sigma: null, l_max: null, gap: null, sensitive_size: null}
+    fifa:      {sigma: null, l_max: null, gap: null, sensitive_size: null}
+    sign:      {sigma: null, l_max: null, gap: null, sensitive_size: null}
+    dna:       {sigma: null, l_max: null, gap: null, sensitive_size: null}
+    bms_web_1: {sigma: null, l_max: null, gap: null, sensitive_size: null}
+    kosarak:   {sigma: null, l_max: null, gap: null, sensitive_size: null}
+    trucks:    {sigma: null, l_max: null, gap: null, sensitive_size: null}
+    tong_hop:  {sigma: null, l_max: null, gap: null, sensitive_size: null}
+  ghi_chu: >
+    sigma khai cả dạng tuyệt đối lẫn tỉ lệ theo tổng sup_NO (§11.5). SC6 quyết định giữ tỉ lệ
+    hay giữ tuyệt đối, và bài phải nói rõ.
+
+dong_2_nguong_epsilon_cua_B_eps:
+  mac_dinh_ma: 0.5
+  theo_bo:
+    msnbc: null
+    fifa: null
+    sign: null
+    dna: null
+    bms_web_1: null
+    kosarak: null
+    trucks: null
+    tong_hop: null
+
+dong_3_hat_giong:
+  lay_mau_tap_nhay_cam: 2026     # mặc định của Runner, đổi bằng --seed
+  sinh_du_lieu_tong_hop: 2026
+  baseline_ngau_nhien: 2026      # HH, HR, RH, RR dùng chung hạt giống này
+  giai_thuat_di_truyen: null
+
+dong_4_tham_so_sinh_du_lieu_tong_hop:
+  phan_phoi_muc: "đều trên bảng chữ cái"
+  kich_thuoc_bang_chu_cai: null
+  so_chuoi: null
+  do_dai_chuoi: null
+  rho_rep_muc_tieu: null
+  beta_muc_tieu: null
+  ghi_chu: >
+    Chỉ báo cáo rho_rep và beta ĐO ĐƯỢC (SyntheticGenerator.measure), không báo cáo giá trị
+    mục tiêu như thể đã đạt.
+
+dong_5_moi_truong_chay:
+  jdk: null            # in sẵn ở đầu mỗi tệp kết quả, ví dụ "17.0.19 OpenJDK 64-Bit Server VM"
+  co_xms: null
+  co_xmx: null
+  he_dieu_hanh: null
+  cpu: null
+  ram: null
+  ten_may_do: null     # truyền vào bằng --machine; lần chạy gắn "dev" không được ghi số thời gian
+
+dong_6_do_bo_nho:
+  cach_do: "heap đã dùng, lấy mẫu từ trong tiến trình (util.MemoryProbe)"
+  chu_ky_lay_mau_ms: 50
+  bo_nho_thuong_tru: null
+  ghi_chu: >
+    §11.7 đòi RSS tối đa của tiến trình. JVM không cho biết RSS, nên phải có script bọc ngoài
+    ghi lại; chưa có (TODO trong util.MemoryProbe). Bảng nào in số bộ nhớ phải nói rõ đang in
+    heap hay RSS.
+
+dong_7_gioi_han_thoi_gian:
+  gioi_han_moi_lan_chay_giay: null
+  ma_qua_thoi_gian: "OT"     # §3.3.14
+  ma_het_bo_nho: "OOM"
+
+dong_8_so_lan_lap_va_tong_hop:
+  duoi_1_giay: 15
+  tu_1_den_10_giay: 10
+  tu_10_den_120_giay: 5
+  tren_120_giay: 3
+  tong_hop: "trung bình ± độ lệch chuẩn; đo song song thời gian treo tường và thời gian CPU"
+  ghi_chu: "util.Timing.repetitionsFor cài đúng bảng này (§11.6)."
+
+dong_9_quy_trinh_lam_nong:
+  so_lan_lam_nong: null
+  ghi_chu: >
+    util.Timing.measure nhận số lần làm nóng làm tham số và bỏ các lần đó. Chốt con số trước
+    khi chạy SC6 và ghi vào đây.
+
+# Ngoài 9 dòng: các quyết định cài đặt phải khai (mục 6 của RUNBOOK.md).
+quyet_dinh_cai_dat:
+  thang_trong_so: 1000000        # CostCurve.SCALE
+  quan_he_S_cong: "chuỗi con trên dãy mục"
+  tia_theo_tien_to_khi_khai_pha: true
+  ngu_nghia_mask: "-1, không khớp mục nào"
+  tuyen_tinh_hoa_tap_muc: "sắp theo mã mục tăng dần; tỉ lệ vị trí bị ảnh hưởng ghi cạnh bộ dữ liệu"

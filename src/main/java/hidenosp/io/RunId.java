@@ -8,6 +8,11 @@ import java.time.format.DateTimeFormatter;
  * The run stamp required by rule 2.6.8: every result file carries one, so a table in the paper can
  * be traced back to the run that produced it.
  *
+ * <p>The timestamp carries milliseconds. Second resolution was not enough: two fast scenarios run
+ * back to back landed in the same second and the second one silently overwrote the first, losing a
+ * whole configuration out of a sweep without any error. Milliseconds make that unlikely, and
+ * {@link ResultSink} refuses to overwrite an existing file, which makes it impossible.
+ *
  * <p>The stamp holds the time in UTC, the host, the code revision and the seed. The revision is
  * read from the environment variable HIDENOSP_REVISION when present, so a continuous run can pass
  * the commit hash in without this class shelling out to git.
@@ -15,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 public record RunId(String timestamp, String host, String revision, long seed, String machineLabel) {
 
     private static final DateTimeFormatter FORMAT =
-            DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss").withZone(ZoneOffset.UTC);
+            DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss-SSS").withZone(ZoneOffset.UTC);
 
     /**
      * @param machineLabel the declared measuring machine of row 5 to 7 of the protocol table, or

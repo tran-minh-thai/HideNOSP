@@ -75,6 +75,8 @@ public final class ResultSink {
      *
      * @throws IllegalArgumentException when the columns do not match the kind, or when a timed file
      *     is opened from a run that is not stamped with a declared measuring machine
+     * @throws IllegalStateException when a file with that name already exists; overwriting it would
+     *     lose a result silently
      */
     public CsvWriter open(Kind kind, String scenario, String[] header) {
         if (probeMode && kind == Kind.INVARIANT) {
@@ -97,6 +99,11 @@ public final class ResultSink {
         }
         Path path = root.resolve(kind.directory())
                 .resolve(scenario + "_" + runId.stamp() + ".csv");
+        if (java.nio.file.Files.exists(path)) {
+            throw new IllegalStateException("a result file already exists at " + path
+                    + "; refusing to overwrite it. Two runs sharing one stamp would lose a result "
+                    + "silently, which is how a sweep can drop a configuration without any error.");
+        }
         String[] comments = runId.headerLines();
         String[] withKind = new String[comments.length + 2];
         System.arraycopy(comments, 0, withKind, 0, comments.length);

@@ -223,11 +223,16 @@ thì mẫu độ dài 4 không nằm trong F_σ nên không lấy mẫu được
 | leviathan | 500 | 106 | 53,6 | 108 | 60,6 |
 | bms1 | 100 | 652 | 6,7 | 662 | 7,4 |
 | sign | 200 | 95 | 2,8 | 95 | 2,7 |
+| fifa | 3000 | 78 | 123,0 | 79 | 123,6 |
 
-Chấp nhận được ở mọi bộ đã đo. Trên sign không có mẫu độ dài 4 nào phổ biến (95 → 95), và trên
-leviathan chỉ thêm 2 mẫu — với chuỗi ngắn hoặc bảng chữ cái lớn thì ℓ_max = 4 gần như miễn phí.
-FIFA (\|Σ\| = 2990) chưa đo xong; nếu quá đắt thì khai riêng cho bộ đó, vì FIFA là đối chứng
-suy biến chứ không phải nhóm chính.
+Rẻ ở **cả sáu bộ**, không có ngoại lệ. Trên sign không có mẫu độ dài 4 nào phổ biến (95 → 95),
+fifa chỉ thêm một mẫu và tốn thêm 0,6 giây, leviathan thêm hai mẫu. Lý do: chi phí khai phá dồn
+ở **mức 2**, nơi số ứng viên là |L₁| × |Σ|; tới mức 4 thì phép chiếu đã thu hẹp tập chuỗi phải
+quét nên mở rộng gần như miễn phí. Chỗ đắt nhất là fifa với |Σ| = 2990, và cái đắt đó đã phải trả
+ngay ở ℓ_max = 3.
+
+Nói cách khác, lý lẽ "ℓ_max = 3 cho rẻ" không đứng: nó không rẻ hơn đáng kể, mà lại làm mẫu độ
+dài 4 của §11.5 không lấy mẫu được.
 
 *σ cho dna phải ≥ 2500.* Với |Σ| = 4 và ℓ_max = 3, không gian mẫu chỉ có 4 + 16 + 64 = 84 mẫu,
 và ở σ = 1000 thì |F_σ| = **84**, tức **mọi** mẫu đều phổ biến. Khi F_σ là toàn bộ không gian,

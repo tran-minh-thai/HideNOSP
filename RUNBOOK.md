@@ -314,5 +314,7 @@ bản thảo hoặc trong bảng giao thức.
 - `PathCounts` bão hoà ở `Long.MAX_VALUE / 4`. Giá trị bão hoà vẫn dùng làm khoá so sánh được
   (đó là tất cả những gì heuristic của [R20] cần) nhưng **không được in ra như số đếm chính xác**;
   `PathCounts.isExact()` cho biết đã bão hoà hay chưa.
-- `Metrics.evaluate` khai phá `F_σ` hai lần cho mỗi thực thể. Với bộ dữ liệu lớn phải thêm bộ nhớ
-  đệm cho `F_σ(D)`, vốn không đổi trong suốt một lần quét tập nhạy cảm.
+- Một kịch bản quét **phải** dựng một `Metrics.Context` cho mỗi cấu hình (bộ, σ, khoảng cách,
+  ℓ_max) và dùng lại nó, thay vì gọi `Metrics.evaluate` tĩnh. Hàm tĩnh khai phá lại `F_σ(D)` mỗi
+  lần gọi; đo được trên MSNBC là 74,7 giây một lượt so với 1,83 giây khi có bộ đệm, tức chênh 41
+  lần. `Metrics.evaluate` chỉ dành cho một lần đánh giá lẻ hoặc cho test.

@@ -75,7 +75,10 @@ public final class Sc3MainComparison implements Scenario {
         String methodList = options.get("methods", "cut-hide,cut-hide-uniform,occurrence,HH,RR");
 
         SequenceDatabase database = load(options, seed);
-        Map<Pattern, Long> frequent = FrequentPatterns.mine(database, gap, maxPatternLength, sigma);
+        // F_sigma(D) khai pha MOT lan cho ca cau hinh, khong phai moi lan danh gia: xem Javadoc
+        // cua Metrics.Context.
+        Metrics.Context context = Metrics.Context.of(database, gap, maxPatternLength, sigma);
+        Map<Pattern, Long> frequent = context.frequent();
         if (frequent.isEmpty()) {
             throw new IllegalStateException("F_sigma(D) is empty at sigma = " + sigma
                     + "; lower sigma or widen the gap before running SC3");
@@ -96,7 +99,7 @@ public final class Sc3MainComparison implements Scenario {
                 for (String name : methodList.split(",")) {
                     HidingMethod method = create(name.trim(), problem, frequent, sigma, epsilon, seed);
                     Sanitization sanitization = method.run(problem);
-                    Metrics.Row row = Metrics.evaluate(problem, sanitization);
+                    Metrics.Row row = context.evaluateMasking(problem, sanitization);
                     writer.writeRow(describe(database), gap.toString(), Integer.toString(sigma),
                             sensitive.toString(), method.name(),
                             format(row.hidingFailure()), Integer.toString(row.lost()),

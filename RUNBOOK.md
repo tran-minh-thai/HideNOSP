@@ -228,6 +228,10 @@ tới lúc nộp. Những ô mã sinh ra được (phiên bản JDK, cỡ heap, 
 `config/preregistration.md` chốt ngưỡng hiệu ứng δ_L và phép kiểm **trước** khi chạy SC3
 (quy tắc 2.4.7). Chưa chốt thì chưa chạy SC3 để lấy kết quả.
 
+`config/quyet_dinh_can_chot.md` liệt kê **mọi** điểm còn phải quyết định của dự án, gộp theo chủ
+đề, tách nhóm chặn SC3 và nhóm chặn lúc nộp. Sinh từ một đợt rà mười nguồn rồi thẩm định lại từng
+điểm; `tools/gop_quyet_dinh.py` gộp kết quả thành tài liệu đó.
+
 ---
 
 ## 7. Những quyết định cài đặt phải khai trong bài

@@ -225,7 +225,7 @@ def weighted_stress(seeds=(1, 2, 3, 4, 5), per_seed=4000):
     H3: for each distinct weight lam, take a minimum-cardinality cut minimising sum(min(w, lam));
     UB = best sum of the F - t lightest true weights over these cuts;
     LB = max over lam of (sum(min(w, lam)) over that cut - t*lam), a valid lower bound."""
-    runs = h1b = h2b = h3b = cert = cert0 = 0; ex = {}
+    runs = h1b = h2b = h3b = h3b0 = cert = cert0 = 0; ex = {}
     for seed in seeds:
         for law in (0, 1):
             rng = random.Random(1000 * seed + law)
@@ -255,14 +255,17 @@ def weighted_stress(seeds=(1, 2, 3, 4, 5), per_seed=4000):
                     lb0, cuts0 = lambda_sweep(P, S, gmin, gmax, nodes, w, t, F, refine=False)
                     lb, cuts = lambda_sweep(P, S, gmin, gmax, nodes, w, t, F, refine=True)
                     ub = min(sum(sorted(w[v] for v in C)[:k]) for C in cuts)
+                    ub0 = min(sum(sorted(w[v] for v in C)[:k]) for C in cuts0)
                     assert lb <= opt + 1e-9 and lb0 <= lb + 1e-9
-                    runs += 1; h1b += h1 > opt; h2b += h2 > opt; h3b += ub > opt
+                    runs += 1; h1b += h1 > opt; h2b += h2 > opt
+                    h3b += ub > opt; h3b0 += ub0 > opt
                     cert += ub - lb < 1 - 1e-9          # integer weights: LB rounded up equals UB
                     cert0 += ub - lb0 < 1 - 1e-9
                     inst = (''.join(P), ''.join(S), gmin, gmax, t, opt, {(j + 1, i + 1): w[(j, i)] for (j, i) in nodes})
                     if ub > opt and 'H3' not in ex: ex['H3'] = inst + (ub,)
                     if t > 0 and h2 > opt and 'H2' not in ex: ex['H2'] = inst + (h2,)
-    print(f"Weighted stress: {runs} runs (0 < t < F); suboptimal: H1 {h1b}, H2 {h2b}, lambda sweep {h3b}")
+    print(f"Weighted stress: {runs} runs (0 < t < F); suboptimal: H1 {h1b}, H2 {h2b}, "
+          f"lambda sweep {h3b0} scanning weight values only, {h3b} with exact maximisation of h")
     print(f"   certified optimal (ceil(LB) = UB): {cert} with exact maximisation of h, {cert0} scanning weight values only")
     print("   lambda-sweep counterexample (P,S,gmin,gmax,t,opt,weights[(level,pos)],UB):", ex.get('H3'))
     print("   H2 counterexample with t > 0 (P,S,gmin,gmax,t,opt,weights,H2):", ex.get('H2'))

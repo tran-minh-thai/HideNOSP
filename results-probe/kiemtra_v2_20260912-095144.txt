@@ -1,0 +1,20 @@
+L0: 1200 instances, 0 mismatches (max flow vs brute-force sup_NO, min cut size)
+L5: 1683 nodes, 0 mismatches (vital vs member of some minimum cut)
+P1: 912 (instance, t) pairs, 0 violations
+P2: 2220 optimal-size feasible sets, 0 not inside a minimum cut
+Greedy vital removal: 912 runs, 0 used more than F - t masks
+Weighted t>0: 912 runs; H1 (min-weight min cut, lightest F-t) suboptimal in 0; H2 (lightest vital node, repeated) suboptimal in 0
+Cost curve c(k): 529 instances, 0 non-convex
+L0 extended (repeated items, m = 1, gmax = inf): 1500 instances, 0 mismatches
+P3: 152 repeated-item (instance, t) pairs; lower bound attained with k < F - t in 17; example ('aa', 'abdacaa', 0, 2, 3, 0, 2)
+H1/H2 counterexample: P = ca, S = babbacbcaacb, gap [0,2]; F = 2
+   k = 1: optimum weight 1 at positions [10]
+   k = 2: optimum weight 53 at positions [6, 8]
+Abul local heuristic vs sup_NO (leftmost tie-break): 10366 sequences, more marks than optimum in 54
+Abul local heuristic vs sup_NO (every tie-break): 21016 sequences, more marks than optimum in 18
+   example P = abc, T = ababcbc, gap [0,3]: optimum 2 heuristic 3
+Weighted stress: 14867 runs (0 < t < F); suboptimal: H1 436, H2 120, lambda sweep 2 scanning weight values only, 0 with exact maximisation of h
+   certified optimal (ceil(LB) = UB): 14864 with exact maximisation of h, 14862 scanning weight values only
+   lambda-sweep counterexample (P,S,gmin,gmax,t,opt,weights[(level,pos)],UB): None
+   H2 counterexample with t > 0 (P,S,gmin,gmax,t,opt,weights,H2): ('ac', 'bbbacabaabacc', 0, 2, 1, 2, {(1, 4): 2, (1, 6): 100, (1, 8): 100, (1, 9): 1, (1, 11): 2, (2, 5): 2, (2, 12): 1, (2, 13): 1}, 3)
+Cost curve c(k), F >= 3: 5931 instances, 3 non-convex; example (P,S,gmin,gmax,c,weights[(level,pos)]): ('ab', 'babcaabbababc', 1, 5, [0, 1, 4, 9, 12], {(1, 2): 100, (1, 5): 3, (1, 6): 50, (1, 9): 1, (1, 11): 2, (2, 1): 2, (2, 3): 1, (2, 7): 3, (2, 8): 3, (2, 10): 3, (2, 12): 3})

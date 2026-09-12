@@ -76,8 +76,11 @@ cd probe && python oldprob.py > ../results-probe/oldprob_$(date -u +%Y%m%d-%H%M%
 ```
 
 `probe/*.py` nạp `kiemtra_v2` qua `sys.path.insert(0, '..')`, nên phải chạy từ trong `probe/`.
-`probe/sideeffect.py` cần `numpy`. Các script này vét cạn trên tập con nên chạy lâu; chúng là dò tìm,
-không nằm trong đường chạy của bài.
+`probe/sideeffect.py` cần `numpy`. Lô chạy lại gần nhất mất khoảng ba phút cho `kiemtra_v2.py`
+và vài giây cho bốn script còn lại; kết quả và bảng đối chiếu với §8.2 nằm ở `results-probe/`.
+
+Không dùng `>>` để ghi thêm vào tệp nằm trên ổ Google Drive: ổ ảo trả kích thước tệp cũ nên lần
+ghi thêm đè vào giữa tệp. Ghi ra đĩa cục bộ rồi chép sang, hoặc chỉ dùng `>`.
 
 ---
 

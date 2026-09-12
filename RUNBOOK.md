@@ -36,7 +36,20 @@ trong bốn ví dụ hỏng thì **bài** hỏng chứ không chỉ mã: các co
 java -cp target/classes hidenosp.exp.Runner
 ```
 
-lệnh trên in danh sách kịch bản và tuỳ chọn của từng cái. Ví dụ:
+lệnh trên in danh sách kịch bản và tuỳ chọn của từng cái.
+
+**Lấy số vào bài thì gọi qua `tools/run.py`, không gọi thẳng `Runner`:**
+
+```bash
+python tools/run.py SC1 --trials=1500 --seed=2026
+```
+
+Script bọc này dịch lại, kiểm cây làm việc sạch, rồi đặt `HIDENOSP_REVISION` bằng sha commit
+trước khi gọi `Runner`. Gọi thẳng `Runner` thì tệp kết quả mang dấu `unversioned` và không truy
+ngược được về commit nào sinh ra nó, tức vi phạm quy tắc 2.6.8 và điều đã chốt ở
+`config/protocol.yaml`. Gọi thẳng chỉ dùng khi chạy thử cho vui.
+
+Ví dụ gọi thẳng để xem nhanh:
 
 ```bash
 java -cp target/classes hidenosp.exp.Runner SC1 --trials=1200 --seed=7
@@ -58,6 +71,18 @@ Tuỳ chọn dùng chung cho mọi kịch bản:
 | `--machine` | `dev` | Tên máy đo đã khai. Lần chạy gắn `dev` **không được** ghi số đo thời gian |
 | `--root` | `.` | Thư mục chứa ba thư mục kết quả |
 | `--probe` | tắt | Đẩy tệp bất biến sang `results-probe/` thay vì `results-invariant/` |
+
+Riêng `tools/run.py` nhận thêm ba tuỳ chọn của chính nó, không chuyển tiếp cho `Runner`:
+
+| Tuỳ chọn | Mặc định | Ý nghĩa |
+|---|---|---|
+| `--jvm=<cờ>` | `-Xmx4g` | Cờ cho JVM; lặp lại được |
+| `--allow-dirty` | tắt | Cho chạy khi cây làm việc còn sửa đổi chưa commit |
+| `--no-build` | tắt | Bỏ qua bước dịch lại |
+
+Cây làm việc còn sửa đổi chưa commit thì script **từ chối chạy**, trừ khi lần chạy đó có `--probe`
+(số dò tìm, được phép) hoặc bạn khai rõ `--allow-dirty`. Cả hai trường hợp đều đóng dấu hậu tố
+`-dirty`, để một tệp kết quả không bao giờ nhận nhầm một sha sạch.
 
 Khi chưa có bộ dữ liệu thật, SC2 và SC3 chạy trên một cơ sở dữ liệu tổng hợp nhỏ có sẵn trong mã.
 **Mọi lần chạy như vậy phải kèm `--probe`**: đó là số đo dò tìm, không phải kết quả (§8.2).
@@ -103,7 +128,7 @@ riêng thì truyền tên: `python tools/fetch_datasets.py msnbc`.
 ### Bước 1. SC1 phải xanh trước đã
 
 ```bash
-java -cp target/classes hidenosp.exp.Runner SC1 --trials=1500 --seed=2026
+python tools/run.py SC1 --trials=1500 --seed=2026
 ```
 
 Kết quả chấp nhận được duy nhất là **0 ca lệch**. SC1 đối chiếu luồng cực đại với vét cạn, kiểm
@@ -113,19 +138,19 @@ Chưa xanh thì mọi con số sau đó vô nghĩa.
 ### Bước 2. SC2 trên từng bộ và từng σ
 
 ```bash
-java -Xmx4g -cp target/classes hidenosp.exp.Runner SC2 --dataset=datasets/msnbc.txt --format=SPMF --sigma=2000 --gmin=0 --gmax=3 --maxPatternLength=3 --patterns=12
+python tools/run.py SC2 --dataset=datasets/msnbc.txt --format=SPMF --sigma=2000 --gmin=0 --gmax=3 --maxPatternLength=4 --patterns=12
 ```
 
 ```bash
-java -Xmx4g -cp target/classes hidenosp.exp.Runner SC2 --dataset=datasets/sign.txt --format=SPMF --sigma=200 --gmin=0 --gmax=3 --maxPatternLength=3 --patterns=10
+python tools/run.py SC2 --dataset=datasets/sign.txt --format=SPMF --sigma=200 --gmin=0 --gmax=3 --maxPatternLength=4 --patterns=10
 ```
 
 ```bash
-java -Xmx4g -cp target/classes hidenosp.exp.Runner SC2 --dataset=datasets/bms1.txt --format=SPMF --sigma=100 --gmin=0 --gmax=3 --maxPatternLength=3 --patterns=10
+python tools/run.py SC2 --dataset=datasets/bms1.txt --format=SPMF --sigma=100 --gmin=0 --gmax=3 --maxPatternLength=4 --patterns=10
 ```
 
 ```bash
-java -Xmx4g -cp target/classes hidenosp.exp.Runner SC2 --dataset=datasets/fifa.txt --format=SPMF --sigma=3000 --gmin=0 --gmax=3 --maxPatternLength=3 --patterns=10
+python tools/run.py SC2 --dataset=datasets/fifa.txt --format=SPMF --sigma=3000 --gmin=0 --gmax=3 --maxPatternLength=4 --patterns=10
 ```
 
 Quét thêm σ và độ rộng khoảng cách để thấy ρ_rep và β đổi theo cấu hình chứ không phải theo bộ:

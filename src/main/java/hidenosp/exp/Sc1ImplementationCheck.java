@@ -63,7 +63,7 @@ public final class Sc1ImplementationCheck implements Scenario {
         int trials = options.getInt("trials", 400);
         long seed = options.getLong("seed", 2026);
         int maxLength = options.getInt("maxLength", 9);
-        int maxPatternLength = options.getInt("maxPatternLength", 3);
+        int maxPatternLength = options.getInt("maxPatternLength", 4);
         int alphabet = options.getInt("alphabet", 3);
 
         Random random = new Random(seed);
@@ -75,7 +75,7 @@ public final class Sc1ImplementationCheck implements Scenario {
             Pattern pattern = randomPattern(random, maxPatternLength, alphabet, trial % 4 == 0);
             checkInstance(sequence, pattern, gap, counters);
         }
-        checkMining(random, alphabet, counters);
+        checkMining(random, alphabet, maxPatternLength, counters);
 
         String[] header = {"kind", "check", "instances", "mismatches"};
         try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header)) {
@@ -168,8 +168,11 @@ public final class Sc1ImplementationCheck implements Scenario {
         }
     }
 
-    /** The level-wise mining with prefix pruning against plain enumeration. */
-    private void checkMining(Random random, int alphabet, Map<String, long[]> counters) {
+    /**
+     * The level-wise mining with prefix pruning against plain enumeration, at the same l_max the
+     * paper uses. Checking at a shorter length would leave the length actually used unchecked.
+     */
+    private void checkMining(Random random, int alphabet, int maxLength, Map<String, long[]> counters) {
         for (int trial = 0; trial < 40; trial++) {
             List<EventSequence> sequences = new ArrayList<>();
             for (int s = 0; s < 4; s++) {
@@ -178,8 +181,9 @@ public final class Sc1ImplementationCheck implements Scenario {
             SequenceDatabase database = new SequenceDatabase(sequences);
             GapConstraint gap = randomGap(random);
             long sigma = 1 + random.nextInt(3);
-            Map<Pattern, Long> pruned = FrequentPatterns.mine(database, gap, 3, sigma);
-            Map<Pattern, Long> plain = FrequentPatterns.enumerateWithoutPruning(database, gap, 3, sigma);
+            Map<Pattern, Long> pruned = FrequentPatterns.mine(database, gap, maxLength, sigma);
+            Map<Pattern, Long> plain =
+                    FrequentPatterns.enumerateWithoutPruning(database, gap, maxLength, sigma);
             count(counters, "F_sigma pruning equals enumeration", !pruned.equals(plain));
         }
     }

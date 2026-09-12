@@ -67,6 +67,7 @@ public final class CutHide implements HidingMethod {
     /** Runs CUT-HIDE and returns R together with the sanitized database. */
     @Override
     public Sanitization run(HideProblem problem) {
+        requireNonEmptyBand(problem);
         Sanitization result = new Sanitization(problem.database()).method("CUT-HIDE " + config);
         if (problem.sensitive().size() == 1) {
             runSinglePattern(problem, problem.sensitive().get(0), result);
@@ -77,6 +78,26 @@ public final class CutHide implements HidingMethod {
             verify(problem, result);
         }
         return result;
+    }
+
+    /**
+     * Refuses to run the weighted variant with an empty B_eps.
+     *
+     * <p>Without this, an empty band would make every position weigh zero and CUT-HIDE would
+     * quietly become the uniform-weight variant of SC7 — that is, the method under test would
+     * silently turn into the method it is being compared against, and nothing in the output would
+     * say so. The band really can come out empty: at epsilon = 0.10 it does on the genome at
+     * sigma = 1000, which is why {@code config/protocol.yaml} locks epsilon = 0.5 together with
+     * this check.
+     */
+    private void requireNonEmptyBand(HideProblem problem) {
+        if (config.weighting() != CutHideConfig.Weighting.VITAL_NODE || !nearThreshold.isEmpty()) {
+            return;
+        }
+        throw new IllegalStateException("B_eps is empty for this configuration ("
+                + problem + ", epsilon = " + problem.epsilon() + "), so the vital-node weights "
+                + "would all be zero and this run would silently be the uniform-weight variant. "
+                + "Raise epsilon, lower sigma, or select the uniform variant on purpose.");
     }
 
     /**
@@ -228,7 +249,7 @@ public final class CutHide implements HidingMethod {
 
     /** Position weights for one sequence, built from a throw-away index over B_eps only. */
     private double[] positionWeights(HideProblem problem, EventSequence sequence, int sequenceIndex) {
-        if (config.weighting() == CutHideConfig.Weighting.UNIFORM || nearThreshold.isEmpty()) {
+        if (config.weighting() == CutHideConfig.Weighting.UNIFORM) {
             return new double[sequence.length()];
         }
         NettreeCutIndex index = new NettreeCutIndex(sequence, problem.gap());

@@ -224,7 +224,8 @@ cỡ heap tối đa.
 | Độ đo HF, Lost, Ghost, DistR, SupDist | `metrics.Metrics` | §2 |
 | `F_σ(D)`, `B_ε`, `𝒮⁺` | `metrics.FrequentPatterns` | §9.2 bước 3 |
 | ρ_rep, β, \|R\|\* | `metrics.DataProfile` | §8.4 |
-| Baseline tầng (a) | `baseline.RandomMasking` (HH/HR/RH/RR), `baseline.OccurrenceCountHeuristic` | §11.3 |
+| Baseline tầng (a) | `baseline.RandomMasking` (HH/HR/RH/RR), `baseline.OccurrenceCountHeuristic` | §11.3; chạy được với \|𝒮\| bất kỳ |
+| Kiểm B_ε rỗng báo lỗi | `hide.CutHide.requireNonEmptyBand` | Chốt ở `protocol.yaml` dòng 2 |
 | Baseline tầng (b): HHA | `baseline.Hha` | [R20]; hai cách tính δ cho SC6 |
 | Baseline tầng (b): DBSH | `baseline.Dbsh` | [R3]; Cost theo ký hiệu, Exclude, Update-paths |
 | Baseline tầng (b): SBSH | `baseline.Sbsh` | [R3]; **cài lại từ mô tả, phải đối chiếu [R3] trước khi dùng số** |

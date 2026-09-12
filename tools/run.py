@@ -12,6 +12,8 @@ Script lam ba viec, theo dung thu tu:
 2. Kiem cay lam viec sach. Mot sha commit chi dinh danh dung ma da chay khi khong co sua doi
    chua commit. Cay ban thi tu choi, tru khi lan chay do la do tim (--probe) hoac nguoi dung
    khai ro --allow-dirty; ca hai truong hop deu dong dau hau to -dirty.
+   Ba thu muc results, results-invariant va results-probe KHONG tinh vao phep kiem nay: chung
+   chua dau ra cua chinh cac lan chay, nen mot lo nhieu lan chay khong tu chan lay minh.
 3. Dat HIDENOSP_REVISION roi goi hidenosp.exp.Runner voi moi doi so con lai.
 
 Cach dung:
@@ -47,6 +49,21 @@ def git(*args):
     return out.stdout.strip()
 
 
+# Ba thu muc nay chua DAU RA cua chinh cac lan chay, khong phai dau vao. Mot tep ket qua moi
+# sinh ra khong doi ma da chay, nen no khong duoc tinh la "cay ban" -- neu tinh thi lan chay thu
+# hai trong cung mot lo se bi chinh lan thu nhat chan lai.
+# Moi thu khac thi CO tinh, ke ca config/ va datasets/provenance.tsv, vi chung la dau vao.
+OUTPUT_DIRS = ("results/", "results-invariant/", "results-probe/")
+
+
+def is_output(status_line):
+    """True neu dong `git status --porcelain` noi ve mot tep nam trong thu muc dau ra."""
+    path = status_line[3:].strip().strip('"')
+    if " -> " in path:
+        path = path.split(" -> ", 1)[1].strip().strip('"')
+    return path.startswith(OUTPUT_DIRS)
+
+
 def revision(allow_dirty, is_probe):
     """Tra ve chuoi phien ban de dong dau, hoac thoat neu cay ban ma khong duoc phep."""
     sha = git("rev-parse", "--short=12", "HEAD")
@@ -57,10 +74,10 @@ def revision(allow_dirty, is_probe):
         sys.exit(2)
 
     status = git("status", "--porcelain")
-    if not status:
+    changed = [line for line in (status or "").splitlines()
+               if line.strip() and not is_output(line)]
+    if not changed:
         return sha
-
-    changed = [line for line in status.splitlines() if line.strip()]
     if not (allow_dirty or is_probe):
         print("LOI: cay lam viec con %d thay doi chua commit." % len(changed), file=sys.stderr)
         print("     Mot sha chi dinh danh dung ma da chay khi khong con sua doi nao treo.",

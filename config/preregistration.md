@@ -1,48 +1,199 @@
 # Chốt trước khi chạy SC3
 
 Quy tắc 2.4.7: ngưỡng hiệu ứng thực tiễn và phép kiểm phải chốt **trước** khi chạy SC3.
-Tệp này là bản chốt đó. Trạng thái hiện tại: **CHƯA CHỐT** — các ô còn `null` phải điền và
-tệp phải được ghi vào git (`git log` làm bằng chứng thời điểm) trước lần chạy SC3 đầu tiên
-có ý định đưa số vào bài.
+Tệp này là bản chốt đó.
 
-Chừng nào tệp này chưa chốt, mọi lần chạy SC3 phải kèm cờ `--probe` để kết quả rơi vào
-`results-probe/`.
+**Trạng thái: ĐÃ CHỐT, ngày 12/09/2026.** Commit ghi tệp này là bằng chứng thời điểm. Từ đây,
+sửa bất kỳ con số nào dưới đây đều phải là một commit riêng, ghi rõ lý do sửa, và nếu sửa sau
+khi đã thấy kết quả SC3 thì phải khai điều đó trong bài.
 
----
+Căn cứ chọn từng giá trị: `config/de_xuat_gia_tri_nhom_A.md`. Số liệu làm căn cứ:
+`results-invariant/giai_doan_1_tom_tat.md` và `results-invariant/khao_sat_bo_du_lieu.md`, đều
+từ SC1 và SC2, chạy độc lập với SC3.
 
-## 1. Giả thuyết
-
-**H2.** Trên các thực thể (bộ dữ liệu, σ, tập nhạy cảm), trung vị của hiệu
-`Lost(baseline) − Lost(CUT-HIDE)` lớn hơn ngưỡng thực tiễn δ_L.
-
-- Đơn vị lặp: một thực thể = một bộ ba (bộ dữ liệu, σ, tập nhạy cảm). Ghi ngay trong chú thích bảng.
-- Phép kiểm: Wilcoxon dấu hạng, một phía.
-- Hiệu chỉnh đa phép kiểm: Holm, theo số baseline được so.
-- Cỡ hiệu ứng báo cáo: rank-biserial.
-- **δ_L = _null_** ← phải điền. Đơn vị: số mẫu không nhạy cảm bị mất. Nêu căn cứ chọn giá trị.
-- Mức ý nghĩa α = 0,05.
-
-**H3.** Tỉ số `|R| / |R|*` của baseline tầng (b) lớn hơn 1 trên nhóm dữ liệu có ρ_rep cao, và
-gần 1 trên nhóm suy biến.
-
-- Ngưỡng phân nhóm: ρ_rep ≥ _null_ là nhóm chính; ρ_rep ≤ _null_ là nhóm đối chứng suy biến.
-- Ngưỡng β cho nhóm đối chứng ràng buộc: β ≤ _null_.
-- Hai ngưỡng trên phải chốt **trước** khi nhìn kết quả SC3, và phải dựa trên bảng SC2, vốn
-  chạy độc lập với SC3.
+**Khai xuất xứ.** Các giá trị dưới đây do người đề xuất soạn và người viết duyệt. Người đề xuất
+**đã thấy** chiều của một lần chạy SC3 dò tìm trên dữ liệu tổng hợp thay thế (`results-probe/`), nên mọi
+ngưỡng được neo vào thang của dữ liệu (cỡ `F_σ`, khoảng trống trong phân bố ρ_rep) chứ không neo
+vào khoảng cách đã quan sát giữa các phương pháp. Ba con số có thể chịu ảnh hưởng nhiều nhất nếu
+việc đó gây thiên lệch là δ_L và hai biên tương đương ở §3; chúng được đánh dấu riêng.
 
 ---
 
-## 2. Kết luận "không khác biệt"
+## 1. Phạm vi
+
+**Phạm vi chính của bài là μ(P) = 1**, tức mẫu nhạy cảm không lặp mục. Trong phạm vi đó, P1, P2,
+P6(b) và lời giải chính xác đều đứng vững.
+
+Mẫu lặp mục (μ(P) ≥ 2) báo cáo ở một mục riêng, dùng cận P3 và bộ giải chính xác trên thực thể
+nhỏ, và khai rõ độ khó là câu hỏi mở. Phần hạn chế phải ghi rằng trên MSNBC thì lớp lặp mục mới
+là lớp có tỉ lệ lặp cao hơn (ρ_rep trung bình 0,434 so với 0,218), còn trên bộ gen MT745584 thì
+ngược lại (0,806 so với 0,773).
+
+Trọng số nút khi μ(P) ≥ 2: gán trọng số vị trí cho mọi nút của vị trí đó. Đây là **lựa chọn cài
+đặt**, không phải hệ quả của mệnh đề nào, vì P1 và P2 không áp dụng ở đó.
+
+---
+
+## 2. Giả thuyết
+
+### H2
+
+Trên các thực thể (bộ dữ liệu, σ, tập nhạy cảm), trung vị của hiệu
+`Lost_rel(baseline) − Lost_rel(CUT-HIDE)` lớn hơn ngưỡng thực tiễn δ_L.
+
+**Đại lượng.** `Lost_rel = Lost / |F_σ(D) \ 𝒮⁺|`, mẫu số là số mẫu phổ biến không nhạy cảm
+trước khi sửa, tức cột `frequent_before` của SC3 trừ đi cỡ bao đóng 𝒮⁺.
+
+| Mục | Giá trị chốt |
+|---|---|
+| **δ_L** | **0,02** (hai điểm phần trăm) |
+| Đơn vị lặp | một thực thể = bộ ba (bộ dữ liệu, σ, tập nhạy cảm) |
+| Phép kiểm | Wilcoxon dấu hạng, một phía |
+| Hiệu chỉnh đa phép kiểm | Holm trên **4** baseline tầng (b) |
+| Cỡ hiệu ứng | rank-biserial = (W⁺ − W⁻)/(W⁺ + W⁻) |
+| Mức ý nghĩa | α = 0,05 |
+
+**Vì sao đại lượng tương đối.** |F_σ| đo được trải hơn một bậc, từ 51 (dna σ=2500) tới 672
+(msnbc σ=1000). Một δ_L tuyệt đối duy nhất sẽ nghiêm với bộ nhỏ và lỏng với bộ lớn, tức trộn hai
+thang vào cùng một phép Wilcoxon. Báo cáo **kèm** trung vị hiệu tuyệt đối trong cùng bảng.
+
+**Vì sao 0,02.** Một điểm phần trăm trên dna (|F| ≈ 51) chưa tới nửa mẫu, nên mọi chênh lệch dù
+một mẫu cũng vượt ngưỡng và δ_L mất tác dụng. 0,02 tương ứng khoảng một mẫu trên dna và 6,5 mẫu
+trên msnbc σ=2000.
+
+**Không** dùng Σ|S| hay |R|\* làm mẫu số: Σ|S| là mẫu số của DistR, |R|\* là cận số lần che.
+
+### H3
+
+Tỉ số `r = |R| / |R|*` của baseline tầng (b) lớn hơn 1 trên nhóm chính, và gần 1 trên nhóm suy
+biến.
+
+| Mục | Giá trị chốt |
+|---|---|
+| "vượt 1" | r ≥ **1,10** |
+| "gần 1" | r ≤ **1,05** |
+| vùng 1,05 < r < 1,10 | không kết luận |
+
+**Lường trước một kết quả âm.** Trên lần chạy dò, mọi phương pháp đều cho r = 1,000, tức không
+baseline nào dùng thừa lần che. Nếu điều đó lặp lại trên dữ liệu thật thì H3 **không bác bỏ
+được**, và đó là kết quả âm phải báo cáo theo quy tắc 3.4.9, không phải lỗi.
+
+### Họ baseline cho Holm
+
+Họ gồm **bốn** baseline tầng (b): HHA, DBSH, SBSH-r1, SBSH-rmax.
+
+Tầng (a) — heuristic đếm lần xuất hiện, HH, HR, RH, RR — báo cáo **mô tả**, không kiểm định:
+chúng tồn tại để chứng minh bài toán không tự giải (§11.3), không để kiểm giả thuyết.
+
+Nếu SBSH không đối chiếu được với Thuật toán 2 và 3 của [R3] thì bỏ SBSH khỏi bảng, họ còn **hai**,
+và phải sửa dòng này **trước** khi chạy.
+
+---
+
+## 3. Phân nhóm dữ liệu
+
+Ngưỡng áp trên **cấu hình**, tức bộ ba (bộ dữ liệu, σ, [g⁻,g⁺]) — **không** phải trên bộ dữ liệu.
+Căn cứ: trên msnbc σ=2000, đổi khoảng cách từ [0,1] sang [0,10] làm β tụt từ 0,432 xuống 0,043;
+β là tính chất của cấu hình chứ không của bộ.
+
+Thống kê gộp trong một cấu hình: **trung vị** ρ_rep (và trung vị β) trên các mẫu nhạy cảm đã lấy.
+Không dùng trung bình, vì phân bố lệch: msnbc [0,3] σ=2000 trải 0,106–0,575.
+
+| Nhóm | Điều kiện |
+|---|---|
+| Nhóm chính | ρ_rep ≥ **0,20** |
+| Nhóm trung gian | **0,05 < ρ_rep < 0,20** |
+| Đối chứng suy biến | ρ_rep ≤ **0,05** |
+| Ràng buộc khoảng cách có hiệu lực | β ≥ **0,20** |
+| Đối chứng ràng buộc suy biến | β ≤ **0,05** |
+
+**Nhóm trung gian không dùng để kiểm H2 hay H3.** Nó chỉ để minh hoạ rằng ρ_rep và β là hai đại
+lượng độc lập: bible và leviathan có ρ_rep quanh 0,15 nhưng β tới 0,50–0,61.
+
+**Vì sao 0,05 và 0,20.** Trung vị ρ_rep đo được, sắp tăng dần: 0,000 (sign, bms1), 0,008 (fifa),
+0,052 (bike), 0,153 (bible), 0,154 (leviathan), 0,323 (msnbc), 0,786 (dna). Hai ngưỡng rơi vào hai
+**khe thưa** của phân bố, nên phân nhóm không nhạy với việc xê dịch ngưỡng vài phần trăm.
+
+**Phân nhóm suy ra từ dữ liệu đã đo:**
+
+| Nhóm | Bộ |
+|---|---|
+| Chính | **dna_mt745584, msnbc** |
+| Trung gian | bible, leviathan |
+| Suy biến | sign, bms1, fifa, bike |
+
+Phân nhóm này chốt tại đây và **không sửa** sau khi thấy kết quả SC3 (quy tắc 2.3.10). Bộ dữ liệu
+mới thêm sau ngày chốt phải được xếp nhóm bằng đúng hai ngưỡng trên, trước khi chạy SC3 trên nó.
+
+---
+
+## 4. Kết luận "không khác biệt"
 
 Khi muốn kết luận hai phương pháp không khác nhau, dùng khoảng tin cậy của hiệu số cùng biên
 tương đương chốt trước, không dùng "p > 0,05".
 
-- Biên tương đương cho Lost: ± _null_.
-- Biên tương đương cho SupDist: ± _null_.
+| Đại lượng | Biên tương đương |
+|---|---|
+| Lost_rel | ± **0,02** (bằng đúng δ_L) |
+| SupDist | ± **0,01** |
+
+Biên tương đương đặt bằng ngưỡng hiệu ứng để không sinh ra một vùng rộng mà kết quả vừa không
+khác biệt vừa không tương đương.
+
+**Con số yếu căn cứ nhất trong tệp này là ±0,01 cho SupDist.** Nó là một quy ước, chưa neo vào
+độ tản đo được. Nếu muốn thay bằng con số có căn cứ, cách hợp lệ là chạy **một** phương pháp duy
+nhất trên nhiều tập nhạy cảm và đo độ tản của SupDist giữa các tập — việc đó không lộ chiều so
+sánh giữa các phương pháp. Thay thì phải là một commit riêng, trước SC3.
 
 ---
 
-## 3. Những gì KHÔNG cần kiểm định
+## 5. Quy ước tính toán
+
+### Wilcoxon
+
+| Mục | Quy ước chốt |
+|---|---|
+| Hiệu đúng bằng 0 | **Pratt**: giữ lại khi xếp hạng, không loại bỏ |
+| Hạng buộc | hạng trung bình |
+| Cỡ hiệu ứng | rank-biserial |
+
+Lost là số nguyên nhỏ nên số cặp có hiệu bằng 0 sẽ nhiều. Wilcoxon gốc vứt chúng đi, làm mất
+thông tin "hai phương pháp ngang nhau" và thổi phồng cỡ hiệu ứng.
+
+### Ghép cặp cho H2
+
+Mỗi phương pháp chạy **tới khi HF = 0**, với |R| tự chọn. Hai chế độ báo cáo tách rời:
+
+1. Thực thể mà mọi phương pháp dùng **cùng** |R|: đưa vào Wilcoxon cho H2.
+2. Thực thể mà baseline dùng **nhiều hơn**: báo cáo riêng dạng cặp (|R|, Lost), **không** kiểm
+   định. Kết luận ở đó mạnh hơn và không cần thống kê.
+
+So Lost ở hai mức |R| khác nhau là so hai thứ khác nhau; ép baseline dừng ở |R|\* thì nó chưa ẩn
+xong nên Lost cũng không so được.
+
+### Loại trừ thực thể
+
+| Tình huống | Xử lý |
+|---|---|
+| Một phương pháp còn HF > 0 | loại cặp khỏi Wilcoxon, đếm và báo cáo riêng |
+| Quá giới hạn thời gian | loại cặp, ghi mã OT, báo cáo số ca |
+| Hết bộ nhớ | loại cặp, ghi mã OOM, báo cáo số ca |
+| Tỉ lệ thực thể bị loại > **10%** | **không kết luận** H2, và nói rõ vì sao |
+
+Gán một giá trị phạt cho ca HF > 0 là bịa dữ liệu, nên không làm.
+
+### Phương pháp ngẫu nhiên
+
+HH, HR, RH, RR và giải thuật di truyền: chạy **10 lần** với hạt giống **2026 tới 2035**, lấy
+**trung vị** Lost và |R| làm giá trị của phương pháp đó trên thực thể đó.
+
+Đây là đại lượng bất biến theo máy nên bảng số lần lặp của §11.6 không áp dụng — bảng đó dành cho
+đo thời gian. Biến thiên quan sát được ở RR là lớn (|R| = 31 và 151 trên hai tập nhạy cảm của
+cùng một cấu hình), nên một lần chạy là không đủ.
+
+---
+
+## 6. Những gì KHÔNG cần kiểm định
 
 - **HF.** Bằng 0 theo thiết kế với CUT-HIDE (bước 8 kiểm lại sau mỗi lần chạy). Nói một lần,
   không đưa vào bảng so sánh (quy tắc 2.4.2).
@@ -53,18 +204,23 @@ tương đương chốt trước, không dùng "p > 0,05".
 
 ---
 
-## 4. Thứ tự chạy đã định
+## 7. Thứ tự chạy đã định
 
-1. SC1 phải xanh (0 ca lệch) trước mọi kịch bản khác.
-2. SC2 chạy trước SC3 và quyết định bộ nào vào nhóm chính, bộ nào vào nhóm đối chứng suy biến.
-   Phân nhóm chốt tại đây, không sửa sau khi thấy kết quả SC3 (quy tắc 2.3.10).
+1. SC1 phải xanh (0 ca lệch) trước mọi kịch bản khác. **Đã xong**, 1.500 thực thể, 0 ca lệch.
+2. SC2 chạy trước SC3 và quyết định phân nhóm. **Đã xong**, 16 cấu hình; phân nhóm ở §3.
 3. SC3, SC4, SC5, SC7, SC8: số bất biến theo máy.
 4. SC6 chạy sau cùng, trên máy đo đã khai, với `--machine=<tên máy>`.
 
+Trước lần chạy SC3 đầu tiên lấy số vào bài, phải xong ba việc kỹ thuật ghi ở
+`config/protocol.yaml`: gắn `HIDENOSP_REVISION` vào dấu định danh lần chạy, nâng ℓ_max lên 4, và
+kiểm rằng B_ε không rỗng ở mọi cấu hình.
+
 ---
 
-## 5. Xử lý kết quả âm
+## 8. Xử lý kết quả âm
 
 Nếu trọng số nút thiết yếu không cải thiện Lost (rủi ro đã lường ở §12), báo cáo kết quả âm
 đủ ba điều kiện của quy tắc 3.4.9. Đóng góp lý thuyết (bài toán, chỉ mục, P1–P7) không phụ
 thuộc vào chiều của kết quả này.
+
+Tương tự với H3: xem mục lường trước ở §2.

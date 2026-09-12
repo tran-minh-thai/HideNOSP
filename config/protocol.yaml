@@ -1,45 +1,71 @@
 # Bảng giao thức 9 dòng (§11.7, quy tắc 2.6.1).
 # Quy tắc 2.6.2: điền ngay ở bản nháp đầu, không đợi tới lúc nộp.
-# Ô nào mã tự sinh được thì đã có sẵn ở đầu mỗi tệp kết quả; chép từ đó sang.
-# Ô để trống có nghĩa là CHƯA CHỐT, không phải là không áp dụng.
+#
+# Trạng thái ngày 12/09/2026: các dòng CHẶN SC3 đã chốt cùng với
+# config/preregistration.md. Các dòng chỉ chặn lúc nộp (máy đo, cờ JVM, cách đo bộ nhớ,
+# giới hạn thời gian, làm nóng) vẫn để null; chúng không chặn việc chạy SC3 tới SC5 và SC7,
+# vì các kịch bản đó cho số bất biến theo máy. SC6 thì chặn.
+#
+# Ô null nghĩa là CHƯA CHỐT, không phải không áp dụng.
+# Căn cứ chọn từng giá trị: config/de_xuat_gia_tri_nhom_A.md
 
 dong_1_nguong_va_pham_vi:
   # Dải sigma, l_max, [g-, g+] và |S| cho TỪNG bộ dữ liệu.
-  mac_dinh_ma:
-    l_max: 3
-    gap: "[0, 3]"
-    sensitive_size: [1, 5, 10, 20]   # §11.5
-    sensitive_sets_moi_o: 20         # §11.5
+  chung_cho_moi_bo:
+    l_max: 4                          # nâng từ 3; §11.5 lấy mẫu nhạy cảm độ dài 2-4, nên
+                                      # l_max = 3 làm mẫu độ dài 4 không nằm trong F_sigma.
+                                      # Chi phí đo được: re o ca sau bo, fifa chi them 0,6 giay.
+    do_dai_mau_nhay_cam: [2, 4]
+    sensitive_size: [1, 5, 10, 20]    # §11.5
+    sensitive_sets_moi_o: 20          # §11.5
+    phan_vi_lay_mau: [10, 30, 50, 70, 90]   # nam phan vi sup_NO, moi phan vi 4 tap -> 20
+    khoang_cach_chung: ["[0,1]", "[0,3]"]
   theo_bo:
-    msnbc:     {sigma: null, l_max: null, gap: null, sensitive_size: null}
-    fifa:      {sigma: null, l_max: null, gap: null, sensitive_size: null}
-    sign:      {sigma: null, l_max: null, gap: null, sensitive_size: null}
-    dna:       {sigma: null, l_max: null, gap: null, sensitive_size: null}
-    bms_web_1: {sigma: null, l_max: null, gap: null, sensitive_size: null}
-    kosarak:   {sigma: null, l_max: null, gap: null, sensitive_size: null}
-    trucks:    {sigma: null, l_max: null, gap: null, sensitive_size: null}
-    tong_hop:  {sigma: null, l_max: null, gap: null, sensitive_size: null}
+    dna_mt745584:
+      sigma: [2500, 4000]
+      khoang_cach: ["[0,1]", "[0,3]", "[0,10]"]
+      ghi_chu: >
+        sigma phai tu 2500 tro len. Voi |Sigma| = 4 va l_max = 3, khong gian mau chi co
+        4 + 16 + 64 = 84 mau, va o sigma = 1000 thi ca 84 deu pho bien, tuc F_sigma la
+        TOAN BO khong gian mau: khi do Ghost khong the khac 0 va Lost mat y nghia so sanh.
+        O sigma = 2500 thi |F_sigma| = 51 tren 84, la tap con thuc su.
+    msnbc:
+      sigma: [1000, 2000, 5000]
+      khoang_cach: ["[0,1]", "[0,3]", "[0,10]"]
+    leviathan: {sigma: [500], khoang_cach: ["[0,1]", "[0,3]"]}
+    bible:     {sigma: [2000], khoang_cach: ["[0,1]", "[0,3]"]}
+    sign:      {sigma: [200], khoang_cach: ["[0,1]", "[0,3]"]}
+    bms1:      {sigma: [100], khoang_cach: ["[0,1]", "[0,3]"]}
+    fifa:      {sigma: [3000], khoang_cach: ["[0,1]", "[0,3]"]}
+    tong_hop:  {sigma: null, khoang_cach: null}
+  quy_tac_chon_sigma: >
+    Giu |F_sigma| trong khoang [50, 700] VA F_sigma phai la tap con THUC SU cua khong gian
+    mau do dai toi l_max. Moi sigma o tren deu thoa.
   ghi_chu: >
-    sigma khai cả dạng tuyệt đối lẫn tỉ lệ theo tổng sup_NO (§11.5). SC6 quyết định giữ tỉ lệ
-    hay giữ tuyệt đối, và bài phải nói rõ.
+    sigma khai ca dang tuyet doi lan ti le theo tong sup_NO (§11.5). Viec giu ti le hay giu
+    tuyet doi khi so giua cac bo con CHUA CHOT; no chan luc nop chu khong chan SC3.
 
 dong_2_nguong_epsilon_cua_B_eps:
-  mac_dinh_ma: 0.5
-  theo_bo:
-    msnbc: null
-    fifa: null
-    sign: null
-    dna: null
-    bms_web_1: null
-    kosarak: null
-    trucks: null
-    tong_hop: null
+  gia_tri: 0.5                        # dung cho MOI bo
+  kiem_bat_buoc: "B_eps khong duoc rong; neu rong thi bao loi, khong chay tiep im lang"
+  can_cu: >
+    Do |B_eps| tren chin cau hinh. epsilon = 0,10 cho B_eps RONG tren dna [0,3] sigma=1000;
+    khi do buoc 4 gan trong so 0 cho moi vi tri va CUT-HIDE am tham tut ve bien the trong so
+    deu, tuc bien the dang duoc so o SC7 lai chinh la bien the dang chay. epsilon = 1,00 keo
+    24-54% cua F_sigma vao bang, khi do trong so 1/(sup - sigma + 1) gan nhu deu va cum tu
+    "mau gan bien" mat nghia. epsilon = 0,50 cho |B_eps| tu 6 toi 248, khong rong o moi cau
+    hinh da do.
 
 dong_3_hat_giong:
-  lay_mau_tap_nhay_cam: 2026     # mặc định của Runner, đổi bằng --seed
+  lay_mau_tap_nhay_cam: 2026
   sinh_du_lieu_tong_hop: 2026
-  baseline_ngau_nhien: 2026      # HH, HR, RH, RR dùng chung hạt giống này
-  giai_thuat_di_truyen: null
+  phuong_phap_ngau_nhien: [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035]
+  cach_tong_hop_phuong_phap_ngau_nhien: "trung vi cua 10 lan chay"
+  giai_thuat_di_truyen: "dung cung 10 hat giong tren"
+  ghi_chu: >
+    HH, HR, RH, RR va GA chay 10 lan vi day la dai luong bat bien theo may; bang so lan lap
+    cua §11.6 chi danh cho do thoi gian. Bien thien quan sat duoc o RR la lon (|R| = 31 va
+    151 tren hai tap nhay cam cua cung mot cau hinh).
 
 dong_4_tham_so_sinh_du_lieu_tong_hop:
   phan_phoi_muc: "đều trên bảng chữ cái"
@@ -49,31 +75,35 @@ dong_4_tham_so_sinh_du_lieu_tong_hop:
   rho_rep_muc_tieu: null
   beta_muc_tieu: null
   ghi_chu: >
-    Chỉ báo cáo rho_rep và beta ĐO ĐƯỢC (SyntheticGenerator.measure), không báo cáo giá trị
-    mục tiêu như thể đã đạt.
+    CHUA CHOT, chan luc nop chu khong chan SC3. Chi bao cao rho_rep va beta DO DUOC
+    (SyntheticGenerator.measure), khong bao cao gia tri muc tieu nhu the da dat.
 
 dong_5_moi_truong_chay:
-  jdk: null            # in sẵn ở đầu mỗi tệp kết quả, ví dụ "17.0.19 OpenJDK 64-Bit Server VM"
+  jdk: null            # in sẵn ở đầu mỗi tệp kết quả
   co_xms: null
   co_xmx: null
   he_dieu_hanh: null
   cpu: null
   ram: null
   ten_may_do: null     # truyền vào bằng --machine; lần chạy gắn "dev" không được ghi số thời gian
+  ghi_chu: "CHUA CHOT. Chan SC6, khong chan SC3 toi SC5 va SC7."
 
 dong_6_do_bo_nho:
   cach_do: "heap đã dùng, lấy mẫu từ trong tiến trình (util.MemoryProbe)"
   chu_ky_lay_mau_ms: 50
   bo_nho_thuong_tru: null
   ghi_chu: >
-    §11.7 đòi RSS tối đa của tiến trình. JVM không cho biết RSS, nên phải có script bọc ngoài
-    ghi lại; chưa có (TODO trong util.MemoryProbe). Bảng nào in số bộ nhớ phải nói rõ đang in
-    heap hay RSS.
+    §11.7 doi RSS toi da cua tien trinh. JVM khong cho biet RSS nen phai co script boc ngoai;
+    chua co (TODO trong util.MemoryProbe). Bang nao in so bo nho phai noi ro dang in heap hay
+    RSS. CHUA CHOT, chan SC6.
 
 dong_7_gioi_han_thoi_gian:
   gioi_han_moi_lan_chay_giay: null
   ma_qua_thoi_gian: "OT"     # §3.3.14
   ma_het_bo_nho: "OOM"
+  xu_ly_khi_qua_han: "loai cap khoi Wilcoxon, dem va bao cao rieng (preregistration §5)"
+  nguong_bo_toi_da: 0.10     # loai qua 10% thuc the thi khong ket luan H2
+  ghi_chu: "Gia tri gioi han giay CHUA CHOT; quy tac xu ly thi da chot."
 
 dong_8_so_lan_lap_va_tong_hop:
   duoi_1_giay: 15
@@ -81,18 +111,31 @@ dong_8_so_lan_lap_va_tong_hop:
   tu_10_den_120_giay: 5
   tren_120_giay: 3
   tong_hop: "trung bình ± độ lệch chuẩn; đo song song thời gian treo tường và thời gian CPU"
-  ghi_chu: "util.Timing.repetitionsFor cài đúng bảng này (§11.6)."
+  ghi_chu: >
+    util.Timing.repetitionsFor cai dung bang nay (§11.6). Bang nay chi ap cho DO THOI GIAN;
+    so lan chay lai cua phuong phap ngau nhien khi do dai luong bat bien nam o dong 3.
 
 dong_9_quy_trinh_lam_nong:
   so_lan_lam_nong: null
-  ghi_chu: >
-    util.Timing.measure nhận số lần làm nóng làm tham số và bỏ các lần đó. Chốt con số trước
-    khi chạy SC6 và ghi vào đây.
+  ghi_chu: "CHUA CHOT, chan SC6. util.Timing.measure nhan so lan lam nong lam tham so."
 
-# Ngoài 9 dòng: các quyết định cài đặt phải khai (mục 6 của RUNBOOK.md).
+# Ngoài 9 dòng: các quyết định cài đặt phải khai (mục 7 của RUNBOOK.md).
 quyet_dinh_cai_dat:
+  pham_vi_mu_P: 1
   thang_trong_so: 1000000        # CostCurve.SCALE
   quan_he_S_cong: "chuỗi con trên dãy mục"
   tia_theo_tien_to_khi_khai_pha: true
   ngu_nghia_mask: "-1, không khớp mục nào"
   tuyen_tinh_hoa_tap_muc: "sắp theo mã mục tăng dần; tỉ lệ vị trí bị ảnh hưởng ghi cạnh bộ dữ liệu"
+  trong_so_nut_khi_mu_lon_hon_1: "gan trong so vi tri cho moi nut cua vi tri do; la lua chon cai dat"
+  thuc_the_nho:
+    so_vi_tri_ung_vien_toi_da: 64    # IlpExact.MAX_CANDIDATES
+    so_lan_che_toi_da: 12            # IlpExact.MAX_MASKS
+  moc_toi_uu_cua_SC3: "exact-minR-minLost"
+  nhieu_mau_duoi_nguong_CSDL: >
+    Lam tron quy hoach tuyen tinh la phuong an chinh (co bao dam he so l_max). GA lai la du
+    phong. Neu ca hai khong kip thi thu pham vi ve |S| = 1 va khai ro, thay vi dua GA vao ma
+    tham so chua chot.
+  phien_ban_ma: >
+    HIDENOSP_REVISION = git rev-parse HEAD, dat trong mot script boc truoc khi goi Runner.
+    BAT BUOC cho moi lan chay lay so vao bai. So hien co dong dau "unversioned" giu lam do tim.

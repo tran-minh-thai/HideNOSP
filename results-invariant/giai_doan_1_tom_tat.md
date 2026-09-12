@@ -113,12 +113,12 @@ xử lý, chọn trước khi chạy SC3:
 | SC2 trên bốn bộ công khai | xong |
 | Lấy bộ DNA và chạy SC2 trên đó | **xong**, xem `khao_sat_bo_du_lieu.md`; kết quả đảo ngược kết luận ở mục 3 |
 | Lấy bộ trucks của [R20] | chưa tìm được nguồn công khai |
-| Chốt ngưỡng phân nhóm ρ_rep và β trong `config/preregistration.md` | **chưa**, cần người viết quyết |
-| Chốt δ_L và biên tương đương | **chưa**, cần người viết quyết |
-| Quyết phạm vi μ(P) theo mục 3 | **chưa**, nhưng nay có phương án trội là giữ μ(P) = 1 |
+| Chốt ngưỡng phân nhóm ρ_rep và β trong `config/preregistration.md` | **xong** 12/09/2026: ≥0,20 nhóm chính, ≤0,05 suy biến, áp trên cấu hình |
+| Chốt δ_L và biên tương đương | **xong** 12/09/2026: δ_L = 0,02 trên Lost tương đối; biên ±0,02 và ±0,01 |
+| Quyết phạm vi μ(P) theo mục 3 | **xong** 12/09/2026: giữ μ(P) = 1 làm phạm vi chính |
 
-Chừng nào `config/preregistration.md` chưa chốt và chưa commit, mọi lần chạy SC3 phải kèm cờ
-`--probe` để kết quả rơi vào `results-probe/`.
+`config/preregistration.md` đã chốt và đã commit ngày 12/09/2026, nên SC3 được phép chạy lấy số
+vào bài — sau khi xong ba việc kỹ thuật ghi ở §7 của tệp đó.
 
 ---
 

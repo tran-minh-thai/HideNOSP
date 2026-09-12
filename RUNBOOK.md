@@ -146,6 +146,11 @@ Với mỗi bộ, xem hai cột:
 Điền ngưỡng phân nhóm và δ_L vào `config/preregistration.md`, commit tệp đó (lịch sử git là bằng
 chứng thời điểm), rồi mới sang SC3.
 
+**Đã làm, ngày 12/09/2026.** `config/preregistration.md` và `config/protocol.yaml` đã chốt mọi
+tham số chặn SC3; căn cứ từng con số ở `config/de_xuat_gia_tri_nhom_A.md`. Ba việc kỹ thuật phải
+xong trước lần chạy SC3 lấy số vào bài: gắn `HIDENOSP_REVISION`, nâng `--maxPatternLength` lên 4,
+và kiểm B_ε không rỗng.
+
 ### Bước 4. Kiểm luật thư mục kết quả
 
 ```bash
@@ -226,7 +231,8 @@ tới lúc nộp. Những ô mã sinh ra được (phiên bản JDK, cỡ heap, 
 đầu mỗi tệp kết quả, chép từ đó sang.
 
 `config/preregistration.md` chốt ngưỡng hiệu ứng δ_L và phép kiểm **trước** khi chạy SC3
-(quy tắc 2.4.7). Chưa chốt thì chưa chạy SC3 để lấy kết quả.
+(quy tắc 2.4.7). **Đã chốt ngày 12/09/2026**; sửa bất kỳ con số nào từ đây phải là một commit
+riêng có ghi lý do.
 
 `config/quyet_dinh_can_chot.md` liệt kê **mọi** điểm còn phải quyết định của dự án, gộp theo chủ
 đề, tách nhóm chặn SC3 và nhóm chặn lúc nộp. Sinh từ một đợt rà mười nguồn rồi thẩm định lại từng

@@ -8,15 +8,22 @@ SC2**, không chép từ mô tả của người khác (§11.2).
 
 ## Bảng bộ dữ liệu (§11.2)
 
-| Tệp | Nguồn | Định dạng | Vai dự kiến (§11.2) | Trạng thái |
-|---|---|---|---|---|
-| `msnbc.txt` | SPMF `publicdatasets/MSNBC.txt` | `SPMF` | Nhóm chính; [R3] đã dùng bản MSN | đã tải |
-| `sign.txt` | SPMF `publicdatasets/SIGN.txt` | `SPMF` | Chờ SC2 quyết | đã tải |
-| `fifa.txt` | SPMF `publicdatasets/FIFA.txt` | `SPMF` | Chờ SC2 quyết | đã tải |
-| `bms1.txt` | SPMF `publicdatasets/BMS1_spmf.txt` | `SPMF` | Đối chứng suy biến; [R3] đã dùng BMS-WebView-1 | đã tải |
-| `kosarak.txt` | SPMF `publicdatasets/kosarak_sequences.txt`, 60 MB | `SPMF` | Mở rộng ở SC6 | chưa tải |
-| `dna.txt` | công khai, kiểm lại nguồn trong [R1] | `PLAIN` | Bảng chữ cái nhỏ, lặp dày, dạng dữ liệu của dòng NOSEP | chưa tải |
-| `trucks.txt` | Dữ liệu của [R20], quỹ đạo rời rạc hoá lưới 10×10, 273 chuỗi | `PLAIN` | Đặt số cạnh [R20] | chưa tải, chưa tìm được nguồn công khai |
+| Tệp | Nguồn | Vai (đo bằng SC2, xem `../results-invariant/khao_sat_bo_du_lieu.md`) | Trạng thái |
+|---|---|---|---|
+| `dna_mt745584.txt` | SPMF `MT745584_SPMF.txt` | **Nhóm chính**: bộ gen COVID-19, ρ_rep 0,786; dạng dữ liệu của [R1] | đã tải |
+| `msnbc.txt` | SPMF `MSNBC.txt` | **Nhóm chính**: ρ_rep 0,323; [R3] dùng bản MSN | đã tải |
+| `leviathan.txt` | SPMF `LEVIATHAN.txt` | Trung gian: ρ_rep 0,154 nhưng β 0,612 | đã tải |
+| `bible.txt` | SPMF `BIBLE.txt` | Trung gian: ρ_rep 0,153 nhưng β 0,500 | đã tải |
+| `fifa.txt` | SPMF `FIFA.txt` | Đối chứng suy biến: ρ_rep 0,008 | đã tải |
+| `sign.txt` | SPMF `SIGN.txt` | Đối chứng suy biến: ρ_rep 0,000 | đã tải |
+| `bms1.txt` | SPMF `BMS1_spmf.txt` | Đối chứng suy biến kép: ρ_rep 0,000, β 0,094; [R3] dùng | đã tải |
+| `bike.txt` | SPMF `BIKE.txt` | Không dùng: ρ_rep 0,052; bản công khai gần nhất với trucks về dạng, **không phải** cùng bộ | đã tải |
+| `kosarak.txt` | SPMF `kosarak_sequences.txt`, 60 MB | Mở rộng ở SC6 | chưa tải |
+| `trucks.txt` | Dữ liệu của [R20] và [R3] | Cần cho SC8 | chưa tìm được nguồn công khai |
+| chuỗi thời gian rời rạc hoá | kho UCR hoặc tương đương | [R1] dùng loại này | chưa lấy |
+
+Đã loại sau khi xem định dạng: **E-Shop** của SPMF (24.026 chuỗi, dài trung bình 62) là **tập mục
+nhiều phần tử**, nằm ngoài mô hình dữ liệu chuỗi sự kiện đơn mục của bài (§8.3).
 
 Bốn tệp đã tải lấy bằng `python tools/fetch_datasets.py`, ghi nguồn gốc vào `provenance.tsv`
 (tệp này **có** vào git: nó chỉ chứa URL, ngày tải, tổng kiểm SHA-256 và kích thước).
@@ -25,12 +32,16 @@ Bốn tệp đã tải lấy bằng `python tools/fetch_datasets.py`, ghi nguồ
 
 | Bộ | N | Tổng độ dài | Trung bình | Dài nhất | \|Σ\| |
 |---|---|---|---|---|---|
+| dna_mt745584 | 498 | 29.860 | 60,0 | 60 | **4** |
 | msnbc | 31.790 | 423.776 | 13,3 | 100 | 17 |
+| bike | 21.078 | 153.383 | 7,3 | 53 | 67 |
 | sign | 730 | 37.958 | 52,0 | 94 | 267 |
-| fifa | 20.450 | 741.092 | 36,2 | 100 | 2.990 |
 | bms1 | 59.601 | 149.638 | 2,5 | 267 | 497 |
+| fifa | 20.450 | 741.092 | 36,2 | 100 | 2.990 |
+| leviathan | 5.834 | 197.251 | 33,8 | 100 | 9.025 |
+| bible | 36.369 | 787.066 | 21,6 | 100 | 13.905 |
 
-Cả bốn tệp đều là tập mục một phần tử, nên tỉ lệ tuyến tính hoá bằng 0: chúng đúng là chuỗi sự
+Cả tám tệp đều là tập mục một phần tử, nên tỉ lệ tuyến tính hoá bằng 0: chúng đúng là chuỗi sự
 kiện đơn mục, không phải dữ liệu giao dịch bị ép về chuỗi.
 
 `tools/fetch_datasets.py` ghi `provenance.tsv` tự động. Bộ nào tải tay thì thêm một dòng theo

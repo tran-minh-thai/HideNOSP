@@ -29,6 +29,15 @@ CATALOGUE = {
               "nhom chinh neu rho_rep du cao: chuoi su kien don muc"),
     "bms1":  (BASE + "/BMS1_spmf.txt", "bms1.txt", "SPMF", 1525544,
               "doi chung suy bien: chuoi ngan, it lap; [R3] dung BMS-WebView-1"),
+    # Bo sung dot 2: chon theo dac trung ma dong gop cua bai can (|Sigma| nho, chuoi dai, lap trong chuoi).
+    "dna":   (BASE + "/MT745584_SPMF.txt", "dna_mt745584.txt", "SPMF", 151789,
+              "ung vien nhom chinh: bo gen COVID-19 MT745584, |Sigma|=4; dang du lieu cua dong NOSEP [R1]"),
+    "bike":  (BASE + "/BIKE.txt", "bike.txt", "SPMF", 1290298,
+              "ung vien: chuoi tram xe dap theo thoi gian, |Sigma|=67; ban cong khai gan nhat voi trucks cua [R20]"),
+    "leviathan": (BASE + "/LEVIATHAN.txt", "leviathan.txt", "SPMF", 1339118,
+              "ung vien: van ban Leviathan theo chuoi tu, dai trung binh 33.8"),
+    "bible": (BASE + "/BIBLE.txt", "bible.txt", "SPMF", 5572333,
+              "ung vien: van ban Kinh thanh theo chuoi tu, dai trung binh 21.6"),
 }
 
 HERE = os.path.dirname(os.path.abspath(__file__))

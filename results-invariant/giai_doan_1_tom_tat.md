@@ -97,6 +97,12 @@ xử lý, chọn trước khi chạy SC3:
 3. Bổ sung bộ dữ liệu có tỉ lệ lặp cao **cho cả mẫu không lặp mục**, tức chuỗi DNA mà §11.2 đã dự
    kiến và dòng NOSEP [R1] dùng. Đây là cách duy nhất làm nhóm chính rộng hơn một bộ.
 
+> **Cập nhật cùng ngày: phương án 3 đã làm, và nó gỡ luôn căng thẳng này.** Bộ gen MT745584
+> (498 chuỗi × 60, |Σ| = 4) cho ρ_rep trung bình 0,786, và quan trọng hơn, ρ_rep của mẫu **không
+> lặp mục** ở đó là 0,806 — **cao hơn** mẫu lặp mục (0,773), tức ngược hẳn MSNBC. Giữ phạm vi ở
+> μ(P) = 1 nay không còn phải trả giá bằng việc bỏ chế độ dữ liệu lặp cao, nên phương án 1 trở
+> thành lựa chọn trội. Số liệu và vai đề nghị cho từng bộ: `khao_sat_bo_du_lieu.md`.
+
 ---
 
 ## 4. Việc còn lại của giai đoạn 1
@@ -105,11 +111,11 @@ xử lý, chọn trước khi chạy SC3:
 |---|---|
 | SC1 xanh | xong |
 | SC2 trên bốn bộ công khai | xong |
-| Lấy bộ DNA và chạy SC2 trên đó | **chưa**, và mục 3 ở trên cho thấy nó quan trọng hơn dự kiến |
+| Lấy bộ DNA và chạy SC2 trên đó | **xong**, xem `khao_sat_bo_du_lieu.md`; kết quả đảo ngược kết luận ở mục 3 |
 | Lấy bộ trucks của [R20] | chưa tìm được nguồn công khai |
 | Chốt ngưỡng phân nhóm ρ_rep và β trong `config/preregistration.md` | **chưa**, cần người viết quyết |
 | Chốt δ_L và biên tương đương | **chưa**, cần người viết quyết |
-| Quyết phạm vi μ(P) theo mục 3 | **chưa**, cần người viết quyết |
+| Quyết phạm vi μ(P) theo mục 3 | **chưa**, nhưng nay có phương án trội là giữ μ(P) = 1 |
 
 Chừng nào `config/preregistration.md` chưa chốt và chưa commit, mọi lần chạy SC3 phải kèm cờ
 `--probe` để kết quả rơi vào `results-probe/`.
@@ -118,6 +124,6 @@ Chừng nào `config/preregistration.md` chưa chốt và chưa commit, mọi l�
 
 ## 5. Tệp gốc
 
-Trong thư mục này: `SC1_20260912-*.csv` và mười tệp `SC2_20260912-*.csv`. Mỗi tệp mang dấu định
+Trong thư mục này: `SC1_20260912-*.csv` và các tệp `SC2_20260912-*.csv` (mười cấu hình của đợt đầu, cộng sáu cấu hình của đợt bổ sung bộ dữ liệu). Mỗi tệp mang dấu định
 danh lần chạy ở tên và ở phần chú thích đầu tệp. Không tệp nào có cột thời gian hay bộ nhớ, đúng
 luật của `results-invariant/`.

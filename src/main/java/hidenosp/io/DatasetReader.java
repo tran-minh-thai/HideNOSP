@@ -65,6 +65,13 @@ public final class DatasetReader {
             if (events.length == 0) {
                 continue;
             }
+            for (int item : events) {
+                if (item < 0) {
+                    throw new IllegalArgumentException("negative item code " + item + " in " + path
+                            + "; the code -1 is reserved for the mask, so item codes must be at "
+                            + "least 0. Re-encode the dataset before loading it.");
+                }
+            }
             positions += events.length;
             sequences.add(new EventSequence(sequences.size(), events));
         }

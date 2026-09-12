@@ -14,9 +14,37 @@ public final class SupportNO {
     private SupportNO() {
     }
 
-    /** sup_NO(P, S). */
+    /**
+     * sup_NO(P, S).
+     *
+     * <p>Two shortcuts stand in front of the max flow, and neither changes the value. A pattern of
+     * length one has single positions as its occurrences, and non-overlapping then means distinct,
+     * so its support is the number of matching positions. And if some level of the Nettree would
+     * carry no node, no occurrence exists at all. Both matter on the real datasets, where mining
+     * F_sigma evaluates a great many candidates that fail immediately.
+     */
     public static int of(Pattern pattern, EventSequence sequence, GapConstraint gap) {
-        return new NettreeFlow(Nettree.build(pattern, sequence, gap)).supNO();
+        if (pattern.length() == 1) {
+            int item = pattern.at(0);
+            int count = 0;
+            for (int i = 0; i < sequence.length(); i++) {
+                if (sequence.at(i) != EventSequence.MASK && sequence.at(i) == item) {
+                    count++;
+                }
+            }
+            return count;
+        }
+        for (int j = 0; j < pattern.length(); j++) {
+            boolean present = false;
+            for (int i = 0; i < sequence.length() && !present; i++) {
+                present = sequence.at(i) != EventSequence.MASK && sequence.at(i) == pattern.at(j);
+            }
+            if (!present) {
+                return 0;
+            }
+        }
+        Nettree nettree = Nettree.build(pattern, sequence, gap);
+        return nettree.nodeCount() == 0 ? 0 : new NettreeFlow(nettree).supNO();
     }
 
     /** sup_NO(P, D) = sum over S of sup_NO(P, S). */

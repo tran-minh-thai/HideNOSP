@@ -131,6 +131,16 @@ public final class NettreeCutIndex {
         return c.throughPosition(position);
     }
 
+    /** The total number of occurrences of pattern {@code id}, the match set size of [R20]. */
+    public long totalOccurrences(int id) {
+        PathCounts c = counts.get(id);
+        if (c == null) {
+            c = PathCounts.of(nettrees.get(id), flows.get(id).removedFlags());
+            counts.set(id, c);
+        }
+        return c.totalOccurrences();
+    }
+
     /**
      * Masks position i in every Nettree that carries a node there and returns the drop in sup_NO
      * per pattern, indexed as in this structure. Only the affected path counts are invalidated.

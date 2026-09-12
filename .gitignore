@@ -2,12 +2,12 @@
 target/
 *.class
 
-# Dữ liệu thô: không vào git, xem datasets/README.md để biết nguồn và cách lấy
+# Dữ liệu thô: không vào git, xem datasets/README.md để biết nguồn và cách lấy.
+# Riêng provenance.tsv thì CÓ vào git: nó chỉ chứa URL, ngày tải, tổng kiểm và kích thước,
+# tức là thứ cho phép người khác lấy lại đúng bytes mà bài đã dùng.
 datasets/*
 !datasets/README.md
-
-# Nguồn gốc tệp dữ liệu có thể chứa đường dẫn máy cá nhân
-datasets/provenance.tsv
+!datasets/provenance.tsv
 
 # Python dò tìm
 __pycache__/

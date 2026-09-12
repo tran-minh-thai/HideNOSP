@@ -153,18 +153,39 @@ public final class Sc3MainComparison implements Scenario {
                 return new RandomMasking(RandomMasking.SequenceChoice.RANDOM,
                         RandomMasking.PositionChoice.RANDOM, seed);
             case "hha":
-                return new Hha(false);
+                return new Hha();
             case "dbsh":
                 return new Dbsh();
             case "sbsh":
-                return new Sbsh(1);
+            case "sbsh-r1":
+                return new Sbsh(1).withThresholdPatterns(atThreshold(problem, frequent, sigma));
+            case "sbsh-rmax":
+                return new Sbsh(problem.maxPatternLength())
+                        .withThresholdPatterns(atThreshold(problem, frequent, sigma));
             case "ilp":
                 return new IlpExact();
+            case "ilp-lost":
+                return IlpExact.withSideEffects(problem, frequent);
             case "ga":
                 return new GaHybrid(true, seed);
             default:
                 throw new IllegalArgumentException("unknown method " + name);
         }
+    }
+
+    /**
+     * The non-sensitive patterns whose support sits exactly at the threshold. Annotate of SBSH
+     * colours a position red when removing it would push one of these below sigma.
+     */
+    private List<Pattern> atThreshold(HideProblem problem, Map<Pattern, Long> frequent, int sigma) {
+        Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+        List<Pattern> out = new ArrayList<>();
+        for (Map.Entry<Pattern, Long> e : frequent.entrySet()) {
+            if (!closure.contains(e.getKey()) && e.getValue() == sigma) {
+                out.add(e.getKey());
+            }
+        }
+        return out;
     }
 
     private List<List<Pattern>> sampleSensitiveSets(Map<Pattern, Long> frequent, int count, int size,

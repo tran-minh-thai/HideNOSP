@@ -8,18 +8,33 @@ SC2**, không chép từ mô tả của người khác (§11.2).
 
 ## Bảng bộ dữ liệu (§11.2)
 
-| Tên tệp dự kiến | Nguồn | Định dạng | Vai dự kiến | Trạng thái |
+| Tệp | Nguồn | Định dạng | Vai dự kiến (§11.2) | Trạng thái |
 |---|---|---|---|---|
-| `msnbc.txt` | UCI, msnbc990928 | `PLAIN` | Chứng minh đóng góp; đặt số cạnh [R3] (bản MSN) | chưa tải |
-| `fifa.txt` | SPMF | `SPMF` | Chứng minh đóng góp nếu ρ_rep đủ cao | chưa tải |
-| `sign.txt` | SPMF | `SPMF` | Chứng minh đóng góp nếu ρ_rep đủ cao | chưa tải |
+| `msnbc.txt` | SPMF `publicdatasets/MSNBC.txt` | `SPMF` | Nhóm chính; [R3] đã dùng bản MSN | đã tải |
+| `sign.txt` | SPMF `publicdatasets/SIGN.txt` | `SPMF` | Chờ SC2 quyết | đã tải |
+| `fifa.txt` | SPMF `publicdatasets/FIFA.txt` | `SPMF` | Chờ SC2 quyết | đã tải |
+| `bms1.txt` | SPMF `publicdatasets/BMS1_spmf.txt` | `SPMF` | Đối chứng suy biến; [R3] đã dùng BMS-WebView-1 | đã tải |
+| `kosarak.txt` | SPMF `publicdatasets/kosarak_sequences.txt`, 60 MB | `SPMF` | Mở rộng ở SC6 | chưa tải |
 | `dna.txt` | công khai, kiểm lại nguồn trong [R1] | `PLAIN` | Bảng chữ cái nhỏ, lặp dày, dạng dữ liệu của dòng NOSEP | chưa tải |
-| `bms1.txt` | SPMF, BMS-WebView-1 | `SPMF` | Đối chứng suy biến (ρ_rep thấp); [R3] đã dùng | chưa tải |
-| `kosarak.txt` | SPMF | `SPMF` | Mở rộng ở SC6 | chưa tải |
-| `trucks.txt` | Dữ liệu của [R20], quỹ đạo rời rạc hoá lưới 10×10, 273 chuỗi | `PLAIN` | Đặt số cạnh [R20]; vai chốt sau khi đo ρ_rep ở SC2 | chưa tải |
+| `trucks.txt` | Dữ liệu của [R20], quỹ đạo rời rạc hoá lưới 10×10, 273 chuỗi | `PLAIN` | Đặt số cạnh [R20] | chưa tải, chưa tìm được nguồn công khai |
 
-Với mỗi tệp tải về, ghi thêm một dòng vào `provenance.tsv` (tự tạo, không theo dõi bởi git nếu
-chứa đường dẫn máy cá nhân): tên tệp, URL, ngày tải, tổng kiểm SHA-256, số chuỗi, tổng độ dài.
+Bốn tệp đã tải lấy bằng `python tools/fetch_datasets.py`, ghi nguồn gốc vào `provenance.tsv`
+(tệp này **có** vào git: nó chỉ chứa URL, ngày tải, tổng kiểm SHA-256 và kích thước).
+
+## Kích thước đo được
+
+| Bộ | N | Tổng độ dài | Trung bình | Dài nhất | \|Σ\| |
+|---|---|---|---|---|---|
+| msnbc | 31.790 | 423.776 | 13,3 | 100 | 17 |
+| sign | 730 | 37.958 | 52,0 | 94 | 267 |
+| fifa | 20.450 | 741.092 | 36,2 | 100 | 2.990 |
+| bms1 | 59.601 | 149.638 | 2,5 | 267 | 497 |
+
+Cả bốn tệp đều là tập mục một phần tử, nên tỉ lệ tuyến tính hoá bằng 0: chúng đúng là chuỗi sự
+kiện đơn mục, không phải dữ liệu giao dịch bị ép về chuỗi.
+
+`tools/fetch_datasets.py` ghi `provenance.tsv` tự động. Bộ nào tải tay thì thêm một dòng theo
+đúng cột của tệp đó: tên, tệp, định dạng, URL, ngày tải, số byte, SHA-256, vai.
 
 ## Hai định dạng mà `io.DatasetReader` đọc
 

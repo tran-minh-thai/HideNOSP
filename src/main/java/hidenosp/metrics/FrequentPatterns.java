@@ -1,11 +1,13 @@
 package hidenosp.metrics;
 
+import hidenosp.core.EventSequence;
 import hidenosp.core.GapConstraint;
 import hidenosp.core.Pattern;
 import hidenosp.core.SequenceDatabase;
 import hidenosp.core.SupportNO;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +19,20 @@ import java.util.Map;
  *
  * <p>The enumeration is level-wise and prunes on the prefix, which is sound: if L and L-prime are
  * occurrences of P extended by one item that differ at every level, their prefixes differ at every
- * level too, so sup_NO(P extended, D) &le; sup_NO(P, D). Every prefix of a frequent pattern is
- * therefore frequent. {@link #enumerateWithoutPruning} keeps the naive version for the
- * implementation check of SC1.
+ * level too, so sup_NO(P extended, S) &le; sup_NO(P, S) in every sequence and hence over D. Every
+ * prefix of a frequent pattern is therefore frequent, and a sequence that does not carry the prefix
+ * cannot carry the extension. {@link #enumerateWithoutPruning} keeps the naive version for the
+ * implementation check of SC1, which compares the two on small instances.
+ *
+ * <p>Two further consequences of the same inequality make the real datasets tractable, and neither
+ * changes the set produced:
+ *
+ * <ul>
+ *   <li>each frequent pattern carries its <em>projection</em>, the sequences where its support is
+ *       positive; an extension is evaluated only there, never over the whole database;</li>
+ *   <li>a length-one pattern needs no max flow at all, because its occurrences are single positions
+ *       and non-overlapping means distinct, so sup_NO is the number of matching positions.</li>
+ * </ul>
  *
  * <p>This class is a counting device, not a contribution: the mining algorithm of [R1] is cited for
  * the definition, and NETGAP is used at SC1 to check that the supports agree.
@@ -29,8 +42,21 @@ public final class FrequentPatterns {
     private FrequentPatterns() {
     }
 
+    /** A frequent pattern together with the sequences where its support is positive. */
+    private static final class Projection {
+        final Pattern pattern;
+        final int[] sequences;
+        final long support;
+
+        Projection(Pattern pattern, int[] sequences, long support) {
+            this.pattern = pattern;
+            this.sequences = sequences;
+            this.support = support;
+        }
+    }
+
     /**
-     * F_sigma(D) with its supports, in ascending pattern order.
+     * F_sigma(D) with its supports, in ascending length then discovery order.
      *
      * @param maxLength l_max
      * @param minSupport sigma, as an absolute number of non-overlapping occurrences
@@ -39,30 +65,86 @@ public final class FrequentPatterns {
                                           int maxLength, long minSupport) {
         Map<Pattern, Long> frequent = new LinkedHashMap<>();
         int[] alphabet = database.alphabet();
-        List<Pattern> level = new ArrayList<>();
-        for (int item : alphabet) {
-            Pattern p = new Pattern(item);
-            long support = SupportNO.of(p, database, gap);
-            if (support >= minSupport) {
-                frequent.put(p, support);
-                level.add(p);
-            }
-        }
+        List<Projection> level = firstLevel(database, alphabet, minSupport, frequent);
         for (int length = 2; length <= maxLength && !level.isEmpty(); length++) {
-            List<Pattern> next = new ArrayList<>();
-            for (Pattern prefix : level) {
+            List<Projection> next = new ArrayList<>();
+            for (Projection prefix : level) {
                 for (int item : alphabet) {
-                    Pattern candidate = prefix.extend(item);
-                    long support = SupportNO.of(candidate, database, gap);
-                    if (support >= minSupport) {
-                        frequent.put(candidate, support);
-                        next.add(candidate);
+                    Projection extended = extend(database, gap, prefix, item, minSupport);
+                    if (extended != null) {
+                        frequent.put(extended.pattern, extended.support);
+                        next.add(extended);
                     }
                 }
             }
             level = next;
         }
         return frequent;
+    }
+
+    /** Length-one patterns, counted directly: for m = 1 an occurrence is one position. */
+    private static List<Projection> firstLevel(SequenceDatabase database, int[] alphabet,
+                                               long minSupport, Map<Pattern, Long> frequent) {
+        Map<Integer, Integer> index = new LinkedHashMap<>();
+        for (int i = 0; i < alphabet.length; i++) {
+            index.put(alphabet[i], i);
+        }
+        long[] total = new long[alphabet.length];
+        List<List<Integer>> carriers = new ArrayList<>(alphabet.length);
+        for (int i = 0; i < alphabet.length; i++) {
+            carriers.add(new ArrayList<>());
+        }
+        for (int s = 0; s < database.size(); s++) {
+            EventSequence sequence = database.get(s);
+            int[] count = new int[alphabet.length];
+            for (int i = 0; i < sequence.length(); i++) {
+                Integer slot = index.get(sequence.at(i));
+                if (slot != null) {
+                    count[slot]++;
+                }
+            }
+            for (int a = 0; a < alphabet.length; a++) {
+                if (count[a] > 0) {
+                    total[a] += count[a];
+                    carriers.get(a).add(s);
+                }
+            }
+        }
+        List<Projection> level = new ArrayList<>();
+        for (int a = 0; a < alphabet.length; a++) {
+            if (total[a] >= minSupport) {
+                Pattern pattern = new Pattern(alphabet[a]);
+                frequent.put(pattern, total[a]);
+                level.add(new Projection(pattern, toArray(carriers.get(a)), total[a]));
+            }
+        }
+        return level;
+    }
+
+    /** Extends one projection by one item, evaluating only inside the projection. */
+    private static Projection extend(SequenceDatabase database, GapConstraint gap,
+                                     Projection prefix, int item, long minSupport) {
+        Pattern candidate = prefix.pattern.extend(item);
+        long total = 0;
+        List<Integer> carriers = new ArrayList<>();
+        for (int s : prefix.sequences) {
+            int support = SupportNO.of(candidate, database.get(s), gap);
+            if (support > 0) {
+                total += support;
+                carriers.add(s);
+            }
+        }
+        return total >= minSupport
+                ? new Projection(candidate, toArray(carriers), total)
+                : null;
+    }
+
+    private static int[] toArray(List<Integer> values) {
+        int[] out = new int[values.size()];
+        for (int i = 0; i < out.length; i++) {
+            out[i] = values.get(i);
+        }
+        return out;
     }
 
     /** The same set by brute force over every word of length up to l_max; SC1 compares the two. */
@@ -76,7 +158,7 @@ public final class FrequentPatterns {
             List<int[]> next = new ArrayList<>();
             for (int[] word : words) {
                 for (int item : alphabet) {
-                    int[] extended = java.util.Arrays.copyOf(word, word.length + 1);
+                    int[] extended = Arrays.copyOf(word, word.length + 1);
                     extended[word.length] = item;
                     next.add(extended);
                     Pattern p = new Pattern(extended);

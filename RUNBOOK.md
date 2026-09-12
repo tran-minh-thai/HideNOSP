@@ -84,7 +84,77 @@ ghi thêm đè vào giữa tệp. Ghi ra đĩa cục bộ rồi chép sang, ho�
 
 ---
 
-## 3. Ba thư mục kết quả và luật của chúng (§11.8)
+## 3. Chạy thực nghiệm giai đoạn 1
+
+Theo §12b, giai đoạn 1 là **cài đặt, SC1–SC2, chốt `config/preregistration.md`**. Nó phải xong
+trước SC3, vì SC2 quyết định bộ dữ liệu nào vào nhóm chính và bộ nào vào nhóm đối chứng suy
+biến, mà quyết định đó không được sửa sau khi đã nhìn kết quả so sánh [2.3.10].
+
+### Bước 0. Lấy dữ liệu
+
+```bash
+python tools/fetch_datasets.py
+```
+
+Tải MSNBC, SIGN, FIFA và BMS-WebView-1 từ kho công khai của SPMF vào `datasets/`, tính SHA-256
+và ghi `datasets/provenance.tsv`. Chạy lại là không tải lại nếu tổng kiểm còn khớp. Muốn một bộ
+riêng thì truyền tên: `python tools/fetch_datasets.py msnbc`.
+
+### Bước 1. SC1 phải xanh trước đã
+
+```bash
+java -cp target/classes hidenosp.exp.Runner SC1 --trials=1500 --seed=2026
+```
+
+Kết quả chấp nhận được duy nhất là **0 ca lệch**. SC1 đối chiếu luồng cực đại với vét cạn, kiểm
+P1, kiểm đặc trưng nút thiết yếu L5, đối chiếu cập nhật gia tăng với dựng lại, và kiểm P5.
+Chưa xanh thì mọi con số sau đó vô nghĩa.
+
+### Bước 2. SC2 trên từng bộ và từng σ
+
+```bash
+java -Xmx4g -cp target/classes hidenosp.exp.Runner SC2 --dataset=datasets/msnbc.txt --format=SPMF --sigma=2000 --gmin=0 --gmax=3 --maxPatternLength=3 --patterns=12
+```
+
+```bash
+java -Xmx4g -cp target/classes hidenosp.exp.Runner SC2 --dataset=datasets/sign.txt --format=SPMF --sigma=200 --gmin=0 --gmax=3 --maxPatternLength=3 --patterns=10
+```
+
+```bash
+java -Xmx4g -cp target/classes hidenosp.exp.Runner SC2 --dataset=datasets/bms1.txt --format=SPMF --sigma=100 --gmin=0 --gmax=3 --maxPatternLength=3 --patterns=10
+```
+
+```bash
+java -Xmx4g -cp target/classes hidenosp.exp.Runner SC2 --dataset=datasets/fifa.txt --format=SPMF --sigma=3000 --gmin=0 --gmax=3 --maxPatternLength=3 --patterns=10
+```
+
+Quét thêm σ và độ rộng khoảng cách để thấy ρ_rep và β đổi theo cấu hình chứ không phải theo bộ:
+đổi `--sigma` và `--gmax`. Thời gian tham khảo trên máy phát triển: SIGN vài giây, BMS1 vài giây,
+MSNBC khoảng 13 giây, FIFA khoảng hai phút (|Σ| = 2990 làm ứng viên mức 2 đông).
+
+**Không** kèm `--probe` ở bước này: đây là kết quả thật, bất biến theo máy, thuộc về
+`results-invariant/`. Cờ `--probe` chỉ dành cho chạy thử trên dữ liệu tổng hợp có sẵn trong mã.
+
+### Bước 3. Đọc bảng SC2 rồi mới chốt preregistration
+
+Với mỗi bộ, xem hai cột:
+
+- **ρ_rep gần 0** nghĩa là sup_NO suy biến thành độ hỗ trợ theo chuỗi. Bộ đó là **đối chứng suy
+  biến**, không được đứng trong nhóm chứng minh đóng góp [2.2.4].
+- **β gần 0** nghĩa là ràng buộc khoảng cách không có hiệu lực trên cấu hình đó.
+
+Điền ngưỡng phân nhóm và δ_L vào `config/preregistration.md`, commit tệp đó (lịch sử git là bằng
+chứng thời điểm), rồi mới sang SC3.
+
+### Bước 4. Kiểm luật thư mục kết quả
+
+```bash
+python tools/check_results.py
+```
+
+---
+
+## 4. Ba thư mục kết quả và luật của chúng (§11.8)
 
 | Thư mục | Chứa gì | Ai được ghi |
 |---|---|---|
@@ -102,7 +172,7 @@ cỡ heap tối đa.
 
 ---
 
-## 4. Trạng thái cài đặt
+## 5. Trạng thái cài đặt
 
 ### Đã cài và đã kiểm
 
@@ -125,16 +195,20 @@ cỡ heap tối đa.
 | `F_σ(D)`, `B_ε`, `𝒮⁺` | `metrics.FrequentPatterns` | §9.2 bước 3 |
 | ρ_rep, β, \|R\|\* | `metrics.DataProfile` | §8.4 |
 | Baseline tầng (a) | `baseline.RandomMasking` (HH/HR/RH/RR), `baseline.OccurrenceCountHeuristic` | §11.3 |
+| Baseline tầng (b): HHA | `baseline.Hha` | [R20]; hai cách tính δ cho SC6 |
+| Baseline tầng (b): DBSH | `baseline.Dbsh` | [R3]; Cost theo ký hiệu, Exclude, Update-paths |
+| Baseline tầng (b): SBSH | `baseline.Sbsh` | [R3]; **cài lại từ mô tả, phải đối chiếu [R3] trước khi dùng số** |
+| Baseline tầng (c): bộ giải chính xác | `baseline.IlpExact` | Nhánh-cận, thực thể nhỏ; tuỳ chọn cực tiểu mẫu mất |
+| Tải bộ dữ liệu kèm tổng kiểm | `tools/fetch_datasets.py` | §11.2 |
 | SC1, SC2, SC3 | `exp.Sc1…`, `exp.Sc2…`, `exp.Sc3…` | Chạy được |
 
 ### Chưa cài (khung có sẵn, đặc tả nằm trong Javadoc của từng lớp)
 
 | Việc | Nơi | Chặn kịch bản nào |
 |---|---|---|
-| HHA của [R20], cả bản quy hoạch động gốc | `baseline.Hha` | SC3 (tầng b), SC6, SC8 |
-| DBSH của [R3] | `baseline.Dbsh` | SC3, SC8 |
-| SBSH của [R3], tham số bán kính | `baseline.Sbsh` | SC3, SC7, SC8 |
-| Quy hoạch nguyên chính xác và quan hệ nới lỏng tuyến tính | `baseline.IlpExact` | SC3 (tầng c) |
+| Đối chiếu SBSH với Thuật toán 2 và 3 của [R3] | `baseline.Sbsh` | SC3, SC7, SC8 |
+| Bản gốc của HHA, DBSH, SBSH trên bài toán cũ (độ hỗ trợ theo số chuỗi) | `baseline.Hha`, `Dbsh` (cờ `originalProblem`), `Sbsh` | SC8 |
+| Quan hệ nới lỏng tuyến tính và làm tròn có bảo đảm ℓ_max | `baseline.IlpExact` | SC3, danh sách đóng góp |
 | Giải thuật di truyền, bản thuần và bản lai khởi tạo từ lát cắt | `baseline.GaHybrid` | SC3 (tầng c) |
 | CUT-HIDE nhiều mẫu với ngưỡng CSDL | `hide.CutHide.runMultiPattern` | SC3 với \|𝒮\| > 1 |
 | SC4, SC5, SC6, SC7, SC8 | `exp.Sc4…` đến `exp.Sc8…` | chính nó |
@@ -145,7 +219,7 @@ Tìm nhanh: `grep -rn "TODO(code)" src/`.
 
 ---
 
-## 5. Bảng giao thức 9 dòng
+## 6. Bảng giao thức 9 dòng
 
 `config/protocol.yaml` là bản điền. Quy tắc 2.6.2 đòi điền **ngay ở bản nháp đầu**, không đợi
 tới lúc nộp. Những ô mã sinh ra được (phiên bản JDK, cỡ heap, hạt giống) đã được in sẵn vào
@@ -156,7 +230,7 @@ tới lúc nộp. Những ô mã sinh ra được (phiên bản JDK, cỡ heap, 
 
 ---
 
-## 6. Những quyết định cài đặt phải khai trong bài
+## 7. Những quyết định cài đặt phải khai trong bài
 
 Đây là các chỗ mã phải chọn một cách làm mà tệp thiết kế chưa chốt. Mỗi dòng cần một câu trong
 bản thảo hoặc trong bảng giao thức.
@@ -178,7 +252,7 @@ bản thảo hoặc trong bảng giao thức.
 
 ---
 
-## 7. Bản đồ từ §9.2 sang mã
+## 8. Bản đồ từ §9.2 sang mã
 
 | Bước §9.2 | Lớp, phương thức |
 |---|---|
@@ -193,7 +267,7 @@ bản thảo hoặc trong bảng giao thức.
 
 ---
 
-## 8. Giới hạn kỹ thuật đã biết
+## 9. Giới hạn kỹ thuật đã biết
 
 - `Dinic.dfs` đệ quy. Với chuỗi rất dài và khoảng cách rộng, ngăn xếp có thể tràn; cần chuyển
   sang vòng lặp trước khi chạy SC6 ở quy mô lớn.

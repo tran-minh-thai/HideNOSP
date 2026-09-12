@@ -232,6 +232,10 @@ tới lúc nộp. Những ô mã sinh ra được (phiên bản JDK, cỡ heap, 
 đề, tách nhóm chặn SC3 và nhóm chặn lúc nộp. Sinh từ một đợt rà mười nguồn rồi thẩm định lại từng
 điểm; `tools/gop_quyet_dinh.py` gộp kết quả thành tài liệu đó.
 
+`config/de_xuat_gia_tri_nhom_A.md` đề xuất **giá trị cụ thể** cho từng điểm chặn SC3, mỗi giá trị
+kèm căn cứ đo được, cái giá phải trả, và cách bác bỏ. Đây là bản để duyệt, chưa phải bản chốt:
+chốt là ghi số vào hai tệp trên rồi commit.
+
 ---
 
 ## 7. Những quyết định cài đặt phải khai trong bài

@@ -161,9 +161,13 @@ public final class Metrics {
                     watched.add(q);
                 }
             }
+            // Mau nhay cam khong bao gio nam trong watched, vi bao dong da loai chung ra, nen
+            // phai them vao day du co tan suat hay khong. Dieu kien cu la
+            // "!frequent.containsKey(p)", tuc mau nhay cam nao co tan suat thi khong ai tinh muc
+            // giam cua no, va HF luon ra 1 ke ca khi da an sach.
             List<Pattern> all = new ArrayList<>(watched);
             for (Pattern p : problem.sensitive()) {
-                if (!frequent.containsKey(p)) {
+                if (!all.contains(p)) {
                     all.add(p);
                 }
             }

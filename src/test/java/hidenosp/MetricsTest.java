@@ -104,6 +104,32 @@ class MetricsTest {
     }
 
     @Test
+    @DisplayName("HF gia tang trung khop voi dinh nghia, ke ca khi mau nhay cam co tan suat")
+    void incrementalHidingFailureAgreesWithTheDefinition() {
+        for (long seed : new long[] {3, 11, 29}) {
+            SequenceDatabase database = database(seed);
+            // sigma = 1 la ca dang so: moi mau nhay cam deu nam trong F_sigma(D). Loi cu bo qua
+            // muc giam cua dung nhung mau do, nen HF luon ra 1 ke ca khi da an sach.
+            for (int sigma : new int[] {1, 8, 14}) {
+                HideProblem problem = new HideProblem(database,
+                        List.of(new Pattern(A, B), new Pattern(B, C)), new GapConstraint(0, 2),
+                        HideProblem.Mode.HIDE_DB, sigma, 0.5, 3);
+                Metrics.Context context = Metrics.Context.of(problem);
+                for (HidingMethod method : List.of(new OccurrenceCountHeuristic(), new Hha(),
+                        new Dbsh(), new RandomMasking(RandomMasking.SequenceChoice.RANDOM,
+                                RandomMasking.PositionChoice.RANDOM, seed))) {
+                    Sanitization sanitization = method.run(problem);
+                    Metrics.Row fast = context.evaluateMasking(problem, sanitization);
+                    double slow = Metrics.hidingFailure(problem, sanitization.sanitized());
+                    assertEquals(slow, fast.hidingFailure(), 1e-9,
+                            "HF khac dinh nghia: " + method.name() + " seed " + seed
+                                    + " sigma " + sigma);
+                }
+            }
+        }
+    }
+
+    @Test
     @DisplayName("Context tu choi khi sigma cua no khac sigma dem tac dung phu cua bai toan")
     void contextRefusesAMismatchedSigma() {
         SequenceDatabase database = database(3);

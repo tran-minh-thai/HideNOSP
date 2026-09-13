@@ -15,6 +15,7 @@ import hidenosp.core.SequenceDatabase;
 import hidenosp.hide.CutHide;
 import hidenosp.hide.CutHideConfig;
 import hidenosp.hide.HideProblem;
+import hidenosp.hide.PrimalDualCover;
 import hidenosp.hide.Sanitization;
 import hidenosp.io.CsvWriter;
 import hidenosp.io.DatasetReader;
@@ -88,7 +89,8 @@ public final class Sc3MainComparison implements Scenario {
 
         String[] header = {"dataset", "gap", "sigma", "sensitive_set", "method", "hf", "lost",
                 "ghost", "dist_r", "sup_dist", "mask_count", "min_masks", "mask_ratio",
-                "certified_pairs", "total_pairs", "frequent_before", "frequent_after"};
+                "certified_pairs", "total_pairs", "lower_bound", "achieved_ratio",
+                "frequent_before", "frequent_after"};
 
         try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header)) {
             for (int index = 0; index < sensitiveSetList.size(); index++) {
@@ -109,6 +111,10 @@ public final class Sc3MainComparison implements Scenario {
                             minMasks == 0 ? "" : format((double) row.maskCount() / minMasks),
                             Long.toString(sanitization.certifiedPairs()),
                             Long.toString(sanitization.totalPairs()),
+                            Long.toString(sanitization.certifiedLowerBound()),
+                            sanitization.certifiedLowerBound() == 0 ? ""
+                                    : format((double) row.maskCount()
+                                            / sanitization.certifiedLowerBound()),
                             Integer.toString(row.frequentBefore()),
                             Integer.toString(row.frequentAfter()));
                     System.out.printf("set %d  %-34s |R| %4d  lost %4d  ghost %3d  supDist %.4f%n",
@@ -165,6 +171,10 @@ public final class Sc3MainComparison implements Scenario {
             case "sbsh-rmax":
                 return new Sbsh(problem.maxPatternLength())
                         .withThresholdPatterns(atThreshold(problem, frequent, sigma));
+            case "primal-dual":
+                // Chi chay khi sigma = 1; voi sigma khac no nem loi noi ro vi sao, khong im lang
+                // tut xuong mot bien the khac.
+                return new PrimalDualCover();
             case "ilp":
                 return new IlpExact();
             case "ilp-lost":

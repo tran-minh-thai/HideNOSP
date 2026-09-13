@@ -21,6 +21,7 @@ public final class Sanitization {
     private String method = "unknown";
     private long certifiedPairs;
     private long totalPairs;
+    private long certifiedLowerBound;
 
     public Sanitization(SequenceDatabase original) {
         this.original = original;
@@ -46,6 +47,19 @@ public final class Sanitization {
 
     public Map<Integer, Set<Integer>> masked() {
         return masked;
+    }
+
+    /**
+     * A lower bound on the optimum this instance could not have beaten, or 0 when the method proves
+     * none. {@link PrimalDualCover} fills it from its feasible dual; the greedy methods cannot.
+     */
+    public Sanitization certifiedLowerBound(long bound) {
+        this.certifiedLowerBound = bound;
+        return this;
+    }
+
+    public long certifiedLowerBound() {
+        return certifiedLowerBound;
     }
 
     /** |R|, the first objective. */

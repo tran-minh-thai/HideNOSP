@@ -324,6 +324,38 @@ bản thảo hoặc trong bảng giao thức.
    của vị trí đó. P1 và P2 vốn không áp dụng trong trường hợp này, nên đây là lựa chọn cài đặt
    chứ không phải hệ quả của mệnh đề nào.
 
+9. **Nguyên–đối ngẫu thay cho làm tròn quy hoạch tuyến tính.** §7 gọi đóng góp này là "làm tròn
+   quy hoạch tuyến tính". Cái đã cài (`PrimalDualCover`) là phương pháp **nguyên–đối ngẫu**, đạt
+   cùng hệ số ℓ_max qua cùng một quy hoạch tuyến tính nhưng là **kỹ thuật khác**, nên câu trong
+   bài phải sửa theo. Ba lý do:
+
+   - không cần bộ giải, giữ đúng lời hứa "không phụ thuộc ngoài, dựng ngoại tuyến" ở
+     `config/protocol.yaml`;
+   - số lần xuất hiện tăng theo hàm mũ (chính vì thế `PathCounts` phải bão hòa) nên không bao giờ
+     viết ra hết ràng buộc được. Nguyên–đối ngẫu mỗi lượt chỉ cần **một** ràng buộc bị vi phạm,
+     tìm bằng đường đi ngắn nhất trên Nettree với khe hở làm trọng số nút;
+   - nó sinh một đối ngẫu khả thi, nên **mỗi thực thể tự mang chặn dưới của nó**. Bài báo cáo được
+     tỉ số đạt thực tế chứ không chỉ trường hợp xấu nhất, cùng tinh thần với cặp chặn có chứng chỉ
+     của quét λ.
+
+   **Bước xóa ngược là bắt buộc, không phải tô điểm.** Với chi phí đơn vị, ràng buộc rẻ nhất luôn
+   là ràng buộc chưa vị trí nào căng, nên cả m vị trí của nó căng cùng một lượt: mỗi lượt mua một
+   đơn vị đối ngẫu và tiêu m. Đo trên ba cơ sở dữ liệu ngẫu nhiên, tỉ số ra đúng 2,000 — bằng
+   trường hợp xấu nhất — ở **cả ba**. Thêm bước xóa ngược (bỏ vị trí thừa, chọn sau bỏ trước) thì
+   cả ba xuống **1,000**, tức chi phí bằng đúng chặn dưới nên lời giải là **tối ưu**, chứ không
+   chỉ trong hệ số. Xóa vị trí chỉ làm giảm chi phí và không đụng tới đối ngẫu nên bảo đảm còn
+   nguyên, và tập thu được là **tối tiểu**: bỏ bất kỳ vị trí nào cũng lộ lại một lần xuất hiện
+   (`PrimalDualCoverTest.theMaskSetIsMinimal` ghim điều này).
+
+   Hệ quả cho SC3: cột tỉ số đạt được của phương pháp này nhiều khả năng nằm sát 1, nên phải báo
+   cáo **cả** hệ số chứng minh được (ℓ_max, trường hợp xấu nhất) **lẫn** tỉ số đo được, và nói rõ
+   hai cái đó khác nhau.
+
+10. **Chi phí đơn vị, chưa có biến thể có trọng số.** `PrimalDualCover` cực tiểu |R|, tức mục tiêu
+    (1) của §2. Lập luận không hề nhìn vào chi phí ngoài việc so khe hở, nên mọi chi phí không âm
+    đều giữ được hệ số; nhưng biến thể có trọng số cần nối B_ε theo đúng cách `CutHide` làm, chưa
+    làm thì không nên bày ra một công tắc không có tác dụng gì.
+
 ---
 
 ## 8. Bản đồ từ §9.2 sang mã

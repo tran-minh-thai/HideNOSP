@@ -32,14 +32,34 @@ import java.util.List;
  * with no radius at all. That is the comparison gap G4 sets up, so SC7 runs SBSH at its smallest
  * and its largest radius and records how often the radius binds.
  *
- * <p><b>TODO(code): verify against the paper before any number from this class enters the
- * manuscript.</b> The colouring and the replacement above are reconstructed from the description in
- * section 3 of the design doc, not from Algorithms 2 and 3 of [R3] themselves. Three points need
- * checking: what the grey label covers, whether the replacement searches a radius in arcs or in
- * positions, and how C-PA and C-SA differ from the plain replacement. This implementation cuts the
- * paths through a red node by taking every node of one Nettree level that lies on a path through
- * it, choosing the level within the radius that costs fewest positions; that does cut every such
- * path, but it is one realisation of the idea, not necessarily theirs.
+ * <p><b>This is NOT the SBSH of [R3].</b> The paper has now been read against this class; the
+ * comparison is written up in {@code config/doi_chieu_sbsh_r3.md}. Four of the five points checked
+ * come out different, so no number from this class may be presented as a result for SBSH until
+ * either the class is corrected or the manuscript declares it a variant of ours:
+ *
+ * <ul>
+ *   <li><b>The grey label is wrong.</b> Algorithm 2 colours by the side effect on non-sensitive
+ *       patterns, not by the cut structure: grey means "carries a pattern sitting exactly at the
+ *       threshold, yet the local check sees none of them fall below it", which is uncertainty
+ *       rather than irrelevance. Here grey is merely the default for a position carrying no
+ *       sensitive node, which puts it outside their colouring altogether, and the grey branch of
+ *       Algorithm 5 (re-annotate at the moment of deletion, delete only if still grey) is
+ *       missing.</li>
+ *   <li><b>The radius is right.</b> Section 4.3 counts r in edges of the matching graph, which is
+ *       Nettree arcs, hence levels. Their Example 3 confirms it.</li>
+ *   <li><b>The range of r is wrong.</b> The paper fixes r in [1, length of the longest sensitive
+ *       sequence]; {@code Sc3MainComparison} passes l_max, which coincides only when the sensitive
+ *       set happens to hold a pattern of that length.</li>
+ *   <li><b>Replace differs.</b> Theirs is min(C-PA, C-SA), where each side walks outward from one
+ *       edge and stops at the FIRST covering set it finds. This one optimises over the whole
+ *       radius on both sides at once, so it returns a set at least as small but never reproduces
+ *       their "take the near one even if it is large" behaviour -- which is what the radius sweep
+ *       of SC7 is supposed to be measuring.</li>
+ *   <li><b>Exclude-SBSH is missing.</b> Algorithm 5 step 1 drops the sequence carrying the most
+ *       sensitive patterns first; the paper says that choice alone reduces side effects
+ *       appreciably. This class walks the sequences in index order. Since H2 is tested on Lost,
+ *       which is exactly the side-effect count, this is likely the heaviest of the four.</li>
+ * </ul>
  *
  * <p>As with DBSH, [R3] deletes and this implementation masks, because section 11.4 requires the
  * same modification for every method.

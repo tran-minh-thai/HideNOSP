@@ -286,6 +286,24 @@ bản thảo hoặc trong bảng giao thức.
 5. **Tuyến tính hoá tập mục.** Tệp SPMF có tập mục nhiều phần tử nằm ngoài mô hình dữ liệu của
    bài (§8.3). `DatasetReader` sắp theo mã mục tăng dần và trả về tỉ lệ vị trí bị ảnh hưởng;
    quy tắc 2.2.10 đòi khai tỉ lệ này cạnh bộ dữ liệu.
+8. **Va chạm ký hiệu: δ đang mang hai nghĩa.** Quy tắc 3.2.4 đòi mỗi ký hiệu định nghĩa đúng một
+   lần, nhưng hiện δ dùng cho hai đại lượng không liên quan:
+
+   - **δ(i)** của [R20]: số lần khớp đi qua vị trí i, tức `|M_T| − |M_T che i|`, đếm **mọi** lần
+     nhúng kể cả chồng lấp. Ở mã là `PathCounts.throughPosition`; `Hha.Delta` chọn cách tính.
+   - **δ_L**: ngưỡng hiệu ứng thực tiễn của H2, chốt ở `preregistration.md` = 0,02.
+
+   Nên giữ δ(i) cho [R20] vì phải giữ nguyên ký hiệu khi trích của họ, và đổi δ_L sang chữ khác
+   trong bản thảo.
+
+   Kèm theo, một chỗ dễ đọc nhầm cần một câu trong bài: **δ(i) không phải mức giảm sup_NO.** Ví dụ
+   chạy tay của G3 cho thấy vị trí có δ lớn nhất lại không làm giảm sup_NO chút nào. δ đếm mọi lần
+   khớp; cái bài cần là nút thiết yếu của L5. Khác nhau ở chỗ đó chính là RQ3.
+
+   Và trong làm tròn quy hoạch tuyến tính, hệ số xấp xỉ là **cỡ ràng buộc lớn nhất** (m ≤ ℓ_max),
+   **không phải** bậc của biến (chính là δ). Lấy nhầm δ làm hệ số sẽ cho một bảo đảm sai, vì δ
+   không bị chặn còn m thì có.
+
 7. **Phạm vi của bảo đảm hệ số ℓ_max.** §7 của bản thiết kế liệt kê trong đóng góp: "với nhiều
    mẫu (NP-khó) dùng làm tròn quy hoạch tuyến tính **có bảo đảm hệ số ℓ_max**". Bảo đảm đó chỉ
    đứng khi **ẩn hết**, tức σ = 1 với HIDE-DB hoặc r = 1 với HIDE-SEQ. Lý do:

@@ -9,8 +9,8 @@ kịch bản thực nghiệm SC1–SC8 của bản thiết kế nghiên cứu.
 - Bảng giao thức 9 dòng: [`config/protocol.yaml`](config/protocol.yaml)
 - Ngưỡng chốt trước khi chạy so sánh chính: [`config/preregistration.md`](config/preregistration.md)
 
-Bản thiết kế nghiên cứu (`doc/`) và bản thảo (`paper/`) nằm **ngoài** kho này, ở cùng thư mục
-dự án một cấp trên.
+Bản thiết kế nghiên cứu (`doc/`), bản thảo (`paper/`) và quy trình chạy trên máy đo (`run.txt`)
+nằm **ngoài** kho này, ở cùng thư mục dự án một cấp trên.
 
 ## Chạy thử
 

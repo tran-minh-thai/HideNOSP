@@ -347,9 +347,32 @@ bản thảo hoặc trong bảng giao thức.
    nguyên, và tập thu được là **tối tiểu**: bỏ bất kỳ vị trí nào cũng lộ lại một lần xuất hiện
    (`PrimalDualCoverTest.theMaskSetIsMinimal` ghim điều này).
 
-   Hệ quả cho SC3: cột tỉ số đạt được của phương pháp này nhiều khả năng nằm sát 1, nên phải báo
-   cáo **cả** hệ số chứng minh được (ℓ_max, trường hợp xấu nhất) **lẫn** tỉ số đo được, và nói rõ
-   hai cái đó khác nhau.
+   **Chặn dưới là của thực thể, không phải của riêng phương pháp.** Đối ngẫu khả thi cận dưới
+   nghiệm quy hoạch tuyến tính, mà nghiệm đó cận dưới tối ưu nguyên, tức |R|* của **chính thực
+   thể**. Vậy cột `lower_bound` chặn dưới cho **mọi** phương pháp chạy trên hàng đó, không riêng
+   nguyên–đối ngẫu. Đây là cái được thật sự: bộ giải chính xác chỉ chạy nổi trên thực thể nhỏ
+   (64 ứng viên, 12 lần che), còn chặn dưới này chạy trên thực thể cỡ nào cũng được, nên SC3 báo
+   cáo được khoảng cách tới tối ưu của từng đường cơ sở trên toàn bộ dữ liệu. Chỉ đúng khi σ = 1.
+
+   **Đo thử: nó không thắng về |R|.** Trên CSDL tổng hợp của SC3, một mẫu nhạy cảm thì mọi phương
+   pháp trừ RR đều chạm đúng tối ưu — vì P1c cho |R|* = sup_NO và tham lam nào cũng tới đó, nên
+   σ = 1 với một mẫu **không phân biệt được gì**. Với ba mẫu nhạy cảm, năm tập:
+
+   | tập | chặn dưới | nguyên–đối ngẫu | tỉ số | tốt nhất của đối thủ | tỉ số |
+   |----:|----------:|----------------:|------:|---------------------:|------:|
+   | 0 | 103 | 109 | 1,058 | 107 | 1,039 |
+   | 1 |  56 |  63 | 1,125 |  61 | 1,089 |
+   | 2 | 110 | 112 | 1,018 | 113 | 1,027 |
+   | 3 | 128 | 131 | 1,023 | 134 | 1,047 |
+   | 4 |  81 |  93 | 1,148 |  87 | 1,074 |
+
+   Thắng 2 trên 5. Vậy đóng góp của nó **không phải** là |R| nhỏ hơn, mà là (a) bảo đảm chứng minh
+   được, và (b) cái chứng chỉ cho phép nói "mọi phương pháp ở hàng này cách tối ưu không quá 1,02
+   đến 1,15 lần" — chặt hơn hẳn trường hợp xấu nhất ℓ_max. Bài phải trình bày đúng như thế, đừng
+   dựng nó thành phương pháp tốt nhất rồi để bảng phản lại.
+
+   Hệ quả cho SC3: phải báo cáo **cả** hệ số chứng minh được (ℓ_max, trường hợp xấu nhất) **lẫn**
+   tỉ số đo được, và nói rõ hai cái đó khác nhau.
 
 10. **Chi phí đơn vị, chưa có biến thể có trọng số.** `PrimalDualCover` cực tiểu |R|, tức mục tiêu
     (1) của §2. Lập luận không hề nhìn vào chi phí ngoài việc so khe hở, nên mọi chi phí không âm

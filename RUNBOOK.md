@@ -286,6 +286,22 @@ bản thảo hoặc trong bảng giao thức.
 5. **Tuyến tính hoá tập mục.** Tệp SPMF có tập mục nhiều phần tử nằm ngoài mô hình dữ liệu của
    bài (§8.3). `DatasetReader` sắp theo mã mục tăng dần và trả về tỉ lệ vị trí bị ảnh hưởng;
    quy tắc 2.2.10 đòi khai tỉ lệ này cạnh bộ dữ liệu.
+7. **Phạm vi của bảo đảm hệ số ℓ_max.** §7 của bản thiết kế liệt kê trong đóng góp: "với nhiều
+   mẫu (NP-khó) dùng làm tròn quy hoạch tuyến tính **có bảo đảm hệ số ℓ_max**". Bảo đảm đó chỉ
+   đứng khi **ẩn hết**, tức σ = 1 với HIDE-DB hoặc r = 1 với HIDE-SEQ. Lý do:
+
+   - Khi σ = 1, điều kiện là "không lần xuất hiện nào sống sót". Mỗi lần xuất hiện L cho một ràng
+     buộc phủ `Σ_{i ∈ L} x_i ≥ 1` với đúng m ≤ ℓ_max biến. Làm tròn mọi `x_i ≥ 1/ℓ_max` lên 1 cho
+     lời giải khả thi với chi phí ≤ ℓ_max lần nghiệm quy hoạch tuyến tính, tức ≤ ℓ_max lần tối ưu.
+     Đây là làm tròn phủ chuẩn với cỡ ràng buộc bị chặn.
+   - Khi σ > 1, điều kiện là "không **họ σ lần xuất hiện đôi một không chồng lấp** nào sống sót".
+     Ràng buộc tương ứng có tới σ·m biến, nên cùng phép làm tròn chỉ cho hệ số **σ·m**, không phải
+     ℓ_max. Số ràng buộc cũng bùng nổ nên còn phải sinh ràng buộc trễ.
+
+   Vậy câu trong §7 cần một mệnh đề giới hạn phạm vi trước khi vào bài. Cái đang cài cho σ > 1 là
+   **tham lam theo tỉ số** của bước 7 §9.2, không có bảo đảm hệ số, và SC3 đo khoảng cách của nó
+   tới bộ giải chính xác trên thực thể nhỏ.
+
 6. **Trọng số nút khi μ(P) ≥ 2.** Một vị trí mang nhiều nút; mã gán trọng số vị trí cho mọi nút
    của vị trí đó. P1 và P2 vốn không áp dụng trong trường hợp này, nên đây là lựa chọn cài đặt
    chứ không phải hệ quả của mệnh đề nào.

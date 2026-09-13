@@ -199,8 +199,9 @@ class BaselineTest {
         List<Pattern> sensitive = List.of(new Pattern(A, B), new Pattern(B, C));
         HideProblem problem = new HideProblem(database, sensitive, new GapConstraint(0, 2),
                 HideProblem.Mode.HIDE_DB, 4, 0.5, 3);
-        // CUT-HIDE duoi nguong CSDL voi nhieu mau van chua cai (LP lam tron), nen khong co o day.
         List<HidingMethod> methods = List.of(
+                new CutHide(CutHideConfig.uniformWeights()),
+                weighted(problem),
                 new OccurrenceCountHeuristic(),
                 new Hha(),
                 new Dbsh(),

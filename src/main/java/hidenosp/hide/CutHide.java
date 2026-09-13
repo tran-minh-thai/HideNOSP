@@ -8,9 +8,13 @@ import hidenosp.core.SupportNO;
 import hidenosp.index.NettreeCutIndex;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * CUT-HIDE, the algorithm of section 9 of the design doc, run on the Nettree cut index.
@@ -161,14 +165,179 @@ public final class CutHide implements HidingMethod {
      */
     private void runMultiPattern(HideProblem problem, Sanitization result) {
         if (problem.isDatabaseMode()) {
-            // TODO(code): the database threshold couples the sequences, so a per-sequence loop
-            // over-masks. Generalise the allocation of P7 to several patterns: build the joint cost
-            // curves, then either the linear-programming rounding with its l_max guarantee or the
-            // hybrid genetic algorithm seeded from the cuts (section 7 of the design doc).
-            throw new UnsupportedOperationException(
-                    "CUT-HIDE with several sensitive patterns under a database threshold is not "
-                            + "implemented yet; see section 9.2 step 7");
+            runMultiPatternDatabase(problem, result);
+        } else {
+            runMultiPatternPerSequence(problem, result);
         }
+    }
+
+    /** The best position of one sequence together with what masking it would buy. */
+    private record Candidate(int sequence, int position, double weight, int[] drop) {
+
+        double ratio(long[] needed) {
+            int gain = 0;
+            for (int p = 0; p < drop.length; p++) {
+                if (needed[p] > 0) {
+                    gain += drop[p];
+                }
+            }
+            return gain / (1 + weight);
+        }
+    }
+
+    /**
+     * HIDE-DB with several sensitive patterns: step 7 of section 9.2, run over the whole database.
+     *
+     * <p>The database threshold couples the sequences. A mask placed anywhere counts against the
+     * same global gap, so the choice cannot be made one sequence at a time; doing that over-masks,
+     * because each sequence would drive its own support down without knowing what the others
+     * already removed. Each round therefore takes the position with the largest ratio of total drop
+     * in sensitive support to 1 + w(i) across all of D, then recomputes.
+     *
+     * <p>Only the sequence just masked changes, so only its candidate is rebuilt and the rest are
+     * reused. They do have to be dropped when a pattern becomes satisfied, because the best position
+     * inside a sequence depends on which patterns still count — though not on how much they still
+     * need, so that happens at most once per sensitive pattern.
+     *
+     * <p>The weights w(i) are computed once per sequence, on the unmasked sequence. Step 4 describes
+     * them that way, and the design doc already declares the weight an approximation because the
+     * effect of several masks does not add up.
+     *
+     * <p>This is a heuristic: the problem is NP-hard by L4a. SC3 measures its distance to the exact
+     * solver on the small instances.
+     */
+    private void runMultiPatternDatabase(HideProblem problem, Sanitization result) {
+        int patternCount = problem.sensitive().size();
+        int sequenceCount = problem.database().size();
+
+        long[] needed = new long[patternCount];
+        for (int p = 0; p < patternCount; p++) {
+            long total = SupportNO.of(problem.sensitive().get(p), problem.database(), problem.gap());
+            needed[p] = Math.max(0, total - problem.threshold() + 1);
+        }
+        if (allSatisfied(needed)) {
+            return;
+        }
+
+        List<Integer> carrying = new ArrayList<>();
+        for (int s = 0; s < sequenceCount; s++) {
+            for (Pattern p : problem.sensitive()) {
+                if (SupportNO.of(p, problem.database().get(s), problem.gap()) > 0) {
+                    carrying.add(s);
+                    break;
+                }
+            }
+        }
+
+        Map<Integer, Set<Integer>> masked = new HashMap<>();
+        Map<Integer, double[]> weights = new HashMap<>();
+        Candidate[] best = new Candidate[sequenceCount];
+        for (int s : carrying) {
+            best[s] = bestInSequence(problem, s, masked, weights, needed);
+        }
+        boolean[] satisfied = satisfiedFlags(needed);
+
+        while (!allSatisfied(needed)) {
+            Candidate pick = null;
+            double pickRatio = 0;
+            for (int s : carrying) {
+                Candidate c = best[s];
+                if (c == null) {
+                    continue;
+                }
+                double ratio = c.ratio(needed);
+                if (ratio > pickRatio) {
+                    pickRatio = ratio;
+                    pick = c;
+                }
+            }
+            if (pick == null) {
+                throw new IllegalStateException("no position lowers a sensitive support any "
+                        + "further, yet the database threshold is still exceeded");
+            }
+            masked.computeIfAbsent(pick.sequence(), k -> new TreeSet<>()).add(pick.position());
+            result.mask(pick.sequence(), pick.position());
+            for (int p = 0; p < patternCount; p++) {
+                needed[p] = Math.max(0, needed[p] - pick.drop()[p]);
+            }
+            best[pick.sequence()] = bestInSequence(problem, pick.sequence(), masked, weights, needed);
+
+            boolean[] now = satisfiedFlags(needed);
+            if (!Arrays.equals(satisfied, now)) {
+                // The set of patterns that still count changed, so every cached choice may be stale.
+                satisfied = now;
+                for (int s : carrying) {
+                    if (s != pick.sequence()) {
+                        best[s] = bestInSequence(problem, s, masked, weights, needed);
+                    }
+                }
+            }
+        }
+    }
+
+    /** Rebuilds one sequence's index over its current mask and returns its best position. */
+    private Candidate bestInSequence(HideProblem problem, int sequenceIndex,
+                                     Map<Integer, Set<Integer>> masked,
+                                     Map<Integer, double[]> weights, long[] needed) {
+        EventSequence original = problem.database().get(sequenceIndex);
+        Set<Integer> here = masked.getOrDefault(sequenceIndex, Set.of());
+        EventSequence sequence = here.isEmpty() ? original : original.mask(here);
+        NettreeCutIndex index = new NettreeCutIndex(sequence, problem.gap());
+        for (Pattern p : problem.sensitive()) {
+            index.add(p, true);
+        }
+        double[] w = weights.computeIfAbsent(sequenceIndex,
+                k -> positionWeights(problem, original, k));
+
+        int patternCount = problem.sensitive().size();
+        int[][] dropAt = new int[original.length()][];
+        for (int p = 0; p < patternCount; p++) {
+            if (needed[p] == 0) {
+                continue;
+            }
+            for (int position : index.vitalPositions(p)) {
+                if (dropAt[position] == null) {
+                    dropAt[position] = new int[patternCount];
+                }
+                dropAt[position][p] = 1;
+            }
+        }
+
+        Candidate best = null;
+        double bestRatio = 0;
+        for (int i = 0; i < original.length(); i++) {
+            if (dropAt[i] == null || here.contains(i)) {
+                continue;
+            }
+            Candidate candidate = new Candidate(sequenceIndex, i, w[i], dropAt[i]);
+            double ratio = candidate.ratio(needed);
+            if (ratio > bestRatio) {
+                bestRatio = ratio;
+                best = candidate;
+            }
+        }
+        return best;
+    }
+
+    private static boolean[] satisfiedFlags(long[] needed) {
+        boolean[] flags = new boolean[needed.length];
+        for (int p = 0; p < needed.length; p++) {
+            flags[p] = needed[p] == 0;
+        }
+        return flags;
+    }
+
+    private static boolean allSatisfied(long[] needed) {
+        for (long value : needed) {
+            if (value > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** HIDE-SEQ with several patterns: the sequences are independent, so one loop each. */
+    private void runMultiPatternPerSequence(HideProblem problem, Sanitization result) {
         for (int s = 0; s < problem.database().size(); s++) {
             EventSequence sequence = problem.database().get(s);
             NettreeCutIndex index = buildIndex(problem, sequence);

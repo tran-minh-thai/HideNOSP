@@ -50,6 +50,11 @@ public final class RandomMasking implements HidingMethod {
     }
 
     @Override
+    public boolean isRandomized() {
+        return true;
+    }
+
+    @Override
     public String name() {
         return (sequenceChoice == SequenceChoice.HEURISTIC ? "H" : "R")
                 + (positionChoice == PositionChoice.HEURISTIC ? "H" : "R") + "-random";

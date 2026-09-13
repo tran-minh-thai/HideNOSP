@@ -57,7 +57,20 @@ public final class Metrics {
 
     /** One row of results. Every field is invariant across machines. */
     public record Row(double hidingFailure, int lost, int ghost, double distR, double supDist,
-                      int maskCount, int frequentBefore, int frequentAfter) {
+                      int maskCount, int frequentBefore, int frequentAfter,
+                      int nonSensitiveBefore) {
+
+        /**
+         * Lost as a share of what could have been lost, which is the quantity H2 is stated on.
+         *
+         * <p>The denominator is |F_sigma(D) \ S+|, the frequent patterns that are neither
+         * sensitive nor in their closure, because those are the only ones Lost ever counts. It is
+         * not {@link #frequentBefore()}: that includes the closure, so dividing by it would shrink
+         * every ratio by a different amount on every instance.
+         */
+        public double lostRelative() {
+            return nonSensitiveBefore == 0 ? 0 : (double) lost / nonSensitiveBefore;
+        }
     }
 
     private Metrics() {
@@ -208,7 +221,7 @@ public final class Metrics {
                     ? 0 : (double) (supportBefore - supportAfter) / supportBefore;
             int frequentAfter = frequent.size() - lost - countClosureLost(closure, drop);
             return new Row(hidingFailure, lost, 0, distR, supDist, sanitization.maskCount(),
-                    frequent.size(), frequentAfter);
+                    frequent.size(), frequentAfter, watched.size());
         }
 
         private int countClosureLost(Set<Pattern> closure, Map<Pattern, Long> drop) {
@@ -248,10 +261,12 @@ public final class Metrics {
             int lost = 0;
             long supportBefore = 0;
             long supportAfter = 0;
+            int watched = 0;
             for (Map.Entry<Pattern, Long> e : frequent.entrySet()) {
                 if (closure.contains(e.getKey())) {
                     continue;
                 }
+                watched++;
                 long now = frequentAfter.getOrDefault(e.getKey(),
                         SupportNO.of(e.getKey(), after, gap));
                 if (now < sigma) {
@@ -271,7 +286,7 @@ public final class Metrics {
             double supDist = supportBefore == 0
                     ? 0 : (double) (supportBefore - supportAfter) / supportBefore;
             return new Row(hidingFailure, lost, ghost, distR, supDist, sanitization.maskCount(),
-                    frequent.size(), frequentAfter.size());
+                    frequent.size(), frequentAfter.size(), watched);
         }
     }
 

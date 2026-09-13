@@ -28,6 +28,11 @@ public final class GaHybrid implements HidingMethod {
     }
 
     @Override
+    public boolean isRandomized() {
+        return true;
+    }
+
+    @Override
     public String name() {
         return seededFromCuts ? "GA-hybrid" : "GA-plain";
     }

@@ -61,7 +61,8 @@ public final class Sc3MainComparison implements Scenario {
     @Override
     public String[] options() {
         return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "maxPatternLength",
-                "epsilon", "sensitiveSets", "sensitiveSize", "seed", "methods"};
+                "epsilon", "sensitiveSets", "sensitiveSize", "seed", "methodSeed", "repeats",
+                "methods"};
     }
 
     @Override
@@ -73,6 +74,12 @@ public final class Sc3MainComparison implements Scenario {
         int sensitiveSets = options.getInt("sensitiveSets", 5);
         int sensitiveSize = options.getInt("sensitiveSize", 1);
         long seed = options.getLong("seed", 2026);
+        // Hat giong cua phuong phap tach roi khoi hat giong lay mau tap nhay cam. Neu dung chung
+        // mot so thi doi hat giong cung doi luon cac tap nhay cam duoc lay, nen muoi lan chay lai
+        // khong con ghep cap duoc voi nhau va quy tac "trung vi tren muoi hat giong" cua
+        // preregistration khong thuc hien duoc.
+        long methodSeed = options.getLong("methodSeed", seed);
+        int repeats = options.getInt("repeats", 1);
         String methodList = options.get("methods", "cut-hide,cut-hide-uniform,occurrence,HH,RR");
 
         SequenceDatabase database = load(options, seed);
@@ -87,10 +94,11 @@ public final class Sc3MainComparison implements Scenario {
         List<List<Pattern>> sensitiveSetList =
                 sampleSensitiveSets(frequent, sensitiveSets, sensitiveSize, seed);
 
-        String[] header = {"dataset", "gap", "sigma", "sensitive_set", "method", "hf", "lost",
-                "ghost", "dist_r", "sup_dist", "mask_count", "min_masks", "mask_ratio",
-                "certified_pairs", "total_pairs", "lower_bound", "achieved_ratio",
-                "frequent_before", "frequent_after"};
+        String[] header = {"dataset", "shape", "gap", "sigma", "sensitive_set", "method_key",
+                "method", "method_seed",
+                "hf", "lost", "lost_rel", "ghost", "dist_r", "sup_dist", "mask_count", "min_masks",
+                "mask_ratio", "certified_pairs", "total_pairs", "lower_bound", "achieved_ratio",
+                "frequent_before", "nonsensitive_before", "frequent_after"};
 
         try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header)) {
             for (int index = 0; index < sensitiveSetList.size(); index++) {
@@ -99,27 +107,47 @@ public final class Sc3MainComparison implements Scenario {
                         HideProblem.Mode.HIDE_DB, sigma, epsilon, maxPatternLength);
                 long minMasks = boundFromP1(database, sensitive, gap, sigma);
                 for (String name : methodList.split(",")) {
-                    HidingMethod method = create(name.trim(), problem, frequent, sigma, epsilon, seed);
-                    Sanitization sanitization = method.run(problem);
-                    Metrics.Row row = context.evaluateMasking(problem, sanitization);
-                    writer.writeRow(describe(database), gap.toString(), Integer.toString(sigma),
-                            sensitive.toString(), method.name(),
-                            format(row.hidingFailure()), Integer.toString(row.lost()),
-                            Integer.toString(row.ghost()), format(row.distR()),
-                            format(row.supDist()), Integer.toString(row.maskCount()),
-                            Long.toString(minMasks),
-                            minMasks == 0 ? "" : format((double) row.maskCount() / minMasks),
-                            Long.toString(sanitization.certifiedPairs()),
-                            Long.toString(sanitization.totalPairs()),
-                            Long.toString(sanitization.certifiedLowerBound()),
-                            sanitization.certifiedLowerBound() == 0 ? ""
-                                    : format((double) row.maskCount()
-                                            / sanitization.certifiedLowerBound()),
-                            Integer.toString(row.frequentBefore()),
-                            Integer.toString(row.frequentAfter()));
-                    System.out.printf("set %d  %-34s |R| %4d  lost %4d  ghost %3d  supDist %.4f%n",
-                            index, method.name(), row.maskCount(), row.lost(), row.ghost(),
-                            row.supDist());
+                    // Phuong phap tat dinh chay mot lan; phuong phap ngau nhien chay lai
+                    // repeats lan voi hat giong lien tiep, moi lan mot hang. Viec lay trung vi
+                    // thuoc ve khau phan tich, khong lam o day: mot hang mot lan chay thi bang
+                    // van con day du de kiem lai.
+                    int runs = create(name.trim(), problem, frequent, sigma, epsilon, methodSeed)
+                            .isRandomized() ? repeats : 1;
+                    for (int k = 0; k < runs; k++) {
+                        long thisSeed = methodSeed + k;
+                        HidingMethod method =
+                                create(name.trim(), problem, frequent, sigma, epsilon, thisSeed);
+                        Sanitization sanitization = method.run(problem);
+                        Metrics.Row row = context.evaluateMasking(problem, sanitization);
+                        // method_key la ten goi tren dong lenh, on dinh; method la ten phuong
+                        // phap tu dat, co the mang tham so vao trong do. SBSH-rmax tu goi minh la
+                        // SBSH-r3 khi l_max = 3, nen phan tich phai bam vao method_key, khong thi
+                        // ho Holm da chot khong bao gio khop duoc ten trong tep.
+                        writer.writeRow(describe(options), shape(database),
+                                gap.toString(), Integer.toString(sigma),
+                                sensitive.toString(),
+                                name.trim().toLowerCase(Locale.ROOT), method.name(),
+                                method.isRandomized() ? Long.toString(thisSeed) : "",
+                                format(row.hidingFailure()), Integer.toString(row.lost()),
+                                format(row.lostRelative()),
+                                Integer.toString(row.ghost()), format(row.distR()),
+                                format(row.supDist()), Integer.toString(row.maskCount()),
+                                Long.toString(minMasks),
+                                minMasks == 0 ? "" : format((double) row.maskCount() / minMasks),
+                                Long.toString(sanitization.certifiedPairs()),
+                                Long.toString(sanitization.totalPairs()),
+                                Long.toString(sanitization.certifiedLowerBound()),
+                                sanitization.certifiedLowerBound() == 0 ? ""
+                                        : format((double) row.maskCount()
+                                                / sanitization.certifiedLowerBound()),
+                                Integer.toString(row.frequentBefore()),
+                                Integer.toString(row.nonSensitiveBefore()),
+                                Integer.toString(row.frequentAfter()));
+                        System.out.printf("set %d  %-34s |R| %4d  lost %4d (%.4f)  supDist %.4f%s%n",
+                                index, method.name(), row.maskCount(), row.lost(),
+                                row.lostRelative(), row.supDist(),
+                                method.isRandomized() ? "  hat " + thisSeed : "");
+                    }
                 }
             }
         }
@@ -250,7 +278,17 @@ public final class Sc3MainComparison implements Scenario {
         return DatasetReader.read(Paths.get(dataset), format).database();
     }
 
-    private String describe(SequenceDatabase database) {
+    /**
+     * The same label SC2 writes, so the grouping of section 3 of the preregistration can be joined
+     * onto these rows. SC2 writes the dataset path; describing the database by its shape instead
+     * would leave the two tables with no key in common and no way to say which group a row is in.
+     */
+    private String describe(Cli options) {
+        String dataset = options.get("dataset", "");
+        return dataset.isEmpty() ? "synthetic" : dataset;
+    }
+
+    private String shape(SequenceDatabase database) {
         return "N=" + database.size() + ",len=" + database.totalLength();
     }
 

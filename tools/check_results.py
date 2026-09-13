@@ -19,7 +19,15 @@ import re
 import sys
 
 TIMING_WORDS = ("time", "ms", "sec", "second", "memory", "rss", "heap", "throughput", "speedup")
-STAMP = re.compile(r"^# run (\d{8}-\d{6})_([^_]+)_(.+)_s(-?\d+)$")
+# Must match RunId.stamp(): yyyyMMdd-HHmmss[-SSS] _ machine _ revision _ s<seed>.
+#
+# The milliseconds are optional here, and only here. RunId always writes them now -- they were
+# added after two runs landed in the same second and one silently overwrote the other -- but the
+# SC1 and SC2 files already in results-invariant/ were produced before that change and are the
+# evidence behind the tables. Rejecting them would be rejecting real results for a reason that has
+# nothing to do with them. This pattern was left at second resolution when RunId changed, so for a
+# while every NEW file was reported as having no stamp at all; hence both shapes are accepted.
+STAMP = re.compile(r"^# run (\d{8}-\d{6}(?:-\d{3})?)_([^_]+)_(.+)_s(-?\d+)$")
 
 
 def is_timing_column(name):

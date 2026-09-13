@@ -15,4 +15,14 @@ public interface HidingMethod {
 
     /** Produces R and, through it, D-prime. Implementations must not modify the problem. */
     Sanitization run(HideProblem problem);
+
+    /**
+     * True when the result depends on the seed, so one run is not the method's value on an
+     * instance. The preregistration answers those with the median over ten seeds, 2026 to 2035;
+     * the scenario needs to know which methods to repeat, and guessing from the name would break
+     * the first time a method is renamed.
+     */
+    default boolean isRandomized() {
+        return false;
+    }
 }

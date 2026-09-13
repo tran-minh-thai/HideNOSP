@@ -378,6 +378,33 @@ bản thảo hoặc trong bảng giao thức.
     (1) của §2. Lập luận không hề nhìn vào chi phí ngoài việc so khe hở, nên mọi chi phí không âm
     đều giữ được hệ số; nhưng biến thể có trọng số cần nối B_ε theo đúng cách `CutHide` làm, chưa
     làm thì không nên bày ra một công tắc không có tác dụng gì.
+11. **Cách tính p của Wilcoxon kiểu Pratt.** Bản chốt định Pratt và hạng trung bình, nhưng
+    **không** định tính p bằng phân bố chính xác hay xấp xỉ chuẩn. Đây là một lựa chọn cài đặt
+    phải khai, vì ba cách cho ba số khác nhau.
+
+    Trong `scipy` 1.18, `method="exact"` dưới Pratt trả về giá trị **sai**: nó dùng phân bố dấu
+    hạng chuẩn trên cả n quan sát, không kể rằng hạng của các hiệu bằng 0 không được phép nhận
+    dấu. Trên một ví dụ 12 quan sát có 4 số 0, liệt kê tay toàn bộ 2⁸ khả năng cho
+    p = 29/256 = 0,113281; `method="auto"` cho đúng số đó, `"exact"` cho 0,211914 và `"approx"`
+    cho 0,099370.
+
+    Vậy `tools/thong_ke.py` chốt `method="auto"`, và `tools/thong_ke_test.py` ghim nó bằng phép
+    liệt kê tay chứ không bằng việc tin vào scipy. Bài phải khai "p tính bằng phân bố chính xác
+    có điều kiện của Pratt khi cỡ mẫu cho phép".
+
+12. **Ba khoảng trống trong bản chốt, phát hiện khi cài `thong_ke.py`.** Không tự vá, chỉ ghi ra:
+
+    - **|R| của CUT-HIDE lớn hơn baseline.** Mục 5 định nghĩa hai chế độ báo cáo: cùng |R| thì
+      kiểm định, baseline dùng **nhiều hơn** thì báo cáo riêng. Trường hợp CUT-HIDE dùng nhiều
+      hơn **không** được định nghĩa. Bỏ im là thiên vị có lợi cho ta, nên script đếm riêng thùng
+      đó và in cảnh báo; bản chốt cần một dòng cho ca này.
+    - **Mã OT và OOM chưa có chỗ ghi.** Mục 5 bảo loại thực thể mang mã OT hoặc OOM, nhưng SC3
+      không có cột nào để ghi. Script đọc cột `status` nếu có; chưa có thì phải thêm trước khi
+      chạy thật, không thì quy tắc loại trừ đó không thi hành được.
+    - **Hạt giống của phương pháp tách khỏi hạt giống lấy mẫu.** Mục 5 đòi 10 hạt giống
+      2026–2035 lấy trung vị. Trước đây SC3 dùng **một** hạt cho cả việc lấy mẫu tập nhạy cảm
+      lẫn việc chạy phương pháp, nên đổi hạt là đổi luôn tập nhạy cảm và mười lần chạy không
+      ghép cặp được với nhau. Đã tách thành `--seed` và `--methodSeed`, thêm `--repeats`.
 
 ---
 

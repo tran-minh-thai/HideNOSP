@@ -185,6 +185,67 @@ class FrontierDpTest {
     }
 
     @Test
+    @DisplayName("weight first: least weight, then fewest masks, against the subset search")
+    void weightFirstMatchesSubsetSearch() {
+        Random random = new Random(4242);
+        int targets = 0;
+        int ordersDiffer = 0;
+        int[] gaps = {0, 1, 2, GapConstraint.UNBOUNDED_MAX};
+        for (int trial = 0; trial < 300; trial++) {
+            int alphabet = 1 + random.nextInt(3);
+            int n = random.nextInt(10);
+            int m = 1 + random.nextInt(3);
+            int[] events = new int[n];
+            for (int i = 0; i < n; i++) {
+                events[i] = random.nextInt(alphabet);
+            }
+            int[] items = new int[m];
+            for (int j = 0; j < m; j++) {
+                items[j] = random.nextInt(alphabet);
+            }
+            EventSequence s = new EventSequence(trial, events);
+            Pattern p = new Pattern(items);
+            GapConstraint gap = new GapConstraint(0, gaps[random.nextInt(gaps.length)]);
+            long[] w = new long[n];
+            for (int i = 0; i < n; i++) {
+                w[i] = random.nextInt(10);
+            }
+            FrontierDp.Curve light = FrontierDp.solve(p, s, gap, w, FrontierDp.Objective.WEIGHT_THEN_MASKS);
+            FrontierDp.Curve few = FrontierDp.solve(p, s, gap, w);
+            for (int t = 0; t <= light.supNO(); t++) {
+                long bestWeight = Long.MAX_VALUE;
+                long bestSize = Long.MAX_VALUE;
+                for (int mask = 0; mask < (1 << n); mask++) {
+                    List<Integer> positions = new ArrayList<>();
+                    long weight = 0;
+                    for (int i = 0; i < n; i++) {
+                        if ((mask & (1 << i)) != 0) {
+                            positions.add(i);
+                            weight += w[i];
+                        }
+                    }
+                    int size = positions.size();
+                    boolean better = weight < bestWeight || (weight == bestWeight && size < bestSize);
+                    if (better && SupportNO.of(p, s.mask(positions), gap) <= t) {
+                        bestWeight = weight;
+                        bestSize = size;
+                    }
+                }
+                String where = p + " in " + s + " gap " + gap + " t " + t;
+                assertEquals(bestWeight, light.weight()[t], "weight first, " + where);
+                assertEquals(bestSize, light.masks()[t], "then masks, " + where);
+                assertEquals(light.masks()[t], light.positions()[t].length, "set size, " + where);
+                if (light.masks()[t] != few.masks()[t] || light.weight()[t] != few.weight()[t]) {
+                    ordersDiffer++;
+                }
+                targets++;
+            }
+        }
+        assertTrue(targets >= 300, "targets: " + targets);
+        assertTrue(ordersDiffer >= 20, "targets where the two orders differ: " + ordersDiffer);
+    }
+
+    @Test
     @DisplayName("the examples of P3: both bounds reached")
     void p3Examples() {
         // P = aa, S = abdacaa, [0,2]: F = 3 and two masks bring it to 0 (lower bound side).

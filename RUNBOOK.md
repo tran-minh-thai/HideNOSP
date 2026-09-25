@@ -63,7 +63,7 @@ java -cp target/classes hidenosp.exp.Runner SC2 --sigma=20 --gmax=2 --patterns=1
 ```
 
 ```bash
-java -cp target/classes hidenosp.exp.Runner SC3 --sigma=15 --gmax=2 --sensitiveSets=5 --probe
+java -cp target/classes hidenosp.exp.Runner SC3 --sigma=15 --gmax=2 --setsPerStratum=1 --probe
 ```
 
 Tuỳ chọn dùng chung cho mọi kịch bản:
@@ -123,6 +123,13 @@ biến, mà quyết định đó không được sửa sau khi đã nhìn kết 
 ```bash
 python tools/fetch_datasets.py
 ```
+
+```bash
+python tools/build_datasets.py
+```
+
+Lệnh thứ hai dựng các tệp SPMF từ dữ liệu thô dưới `datasets/raw/` (ba nhật ký tiến trình của 4TU
+và 14 CSDL của HAUP-Hider); quy tắc gán vai cho từng trường nằm ở đầu `tools/build_datasets.py`.
 
 Tải MSNBC, SIGN, FIFA và BMS-WebView-1 từ kho công khai của SPMF vào `datasets/`, tính SHA-256
 và ghi `datasets/provenance.tsv`. Chạy lại là không tải lại nếu tổng kiểm còn khớp. Muốn một bộ
@@ -232,18 +239,20 @@ cỡ heap tối đa.
 | Baseline tầng (a) | `baseline.RandomMasking` (HH/HR/RH/RR), `baseline.OccurrenceCountHeuristic` | §11.3; chạy được với \|𝒮\| bất kỳ |
 | Kiểm B_ε rỗng báo lỗi | `hide.CutHide.requireNonEmptyBand` | Chốt ở `protocol.yaml` dòng 2 |
 | Baseline tầng (b): HHA | `baseline.Hha` | [R20]; hai cách tính δ cho SC6 |
-| Baseline tầng (b): DBSH | `baseline.Dbsh` | [R3]; Cost theo ký hiệu, Exclude, Update-paths |
+| Baseline tầng (b): DBSH | `baseline.Dbsh` | [R3], Thuật toán 4 kèm 1 và 3; tái tạo đúng Hình 1(e), Hình 4(b), Ví dụ 1 (`DbshPaperExampleTest`). Dùng chung Cost (`SymbolCover`) và Exclude (`Exclude`) với SBSH |
 | Baseline tầng (b): SBSH | `baseline.Sbsh` | [R3], Thuật toán 5 kèm 1–3 và mục 4.3; tái tạo đúng Hình 1(f), Hình 4(b) và Ví dụ 3 của bài (`SbshPaperExampleTest`). Chỗ bài để ngỏ: `config/doi_chieu_sbsh_r3.md` mục 6 |
 | Baseline tầng (c): bộ giải chính xác | `baseline.IlpExact` | Nhánh-cận, thực thể nhỏ; tuỳ chọn cực tiểu mẫu mất |
-| Tải bộ dữ liệu kèm tổng kiểm | `tools/fetch_datasets.py` | §11.2 |
+| Tải bộ dữ liệu kèm tổng kiểm | `tools/fetch_datasets.py` | §11.2; chỉ kiểm, không ghi đè bản ghi; kiểm MD5 do nguồn công bố |
+| Dựng tệp SPMF từ dữ liệu thô (nhật ký XES, CSDL của HAUP-Hider) | `tools/build_datasets.py` | Quy tắc gán vai ghi trong tệp; bản dựng phải khớp bản ghi |
+| Lấy mẫu tập nhạy cảm theo năm tầng phân vị, không lặp | `exp.SensitiveSampling` | `preregistration.md` mục 9 |
 | SC1, SC2, SC3 | `exp.Sc1…`, `exp.Sc2…`, `exp.Sc3…` | Chạy được |
 
 ### Chưa cài (khung có sẵn, đặc tả nằm trong Javadoc của từng lớp)
 
 | Việc | Nơi | Chặn kịch bản nào |
 |---|---|---|
-| Đối chiếu DBSH và HHA với bài gốc: DBSH còn dùng hàm Cost khác Thuật toán 1 của [R3] (tổng số vị trí trên đường của ký hiệu rẻ nhất theo từng mẫu, thay cho phủ tập tham lam) | `baseline.Dbsh`, `baseline.Hha` | SC3, SC8 |
-| Bản gốc của HHA, DBSH trên bài toán cũ (độ hỗ trợ theo số chuỗi); SBSH đã có (`Sbsh.Support.SEQUENCE_COUNT`) | `baseline.Hha`, `Dbsh` (cờ `originalProblem`) | SC8 |
+| Đối chiếu HHA với bài gốc [R20] từng dòng, như đã làm cho DBSH và SBSH | `baseline.Hha` | SC3, SC8 |
+| Bản gốc của HHA trên bài toán cũ (độ hỗ trợ theo số chuỗi); DBSH và SBSH đã có (`SupportCount.SEQUENCE_COUNT`) | `baseline.Hha` | SC8 |
 | Giải thuật di truyền, bản thuần và bản lai khởi tạo từ lát cắt | `baseline.GaHybrid` | SC3 (tầng c) |
 | SC4, SC5, SC6, SC7, SC8 | `exp.Sc4…` đến `exp.Sc8…` | chính nó |
 | Đối chiếu với NETGAP của [R1] | `exp.Sc1ImplementationCheck` | SC1 (phần còn thiếu) |

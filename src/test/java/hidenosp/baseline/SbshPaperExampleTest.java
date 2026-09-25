@@ -119,7 +119,7 @@ class SbshPaperExampleTest {
         Map<Pattern, Long> frequent = frequentBySequenceCount(database, 3);
         HideProblem problem = new HideProblem(database, SENSITIVE, NO_MAXIMUM_GAP,
                 HideProblem.Mode.HIDE_DB, 3, 0.5, 3);
-        Sanitization result = new Sbsh(3, Sbsh.Support.SEQUENCE_COUNT)
+        Sanitization result = new Sbsh(3, SupportCount.SEQUENCE_COUNT)
                 .withNonSensitiveFrequent(nonSensitive(frequent))
                 .run(problem);
 
@@ -150,7 +150,7 @@ class SbshPaperExampleTest {
         Map<Pattern, Long> nonSensitive = nonSensitive(frequent);
         HideProblem problem = new HideProblem(database, SENSITIVE, NO_MAXIMUM_GAP,
                 HideProblem.Mode.HIDE_DB, 3, 0.5, 3);
-        SequenceDatabase after = new Sbsh(3, Sbsh.Support.SEQUENCE_COUNT)
+        SequenceDatabase after = new Sbsh(3, SupportCount.SEQUENCE_COUNT)
                 .withNonSensitiveFrequent(nonSensitive)
                 .run(problem)
                 .sanitized();
@@ -195,7 +195,7 @@ class SbshPaperExampleTest {
                 "supports of the constructed case");
         HideProblem problem = new HideProblem(database, List.of(s), NO_MAXIMUM_GAP,
                 HideProblem.Mode.HIDE_DB, 2, 0.5, 2);
-        Sanitization result = new Sbsh(1, Sbsh.Support.SEQUENCE_COUNT)
+        Sanitization result = new Sbsh(1, SupportCount.SEQUENCE_COUNT)
                 .withNonSensitiveFrequent(nonSensitive)
                 .run(problem);
         assertEquals(new TreeSet<>(Set.of(0, 2, 3)), new TreeSet<>(result.maskedIn(0)));

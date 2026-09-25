@@ -227,3 +227,46 @@ không phải sửa bản chốt.
 mẫu, số vị trí trên đường của ký hiệu rẻ nhất — **không** phải Thuật toán 1 (phủ tập tham lam,
 trọng số là số lần xuất hiện của ký hiệu trong chuỗi). Hai đường cơ sở của cùng một bài đang
 dùng hai hàm Cost khác nhau; phải đối chiếu DBSH với Thuật toán 3–4 trước khi chạy SC3 lấy số.
+
+---
+
+## 7. Cập nhật 25/09/2026 (lượt 2) — DBSH đã sửa theo bài; đính chính mục 6 về Exclude
+
+**Đính chính mục 6.** Mục 6 ghi phép chuyển của Exclude-SBSH là "tổng sup_NO của các chuỗi **được
+giữ** ≤ σ − 1". Sai cách đọc Thuật toán 3. Nguyên văn mục 5.1: "moves the transaction to D′
+without sanitizing it only if every sensitive sequence supported by T has been **encountered**
+fewer than (ψ − 1) times" — bộ đếm M(s) tăng với **mọi** giao dịch đã duyệt, kể cả giao dịch bị
+làm sạch. Tính tay Hình 1(e): chỉ cách đọc này ra đúng việc DBSH làm sạch T8 (mà T5 đã bị làm sạch
+thì ⟨d,f,g⟩ đã dưới ngưỡng). Hình 1(f) của SBSH ra cùng một kết quả dưới cả hai cách đọc, nên test
+của SBSH không bắt được lỗi này; test của DBSH bắt được. Hai thuật toán nay dùng chung **một** cài
+đặt Exclude (`baseline/Exclude.java`), nên cả hai theo cách đọc đúng.
+
+**DBSH** (`baseline/Dbsh.java`) viết lại theo Thuật toán 4, với Thuật toán 1 (Cost, phủ tập tham
+lam theo ký hiệu, trọng số = số lần xuất hiện của ký hiệu trong chuỗi) và Thuật toán 3 (Exclude).
+Bản trước lệch ba chỗ:
+
+| Điểm | Bản trước | Bản từ 25/09 |
+|---|---|---|
+| Cost | Tổng theo từng mẫu của số vị trí trên đường của ký hiệu rẻ nhất | Thuật toán 1: phủ tập tham lam, trọng số chia cho số mẫu ký hiệu phủ |
+| Exclude | Làm sạch chuỗi rẻ trước cho tới khi đủ mức giảm | Thuật toán 3: duyệt theo Cost giảm dần, giữ chuỗi khi mọi mẫu nó hỗ trợ mới gặp dưới ψ − 1 lần (đếm cả chuỗi bị làm sạch) |
+| Làm sạch một chuỗi | Bỏ dần đơn vị sup_NO tới đúng mức cần | Thuật toán 4: với từng tập con S_j, bỏ các vị trí của ký hiệu đã chọn tới khi chuỗi không còn hỗ trợ mẫu nào của S_j — tức làm sạch **hết** chuỗi được chọn, như bài |
+
+**Chỗ bài để ngỏ và cách đã chọn.** Hoà ở Exclude ("arbitrary") lấy chỉ số chuỗi lớn trước — tái
+tạo đúng Hình 1(e). Vị trí của ký hiệu đã chọn mà không nằm trên đường đầy đủ nào thì bỏ qua:
+Candidates làm việc trên đồ thị khớp, vốn chỉ giữ nút trên đường đầy đủ (Định nghĩa 4.1), và đây
+cũng là cách đọc có lợi nhất cho DBSH. Thứ tự trong P[j]: vị trí tăng dần.
+
+**Hệ quả của phép chuyển cần khai trong bài.** Dưới sup_NO, DBSH vẫn làm sạch hết mỗi chuỗi được
+chọn, nên có thể dùng nhiều lần che hơn mức cần để tụt dưới σ. Đó là hành vi của DBSH theo bài,
+không phải khiếm khuyết của phép chuyển; bản trước ngày này đã "chỉnh" DBSH cho sup_NO một cách mà
+tác giả chưa từng làm.
+
+**Bằng chứng** (`src/test/java/hidenosp/baseline/DbshPaperExampleTest.java`): tái tạo đúng Hình
+1(e) (T1: 0; T5: 0, 1; T6: 0; T8: 1), khoảng cách 5 và năm tác dụng phụ ⟨a,c⟩, ⟨a,e⟩, ⟨d,f⟩,
+⟨d,g⟩, ⟨f,g⟩ của Hình 4(b), và Cost của Ví dụ 1 (bằng 2). Thêm hai ca tự dựng: vị trí ngoài đường
+đầy đủ bị bỏ qua; Cost chia trọng số cho số mẫu được phủ. Tiêm 7 lỗi (Exclude chỉ đếm chuỗi được
+giữ, Cost tăng dần, hoà tăng dần, Cost không chia, không bỏ qua vị trí ngoài đường, hoà theo lần
+xuất hiện cuối, dừng khi một mẫu của S_j hết): bắt được 7/7. Chạy lại 10 lỗi tiêm của SBSH sau khi
+tách phần dùng chung: vẫn bắt được 10/10.
+
+**Còn lại:** HHA của [R20] chưa được đối chiếu từng dòng với bài gốc theo cách tương tự.

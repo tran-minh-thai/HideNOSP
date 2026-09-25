@@ -73,21 +73,13 @@ import java.util.TreeSet;
  *
  * <p><b>Two transfers</b> have to be declared where this is used as a baseline. First, the paper
  * deletes events and this class masks them, so that every method applies the same modification.
- * Without a maximum gap the two give the same supports. Second, {@link Support#NON_OVERLAPPING}
+ * Without a maximum gap the two give the same supports. Second, {@link SupportCount#NON_OVERLAPPING}
  * replaces the support of the paper (the number of sequences containing a pattern) by the number
  * of non-overlapping occurrences, everywhere the procedure reads a support: the keep budget of
  * Exclude-SBSH, the threshold test of Annotate and the loop condition. Nothing else changes, and
- * {@link Support#SEQUENCE_COUNT} runs the procedure of the paper unchanged.
+ * {@link SupportCount#SEQUENCE_COUNT} runs the procedure of the paper unchanged.
  */
 public final class Sbsh implements HidingMethod {
-
-    /** Which support the procedure counts. */
-    public enum Support {
-        /** Non-overlapping occurrences summed over the sequences: the transfer compared in SC3. */
-        NON_OVERLAPPING,
-        /** Number of sequences containing the pattern: the problem of the paper itself. */
-        SEQUENCE_COUNT
-    }
 
     static final int BLACK = 0;
     static final int RED = 1;
@@ -95,19 +87,19 @@ public final class Sbsh implements HidingMethod {
     static final int NOT_ANNOTATED = -1;
 
     private final int radius;
-    private final Support support;
+    private final SupportCount support;
     private Map<Pattern, Long> nonSensitiveFrequent;
 
     /** The transferred version on sup_NO, the one the main comparison runs. */
     public Sbsh(int radius) {
-        this(radius, Support.NON_OVERLAPPING);
+        this(radius, SupportCount.NON_OVERLAPPING);
     }
 
     /**
      * @param radius r of Replace, counted in edges of the matching graph, i.e. Nettree levels; the
      *     paper takes r in [1, length of the longest sensitive pattern]
      */
-    public Sbsh(int radius, Support support) {
+    public Sbsh(int radius, SupportCount support) {
         if (radius < 1) {
             throw new IllegalArgumentException("the radius of Replace starts at 1, got " + radius);
         }
@@ -117,7 +109,7 @@ public final class Sbsh implements HidingMethod {
 
     /**
      * The non-sensitive frequent patterns, F_sigma(D) without the sensitive patterns and their
-     * super-patterns, each with its support in the original database counted as {@link Support}
+     * super-patterns, each with its support in the original database counted as the {@link SupportCount} of this instance
      * says. Annotate and Exclude-SBSH read them; the map may be empty, but it must be given.
      */
     public Sbsh withNonSensitiveFrequent(Map<Pattern, Long> supports) {
@@ -127,7 +119,7 @@ public final class Sbsh implements HidingMethod {
 
     @Override
     public String name() {
-        return (support == Support.SEQUENCE_COUNT ? "SBSH-original-r" : "SBSH-r") + radius;
+        return (support == SupportCount.SEQUENCE_COUNT ? "SBSH-original-r" : "SBSH-r") + radius;
     }
 
     public int radius() {
@@ -141,7 +133,7 @@ public final class Sbsh implements HidingMethod {
                     + "supports (withNonSensitiveFrequent); without them Annotate colours every "
                     + "position black and the run is not SBSH");
         }
-        if (support == Support.SEQUENCE_COUNT && !problem.isDatabaseMode()) {
+        if (support == SupportCount.SEQUENCE_COUNT && !problem.isDatabaseMode()) {
             throw new IllegalArgumentException("the sequence-count support of the paper is defined "
                     + "for a database threshold only");
         }
@@ -150,7 +142,7 @@ public final class Sbsh implements HidingMethod {
 
     /** Units a sequence contributes to a support, given sup_NO of the pattern in that sequence. */
     private long unit(int supNO) {
-        return support == Support.SEQUENCE_COUNT ? (supNO > 0 ? 1 : 0) : supNO;
+        return support.unit(supNO);
     }
 
     /** State of one call to {@link #run}. */
@@ -252,34 +244,23 @@ public final class Sbsh implements HidingMethod {
                 }
                 return toSanitise;
             }
-            long budget = problem.threshold() - 1L;
-            long[] kept = new long[sensitive.size()];
-            for (int s : order) {
-                boolean fits = true;
-                for (int p : ts.get(s)) {
-                    fits &= kept[p] + units[p][s] <= budget;
-                }
-                if (fits) {
-                    for (int p : ts.get(s)) {
-                        kept[p] += units[p][s];
-                    }
-                } else {
-                    toSanitise.add(s);
-                }
+            long[][] longUnits = new long[units.length][];
+            for (int p = 0; p < units.length; p++) {
+                longUnits[p] = java.util.Arrays.stream(units[p]).asLongStream().toArray();
             }
-            return toSanitise;
+            return Exclude.toSanitise(order, ts, longUnits, problem.threshold());
         }
 
-        private Cover cover(EventSequence sequence, List<Integer> supported) {
-            return Sbsh.this.cover(sequence, supported, sensitive);
+        private SymbolCover.Cover cover(EventSequence sequence, List<Integer> supported) {
+            return SymbolCover.of(sequence, supported, sensitive);
         }
 
         /** Steps 3 to 39 of Algorithm 5 for one sequence. */
         private void sanitise(int s, List<Integer> supported) {
             Sequence t = new Sequence(s, supported);
-            Cover cover = cover(t.original, supported);
+            SymbolCover.Cover cover = cover(t.original, supported);
             int[] colour = t.annotateAll();
-            List<Integer> positions = cover.positions();
+            List<Integer> positions = cover.flatPositions();
 
             int i = 0;
             while (i < positions.size() && t.maxUpdatedSupport() >= problem.threshold()) {
@@ -322,27 +303,7 @@ public final class Sbsh implements HidingMethod {
 
         /** Post-condition: every sensitive pattern is below the threshold. A failure is a bug. */
         private void verify() {
-            SequenceDatabase after = result.sanitized();
-            for (Pattern p : sensitive) {
-                if (problem.isDatabaseMode()) {
-                    long total = 0;
-                    for (int s = 0; s < after.size(); s++) {
-                        total += unit(SupportNO.of(p, after.get(s), gap));
-                    }
-                    if (total >= problem.threshold()) {
-                        throw new IllegalStateException(name() + " left the support of " + p + " at "
-                                + total + ", threshold " + problem.threshold());
-                    }
-                } else {
-                    for (int s = 0; s < after.size(); s++) {
-                        int here = SupportNO.of(p, after.get(s), gap);
-                        if (here >= problem.threshold()) {
-                            throw new IllegalStateException(name() + " left sup_NO(" + p + ") = "
-                                    + here + " in sequence " + s + ", limit " + problem.threshold());
-                        }
-                    }
-                }
-            }
+            Exclude.verify(problem, result, support, name());
         }
 
         /** One sequence while it is being sanitised: its index, its marks and the supports they move. */
@@ -629,86 +590,13 @@ public final class Sbsh implements HidingMethod {
         }
     }
 
-    /** Candidates-SBSH: the greedy cover of Algorithm 1, flattened into P, with the subsets S_j. */
-    record Cover(long cost, List<Integer> positions, List<Set<Integer>> subsets) {
-    }
-
-    /**
-     * Algorithm 1 (Cost) and Candidates-SBSH in one pass. Every distinct symbol of a supported
-     * sensitive pattern covers the patterns containing it and weighs its number of occurrences in
-     * the sequence; the symbol with the least weight per covered pattern is taken until every
-     * supported pattern is covered. P lists the positions of the chosen symbols, ordered by the size
-     * of the subset they cover (descending), then by the order of choice, then by position.
-     *
-     * @param supported the supported sensitive patterns as indices into {@code sensitive}; the
-     *     subsets hold indices into this list
-     */
-    private Cover cover(EventSequence sequence, List<Integer> supported, List<Pattern> sensitive) {
-        Map<Integer, Set<Integer>> covers = new LinkedHashMap<>();
-        Map<Integer, Integer> firstOccurrence = new HashMap<>();
-        Map<Integer, Integer> weight = new HashMap<>();
-        for (int i = 0; i < sequence.length(); i++) {
-            int item = sequence.at(i);
-            if (item == EventSequence.MASK) {
-                continue;
-            }
-            weight.merge(item, 1, Integer::sum);
-            firstOccurrence.putIfAbsent(item, i);
-        }
-        for (int k = 0; k < supported.size(); k++) {
-            for (int item : sensitive.get(supported.get(k)).items()) {
-                covers.computeIfAbsent(item, x -> new TreeSet<>()).add(k);
-            }
-        }
-        Set<Integer> covered = new TreeSet<>();
-        List<Integer> chosen = new ArrayList<>();
-        long cost = 0;
-        while (covered.size() < supported.size()) {
-            int best = -1;
-            double bestRatio = Double.POSITIVE_INFINITY;
-            for (Map.Entry<Integer, Set<Integer>> e : covers.entrySet()) {
-                int item = e.getKey();
-                if (chosen.contains(item) || covered.containsAll(e.getValue())
-                        || !weight.containsKey(item)) {
-                    continue;
-                }
-                double ratio = (double) weight.get(item) / e.getValue().size();
-                if (ratio < bestRatio || (ratio == bestRatio && best >= 0
-                        && firstOccurrence.get(item) < firstOccurrence.get(best))) {
-                    bestRatio = ratio;
-                    best = item;
-                }
-            }
-            if (best < 0) {
-                throw new IllegalStateException("a supported sensitive pattern has a symbol that "
-                        + "does not occur in the sequence");
-            }
-            chosen.add(best);
-            cost += weight.get(best);
-            covered.addAll(covers.get(best));
-        }
-        List<Integer> byCoverSize = new ArrayList<>(chosen);
-        byCoverSize.sort(Comparator.comparingInt((Integer item) -> -covers.get(item).size()));
-        List<Integer> positions = new ArrayList<>();
-        List<Set<Integer>> subsets = new ArrayList<>();
-        for (int item : byCoverSize) {
-            subsets.add(covers.get(item));
-            for (int i = 0; i < sequence.length(); i++) {
-                if (sequence.at(i) == item) {
-                    positions.add(i);
-                }
-            }
-        }
-        return new Cover(cost, positions, subsets);
-    }
-
     /**
      * Replace on one sequence and one sensitive pattern under a given annotation, without the rest
      * of the procedure. It exists so that the paper's Example 3 can be checked on its own.
      */
     static List<Integer> replaceOn(int radius, EventSequence sequence, GapConstraint gap,
                                    Pattern pattern, int position, int[] colour) {
-        Sbsh sbsh = new Sbsh(radius, Support.SEQUENCE_COUNT).withNonSensitiveFrequent(Map.of());
+        Sbsh sbsh = new Sbsh(radius, SupportCount.SEQUENCE_COUNT).withNonSensitiveFrequent(Map.of());
         HideProblem problem = new HideProblem(new SequenceDatabase(List.of(sequence)),
                 List.of(pattern), gap, HideProblem.Mode.HIDE_DB, 1, 0.5, pattern.length());
         Run run = sbsh.new Run(problem);

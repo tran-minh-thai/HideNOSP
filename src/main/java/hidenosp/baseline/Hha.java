@@ -3,157 +3,174 @@ package hidenosp.baseline;
 import hidenosp.core.EventSequence;
 import hidenosp.core.GapConstraint;
 import hidenosp.core.Pattern;
+import hidenosp.core.SequenceDatabase;
 import hidenosp.core.SupportNO;
 import hidenosp.hide.HideProblem;
 import hidenosp.hide.Sanitization;
 import hidenosp.index.NettreeCutIndex;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
- * HHA of Abul, Atzori, Bonchi and Giannotti 2007 [R20], tier (b) of section 11.3.
+ * HHA, the sequence hiding algorithm of O. Abul, M. Atzori, F. Bonchi and F. Giannotti, "Hiding
+ * sequences", ICDE Workshops 2007 (Algorithm 1), kept unchanged as Algorithm 1 of O. Abul,
+ * F. Bonchi and F. Giannotti, "Hiding sequential and spatiotemporal patterns", IEEE TKDE 2010. The
+ * name HHA is the one Gkoulalas-Divanis and Loukides (KDD 2011) use for it.
  *
- * <p>The method has two parts and the paper measures them separately.
+ * <ol>
+ *   <li><b>Global heuristic</b> (lines 2 to 5): "sort the sequences in D in ascending order of
+ *       matching set size, and remove all matchings in top |D| - psi input sequences". The psi
+ *       sequences with the largest matching sets are left intact; every other sequence is
+ *       sanitised. The matching set counts every embedding of every sensitive pattern, overlapping
+ *       or not, under the gap constraint.</li>
+ *   <li><b>Local heuristic</b> (Sanitize): "choose the marking position that is involved in most
+ *       matches", iterated until the sequence has no matching left. delta(T[i]) is the number of
+ *       matchings of all sensitive patterns that use position i.</li>
+ * </ol>
+ *
+ * <p><b>Where the papers leave a choice open</b>, and what this class does:
  *
  * <ul>
- *   <li><b>The position rule.</b> Mask the position lying on the most matches, repeat. The quantity
- *       the paper calls delta(i) is the number of occurrences through position i, that is
- *       |M_T| - |M_T with i masked|. Ties go to the leftmost position, as in the probe scripts that
- *       produced the numbers of section 8.2.</li>
- *   <li><b>The sequence ordering.</b> Sequences are taken in decreasing size of their match set,
- *       so the sequences with the most occurrences are sanitised first.</li>
+ *   <li><em>Ties of delta</em> go to the leftmost position, and <em>ties of the matching set
+ *       size</em> to the lower sequence index, so the higher index is kept. With these the class
+ *       reproduces the HHA output of Figure 1(d) of the KDD 2011 paper (see
+ *       {@code HhaPaperExampleTest}).</li>
  * </ul>
  *
- * <p>{@link Delta} selects how delta is computed, and both ways return the same numbers. {@code
- * ORIGINAL_DP} is the per-position dynamic program of theorem 2 of [R20]: one count over the whole
- * sequence for every candidate position. {@code PATH_COUNTS} is the forward and backward count of
- * the index, which gives every delta in one pass. SC6 times the two against each other, so the
- * original must stay available; timing the index against a straw man would prove nothing.
+ * <p><b>Transfer.</b> The papers mark with a symbol outside the alphabet, which is what masking is.
+ * The threshold of the papers keeps sup &le; psi; here the database threshold keeps the support
+ * below sigma, so psi = sigma - 1. {@link SupportCount#SEQUENCE_COUNT} keeps the psi largest
+ * sequences, as the papers do. With {@link SupportCount#NON_OVERLAPPING} a kept sequence costs
+ * its largest sup_NO over the sensitive patterns instead of 1, and the kept part is the longest run
+ * of largest sequences whose cost stays within sigma - 1; with one pattern that is the budget of
+ * the paper in sup_NO units, and with the sequence count it is exactly the rule of the paper. A
+ * sequence chosen for sanitising loses every matching, as in the paper, even when fewer masks would
+ * bring the database below sigma. Under a per-sequence limit r (HIDE-SEQ) every sequence at or
+ * above r is sanitised until each pattern is below r, which is the "occurrence count" extension of
+ * the TKDE paper with sup_NO in place of the size of the matching set.
  *
- * <p>The rule is not optimal for sup_NO, which is the subject of RQ3 and of gap G3: on
- * S = a b a a b a b a a with P = ab and gap [0,2], position 4 lies on two occurrences, as many as
- * any other, yet masking it leaves three pairwise non-overlapping occurrences untouched. Lemma L5
- * says why: that position carries no vital node.
- *
- * <p>The authors never tuned this rule for a non-overlapping count, and the paper has to say so
- * where it reports the comparison.
+ * <p>{@link Delta} selects how delta is computed; both give the same values. {@code ORIGINAL_DP}
+ * recounts the matchings with the position masked, one dynamic program per position, as the proof
+ * of Theorem 2 does (with masking rather than deletion, which the gap constraint requires).
+ * {@code PATH_COUNTS} reads every delta at once from the forward and backward counts of the index.
+ * SC6 times the two against each other.
  */
 public final class Hha implements HidingMethod {
 
-    /** How delta(i) is computed. The values agree; the cost does not. */
+    /** How delta(T[i]) is computed. The values agree; the cost does not. */
     public enum Delta {
         /** One forward and one backward pass over the Nettree give every delta at once. */
         PATH_COUNTS,
-        /** Theorem 2 of [R20]: one match count per candidate position. */
+        /** Theorem 2: one count of the matchings per candidate position. */
         ORIGINAL_DP
     }
 
     private final Delta delta;
-
-    public Hha(Delta delta) {
-        this.delta = delta;
-    }
+    private final SupportCount support;
 
     /** The configuration used in the comparison tables. */
     public Hha() {
-        this(Delta.PATH_COUNTS);
+        this(Delta.PATH_COUNTS, SupportCount.NON_OVERLAPPING);
+    }
+
+    public Hha(Delta delta) {
+        this(delta, SupportCount.NON_OVERLAPPING);
+    }
+
+    public Hha(Delta delta, SupportCount support) {
+        this.delta = delta;
+        this.support = support;
     }
 
     @Override
     public String name() {
-        return "HHA-" + (delta == Delta.PATH_COUNTS ? "pathcounts" : "dp");
+        return "HHA" + (support == SupportCount.SEQUENCE_COUNT ? "-original" : "")
+                + (delta == Delta.ORIGINAL_DP ? "-dp" : "");
     }
 
     @Override
     public Sanitization run(HideProblem problem) {
-        Sanitization result = new Sanitization(problem.database()).method(name());
+        if (support == SupportCount.SEQUENCE_COUNT && !problem.isDatabaseMode()) {
+            throw new IllegalArgumentException("the sequence-count support of the paper is defined "
+                    + "for a database threshold only");
+        }
+        SequenceDatabase database = problem.database();
         List<Pattern> sensitive = problem.sensitive();
-        int patternCount = sensitive.size();
-        int sequenceCount = problem.database().size();
+        int n = database.size();
+        int limit = problem.isDatabaseMode() ? 1 : problem.threshold();
 
-        int[][] support = new int[patternCount][sequenceCount];
-        long[] total = new long[patternCount];
-        for (int p = 0; p < patternCount; p++) {
-            for (int s = 0; s < sequenceCount; s++) {
-                support[p][s] = SupportNO.of(sensitive.get(p), problem.database().get(s), problem.gap());
-                total[p] += support[p][s];
+        long[] cost = new long[n];
+        long[] matchingSet = new long[n];
+        List<Integer> carrying = new ArrayList<>();
+        for (int s = 0; s < n; s++) {
+            boolean carries = false;
+            for (Pattern p : sensitive) {
+                int supNO = SupportNO.of(p, database.get(s), problem.gap());
+                cost[s] = Math.max(cost[s], support.unit(supNO));
+                carries |= supNO >= limit;
+            }
+            if (carries) {
+                carrying.add(s);
+                NettreeCutIndex index = index(problem, s);
+                long total = 0;
+                for (int id = 0; id < index.patternCount(); id++) {
+                    total = Math.min(hidenosp.index.PathCounts.SATURATED,
+                            total + index.totalOccurrences(id));
+                }
+                matchingSet[s] = total;
             }
         }
 
-        long[] needed = new long[patternCount];
+        List<Integer> toSanitise = new ArrayList<>(carrying);
         if (problem.isDatabaseMode()) {
-            for (int p = 0; p < patternCount; p++) {
-                needed[p] = Math.max(0, total[p] - problem.threshold() + 1);
+            toSanitise.sort(Comparator.<Integer>comparingLong(s -> matchingSet[s])
+                    .thenComparing(Comparator.<Integer>naturalOrder()));
+            long budget = problem.threshold() - 1L;
+            long kept = 0;
+            int keepFrom = toSanitise.size();
+            while (keepFrom > 0 && kept + cost[toSanitise.get(keepFrom - 1)] <= budget) {
+                keepFrom--;
+                kept += cost[toSanitise.get(keepFrom)];
             }
+            toSanitise = new ArrayList<>(toSanitise.subList(0, keepFrom));
         }
 
-        for (int s : orderByMatchSetSize(problem, support)) {
-            if (problem.isDatabaseMode() && allSatisfied(needed)) {
-                break;
-            }
-            sanitiseSequence(problem, s, support, needed, result);
+        Sanitization result = new Sanitization(database).method(name());
+        for (int s : toSanitise) {
+            sanitise(problem, s, limit, result);
         }
+        Exclude.verify(problem, result, support, name());
         return result;
     }
 
-    /** Sequences in decreasing size of their match set, the ordering rule of [R20]. */
-    private int[] orderByMatchSetSize(HideProblem problem, int[][] support) {
-        int sequenceCount = problem.database().size();
-        long[] size = new long[sequenceCount];
-        List<Integer> order = new ArrayList<>();
-        for (int s = 0; s < sequenceCount; s++) {
-            boolean carries = false;
-            for (int[] row : support) {
-                carries |= row[s] > 0;
-            }
-            if (!carries) {
-                continue;
-            }
-            NettreeCutIndex index = index(problem, s);
-            long matches = 0;
-            for (int id = 0; id < index.patternCount(); id++) {
-                matches = Math.min(Long.MAX_VALUE / 4, matches + index.totalOccurrences(id));
-            }
-            size[s] = matches;
-            order.add(s);
-        }
-        order.sort((a, b) -> Long.compare(size[b], size[a]));
-        int[] out = new int[order.size()];
-        for (int i = 0; i < out.length; i++) {
-            out[i] = order.get(i);
-        }
-        return out;
-    }
-
-    /** Masks inside one sequence until its share of the required drop is reached. */
-    private void sanitiseSequence(HideProblem problem, int sequenceIndex, int[][] support,
-                                  long[] needed, Sanitization result) {
-        EventSequence sequence = problem.database().get(sequenceIndex);
-        NettreeCutIndex index = index(problem, sequenceIndex);
-        long[] here = new long[support.length];
-        for (int p = 0; p < support.length; p++) {
-            here[p] = problem.isDatabaseMode()
-                    ? Math.min(needed[p], support[p][sequenceIndex])
-                    : Math.max(0, support[p][sequenceIndex] - problem.threshold() + 1);
-        }
-        while (!allSatisfied(here)) {
-            int target = bestPosition(problem, sequence, index, here);
+    /** Sanitize(T, Sh): mask the position on the most matchings until none (or none at r) is left. */
+    private void sanitise(HideProblem problem, int s, int limit, Sanitization result) {
+        EventSequence sequence = problem.database().get(s);
+        NettreeCutIndex index = index(problem, s);
+        while (anyAtLimit(index, limit)) {
+            int target = bestPosition(problem, sequence, index);
             if (target < 0) {
-                return;
+                throw new IllegalStateException("a sequence still supports a sensitive pattern but "
+                        + "no position lies on a matching");
             }
-            int[] drop = index.maskPosition(target);
-            result.mask(sequenceIndex, target);
-            for (int p = 0; p < here.length; p++) {
-                here[p] = Math.max(0, here[p] - drop[p]);
-                needed[p] = Math.max(0, needed[p] - drop[p]);
-            }
+            index.maskPosition(target);
+            result.mask(s, target);
         }
     }
 
-    /** The position on the most matches, counted over the patterns that still need a drop. */
-    private int bestPosition(HideProblem problem, EventSequence sequence, NettreeCutIndex index,
-                             long[] here) {
+    private static boolean anyAtLimit(NettreeCutIndex index, int limit) {
+        for (int id = 0; id < index.patternCount(); id++) {
+            if (index.supNO(id) >= limit) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** The position on the most matchings of all sensitive patterns; ties go to the leftmost. */
+    private int bestPosition(HideProblem problem, EventSequence sequence, NettreeCutIndex index) {
         long best = 0;
         int target = -1;
         for (int i = 0; i < sequence.length(); i++) {
@@ -161,12 +178,11 @@ public final class Hha implements HidingMethod {
                 continue;
             }
             long through = 0;
-            for (int p = 0; p < here.length; p++) {
-                if (here[p] > 0) {
-                    through += delta == Delta.PATH_COUNTS
-                            ? index.occurrencesThrough(p, i)
-                            : originalDelta(problem, sequence, index, p, i);
-                }
+            for (int p = 0; p < index.patternCount(); p++) {
+                long here = delta == Delta.PATH_COUNTS
+                        ? index.occurrencesThrough(p, i)
+                        : originalDelta(problem, sequence, index, p, i);
+                through = Math.min(hidenosp.index.PathCounts.SATURATED, through + here);
             }
             if (through > best) {
                 best = through;
@@ -177,9 +193,9 @@ public final class Hha implements HidingMethod {
     }
 
     /**
-     * delta(i) the way theorem 2 of [R20] computes it: count the matches of the sequence, count
-     * them again with position i masked, and subtract. Kept so SC6 can time the original against
-     * the forward and backward counts of the index.
+     * delta(i) the way Theorem 2 computes it: count the matchings of the sequence, count them again
+     * with position i masked, and subtract. Kept so SC6 can time the original against the forward
+     * and backward counts of the index.
      */
     private long originalDelta(HideProblem problem, EventSequence sequence, NettreeCutIndex index,
                                int patternId, int position) {
@@ -195,8 +211,8 @@ public final class Hha implements HidingMethod {
     }
 
     /**
-     * The number of occurrences of P in S, by the dynamic program of lemmas 3 and 4 of [R20]:
-     * Q[k][j] counts the matches of the prefix of length k+1 that end at position j. Saturates at
+     * The number of matchings of P in S, by the dynamic program of Lemmas 2 to 5 of the papers:
+     * q[k][j] counts the matchings of the prefix of length k+1 that end at position j. Saturates at
      * the ceiling of {@link hidenosp.index.PathCounts}, since the count grows exponentially.
      */
     public static long countMatches(Pattern pattern, EventSequence sequence, GapConstraint gap,
@@ -242,14 +258,5 @@ public final class Hha implements HidingMethod {
             index.add(p, true);
         }
         return index;
-    }
-
-    private static boolean allSatisfied(long[] needed) {
-        for (long value : needed) {
-            if (value > 0) {
-                return false;
-            }
-        }
-        return true;
     }
 }

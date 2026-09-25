@@ -238,7 +238,7 @@ cỡ heap tối đa.
 | ρ_rep, β, \|R\|\* | `metrics.DataProfile` | §8.4 |
 | Baseline tầng (a) | `baseline.RandomMasking` (HH/HR/RH/RR), `baseline.OccurrenceCountHeuristic` | §11.3; chạy được với \|𝒮\| bất kỳ |
 | Kiểm B_ε rỗng báo lỗi | `hide.CutHide.requireNonEmptyBand` | Chốt ở `protocol.yaml` dòng 2 |
-| Baseline tầng (b): HHA | `baseline.Hha` | [R20]; hai cách tính δ cho SC6 |
+| Baseline tầng (b): HHA | `baseline.Hha` | [R20], [R2] Thuật toán 1; tái tạo đúng Ví dụ 2 của [R20] và Hình 1(d), 4(b) của [R3] (`HhaPaperExampleTest`); hai cách tính δ cho SC6. Đối chiếu: `config/doi_chieu_hha_r20.md` |
 | Baseline tầng (b): DBSH | `baseline.Dbsh` | [R3], Thuật toán 4 kèm 1 và 3; tái tạo đúng Hình 1(e), Hình 4(b), Ví dụ 1 (`DbshPaperExampleTest`). Dùng chung Cost (`SymbolCover`) và Exclude (`Exclude`) với SBSH |
 | Baseline tầng (b): SBSH | `baseline.Sbsh` | [R3], Thuật toán 5 kèm 1–3 và mục 4.3; tái tạo đúng Hình 1(f), Hình 4(b) và Ví dụ 3 của bài (`SbshPaperExampleTest`). Chỗ bài để ngỏ: `config/doi_chieu_sbsh_r3.md` mục 6 |
 | Baseline tầng (c): bộ giải chính xác | `baseline.IlpExact` | Nhánh-cận, thực thể nhỏ; tuỳ chọn cực tiểu mẫu mất |
@@ -251,8 +251,6 @@ cỡ heap tối đa.
 
 | Việc | Nơi | Chặn kịch bản nào |
 |---|---|---|
-| Đối chiếu HHA với bài gốc [R20] từng dòng, như đã làm cho DBSH và SBSH | `baseline.Hha` | SC3, SC8 |
-| Bản gốc của HHA trên bài toán cũ (độ hỗ trợ theo số chuỗi); DBSH và SBSH đã có (`SupportCount.SEQUENCE_COUNT`) | `baseline.Hha` | SC8 |
 | Giải thuật di truyền, bản thuần và bản lai khởi tạo từ lát cắt | `baseline.GaHybrid` | SC3 (tầng c) |
 | SC4, SC5, SC6, SC7, SC8 | `exp.Sc4…` đến `exp.Sc8…` | chính nó |
 | Đối chiếu với NETGAP của [R1] | `exp.Sc1ImplementationCheck` | SC1 (phần còn thiếu) |

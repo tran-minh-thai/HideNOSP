@@ -17,8 +17,12 @@ dong_1_nguong_va_pham_vi:
                                       # Chi phí đo được: re o ca sau bo, fifa chi them 0,6 giay.
     do_dai_mau_nhay_cam: [2, 4]
     sensitive_size: [1, 5, 10, 20]    # §11.5
-    sensitive_sets_moi_o: 20          # §11.5
+    sensitive_sets_moi_o: 20          # §11.5; toi da, xem preregistration.md muc 9
     phan_vi_lay_mau: [10, 30, 50, 70, 90]   # nam phan vi sup_NO, moi phan vi 4 tap -> 20
+    cach_lay_mau: >
+      Five equal-rank strata of the candidates sorted by sup_NO, centred on these percentiles;
+      up to 4 distinct sets per stratum, never a repeated set (hidenosp.exp.SensitiveSampling,
+      preregistration.md section 9, added 2026-09-25 before any SC3 run for the paper).
     khoang_cach_chung: ["[0,1]", "[0,3]"]
   theo_bo:
     dna_mt745584:

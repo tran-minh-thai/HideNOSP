@@ -262,3 +262,35 @@ Nếu trọng số nút thiết yếu không cải thiện Lost (rủi ro đã l
 thuộc vào chiều của kết quả này.
 
 Tương tự với H3: xem mục lường trước ở §2.
+
+---
+
+## 9. Bổ sung ngày 25/09/2026 — cách lấy mẫu tập nhạy cảm (trước mọi lần chạy SC3 lấy số)
+
+**Lý do bổ sung.** `protocol.yaml` dòng 1 chốt năm phân vị sup_NO, mỗi phân vị 4 tập, nhưng mã
+trước ngày này **không** thực hiện điều đó: nó trộn ngẫu nhiên kho ứng viên cho từng tập, độc lập
+nhau, nên có thể lặp tập. Đo trên dữ liệu thật (`results-probe/sbsh_feasibility_and_sampling_20260925.md`):
+trên bộ gen, 20 tập mỗi ô chỉ cho 1 đến 14 tập khác nhau tuỳ cấu hình, vì kho ứng viên chỉ có 4
+đến 23 mẫu. Đếm tập lặp như những đơn vị riêng sẽ thổi phồng cỡ mẫu của phép Wilcoxon.
+
+**Thời điểm.** Chưa có lần chạy SC3 lấy số nào. Các lượt SC3 đã chạy đều là thăm dò: trên dữ liệu
+tổng hợp trước ngày chốt, và ba lượt thăm dò khả thi ngày 25/09 (DBSH và SBSH trên bộ gen và
+MSNBC), trong đó chỉ cột HF được đọc.
+
+**Quy tắc chốt**, nay đã cài ở `hidenosp.exp.SensitiveSampling` (test: `SensitiveSamplingTest`):
+
+1. Kho ứng viên là các mẫu của F_σ dài từ 2 tới 4 và không lặp mục (phạm vi μ(P) = 1 ở §1).
+2. Kho được sắp theo sup_NO tăng dần (hoà thì theo thứ tự mẫu) và cắt thành năm tầng bằng nhau
+   theo hạng, tâm ở p10, p30, p50, p70, p90.
+3. Mỗi tầng cho tối đa **4 tập khác nhau** cỡ |𝒮|, rút từ riêng tầng đó bằng hạt giống 2026 (mỗi
+   tầng một bộ sinh suy ra từ hạt giống). Tầng có ít mẫu hơn |𝒮| không cho tập nào; tầng có ít tổ
+   hợp hơn 4 thì cho mọi tổ hợp.
+4. **Không bao giờ lặp một tập để đủ 20.** Ô (cấu hình, |𝒮|) nào rút được ít hơn 20 tập vẫn chạy
+   với số tập có được; số đó ghi ở đầu tệp kết quả và phải có trong bảng của bài. Ô không rút được
+   tập nào thì không tồn tại và không chạy; bài ghi rõ vì sao (cỡ kho ứng viên).
+5. Đơn vị lặp của H2 vẫn là (bộ dữ liệu, σ, khoảng cách, tập nhạy cảm), nay mọi đơn vị là khác
+   nhau. Tập rút thiếu không phải "thực thể bị loại" của §5, nên không tính vào ngưỡng 10%.
+
+Tuỳ chọn dòng lệnh đổi theo: `--sensitiveSets` bỏ, thay bằng `--setsPerStratum` (mặc định 4).
+
+**Không đổi:** δ_L, họ Holm bốn phần tử, ngưỡng phân nhóm, các biên tương đương.

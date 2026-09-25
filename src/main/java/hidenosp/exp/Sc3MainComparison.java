@@ -61,7 +61,7 @@ public final class Sc3MainComparison implements Scenario {
     @Override
     public String[] options() {
         return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "maxPatternLength",
-                "epsilon", "sensitiveSets", "sensitiveSize", "seed", "methodSeed", "repeats",
+                "epsilon", "setsPerStratum", "sensitiveSize", "seed", "methodSeed", "repeats",
                 "methods"};
     }
 
@@ -71,7 +71,9 @@ public final class Sc3MainComparison implements Scenario {
         int sigma = options.getInt("sigma", 20);
         int maxPatternLength = options.getInt("maxPatternLength", 3);
         double epsilon = options.getDouble("epsilon", 0.5);
-        int sensitiveSets = options.getInt("sensitiveSets", 5);
+        // Five strata of sup_NO (percentiles 10 to 90), this many distinct sets from each: the
+        // protocol fixes 4, i.e. 20 sets per cell when the pool allows it.
+        int perStratum = options.getInt("setsPerStratum", 4);
         int sensitiveSize = options.getInt("sensitiveSize", 1);
         long seed = options.getLong("seed", 2026);
         // Hat giong cua phuong phap tach roi khoi hat giong lay mau tap nhay cam. Neu dung chung
@@ -91,18 +93,32 @@ public final class Sc3MainComparison implements Scenario {
             throw new IllegalStateException("F_sigma(D) is empty at sigma = " + sigma
                     + "; lower sigma or widen the gap before running SC3");
         }
-        List<List<Pattern>> sensitiveSetList =
-                sampleSensitiveSets(frequent, sensitiveSets, sensitiveSize, seed);
+        SensitiveSampling.Result sampling =
+                SensitiveSampling.draw(frequent, sensitiveSize, perStratum, seed);
+        System.out.println(sampling.describe());
+        if (sampling.draws().isEmpty()) {
+            throw new IllegalStateException("no sensitive set of size " + sensitiveSize
+                    + " can be drawn in this configuration, so the cell does not exist: "
+                    + sampling.describe());
+        }
+        if (sampling.draws().size() < sampling.requested()) {
+            System.out.println("WARNING: the pool gives " + sampling.draws().size() + " distinct sets, "
+                    + "not " + sampling.requested() + "; the cell runs with these and the result file "
+                    + "header says so. No set is repeated to make up the number.");
+        }
+        List<SensitiveSampling.Draw> draws = sampling.draws();
 
-        String[] header = {"dataset", "shape", "gap", "sigma", "sensitive_set", "method_key",
+        String[] header = {"dataset", "shape", "gap", "sigma", "sensitive_set", "stratum", "method_key",
                 "method", "method_seed",
                 "hf", "lost", "lost_rel", "ghost", "dist_r", "sup_dist", "mask_count", "min_masks",
                 "mask_ratio", "certified_pairs", "total_pairs", "lower_bound", "achieved_ratio",
                 "frequent_before", "nonsensitive_before", "frequent_after"};
 
-        try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header)) {
-            for (int index = 0; index < sensitiveSetList.size(); index++) {
-                List<Pattern> sensitive = sensitiveSetList.get(index);
+        String[] provenance = {"options " + options.all(), sampling.describe()};
+        try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header, provenance)) {
+            for (int index = 0; index < draws.size(); index++) {
+                List<Pattern> sensitive = draws.get(index).patterns();
+                String stratum = "p" + draws.get(index).percentile();
                 HideProblem problem = new HideProblem(database, sensitive, gap,
                         HideProblem.Mode.HIDE_DB, sigma, epsilon, maxPatternLength);
                 long minMasks = boundFromP1(database, sensitive, gap, sigma);
@@ -125,7 +141,7 @@ public final class Sc3MainComparison implements Scenario {
                         // ho Holm da chot khong bao gio khop duoc ten trong tep.
                         writer.writeRow(describe(options), shape(database),
                                 gap.toString(), Integer.toString(sigma),
-                                sensitive.toString(),
+                                sensitive.toString(), stratum,
                                 name.trim().toLowerCase(Locale.ROOT), method.name(),
                                 method.isRandomized() ? Long.toString(thisSeed) : "",
                                 format(row.hidingFailure()), Integer.toString(row.lost()),
@@ -238,31 +254,6 @@ public final class Sc3MainComparison implements Scenario {
             longest = Math.max(longest, p.length());
         }
         return longest;
-    }
-
-    private List<List<Pattern>> sampleSensitiveSets(Map<Pattern, Long> frequent, int count, int size,
-                                                    long seed) {
-        List<Pattern> pool = new ArrayList<>();
-        for (Map.Entry<Pattern, Long> e : frequent.entrySet()) {
-            if (e.getKey().length() >= 2 && e.getKey().hasDistinctItems()) {
-                pool.add(e.getKey());
-            }
-        }
-        if (pool.isEmpty()) {
-            throw new IllegalStateException("no frequent pattern of length at least two");
-        }
-        Random random = new Random(seed);
-        List<List<Pattern>> out = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            List<Pattern> set = new ArrayList<>();
-            List<Pattern> shuffled = new ArrayList<>(pool);
-            java.util.Collections.shuffle(shuffled, random);
-            for (int k = 0; k < Math.min(size, shuffled.size()); k++) {
-                set.add(shuffled.get(k));
-            }
-            out.add(set);
-        }
-        return out;
     }
 
     private SequenceDatabase load(Cli options, long seed) {

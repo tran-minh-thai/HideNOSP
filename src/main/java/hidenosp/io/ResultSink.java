@@ -79,6 +79,15 @@ public final class ResultSink {
      *     lose a result silently
      */
     public CsvWriter open(Kind kind, String scenario, String[] header) {
+        return open(kind, scenario, header, new String[0]);
+    }
+
+    /**
+     * As {@link #open(Kind, String, String[])}, with further header lines that describe how the rows
+     * were produced, for instance the options of the run. Each line gets a leading "# " when it has
+     * none, so no reader mistakes it for data.
+     */
+    public CsvWriter open(Kind kind, String scenario, String[] header, String[] extraComments) {
         if (probeMode && kind == Kind.INVARIANT) {
             kind = Kind.PROBE;
         }
@@ -105,10 +114,14 @@ public final class ResultSink {
                     + "silently, which is how a sweep can drop a configuration without any error.");
         }
         String[] comments = runId.headerLines();
-        String[] withKind = new String[comments.length + 2];
+        String[] withKind = new String[comments.length + 2 + extraComments.length];
         System.arraycopy(comments, 0, withKind, 0, comments.length);
         withKind[comments.length] = "# kind " + kind;
         withKind[comments.length + 1] = "# scenario " + scenario;
+        for (int i = 0; i < extraComments.length; i++) {
+            String line = extraComments[i].replace('\n', ' ');
+            withKind[comments.length + 2 + i] = line.startsWith("#") ? line : "# " + line;
+        }
         return new CsvWriter(path, header, withKind);
     }
 

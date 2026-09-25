@@ -86,6 +86,24 @@ for _k, _size in HAUP_UTILITY_SIZES.items():
         HAUP + "/SDB%d_utility.txt" % _k, "raw/haup/SDB%d_utility.txt" % _k, "UTILITY", _size,
         "item utilities of SDB%d of HAUP-Hider; only needed to run HAUP-Hider itself" % _k)
 
+# The protein datasets of the non-overlapping mining line (Wu et al.), as published with NTP-Miner
+# in the same repository, pinned to the commit of that folder. One protein per line, one lower-case
+# letter per residue. The six files are nested (exact sequence match, printed again by every build of
+# tools/build_datasets.py): every sequence of SDB2 is in SDB1, of SDB3 in SDB2, of SDB5 in SDB4 and of
+# SDB6 in SDB5. Only the two largest, SDB1 and SDB4, are built; the other four are kept because they
+# are the published files that show the nesting.
+NTP = ("https://raw.githubusercontent.com/wuc567/Pattern-Mining/"
+       "0b3d4e51565abc1aff70c1c39f47785ad5c0d480/NTP-Miner/dataset")
+NTP_SIZES = {1: 92887, 2: 63659, 3: 32839, 4: 110603, 5: 74223, 6: 37725}
+NTP_BUILT = (1, 4)
+NTP_CONTAINED_IN = {2: 1, 3: 2, 5: 4, 6: 5}
+for _k, _size in NTP_SIZES.items():
+    CATALOGUE["ntp_sdb%d_raw" % _k] = (
+        NTP + "/SDB%d.txt" % _k, "raw/ntp/SDB%d.txt" % _k, "LETTERS", _size,
+        "raw protein dataset SDB%d of NTP-Miner, github wuc567/Pattern-Mining at 0b3d4e5; " % _k
+        + ("input of protein_sdb%d" % _k if _k in NTP_BUILT else
+           "every sequence is also in SDB%d, so it is not built" % NTP_CONTAINED_IN[_k]))
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 DATASETS = os.path.join(ROOT, "datasets")

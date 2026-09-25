@@ -9,7 +9,7 @@ import hidenosp.util.Cli;
  */
 public interface Scenario {
 
-    /** SC1 to SC8. */
+    /** SC1 to SC8, or SIGMA for the helper that applies the sigma rule. */
     String id();
 
     /** One line, the purpose column of the table of section 11.1. */

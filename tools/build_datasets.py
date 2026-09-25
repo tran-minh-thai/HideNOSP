@@ -19,6 +19,13 @@ has to state them:
   When every item token is a non-negative integer the tokens keep their value as item code, so the
   authors' utility files still apply; otherwise the sorted distinct tokens get codes 0, 1, 2, ...
 
+  Protein datasets of NTP-Miner (protein_sdb1, protein_sdb4). One line is one protein sequence and
+  one residue letter is one item; blanks carry no residue and are skipped. Any other character is an
+  error, not a residue. The sorted distinct letters get codes 0, 1, 2, ... The six published files
+  are nested (SDB3 in SDB2 in SDB1, SDB6 in SDB5 in SDB4), so only SDB1 and SDB4 are built, and those
+  two share most of their sequences too. Every protein build prints its exact-match overlap with the
+  six raw files, because the overlap decides how many datasets the protein data count as.
+
 For every event log the share of events whose place among equal timestamps was decided by the file
 order is printed, because it has to be declared next to the dataset.
 
@@ -57,6 +64,10 @@ BUILDS = {
 for _k in fetch_datasets.HAUP_SIZES:
     BUILDS["haup_sdb%d" % _k] = ("haup_sdb%d_raw" % _k, "tokens", "one line per sequence",
                                  "database SDB%d of HAUP-Hider, the closest hiding method" % _k)
+for _k in fetch_datasets.NTP_BUILT:
+    BUILDS["protein_sdb%d" % _k] = ("ntp_sdb%d_raw" % _k, "letters",
+                                    "one line per protein, one residue letter per item",
+                                    "protein dataset SDB%d of NTP-Miner (NOSEP line of work)" % _k)
 
 
 def local_name(tag):
@@ -140,6 +151,39 @@ def read_tokens(path):
     return sequences
 
 
+def read_letters(path):
+    """Return the sequences of a letter file, one sequence per line, one letter per item."""
+    sequences = []
+    with io.open(path, encoding="ascii") as handle:
+        for number, line in enumerate(handle, 1):
+            residues = "".join(line.split())
+            if not residues:
+                continue
+            if not residues.isalpha():
+                bad = sorted({c for c in residues if not c.isalpha()})
+                raise ValueError("%s line %d holds characters that are not residue letters: %r"
+                                 % (path, number, bad))
+            sequences.append([[letter] for letter in residues])
+    return sequences
+
+
+def print_overlap(name, itemset_sequences, rows):
+    """Print how many sequences this protein dataset shares with each raw NTP-Miner file."""
+    own = {"".join(itemset[0] for itemset in seq) for seq in itemset_sequences}
+    for k in sorted(fetch_datasets.NTP_SIZES):
+        raw_name = "ntp_sdb%d_raw" % k
+        path = os.path.join(DATASETS, fetch_datasets.CATALOGUE[raw_name][1])
+        if raw_name not in rows or not os.path.exists(path) \
+                or fetch_datasets.sha256_of(path) != rows[raw_name][6]:
+            print("  %-10s overlap with SDB%d not measured: the raw file is missing or differs from "
+                  "its record" % (name, k))
+            continue
+        other = {"".join(itemset[0] for itemset in seq) for seq in read_letters(path)}
+        shared = len(own & other)
+        print("  %-10s shares %d sequences with SDB%d: %.2f of its %d, %.2f of the %d of SDB%d"
+              % (name, shared, k, shared / len(own), len(own), shared / len(other), len(other), k))
+
+
 def codes_for(labels):
     """Item codes: integer labels keep their value when all are integers, else sorted order."""
     distinct = sorted(set(labels))
@@ -182,6 +226,11 @@ def build(name, rows):
         dropped = len(label_sequences) - len(itemset_sequences)
         tie_note = "%d of %d events (%.4f) ordered by the file among equal timestamps" % (
             tie_ordered, kept, tie_ordered / kept if kept else 0.0)
+    elif kind == "letters":
+        itemset_sequences = read_letters(raw_path)
+        dropped = 0
+        tie_note = "no timestamps"
+        print_overlap(name, itemset_sequences, rows)
     else:
         itemset_sequences = read_tokens(raw_path)
         dropped = 0

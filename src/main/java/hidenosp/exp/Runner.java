@@ -62,7 +62,10 @@ public final class Runner {
         System.out.printf("done in %.1f s%n", (System.nanoTime() - start) / 1e9);
     }
 
-    /** Every scenario of the table of section 11.1, keyed by its identifier. */
+    /**
+     * Every scenario of the table of section 11.1, keyed by its identifier, and SIGMA, the helper
+     * that applies the sigma rule of the protocol before any scenario runs on a dataset.
+     */
     public static Map<String, Scenario> registry() {
         Map<String, Scenario> map = new LinkedHashMap<>();
         for (Scenario scenario : List.of(
@@ -73,7 +76,8 @@ public final class Runner {
                 new Sc5DeletionGhosts(),
                 new Sc6Scalability(),
                 new Sc7DesignVariants(),
-                new Sc8OriginalProblem())) {
+                new Sc8OriginalProblem(),
+                new SigmaScan())) {
             map.put(scenario.id(), scenario);
         }
         return map;

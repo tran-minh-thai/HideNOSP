@@ -30,40 +30,62 @@ public final class Allocation {
      * @param total K, the total number of masks to distribute
      */
     public static Result solve(List<CostCurve> curves, int total) {
+        // Memory: two rows of values and one short per (sequence with support, reachable sum).
+        // Full (n + 1) x (K + 1) tables of long and int needed 9 to 12 GB on the largest MSNBC
+        // patterns, beyond the heap of the protocol.
         int n = curves.size();
         long infinite = Long.MAX_VALUE / 4;
-        long[][] best = new long[n + 1][total + 1];
-        int[][] choice = new int[n + 1][total + 1];
-        for (long[] row : best) {
-            java.util.Arrays.fill(row, infinite);
-        }
-        best[0][0] = 0;
+        long[] best = new long[total + 1];
+        java.util.Arrays.fill(best, infinite);
+        best[0] = 0;
+        short[][] choice = new short[n][];
+        int reachable = 0;
         for (int s = 0; s < n; s++) {
             CostCurve curve = curves.get(s);
             int limit = curve.supNO();
-            for (int used = 0; used <= total; used++) {
-                if (best[s][used] == infinite) {
+            if (limit == 0) {
+                continue;
+            }
+            requireShort(limit);
+            int top = Math.min(total, reachable + limit);
+            long[] next = new long[total + 1];
+            java.util.Arrays.fill(next, infinite);
+            choice[s] = new short[top + 1];
+            for (int used = 0; used <= reachable; used++) {
+                if (best[used] == infinite) {
                     continue;
                 }
                 for (int k = 0; k <= limit && used + k <= total; k++) {
-                    long value = best[s][used] + curve.cost(k);
-                    if (value < best[s + 1][used + k]) {
-                        best[s + 1][used + k] = value;
-                        choice[s + 1][used + k] = k;
+                    long value = best[used] + curve.cost(k);
+                    if (value < next[used + k]) {
+                        next[used + k] = value;
+                        choice[s][used + k] = (short) k;
                     }
                 }
             }
+            best = next;
+            reachable = top;
         }
-        if (best[n][total] == infinite) {
+        if (best[total] == infinite) {
             throw new IllegalArgumentException("cannot place " + total + " masks within the curves");
         }
         int[] counts = new int[n];
         int used = total;
-        for (int s = n; s > 0; s--) {
-            counts[s - 1] = choice[s][used];
-            used -= choice[s][used];
+        for (int s = n - 1; s >= 0; s--) {
+            if (choice[s] == null) {
+                continue;
+            }
+            counts[s] = choice[s][used];
+            used -= counts[s];
         }
-        return new Result(counts, best[n][total]);
+        return new Result(counts, best[total]);
+    }
+
+    private static void requireShort(int supNO) {
+        if (supNO > Short.MAX_VALUE) {
+            throw new IllegalArgumentException("sup_NO of one sequence is " + supNO
+                    + ", above the " + Short.MAX_VALUE + " the allocation table can record");
+        }
     }
 
     /**
@@ -78,6 +100,17 @@ public final class Allocation {
      * @return the remaining support t_S chosen for every sequence
      */
     public static int[] solveExact(int[][] masks, long[][] weight, int needed) {
+        return solveExact(masks, weight, needed, false);
+    }
+
+    /**
+     * As {@link #solveExact(int[][], long[][], int)}; with {@code weightFirst} the total weight is
+     * minimised first and the masks break ties, the order of FrontierDp.Objective.WEIGHT_THEN_MASKS.
+     */
+    public static int[] solveExact(int[][] masks, long[][] weight, int needed, boolean weightFirst) {
+        // The reductions add up to exactly K. Lowering a sequence by more than it has to never
+        // helps, because every curve is non-increasing in t (FrontierDpTest checks it), so the
+        // exact sum loses nothing and the choice alone identifies the predecessor.
         int n = masks.length;
         long infinite = Long.MAX_VALUE / 4;
         long[] bestMasks = new long[needed + 1];
@@ -86,34 +119,38 @@ public final class Allocation {
         java.util.Arrays.fill(bestWeight, infinite);
         bestMasks[0] = 0;
         bestWeight[0] = 0;
-        int[][] reductionChosen = new int[n][];
-        int[][] cameFrom = new int[n][];
+        short[][] choice = new short[n][];
+        int reachable = 0;
         for (int s = 0; s < n; s++) {
             int f = masks[s].length - 1;
+            requireShort(f);
+            int top = Math.min(needed, reachable + f);
             long[] nextMasks = new long[needed + 1];
             long[] nextWeight = new long[needed + 1];
             java.util.Arrays.fill(nextMasks, infinite);
             java.util.Arrays.fill(nextWeight, infinite);
-            reductionChosen[s] = new int[needed + 1];
-            cameFrom[s] = new int[needed + 1];
-            for (int reached = 0; reached <= needed; reached++) {
+            choice[s] = new short[top + 1];
+            for (int reached = 0; reached <= reachable; reached++) {
                 if (bestMasks[reached] == infinite) {
                     continue;
                 }
-                for (int k = 0; k <= f; k++) {
-                    int to = Math.min(needed, reached + k);
+                for (int k = 0; k <= f && reached + k <= needed; k++) {
+                    int to = reached + k;
                     long m = bestMasks[reached] + masks[s][f - k];
                     long w = bestWeight[reached] + weight[s][f - k];
-                    if (m < nextMasks[to] || (m == nextMasks[to] && w < nextWeight[to])) {
+                    boolean better = weightFirst
+                            ? w < nextWeight[to] || (w == nextWeight[to] && m < nextMasks[to])
+                            : m < nextMasks[to] || (m == nextMasks[to] && w < nextWeight[to]);
+                    if (better) {
                         nextMasks[to] = m;
                         nextWeight[to] = w;
-                        reductionChosen[s][to] = k;
-                        cameFrom[s][to] = reached;
+                        choice[s][to] = (short) k;
                     }
                 }
             }
             bestMasks = nextMasks;
             bestWeight = nextWeight;
+            reachable = top;
         }
         if (bestMasks[needed] == infinite) {
             throw new IllegalArgumentException("cannot reduce sup_NO by " + needed
@@ -123,10 +160,47 @@ public final class Allocation {
         int at = needed;
         for (int s = n - 1; s >= 0; s--) {
             int f = masks[s].length - 1;
-            remaining[s] = f - reductionChosen[s][at];
-            at = cameFrom[s][at];
+            int k = choice[s][at];
+            remaining[s] = f - k;
+            at -= k;
         }
         return remaining;
+    }
+
+    /**
+     * The least total of masks of {@link #solveExact} without the sets, in O(K) memory: what SC2
+     * needs for |R| star.
+     */
+    public static long leastMasks(int[][] masks, int needed) {
+        long infinite = Long.MAX_VALUE / 4;
+        long[] best = new long[needed + 1];
+        java.util.Arrays.fill(best, infinite);
+        best[0] = 0;
+        int reachable = 0;
+        for (int[] curve : masks) {
+            int f = curve.length - 1;
+            int top = Math.min(needed, reachable + f);
+            long[] next = new long[needed + 1];
+            java.util.Arrays.fill(next, infinite);
+            for (int reached = 0; reached <= reachable; reached++) {
+                if (best[reached] == infinite) {
+                    continue;
+                }
+                for (int k = 0; k <= f && reached + k <= needed; k++) {
+                    long m = best[reached] + curve[f - k];
+                    if (m < next[reached + k]) {
+                        next[reached + k] = m;
+                    }
+                }
+            }
+            best = next;
+            reachable = top;
+        }
+        if (best[needed] == infinite) {
+            throw new IllegalArgumentException("cannot reduce sup_NO by " + needed
+                    + " within the curves");
+        }
+        return best[needed];
     }
 
     /**

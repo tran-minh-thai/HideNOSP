@@ -89,17 +89,7 @@ public record DataProfile(Pattern pattern, long supNO, int supSeq, long supNOWit
         if (needed <= 0) {
             return 0;
         }
-        int[][] masks = curves.toArray(new int[0][]);
-        long[][] zero = new long[masks.length][];
-        for (int c = 0; c < masks.length; c++) {
-            zero[c] = new long[masks[c].length];
-        }
-        int[] remaining = Allocation.solveExact(masks, zero, (int) needed);
-        long sum = 0;
-        for (int c = 0; c < masks.length; c++) {
-            sum += masks[c][remaining[c]];
-        }
-        return sum;
+        return Allocation.leastMasks(curves.toArray(new int[0][]), (int) needed);
     }
 
     /** Header for the SC2 table, kept next to the row writer so the two cannot drift apart. */

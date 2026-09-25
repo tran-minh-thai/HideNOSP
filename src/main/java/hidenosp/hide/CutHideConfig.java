@@ -30,6 +30,12 @@ public record CutHideConfig(Weighting weighting, boolean refineLambda, Allocatio
          */
         FRONTIER_DP,
         /**
+         * Theorem P8 with the order of the two costs reversed: least surrogate weight, then fewest
+         * masks. It departs from the lexicographic objective of section 2 on purpose, to measure
+         * the other end of the trade-off; with g- &gt; 0 it falls back to the lambda sweep.
+         */
+        FRONTIER_DP_WEIGHT_FIRST,
+        /**
          * The weighted cut and the lambda sweep of P6 only. For a repeated-item pattern the masks
          * are those of a cut, the mu(P)-approximation of P3.
          */

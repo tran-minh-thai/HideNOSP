@@ -113,7 +113,7 @@ public final class CutHide implements HidingMethod {
      * With g- = 0 the exact curves of P8 replace both, for any mu(P).
      */
     private void runSinglePattern(HideProblem problem, Pattern pattern, Sanitization result) {
-        if (config.curves() == CutHideConfig.Curves.FRONTIER_DP && FrontierDp.applies(problem.gap())) {
+        if (config.curves() != CutHideConfig.Curves.LAMBDA_SWEEP && FrontierDp.applies(problem.gap())) {
             runSinglePatternExact(problem, pattern, result);
             return;
         }
@@ -152,6 +152,7 @@ public final class CutHide implements HidingMethod {
                     + "program only; " + config.allocation() + " is defined for the lambda-sweep "
                     + "curves, so select Curves.LAMBDA_SWEEP for that variant");
         }
+        boolean weightFirst = config.curves() == CutHideConfig.Curves.FRONTIER_DP_WEIGHT_FIRST;
         int n = problem.database().size();
         FrontierDp.Curve[] curves = new FrontierDp.Curve[n];
         long total = 0;
@@ -162,7 +163,8 @@ public final class CutHide implements HidingMethod {
             for (int i = 0; i < weights.length; i++) {
                 scaled[i] = Math.round(weights[i] * CostCurve.SCALE);
             }
-            curves[s] = FrontierDp.solve(pattern, sequence, problem.gap(), scaled);
+            curves[s] = FrontierDp.solve(pattern, sequence, problem.gap(), scaled, weightFirst
+                    ? FrontierDp.Objective.WEIGHT_THEN_MASKS : FrontierDp.Objective.MASKS_THEN_WEIGHT);
             total += curves[s].supNO();
         }
         int[] remaining = new int[n];
@@ -188,7 +190,7 @@ public final class CutHide implements HidingMethod {
                     masks[c] = curves[carrying.get(c)].masks();
                     weight[c] = curves[carrying.get(c)].weight();
                 }
-                int[] chosen = Allocation.solveExact(masks, weight, (int) needed);
+                int[] chosen = Allocation.solveExact(masks, weight, (int) needed, weightFirst);
                 for (int c = 0; c < carrying.size(); c++) {
                     remaining[carrying.get(c)] = chosen[c];
                 }

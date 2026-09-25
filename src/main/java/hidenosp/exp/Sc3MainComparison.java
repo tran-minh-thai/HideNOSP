@@ -209,6 +209,17 @@ public final class Sc3MainComparison implements Scenario {
                 return new CutHide(CutHideConfig.standard().withCurves(CutHideConfig.Curves.LAMBDA_SWEEP))
                         .withNearThreshold(band, factor);
             }
+            case "cut-hide-weight": {
+                // Theorem P8 with the surrogate weight first and the masks second: the other end
+                // of the trade-off between |R| and Lost on repeated-item patterns.
+                Set<Pattern> closure =
+                        FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+                List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
+                double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
+                return new CutHide(CutHideConfig.standard()
+                        .withCurves(CutHideConfig.Curves.FRONTIER_DP_WEIGHT_FIRST))
+                        .withNearThreshold(band, factor);
+            }
             case "cut-hide-uniform":
                 return new CutHide(CutHideConfig.uniformWeights());
             case "occurrence":

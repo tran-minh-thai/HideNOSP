@@ -47,6 +47,14 @@ public final class FrontierDp {
     public record Curve(int supNO, int[] masks, long[] weight, int[][] positions, int states) {
     }
 
+    /** The order in which the two costs of a masking set are minimised. */
+    public enum Objective {
+        /** The objective of HIDE-DB and HIDE-SEQ (design section 2): fewest masks, then weight. */
+        MASKS_THEN_WEIGHT,
+        /** Least position weight (the side-effect surrogate) first, then fewest masks. */
+        WEIGHT_THEN_MASKS
+    }
+
     /** True when the gap constraint allows the program, that is g- = 0. */
     public static boolean applies(GapConstraint gap) {
         return gap.gmin() == 0;
@@ -60,9 +68,14 @@ public final class FrontierDp {
 
     /** One partial solution: its cost and the positions it masked, shared as a persistent list. */
     private record Entry(int masks, long weight, Chain chain) {
-        boolean betterThan(Entry other) {
-            return other == null || masks < other.masks
-                    || (masks == other.masks && weight < other.weight);
+        boolean betterThan(Entry other, Objective objective) {
+            if (other == null) {
+                return true;
+            }
+            if (objective == Objective.WEIGHT_THEN_MASKS) {
+                return weight < other.weight || (weight == other.weight && masks < other.masks);
+            }
+            return masks < other.masks || (masks == other.masks && weight < other.weight);
         }
     }
 
@@ -77,6 +90,16 @@ public final class FrontierDp {
      */
     public static Curve solve(Pattern pattern, EventSequence sequence, GapConstraint gap,
                               long[] positionWeight) {
+        return solve(pattern, sequence, gap, positionWeight, Objective.MASKS_THEN_WEIGHT);
+    }
+
+    /**
+     * As {@link #solve(Pattern, EventSequence, GapConstraint, long[])} under the given order of the
+     * two costs. With {@link Objective#WEIGHT_THEN_MASKS}, {@code masks[t]} is the number of masks
+     * of the lightest set, not the least number of masks.
+     */
+    public static Curve solve(Pattern pattern, EventSequence sequence, GapConstraint gap,
+                              long[] positionWeight, Objective objective) {
         if (!applies(gap)) {
             throw new IllegalArgumentException("FrontierDp needs g- = 0, got " + gap
                     + "; with g- > 0 the latest reachable node no longer dominates");
@@ -147,7 +170,8 @@ public final class FrontierDp {
                     // Mask position i: none of its nodes is reachable.
                     carry(d, next, m, g, none, -1, 0, capableLevel);
                     relax(after, encode(next, base), budgets, c,
-                            new Entry(e.masks() + 1, e.weight() + w, new Chain(i, e.chain())));
+                            new Entry(e.masks() + 1, e.weight() + w, new Chain(i, e.chain())),
+                            objective);
                     // Keep position i and delete a subset of its reachable nodes (budget).
                     for (int subset = 0; subset < (1 << capable); subset++) {
                         int deleted = Integer.bitCount(subset);
@@ -165,11 +189,11 @@ public final class FrontierDp {
                             continue;
                         }
                         carry(d, next, m, g, none, kept, capable, capableLevel);
-                        relax(after, encode(next, base), budgets, c + deleted, e);
+                        relax(after, encode(next, base), budgets, c + deleted, e, objective);
                     }
                 }
             }
-            prune(after);
+            prune(after, objective);
             current = after;
             largest = Math.max(largest, current.size());
             last = i;
@@ -182,7 +206,7 @@ public final class FrontierDp {
             Entry best = null;
             for (Entry[] entries : current.values()) {
                 for (int c = 0; c <= t; c++) {
-                    if (entries[c] != null && entries[c].betterThan(best)) {
+                    if (entries[c] != null && entries[c].betterThan(best, objective)) {
                         best = entries[c];
                     }
                 }
@@ -195,7 +219,7 @@ public final class FrontierDp {
             weight[t] = best.weight();
             positions[t] = toArray(best.chain());
         }
-        if (masks[supNO] != 0) {
+        if (masks[supNO] != 0 || weight[supNO] != 0) {
             throw new IllegalStateException("sup_NO = " + supNO + " from the flow, but the program "
                     + "needs " + masks[supNO] + " masks to reach it; Menger says 0");
         }
@@ -219,22 +243,23 @@ public final class FrontierDp {
         }
     }
 
-    private static void relax(Map<Long, Entry[]> map, long key, int budgets, int c, Entry candidate) {
+    private static void relax(Map<Long, Entry[]> map, long key, int budgets, int c, Entry candidate,
+                              Objective objective) {
         Entry[] entries = map.computeIfAbsent(key, k -> new Entry[budgets]);
-        if (candidate.betterThan(entries[c])) {
+        if (candidate.betterThan(entries[c], objective)) {
             entries[c] = candidate;
         }
     }
 
     /** Drops an entry that uses more budget than another of its state without costing less. */
-    private static void prune(Map<Long, Entry[]> map) {
+    private static void prune(Map<Long, Entry[]> map, Objective objective) {
         for (Entry[] entries : map.values()) {
             Entry best = null;
             for (int c = 0; c < entries.length; c++) {
                 if (entries[c] == null) {
                     continue;
                 }
-                if (best != null && !entries[c].betterThan(best)) {
+                if (best != null && !entries[c].betterThan(best, objective)) {
                     entries[c] = null;
                 } else {
                     best = entries[c];

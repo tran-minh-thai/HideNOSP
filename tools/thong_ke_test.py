@@ -255,8 +255,8 @@ def thu_xep_nhom_lay_trung_vi():
         f.write("dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,"
                 "mask_share,rho_rep,beta,min_masks_exact\n")
         # rho_rep = [0.01, 0.02, 0.90]: trung vi 0.02 (suy bien), trung binh 0.31 (trung gian).
-        for rho in (0.01, 0.02, 0.90):
-            f.write("datasets/x.txt,\"[0,3]\",100,\"[1]\",1,1,1,1,0,%s,0.5,true\n" % rho)
+        for k, rho in enumerate((0.01, 0.02, 0.90)):
+            f.write("datasets/x.txt,\"[0,3]\",100,\"[%d, 9]\",1,1,1,1,0,%s,0.5,true\n" % (k, rho))
     nhom = tk.xep_nhom([duong_dan])
     thong_tin = nhom[("x", "[0,3]", 100)]
     gan(thong_tin["rho_rep"], 0.02)
@@ -293,9 +293,9 @@ def _viet_sc2(duong_dan, hang, profile):
             f.write("# profile %s\n" % profile)
         f.write("dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,"
                 "mask_share,rho_rep,beta,min_masks_exact\n")
-        for ten, rho, beta, rieng in hang:
-            f.write("datasets/%s.txt,\"[0,3]\",100,\"[1, 2]\",1,1,1,1,0,%s,%s,%s\n"
-                    % (ten, rho, beta, "true" if rieng else "false"))
+        for k, (ten, rho, beta, rieng) in enumerate(hang):
+            f.write("datasets/%s.txt,\"[0,3]\",100,\"[%d, 9]\",1,1,1,1,0,%s,%s,%s\n"
+                    % (ten, k, rho, beta, "true" if rieng else "false"))
 
 
 def thu_xep_nhom_chi_doc_toan_kho():
@@ -358,6 +358,23 @@ def thu_h2_chi_tren_nhom_chinh():
     tk.chay_h2(hang, lambda s="": ra.append(s), nhom)
     assert any("tested on the 2 rows of the main group only" in s for s in ra), ra[:8]
 
+
+
+def thu_xep_nhom_khong_dem_trung_lan_chay_lai():
+    """Two pool files of one configuration (a rerun) count each pattern once."""
+    import tempfile
+    thu_muc = tempfile.mkdtemp()
+    hang = [("x", 0.30, 0.5, True)]
+    for ten in ("SC2_a.csv", "SC2_b.csv"):
+        _viet_sc2(os.path.join(thu_muc, ten), hang, "pool")
+    nhom = tk.xep_nhom([os.path.join(thu_muc, "SC2_a.csv"), os.path.join(thu_muc, "SC2_b.csv")])
+    gan(nhom[("x", "[0,3]", 100)]["pool"], 1)
+    _viet_sc2(os.path.join(thu_muc, "SC2_c.csv"), [("x", 0.40, 0.5, True)], "pool")
+    try:
+        tk.xep_nhom([os.path.join(thu_muc, "SC2_a.csv"), os.path.join(thu_muc, "SC2_c.csv")])
+    except ValueError:
+        return
+    raise AssertionError("one pattern with two different profiles was accepted")
 
 PHEP_THU = [v for k, v in sorted(globals().items()) if k.startswith("thu_")]
 

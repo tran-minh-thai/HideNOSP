@@ -124,8 +124,7 @@ def xep_nhom(tep_sc2):
     of the configuration, the patterns the main comparison hides. Files of the sampled profile are
     ignored, and a pool file holding a repeated-item pattern is an error.
     """
-    rho = defaultdict(list)
-    beta = defaultdict(list)
+    theo_mau = defaultdict(dict)   # configuration -> pattern -> (rho_rep, beta)
     for duong_dan in tep_sc2:
         chu_thich, hang = doc_csv(duong_dan)
         if "# profile pool" not in chu_thich:
@@ -135,8 +134,15 @@ def xep_nhom(tep_sc2):
                 raise ValueError("%s: a pool profile holds distinct-item patterns only, found %s"
                                  % (duong_dan, r.get("pattern")))
             khoa = (ten_bo(r["dataset"]), r["gap"], int(r["sigma"]))
-            rho[khoa].append(so(r["rho_rep"]))
-            beta[khoa].append(so(r["beta"]))
+            gia_tri = (so(r["rho_rep"]), so(r["beta"]))
+            cu = theo_mau[khoa].get(r["pattern"])
+            if cu is not None and cu != gia_tri:
+                raise ValueError("%s: pattern %s of %s was profiled twice with different values"
+                                 % (duong_dan, r["pattern"], khoa))
+            # A second pool file of the same configuration (a rerun) must not count twice.
+            theo_mau[khoa][r["pattern"]] = gia_tri
+    rho = {k: [v[0] for v in m.values()] for k, m in theo_mau.items()}
+    beta = {k: [v[1] for v in m.values()] for k, m in theo_mau.items()}
     ra = {}
     for khoa, gia_tri in rho.items():
         m = float(np.median(gia_tri))

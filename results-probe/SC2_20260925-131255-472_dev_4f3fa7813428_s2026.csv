@@ -1,0 +1,15 @@
+# run 20260925-131255-472_dev_4f3fa7813428_s2026
+# host unknown-host
+# jdk 26.0.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# kind PROBE
+# scenario SC2
+# profile pool
+# options {probe=true, dataset=datasets/fifa.txt, format=SPMF, sigma=3000, gmin=0, gmax=1, maxPatternLength=4, profile=pool}
+dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,mask_share,rho_rep,beta,min_masks_exact
+datasets/fifa.txt,"[0,1]",3000,"[46, 48]",3034,3001,4820,35,0.000047,0.010877,0.370539,true
+datasets/fifa.txt,"[0,1]",3000,"[45, 32]",3040,3031,4944,41,0.000055,0.002961,0.385113,true
+datasets/fifa.txt,"[0,1]",3000,"[45, 15]",3272,3252,5047,273,0.000368,0.006112,0.351694,true
+datasets/fifa.txt,"[0,1]",3000,"[17, 46]",3624,3595,6030,625,0.000843,0.008002,0.399005,true
+datasets/fifa.txt,"[0,1]",3000,"[155, 147]",3772,3740,6126,773,0.001043,0.008484,0.384264,true

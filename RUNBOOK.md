@@ -181,6 +181,17 @@ Với mỗi bộ, xem hai cột:
 Điền ngưỡng phân nhóm và δ_L vào `config/preregistration.md`, commit tệp đó (lịch sử git là bằng
 chứng thời điểm), rồi mới sang SC3.
 
+**Từ 25/09/2026 (preregistration mục 10):** nhóm tính trên **toàn bộ mẫu không lặp mục** dài 2–4 của
+F_σ, tức kho mà SC3 rút tập nhạy cảm. Chạy SC2 với `--profile=pool` cho mọi cấu hình của
+`protocol.yaml`; tệp SC2 lấy mẫu con không còn dùng để xếp nhóm. Sau lượt SC2 chính thức trên máy
+đo, sinh bảng nhóm một lần rồi rà và commit (commit là chốt):
+
+```bash
+python tools/thong_ke.py --sc2 results-invariant --write-groups
+```
+
+`tools/thong_ke.py` so từng cấu hình với `config/nhom_cau_hinh.tsv`, và chỉ kiểm H2 trên nhóm chính.
+
 **Đã làm, ngày 12/09/2026.** `config/preregistration.md` và `config/protocol.yaml` đã chốt mọi
 tham số chặn SC3; căn cứ từng con số ở `config/de_xuat_gia_tri_nhom_A.md`. Ba việc kỹ thuật phải
 xong trước lần chạy SC3 lấy số vào bài: gắn `HIDENOSP_REVISION`, nâng `--maxPatternLength` lên 4,

@@ -1,0 +1,50 @@
+# run 20260925-131504-569_dev_a102f64bcf28_s2026
+# host unknown-host
+# jdk 26.0.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# kind PROBE
+# scenario SC3
+# options {probe=true, dataset=datasets/bpi2013.txt, format=SPMF, sigma=1000, gmin=0, gmax=1, maxPatternLength=4, epsilon=0.5, sensitiveSize=1, seed=2026, methods=cut-hide,hha}
+# sensitive sets: size 1, pool 34 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 6 -> 4, p30: 7 -> 4, p50: 7 -> 4, p70: 7 -> 4, p90: 7 -> 4
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 5, 8]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,0,0.000000,0,0.004502,0.013009,295,295,1.000000,295,295,0,,106,103,105
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 5, 8]]",p10,hha,HHA,,0.000000,4,0.038835,0,0.004502,0.016625,295,295,1.000000,0,0,0,,106,103,101
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 11, 10]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,0,0.000000,0,0.004822,0.009152,316,316,1.000000,313,313,0,,106,102,105
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 11, 10]]",p10,hha,HHA,,0.000000,1,0.009804,0,0.004822,0.022339,316,316,1.000000,0,0,0,,106,102,104
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[0, 1, 5]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,0,0.000000,0,0.001526,0.002893,100,100,1.000000,93,93,0,,106,104,105
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[0, 1, 5]]",p10,hha,HHA,,0.000000,1,0.009615,0,0.001526,0.003851,100,100,1.000000,0,0,0,,106,104,104
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[5, 8]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,0,0.000000,0,0.005066,0.004129,332,332,1.000000,330,330,0,,106,101,105
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[5, 8]]",p10,hha,HHA,,0.000000,1,0.009901,0,0.005066,0.007873,332,332,1.000000,0,0,0,,106,101,104
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 10, 8]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,0,0.000000,0,0.009308,0.010305,610,610,1.000000,610,610,0,,106,103,105
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 10, 8]]",p30,hha,HHA,,0.000000,4,0.038835,0,0.009308,0.026735,610,610,1.000000,0,0,0,,106,103,101
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 5]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,0,0.000000,0,0.007294,0.013518,478,478,1.000000,450,450,0,,106,100,105
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 5]]",p30,hha,HHA,,0.000000,2,0.020000,0,0.007294,0.016929,478,478,1.000000,0,0,0,,106,100,103
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 1, 5]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,0,0.000000,0,0.009461,0.027142,620,620,1.000000,576,576,0,,106,103,105
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 1, 5]]",p30,hha,HHA,,0.000000,5,0.048544,0,0.009461,0.025852,620,620,1.000000,0,0,0,,106,103,100
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 1, 8]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,0,0.000000,0,0.009827,0.019588,644,644,1.000000,644,644,0,,106,102,105
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 1, 8]]",p30,hha,HHA,,0.000000,5,0.049020,0,0.009827,0.028609,644,644,1.000000,0,0,0,,106,102,100
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 5, 10]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,0,0.000000,0,0.015931,0.024898,1044,1044,1.000000,1036,1036,0,,106,103,105
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 5, 10]]",p50,hha,HHA,,0.000000,10,0.097087,0,0.015931,0.063981,1044,1044,1.000000,0,0,0,,106,103,95
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 5, 10, 8]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,1,0.009524,0,0.014161,0.027125,928,928,1.000000,924,924,0,,106,105,104
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 5, 10, 8]]",p50,hha,HHA,,0.000000,10,0.095238,0,0.014161,0.061348,928,928,1.000000,0,0,0,,106,105,95
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 11, 0]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,1,0.009804,0,0.015198,0.051211,996,996,1.000000,895,895,0,,106,102,104
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 11, 0]]",p50,hha,HHA,,0.000000,2,0.019608,0,0.015198,0.067351,996,996,1.000000,0,0,0,,106,102,103
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[5, 10, 8]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,1,0.009615,0,0.014741,0.024976,966,966,1.000000,962,962,0,,106,104,104
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[5, 10, 8]]",p50,hha,HHA,,0.000000,7,0.067308,0,0.014741,0.031004,966,966,1.000000,0,0,0,,106,104,98
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 1, 10, 8]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,2,0.019048,0,0.023469,0.047696,1538,1538,1.000000,1531,1531,0,,106,105,103
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 1, 10, 8]]",p70,hha,HHA,,0.000000,11,0.104762,0,0.023469,0.068733,1538,1538,1.000000,0,0,0,,106,105,94
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 1, 0]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,1,0.009901,0,0.020905,0.076455,1370,1370,1.000000,1089,1089,0,,106,101,104
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 1, 0]]",p70,hha,HHA,,0.000000,7,0.069307,0,0.020921,0.069317,1371,1370,1.000730,0,0,0,,106,101,98
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 1, 10]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,0,0.000000,0,0.025483,0.046268,1670,1670,1.000000,1633,1633,0,,106,101,105
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 1, 10]]",p70,hha,HHA,,0.000000,9,0.089109,0,0.025483,0.065381,1670,1670,1.000000,0,0,0,,106,101,96
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[0, 1]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,2,0.021505,0,0.032304,0.053490,2117,2117,1.000000,1323,1323,0,,106,93,103
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[0, 1]]",p70,hha,HHA,,0.000000,9,0.096774,0,0.032320,0.047680,2118,2117,1.000472,0,0,0,,106,93,96
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 10, 8]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,6,0.059406,0,0.067279,0.093713,4409,4409,1.000000,4330,4330,0,,106,101,99
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 10, 8]]",p90,hha,HHA,,0.000000,22,0.217822,0,0.067279,0.204559,4409,4409,1.000000,0,0,0,,106,101,83
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 11]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,10,0.128205,0,0.131323,0.248907,8606,8606,1.000000,3876,3876,0,,106,78,95
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 11]]",p90,hha,HHA,,0.000000,17,0.217949,0,0.131399,0.274919,8611,8606,1.000581,0,0,0,,106,78,88
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 5]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,2,0.022727,0,0.043856,0.068671,2874,2874,1.000000,2111,2111,0,,106,88,103
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[1, 5]]",p90,hha,HHA,,0.000000,6,0.068182,0,0.043871,0.114940,2875,2874,1.000348,0,0,0,,106,88,99
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 1]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM]",,0.000000,8,0.112676,0,0.148444,0.243870,9728,9728,1.000000,4132,4132,0,,106,71,97
+datasets/bpi2013.txt,"N=7554,len=65533","[0,1]",1000,"[[11, 1]]",p90,hha,HHA,,0.000000,15,0.211268,0,0.148551,0.221678,9735,9728,1.000720,0,0,0,,106,71,90

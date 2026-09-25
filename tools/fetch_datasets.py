@@ -42,6 +42,50 @@ CATALOGUE = {
               "ung vien: van ban Kinh thanh theo chuoi tu, dai trung binh 21.6"),
 }
 
+# Raw inputs, stored under datasets/raw/. The Java code never reads them; tools/build_datasets.py
+# turns each into an SPMF file and records that file in provenance.tsv as well.
+FOURTU = "https://data.4tu.nl/file"
+CATALOGUE.update({
+    "bpi2012_raw": (FOURTU + "/533f66a4-8911-4ac7-8612-1235d65d1f37/3276db7f-8bee-4f2b-88ee-92dbffb5a893",
+                    "raw/BPI_Challenge_2012.xes.gz", "XES_GZ", 3342406,
+                    "raw event log BPI Challenge 2012, 4TU.ResearchData, "
+                    "doi 10.4121/uuid:3926db30-f712-4394-aebc-75976070e91f; input of bpi2012"),
+    "bpi2013_raw": (FOURTU + "/0fc5c579-e544-4fab-9143-fab1f5192432/aa51ffbb-25fd-4b5a-b0b8-9aba659b7e8c",
+                    "raw/BPI_Challenge_2013_incidents.xes.gz", "XES_GZ", 1322247,
+                    "raw event log BPI Challenge 2013 incidents, 4TU.ResearchData, "
+                    "doi 10.4121/uuid:500573e6-accc-4b0c-9576-aa5468b10cee; input of bpi2013"),
+    "sepsis_raw": (FOURTU + "/33632f3c-5c48-40cf-8d8f-2db57f5a6ce7/643dccf2-985a-459e-835c-a82bce1c0339",
+                   "raw/Sepsis_Cases_Event_Log.xes.gz", "XES_GZ", 202508,
+                   "raw event log Sepsis Cases, 4TU.ResearchData, "
+                   "doi 10.4121/uuid:915d2bfb-7e84-49ad-a286-dc35f063a460; input of sepsis"),
+})
+
+# The checksums the publisher lists for the files above. A download that does not match them is
+# refused before anything is written, whether or not provenance.tsv already has a record.
+PUBLISHED_MD5 = {
+    "bpi2012_raw": "74c7ba9aba85bfcb181a22c9d565e5b5",
+    "bpi2013_raw": "d4809bd55e3e1c15b017ab4e58228297",
+    "sepsis_raw": "b5671166ac71eb20680d3c74616c43d2",
+}
+
+# The 14 databases of HAUP-Hider (Wu, Zhou, Li, Liu, Wei, Wu), the closest hiding method on
+# non-overlapping occurrences, from the authors' repository pinned to the commit that added them.
+# The repository declares no licence: the files are fetched for evaluation, never redistributed.
+HAUP = ("https://raw.githubusercontent.com/wuc567/Pattern-Mining/"
+        "37c82b7be9dd7debdf32497666e79af6df79d002/HAUP-Hider/Databases")
+HAUP_SIZES = {1: 50067, 2: 310553, 3: 23444, 4: 812992, 5: 1004723, 6: 235896, 7: 102005,
+              8: 151714, 9: 204011, 10: 254770, 11: 305831, 12: 357219, 13: 408568, 14: 459324}
+HAUP_UTILITY_SIZES = {1: 23, 2: 1615, 3: 74, 4: 51617, 5: 123143, 6: 1520}
+for _k, _size in HAUP_SIZES.items():
+    CATALOGUE["haup_sdb%d_raw" % _k] = (
+        HAUP + "/SDB%d.txt" % _k, "raw/haup/SDB%d.txt" % _k, "TOKENS", _size,
+        "raw database SDB%d of HAUP-Hider, github wuc567/Pattern-Mining at 37c82b7; input of "
+        "haup_sdb%d" % (_k, _k))
+for _k, _size in HAUP_UTILITY_SIZES.items():
+    CATALOGUE["haup_sdb%d_utility_raw" % _k] = (
+        HAUP + "/SDB%d_utility.txt" % _k, "raw/haup/SDB%d_utility.txt" % _k, "UTILITY", _size,
+        "item utilities of SDB%d of HAUP-Hider; only needed to run HAUP-Hider itself" % _k)
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 DATASETS = os.path.join(ROOT, "datasets")
@@ -100,7 +144,13 @@ def fetch(name, rows):
     request = urllib.request.Request(url, headers={"User-Agent": "hidenosp-fetch/1.0"})
     with urllib.request.urlopen(request, timeout=120) as response:
         data = response.read()
+    published = PUBLISHED_MD5.get(name)
+    if published is not None and hashlib.md5(data).hexdigest() != published:
+        print("  ERROR %s: md5 %s differs from the %s published by the source; nothing written"
+              % (name, hashlib.md5(data).hexdigest(), published))
+        return "mismatch"
     digest = hashlib.sha256(data).hexdigest()
+    os.makedirs(os.path.dirname(target), exist_ok=True)
     if recorded is not None and digest != recorded:
         rejected = target + ".mismatch"
         with open(rejected, "wb") as handle:

@@ -37,6 +37,12 @@ dong_1_nguong_va_pham_vi:
     sign:      {sigma: [200], khoang_cach: ["[0,1]", "[0,3]"]}
     bms1:      {sigma: [100], khoang_cach: ["[0,1]", "[0,3]"]}
     fifa:      {sigma: [3000], khoang_cach: ["[0,1]", "[0,3]"]}
+    # Added 2026-09-25 (event logs, tools/build_datasets.py). Sigma picked by quy_tac_chon_sigma:
+    # |F_sigma| within [50, 700] at both gaps. Group still to be fixed by the official SC2 run on
+    # the measuring machine, with the thresholds of preregistration.md section 3, before any SC3.
+    bpi2013:   {sigma: [500, 1000], khoang_cach: ["[0,1]", "[0,3]"]}
+    bpi2012:   {sigma: [2000, 4000], khoang_cach: ["[0,1]", "[0,3]"]}
+    sepsis:    {sigma: [300], khoang_cach: ["[0,1]", "[0,3]"]}
     tong_hop:  {sigma: null, khoang_cach: null}
   quy_tac_chon_sigma: >
     Giu |F_sigma| trong khoang [50, 700] VA F_sigma phai la tap con THUC SU cua khong gian

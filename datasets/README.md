@@ -80,3 +80,41 @@ nhóm chứng minh đóng góp, chứ không chỉ ghi chú.
 `io.SyntheticGenerator` sinh dữ liệu có kiểm soát ρ_rep và β, hạt giống theo từng tệp
 (quy tắc 2.6.7, 4.2.4). Chỉ báo cáo ρ_rep và β **đo được** bằng `SyntheticGenerator.measure`,
 không báo cáo giá trị mục tiêu như thể đã đạt.
+
+## Bổ sung ngày 25/09/2026 — nhật ký tiến trình và CSDL của HAUP-Hider
+
+Lấy bằng `python tools/fetch_datasets.py` (tệp thô vào `datasets/raw/`, kiểm MD5 do nguồn công bố),
+dựng bằng `python tools/build_datasets.py` (quy tắc gán vai ở đầu tệp đó). Mọi số dưới đây **đo**
+trên tệp đã dựng; cột phân nhóm là **thăm dò** SC2 trên máy phát triển
+(`../results-probe/SC2_20260925-122*`), phân nhóm chính thức chờ SC2 trên máy đo.
+
+**Bảng gán vai của nhật ký tiến trình** (một quyết định thiết kế, phải khai trong bài): một ca
+(hồ sơ vay, sự cố, bệnh nhân) là một chuỗi; một sự kiện là một vị trí; mục là hoạt động
+(BPI 2012: tên hoạt động của sự kiện COMPLETE; BPI 2013: trạng thái/trạng thái con; Sepsis: tên
+hoạt động); thứ tự theo dấu thời gian, sự kiện trùng dấu thời gian giữ thứ tự trong tệp.
+
+| Bộ | Nguồn | N | Sự kiện | \|Σ\| | Trùng dấu thời gian | ρ_rep trung vị (mọi mẫu / chỉ μ=1) | β | Phân nhóm (thăm dò) |
+|---|---|---|---|---|---|---|---|---|
+| `bpi2013` | 4TU, BPI Challenge 2013 incidents | 7.554 | 65.533 | 13 | 0,0% | [0,1] σ=1000: 0,254 / 0,021; [0,3] σ=500: 0,236 / 0,135; hai cấu hình còn lại 0,13 | 0,11–0,45 | Theo chữ của quy tắc đã chốt: **nhóm chính** ở 2/4 cấu hình. Chỉ tính mẫu không lặp mục: trung gian hoặc suy biến |
+| `bpi2012` | 4TU, BPI Challenge 2012 | 13.087 | 164.506 | 23 | 8,5% | 0,000 / 0,000 ở cả 4 cấu hình (mẫu lặp mục: 0,00–0,75; 3/4 cấu hình từ 0,48) | 0,06–0,21 | Suy biến cho phạm vi μ(P) = 1 |
+| `sepsis` | 4TU, Sepsis Cases | 1.050 | 15.214 | 16 | **29,2%** | 0,048 / 0,000 và 0,000 / 0,000 (mẫu lặp mục: 0,28–0,51) | 0,20–0,53 | Suy biến; tỉ lệ trùng dấu thời gian lớn, nên xét loại khỏi nhóm chứng minh đóng góp |
+
+**CSDL của HAUP-Hider** (`haup_sdb1` … `haup_sdb14`, kho `wuc567/Pattern-Mining` tại commit
+`37c82b7`, kho không khai giấy phép; chỉ tải về để đánh giá, không phân phối lại). Phép đo dấu vết
+tập mục bị dàn phẳng (tỉ lệ cặp kề tăng dần và độ dài đoạn tăng):
+
+| Bộ | Cặp kề tăng | Đoạn tăng trung bình / dài nhất | Đọc |
+|---|---|---|---|
+| `haup_sdb2`, `haup_sdb7`–`haup_sdb14` | 0,90 | **9,00 / 9** | Mọi đoạn tăng dài đúng 9: tập mục 9 phần tử sắp tăng rồi nối lại. Khớp số liệu E-Shop (283 mục; SDB2: 766 chuỗi, 47.322 mục) |
+| `haup_sdb3`, `haup_sdb4`, `haup_sdb5` | 0,86–0,91 | 6,2–9,3 / 12–58 | Tập mục dàn phẳng; SDB4, SDB5 khớp OnlineRetail-Best, OnlineRetail-All |
+| `haup_sdb1` | 0,63 | 2,52 / 6 | Khớp Babysale (6 mục, 359 chuỗi; trung bình 2,49 mục mỗi tập) |
+| `haup_sdb6` | 0,64 | 2,66 / 14 | Là SIGN, bộ đã có (`sign.txt`) |
+| đối chiếu: `msnbc`, `bible`, nhật ký | 0,42–0,51 | 1,6–1,9 / 5–24 | Thứ tự thật |
+
+Vai: **13/14 bộ nằm ngoài mô hình dữ liệu của bài** (thứ tự trong tập mục là giả nên ràng buộc
+khoảng cách không có nghĩa). Chỉ dùng để so với HAUP-Hider trên chính dữ liệu của họ, khai rõ vai
+đó; không dùng làm bằng chứng cho đóng góp.
+
+**Phát hiện phụ về `bms1`:** 100% cặp kề tăng dần — mỗi chuỗi đã bị sắp theo mã mục, thứ tự nhấp
+chuột thật đã mất. Bộ này vẫn là đối chứng suy biến; không được dùng nó làm bằng chứng cho bất cứ
+điều gì phụ thuộc thứ tự (ràng buộc khoảng cách, SC5).

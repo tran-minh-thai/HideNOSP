@@ -130,6 +130,14 @@ class FrontierDpTest {
                 if (p.mu() >= 2 && curve.masks()[t] < curve.supNO() - t) {
                     belowCut++;
                 }
+                // A set that reaches t also reaches t + 1, so the pair never grows with t; the
+                // allocation relies on it when it lets a sequence lower by more than needed.
+                if (t > 0) {
+                    boolean monotone = curve.masks()[t] < curve.masks()[t - 1]
+                            || (curve.masks()[t] == curve.masks()[t - 1]
+                                && curve.weight()[t] <= curve.weight()[t - 1]);
+                    assertTrue(monotone, "(masks, weight) non-increasing in t, " + where);
+                }
                 if (curve.masks()[t] > 0 && heaviest(p, s, gap, t, w, curve.masks()[t])
                         > curve.weight()[t]) {
                     weightDecides++;

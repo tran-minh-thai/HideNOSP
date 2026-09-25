@@ -34,8 +34,11 @@ import java.util.Random;
  * across the quantiles of sup_NO, of any kind. {@code --profile=pool} reports every candidate the
  * main comparison can draw a sensitive set from: the frequent patterns of length 2 to 4 with
  * distinct items ({@link SensitiveSampling#pool}). The groups of the preregistration (section 10)
- * are the medians over that pool, so they describe the patterns that are actually hidden. The
- * profile and every option of the run are written into the header of the result file.
+ * are the medians over that pool, so they describe the patterns that are actually hidden.
+ * {@code --profile=repeated} reports every frequent pattern of length 2 to 4 that repeats an item
+ * ({@link SensitiveSampling#repeatedPool}), with the exact least masks of theorem P8 when g- = 0;
+ * it is the data regime of the repeated-item scope. The profile and every option of the run are
+ * written into the header of the result file.
  *
  * <p>With no dataset given the scenario runs on a small built-in synthetic database, so the
  * pipeline can be exercised before the public datasets are in place.
@@ -68,8 +71,10 @@ public final class Sc2DataRegime implements Scenario {
         int patternCount = options.getInt("patterns", 10);
         long seed = options.getLong("seed", 2026);
         String profileMode = options.get("profile", "sample");
-        if (!profileMode.equals("sample") && !profileMode.equals("pool")) {
-            throw new IllegalArgumentException("--profile is sample or pool, got " + profileMode);
+        if (!profileMode.equals("sample") && !profileMode.equals("pool")
+                && !profileMode.equals("repeated")) {
+            throw new IllegalArgumentException("--profile is sample, pool or repeated, got "
+                    + profileMode);
         }
 
         SequenceDatabase database;
@@ -90,12 +95,15 @@ public final class Sc2DataRegime implements Scenario {
 
         Map<Pattern, Long> frequent =
                 FrequentPatterns.mine(database, gap, maxPatternLength, sigma);
-        List<Pattern> candidates = profileMode.equals("pool")
-                ? SensitiveSampling.pool(frequent)
-                : sampleByQuantile(frequent, patternCount, seed);
-        if (profileMode.equals("pool") && candidates.isEmpty()) {
-            throw new IllegalStateException("no distinct-item candidate of length 2 to 4 in F_sigma "
-                    + "at sigma = " + sigma + ", gap " + gap + "; the configuration has nothing to hide");
+        List<Pattern> candidates = switch (profileMode) {
+            case "pool" -> SensitiveSampling.pool(frequent);
+            case "repeated" -> SensitiveSampling.repeatedPool(frequent);
+            default -> sampleByQuantile(frequent, patternCount, seed);
+        };
+        if (!profileMode.equals("sample") && candidates.isEmpty()) {
+            throw new IllegalStateException("no " + (profileMode.equals("pool") ? "distinct-item"
+                    : "repeated-item") + " candidate of length 2 to 4 in F_sigma at sigma = "
+                    + sigma + ", gap " + gap + "; the configuration has nothing to hide");
         }
 
         String[] header = new String[DataProfile.header().length + 3];
@@ -131,9 +139,10 @@ public final class Sc2DataRegime implements Scenario {
                         profile.constraintEffect(), profile.minMasks(), profile.maskShare());
             }
         }
-        if (profileMode.equals("pool")) {
-            System.out.printf("pool of %d distinct-item candidates: median rho_rep %.3f, median beta %.3f%n",
-                    candidates.size(), median(repetition), median(effect));
+        if (!profileMode.equals("sample")) {
+            System.out.printf("pool of %d %s candidates: median rho_rep %.3f, median beta %.3f%n",
+                    candidates.size(), profileMode.equals("pool") ? "distinct-item" : "repeated-item",
+                    median(repetition), median(effect));
         }
     }
 

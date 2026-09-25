@@ -39,7 +39,7 @@ public final class SensitiveSampling {
 
     /** The drawn sets together with what the pool allowed. */
     public record Result(List<Draw> draws, int poolSize, int[] stratumSize, int[] drawn,
-                         int requestedPerStratum, int setSize) {
+                         int requestedPerStratum, int setSize, boolean repeatedItems) {
 
         public int requested() {
             return requestedPerStratum * PERCENTILES.length;
@@ -48,7 +48,8 @@ public final class SensitiveSampling {
         /** A line for the console and for the header of the result file. */
         public String describe() {
             StringBuilder b = new StringBuilder();
-            b.append("sensitive sets: size ").append(setSize).append(", pool ").append(poolSize)
+            b.append("sensitive sets: size ").append(setSize)
+                    .append(repeatedItems ? ", repeated-item pool " : ", pool ").append(poolSize)
                     .append(" candidates, ").append(draws.size()).append(" of ").append(requested())
                     .append(" requested sets drawn; per stratum (percentile: candidates -> sets)");
             for (int k = 0; k < PERCENTILES.length; k++) {
@@ -60,6 +61,25 @@ public final class SensitiveSampling {
     }
 
     private SensitiveSampling() {
+    }
+
+    /**
+     * The repeated-item counterpart of {@link #pool}: the frequent patterns of length 2 to 4 in
+     * which some item occurs twice or more, ordered the same way. Theorem P8 makes their least
+     * masks exact when g- = 0, which is what lets them be profiled and hidden like the pool.
+     */
+    public static List<Pattern> repeatedPool(Map<Pattern, Long> frequent) {
+        List<Pattern> pool = new ArrayList<>();
+        for (Pattern p : frequent.keySet()) {
+            if (p.length() >= MIN_LENGTH && p.length() <= MAX_LENGTH && !p.hasDistinctItems()) {
+                pool.add(p);
+            }
+        }
+        pool.sort((a, b) -> {
+            int bySupport = Long.compare(frequent.get(a), frequent.get(b));
+            return bySupport != 0 ? bySupport : a.compareTo(b);
+        });
+        return pool;
     }
 
     /** The candidates, sorted by sup_NO and then by pattern: the order the strata are cut from. */
@@ -83,10 +103,19 @@ public final class SensitiveSampling {
      * @param seed the sampling seed of the protocol; each stratum derives its own generator from it
      */
     public static Result draw(Map<Pattern, Long> frequent, int size, int perStratum, long seed) {
+        return draw(frequent, size, perStratum, seed, false);
+    }
+
+    /**
+     * As {@link #draw(Map, int, int, long)}, from the repeated-item pool when {@code repeatedItems}
+     * is true: the same five strata and the same rule of distinct sets.
+     */
+    public static Result draw(Map<Pattern, Long> frequent, int size, int perStratum, long seed,
+                              boolean repeatedItems) {
         if (size < 1 || perStratum < 1) {
             throw new IllegalArgumentException("set size and sets per stratum must be positive");
         }
-        List<Pattern> pool = pool(frequent);
+        List<Pattern> pool = repeatedItems ? repeatedPool(frequent) : pool(frequent);
         int n = pool.size();
         int strata = PERCENTILES.length;
         int[] stratumSize = new int[strata];
@@ -103,7 +132,7 @@ public final class SensitiveSampling {
                 draws.add(new Draw(set, PERCENTILES[k]));
             }
         }
-        return new Result(draws, n, stratumSize, drawn, perStratum, size);
+        return new Result(draws, n, stratumSize, drawn, perStratum, size, repeatedItems);
     }
 
     /** Up to {@code wanted} distinct sets of {@code size} members of the stratum. */

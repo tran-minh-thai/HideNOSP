@@ -8,11 +8,12 @@ Two tables:
   groups  one row per (dataset, gap, sigma) of SC2 files written with --profile=pool: the medians of
           rho_rep and beta over the pool and the groups of preregistration section 10, computed by
           thong_ke.xep_nhom, the same function that writes the locked table. This table is a
-          report only; it never writes config/nhom_cau_hinh.tsv.
+          report only; it never writes config/nhom_cau_hinh.tsv. With --profile=repeated it reads
+          the files of SC2 --profile=repeated instead, the repeated-item pool.
 
 Every row names the file it comes from, so a number in a document can be traced to its artifact.
 
-Run: python tools/data_regime_tables.py sigma|groups <file or directory> [...]
+Run: python tools/data_regime_tables.py sigma|groups [--profile=repeated] <file or directory> [...]
 A directory stands for its SIGMA_*.csv (sigma) or SC2_*.csv (groups) files.
 """
 import csv
@@ -82,17 +83,17 @@ def sigma_table(files):
     return count
 
 
-def groups_table(files):
+def groups_table(files, profile="pool"):
     import thong_ke  # needs numpy; imported here so that the sigma table runs without it
 
-    pool_files = [p for p in files if "# profile pool\n" in data_rows(p)[0]]
+    pool_files = [p for p in files if "# profile %s\n" % profile in data_rows(p)[0]]
     source = {}
     for path in pool_files:
         _, rows = data_rows(path)
         for r in rows:
             key = (dataset_name(r["dataset"]), r["gap"], int(r["sigma"]))
             source.setdefault(key, set()).add(os.path.basename(path))
-    groups = thong_ke.xep_nhom(pool_files)
+    groups = thong_ke.xep_nhom(pool_files, profile=profile)
     print("| dataset | gap | sigma | pool | median rho_rep | median beta | group | beta group "
           "| file |")
     print("|---|---|---:|---:|---:|---:|---|---|---|")
@@ -103,8 +104,8 @@ def groups_table(files):
             label(BETA_GROUP, v["nhom_beta"]),
             ", ".join(sorted(source.get(key, ())))))
     print()
-    print("%d configurations from %d pool files (%d files given)"
-          % (len(groups), len(pool_files), len(files)))
+    print("%d configurations from %d %s files (%d files given)"
+          % (len(groups), len(pool_files), profile, len(files)))
     return len(groups)
 
 
@@ -112,10 +113,19 @@ def main(argv):
     if len(argv) < 2 or argv[0] not in ("sigma", "groups"):
         print(__doc__)
         return 2
+    profile = "pool"
+    rest = []
+    for a in argv[1:]:
+        if a.startswith("--profile="):
+            profile = a.split("=", 1)[1]
+            if profile not in ("pool", "repeated"):
+                raise SystemExit("--profile is pool or repeated, got " + profile)
+        else:
+            rest.append(a)
     if argv[0] == "sigma":
-        n = sigma_table(expand(argv[1:], "SIGMA_"))
+        n = sigma_table(expand(rest, "SIGMA_"))
     else:
-        n = groups_table(expand(argv[1:], "SC2_"))
+        n = groups_table(expand(rest, "SC2_"), profile)
     if n == 0:
         print("no row: nothing to report", file=sys.stderr)
         return 1

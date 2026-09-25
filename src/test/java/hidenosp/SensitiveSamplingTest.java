@@ -134,4 +134,28 @@ class SensitiveSamplingTest {
         assertEquals(a, b);
         assertNotEquals(a, c);
     }
+
+    @Test
+    @DisplayName("the repeated-item pool holds repeated items of length 2 to 4, ordered by sup_NO")
+    void repeatedPool() {
+        Map<Pattern, Long> frequent = new LinkedHashMap<>();
+        frequent.put(new Pattern(3, 3), 7L);
+        frequent.put(new Pattern(1, 2, 1), 2L);
+        frequent.put(new Pattern(4, 4, 4, 4), 5L);
+        frequent.put(new Pattern(5, 6), 9L);                 // distinct: not in this pool
+        frequent.put(new Pattern(7), 9L);                    // too short
+        frequent.put(new Pattern(8, 8, 8, 8, 8), 9L);        // too long
+        List<Pattern> pool = SensitiveSampling.repeatedPool(frequent);
+        assertEquals(List.of(new Pattern(1, 2, 1), new Pattern(4, 4, 4, 4), new Pattern(3, 3)), pool);
+        SensitiveSampling.Result drawn = SensitiveSampling.draw(frequent, 1, 4, 2026, true);
+        assertTrue(drawn.repeatedItems());
+        assertEquals(3, drawn.poolSize());
+        for (SensitiveSampling.Draw d : drawn.draws()) {
+            assertFalse(d.patterns().get(0).hasDistinctItems(), "a repeated-item set was expected");
+        }
+        assertTrue(drawn.describe().contains("repeated-item pool 3"), drawn.describe());
+        SensitiveSampling.Result distinct = SensitiveSampling.draw(frequent, 1, 4, 2026);
+        assertEquals(1, distinct.poolSize());
+        assertEquals(new Pattern(5, 6), distinct.draws().get(0).patterns().get(0));
+    }
 }

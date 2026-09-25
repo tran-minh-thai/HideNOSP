@@ -35,8 +35,11 @@ import java.util.TreeSet;
  *       zero by construction.</li>
  * </ol>
  *
- * <p>Steps 5 and 6 are exact only for one sensitive pattern with distinct items (P1, P2, P6(b));
- * with several patterns the problem is NP-hard (L4a) and this class runs the greedy of step 7.
+ * <p>With one sensitive pattern and g- = 0, steps 5 and 6 are exact for any mu(P): the curves come
+ * from theorem P8 ({@link FrontierDp}) and the allocation minimises the masks and then the weight.
+ * With g- &gt; 0 they are exact for distinct items only (P1, P2, P6(b)), the lambda sweep brackets
+ * the weight, and a repeated-item pattern gets the cut of P3. With several patterns the problem is
+ * NP-hard (L4a) and this class runs the greedy of step 7.
  */
 public final class CutHide implements HidingMethod {
 
@@ -107,8 +110,13 @@ public final class CutHide implements HidingMethod {
     /**
      * One sensitive pattern. With mu(P) = 1 the number of masks is forced by P1, so the work is
      * only to choose where they go: the cost curves of P6 per sequence, then the allocation of P7.
+     * With g- = 0 the exact curves of P8 replace both, for any mu(P).
      */
     private void runSinglePattern(HideProblem problem, Pattern pattern, Sanitization result) {
+        if (config.curves() == CutHideConfig.Curves.FRONTIER_DP && FrontierDp.applies(problem.gap())) {
+            runSinglePatternExact(problem, pattern, result);
+            return;
+        }
         int n = problem.database().size();
         int[] supports = SupportNO.perSequence(pattern, problem.database(), problem.gap());
 
@@ -128,6 +136,70 @@ public final class CutHide implements HidingMethod {
             CostCurve curve = curves.get(s);
             result.recordCertification(curve.isCertified(counts[s]));
             for (int position : curve.positions(counts[s])) {
+                result.mask(s, position);
+            }
+        }
+    }
+
+    /**
+     * One sensitive pattern with g- = 0: the exact curve of theorem P8 in every sequence, then the
+     * remaining support per sequence (forced r - 1 for HIDE-SEQ, allocated for HIDE-DB), then the
+     * positions the curve stores for that support.
+     */
+    private void runSinglePatternExact(HideProblem problem, Pattern pattern, Sanitization result) {
+        if (config.allocation() != CutHideConfig.AllocationRule.DYNAMIC_PROGRAM) {
+            throw new IllegalArgumentException("the exact curves of P8 are allocated by a dynamic "
+                    + "program only; " + config.allocation() + " is defined for the lambda-sweep "
+                    + "curves, so select Curves.LAMBDA_SWEEP for that variant");
+        }
+        int n = problem.database().size();
+        FrontierDp.Curve[] curves = new FrontierDp.Curve[n];
+        long total = 0;
+        for (int s = 0; s < n; s++) {
+            EventSequence sequence = problem.database().get(s);
+            double[] weights = positionWeights(problem, sequence, s);
+            long[] scaled = new long[weights.length];
+            for (int i = 0; i < weights.length; i++) {
+                scaled[i] = Math.round(weights[i] * CostCurve.SCALE);
+            }
+            curves[s] = FrontierDp.solve(pattern, sequence, problem.gap(), scaled);
+            total += curves[s].supNO();
+        }
+        int[] remaining = new int[n];
+        for (int s = 0; s < n; s++) {
+            remaining[s] = curves[s].supNO();
+        }
+        if (!problem.isDatabaseMode()) {
+            for (int s = 0; s < n; s++) {
+                remaining[s] = Math.min(curves[s].supNO(), problem.threshold() - 1);
+            }
+        } else {
+            long needed = total - problem.threshold() + 1;
+            if (needed > 0) {
+                List<Integer> carrying = new ArrayList<>();
+                for (int s = 0; s < n; s++) {
+                    if (curves[s].supNO() > 0) {
+                        carrying.add(s);
+                    }
+                }
+                int[][] masks = new int[carrying.size()][];
+                long[][] weight = new long[carrying.size()][];
+                for (int c = 0; c < carrying.size(); c++) {
+                    masks[c] = curves[carrying.get(c)].masks();
+                    weight[c] = curves[carrying.get(c)].weight();
+                }
+                int[] chosen = Allocation.solveExact(masks, weight, (int) needed);
+                for (int c = 0; c < carrying.size(); c++) {
+                    remaining[carrying.get(c)] = chosen[c];
+                }
+            }
+        }
+        for (int s = 0; s < n; s++) {
+            if (remaining[s] >= curves[s].supNO()) {
+                continue;
+            }
+            result.recordCertification(true);
+            for (int position : curves[s].positions()[remaining[s]]) {
                 result.mask(s, position);
             }
         }

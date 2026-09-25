@@ -67,6 +67,69 @@ public final class Allocation {
     }
 
     /**
+     * The allocation for exact curves of any mu(P) (theorem P8): choose a remaining support t_S per
+     * sequence so that sum over S of t_S &le; sigma - 1, minimising the number of masks and then the
+     * weight. A mask may lower sup_NO by more than one when mu(P) &ge; 2, so the program runs on the
+     * reduction F_S - t_S capped at the need K; for mu(P) = 1 it returns what {@link #solve} does.
+     *
+     * @param masks masks[s][t], the least masks that bring sequence s down to t, for t = 0 .. F_s
+     * @param weight weight[s][t], the least weight among those
+     * @param needed K = sum F_S - sigma + 1, at least 1
+     * @return the remaining support t_S chosen for every sequence
+     */
+    public static int[] solveExact(int[][] masks, long[][] weight, int needed) {
+        int n = masks.length;
+        long infinite = Long.MAX_VALUE / 4;
+        long[] bestMasks = new long[needed + 1];
+        long[] bestWeight = new long[needed + 1];
+        java.util.Arrays.fill(bestMasks, infinite);
+        java.util.Arrays.fill(bestWeight, infinite);
+        bestMasks[0] = 0;
+        bestWeight[0] = 0;
+        int[][] reductionChosen = new int[n][];
+        int[][] cameFrom = new int[n][];
+        for (int s = 0; s < n; s++) {
+            int f = masks[s].length - 1;
+            long[] nextMasks = new long[needed + 1];
+            long[] nextWeight = new long[needed + 1];
+            java.util.Arrays.fill(nextMasks, infinite);
+            java.util.Arrays.fill(nextWeight, infinite);
+            reductionChosen[s] = new int[needed + 1];
+            cameFrom[s] = new int[needed + 1];
+            for (int reached = 0; reached <= needed; reached++) {
+                if (bestMasks[reached] == infinite) {
+                    continue;
+                }
+                for (int k = 0; k <= f; k++) {
+                    int to = Math.min(needed, reached + k);
+                    long m = bestMasks[reached] + masks[s][f - k];
+                    long w = bestWeight[reached] + weight[s][f - k];
+                    if (m < nextMasks[to] || (m == nextMasks[to] && w < nextWeight[to])) {
+                        nextMasks[to] = m;
+                        nextWeight[to] = w;
+                        reductionChosen[s][to] = k;
+                        cameFrom[s][to] = reached;
+                    }
+                }
+            }
+            bestMasks = nextMasks;
+            bestWeight = nextWeight;
+        }
+        if (bestMasks[needed] == infinite) {
+            throw new IllegalArgumentException("cannot reduce sup_NO by " + needed
+                    + " within the curves");
+        }
+        int[] remaining = new int[n];
+        int at = needed;
+        for (int s = n - 1; s >= 0; s--) {
+            int f = masks[s].length - 1;
+            remaining[s] = f - reductionChosen[s][at];
+            at = cameFrom[s][at];
+        }
+        return remaining;
+    }
+
+    /**
      * The greedy alternative compared against the dynamic program at SC7: repeatedly give one more
      * mask to the sequence with the smallest marginal cost. Correct only for convex curves.
      */

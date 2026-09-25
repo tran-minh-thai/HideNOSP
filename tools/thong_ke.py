@@ -117,22 +117,36 @@ def so(x, mac_dinh=float("nan")):
 
 # ---------------------------------------------------------------- xep nhom
 
-def xep_nhom(tep_sc2):
+def muc_cua_mau(chuoi):
+    """The items of a pattern as SC2 prints it, "[3, 5, 3]" -> ["3", "5", "3"]."""
+    return [x.strip() for x in chuoi.strip().strip("[]").split(",") if x.strip()]
+
+
+def xep_nhom(tep_sc2, profile="pool"):
     """Group of every configuration (dataset, gap, sigma) under preregistration section 10.
 
     Only SC2 files written with --profile=pool count: their rows are every distinct-item candidate
     of the configuration, the patterns the main comparison hides. Files of the sampled profile are
-    ignored, and a pool file holding a repeated-item pattern is an error.
+    ignored, and a pool file holding a repeated-item pattern is an error. With profile="repeated"
+    the same is done on the files of --profile=repeated, whose rows must all repeat an item. The
+    check reads the items of the pattern itself: min_masks_exact no longer tells the two kinds apart
+    once theorem P8 makes repeated-item bounds exact.
     """
+    if profile not in ("pool", "repeated"):
+        raise ValueError("profile is pool or repeated, got %r" % profile)
     theo_mau = defaultdict(dict)   # configuration -> pattern -> (rho_rep, beta)
     for duong_dan in tep_sc2:
         chu_thich, hang = doc_csv(duong_dan)
-        if "# profile pool" not in chu_thich:
+        if "# profile %s" % profile not in chu_thich:
             continue
         for r in hang:
-            if r.get("min_masks_exact") != "true":
-                raise ValueError("%s: a pool profile holds distinct-item patterns only, found %s"
-                                 % (duong_dan, r.get("pattern")))
+            muc = muc_cua_mau(r.get("pattern", ""))
+            khong_lap = len(set(muc)) == len(muc)
+            if not muc or khong_lap != (profile == "pool"):
+                raise ValueError("%s: a %s profile holds %s patterns only, found %s"
+                                 % (duong_dan, profile,
+                                    "distinct-item" if profile == "pool" else "repeated-item",
+                                    r.get("pattern")))
             khoa = (ten_bo(r["dataset"]), r["gap"], int(r["sigma"]))
             gia_tri = (so(r["rho_rep"]), so(r["beta"]))
             cu = theo_mau[khoa].get(r["pattern"])

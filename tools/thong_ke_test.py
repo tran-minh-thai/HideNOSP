@@ -294,8 +294,10 @@ def _viet_sc2(duong_dan, hang, profile):
         f.write("dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,"
                 "mask_share,rho_rep,beta,min_masks_exact\n")
         for k, (ten, rho, beta, rieng) in enumerate(hang):
-            f.write("datasets/%s.txt,\"[0,3]\",100,\"[%d, 9]\",1,1,1,1,0,%s,%s,%s\n"
-                    % (ten, k, rho, beta, "true" if rieng else "false"))
+            # A distinct-item pattern [k, 9], or the repeated-item pattern [k, k].
+            mau = "[%d, 9]" % k if rieng else "[%d, %d]" % (k, k)
+            f.write("datasets/%s.txt,\"[0,3]\",100,\"%s\",1,1,1,1,0,%s,%s,true\n"
+                    % (ten, mau, rho, beta))
 
 
 def thu_xep_nhom_chi_doc_toan_kho():
@@ -325,6 +327,26 @@ def thu_xep_nhom_tu_choi_mau_lap_muc():
     except ValueError:
         return
     raise AssertionError("a repeated-item row in a pool file was accepted")
+
+
+def thu_xep_nhom_kho_lap_muc():
+    """profile="repeated" groups the repeated-item pool and refuses a distinct-item row there."""
+    import tempfile
+    thu_muc = tempfile.mkdtemp()
+    lap = os.path.join(thu_muc, "SC2_repeated.csv")
+    _viet_sc2(lap, [("x", 0.30, 0.5, False), ("x", 0.40, 0.5, False), ("x", 0.10, 0.5, False)],
+              "repeated")
+    nhom = tk.xep_nhom([lap], profile="repeated")
+    gan(nhom[("x", "[0,3]", 100)]["rho_rep"], 0.30)
+    assert nhom[("x", "[0,3]", 100)]["nhom"] == "chinh"
+    assert tk.xep_nhom([lap]) == {}, "a repeated file must not enter the pool groups"
+    sai = os.path.join(thu_muc, "SC2_repeated_bad.csv")
+    _viet_sc2(sai, [("x", 0.30, 0.5, False), ("x", 0.90, 0.5, True)], "repeated")
+    try:
+        tk.xep_nhom([sai], profile="repeated")
+    except ValueError:
+        return
+    raise AssertionError("a distinct-item row in a repeated file was accepted")
 
 
 def thu_bang_nhom_khop_va_lech():

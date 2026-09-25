@@ -62,7 +62,7 @@ public final class Sc3MainComparison implements Scenario {
     public String[] options() {
         return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "maxPatternLength",
                 "epsilon", "setsPerStratum", "sensitiveSize", "seed", "methodSeed", "repeats",
-                "methods"};
+                "methods", "patternKind"};
     }
 
     @Override
@@ -83,6 +83,12 @@ public final class Sc3MainComparison implements Scenario {
         long methodSeed = options.getLong("methodSeed", seed);
         int repeats = options.getInt("repeats", 1);
         String methodList = options.get("methods", "cut-hide,cut-hide-uniform,occurrence,HH,RR");
+        // distinct (the main scope, mu(P) = 1) or repeated (the repeated-item scope of theorem P8).
+        String patternKind = options.get("patternKind", "distinct");
+        if (!patternKind.equals("distinct") && !patternKind.equals("repeated")) {
+            throw new IllegalArgumentException("--patternKind is distinct or repeated, got "
+                    + patternKind);
+        }
 
         SequenceDatabase database = load(options, seed);
         // F_sigma(D) khai pha MOT lan cho ca cau hinh, khong phai moi lan danh gia: xem Javadoc
@@ -93,8 +99,8 @@ public final class Sc3MainComparison implements Scenario {
             throw new IllegalStateException("F_sigma(D) is empty at sigma = " + sigma
                     + "; lower sigma or widen the gap before running SC3");
         }
-        SensitiveSampling.Result sampling =
-                SensitiveSampling.draw(frequent, sensitiveSize, perStratum, seed);
+        SensitiveSampling.Result sampling = SensitiveSampling.draw(frequent, sensitiveSize,
+                perStratum, seed, patternKind.equals("repeated"));
         System.out.println(sampling.describe());
         if (sampling.draws().isEmpty()) {
             throw new IllegalStateException("no sensitive set of size " + sensitiveSize
@@ -169,14 +175,18 @@ public final class Sc3MainComparison implements Scenario {
         }
     }
 
-    /** |R| star for a single sensitive pattern, from the corollary of P1; 0 when it does not apply. */
+    /**
+     * |R| star for a single sensitive pattern: the corollary of P1 for distinct items, theorem P8
+     * with its allocation for repeated items when g- = 0; 0 when neither applies.
+     */
     private long boundFromP1(SequenceDatabase database, List<Pattern> sensitive, GapConstraint gap,
                              int sigma) {
-        if (sensitive.size() != 1 || !sensitive.get(0).hasDistinctItems()) {
+        if (sensitive.size() != 1) {
             return 0;
         }
-        return DataProfile.of(database, sensitive.get(0), gap, HideProblem.Mode.HIDE_DB, sigma)
-                .minMasks();
+        DataProfile profile =
+                DataProfile.of(database, sensitive.get(0), gap, HideProblem.Mode.HIDE_DB, sigma);
+        return profile.isExact() ? profile.minMasks() : 0;
     }
 
     private HidingMethod create(String name, HideProblem problem, Map<Pattern, Long> frequent,
@@ -188,6 +198,16 @@ public final class Sc3MainComparison implements Scenario {
                 List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
                 double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
                 return new CutHide(CutHideConfig.standard()).withNearThreshold(band, factor);
+            }
+            case "cut-hide-sweep": {
+                // CUT-HIDE without theorem P8: the lambda-sweep curves, and for a repeated-item
+                // pattern the masks of a cut (P3). The ablation that measures what P8 adds.
+                Set<Pattern> closure =
+                        FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+                List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
+                double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
+                return new CutHide(CutHideConfig.standard().withCurves(CutHideConfig.Curves.LAMBDA_SWEEP))
+                        .withNearThreshold(band, factor);
             }
             case "cut-hide-uniform":
                 return new CutHide(CutHideConfig.uniformWeights());

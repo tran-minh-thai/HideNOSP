@@ -236,6 +236,12 @@ Mỗi tệp mang dấu định danh lần chạy (§2.6.8) trong tên và trong 
 thời điểm UTC, máy, phiên bản mã (biến môi trường `HIDENOSP_REVISION`), hạt giống, phiên bản JDK,
 cỡ heap tối đa.
 
+**Tệp `.partial`.** Kết quả được ghi vào `<tên>.csv.partial` và chỉ đổi sang tên cuối khi kịch bản chạy
+hết (`CsvWriter.complete()`). Một lượt bị ngắt giữa chừng — hết bộ nhớ, bị dừng, máy khởi động lại để cập
+nhật — để lại tệp `.partial`: không công cụ đọc nào nhận nó, và `tools/check_results.py` báo lỗi. Xoá tệp
+đó và chạy lại đúng lệnh; không commit. Trước khi có cơ chế này, các lượt SC2 hết bộ nhớ trên MSNBC đã để
+lại tệp mang tên cuối nhưng thiếu các hàng cuối (884/885, 1.448/1.450 hàng) — đúng các mẫu hỗ trợ cao nhất.
+
 ---
 
 ## 5. Trạng thái cài đặt
@@ -271,6 +277,10 @@ cỡ heap tối đa.
 | Tải bộ dữ liệu kèm tổng kiểm | `tools/fetch_datasets.py` | §11.2; chỉ kiểm, không ghi đè bản ghi; kiểm MD5 do nguồn công bố |
 | Dựng tệp SPMF từ dữ liệu thô (nhật ký XES, CSDL của HAUP-Hider, protein) | `tools/build_datasets.py` | Quy tắc gán vai ghi trong tệp; bản dựng phải khớp bản ghi |
 | Quy tắc chọn σ, áp bằng chương trình | `exp.SigmaScan` (mã kịch bản `SIGMA`) | Không phải kịch bản của bài; tệp bất biến theo máy |
+| Lời giải chính xác một mẫu, mọi μ, khi g⁻ = 0 | `hide.FrontierDp` | Định lý P8 của bản thiết kế: quy hoạch động theo nút tới được muộn nhất; hai thứ tự mục tiêu (`Objective`); kiểm với tìm kiếm trên mọi tập con (`FrontierDpTest`) |
+| Phân bổ chính xác giữa các chuỗi | `hide.Allocation.solveExact`, `leastMasks` | Theo từ điển (số lần che, trọng số) hoặc ngược lại; bộ nhớ O(K) cho giá trị, một `short` mỗi (chuỗi có hỗ trợ, tổng) cho truy vết |
+| CUT-HIDE một mẫu, mọi μ | `hide.CutHide` với `CutHideConfig.Curves` | `FRONTIER_DP` (mặc định), `FRONTIER_DP_WEIGHT_FIRST`, `LAMBDA_SWEEP` (đối chứng); khóa phương pháp SC3: `cut-hide`, `cut-hide-weight`, `cut-hide-sweep` |
+| Kho mẫu lặp mục | `exp.SensitiveSampling.repeatedPool`; SC2 `--profile=repeated`; SC3 `--patternKind=repeated` | \|R\|* chính xác cho mẫu lặp mục khi g⁻ = 0 (`metrics.DataProfile`) |
 | Bảng markdown từ hiện vật (quy tắc σ, nhóm) | `tools/data_regime_tables.py` | Để tài liệu tổng hợp nhúng bảng sinh ra, không chép tay |
 | Lấy mẫu tập nhạy cảm theo năm tầng phân vị, không lặp | `exp.SensitiveSampling` | `preregistration.md` mục 9 |
 | SC1, SC2, SC3 | `exp.Sc1…`, `exp.Sc2…`, `exp.Sc3…` | Chạy được |

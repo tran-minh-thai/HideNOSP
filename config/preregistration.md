@@ -141,6 +141,10 @@ Ngưỡng đặt ở chỗ thưa nên phân nhóm không nhạy với việc xê
 > chốt ℓ_max = 4, toàn bộ SC2 đã chạy lại và hai ngưỡng **vẫn nằm trong khe thưa**, nên chúng
 > không bị sửa. Đây là đo lại để kiểm, không phải chọn lại sau khi thấy kết quả.
 
+> **Thay bởi mục 10 (25/09/2026).** Thống kê gộp và bảng phân nhóm dưới đây tính theo trung vị
+> trên **mẫu SC2 đã lấy**, gồm cả mẫu lặp mục. Từ ngày 25/09 nhóm được tính trên **mẫu không lặp
+> mục** (mục 10); bảng dưới giữ lại làm lịch sử, không còn là bảng chốt.
+
 **Phân nhóm suy ra từ dữ liệu đã đo:**
 
 Áp trên **cấu hình** (25 cấu hình, ℓ_max = 4, trung vị):
@@ -294,3 +298,36 @@ MSNBC), trong đó chỉ cột HF được đọc.
 Tuỳ chọn dòng lệnh đổi theo: `--sensitiveSets` bỏ, thay bằng `--setsPerStratum` (mặc định 4).
 
 **Không đổi:** δ_L, họ Holm bốn phần tử, ngưỡng phân nhóm, các biên tương đương.
+
+---
+
+## 10. Bổ sung ngày 25/09/2026 — nhóm dữ liệu tính trên mẫu không lặp mục (trước mọi lần chạy SC3 lấy số)
+
+**Quyết định của người viết**, sau khi đo ba nhật ký tiến trình mới: trung vị ρ_rep và β của một
+cấu hình được lấy trên **mẫu không lặp mục**, không phải trên mọi mẫu SC2 lấy ra.
+
+**Lý do.** SC3 chỉ ẩn mẫu không lặp mục (mục 1 và mục 9), nên nhóm phải mô tả đúng loại mẫu đó.
+Trung vị trên mọi mẫu trộn cả mẫu lặp mục, và có bộ mà hai loại khác hẳn nhau: BPI 2013 ở [0,1]
+σ=1000 có trung vị 0,254 trên mọi mẫu nhưng 0,021 trên mẫu không lặp mục
+(`results-probe/SC2_20260925-122652-529`). Cách cũ xếp cấu hình đó vào nhóm chính vì những mẫu mà
+SC3 không bao giờ ẩn. Cách mới bất lợi hơn cho bài, nên không phải chọn sau khi nhìn để có lợi.
+
+**Quy tắc chốt**, cài ở `tools/thong_ke.py` và SC2 (`--profile=pool`):
+
+1. Với mỗi cấu hình (bộ dữ liệu, σ, [g⁻,g⁺]), trung vị ρ_rep và trung vị β lấy trên **toàn bộ**
+   kho ứng viên của mục 9 — mọi mẫu của F_σ dài 2 tới 4, không lặp mục — chứ không trên một mẫu
+   con. SC2 chạy với `--profile=pool` ghi ra đúng kho đó; tệp SC2 lấy mẫu con không dùng để xếp nhóm.
+2. Ngưỡng giữ nguyên như mục 3: nhóm chính ρ_rep ≥ 0,20; suy biến ≤ 0,05; β ≥ 0,20 có hiệu lực,
+   ≤ 0,05 suy biến.
+3. Bảng nhóm của từng cấu hình được sinh **một lần** từ các lượt SC2 chính thức trên máy đo
+   (`python tools/thong_ke.py --sc2 results-invariant --write-groups`) thành
+   `config/nhom_cau_hinh.tsv`, và commit tệp đó là chốt. Phân tích so từng cấu hình với bảng; lệch
+   là dừng. Bảng thay cho các con số 12/7/6 ở mục 3.
+4. **H2 kiểm trên nhóm chính.** Mục 3 đã ghi "nhóm trung gian không dùng để kiểm H2 hay H3", và bản
+   thiết kế (§8.4) để nhóm suy biến ngoài nhóm chứng minh đóng góp; mã phân tích trước ngày này gộp
+   mọi cấu hình vào H2, trái với cả hai. Nay chỉ hàng của nhóm chính vào Wilcoxon; các nhóm khác báo
+   cáo mô tả. Đây là thi hành điều đã chốt, không phải quyết định mới.
+
+**Thời điểm.** Chưa có lần chạy SC3 lấy số nào; chưa có tệp SC2 chính thức nào ở chế độ toàn kho.
+
+**Không đổi:** δ_L, họ Holm bốn phần tử, các ngưỡng, các biên tương đương, cách lấy mẫu của mục 9.

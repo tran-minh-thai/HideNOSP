@@ -30,6 +30,13 @@ import java.util.Random;
  * to the degenerate control group, and the same holds for beta and the gap constraint. Deciding
  * that afterwards, once the comparison is known, would be choosing the evidence to fit the claim.
  *
+ * <p>Two profiles. {@code --profile=sample} (the default) reports a sample of candidates drawn
+ * across the quantiles of sup_NO, of any kind. {@code --profile=pool} reports every candidate the
+ * main comparison can draw a sensitive set from: the frequent patterns of length 2 to 4 with
+ * distinct items ({@link SensitiveSampling#pool}). The groups of the preregistration (section 10)
+ * are the medians over that pool, so they describe the patterns that are actually hidden. The
+ * profile and every option of the run are written into the header of the result file.
+ *
  * <p>With no dataset given the scenario runs on a small built-in synthetic database, so the
  * pipeline can be exercised before the public datasets are in place.
  */
@@ -48,7 +55,7 @@ public final class Sc2DataRegime implements Scenario {
     @Override
     public String[] options() {
         return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "maxPatternLength",
-                "patterns", "seed"};
+                "patterns", "seed", "profile"};
     }
 
     @Override
@@ -60,6 +67,10 @@ public final class Sc2DataRegime implements Scenario {
         int maxPatternLength = options.getInt("maxPatternLength", 3);
         int patternCount = options.getInt("patterns", 10);
         long seed = options.getLong("seed", 2026);
+        String profileMode = options.get("profile", "sample");
+        if (!profileMode.equals("sample") && !profileMode.equals("pool")) {
+            throw new IllegalArgumentException("--profile is sample or pool, got " + profileMode);
+        }
 
         SequenceDatabase database;
         String source;
@@ -79,7 +90,13 @@ public final class Sc2DataRegime implements Scenario {
 
         Map<Pattern, Long> frequent =
                 FrequentPatterns.mine(database, gap, maxPatternLength, sigma);
-        List<Pattern> candidates = sampleByQuantile(frequent, patternCount, seed);
+        List<Pattern> candidates = profileMode.equals("pool")
+                ? SensitiveSampling.pool(frequent)
+                : sampleByQuantile(frequent, patternCount, seed);
+        if (profileMode.equals("pool") && candidates.isEmpty()) {
+            throw new IllegalStateException("no distinct-item candidate of length 2 to 4 in F_sigma "
+                    + "at sigma = " + sigma + ", gap " + gap + "; the configuration has nothing to hide");
+        }
 
         String[] header = new String[DataProfile.header().length + 3];
         header[0] = "dataset";
@@ -87,7 +104,10 @@ public final class Sc2DataRegime implements Scenario {
         header[2] = "sigma";
         System.arraycopy(DataProfile.header(), 0, header, 3, DataProfile.header().length);
 
-        try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header)) {
+        String[] provenance = {"profile " + profileMode, "options " + options.all()};
+        List<Double> repetition = new ArrayList<>();
+        List<Double> effect = new ArrayList<>();
+        try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header, provenance)) {
             System.out.println("dataset " + source + ", |D| = " + database.size()
                     + ", total length " + database.totalLength()
                     + ", alphabet " + database.alphabet().length
@@ -103,12 +123,28 @@ public final class Sc2DataRegime implements Scenario {
                 row[2] = Integer.toString(sigma);
                 System.arraycopy(profile.row(), 0, row, 3, profile.row().length);
                 writer.writeRow(row);
+                repetition.add(profile.repetitionRatio());
+                effect.add(profile.constraintEffect());
                 System.out.printf("%-18s sup_NO %5d  sup_seq %5d  rho_rep %.3f  beta %.3f  "
                                 + "min masks %5d (%.4f of D)%n",
                         pattern, profile.supNO(), profile.supSeq(), profile.repetitionRatio(),
                         profile.constraintEffect(), profile.minMasks(), profile.maskShare());
             }
         }
+        if (profileMode.equals("pool")) {
+            System.out.printf("pool of %d distinct-item candidates: median rho_rep %.3f, median beta %.3f%n",
+                    candidates.size(), median(repetition), median(effect));
+        }
+    }
+
+    private static double median(List<Double> values) {
+        List<Double> sorted = new ArrayList<>(values);
+        java.util.Collections.sort(sorted);
+        int n = sorted.size();
+        if (n == 0) {
+            return Double.NaN;
+        }
+        return n % 2 == 1 ? sorted.get(n / 2) : (sorted.get(n / 2 - 1) + sorted.get(n / 2)) / 2;
     }
 
     /**

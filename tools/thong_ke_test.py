@@ -225,6 +225,7 @@ def thu_xep_nhom_dung_nguong():
     def viet(duong_dan, bo_ba):
         with _io.open(duong_dan, "w", encoding="utf-8", newline="\n") as f:
             f.write("# run x\n")
+            f.write("# profile pool\n")
             f.write("dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,"
                     "mask_share,rho_rep,beta,min_masks_exact\n")
             for ten, rho, beta in bo_ba:
@@ -250,6 +251,7 @@ def thu_xep_nhom_lay_trung_vi():
     duong_dan = os.path.join(thu_muc, "SC2_test.csv")
     with _io.open(duong_dan, "w", encoding="utf-8", newline="\n") as f:
         f.write("# run x\n")
+        f.write("# profile pool\n")
         f.write("dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,"
                 "mask_share,rho_rep,beta,min_masks_exact\n")
         # rho_rep = [0.01, 0.02, 0.90]: trung vi 0.02 (suy bien), trung binh 0.31 (trung gian).
@@ -280,6 +282,81 @@ def thu_hang_so_khop_ban_chot():
     assert "2026 tới 2035" in van_ban or "2026 toi 2035" in van_ban
     for ten in ("HHA", "DBSH", "SBSH-r1", "SBSH-rmax"):
         assert ten in van_ban, "ho Holm thieu %s trong ban chot" % ten
+
+
+def _viet_sc2(duong_dan, hang, profile):
+    """An SC2 file: rows of (dataset, rho_rep, beta, distinct items), profile line if given."""
+    import io as _io
+    with _io.open(duong_dan, "w", encoding="utf-8", newline="\n") as f:
+        f.write("# run x\n")
+        if profile:
+            f.write("# profile %s\n" % profile)
+        f.write("dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,"
+                "mask_share,rho_rep,beta,min_masks_exact\n")
+        for ten, rho, beta, rieng in hang:
+            f.write("datasets/%s.txt,\"[0,3]\",100,\"[1, 2]\",1,1,1,1,0,%s,%s,%s\n"
+                    % (ten, rho, beta, "true" if rieng else "false"))
+
+
+def thu_xep_nhom_chi_doc_toan_kho():
+    """Section 10: only SC2 files of the pool profile group; a sampled file is ignored."""
+    import tempfile
+    thu_muc = tempfile.mkdtemp()
+    mau_con = os.path.join(thu_muc, "SC2_sample.csv")
+    toan_kho = os.path.join(thu_muc, "SC2_pool.csv")
+    _viet_sc2(mau_con, [("x", 0.90, 0.5, False), ("x", 0.90, 0.5, True)], None)
+    _viet_sc2(toan_kho, [("x", 0.01, 0.5, True), ("x", 0.02, 0.5, True), ("x", 0.03, 0.5, True)],
+              "pool")
+    nhom = tk.xep_nhom([mau_con, toan_kho])
+    thong_tin = nhom[("x", "[0,3]", 100)]
+    gan(thong_tin["rho_rep"], 0.02)
+    gan(thong_tin["pool"], 3)
+    assert thong_tin["nhom"] == "suy bien", thong_tin
+    assert tk.xep_nhom([mau_con]) == {}, "a sampled file alone must give no group"
+
+
+def thu_xep_nhom_tu_choi_mau_lap_muc():
+    """A pool file with a repeated-item pattern is not a pool file: stop, do not average it in."""
+    import tempfile
+    duong_dan = os.path.join(tempfile.mkdtemp(), "SC2_pool.csv")
+    _viet_sc2(duong_dan, [("x", 0.30, 0.5, True), ("x", 0.90, 0.5, False)], "pool")
+    try:
+        tk.xep_nhom([duong_dan])
+    except ValueError:
+        return
+    raise AssertionError("a repeated-item row in a pool file was accepted")
+
+
+def thu_bang_nhom_khop_va_lech():
+    """The locked table is compared configuration by configuration, both ways."""
+    import tempfile
+    thu_muc = tempfile.mkdtemp()
+    sc2 = os.path.join(thu_muc, "SC2_pool.csv")
+    _viet_sc2(sc2, [("x", 0.30, 0.5, True), ("y", 0.01, 0.01, True)], "pool")
+    nhom = tk.xep_nhom([sc2])
+    bang_tep = os.path.join(thu_muc, "nhom.tsv")
+    tk.ghi_bang_nhom(nhom, bang_tep)
+    bang = tk.doc_bang_nhom(bang_tep)
+    assert tk.kiem_xep_nhom(nhom, lambda s="": None, bang), "an unchanged table must match"
+    bang[("x", "[0,3]", 100)]["group"] = "trung gian"
+    assert not tk.kiem_xep_nhom(nhom, lambda s="": None, bang), "a changed group must fail"
+    del bang[("x", "[0,3]", 100)]
+    assert not tk.kiem_xep_nhom(nhom, lambda s="": None, bang), "a missing row must fail"
+    assert tk.doc_bang_nhom(os.path.join(thu_muc, "none.tsv")) is None
+
+
+def thu_h2_chi_tren_nhom_chinh():
+    """Section 3 and the design: H2 is tested on the main group, the rest is not pooled in."""
+    hang = []
+    for ten in ("a", "b"):
+        for pp, lost in (("cut-hide", 0.10), ("hha", 0.20)):
+            r = _hang(pp, 10, lost, tap="T")
+            r["dataset"] = ten
+            hang.append(r)
+    nhom = {("a", "[0,2]", 20): {"nhom": "chinh"}, ("b", "[0,2]", 20): {"nhom": "suy bien"}}
+    ra = []
+    tk.chay_h2(hang, lambda s="": ra.append(s), nhom)
+    assert any("tested on the 2 rows of the main group only" in s for s in ra), ra[:8]
 
 
 PHEP_THU = [v for k, v in sorted(globals().items()) if k.startswith("thu_")]

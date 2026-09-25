@@ -7,8 +7,10 @@ gon trong lop CHOT ben duoi, moi hang ghi ro no den tu muc nao, de doi chieu ban
 Lam nhung viec sau, theo thu tu:
 
 1. Doc tep SC3, gop cac lan chay lai cua phuong phap ngau nhien bang TRUNG VI (muc 5).
-2. Xep nhom cau hinh tu SC2 bang hai nguong rho_rep da chot, roi doi chieu voi bang da chot
-   trong preregistration muc 3. Lech thi bao va dung.
+2. Group the configurations from the SC2 files of the pool profile (preregistration section 10:
+   medians over the distinct-item candidates) with the locked thresholds, and compare every
+   configuration with the locked table config/nhom_cau_hinh.tsv. A difference stops the analysis.
+   H2 is tested on the main group only; the other groups are reported descriptively.
 3. Loai tru thuc the theo muc 5, dem theo tung ly do. Ti le loai vuot 10% thi KHONG ket luan H2.
 4. Ghep cap theo muc 5: chi thuc the ma hai phuong phap dung CUNG |R| moi vao Wilcoxon.
 5. Wilcoxon dau hang mot phia kieu Pratt tren Lost_rel, co hieu chinh Holm tren ho baseline
@@ -21,6 +23,7 @@ Cach dung:
     python tools/thong_ke.py
     python tools/thong_ke.py --sc3 results-invariant --sc2 results-invariant
     python tools/thong_ke.py --sc3 results-probe --bo-qua-xep-nhom
+    python tools/thong_ke.py --sc2 results-invariant --write-groups   (lock the table, once)
 
 Ma thoat 1 khi co dieu khien ket qua khong dung duoc (ti le loai qua cao, xep nhom lech,
 thieu cot). Ma thoat 0 khong co nghia la H2 duoc ung ho; no chi co nghia la phan tich chay
@@ -60,8 +63,10 @@ class CHOT:
     TI_LE_LOAI_TOI_DA = 0.10   # muc 5
     HAT_GIONG = tuple(range(2026, 2036))                     # muc 5, muoi hat giong
 
-    # muc 3: bang xep nhom da chot. Script tu tinh lai tu SC2 roi doi chieu voi bang nay.
-    SO_CAU_HINH_DA_CHOT = {"chinh": 12, "trung gian": 7, "suy bien": 6}
+    # Section 10: the group of every configuration, locked in this file once the official SC2
+    # runs of the pool profile exist. The script recomputes the groups and compares them.
+    BANG_NHOM = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                             "config", "nhom_cau_hinh.tsv")
 
 
 # Cot ma phan tich nay khong the thieu. Ban SC3 cu khong co lost_rel va nonsensitive_before.
@@ -113,12 +118,22 @@ def so(x, mac_dinh=float("nan")):
 # ---------------------------------------------------------------- xep nhom
 
 def xep_nhom(tep_sc2):
-    """Nhom cua tung cau hinh (bo, gap, sigma), tu trung vi rho_rep, bang nguong da chot muc 3."""
+    """Group of every configuration (dataset, gap, sigma) under preregistration section 10.
+
+    Only SC2 files written with --profile=pool count: their rows are every distinct-item candidate
+    of the configuration, the patterns the main comparison hides. Files of the sampled profile are
+    ignored, and a pool file holding a repeated-item pattern is an error.
+    """
     rho = defaultdict(list)
     beta = defaultdict(list)
     for duong_dan in tep_sc2:
-        _, hang = doc_csv(duong_dan)
+        chu_thich, hang = doc_csv(duong_dan)
+        if "# profile pool" not in chu_thich:
+            continue
         for r in hang:
+            if r.get("min_masks_exact") != "true":
+                raise ValueError("%s: a pool profile holds distinct-item patterns only, found %s"
+                                 % (duong_dan, r.get("pattern")))
             khoa = (ten_bo(r["dataset"]), r["gap"], int(r["sigma"]))
             rho[khoa].append(so(r["rho_rep"]))
             beta[khoa].append(so(r["beta"]))
@@ -138,27 +153,80 @@ def xep_nhom(tep_sc2):
             nhom_beta = "suy bien"
         else:
             nhom_beta = "trung gian"
-        ra[khoa] = {"nhom": nhom, "rho_rep": m, "beta": b, "nhom_beta": nhom_beta}
+        ra[khoa] = {"nhom": nhom, "rho_rep": m, "beta": b, "nhom_beta": nhom_beta,
+                    "pool": len(gia_tri)}
     return ra
 
 
-def kiem_xep_nhom(nhom, ghi):
-    """So so cau hinh tung nhom voi bang da chot muc 3. Lech la mot canh bao phai doc, khong bo qua."""
-    dem = defaultdict(int)
-    for v in nhom.values():
-        dem[v["nhom"]] += 1
+BANG_COT = ("dataset", "gap", "sigma", "pool", "rho_rep_median", "beta_median", "group",
+            "beta_group")
+
+
+def ghi_bang_nhom(nhom, duong_dan):
+    """Write the group table: done once, from the official SC2 runs, then committed (locked)."""
+    with io.open(duong_dan, "w", encoding="utf-8", newline="\n") as f:
+        f.write("# Groups of preregistration section 10, from SC2 --profile=pool. Locked by commit.\n")
+        f.write("\t".join(BANG_COT) + "\n")
+        for khoa in sorted(nhom):
+            v = nhom[khoa]
+            f.write("\t".join([khoa[0], khoa[1], str(khoa[2]), str(v["pool"]),
+                               "%.6f" % v["rho_rep"], "%.6f" % v["beta"], v["nhom"],
+                               v["nhom_beta"]]) + "\n")
+
+
+def doc_bang_nhom(duong_dan):
+    """The locked table as {(dataset, gap, sigma): row}, or None when it does not exist yet."""
+    if not os.path.exists(duong_dan):
+        return None
+    ra = {}
+    with io.open(duong_dan, encoding="utf-8") as f:
+        for line in f:
+            if line.startswith("#") or line.startswith("dataset\t") or not line.strip():
+                continue
+            o = line.rstrip("\n").split("\t")
+            ra[(o[0], o[1], int(o[2]))] = dict(zip(BANG_COT, o))
+    return ra
+
+
+def kiem_xep_nhom(nhom, ghi, bang=None):
+    """Compare every recomputed group with the locked table. Any difference stops the analysis."""
+    bang = doc_bang_nhom(CHOT.BANG_NHOM) if bang is None else bang
     ghi("")
-    ghi("Xep nhom cau hinh tu SC2 (nguong da chot: rho_rep >= %.2f chinh, <= %.2f suy bien)"
-        % (CHOT.RHO_CHINH, CHOT.RHO_SUY_BIEN))
-    for ten in ("chinh", "trung gian", "suy bien"):
-        cho = CHOT.SO_CAU_HINH_DA_CHOT[ten]
-        ghi("  %-10s %3d cau hinh   (preregistration muc 3 ghi %d)" % (ten, dem[ten], cho))
-    khop = all(dem[k] == v for k, v in CHOT.SO_CAU_HINH_DA_CHOT.items())
-    if not khop:
+    ghi("Groups of the configurations (section 10: medians over the distinct-item candidates;"
+        " rho_rep >= %.2f main, <= %.2f degenerate)" % (CHOT.RHO_CHINH, CHOT.RHO_SUY_BIEN))
+    if not nhom:
+        ghi("  NO SC2 file of the pool profile: nothing to group. Run SC2 with --profile=pool.")
+        return False
+    for khoa in sorted(nhom):
+        v = nhom[khoa]
+        ghi("  %-16s %-7s sigma %-6d pool %4d  rho_rep %.3f  beta %.3f  -> %s / beta %s"
+            % (khoa[0], khoa[1], khoa[2], v["pool"], v["rho_rep"], v["beta"], v["nhom"],
+               v["nhom_beta"]))
+    if bang is None:
         ghi("")
-        ghi("  LECH so voi bang da chot o preregistration muc 3. Hoac tep SC2 dua vao khong phai")
-        ghi("  bo da dung de chot, hoac so do da doi. Phai giai quyet truoc khi doc ket qua H2.")
-    return khop
+        ghi("  The locked table %s does not exist yet. Write it once from the official SC2 runs"
+            % CHOT.BANG_NHOM)
+        ghi("  (--write-groups) and commit it before any SC3 result is read.")
+        return False
+    lech = []
+    for khoa in sorted(set(nhom) | set(bang)):
+        if khoa not in nhom:
+            lech.append("%s is locked but has no SC2 pool file here" % (khoa,))
+        elif khoa not in bang:
+            lech.append("%s has an SC2 pool file but is not in the locked table" % (khoa,))
+        elif (nhom[khoa]["nhom"] != bang[khoa]["group"]
+              or nhom[khoa]["nhom_beta"] != bang[khoa]["beta_group"]):
+            lech.append("%s: recomputed %s / %s, locked %s / %s"
+                        % (khoa, nhom[khoa]["nhom"], nhom[khoa]["nhom_beta"], bang[khoa]["group"],
+                           bang[khoa]["beta_group"]))
+    if lech:
+        ghi("")
+        ghi("  DIFFERENT from the locked table:")
+        for d in lech:
+            ghi("    " + d)
+        return False
+    ghi("  %d configurations, all as locked." % len(nhom))
+    return True
 
 
 # ---------------------------------------------------------------- gop lan chay lai
@@ -338,12 +406,31 @@ def ly_do_loai(ta, doi):
 
 # ---------------------------------------------------------------- H2
 
-def chay_h2(hang, ghi):
+def chay_h2(hang, ghi, nhom=None):
     ghi("")
     ghi("=" * 78)
     ghi("H2  trung vi cua Lost_rel(baseline) - Lost_rel(CUT-HIDE) lon hon delta_L = %.2f"
         % CHOT.DELTA_L)
     ghi("=" * 78)
+
+    if nhom is not None:
+        # Preregistration section 3 keeps the intermediate group out of H2, and the design keeps
+        # the degenerate group out of the evidence for the contribution: H2 is the main group.
+        theo_nhom = defaultdict(int)
+        giu = []
+        for r in hang:
+            thong_tin = nhom.get((r["dataset"], r["gap"], r["sigma"]))
+            ten_nhom = thong_tin["nhom"] if thong_tin else "khong xep"
+            theo_nhom[ten_nhom] += 1
+            if ten_nhom == "chinh":
+                giu.append(r)
+        ghi("")
+        ghi("  rows by group: " + ", ".join("%s %d" % (k, v) for k, v in sorted(theo_nhom.items())))
+        ghi("  H2 is tested on the %d rows of the main group only." % len(giu))
+        hang = giu
+    else:
+        ghi("")
+        ghi("  PROBE: no group filter (--bo-qua-xep-nhom); every row enters H2.")
 
     if not co_mat(hang, CHOT.PHUONG_PHAP_CUA_TA):
         co = sorted({r["method_key"] for r in hang})
@@ -540,12 +627,24 @@ def main(argv=None):
     bo.add_argument("--bo-qua-xep-nhom", action="store_true",
                     help="khong doi chieu so cau hinh voi bang da chot (dung khi chay do tim)")
     bo.add_argument("--ra", default="", help="ghi bao cao ra tep thay vi in ra man hinh")
+    bo.add_argument("--write-groups", action="store_true",
+                    help="write config/nhom_cau_hinh.tsv from the SC2 pool files and stop; done "
+                         "once, from the official runs, and committed")
     doi_so = bo.parse_args(argv)
 
     dong_ra = []
 
     def ghi(s=""):
         dong_ra.append(s)
+
+    if doi_so.write_groups:
+        nhom = xep_nhom(gom_tep(doi_so.sc2, "SC2_"))
+        if not nhom:
+            print("no SC2 file of the pool profile in %s" % doi_so.sc2, file=sys.stderr)
+            return 1
+        ghi_bang_nhom(nhom, CHOT.BANG_NHOM)
+        print("wrote %s (%d configurations)" % (CHOT.BANG_NHOM, len(nhom)))
+        return 0
 
     tep_sc3 = gom_tep(doi_so.sc3, "SC3_")
     if not tep_sc3:
@@ -596,8 +695,10 @@ def main(argv=None):
     else:
         ghi("")
         ghi("  Khong co tep SC2: khong xep nhom duoc, H3 se khong chia nhom chinh/suy bien.")
+        # Without groups H2 has no main group to be tested on; only a probe may go on.
+        xep_dung = doi_so.bo_qua_xep_nhom
 
-    h2_dung = chay_h2(hang, ghi)
+    h2_dung = chay_h2(hang, ghi, None if doi_so.bo_qua_xep_nhom else nhom)
     chay_h3(hang, nhom, ghi)
     chay_tuong_duong(hang, ghi)
 

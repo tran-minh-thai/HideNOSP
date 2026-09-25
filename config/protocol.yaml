@@ -79,12 +79,14 @@ dong_4_tham_so_sinh_du_lieu_tong_hop:
     (SyntheticGenerator.measure), khong bao cao gia tri muc tieu nhu the da dat.
 
 dong_5_moi_truong_chay:
-  jdk: null            # in sẵn ở đầu mỗi tệp kết quả
+  jdk: "Eclipse Temurin 25 (LTS)"   # bytecode target 25 in pom.xml; tools/run.py refuses any
+                                    # other Java major version for runs that go into the paper.
+                                    # The exact update (25.0.x) is stamped into every result file.
   co_xms: null
   co_xmx: null
-  he_dieu_hanh: null
-  cpu: null
-  ram: null
+  he_dieu_hanh: "Windows"           # measuring machine, separate from the development machine
+  cpu: "AMD Ryzen 9 9950X"
+  ram: "64 GB"
   ten_may_do: null     # truyền vào bằng --machine; lần chạy gắn "dev" không được ghi số thời gian
   ghi_chu: "CHUA CHOT. Chan SC6, khong chan SC3 toi SC5 va SC7."
 

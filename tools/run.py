@@ -1,34 +1,38 @@
-"""Chay mot kich ban co gan phien ban ma vao dau dinh danh lan chay.
+"""Run one scenario with the code revision stamped into the run identifier.
 
-Vi sao can script nay. RunId doc bien moi truong HIDENOSP_REVISION va dong dau no vao ten tep
-ket qua; khong dat thi moi tep mang dau "unversioned" va khong truy nguoc duoc ve commit nao
-sinh ra no. Quy tac 2.6.8 doi dau dinh danh lan chay, va config/protocol.yaml chot rang bien nay
-BAT BUOC cho moi lan chay lay so vao bai.
+Why this wrapper exists. RunId reads the environment variable HIDENOSP_REVISION and stamps it into
+the result file name; without it every file says "unversioned" and cannot be traced back to the
+commit that produced it. config/protocol.yaml makes the variable MANDATORY for every run whose
+numbers go into the paper.
 
-Script lam ba viec, theo dung thu tu:
+The wrapper does five things, in this order:
 
-1. Dich lai (mvn -o -q compile). Neu bo qua buoc nay thi phien ban duoc dong dau co the la ma
-   NGUON hien tai trong khi cai dang chay lai la lop .class cu -- tuc dau dinh danh noi doi.
-2. Kiem cay lam viec sach. Mot sha commit chi dinh danh dung ma da chay khi khong co sua doi
-   chua commit. Cay ban thi tu choi, tru khi lan chay do la do tim (--probe) hoac nguoi dung
-   khai ro --allow-dirty; ca hai truong hop deu dong dau hau to -dirty.
-   Ba thu muc results, results-invariant va results-probe KHONG tinh vao phep kiem nay: chung
-   chua dau ra cua chinh cac lan chay, nen mot lo nhieu lan chay khong tu chan lay minh.
-3. Dat HIDENOSP_REVISION roi goi hidenosp.exp.Runner voi moi doi so con lai.
+1. Checks the Java version. The protocol fixes JDK 25 on every machine. Runs for the paper refuse
+   any other major version; probe runs (--probe) only warn.
+2. Rebuilds (mvn -o -q compile). Skipping this could stamp the CURRENT source revision onto a run
+   of stale .class files, so the stamp would lie.
+3. Checks that the working tree is clean. A commit sha identifies the code that ran only when no
+   uncommitted change is pending. A dirty tree is refused unless the run is a probe (--probe) or
+   the user says --allow-dirty; both cases get the suffix -dirty.
+   The three output directories results, results-invariant and results-probe do NOT count: they
+   hold the output of the runs themselves, so a batch of runs must not block itself.
+4. On Windows, asks the system not to sleep until the run ends.
+5. Sets HIDENOSP_REVISION and calls hidenosp.exp.Runner with the remaining arguments.
 
-Cach dung:
+Usage:
 
     python tools/run.py SC1 --trials=1500 --seed=2026
     python tools/run.py --jvm=-Xmx6g SC2 --dataset=datasets/dna_mt745584.txt --format=SPMF --sigma=2500 --gmin=0 --gmax=3 --maxPatternLength=4
     python tools/run.py --probe SC3 --sigma=2000 --maxPatternLength=4
 
-Tuy chon cua RIENG script nay (khong chuyen tiep cho Runner):
+Options of THIS script (not forwarded to Runner):
 
-    --jvm=<co>        co cho JVM, mac dinh -Xmx4g; lap lai duoc de dua nhieu co
-    --allow-dirty     cho chay khi cay lam viec con sua doi chua commit
-    --no-build        bo qua buoc dich lai (chi dung khi biet chac .class dang moi)
+    --jvm=<flag>      JVM flag, default -Xmx4g; repeat to pass several flags
+    --allow-dirty     run even though the working tree has uncommitted changes
+    --no-build        skip the rebuild (only when the .class files are known to be current)
 """
 import os
+import re
 import subprocess
 import sys
 
@@ -37,9 +41,12 @@ ROOT = os.path.dirname(HERE)
 CLASSES = os.path.join(ROOT, "target", "classes")
 MAIN = "hidenosp.exp.Runner"
 
+# config/protocol.yaml, row 5. The bytecode target in pom.xml is the same number.
+REQUIRED_JAVA_MAJOR = 25
+
 
 def git(*args):
-    """Chay mot lenh git trong kho, tra ve chuoi da cat khoang trang, hoac None neu loi."""
+    """Run a git command in the repository; return stripped stdout, or None on failure."""
     try:
         out = subprocess.run(["git"] + list(args), cwd=ROOT, capture_output=True, text=True)
     except FileNotFoundError:
@@ -49,15 +56,15 @@ def git(*args):
     return out.stdout.strip()
 
 
-# Ba thu muc nay chua DAU RA cua chinh cac lan chay, khong phai dau vao. Mot tep ket qua moi
-# sinh ra khong doi ma da chay, nen no khong duoc tinh la "cay ban" -- neu tinh thi lan chay thu
-# hai trong cung mot lo se bi chinh lan thu nhat chan lai.
-# Moi thu khac thi CO tinh, ke ca config/ va datasets/provenance.tsv, vi chung la dau vao.
+# These three directories hold the OUTPUT of the runs, not their input. A freshly written result
+# file does not change the code that ran, so it must not count as a dirty tree -- otherwise the
+# second run of a batch would be blocked by the first.
+# Everything else DOES count, including config/ and datasets/provenance.tsv, because they are input.
 OUTPUT_DIRS = ("results/", "results-invariant/", "results-probe/")
 
 
 def is_output(status_line):
-    """True neu dong `git status --porcelain` noi ve mot tep nam trong thu muc dau ra."""
+    """True if a `git status --porcelain` line refers to a file inside an output directory."""
     path = status_line[3:].strip().strip('"')
     if " -> " in path:
         path = path.split(" -> ", 1)[1].strip().strip('"')
@@ -65,11 +72,12 @@ def is_output(status_line):
 
 
 def revision(allow_dirty, is_probe):
-    """Tra ve chuoi phien ban de dong dau, hoac thoat neu cay ban ma khong duoc phep."""
+    """Return the revision string to stamp, or exit if the tree is dirty and that is not allowed."""
     sha = git("rev-parse", "--short=12", "HEAD")
     if sha is None:
-        print("LOI: khong doc duoc phien ban git. Dang chay ngoai mot kho git?", file=sys.stderr)
-        print("     Neu that su muon chay khong co phien ban, dat HIDENOSP_REVISION bang tay.",
+        print("ERROR: cannot read the git revision. Running outside a git repository?",
+              file=sys.stderr)
+        print("       To run without a revision on purpose, set HIDENOSP_REVISION by hand.",
               file=sys.stderr)
         sys.exit(2)
 
@@ -79,47 +87,121 @@ def revision(allow_dirty, is_probe):
     if not changed:
         return sha
     if not (allow_dirty or is_probe):
-        print("LOI: cay lam viec con %d thay doi chua commit." % len(changed), file=sys.stderr)
-        print("     Mot sha chi dinh danh dung ma da chay khi khong con sua doi nao treo.",
+        print("ERROR: the working tree has %d uncommitted change(s)." % len(changed),
+              file=sys.stderr)
+        print("       A commit sha identifies the code that ran only when nothing is pending.",
               file=sys.stderr)
         for line in changed[:10]:
-            print("       " + line, file=sys.stderr)
+            print("         " + line, file=sys.stderr)
         if len(changed) > 10:
-            print("       ... va %d dong nua" % (len(changed) - 10), file=sys.stderr)
+            print("         ... and %d more" % (len(changed) - 10), file=sys.stderr)
         print(file=sys.stderr)
-        print("     Chon mot trong ba: commit cac thay doi; hoac them --probe neu day la lan",
+        print("       Either commit the changes; or add --probe for a probe run; or add",
               file=sys.stderr)
-        print("     chay do tim; hoac them --allow-dirty neu that su co y.", file=sys.stderr)
+        print("       --allow-dirty if you really mean it.", file=sys.stderr)
         sys.exit(3)
 
-    print("CANH BAO: cay lam viec con %d thay doi chua commit; dong dau la %s-dirty."
+    print("WARNING: the working tree has %d uncommitted change(s); the stamp is %s-dirty."
           % (len(changed), sha), flush=True)
     return sha + "-dirty"
 
 
+def java_executable():
+    """The java launcher of JAVA_HOME when it is set, otherwise `java` on PATH.
+
+    Maven compiles with the JDK of JAVA_HOME, so taking the launcher from the same place keeps the
+    compile and the run on one JDK even when an older Java is still first on PATH.
+    """
+    home = os.environ.get("JAVA_HOME")
+    if not home:
+        return "java"
+    exe = os.path.join(home, "bin", "java.exe" if os.name == "nt" else "java")
+    if not os.path.isfile(exe):
+        print("ERROR: JAVA_HOME is set to %s, but %s does not exist." % (home, exe),
+              file=sys.stderr)
+        sys.exit(5)
+    return exe
+
+
+def java_version(java):
+    """Return (major version, first line of `java -version`) for the given launcher."""
+    try:
+        out = subprocess.run([java, "-version"], capture_output=True, text=True)
+    except FileNotFoundError:
+        print("ERROR: no Java launcher found (tried %s). Install JDK %d."
+              % (java, REQUIRED_JAVA_MAJOR), file=sys.stderr)
+        sys.exit(5)
+    text = (out.stderr or "") + (out.stdout or "")
+    first = text.strip().splitlines()[0] if text.strip() else "(no output)"
+    match = re.search(r'version "(\d+)(?:\.(\d+))?', text)
+    if not match:
+        return None, first
+    major = int(match.group(1))
+    if major == 1 and match.group(2):  # the old "1.8" style
+        major = int(match.group(2))
+    return major, first
+
+
+def check_java(java, is_probe):
+    """Refuse a run for the paper on any Java major version other than the one fixed by the protocol."""
+    major, first = java_version(java)
+    if major == REQUIRED_JAVA_MAJOR:
+        print("java: %s  [%s]" % (first, java), flush=True)
+        return
+    message = ("Java major version %s at %s (\"%s\"), but config/protocol.yaml fixes JDK %d."
+               % (major if major is not None else "unknown", java, first, REQUIRED_JAVA_MAJOR))
+    if is_probe:
+        print("WARNING: " + message + " Allowed because this is a probe run.", flush=True)
+        return
+    print("ERROR: " + message, file=sys.stderr)
+    print("       Install Temurin %d and point JAVA_HOME at it, or add --probe for a probe run."
+          % REQUIRED_JAVA_MAJOR, file=sys.stderr)
+    sys.exit(5)
+
+
+def keep_awake():
+    """On Windows, ask the system not to sleep while this process waits for the run.
+
+    The request (ES_CONTINUOUS | ES_SYSTEM_REQUIRED) belongs to the calling thread and ends when the
+    thread does, i.e. when the run finishes or is interrupted. It does not stop Windows Update from
+    restarting the machine; that has to be paused by hand before a long batch.
+    """
+    if os.name != "nt":
+        return
+    import ctypes
+    es_continuous = 0x80000000
+    es_system_required = 0x00000001
+    previous = ctypes.windll.kernel32.SetThreadExecutionState(es_continuous | es_system_required)
+    if previous == 0:
+        print("WARNING: SetThreadExecutionState failed; the machine may sleep during the run.",
+              flush=True)
+    else:
+        print("keep-awake: on until this run ends", flush=True)
+
+
 def build():
-    """Dich lai de lop .class chac chan khop voi ma nguon ma sha dang dong dau."""
+    """Rebuild, so the .class files certainly match the source whose sha is being stamped."""
     mvn = "mvn.cmd" if os.name == "nt" else "mvn"
     try:
         out = subprocess.run([mvn, "-o", "-q", "compile"], cwd=ROOT)
     except FileNotFoundError:
-        print("LOI: khong tim thay maven. Them --no-build neu .class chac chan da moi.",
+        print("ERROR: Maven not found. Add --no-build if the .class files are certainly current.",
               file=sys.stderr)
         sys.exit(4)
     if out.returncode != 0:
-        print("LOI: dich that bai, khong chay tiep.", file=sys.stderr)
+        print("ERROR: the build failed; not running.", file=sys.stderr)
         sys.exit(out.returncode)
 
 
 def check_protocol(args):
-    """Nhac cac rang buoc da chot o config/protocol.yaml ma script nay thay duoc."""
+    """Warn about the constraints fixed in config/protocol.yaml that this script can see."""
     scenario = next((a for a in args if not a.startswith("-")), "")
     if scenario.upper() in ("SC2", "SC3", "SC4", "SC5", "SC7"):
         lmax = next((a.split("=", 1)[1] for a in args if a.startswith("--maxPatternLength=")), None)
         if lmax != "4":
-            print("CANH BAO: protocol.yaml chot l_max = 4, lan chay nay dung %s."
-                  % (lmax if lmax else "mac dinh cua kich ban"), flush=True)
-            print("          So sinh ra se khong so duoc voi cac bang khac cua bai.", flush=True)
+            print("WARNING: protocol.yaml fixes l_max = 4, this run uses %s."
+                  % (lmax if lmax else "the scenario default"), flush=True)
+            print("         Its numbers will not be comparable with the other tables.", flush=True)
 
 
 def main():
@@ -145,27 +227,31 @@ def main():
     if not jvm:
         jvm = ["-Xmx4g"]
 
-    # Runner doi ten kich ban o vi tri dau. Script nay nhan tuy chon o bat ky dau nao, nen
-    # phai tu dua ten kich ban len truoc, neu khong thi "run.py --probe SC1" se hong.
+    # Runner expects the scenario name first. This script accepts options anywhere, so it moves
+    # the scenario name to the front; otherwise "run.py --probe SC1" would break.
     scenario_at = next((i for i, a in enumerate(forwarded) if not a.startswith("-")), None)
     if scenario_at is not None and scenario_at > 0:
         forwarded.insert(0, forwarded.pop(scenario_at))
 
     is_probe = "--probe" in forwarded or "--probe=true" in forwarded
 
+    java = java_executable()
+    check_java(java, is_probe)
     if not no_build:
         build()
     rev = revision(allow_dirty, is_probe)
     check_protocol(forwarded)
+    keep_awake()
 
     env = dict(os.environ)
     env["HIDENOSP_REVISION"] = rev
     print("HIDENOSP_REVISION = %s" % rev, flush=True)
 
-    # Xo dem truoc khi giao fd cho java, neu khong thi cac dong tren hien sau ket qua chay.
+    # Flush before handing the file descriptors to java, otherwise the lines above appear after
+    # the output of the run.
     sys.stdout.flush()
     sys.stderr.flush()
-    command = ["java"] + jvm + ["-cp", CLASSES, MAIN] + forwarded
+    command = [java] + jvm + ["-cp", CLASSES, MAIN] + forwarded
     return subprocess.run(command, cwd=ROOT, env=env).returncode
 
 

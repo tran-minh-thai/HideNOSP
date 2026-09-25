@@ -34,12 +34,12 @@ in danh sách kịch bản cùng tuỳ chọn của từng cái.
 
 ## Yêu cầu
 
-JDK 17 trở lên, Maven 3.9 trở lên. Không phụ thuộc thư viện ngoài ngoài JUnit 5 (chỉ cho test).
+JDK 25 (bản LTS, Eclipse Temurin), Maven 3.9 trở lên. Không phụ thuộc thư viện ngoài ngoài JUnit 5 (chỉ cho test).
 
 ## Bố cục
 
 ```
-pom.xml                 Maven, Java 17
+pom.xml                 Maven, Java 25
 src/main/java/hidenosp/
   core/                 chuỗi sự kiện, mẫu, ràng buộc khoảng cách, Nettree, sup_NO
   core/flow/            Dinic sức chứa nút, lát cắt nhỏ nhất, nút thiết yếu, che gia tăng
@@ -65,10 +65,5 @@ biến không được mang cột thời gian hay bộ nhớ, và chỉ máy đo
 
 ## Trạng thái
 
-Đã cài và đã kiểm: Nettree, luồng cực đại sức chứa nút, lát cắt nhỏ nhất, nút thiết yếu, cập
-nhật gia tăng, lát cắt có trọng số, quét lambda có chứng nhận tối ưu, đường cong chi phí, phân
-bổ giữa các chuỗi, CUT-HIDE cho một mẫu, bộ độ đo, SC1–SC3.
-
-Chưa cài: HHA, DBSH, SBSH, quy hoạch nguyên chính xác, giải thuật di truyền, CUT-HIDE nhiều mẫu
-với ngưỡng cơ sở dữ liệu, SC4–SC8. Khung và đặc tả của từng phần nằm trong Javadoc của lớp
-tương ứng; tìm nhanh bằng `grep -rn "TODO(code)" src/`.
+Nguồn đúng duy nhất cho trạng thái cài đặt là mục 5 của [`RUNBOOK.md`](RUNBOOK.md); tệp này không
+chép lại để hai nơi không lệch nhau. Tìm nhanh phần chưa cài: `grep -rn "TODO(code)" src/`.

@@ -14,7 +14,10 @@ tìm Python sẵn có cũng chú thích tiếng Anh); tài liệu vận hành nh
 
 ## 1. Yêu cầu và cách dịch
 
-- JDK 17 trở lên (đã thử với Microsoft OpenJDK 17.0.19).
+- JDK 25 (bản LTS, Eclipse Temurin). Mọi máy dùng cùng JDK 25; `tools/run.py` từ chối chạy lấy
+  số vào bài trên phiên bản Java khác. Đổi từ JDK 17 ngày 25/09/2026. Số bất biến của giai đoạn 1
+  (JDK 17, Windows) đã được chạy lại bằng JDK 26 trên macOS ở cùng commit `2f63b56`: 4 cấu hình
+  SC2, 58 dòng, trùng khít sau khi chuẩn hoá ký tự xuống dòng và dấu phân cách đường dẫn.
 - Maven 3.9 trở lên. Kho `~/.m2` đã có sẵn junit 5.10.2 nên dịch được ở chế độ offline.
 
 ```bash
@@ -221,6 +224,8 @@ cỡ heap tối đa.
 | Chỉ mục gộp nhiều mẫu | `index.NettreeCutIndex` | §9.1 |
 | CUT-HIDE, một mẫu | `hide.CutHide` | Chính xác khi μ(P)=1; bước 1–6, 8 |
 | CUT-HIDE, nhiều mẫu, HIDE-SEQ | `hide.CutHide` | Tham lam theo tỉ số, bước 7 |
+| CUT-HIDE, nhiều mẫu, HIDE-DB | `hide.CutHide.runMultiPatternDatabase` | Tham lam theo tỉ số trên toàn CSDL; **không** có bảo đảm hệ số khi σ > 1 |
+| Nguyên–đối ngẫu, hệ số ℓ_max và chặn dưới cho từng thực thể | `hide.PrimalDualCover` | Chỉ khi σ = 1 (xem mục 7 khoản 7 và 9) |
 | Độ đo HF, Lost, Ghost, DistR, SupDist | `metrics.Metrics` | §2 |
 | `F_σ(D)`, `B_ε`, `𝒮⁺` | `metrics.FrequentPatterns` | §9.2 bước 3 |
 | ρ_rep, β, \|R\|\* | `metrics.DataProfile` | §8.4 |
@@ -239,9 +244,7 @@ cỡ heap tối đa.
 |---|---|---|
 | Đối chiếu SBSH với Thuật toán 2 và 3 của [R3] | `baseline.Sbsh` | SC3, SC7, SC8 |
 | Bản gốc của HHA, DBSH, SBSH trên bài toán cũ (độ hỗ trợ theo số chuỗi) | `baseline.Hha`, `Dbsh` (cờ `originalProblem`), `Sbsh` | SC8 |
-| Quan hệ nới lỏng tuyến tính và làm tròn có bảo đảm ℓ_max | `baseline.IlpExact` | SC3, danh sách đóng góp |
 | Giải thuật di truyền, bản thuần và bản lai khởi tạo từ lát cắt | `baseline.GaHybrid` | SC3 (tầng c) |
-| CUT-HIDE nhiều mẫu với ngưỡng CSDL | `hide.CutHide.runMultiPattern` | SC3 với \|𝒮\| > 1 |
 | SC4, SC5, SC6, SC7, SC8 | `exp.Sc4…` đến `exp.Sc8…` | chính nó |
 | Đối chiếu với NETGAP của [R1] | `exp.Sc1ImplementationCheck` | SC1 (phần còn thiếu) |
 | Đo bộ nhớ thường trú của tiến trình | `util.MemoryProbe` | SC6 |

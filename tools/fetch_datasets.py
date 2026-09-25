@@ -6,6 +6,8 @@ what lets someone else obtain the same bytes, and it is what a reviewer needs wh
 "MSNBC" without saying which copy of MSNBC.
 
 The script is idempotent: a file already present whose SHA-256 matches the record is left alone.
+A dataset that already has a record is only verified against it; a download that differs is
+reported as an error (exit code 1) and the record is never overwritten.
 
 Run: python tools/fetch_datasets.py [name ...]
 With no argument it fetches every dataset listed in CATALOGUE.
@@ -80,40 +82,69 @@ def write_provenance(rows):
 
 
 def fetch(name, rows):
+    """Fetch one dataset and check it against its provenance record.
+
+    Returns "present", "fetched", "recorded" (a dataset with no record yet, now recorded) or
+    "mismatch". A recorded dataset is VERIFIED, never re-recorded: the record is what the paper's
+    numbers were computed on, so a download that differs from it is an error, not an update.
+    Rewriting the record here would also change provenance.tsv on every fresh machine (the fetch
+    date alone differs), and tools/run.py would then refuse every run because the tree is dirty.
+    """
     url, filename, fmt, expected, role = CATALOGUE[name]
     target = os.path.join(DATASETS, filename)
-    if os.path.exists(target) and name in rows and sha256_of(target) == rows[name][6]:
-        print("  %-8s da co, tong kiem khop, bo qua" % name)
-        return
-    print("  %-8s tai %s" % (name, url))
+    recorded = rows[name][6] if name in rows else None
+    if recorded is not None and os.path.exists(target) and sha256_of(target) == recorded:
+        print("  %-9s present, sha256 matches the record" % name)
+        return "present"
+    print("  %-9s downloading %s" % (name, url))
     request = urllib.request.Request(url, headers={"User-Agent": "hidenosp-fetch/1.0"})
     with urllib.request.urlopen(request, timeout=120) as response:
         data = response.read()
-    if expected is not None and len(data) != expected:
-        print("     CANH BAO: nhan %d byte, cho %d. Nguon co the da doi; kiem lai truoc khi dung."
-              % (len(data), expected))
+    digest = hashlib.sha256(data).hexdigest()
+    if recorded is not None and digest != recorded:
+        rejected = target + ".mismatch"
+        with open(rejected, "wb") as handle:
+            handle.write(data)
+        print("  ERROR %s: the download does not match datasets/provenance.tsv" % name)
+        print("        recorded sha256 %s (%s bytes)" % (recorded, rows[name][5]))
+        print("        received sha256 %s (%d bytes)" % (digest, len(data)))
+        print("        kept aside as %s; %s was not touched" % (rejected, target))
+        return "mismatch"
     with open(target, "wb") as handle:
         handle.write(data)
-    digest = sha256_of(target)
+    if recorded is not None:
+        print("            %d bytes, sha256 matches the record" % len(data))
+        return "fetched"
+    if expected is not None and len(data) != expected:
+        print("  WARNING %s: %d bytes received, %d expected by CATALOGUE" % (name, len(data), expected))
     rows[name] = [name, filename, fmt, url, time.strftime("%Y-%m-%d"), str(len(data)), digest, role]
-    print("     %d byte, sha256 %s" % (len(data), digest[:16] + "..."))
+    print("            %d bytes, sha256 %s..., NEW record" % (len(data), digest[:16]))
+    return "recorded"
 
 
 def main():
     names = sys.argv[1:] or list(CATALOGUE)
     unknown = [n for n in names if n not in CATALOGUE]
     if unknown:
-        print("khong biet bo du lieu: " + ", ".join(unknown))
-        print("co the chon: " + ", ".join(CATALOGUE))
+        print("unknown dataset: " + ", ".join(unknown))
+        print("known: " + ", ".join(CATALOGUE))
         return 2
     if not os.path.isdir(DATASETS):
         os.makedirs(DATASETS)
     rows = read_provenance()
-    print("tai ve %s" % DATASETS)
-    for name in names:
-        fetch(name, rows)
-    write_provenance(rows)
-    print("da ghi %s" % PROVENANCE)
+    print("datasets directory: %s" % DATASETS)
+    outcome = {name: fetch(name, rows) for name in names}
+    if "recorded" in outcome.values():
+        write_provenance(rows)
+        print("wrote %s (new records: %s)" % (PROVENANCE, ", ".join(
+            n for n, o in outcome.items() if o == "recorded")))
+    counts = {o: sum(1 for v in outcome.values() if v == o)
+              for o in ("present", "fetched", "recorded", "mismatch")}
+    print("checked %d dataset(s): %d present, %d fetched, %d newly recorded, %d MISMATCH"
+          % (len(names), counts["present"], counts["fetched"], counts["recorded"], counts["mismatch"]))
+    if counts["mismatch"]:
+        print("STOP: do not run anything on these datasets until the mismatch is resolved.")
+        return 1
     return 0
 
 

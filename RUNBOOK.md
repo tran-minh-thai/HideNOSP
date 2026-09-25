@@ -128,8 +128,23 @@ python tools/fetch_datasets.py
 python tools/build_datasets.py
 ```
 
-Lệnh thứ hai dựng các tệp SPMF từ dữ liệu thô dưới `datasets/raw/` (ba nhật ký tiến trình của 4TU
-và 14 CSDL của HAUP-Hider); quy tắc gán vai cho từng trường nằm ở đầu `tools/build_datasets.py`.
+Lệnh thứ hai dựng các tệp SPMF từ dữ liệu thô dưới `datasets/raw/` (ba nhật ký tiến trình của 4TU,
+14 CSDL của HAUP-Hider và hai tệp protein của NTP-Miner, `protein_sdb1` và `protein_sdb4`); quy tắc
+gán vai cho từng trường nằm ở đầu `tools/build_datasets.py`. Sáu tệp protein thô lồng nhau, nên chỉ
+hai tệp lớn nhất được dựng; mỗi lần dựng in độ trùng của chúng với cả sáu tệp.
+
+**Chọn σ cho một bộ mới** bằng quy tắc của `config/protocol.yaml` (|F_σ| trong [50, 700] ở mọi
+khoảng cách, và F_σ là tập con thực sự của không gian mẫu), áp bằng chương trình chứ không đọc bằng
+mắt:
+
+```bash
+python tools/run.py --probe SIGMA --dataset=datasets/protein_sdb4.txt --format=SPMF --sigma=300,400,500,600,700,800,900,1000,1200 --gmin=0 --gmax=1,3 --maxPatternLength=4
+```
+
+Dòng cuối in các σ thoả quy tắc ở mọi khoảng cách đã quét; tệp `SIGMA_*.csv` ghi từng cấu hình.
+`python tools/data_regime_tables.py sigma <tệp hoặc thư mục>` in bảng markdown từ các tệp đó, và
+`python tools/data_regime_tables.py groups <tệp hoặc thư mục>` in bảng nhóm từ các tệp SC2 toàn kho
+(chỉ để báo cáo; bảng chốt vẫn do `thong_ke.py --write-groups` ghi).
 
 Tải MSNBC, SIGN, FIFA và BMS-WebView-1 từ kho công khai của SPMF vào `datasets/`, tính SHA-256
 và ghi `datasets/provenance.tsv`. Chạy lại là không tải lại nếu tổng kiểm còn khớp. Muốn một bộ
@@ -254,7 +269,9 @@ cỡ heap tối đa.
 | Baseline tầng (b): SBSH | `baseline.Sbsh` | [R3], Thuật toán 5 kèm 1–3 và mục 4.3; tái tạo đúng Hình 1(f), Hình 4(b) và Ví dụ 3 của bài (`SbshPaperExampleTest`). Chỗ bài để ngỏ: `config/doi_chieu_sbsh_r3.md` mục 6 |
 | Baseline tầng (c): bộ giải chính xác | `baseline.IlpExact` | Nhánh-cận, thực thể nhỏ; tuỳ chọn cực tiểu mẫu mất |
 | Tải bộ dữ liệu kèm tổng kiểm | `tools/fetch_datasets.py` | §11.2; chỉ kiểm, không ghi đè bản ghi; kiểm MD5 do nguồn công bố |
-| Dựng tệp SPMF từ dữ liệu thô (nhật ký XES, CSDL của HAUP-Hider) | `tools/build_datasets.py` | Quy tắc gán vai ghi trong tệp; bản dựng phải khớp bản ghi |
+| Dựng tệp SPMF từ dữ liệu thô (nhật ký XES, CSDL của HAUP-Hider, protein) | `tools/build_datasets.py` | Quy tắc gán vai ghi trong tệp; bản dựng phải khớp bản ghi |
+| Quy tắc chọn σ, áp bằng chương trình | `exp.SigmaScan` (mã kịch bản `SIGMA`) | Không phải kịch bản của bài; tệp bất biến theo máy |
+| Bảng markdown từ hiện vật (quy tắc σ, nhóm) | `tools/data_regime_tables.py` | Để tài liệu tổng hợp nhúng bảng sinh ra, không chép tay |
 | Lấy mẫu tập nhạy cảm theo năm tầng phân vị, không lặp | `exp.SensitiveSampling` | `preregistration.md` mục 9 |
 | SC1, SC2, SC3 | `exp.Sc1…`, `exp.Sc2…`, `exp.Sc3…` | Chạy được |
 

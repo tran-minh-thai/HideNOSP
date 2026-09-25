@@ -118,3 +118,29 @@ khoảng cách không có nghĩa). Chỉ dùng để so với HAUP-Hider trên c
 **Phát hiện phụ về `bms1`:** 100% cặp kề tăng dần — mỗi chuỗi đã bị sắp theo mã mục, thứ tự nhấp
 chuột thật đã mất. Bộ này vẫn là đối chứng suy biến; không được dùng nó làm bằng chứng cho bất cứ
 điều gì phụ thuộc thứ tự (ràng buộc khoảng cách, SC5).
+
+## Bổ sung ngày 25/09/2026 (2) — protein của dòng khai phá không chồng lấp
+
+Nguồn: sáu tệp `SDB1` … `SDB6` công bố cùng NTP-Miner trong kho `wuc567/Pattern-Mining`, ghim commit
+`0b3d4e5`; tải bằng `python tools/fetch_datasets.py`, dựng bằng `python tools/build_datasets.py`
+(quy tắc `letters`: một dòng là một protein, một chữ cái axit amin là một mục; ký tự khác chữ cái là
+lỗi). Mọi số dưới đây **đo** trên tệp đã dựng; đầu ra nguyên văn của bộ dựng:
+`../results-probe/protein_build_log_20260925.txt`.
+
+**Sáu tệp lồng nhau, nên chúng là MỘT nguồn dữ liệu, không phải sáu bộ.** Đo bằng so khớp nguyên
+chuỗi: mọi chuỗi của SDB2 nằm trong SDB1, của SDB3 trong SDB2, của SDB5 trong SDB4, của SDB6 trong
+SDB5; SDB1 và SDB4 chung 378 chuỗi (75% của SDB1, 64% của SDB4). Chỉ dựng hai tệp lớn nhất; bốn tệp
+còn lại giữ nguyên tệp thô vì chúng là bằng chứng của việc lồng nhau.
+
+| Bộ | Tệp thô | N | Sự kiện | \|Σ\| | Dài trung bình / dài nhất | σ (chọn theo quy tắc, trước mọi lượt SC2) | Phân nhóm (thăm dò) |
+|---|---|---|---|---|---|---|---|
+| `protein_sdb4` | SDB4 | 590 | 109.424 | 20 | 185,5 / 653 | 500, 900 | **Nhóm chính**, ràng buộc khoảng cách có hiệu lực, cả 4 cấu hình |
+| `protein_sdb1` | SDB1 | 507 | 91.875 | 20 | 181,2 / 994 | 400, 800 | **Nhóm chính**, ràng buộc khoảng cách có hiệu lực, cả 4 cấu hình |
+
+Trung vị ρ_rep, β và cỡ kho ứng viên của từng cấu hình: bảng 1 của
+`../results-probe/protein_groups_and_sigma_rule_probe_20260925.md` (sinh bằng
+`tools/data_regime_tables.py`). Phân nhóm chính thức chờ SC2 trên máy đo (`run.txt` mục 5a).
+
+**Vai:** chứng minh đóng góp (nhóm chính). Vì hai tệp chung phần lớn chuỗi, **đếm là một bộ**;
+tệp nào vào phép kiểm H2 là quyết định còn mở; khi chốt sẽ ghi thành một mục bổ sung của
+`../config/preregistration.md`, trước mọi lượt SC3 trên protein.

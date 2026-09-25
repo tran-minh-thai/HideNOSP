@@ -1,0 +1,23 @@
+== protein_sdb4 500 [0,1] exit=0 9s | |F_sigma(D)| = 208 at sigma = 500, gap [0,1], l_max = 4 pool of 177 distinct-item candidates: median rho_rep 0.490, median beta 0.831 
+== protein_sdb4 500 [0,3] exit=0 23s | |F_sigma(D)| = 469 at sigma = 500, gap [0,3], l_max = 4 pool of 371 distinct-item candidates: median rho_rep 0.552, median beta 0.731 
+== protein_sdb4 900 [0,1] exit=0 3s | |F_sigma(D)| = 63 at sigma = 900, gap [0,1], l_max = 4 pool of 38 distinct-item candidates: median rho_rep 0.583, median beta 0.802 
+== protein_sdb4 900 [0,3] exit=0 11s | |F_sigma(D)| = 211 at sigma = 900, gap [0,3], l_max = 4 pool of 178 distinct-item candidates: median rho_rep 0.640, median beta 0.700 
+== protein_sdb1 400 [0,1] exit=0 8s | |F_sigma(D)| = 212 at sigma = 400, gap [0,1], l_max = 4 pool of 181 distinct-item candidates: median rho_rep 0.495, median beta 0.829 
+== protein_sdb1 400 [0,3] exit=0 23s | |F_sigma(D)| = 535 at sigma = 400, gap [0,3], l_max = 4 pool of 411 distinct-item candidates: median rho_rep 0.536, median beta 0.739 
+== protein_sdb1 800 [0,1] exit=0 2s | |F_sigma(D)| = 55 at sigma = 800, gap [0,1], l_max = 4 pool of 31 distinct-item candidates: median rho_rep 0.597, median beta 0.796 
+== protein_sdb1 800 [0,3] exit=0 9s | |F_sigma(D)| = 192 at sigma = 800, gap [0,3], l_max = 4 pool of 157 distinct-item candidates: median rho_rep 0.645, median beta 0.691 
+DONE
+
+# Rerun check: the 8 protein commands of run.txt section 5a, extracted verbatim, each run twice on
+# the clean clone: as written (must be refused by the JDK gate on JDK 26) and with --probe --no-build.
+# verbatim refused by the JDK gate: 8/8; probe runs completed: 8/8
+# Each probe rerun compared with the first run by tools/compare_invariant.py (exact rows):
+#   protein_sdb1.txt [0,1] sigma 400: 181 rows, 20260925-141108-16 vs 20260925-142529-02: IDENTICAL
+#   protein_sdb1.txt [0,1] sigma 800: 31 rows, 20260925-141139-45 vs 20260925-142559-87: IDENTICAL
+#   protein_sdb1.txt [0,3] sigma 400: 411 rows, 20260925-141116-14 vs 20260925-142537-02: IDENTICAL
+#   protein_sdb1.txt [0,3] sigma 800: 157 rows, 20260925-141141-98 vs 20260925-142602-34: IDENTICAL
+#   protein_sdb4.txt [0,1] sigma 500: 177 rows, 20260925-141022-48 vs 20260925-142444-36: IDENTICAL
+#   protein_sdb4.txt [0,1] sigma 900: 38 rows, 20260925-141054-11 vs 20260925-142515-27: IDENTICAL
+#   protein_sdb4.txt [0,3] sigma 500: 371 rows, 20260925-141031-34 vs 20260925-142453-14: IDENTICAL
+#   protein_sdb4.txt [0,3] sigma 900: 178 rows, 20260925-141057-35 vs 20260925-142518-50: IDENTICAL
+#   identical: 8 of 8 configurations, 1544 data rows compared

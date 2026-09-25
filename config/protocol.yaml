@@ -47,10 +47,27 @@ dong_1_nguong_va_pham_vi:
     bpi2013:   {sigma: [500, 1000], khoang_cach: ["[0,1]", "[0,3]"]}
     bpi2012:   {sigma: [2000, 4000], khoang_cach: ["[0,1]", "[0,3]"]}
     sepsis:    {sigma: [300], khoang_cach: ["[0,1]", "[0,3]"]}
+    # Added 2026-09-25: protein files SDB4 and SDB1 of NTP-Miner (tools/build_datasets.py). The
+    # two share 64-75% of their sequences (exact match), so they are one source of data; which of
+    # them enters H2 is still open, to be fixed in config/preregistration.md before any SC3 run on
+    # protein. Sigma fixed before any SC2 run on them: the smallest and the largest sigma of the
+    # grid 300..1200 that meet the rule below at both gaps (scenario SIGMA; table 2 of
+    # results-probe/protein_groups_and_sigma_rule_probe_20260925.md).
+    protein_sdb4: {sigma: [500, 900], khoang_cach: ["[0,1]", "[0,3]"]}
+    protein_sdb1: {sigma: [400, 800], khoang_cach: ["[0,1]", "[0,3]"]}
     tong_hop:  {sigma: null, khoang_cach: null}
   quy_tac_chon_sigma: >
     Giu |F_sigma| trong khoang [50, 700] VA F_sigma phai la tap con THUC SU cua khong gian
     mau do dai toi l_max. Moi sigma o tren deu thoa.
+  # CORRECTION 2026-09-25. The last sentence above is false at l_max = 4. The rule applied by a
+  # program (scenario SIGMA, commit a548e53; results-probe/protein_groups_and_sigma_rule_probe_
+  # 20260925.md, table 2) puts six of the fifteen dna_mt745584 and msnbc configurations outside
+  # [50, 700]: dna [0,1] sigma 2500 and 4000, dna [0,3] sigma 4000 (too few patterns), msnbc [0,3]
+  # sigma 1000, msnbc [0,10] sigma 1000 and 2000 (too many). Every other sigma above meets the
+  # rule at every gap it is used with. The dna and msnbc values were fixed on 2026-09-12 by the
+  # preregistration and are kept; the rule binds the datasets added after that date. What the six
+  # cells change: the three dna cells have |F_sigma| of 6 to 16, so Lost_rel moves in coarse steps
+  # there and must be read with its denominator; the three msnbc cells only cost more time.
   ghi_chu: >
     sigma khai ca dang tuyet doi lan ti le theo tong sup_NO (§11.5). Viec giu ti le hay giu
     tuyet doi khi so giua cac bo con CHUA CHOT; no chan luc nop chu khong chan SC3.

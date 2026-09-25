@@ -86,14 +86,30 @@ class BaselineTest {
         throw new IllegalStateException("khong dung duoc B_eps cho thuc the thu nghiem nay");
     }
 
-    private static List<HidingMethod> methods() {
+    /** SBSH with F_sigma(D) minus S-plus, which its Annotate and Exclude-SBSH read. */
+    private static Sbsh sbsh(HideProblem problem, int radius) {
+        long sigma = problem.frequentThreshold();
+        var frequent = hidenosp.metrics.FrequentPatterns.mine(
+                problem.database(), problem.gap(), problem.maxPatternLength(), sigma);
+        var closure = hidenosp.metrics.FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+        java.util.Map<Pattern, Long> nonSensitive = new java.util.LinkedHashMap<>();
+        frequent.forEach((q, v) -> {
+            if (!closure.contains(q)) {
+                nonSensitive.put(q, v);
+            }
+        });
+        return new Sbsh(radius).withNonSensitiveFrequent(nonSensitive);
+    }
+
+    private static List<HidingMethod> methods(HideProblem problem) {
         return List.of(
                 new CutHide(CutHideConfig.uniformWeights()),
                 new OccurrenceCountHeuristic(),
                 new Hha(Hha.Delta.PATH_COUNTS),
                 new Hha(Hha.Delta.ORIGINAL_DP),
                 new Dbsh(),
-                new Sbsh(1),
+                sbsh(problem, 1),
+                sbsh(problem, problem.maxPatternLength()),
                 new RandomMasking(RandomMasking.SequenceChoice.HEURISTIC,
                         RandomMasking.PositionChoice.HEURISTIC, 7),
                 new RandomMasking(RandomMasking.SequenceChoice.RANDOM,
@@ -106,7 +122,7 @@ class BaselineTest {
         SequenceDatabase database = smallDatabase();
         HideProblem problem = problem(database, 6);
         Pattern sensitive = problem.sensitive().get(0);
-        List<HidingMethod> all = new ArrayList<>(methods());
+        List<HidingMethod> all = new ArrayList<>(methods(problem));
         all.add(weighted(problem));
         for (HidingMethod method : all) {
             Sanitization sanitization = method.run(problem);
@@ -137,7 +153,7 @@ class BaselineTest {
         long predicted = DataProfile
                 .of(database, problem.sensitive().get(0), problem.gap(), HideProblem.Mode.HIDE_DB, 6)
                 .minMasks();
-        List<HidingMethod> all = new ArrayList<>(methods());
+        List<HidingMethod> all = new ArrayList<>(methods(problem));
         all.add(weighted(problem));
         for (HidingMethod method : all) {
             long used = method.run(problem).maskCount();
@@ -165,7 +181,7 @@ class BaselineTest {
         SequenceDatabase database = smallDatabase();
         HideProblem problem = new HideProblem(database, List.of(new Pattern(A, B)),
                 new GapConstraint(0, 2), HideProblem.Mode.HIDE_SEQ, 1, 0.5, 3, 6);
-        for (HidingMethod method : List.of(weighted(problem), new Hha(), new Dbsh())) {
+        for (HidingMethod method : List.of(weighted(problem), new Hha(), new Dbsh(), sbsh(problem, 1))) {
             SequenceDatabase after = method.run(problem).sanitized();
             for (int s = 0; s < after.size(); s++) {
                 assertEquals(0, SupportNO.of(problem.sensitive().get(0), after.get(s), problem.gap()),
@@ -181,7 +197,7 @@ class BaselineTest {
         HideProblem problem = problem(database, 6);
         Pattern[] watched = {new Pattern(A), new Pattern(B), new Pattern(C),
                 new Pattern(B, A), new Pattern(A, C), new Pattern(C, B, A)};
-        List<HidingMethod> all = new ArrayList<>(methods());
+        List<HidingMethod> all = new ArrayList<>(methods(problem));
         all.add(weighted(problem));
         for (HidingMethod method : all) {
             SequenceDatabase after = method.run(problem).sanitized();
@@ -205,7 +221,8 @@ class BaselineTest {
                 new OccurrenceCountHeuristic(),
                 new Hha(),
                 new Dbsh(),
-                new Sbsh(1),
+                sbsh(problem, 1),
+                sbsh(problem, 3),
                 new RandomMasking(RandomMasking.SequenceChoice.HEURISTIC,
                         RandomMasking.PositionChoice.HEURISTIC, 7),
                 new RandomMasking(RandomMasking.SequenceChoice.HEURISTIC,
@@ -232,7 +249,7 @@ class BaselineTest {
         HideProblem problem = new HideProblem(database, sensitive, new GapConstraint(0, 2),
                 HideProblem.Mode.HIDE_SEQ, 1, 0.5, 3, 6);
         for (HidingMethod method : List.of(new CutHide(CutHideConfig.uniformWeights()),
-                new OccurrenceCountHeuristic(), new Hha(), new Dbsh(),
+                new OccurrenceCountHeuristic(), new Hha(), new Dbsh(), sbsh(problem, 1),
                 new RandomMasking(RandomMasking.SequenceChoice.RANDOM,
                         RandomMasking.PositionChoice.RANDOM, 7))) {
             SequenceDatabase after = method.run(problem).sanitized();
@@ -243,6 +260,15 @@ class BaselineTest {
                 }
             }
         }
+    }
+
+    @Test
+    @DisplayName("SBSH without the non-sensitive frequent patterns refuses to run")
+    void sbshNeedsTheNonSensitivePatterns() {
+        HideProblem problem = problem(smallDatabase(), 6);
+        IllegalStateException thrown = org.junit.jupiter.api.Assertions.assertThrows(
+                IllegalStateException.class, () -> new Sbsh(1).run(problem));
+        assertTrue(thrown.getMessage().contains("withNonSensitiveFrequent"), thrown.getMessage());
     }
 
     @Test

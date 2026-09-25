@@ -1,279 +1,728 @@
 package hidenosp.baseline;
 
 import hidenosp.core.EventSequence;
+import hidenosp.core.GapConstraint;
 import hidenosp.core.Nettree;
 import hidenosp.core.Pattern;
+import hidenosp.core.SequenceDatabase;
 import hidenosp.core.SupportNO;
 import hidenosp.hide.HideProblem;
 import hidenosp.hide.Sanitization;
 import hidenosp.index.NettreeCutIndex;
+import hidenosp.index.PathCounts;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
- * SBSH of Gkoulalas-Divanis and Loukides 2011 [R3], tier (b) of section 11.3.
+ * SBSH, the side-effect based sequence hiding algorithm of A. Gkoulalas-Divanis and G. Loukides,
+ * "Revisiting sequential pattern hiding to enhance utility", KDD 2011 (Algorithm 5, with
+ * Algorithms 1 to 3 and the procedures of its Section 4.3).
  *
- * <p>SBSH decides inside a sequence which positions are safe to remove:
+ * <p>The class follows the published procedure step by step:
  *
- * <ul>
- *   <li><b>Annotate.</b> Colour each position by what removing it would cost. A position is
- *       <em>red</em> when removing it would push a non-sensitive pattern sitting exactly at the
- *       threshold below it; <em>black</em> when it lies on a sensitive occurrence and is not red;
- *       <em>grey</em> when it carries no sensitive node at all.</li>
- *   <li><b>Replace.</b> When the position the rule would take is red, replace it by a set of black
- *       positions that cut every path through it, searched within a radius of r arcs. The authors
- *       state the radius exists to save computation.</li>
- * </ul>
+ * <ol>
+ *   <li><b>Exclude-SBSH</b> (step 1): order the sequences that support a sensitive pattern and keep
+ *       intact as many as the threshold allows; the rest are sanitised, in that order.</li>
+ *   <li><b>Candidates-SBSH</b> (step 3): the greedy weighted set cover over symbols of Algorithm 1,
+ *       flattened into one array P of positions, with the covered subsets S_j kept in H.</li>
+ *   <li><b>Annotate-T</b> (step 4): colour every position carrying a symbol of a supported sensitive
+ *       pattern by Algorithm 2 &mdash; black when no non-sensitive frequent pattern containing its
+ *       symbol sits exactly at the threshold, red when removing it drops one of those below the
+ *       threshold, gray otherwise.</li>
+ *   <li><b>Main loop</b> (steps 7 to 37): black positions are removed; a red position is replaced by
+ *       the union over the subsets S_j of Replace, which is the smaller of C-PA and C-SA; a gray
+ *       position is re-annotated with the marks made so far and removed if it is still gray.</li>
+ * </ol>
  *
- * <p>For one pattern with distinct items that replacement is a special case of the weighted vertex
- * cut of P6(b), with the red position carrying a large capacity, and one max flow solves it exactly
- * with no radius at all. That is the comparison gap G4 sets up, so SC7 runs SBSH at its smallest
- * and its largest radius and records how often the radius binds.
- *
- * <p><b>This is NOT the SBSH of [R3].</b> The paper has now been read against this class; the
- * comparison is written up in {@code config/doi_chieu_sbsh_r3.md}. Four of the five points checked
- * come out different, so no number from this class may be presented as a result for SBSH until
- * either the class is corrected or the manuscript declares it a variant of ours:
+ * <p><b>Where the paper leaves a choice open</b>, and what this class does:
  *
  * <ul>
- *   <li><b>The grey label is wrong.</b> Algorithm 2 colours by the side effect on non-sensitive
- *       patterns, not by the cut structure: grey means "carries a pattern sitting exactly at the
- *       threshold, yet the local check sees none of them fall below it", which is uncertainty
- *       rather than irrelevance. Here grey is merely the default for a position carrying no
- *       sensitive node, which puts it outside their colouring altogether, and the grey branch of
- *       Algorithm 5 (re-annotate at the moment of deletion, delete only if still grey) is
- *       missing.</li>
- *   <li><b>The radius is right.</b> Section 4.3 counts r in edges of the matching graph, which is
- *       Nettree arcs, hence levels. Their Example 3 confirms it.</li>
- *   <li><b>The range of r is wrong.</b> The paper fixes r in [1, length of the longest sensitive
- *       sequence]; {@code Sc3MainComparison} passes l_max, which coincides only when the sensitive
- *       set happens to hold a pattern of that length.</li>
- *   <li><b>Replace differs.</b> Theirs is min(C-PA, C-SA), where each side walks outward from one
- *       edge and stops at the FIRST covering set it finds. This one optimises over the whole
- *       radius on both sides at once, so it returns a set at least as small but never reproduces
- *       their "take the near one even if it is large" behaviour -- which is what the radius sweep
- *       of SC7 is supposed to be measuring.</li>
- *   <li><b>Exclude-SBSH is missing.</b> Algorithm 5 step 1 drops the sequence carrying the most
- *       sensitive patterns first; the paper says that choice alone reduces side effects
- *       appreciably. This class walks the sequences in index order. Since H2 is tested on Lost,
- *       which is exactly the side-effect count, this is likely the heaviest of the four.</li>
+ *   <li><em>Exclude-SBSH.</em> The text describes it as removing from D_S the transaction that
+ *       supports the largest number of sensitive sequences, while the worked example of its
+ *       Section 5.2.3 justifies the choices by the number of non-sensitive frequent sequences each
+ *       transaction supports. Reproduced by hand, only the second reading yields the published
+ *       output of its Figure 1(f): with the first one the third transaction of the example is
+ *       sanitised before the eighth and loses its first two events instead of its last three. This
+ *       class therefore orders by the number of supported non-sensitive frequent patterns
+ *       (descending), then by the Cost of Algorithm 1 (descending, as in Algorithm 3), then by
+ *       sequence index (descending, standing for "arbitrary"; ascending would swap the second and
+ *       third transaction of the example, which the paper leaves open). D_S is processed in the
+ *       same order. The test {@code SbshPaperExampleTest} pins the whole example.</li>
+ *   <li><em>Invalid positions.</em> "P[i] = null" is read as the end of P, and a position whose
+ *       nodes lie on no complete path any more (Update-paths has removed them) is skipped.</li>
+ *   <li><em>Re-annotation.</em> Algorithm 5 only handles a gray position that is gray again. When the
+ *       re-annotation returns black or red, the annotation is updated and the position is handled
+ *       by that branch on the next pass.</li>
+ *   <li><em>C-PA and C-SA.</em> At distance k the candidate set is the layer of nodes k edges before
+ *       (after) the node of P[i], restricted to nodes still on a complete path; it is accepted when
+ *       every position in it is annotated black. The first k that works is returned. Replace keeps
+ *       the smaller of the two sets and C-PA on a tie.</li>
+ *   <li><em>Ties in the greedy cover</em> are broken by the first occurrence of the symbol in the
+ *       sequence, which reproduces the choice stated in the paper's Example 1.</li>
  * </ul>
  *
- * <p>As with DBSH, [R3] deletes and this implementation masks, because section 11.4 requires the
- * same modification for every method.
+ * <p><b>Two transfers</b> have to be declared where this is used as a baseline. First, the paper
+ * deletes events and this class masks them, so that every method applies the same modification.
+ * Without a maximum gap the two give the same supports. Second, {@link Support#NON_OVERLAPPING}
+ * replaces the support of the paper (the number of sequences containing a pattern) by the number
+ * of non-overlapping occurrences, everywhere the procedure reads a support: the keep budget of
+ * Exclude-SBSH, the threshold test of Annotate and the loop condition. Nothing else changes, and
+ * {@link Support#SEQUENCE_COUNT} runs the procedure of the paper unchanged.
  */
 public final class Sbsh implements HidingMethod {
 
-    private static final int GREY = 0;
-    private static final int BLACK = 1;
-    private static final int RED = 2;
+    /** Which support the procedure counts. */
+    public enum Support {
+        /** Non-overlapping occurrences summed over the sequences: the transfer compared in SC3. */
+        NON_OVERLAPPING,
+        /** Number of sequences containing the pattern: the problem of the paper itself. */
+        SEQUENCE_COUNT
+    }
+
+    static final int BLACK = 0;
+    static final int RED = 1;
+    static final int GRAY = 2;
+    static final int NOT_ANNOTATED = -1;
 
     private final int radius;
-    private List<Pattern> thresholdPatterns = Collections.emptyList();
+    private final Support support;
+    private Map<Pattern, Long> nonSensitiveFrequent;
 
-    /**
-     * @param radius how far the replacement may look, in Nettree levels away from the red node
-     */
+    /** The transferred version on sup_NO, the one the main comparison runs. */
     public Sbsh(int radius) {
-        this.radius = radius;
+        this(radius, Support.NON_OVERLAPPING);
     }
 
     /**
-     * The non-sensitive patterns whose support sits exactly at the threshold. Annotate needs them:
-     * without them every position is black and the colouring does nothing. The caller takes them
-     * from F_sigma(D), as it does for B_eps of CUT-HIDE.
+     * @param radius r of Replace, counted in edges of the matching graph, i.e. Nettree levels; the
+     *     paper takes r in [1, length of the longest sensitive pattern]
      */
-    public Sbsh withThresholdPatterns(List<Pattern> patterns) {
-        this.thresholdPatterns = List.copyOf(patterns);
+    public Sbsh(int radius, Support support) {
+        if (radius < 1) {
+            throw new IllegalArgumentException("the radius of Replace starts at 1, got " + radius);
+        }
+        this.radius = radius;
+        this.support = support;
+    }
+
+    /**
+     * The non-sensitive frequent patterns, F_sigma(D) without the sensitive patterns and their
+     * super-patterns, each with its support in the original database counted as {@link Support}
+     * says. Annotate and Exclude-SBSH read them; the map may be empty, but it must be given.
+     */
+    public Sbsh withNonSensitiveFrequent(Map<Pattern, Long> supports) {
+        this.nonSensitiveFrequent = new LinkedHashMap<>(supports);
         return this;
     }
 
     @Override
     public String name() {
-        return "SBSH-r" + radius;
+        return (support == Support.SEQUENCE_COUNT ? "SBSH-original-r" : "SBSH-r") + radius;
+    }
+
+    public int radius() {
+        return radius;
     }
 
     @Override
     public Sanitization run(HideProblem problem) {
-        Sanitization result = new Sanitization(problem.database()).method(name());
-        int sequenceCount = problem.database().size();
-        List<Pattern> sensitive = problem.sensitive();
-
-        int[][] support = new int[sensitive.size()][sequenceCount];
-        long[] total = new long[sensitive.size()];
-        for (int p = 0; p < sensitive.size(); p++) {
-            for (int s = 0; s < sequenceCount; s++) {
-                support[p][s] = SupportNO.of(sensitive.get(p), problem.database().get(s), problem.gap());
-                total[p] += support[p][s];
-            }
+        if (nonSensitiveFrequent == null) {
+            throw new IllegalStateException("SBSH needs the non-sensitive frequent patterns and their "
+                    + "supports (withNonSensitiveFrequent); without them Annotate colours every "
+                    + "position black and the run is not SBSH");
         }
-
-        long[] needed = new long[sensitive.size()];
-        if (problem.isDatabaseMode()) {
-            for (int p = 0; p < sensitive.size(); p++) {
-                needed[p] = Math.max(0, total[p] - problem.threshold() + 1);
-            }
+        if (support == Support.SEQUENCE_COUNT && !problem.isDatabaseMode()) {
+            throw new IllegalArgumentException("the sequence-count support of the paper is defined "
+                    + "for a database threshold only");
         }
-
-        for (int s = 0; s < sequenceCount; s++) {
-            if (problem.isDatabaseMode() && allSatisfied(needed)) {
-                break;
-            }
-            long[] here = new long[sensitive.size()];
-            for (int p = 0; p < sensitive.size(); p++) {
-                here[p] = problem.isDatabaseMode()
-                        ? Math.min(needed[p], support[p][s])
-                        : Math.max(0, support[p][s] - problem.threshold() + 1);
-            }
-            if (allSatisfied(here)) {
-                continue;
-            }
-            long[] removed = sanitiseSequence(problem, s, here, result);
-            for (int p = 0; p < sensitive.size(); p++) {
-                needed[p] = Math.max(0, needed[p] - removed[p]);
-            }
-        }
-        return result;
+        return new Run(problem).execute();
     }
 
-    private long[] sanitiseSequence(HideProblem problem, int sequenceIndex, long[] target,
-                                    Sanitization result) {
-        EventSequence sequence = problem.database().get(sequenceIndex);
-        NettreeCutIndex index = new NettreeCutIndex(sequence, problem.gap());
-        int sensitiveCount = problem.sensitive().size();
-        for (Pattern p : problem.sensitive()) {
-            index.add(p, true);
-        }
-        for (Pattern q : thresholdPatterns) {
-            index.add(q, false);
+    /** Units a sequence contributes to a support, given sup_NO of the pattern in that sequence. */
+    private long unit(int supNO) {
+        return support == Support.SEQUENCE_COUNT ? (supNO > 0 ? 1 : 0) : supNO;
+    }
+
+    /** State of one call to {@link #run}. */
+    private final class Run {
+
+        private final HideProblem problem;
+        private final SequenceDatabase database;
+        private final GapConstraint gap;
+        private final List<Pattern> sensitive;
+        private final List<Pattern> nonSensitive;
+        /** Current database support of every sensitive pattern. */
+        private final long[] sensitiveSupport;
+        /** Current database support of every non-sensitive frequent pattern. */
+        private final long[] nonSensitiveSupport;
+        private final Sanitization result;
+        /** For every carrying sequence: {non-sensitive pattern, sup_NO in that sequence} pairs. */
+        private final Map<Integer, List<int[]>> nonSensitiveHereOf = new HashMap<>();
+
+        Run(HideProblem problem) {
+            this.problem = problem;
+            this.database = problem.database();
+            this.gap = problem.gap();
+            this.sensitive = problem.sensitive();
+            this.nonSensitive = new ArrayList<>(nonSensitiveFrequent.keySet());
+            this.nonSensitiveSupport = new long[nonSensitive.size()];
+            for (int q = 0; q < nonSensitive.size(); q++) {
+                nonSensitiveSupport[q] = nonSensitiveFrequent.get(nonSensitive.get(q));
+            }
+            this.sensitiveSupport = new long[sensitive.size()];
+            this.result = new Sanitization(database).method(name());
         }
 
-        long[] removed = new long[target.length];
-        long[] remaining = target.clone();
-        while (!allSatisfied(remaining)) {
-            int[] colour = annotate(index, sensitiveCount, sequence.length());
-            int candidate = -1;
-            for (int p = 0; p < sensitiveCount && candidate < 0; p++) {
-                if (remaining[p] == 0) {
+        Sanitization execute() {
+            int n = database.size();
+            int[][] units = new int[sensitive.size()][n];
+            for (int p = 0; p < sensitive.size(); p++) {
+                for (int s = 0; s < n; s++) {
+                    units[p][s] = (int) unit(SupportNO.of(sensitive.get(p), database.get(s), gap));
+                    sensitiveSupport[p] += units[p][s];
+                }
+            }
+
+            List<Integer> carrying = new ArrayList<>();
+            Map<Integer, List<Integer>> supportedSensitive = new HashMap<>();
+            for (int s = 0; s < n; s++) {
+                List<Integer> ts = new ArrayList<>();
+                for (int p = 0; p < sensitive.size(); p++) {
+                    if (units[p][s] > 0) {
+                        ts.add(p);
+                    }
+                }
+                if (!ts.isEmpty()) {
+                    carrying.add(s);
+                    supportedSensitive.put(s, ts);
+                }
+            }
+
+            for (int s : excludeSbsh(carrying, supportedSensitive, units)) {
+                sanitise(s, supportedSensitive.get(s));
+            }
+            verify();
+            return result;
+        }
+
+        /**
+         * Exclude-SBSH: order, keep what the budget allows, and return the sequences to sanitise in
+         * that order. Under a per-sequence limit every sequence at or above the limit has to be
+         * sanitised, so only the order applies.
+         */
+        private List<Integer> excludeSbsh(List<Integer> carrying, Map<Integer, List<Integer>> ts,
+                                          int[][] units) {
+            Map<Integer, long[]> key = new HashMap<>();
+            for (int s : carrying) {
+                EventSequence sequence = database.get(s);
+                List<int[]> here = new ArrayList<>();
+                for (int q = 0; q < nonSensitive.size(); q++) {
+                    int value = SupportNO.of(nonSensitive.get(q), sequence, gap);
+                    if (value > 0) {
+                        here.add(new int[] {q, value});
+                    }
+                }
+                nonSensitiveHereOf.put(s, here);
+                key.put(s, new long[] {here.size(), cover(sequence, ts.get(s)).cost()});
+            }
+            List<Integer> order = new ArrayList<>(carrying);
+            order.sort(Comparator.<Integer>comparingLong(s -> -key.get(s)[0])
+                    .thenComparingLong(s -> -key.get(s)[1])
+                    .thenComparing(Comparator.<Integer>reverseOrder()));
+
+            List<Integer> toSanitise = new ArrayList<>();
+            if (!problem.isDatabaseMode()) {
+                for (int s : order) {
+                    for (int p : ts.get(s)) {
+                        if (units[p][s] >= problem.threshold()) {
+                            toSanitise.add(s);
+                            break;
+                        }
+                    }
+                }
+                return toSanitise;
+            }
+            long budget = problem.threshold() - 1L;
+            long[] kept = new long[sensitive.size()];
+            for (int s : order) {
+                boolean fits = true;
+                for (int p : ts.get(s)) {
+                    fits &= kept[p] + units[p][s] <= budget;
+                }
+                if (fits) {
+                    for (int p : ts.get(s)) {
+                        kept[p] += units[p][s];
+                    }
+                } else {
+                    toSanitise.add(s);
+                }
+            }
+            return toSanitise;
+        }
+
+        private Cover cover(EventSequence sequence, List<Integer> supported) {
+            return Sbsh.this.cover(sequence, supported, sensitive);
+        }
+
+        /** Steps 3 to 39 of Algorithm 5 for one sequence. */
+        private void sanitise(int s, List<Integer> supported) {
+            Sequence t = new Sequence(s, supported);
+            Cover cover = cover(t.original, supported);
+            int[] colour = t.annotateAll();
+            List<Integer> positions = cover.positions();
+
+            int i = 0;
+            while (i < positions.size() && t.maxUpdatedSupport() >= problem.threshold()) {
+                int position = positions.get(i);
+                if (!t.isValid(position)) {
+                    i++;
                     continue;
                 }
-                candidate = pick(index, p, colour, BLACK);
-                if (candidate < 0) {
-                    int red = pick(index, p, colour, RED);
-                    if (red >= 0) {
-                        List<Integer> replacement = replace(index, p, red, colour);
-                        if (!replacement.isEmpty()) {
-                            for (int position : replacement) {
-                                applyMask(index, position, sequenceIndex, remaining, removed, result);
-                            }
-                            candidate = Integer.MIN_VALUE;
-                        } else {
-                            candidate = red;
+                if (colour[position] == BLACK) {
+                    t.mask(position);
+                    i++;
+                } else if (colour[position] == RED) {
+                    Set<Integer> alternatives = new LinkedHashSet<>();
+                    for (Set<Integer> subset : cover.subsets()) {
+                        if (t.hasSingleNodePath(subset, position)) {
+                            break;
+                        }
+                        alternatives.addAll(t.replace(position, subset, colour, radius));
+                    }
+                    if (alternatives.isEmpty()) {
+                        t.mask(position);
+                        i++;
+                    } else {
+                        for (int alternative : alternatives) {
+                            t.mask(alternative);
+                        }
+                    }
+                } else {
+                    int again = t.annotate(position);
+                    if (again == GRAY) {
+                        t.mask(position);
+                        i++;
+                    } else {
+                        colour[position] = again;
+                    }
+                }
+            }
+            t.commit();
+        }
+
+        /** Post-condition: every sensitive pattern is below the threshold. A failure is a bug. */
+        private void verify() {
+            SequenceDatabase after = result.sanitized();
+            for (Pattern p : sensitive) {
+                if (problem.isDatabaseMode()) {
+                    long total = 0;
+                    for (int s = 0; s < after.size(); s++) {
+                        total += unit(SupportNO.of(p, after.get(s), gap));
+                    }
+                    if (total >= problem.threshold()) {
+                        throw new IllegalStateException(name() + " left the support of " + p + " at "
+                                + total + ", threshold " + problem.threshold());
+                    }
+                } else {
+                    for (int s = 0; s < after.size(); s++) {
+                        int here = SupportNO.of(p, after.get(s), gap);
+                        if (here >= problem.threshold()) {
+                            throw new IllegalStateException(name() + " left sup_NO(" + p + ") = "
+                                    + here + " in sequence " + s + ", limit " + problem.threshold());
                         }
                     }
                 }
             }
-            if (candidate == Integer.MIN_VALUE) {
-                continue;
-            }
-            if (candidate < 0) {
-                break;
-            }
-            applyMask(index, candidate, sequenceIndex, remaining, removed, result);
         }
-        return removed;
+
+        /** One sequence while it is being sanitised: its index, its marks and the supports they move. */
+        private final class Sequence {
+
+            final int index;
+            final EventSequence original;
+            final NettreeCutIndex nettrees;
+            /** Index ids of the supported sensitive patterns, in the order of {@code supported}. */
+            final int[] sensitiveId;
+            final int[] sensitivePattern;
+            /** Non-sensitive frequent patterns this sequence supports, and their index ids. */
+            final List<Integer> nonSensitiveHere = new ArrayList<>();
+            final Map<Integer, Integer> nonSensitiveId = new HashMap<>();
+            final Map<Integer, Integer> nonSensitiveUnitAtStart = new HashMap<>();
+            final int[] sensitiveUnitAtStart;
+            final Set<Integer> marked = new TreeSet<>();
+            private int version;
+            private final Map<Integer, int[]> vitalCache = new HashMap<>();
+            private final Map<Integer, Integer> vitalVersion = new HashMap<>();
+            private final Map<Integer, PathCounts> countsCache = new HashMap<>();
+            private final Map<Integer, Integer> countsVersion = new HashMap<>();
+
+            Sequence(int index, List<Integer> supported) {
+                this.index = index;
+                this.original = database.get(index);
+                this.nettrees = new NettreeCutIndex(original, gap);
+                this.sensitivePattern = supported.stream().mapToInt(Integer::intValue).toArray();
+                this.sensitiveId = new int[sensitivePattern.length];
+                this.sensitiveUnitAtStart = new int[sensitivePattern.length];
+                for (int k = 0; k < sensitivePattern.length; k++) {
+                    sensitiveId[k] = nettrees.add(sensitive.get(sensitivePattern[k]), true);
+                    sensitiveUnitAtStart[k] = (int) unit(nettrees.supNO(sensitiveId[k]));
+                }
+                for (int[] pair : nonSensitiveHereOf.get(index)) {
+                    int q = pair[0];
+                    int here = pair[1];
+                    nonSensitiveHere.add(q);
+                    int u = (int) unit(here);
+                    nonSensitiveUnitAtStart.put(q, u);
+                    // Only a pattern whose support can sit exactly at the threshold while this
+                    // sequence is marked can turn a position red, so only those enter the index.
+                    long now = nonSensitiveSupport[q];
+                    long threshold = problem.frequentThreshold();
+                    if (now >= threshold && now - u <= threshold) {
+                        nonSensitiveId.put(q, nettrees.add(nonSensitive.get(q), false));
+                    }
+                }
+            }
+
+            /** Annotate-T: every position carrying a symbol of a supported sensitive pattern. */
+            int[] annotateAll() {
+                Set<Integer> symbols = new java.util.HashSet<>();
+                for (int p : sensitivePattern) {
+                    for (int item : sensitive.get(p).items()) {
+                        symbols.add(item);
+                    }
+                }
+                int[] colour = new int[original.length()];
+                Arrays.fill(colour, NOT_ANNOTATED);
+                for (int i = 0; i < original.length(); i++) {
+                    if (symbols.contains(original.at(i))) {
+                        colour[i] = annotate(i);
+                    }
+                }
+                return colour;
+            }
+
+            /** Algorithm 2, with the supports computed as if the marked positions were removed. */
+            int annotate(int position) {
+                int symbol = original.at(position);
+                boolean atThreshold = false;
+                for (Map.Entry<Integer, Integer> e : nonSensitiveId.entrySet()) {
+                    Pattern q = nonSensitive.get(e.getKey());
+                    if (!contains(q, symbol)) {
+                        continue;
+                    }
+                    int id = e.getValue();
+                    long updated = nonSensitiveSupport[e.getKey()]
+                            - (nonSensitiveUnitAtStart.get(e.getKey()) - unit(nettrees.supNO(id)));
+                    if (updated != problem.frequentThreshold()) {
+                        continue;
+                    }
+                    atThreshold = true;
+                    if (lowers(id, position)) {
+                        return RED;
+                    }
+                }
+                return atThreshold ? GRAY : BLACK;
+            }
+
+            /** True when masking the position lowers the support units of index pattern {@code id}. */
+            private boolean lowers(int id, int position) {
+                int now = nettrees.supNO(id);
+                if (now == 0 || marked.contains(position)) {
+                    return false;
+                }
+                int after;
+                if (nettrees.pattern(id).hasDistinctItems()) {
+                    // A position carries at most one node, and it lowers sup_NO exactly when that
+                    // node lies on every maximum family of disjoint paths.
+                    after = Arrays.binarySearch(vital(id), position) >= 0 ? now - 1 : now;
+                } else {
+                    Set<Integer> trial = new TreeSet<>(marked);
+                    trial.add(position);
+                    after = SupportNO.of(nettrees.pattern(id), original.mask(trial), gap);
+                }
+                return unit(after) < unit(now);
+            }
+
+            private int[] vital(int id) {
+                Integer seen = vitalVersion.get(id);
+                if (seen == null || seen != version) {
+                    vitalCache.put(id, nettrees.vitalPositions(id));
+                    vitalVersion.put(id, version);
+                }
+                return vitalCache.get(id);
+            }
+
+            /** Max-updated-support: the largest current support over the supported sensitive patterns. */
+            long maxUpdatedSupport() {
+                long max = 0;
+                for (int k = 0; k < sensitiveId.length; k++) {
+                    long now = unit(nettrees.supNO(sensitiveId[k]));
+                    long value = problem.isDatabaseMode()
+                            ? sensitiveSupport[sensitivePattern[k]] - (sensitiveUnitAtStart[k] - now)
+                            : nettrees.supNO(sensitiveId[k]);
+                    max = Math.max(max, value);
+                }
+                return max;
+            }
+
+            /** A position still carries a node on a complete path of some supported sensitive pattern. */
+            boolean isValid(int position) {
+                if (marked.contains(position)) {
+                    return false;
+                }
+                for (int id : sensitiveId) {
+                    if (nettrees.occurrencesThrough(id, position) > 0) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            /** Update-paths: mark the position and remove it from every Nettree of the index. */
+            void mask(int position) {
+                if (marked.add(position)) {
+                    nettrees.maskPosition(position);
+                    result.mask(index, position);
+                    version++;
+                }
+            }
+
+            /** True when a sensitive pattern of the subset has a one-node complete path at the position. */
+            boolean hasSingleNodePath(Set<Integer> subset, int position) {
+                for (int k : subset) {
+                    int id = sensitiveId[k];
+                    if (nettrees.pattern(id).length() == 1
+                            && nettrees.occurrencesThrough(id, position) > 0) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            /** Replace: the smaller of C-PA and C-SA; an empty set means neither found one. */
+            List<Integer> replace(int position, Set<Integer> subset, int[] colour, int r) {
+                List<Integer> before = directed(position, subset, colour, r, true);
+                List<Integer> after = directed(position, subset, colour, r, false);
+                if (before.isEmpty()) {
+                    return after;
+                }
+                if (after.isEmpty()) {
+                    return before;
+                }
+                return before.size() <= after.size() ? before : after;
+            }
+
+            /**
+             * C-PA ({@code preceding} true) or C-SA: for k = 1, ..., r, the positions of the nodes k
+             * edges before (after) every node of the position on a complete path of a pattern of the
+             * subset. The first k at which that layer is non-empty and entirely black is returned.
+             */
+            private List<Integer> directed(int position, Set<Integer> subset, int[] colour, int r,
+                                           boolean preceding) {
+                for (int k = 1; k <= r; k++) {
+                    Set<Integer> layer = new TreeSet<>();
+                    boolean usable = true;
+                    boolean anyNode = false;
+                    for (int s : subset) {
+                        int id = sensitiveId[s];
+                        Nettree nettree = nettrees.nettree(id);
+                        for (int v : nettree.nodesAtPosition(position)) {
+                            if (!alive(id, v)) {
+                                continue;
+                            }
+                            anyNode = true;
+                            int target = nettree.level(v) + (preceding ? -k : k);
+                            if (target < 0 || target >= nettree.pattern().length()) {
+                                usable = false;
+                                continue;
+                            }
+                            for (int u : reachable(id, v, k, preceding)) {
+                                int p = nettree.position(u);
+                                if (colour[p] != BLACK) {
+                                    usable = false;
+                                }
+                                layer.add(p);
+                            }
+                        }
+                    }
+                    if (!anyNode) {
+                        return List.of();
+                    }
+                    if (usable && !layer.isEmpty()) {
+                        return new ArrayList<>(layer);
+                    }
+                }
+                return List.of();
+            }
+
+            /** The nodes exactly k edges before (after) v, through nodes still on a complete path. */
+            private Set<Integer> reachable(int id, int v, int k, boolean preceding) {
+                Nettree nettree = nettrees.nettree(id);
+                Set<Integer> frontier = new TreeSet<>(List.of(v));
+                for (int step = 0; step < k; step++) {
+                    Set<Integer> next = new TreeSet<>();
+                    ArrayDeque<Integer> queue = new ArrayDeque<>(frontier);
+                    while (!queue.isEmpty()) {
+                        int x = queue.poll();
+                        for (int y : preceding ? nettree.in(x) : nettree.out(x)) {
+                            if (alive(id, y)) {
+                                next.add(y);
+                            }
+                        }
+                    }
+                    frontier = next;
+                }
+                return frontier;
+            }
+
+            /** A node is in the matching graph while it lies on a complete path (Update-paths). */
+            private boolean alive(int id, int v) {
+                if (nettrees.flow(id).isRemoved(v)) {
+                    return false;
+                }
+                Integer seen = countsVersion.get(id);
+                if (seen == null || seen != version) {
+                    countsCache.put(id, PathCounts.of(nettrees.nettree(id), nettrees.flow(id).removedFlags()));
+                    countsVersion.put(id, version);
+                }
+                return countsCache.get(id).through(v) > 0;
+            }
+
+            /** Step 39 and the bookkeeping after it: the marks become deletions of this sequence. */
+            void commit() {
+                for (int k = 0; k < sensitiveId.length; k++) {
+                    long now = unit(nettrees.supNO(sensitiveId[k]));
+                    sensitiveSupport[sensitivePattern[k]] -= sensitiveUnitAtStart[k] - now;
+                }
+                if (marked.isEmpty()) {
+                    return;
+                }
+                EventSequence after = original.mask(marked);
+                Set<Integer> maskedSymbols = new java.util.HashSet<>();
+                for (int position : marked) {
+                    maskedSymbols.add(original.at(position));
+                }
+                for (int q : nonSensitiveHere) {
+                    Pattern pattern = nonSensitive.get(q);
+                    boolean touched = false;
+                    for (int item : pattern.items()) {
+                        touched |= maskedSymbols.contains(item);
+                    }
+                    if (!touched) {
+                        continue;
+                    }
+                    Integer id = nonSensitiveId.get(q);
+                    int nowNO = id != null ? nettrees.supNO(id) : SupportNO.of(pattern, after, gap);
+                    nonSensitiveSupport[q] -= nonSensitiveUnitAtStart.get(q) - unit(nowNO);
+                }
+            }
+        }
     }
 
-    private void applyMask(NettreeCutIndex index, int position, int sequenceIndex,
-                           long[] remaining, long[] removed, Sanitization result) {
-        int[] drop = index.maskPosition(position);
-        result.mask(sequenceIndex, position);
-        for (int p = 0; p < remaining.length; p++) {
-            remaining[p] = Math.max(0, remaining[p] - drop[p]);
-            removed[p] += drop[p];
-        }
-    }
-
-    /** Annotate: one colour per position of the sequence. */
-    private int[] annotate(NettreeCutIndex index, int sensitiveCount, int length) {
-        int[] colour = new int[length];
-        for (int p = 0; p < sensitiveCount; p++) {
-            for (int position : index.vitalPositions(p)) {
-                colour[position] = BLACK;
-            }
-        }
-        for (int q = sensitiveCount; q < index.patternCount(); q++) {
-            for (int position : index.vitalPositions(q)) {
-                colour[position] = RED;
-            }
-        }
-        return colour;
-    }
-
-    /** The first position of the wanted colour whose masking lowers the support of pattern p. */
-    private int pick(NettreeCutIndex index, int patternId, int[] colour, int wanted) {
-        for (int position : index.vitalPositions(patternId)) {
-            if (!index.isMasked(position) && colour[position] == wanted) {
-                return position;
-            }
-        }
-        return -1;
+    /** Candidates-SBSH: the greedy cover of Algorithm 1, flattened into P, with the subsets S_j. */
+    record Cover(long cost, List<Integer> positions, List<Set<Integer>> subsets) {
     }
 
     /**
-     * Replace: a set of black positions that cuts every complete path through the red position.
-     * Every complete path through a node at level j also passes through some node of each other
-     * level, so taking every position that carries a level-k node on a path through the red node
-     * cuts them all. The level k is chosen within the radius and at the lowest cost in positions;
-     * a level holding a position that is not black is rejected, which is the point of the colouring.
+     * Algorithm 1 (Cost) and Candidates-SBSH in one pass. Every distinct symbol of a supported
+     * sensitive pattern covers the patterns containing it and weighs its number of occurrences in
+     * the sequence; the symbol with the least weight per covered pattern is taken until every
+     * supported pattern is covered. P lists the positions of the chosen symbols, ordered by the size
+     * of the subset they cover (descending), then by the order of choice, then by position.
      *
-     * @return the positions to mask instead of the red one, empty when the radius holds nothing usable
+     * @param supported the supported sensitive patterns as indices into {@code sensitive}; the
+     *     subsets hold indices into this list
      */
-    private List<Integer> replace(NettreeCutIndex index, int patternId, int redPosition, int[] colour) {
-        Nettree nettree = index.nettree(patternId);
-        int redLevel = -1;
-        for (int v : nettree.nodesAtPosition(redPosition)) {
-            redLevel = nettree.level(v);
-        }
-        if (redLevel < 0) {
-            return List.of();
-        }
-        List<Integer> best = null;
-        for (int level = 0; level < nettree.pattern().length(); level++) {
-            if (level == redLevel || Math.abs(level - redLevel) > radius) {
+    private Cover cover(EventSequence sequence, List<Integer> supported, List<Pattern> sensitive) {
+        Map<Integer, Set<Integer>> covers = new LinkedHashMap<>();
+        Map<Integer, Integer> firstOccurrence = new HashMap<>();
+        Map<Integer, Integer> weight = new HashMap<>();
+        for (int i = 0; i < sequence.length(); i++) {
+            int item = sequence.at(i);
+            if (item == EventSequence.MASK) {
                 continue;
             }
-            List<Integer> positions = new ArrayList<>();
-            boolean usable = true;
-            for (int v = 0; v < nettree.nodeCount() && usable; v++) {
-                if (nettree.level(v) != level || index.flow(patternId).isRemoved(v)) {
-                    continue;
-                }
-                if (index.occurrencesThrough(patternId, nettree.position(v)) == 0) {
-                    continue;
-                }
-                int position = nettree.position(v);
-                if (colour[position] != BLACK) {
-                    usable = false;
-                } else if (!positions.contains(position)) {
-                    positions.add(position);
-                }
-            }
-            if (usable && !positions.isEmpty() && (best == null || positions.size() < best.size())) {
-                best = positions;
+            weight.merge(item, 1, Integer::sum);
+            firstOccurrence.putIfAbsent(item, i);
+        }
+        for (int k = 0; k < supported.size(); k++) {
+            for (int item : sensitive.get(supported.get(k)).items()) {
+                covers.computeIfAbsent(item, x -> new TreeSet<>()).add(k);
             }
         }
-        return best == null ? List.of() : best;
+        Set<Integer> covered = new TreeSet<>();
+        List<Integer> chosen = new ArrayList<>();
+        long cost = 0;
+        while (covered.size() < supported.size()) {
+            int best = -1;
+            double bestRatio = Double.POSITIVE_INFINITY;
+            for (Map.Entry<Integer, Set<Integer>> e : covers.entrySet()) {
+                int item = e.getKey();
+                if (chosen.contains(item) || covered.containsAll(e.getValue())
+                        || !weight.containsKey(item)) {
+                    continue;
+                }
+                double ratio = (double) weight.get(item) / e.getValue().size();
+                if (ratio < bestRatio || (ratio == bestRatio && best >= 0
+                        && firstOccurrence.get(item) < firstOccurrence.get(best))) {
+                    bestRatio = ratio;
+                    best = item;
+                }
+            }
+            if (best < 0) {
+                throw new IllegalStateException("a supported sensitive pattern has a symbol that "
+                        + "does not occur in the sequence");
+            }
+            chosen.add(best);
+            cost += weight.get(best);
+            covered.addAll(covers.get(best));
+        }
+        List<Integer> byCoverSize = new ArrayList<>(chosen);
+        byCoverSize.sort(Comparator.comparingInt((Integer item) -> -covers.get(item).size()));
+        List<Integer> positions = new ArrayList<>();
+        List<Set<Integer>> subsets = new ArrayList<>();
+        for (int item : byCoverSize) {
+            subsets.add(covers.get(item));
+            for (int i = 0; i < sequence.length(); i++) {
+                if (sequence.at(i) == item) {
+                    positions.add(i);
+                }
+            }
+        }
+        return new Cover(cost, positions, subsets);
     }
 
-    private static boolean allSatisfied(long[] remaining) {
-        for (long value : remaining) {
-            if (value > 0) {
-                return false;
+    /**
+     * Replace on one sequence and one sensitive pattern under a given annotation, without the rest
+     * of the procedure. It exists so that the paper's Example 3 can be checked on its own.
+     */
+    static List<Integer> replaceOn(int radius, EventSequence sequence, GapConstraint gap,
+                                   Pattern pattern, int position, int[] colour) {
+        Sbsh sbsh = new Sbsh(radius, Support.SEQUENCE_COUNT).withNonSensitiveFrequent(Map.of());
+        HideProblem problem = new HideProblem(new SequenceDatabase(List.of(sequence)),
+                List.of(pattern), gap, HideProblem.Mode.HIDE_DB, 1, 0.5, pattern.length());
+        Run run = sbsh.new Run(problem);
+        run.nonSensitiveHereOf.put(0, List.of());
+        Run.Sequence t = run.new Sequence(0, List.of(0));
+        return t.replace(position, Set.of(0), colour, radius);
+    }
+
+    private static boolean contains(Pattern pattern, int item) {
+        for (int x : pattern.items()) {
+            if (x == item) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }

@@ -159,3 +159,71 @@ phải SBSH của [R3]**.
 
 Dù chọn gì, phải làm **trước** khi chạy SC3 lấy số vào bài, và nếu sửa `preregistration.md` thì
 đó là một commit riêng ghi rõ lý do, theo đúng đoạn đầu của tệp đó.
+
+---
+
+## 6. Cập nhật 25/09/2026 — đã sửa theo phương án 1 (sửa cho đúng bài)
+
+Người viết chọn phương án 1. `baseline/Sbsh.java` viết lại theo Thuật toán 5, cùng Thuật toán 1
+(Cost, dùng cho Candidates-SBSH và cho thứ tự của Exclude-SBSH), Thuật toán 2 (Annotate) và
+C-PA, C-SA, Replace của mục 4.3. Bảng ở mục 5 trên đây mô tả bản cài **trước** ngày này; cả năm
+điểm nay đã theo bài:
+
+| # | Điểm | Bản cài từ 25/09 |
+|---|---|---|
+| 1 | Nhãn xám | Theo Thuật toán 2 (xám = có mẫu không nhạy cảm nằm đúng ngưỡng nhưng xoá vị trí này không làm nó tụt); nhánh xám của Thuật toán 5 (tô màu lại rồi mới xoá) đã có |
+| 2 | Bán kính đếm theo cung | Giữ nguyên, đúng |
+| 2b | Miền r | `sbsh-rmax` lấy độ dài mẫu nhạy cảm dài nhất của tập, không lấy ℓ_max |
+| 3 | C-PA / C-SA / Replace | Mỗi phía tăng k từ 1, dừng ở k đầu tiên tìm được; Replace lấy tập nhỏ hơn |
+| 4 | Exclude-SBSH | Đã có (xem điểm mới dưới đây) |
+
+**Phát hiện mới khi đọc lại toàn văn: bài tự mâu thuẫn về Exclude-SBSH.** Mục 5.2.2 viết
+nguyên văn: "a variant of Algorithm 3 that removes the transaction that supports the largest
+number of sensitive sequences from D_S, breaking ties arbitrarily if many transactions have the
+same sanitization cost". Mục 5.2.3 giải thích lựa chọn trong ví dụ bằng mẫu **không** nhạy cảm:
+"Although both T1 and T2 have a sanitization cost of 1 [...] T2 supports fewer nonsensitive
+frequent sequences. [...] SBSH selects this transaction instead of T1." Tính tay trên Hình 1:
+
+- đọc theo số mẫu **nhạy cảm**, T7 (hỗ trợ 2 mẫu nhạy cảm) được làm sạch trước T8, nên T7 mất
+  d và f thành `* * h h h`, trái với Hình 1(f) in `d f * * *`;
+- đọc theo số mẫu **không nhạy cảm** (giảm dần), rồi Cost (giảm dần, như Thuật toán 3), rồi chỉ
+  số chuỗi, thì ra đúng Hình 1(f) và đúng tác dụng phụ ở Hình 4(b).
+
+Bản cài theo cách đọc thứ hai. Thứ tự cuối cùng (chỉ số chuỗi) bài để "tuỳ ý"; chọn giảm dần thì
+tái tạo đúng Hình 1(f), chọn tăng dần thì T2 và T3 đổi vai — cả hai đều đúng với bài.
+
+**Những chỗ bài để ngỏ và cách đã chọn** (ghi cả trong Javadoc của lớp):
+
+1. "P[i] = ∅" đọc là hết mảng P; vị trí không còn nút nào trên đường đầy đủ thì bỏ qua.
+2. Thuật toán 5 chỉ xử lý vị trí xám **vẫn** xám khi tô lại. Tô lại ra đen hoặc đỏ thì cập nhật
+   nhãn và để vòng sau xử lý theo nhánh đó (nếu không, vòng lặp đứng yên mãi).
+3. C-PA/C-SA ở khoảng cách k lấy **cả tầng** cách k cung, chỉ gồm nút còn trên đường đầy đủ, và
+   nhận khi mọi vị trí trong tầng mang nhãn đen. Hoà giữa C-PA và C-SA thì lấy C-PA.
+4. Hoà trong phủ tập tham lam: ký hiệu xuất hiện trước trong chuỗi — tái tạo đúng Ví dụ 1.
+
+**Bằng chứng** (`src/test/java/hidenosp/baseline/SbshPaperExampleTest.java`), chạy ở chế độ
+`SEQUENCE_COUNT` tức bài toán của chính bài báo, không có khoảng cách tối đa:
+
+- Hình 1(f): đúng các vị trí bị che {T2: 0; T6: 0; T7: 2, 3, 4; T8: 1}, khoảng cách 6 (Hình 4(b));
+- Hình 4(b): đúng ba tác dụng phụ ⟨a,c⟩, ⟨a,e⟩, ⟨d,g⟩;
+- Ví dụ 3 / Hình 2(e): Replace(3, G, 1) = {4, 5, 6}, Replace(3, G, 2) = {0, 1};
+- hai ca tự dựng (không có trong bài) cho nhánh xám và cho "tính độ hỗ trợ như thể các vị trí đã
+  đánh dấu đã bị xoá" dưới sup_NO.
+
+Tiêm lỗi: 10 lỗi (khoá sắp xếp của Exclude-SBSH, thứ tự hoà, bỏ điều kiện đen của Replace, lấy
+tập lớn hơn, Annotate đọc độ hỗ trợ ban đầu, bỏ tô màu lại, đếm theo số chuỗi ở chế độ sup_NO,
+không bao giờ thay vị trí đỏ, tô màu lại bỏ qua các vị trí đã đánh dấu, C-SA tìm sai hướng) —
+bắt được 10/10. Ví dụ của bài không có vị trí xám nào nên hai lỗi về nhánh xám chỉ bị bắt sau
+khi thêm hai ca tự dựng.
+
+**Chuyển sang sup_NO** (bản SC3 dùng): chỉ thay hàm độ hỗ trợ ở ba chỗ bài đọc độ hỗ trợ — ngân
+sách giữ lại của Exclude-SBSH (tổng sup_NO của các chuỗi được giữ ≤ σ − 1 cho mỗi mẫu nhạy cảm),
+phép so ngưỡng của Annotate, và điều kiện lặp. Phép sửa là che thay cho xoá, như mọi phương pháp.
+
+**Họ Holm giữ nguyên bốn phần tử** (HHA, DBSH, SBSH-r1, SBSH-rmax) như `preregistration.md` §2;
+không phải sửa bản chốt.
+
+**Còn lại, không thuộc SBSH nhưng lộ ra khi làm việc này:** `Dbsh` tính Cost bằng tổng, theo từng
+mẫu, số vị trí trên đường của ký hiệu rẻ nhất — **không** phải Thuật toán 1 (phủ tập tham lam,
+trọng số là số lần xuất hiện của ký hiệu trong chuỗi). Hai đường cơ sở của cùng một bài đang
+dùng hai hàm Cost khác nhau; phải đối chiếu DBSH với Thuật toán 3–4 trước khi chạy SC3 lấy số.

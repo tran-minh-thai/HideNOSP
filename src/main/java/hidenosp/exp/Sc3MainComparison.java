@@ -195,10 +195,11 @@ public final class Sc3MainComparison implements Scenario {
                 return new Dbsh();
             case "sbsh":
             case "sbsh-r1":
-                return new Sbsh(1).withThresholdPatterns(atThreshold(problem, frequent, sigma));
+                return new Sbsh(1).withNonSensitiveFrequent(nonSensitiveFrequent(problem, frequent));
             case "sbsh-rmax":
-                return new Sbsh(problem.maxPatternLength())
-                        .withThresholdPatterns(atThreshold(problem, frequent, sigma));
+                // The paper takes r in [1, length of the longest sensitive pattern], not l_max.
+                return new Sbsh(longestSensitive(problem))
+                        .withNonSensitiveFrequent(nonSensitiveFrequent(problem, frequent));
             case "primal-dual":
                 // Chi chay khi sigma = 1; voi sigma khac no nem loi noi ro vi sao, khong im lang
                 // tut xuong mot bien the khac.
@@ -215,18 +216,28 @@ public final class Sc3MainComparison implements Scenario {
     }
 
     /**
-     * The non-sensitive patterns whose support sits exactly at the threshold. Annotate of SBSH
-     * colours a position red when removing it would push one of these below sigma.
+     * F_sigma(D) without the sensitive patterns and their super-patterns, with sup_NO(Q, D). SBSH
+     * needs all of them, not only those at the threshold: its Annotate reads the current support,
+     * and a pattern above sigma at the start can sit exactly at sigma once earlier sequences have
+     * been sanitised.
      */
-    private List<Pattern> atThreshold(HideProblem problem, Map<Pattern, Long> frequent, int sigma) {
+    private Map<Pattern, Long> nonSensitiveFrequent(HideProblem problem, Map<Pattern, Long> frequent) {
         Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
-        List<Pattern> out = new ArrayList<>();
+        Map<Pattern, Long> out = new LinkedHashMap<>();
         for (Map.Entry<Pattern, Long> e : frequent.entrySet()) {
-            if (!closure.contains(e.getKey()) && e.getValue() == sigma) {
-                out.add(e.getKey());
+            if (!closure.contains(e.getKey())) {
+                out.put(e.getKey(), e.getValue());
             }
         }
         return out;
+    }
+
+    private static int longestSensitive(HideProblem problem) {
+        int longest = 1;
+        for (Pattern p : problem.sensitive()) {
+            longest = Math.max(longest, p.length());
+        }
+        return longest;
     }
 
     private List<List<Pattern>> sampleSensitiveSets(Map<Pattern, Long> frequent, int count, int size,

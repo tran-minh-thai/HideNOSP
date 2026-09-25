@@ -233,7 +233,7 @@ cỡ heap tối đa.
 | Kiểm B_ε rỗng báo lỗi | `hide.CutHide.requireNonEmptyBand` | Chốt ở `protocol.yaml` dòng 2 |
 | Baseline tầng (b): HHA | `baseline.Hha` | [R20]; hai cách tính δ cho SC6 |
 | Baseline tầng (b): DBSH | `baseline.Dbsh` | [R3]; Cost theo ký hiệu, Exclude, Update-paths |
-| Baseline tầng (b): SBSH | `baseline.Sbsh` | [R3]; **cài lại từ mô tả, phải đối chiếu [R3] trước khi dùng số** |
+| Baseline tầng (b): SBSH | `baseline.Sbsh` | [R3], Thuật toán 5 kèm 1–3 và mục 4.3; tái tạo đúng Hình 1(f), Hình 4(b) và Ví dụ 3 của bài (`SbshPaperExampleTest`). Chỗ bài để ngỏ: `config/doi_chieu_sbsh_r3.md` mục 6 |
 | Baseline tầng (c): bộ giải chính xác | `baseline.IlpExact` | Nhánh-cận, thực thể nhỏ; tuỳ chọn cực tiểu mẫu mất |
 | Tải bộ dữ liệu kèm tổng kiểm | `tools/fetch_datasets.py` | §11.2 |
 | SC1, SC2, SC3 | `exp.Sc1…`, `exp.Sc2…`, `exp.Sc3…` | Chạy được |
@@ -242,8 +242,8 @@ cỡ heap tối đa.
 
 | Việc | Nơi | Chặn kịch bản nào |
 |---|---|---|
-| Đối chiếu SBSH với Thuật toán 2 và 3 của [R3] | `baseline.Sbsh` | SC3, SC7, SC8 |
-| Bản gốc của HHA, DBSH, SBSH trên bài toán cũ (độ hỗ trợ theo số chuỗi) | `baseline.Hha`, `Dbsh` (cờ `originalProblem`), `Sbsh` | SC8 |
+| Đối chiếu DBSH và HHA với bài gốc: DBSH còn dùng hàm Cost khác Thuật toán 1 của [R3] (tổng số vị trí trên đường của ký hiệu rẻ nhất theo từng mẫu, thay cho phủ tập tham lam) | `baseline.Dbsh`, `baseline.Hha` | SC3, SC8 |
+| Bản gốc của HHA, DBSH trên bài toán cũ (độ hỗ trợ theo số chuỗi); SBSH đã có (`Sbsh.Support.SEQUENCE_COUNT`) | `baseline.Hha`, `Dbsh` (cờ `originalProblem`) | SC8 |
 | Giải thuật di truyền, bản thuần và bản lai khởi tạo từ lát cắt | `baseline.GaHybrid` | SC3 (tầng c) |
 | SC4, SC5, SC6, SC7, SC8 | `exp.Sc4…` đến `exp.Sc8…` | chính nó |
 | Đối chiếu với NETGAP của [R1] | `exp.Sc1ImplementationCheck` | SC1 (phần còn thiếu) |

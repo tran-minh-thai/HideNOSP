@@ -1,0 +1,150 @@
+# run 20260925-150114-863_dev_2960d00946cc_s2026
+# host unknown-host
+# jdk 26.0.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# kind PROBE
+# scenario SC3
+# options {probe=true, dataset=datasets/sepsis.txt, format=SPMF, sigma=300, gmin=0, gmax=1, maxPatternLength=4, epsilon=0.5, seed=2026, sensitiveSize=1, setsPerStratum=4, patternKind=repeated, methods=cut-hide,cut-hide-weight,cut-hide-sweep,hha,dbsh,sbsh-r1,sbsh-rmax}
+# sensitive sets: size 1, repeated-item pool 25 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 5 -> 4, p30: 5 -> 4, p50: 5 -> 4, p70: 5 -> 4, p90: 5 -> 4
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9, 2]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000394,0.001327,6,6,1.000000,6,6,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9, 2]]",p10,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,0,0.000000,0,0.000920,0.001642,14,6,2.333333,10,10,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9, 2]]",p10,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,0,0.000000,0,0.000986,0.001510,15,6,2.500000,13,13,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9, 2]]",p10,hha,HHA,,0.000000,1,0.010638,0,0.001052,0.003848,16,6,2.666667,0,0,0,,95,94,93
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9, 2]]",p10,dbsh,DBSH,,0.000000,0,0.000000,0,0.001183,0.002936,18,6,3.000000,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9, 2]]",p10,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.001249,0.003533,19,6,3.166667,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9, 2]]",p10,sbsh-rmax,SBSH-r4,,0.000000,0,0.000000,0,0.001249,0.003533,19,6,3.166667,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 9]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000789,0.002936,12,12,1.000000,11,11,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 9]]",p10,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,0,0.000000,0,0.001709,0.003136,26,12,2.166667,20,20,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 9]]",p10,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,0,0.000000,0,0.001512,0.002936,23,12,1.916667,20,20,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 9]]",p10,hha,HHA,,0.000000,0,0.000000,0,0.001512,0.004761,23,12,1.916667,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 9]]",p10,dbsh,DBSH,,0.000000,0,0.000000,0,0.001512,0.005508,23,12,1.916667,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 9]]",p10,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.001577,0.005242,24,12,2.000000,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 9]]",p10,sbsh-rmax,SBSH-r4,,0.000000,0,0.000000,0,0.001577,0.005242,24,12,2.000000,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 9, 2, 9]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001446,0.005028,22,22,1.000000,22,22,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 9, 2, 9]]",p10,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,0,0.000000,0,0.002498,0.004198,38,22,1.727273,34,34,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 9, 2, 9]]",p10,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,0,0.000000,0,0.002235,0.003435,34,22,1.545455,34,34,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 9, 2, 9]]",p10,hha,HHA,,0.000000,2,0.021277,0,0.002235,0.005874,34,22,1.545455,0,0,0,,95,94,92
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 9, 2, 9]]",p10,dbsh,DBSH,,0.000000,1,0.010638,0,0.002235,0.005924,34,22,1.545455,0,0,0,,95,94,93
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 9, 2, 9]]",p10,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.002761,0.005028,42,22,1.909091,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 9, 2, 9]]",p10,sbsh-rmax,SBSH-r4,,0.000000,0,0.000000,0,0.002761,0.005028,42,22,1.909091,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 9]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000263,0.000763,4,4,1.000000,4,4,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 9]]",p10,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,0,0.000000,0,0.000460,0.000879,7,4,1.750000,6,6,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 9]]",p10,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,0,0.000000,0,0.000592,0.001062,9,4,2.250000,8,8,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 9]]",p10,hha,HHA,,0.000000,0,0.000000,0,0.000657,0.002040,10,4,2.500000,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 9]]",p10,dbsh,DBSH,,0.000000,0,0.000000,0,0.000657,0.002140,10,4,2.500000,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 9]]",p10,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.000657,0.002024,10,4,2.500000,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 9]]",p10,sbsh-rmax,SBSH-r4,,0.000000,0,0.000000,0,0.000657,0.002024,10,4,2.500000,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 2]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,4,0.042553,0,0.003352,0.019062,51,51,1.000000,44,44,0,,95,94,90
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 2]]",p30,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,2,0.021277,0,0.006376,0.019145,97,51,1.901961,75,75,0,,95,94,92
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 2]]",p30,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,1,0.010638,0,0.008150,0.024181,124,51,2.431373,86,86,0,,95,94,93
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 2]]",p30,hha,HHA,,0.000000,7,0.074468,0,0.007559,0.031310,115,51,2.254902,0,0,0,,95,94,87
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 2]]",p30,dbsh,DBSH,,0.000000,6,0.063830,0,0.009465,0.038124,144,51,2.823529,0,0,0,,95,94,88
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 2]]",p30,sbsh-r1,SBSH-r1,,0.000000,6,0.063830,0,0.009794,0.037941,149,51,2.921569,0,0,0,,95,94,88
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 2]]",p30,sbsh-rmax,SBSH-r4,,0.000000,6,0.063830,0,0.009794,0.037941,149,51,2.921569,0,0,0,,95,94,88
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 2]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,2,0.021277,0,0.002629,0.015914,40,40,1.000000,33,33,0,,95,94,92
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 2]]",p30,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,0,0.000000,0,0.005587,0.018455,85,40,2.125000,60,60,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 2]]",p30,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,0,0.000000,0,0.006310,0.020299,96,40,2.400000,68,68,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 2]]",p30,hha,HHA,,0.000000,5,0.053191,0,0.006244,0.023838,95,40,2.375000,0,0,0,,95,94,89
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 2]]",p30,dbsh,DBSH,,0.000000,6,0.063830,0,0.007427,0.028422,113,40,2.825000,0,0,0,,95,94,88
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 2]]",p30,sbsh-r1,SBSH-r1,,0.000000,3,0.031915,0,0.007296,0.027309,111,40,2.775000,0,0,0,,95,94,91
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 2]]",p30,sbsh-rmax,SBSH-r4,,0.000000,3,0.031915,0,0.007296,0.027309,111,40,2.775000,0,0,0,,95,94,91
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 2, 9, 2]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001380,0.005957,21,21,1.000000,21,21,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 2, 9, 2]]",p30,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,0,0.000000,0,0.002366,0.004779,36,21,1.714286,35,35,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 2, 9, 2]]",p30,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,0,0.000000,0,0.002366,0.004779,36,21,1.714286,36,36,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 2, 9, 2]]",p30,hha,HHA,,0.000000,1,0.010638,0,0.002366,0.006189,36,21,1.714286,0,0,0,,95,94,93
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 2, 9, 2]]",p30,dbsh,DBSH,,0.000000,1,0.010638,0,0.002366,0.006322,36,21,1.714286,0,0,0,,95,94,93
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 2, 9, 2]]",p30,sbsh-r1,SBSH-r1,,0.000000,1,0.010638,0,0.002826,0.005642,43,21,2.047619,0,0,0,,95,94,93
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 2, 9, 2]]",p30,sbsh-rmax,SBSH-r4,,0.000000,0,0.000000,0,0.002826,0.006057,43,21,2.047619,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 2, 2]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001643,0.005842,25,25,1.000000,21,21,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 2, 2]]",p30,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,0,0.000000,0,0.003484,0.007851,53,25,2.120000,46,46,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 2, 2]]",p30,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,0,0.000000,0,0.003286,0.007568,50,25,2.000000,47,47,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 2, 2]]",p30,hha,HHA,,0.000000,2,0.021277,0,0.003286,0.011851,50,25,2.000000,0,0,0,,95,94,92
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 2, 2]]",p30,dbsh,DBSH,,0.000000,0,0.000000,0,0.003352,0.011983,51,25,2.040000,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 2, 2]]",p30,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.003484,0.011884,53,25,2.120000,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 2, 2]]",p30,sbsh-rmax,SBSH-r4,,0.000000,0,0.000000,0,0.003484,0.011884,53,25,2.120000,0,0,0,,95,94,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 2]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,6,0.063830,0,0.011371,0.048730,173,173,1.000000,124,124,0,,95,94,88
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 2]]",p50,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,2,0.021277,0,0.017024,0.046431,259,173,1.497110,183,183,0,,95,94,92
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 2]]",p50,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,2,0.021277,0,0.017813,0.048047,271,173,1.566474,193,193,0,,95,94,92
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 2]]",p50,hha,HHA,,0.000000,7,0.074468,0,0.016235,0.058092,247,173,1.427746,0,0,0,,95,94,87
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 2]]",p50,dbsh,DBSH,,0.000000,11,0.117021,0,0.020836,0.073203,317,173,1.832370,0,0,0,,95,94,83
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 2]]",p50,sbsh-r1,SBSH-r1,,0.000000,11,0.117021,0,0.020639,0.072120,314,173,1.815029,0,0,0,,95,94,83
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 2]]",p50,sbsh-rmax,SBSH-r4,,0.000000,11,0.117021,0,0.020639,0.072120,314,173,1.815029,0,0,0,,95,94,83
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 9]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,3,0.031915,0,0.003812,0.024184,58,58,1.000000,47,47,0,,95,94,91
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 9]]",p50,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,2,0.021277,0,0.009859,0.025829,150,58,2.586207,93,93,0,,95,94,92
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 9]]",p50,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,1,0.010638,0,0.008742,0.025430,133,58,2.293103,105,105,0,,95,94,93
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 9]]",p50,hha,HHA,,0.000000,5,0.053191,0,0.007690,0.033592,117,58,2.017241,0,0,0,,95,94,89
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 9]]",p50,dbsh,DBSH,,0.000000,8,0.085106,0,0.010188,0.041520,155,58,2.672414,0,0,0,,95,94,86
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 9]]",p50,sbsh-r1,SBSH-r1,,0.000000,8,0.085106,0,0.010254,0.040240,156,58,2.689655,0,0,0,,95,94,86
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 9]]",p50,sbsh-rmax,SBSH-r4,,0.000000,8,0.085106,0,0.010254,0.040240,156,58,2.689655,0,0,0,,95,94,86
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 2, 9]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,7,0.074468,0,0.008939,0.041570,136,136,1.000000,87,87,0,,95,94,87
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 2, 9]]",p50,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,2,0.021277,0,0.014000,0.035926,213,136,1.566176,160,160,0,,95,94,92
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 2, 9]]",p50,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,1,0.010638,0,0.014855,0.037990,226,136,1.661765,168,168,0,,95,94,93
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 2, 9]]",p50,hha,HHA,,0.000000,8,0.085106,0,0.014329,0.050842,218,136,1.602941,0,0,0,,95,94,86
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 2, 9]]",p50,dbsh,DBSH,,0.000000,9,0.095745,0,0.017221,0.060382,262,136,1.926471,0,0,0,,95,94,85
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 2, 9]]",p50,sbsh-r1,SBSH-r1,,0.000000,9,0.095745,0,0.017221,0.057951,262,136,1.926471,0,0,0,,95,94,85
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 2, 9]]",p50,sbsh-rmax,SBSH-r4,,0.000000,9,0.095745,0,0.017221,0.057951,262,136,1.926471,0,0,0,,95,94,85
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.011111,0,0.004798,0.010550,73,73,1.000000,47,47,0,,95,90,93
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9]]",p50,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,0,0.000000,0,0.006376,0.007477,97,73,1.328767,48,48,0,,95,90,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9]]",p50,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,0,0.000000,0,0.010845,0.014271,165,73,2.260274,59,59,0,,95,90,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9]]",p50,hha,HHA,,0.000000,4,0.044444,0,0.009728,0.032724,148,73,2.027397,0,0,0,,95,90,90
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9]]",p50,dbsh,DBSH,,0.000000,5,0.055556,0,0.013080,0.039348,199,73,2.726027,0,0,0,,95,90,89
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9]]",p50,sbsh-r1,SBSH-r1,,0.000000,4,0.044444,0,0.012949,0.029191,197,73,2.698630,0,0,0,,95,90,90
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9]]",p50,sbsh-rmax,SBSH-r3,,0.000000,4,0.044444,0,0.012949,0.029191,197,73,2.698630,0,0,0,,95,90,90
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 9]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,8,0.085106,0,0.011042,0.058734,168,168,1.000000,113,113,0,,95,94,86
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 9]]",p70,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,1,0.010638,0,0.017615,0.057367,268,168,1.595238,175,175,0,,95,94,93
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 9]]",p70,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,4,0.042553,0,0.020376,0.064654,310,168,1.845238,200,200,0,,95,94,90
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 9]]",p70,hha,HHA,,0.000000,12,0.127660,0,0.017090,0.071091,260,168,1.547619,0,0,0,,95,94,82
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 9]]",p70,dbsh,DBSH,,0.000000,13,0.138298,0,0.024648,0.094655,375,168,2.232143,0,0,0,,95,94,81
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 9]]",p70,sbsh-r1,SBSH-r1,,0.000000,13,0.138298,0,0.024385,0.093271,371,168,2.208333,0,0,0,,95,94,81
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 9]]",p70,sbsh-rmax,SBSH-r4,,0.000000,13,0.138298,0,0.024385,0.093271,371,168,2.208333,0,0,0,,95,94,81
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 2]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,10,0.106383,0,0.012817,0.067434,195,195,1.000000,123,123,0,,95,94,84
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 2]]",p70,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,7,0.074468,0,0.020245,0.068035,308,195,1.579487,184,184,0,,95,94,87
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 2]]",p70,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,6,0.063830,0,0.022611,0.072642,344,195,1.764103,221,221,0,,95,94,88
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 2]]",p70,hha,HHA,,0.000000,11,0.117021,0,0.019982,0.083225,304,195,1.558974,0,0,0,,95,94,83
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 2]]",p70,dbsh,DBSH,,0.000000,14,0.148936,0,0.029052,0.110516,442,195,2.266667,0,0,0,,95,94,80
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 2]]",p70,sbsh-r1,SBSH-r1,,0.000000,13,0.138298,0,0.028132,0.105926,428,195,2.194872,0,0,0,,95,94,81
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 2]]",p70,sbsh-rmax,SBSH-r4,,0.000000,13,0.138298,0,0.028132,0.105926,428,195,2.194872,0,0,0,,95,94,81
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,4,0.044944,0,0.020376,0.052843,310,310,1.000000,206,206,0,,95,89,90
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9]]",p70,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,2,0.022472,0,0.026226,0.052114,399,310,1.287097,247,247,0,,95,89,92
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9]]",p70,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,3,0.033708,0,0.026949,0.057009,410,310,1.322581,261,261,0,,95,89,91
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9]]",p70,hha,HHA,,0.000000,11,0.123596,0,0.024385,0.073379,371,310,1.196774,0,0,0,,95,89,83
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9]]",p70,dbsh,DBSH,,0.000000,12,0.134831,0,0.030038,0.091728,457,310,1.474194,0,0,0,,95,89,82
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9]]",p70,sbsh-r1,SBSH-r1,,0.000000,11,0.123596,0,0.029512,0.088794,449,310,1.448387,0,0,0,,95,89,83
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9]]",p70,sbsh-rmax,SBSH-r3,,0.000000,11,0.123596,0,0.029512,0.088794,449,310,1.448387,0,0,0,,95,89,83
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,6,0.066667,0,0.014986,0.044136,228,228,1.000000,155,155,0,,95,90,88
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9]]",p70,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,2,0.022222,0,0.021230,0.048665,323,228,1.416667,191,191,0,,95,90,92
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9]]",p70,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,4,0.044444,0,0.022414,0.050095,341,228,1.495614,214,214,0,,95,90,90
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9]]",p70,hha,HHA,,0.000000,10,0.111111,0,0.019850,0.057758,302,228,1.324561,0,0,0,,95,90,84
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9]]",p70,dbsh,DBSH,,0.000000,9,0.100000,0,0.023860,0.067160,363,228,1.592105,0,0,0,,95,90,85
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9]]",p70,sbsh-r1,SBSH-r1,,0.000000,7,0.077778,0,0.023794,0.065335,362,228,1.587719,0,0,0,,95,90,87
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9]]",p70,sbsh-rmax,SBSH-r3,,0.000000,7,0.077778,0,0.024188,0.065352,368,228,1.614035,0,0,0,,95,90,87
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.031418,0.029255,478,478,1.000000,234,234,0,,95,79,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9]]",p90,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,0,0.000000,0,0.035691,0.031249,543,478,1.135983,257,257,0,,95,79,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9]]",p90,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,0,0.000000,0,0.042395,0.041588,645,478,1.349372,257,257,0,,95,79,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9]]",p90,hha,HHA,,0.000000,3,0.037975,0,0.038123,0.056941,580,478,1.213389,0,0,0,,95,79,91
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9]]",p90,dbsh,DBSH,,0.000000,8,0.101266,0,0.050743,0.084666,772,478,1.615063,0,0,0,,95,79,86
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9]]",p90,sbsh-r1,SBSH-r1,,0.000000,8,0.101266,0,0.050480,0.077541,768,478,1.606695,0,0,0,,95,79,86
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9]]",p90,sbsh-rmax,SBSH-r2,,0.000000,8,0.101266,0,0.050480,0.077541,768,478,1.606695,0,0,0,,95,79,86
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,9,0.102273,0,0.025371,0.080363,386,386,1.000000,242,242,0,,95,88,85
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2]]",p90,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,8,0.090909,0,0.034771,0.092399,529,386,1.370466,315,315,0,,95,88,86
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2]]",p90,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,10,0.113636,0,0.039503,0.101324,601,386,1.556995,340,340,0,,95,88,84
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2]]",p90,hha,HHA,,0.000000,12,0.136364,0,0.032602,0.102084,496,386,1.284974,0,0,0,,95,88,82
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2]]",p90,dbsh,DBSH,,0.000000,18,0.204545,0,0.049231,0.143140,749,386,1.940415,0,0,0,,95,88,76
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2]]",p90,sbsh-r1,SBSH-r1,,0.000000,20,0.227273,0,0.048771,0.141638,742,386,1.922280,0,0,0,,95,88,74
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2]]",p90,sbsh-rmax,SBSH-r3,,0.000000,20,0.227273,0,0.048771,0.141638,742,386,1.922280,0,0,0,,95,88,74
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,8,0.090909,0,0.026883,0.083702,409,409,1.000000,256,256,0,,95,88,86
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9]]",p90,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,10,0.113636,0,0.037663,0.094366,573,409,1.400978,335,335,0,,95,88,84
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9]]",p90,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,12,0.136364,0,0.040423,0.102483,615,409,1.503667,338,338,0,,95,88,82
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9]]",p90,hha,HHA,,0.000000,10,0.113636,0,0.033916,0.104570,516,409,1.261614,0,0,0,,95,88,84
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9]]",p90,dbsh,DBSH,,0.000000,15,0.170455,0,0.050151,0.148516,763,409,1.865526,0,0,0,,95,88,79
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9]]",p90,sbsh-r1,SBSH-r1,,0.000000,15,0.170455,0,0.049034,0.144679,746,409,1.823961,0,0,0,,95,88,79
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9]]",p90,sbsh-rmax,SBSH-r3,,0.000000,15,0.170455,0,0.049034,0.144679,746,409,1.823961,0,0,0,,95,88,79
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,2,0.025000,0,0.025174,0.028942,383,383,1.000000,229,229,0,,95,80,92
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2]]",p90,cut-hide-weight,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP_WEIGHT_FIRST]",,0.000000,0,0.000000,0,0.029907,0.031457,455,383,1.187990,295,295,0,,95,80,94
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2]]",p90,cut-hide-sweep,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, LAMBDA_SWEEP]",,0.000000,2,0.025000,0,0.034311,0.039974,522,383,1.362924,300,300,0,,95,80,92
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2]]",p90,hha,HHA,,0.000000,5,0.062500,0,0.031879,0.053197,485,383,1.266319,0,0,0,,95,80,89
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2]]",p90,dbsh,DBSH,,0.000000,7,0.087500,0,0.040029,0.072898,609,383,1.590078,0,0,0,,95,80,87
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2]]",p90,sbsh-r1,SBSH-r1,,0.000000,6,0.075000,0,0.039766,0.069354,605,383,1.579634,0,0,0,,95,80,88
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2]]",p90,sbsh-rmax,SBSH-r2,,0.000000,6,0.075000,0,0.039766,0.069354,605,383,1.579634,0,0,0,,95,80,88

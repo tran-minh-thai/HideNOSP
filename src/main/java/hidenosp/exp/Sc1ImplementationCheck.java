@@ -91,6 +91,8 @@ public final class Sc1ImplementationCheck implements Scenario {
                         isCheck ? "check" : "observation", e.getKey(),
                         e.getValue()[0], e.getValue()[1], isCheck ? "mismatches" : "cases");
             }
+            // Every counter is written: the file is complete even when it records mismatches.
+            writer.complete();
             System.out.println(failures == 0
                     ? "SC1 passed: no mismatch"
                     : "SC1 FAILED: " + failures + " mismatches, see the file in results-invariant/");

@@ -138,6 +138,7 @@ public final class Sc2DataRegime implements Scenario {
                         pattern, profile.supNO(), profile.supSeq(), profile.repetitionRatio(),
                         profile.constraintEffect(), profile.minMasks(), profile.maskShare());
             }
+            writer.complete();
         }
         if (!profileMode.equals("sample")) {
             System.out.printf("pool of %d %s candidates: median rho_rep %.3f, median beta %.3f%n",

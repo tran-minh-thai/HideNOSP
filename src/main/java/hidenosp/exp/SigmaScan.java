@@ -100,6 +100,7 @@ public final class SigmaScan implements Scenario {
                     atEveryGap.merge(sigma, row.meetsRule(), Boolean::logicalAnd);
                 }
             }
+            writer.complete();
         }
         List<Integer> kept = new ArrayList<>();
         atEveryGap.forEach((sigma, meets) -> {

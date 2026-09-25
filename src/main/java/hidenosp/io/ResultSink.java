@@ -108,7 +108,8 @@ public final class ResultSink {
         }
         Path path = root.resolve(kind.directory())
                 .resolve(scenario + "_" + runId.stamp() + ".csv");
-        if (java.nio.file.Files.exists(path)) {
+        if (java.nio.file.Files.exists(path)
+                || java.nio.file.Files.exists(path.resolveSibling(path.getFileName() + CsvWriter.PARTIAL))) {
             throw new IllegalStateException("a result file already exists at " + path
                     + "; refusing to overwrite it. Two runs sharing one stamp would lose a result "
                     + "silently, which is how a sweep can drop a configuration without any error.");

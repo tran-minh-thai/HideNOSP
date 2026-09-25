@@ -8,6 +8,9 @@ Rules checked:
   results-invariant/  no timing or memory column; run stamp present
   results-probe/      no timing or memory column; run stamp present
   results/            at least one timing or memory column; machine label is not "dev"
+  every directory     no .partial file: CsvWriter writes <file>.csv.partial and renames it only when
+                      the scenario finished, so a .partial file is a run that stopped early (out of
+                      memory, killed, a restart) and holds a truncated table that must not be read
 
 Run: python tools/check_results.py [root]
 Exit status is 1 when anything fails, so it can be wired into a pre-commit hook or a pipeline.
@@ -54,6 +57,10 @@ def check_directory(root, name, expect_timing):
     if not os.path.isdir(directory):
         return ["missing directory: " + name]
     for entry in sorted(os.listdir(directory)):
+        if entry.endswith(".partial"):
+            problems.append("%s/%s: the run stopped before its last row; delete this file and run "
+                            "the same command again" % (name, entry))
+            continue
         if not entry.endswith(".csv"):
             continue
         path = os.path.join(directory, entry)

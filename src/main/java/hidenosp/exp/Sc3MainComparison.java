@@ -172,6 +172,7 @@ public final class Sc3MainComparison implements Scenario {
                     }
                 }
             }
+            writer.complete();
         }
     }
 

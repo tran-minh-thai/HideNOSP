@@ -147,9 +147,11 @@ public final class Sc3MainComparison implements Scenario {
                     CutHide cutHide = (CutHide) create("cut-hide", problem, frequent, sigma, epsilon,
                             methodSeed);
                     List<CutHide.ParetoVertex> vertices = cutHide.paretoFront(problem);
+                    // Adjacent vertices differ in few sequences: one session remembers the rest.
+                    Metrics.Context.Session session = context.session(problem);
                     for (int k = 0; k < vertices.size(); k++) {
                         CutHide.ParetoVertex v = vertices.get(k);
-                        Metrics.Row row = context.evaluateMasking(problem, v.sanitization());
+                        Metrics.Row row = session.evaluate(v.sanitization());
                         front.writeRow(describe(options), shape(database), gap.toString(),
                                 Integer.toString(sigma), sensitive.toString(), stratum,
                                 Integer.toString(k), Integer.toString(vertices.size()),

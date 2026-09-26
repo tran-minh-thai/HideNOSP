@@ -200,12 +200,24 @@ public final class CutHide implements HidingMethod {
         requireNonEmptyBand(problem);
         Pattern pattern = problem.sensitive().get(0);
         long[][] scaled = scaledWeights(problem);
-        Solved left = solveOrdered(problem, pattern, scaled, new FrontierDp.Order(0, 1));
-        Solved right = solveOrdered(problem, pattern, scaled, new FrontierDp.Order(1, 0));
+        FrontierDp.Curve[] fewest = curves(problem, pattern, scaled, new FrontierDp.Order(0, 1), null);
+        FrontierDp.Curve[] lightest = curves(problem, pattern, scaled, new FrontierDp.Order(1, 0), null);
+        // A sequence whose two extreme curves agree at every target has, at every target, one
+        // point that is best in masks and in weight at once: it is optimal for every order, so
+        // its curve is reused for every order below instead of being solved again.
+        FrontierDp.Curve[] fixed = new FrontierDp.Curve[fewest.length];
+        for (int s = 0; s < fewest.length; s++) {
+            if (Arrays.equals(fewest[s].masks(), lightest[s].masks())
+                    && Arrays.equals(fewest[s].weight(), lightest[s].weight())) {
+                fixed[s] = fewest[s];
+            }
+        }
+        Solved left = allocate(problem, fewest, new FrontierDp.Order(0, 1));
+        Solved right = allocate(problem, lightest, new FrontierDp.Order(1, 0));
         List<Solved> vertices = new ArrayList<>();
         vertices.add(left);
         if (right.masks() != left.masks() || right.weight() != left.weight()) {
-            between(problem, pattern, scaled, left, right, vertices);
+            between(problem, pattern, scaled, fixed, left, right, vertices);
             vertices.add(right);
         }
         List<ParetoVertex> out = new ArrayList<>(vertices.size());
@@ -233,8 +245,8 @@ public final class CutHide implements HidingMethod {
      * Proposition P10(b): the vertices strictly between two adjacent known vertices, found along
      * the normal of the segment that joins them, added in the order of increasing masks.
      */
-    private void between(HideProblem problem, Pattern pattern, long[][] scaled, Solved y1, Solved y2,
-                         List<Solved> out) {
+    private void between(HideProblem problem, Pattern pattern, long[][] scaled,
+                         FrontierDp.Curve[] fixed, Solved y1, Solved y2, List<Solved> out) {
         long a = y2.masks() - y1.masks();
         long b = y1.weight() - y2.weight();
         if (a <= 0 || b <= 0) {
@@ -243,13 +255,13 @@ public final class CutHide implements HidingMethod {
                     + ")");
         }
         FrontierDp.Order normal = new FrontierDp.Order(a, b);
-        Solved y = solveOrdered(problem, pattern, scaled, normal);
+        Solved y = allocate(problem, curves(problem, pattern, scaled, normal, fixed), normal);
         if (normal.scalar(y.masks(), y.weight()) >= normal.scalar(y1.masks(), y1.weight())) {
             return;
         }
-        between(problem, pattern, scaled, y1, y, out);
+        between(problem, pattern, scaled, fixed, y1, y, out);
         out.add(y);
-        between(problem, pattern, scaled, y, y2, out);
+        between(problem, pattern, scaled, fixed, y, y2, out);
     }
 
     /** The position weights of every sequence, in the scaled unit of {@link CostCurve#SCALE}. */
@@ -274,13 +286,28 @@ public final class CutHide implements HidingMethod {
      */
     private Solved solveOrdered(HideProblem problem, Pattern pattern, long[][] scaled,
                                 FrontierDp.Order order) {
+        return allocate(problem, curves(problem, pattern, scaled, order, null), order);
+    }
+
+    /** The curve of every sequence under the order; a non-null {@code fixed[s]} is reused. */
+    private FrontierDp.Curve[] curves(HideProblem problem, Pattern pattern, long[][] scaled,
+                                      FrontierDp.Order order, FrontierDp.Curve[] fixed) {
         int n = problem.database().size();
         FrontierDp.Curve[] curves = new FrontierDp.Curve[n];
-        long total = 0;
         for (int s = 0; s < n; s++) {
-            curves[s] = FrontierDp.solve(pattern, problem.database().get(s), problem.gap(),
+            curves[s] = fixed != null && fixed[s] != null ? fixed[s]
+                    : FrontierDp.solve(pattern, problem.database().get(s), problem.gap(),
                     scaled[s], order);
-            total += curves[s].supNO();
+        }
+        return curves;
+    }
+
+    /** The remaining support per sequence under the order, and the positions the curves store. */
+    private Solved allocate(HideProblem problem, FrontierDp.Curve[] curves, FrontierDp.Order order) {
+        int n = curves.length;
+        long total = 0;
+        for (FrontierDp.Curve c : curves) {
+            total += c.supNO();
         }
         int[] remaining = new int[n];
         for (int s = 0; s < n; s++) {

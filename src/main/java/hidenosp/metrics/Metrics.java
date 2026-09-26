@@ -130,98 +130,127 @@ public final class Metrics {
         }
 
         /**
-         * How much each pattern of {@code watched} loses under this sanitization, visiting only the
-         * sequences it actually masked.
-         */
-        private Map<Pattern, Long> drops(Sanitization sanitization, List<Pattern> watched) {
-            Map<Pattern, Long> drop = new HashMap<>();
-            for (Map.Entry<Integer, Set<Integer>> e : sanitization.masked().entrySet()) {
-                int s = e.getKey();
-                if (e.getValue().isEmpty()) {
-                    continue;
-                }
-                EventSequence after = database.get(s).mask(e.getValue());
-                for (Pattern q : watched) {
-                    int before = supportIn(q, s);
-                    if (before == 0) {
-                        continue;
-                    }
-                    int now = SupportNO.of(q, after, gap);
-                    if (now != before) {
-                        drop.merge(q, (long) (before - now), Long::sum);
-                    }
-                }
-            }
-            return drop;
-        }
-
-        /**
          * Every measure for one masking sanitization. Ghost is zero by P5(a), not measured.
          *
          * @throws IllegalArgumentException if the threshold of the problem does not match the sigma
          *     this context was mined at, which would silently count Lost against the wrong set
          */
         public Row evaluateMasking(HideProblem problem, Sanitization sanitization) {
+            return session(problem).evaluate(sanitization);
+        }
+
+        /**
+         * An evaluator for many sanitizations of one problem, such as the vertices of a Pareto
+         * front: it remembers the supports of every (sequence, masked positions) it has met, and
+         * adjacent vertices differ in few sequences. The rows are those of
+         * {@link #evaluateMasking}; only the work is shared.
+         */
+        public Session session(HideProblem problem) {
             if (problem.frequentThreshold() != sigma) {
                 throw new IllegalArgumentException("this context was mined at sigma = " + sigma
                         + " but the problem counts side effects at sigma = "
                         + problem.frequentThreshold());
             }
-            Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
-            List<Pattern> watched = new ArrayList<>();
-            for (Pattern q : frequent.keySet()) {
-                if (!closure.contains(q)) {
-                    watched.add(q);
-                }
-            }
-            // Mau nhay cam khong bao gio nam trong watched, vi bao dong da loai chung ra, nen
-            // phai them vao day du co tan suat hay khong. Dieu kien cu la
-            // "!frequent.containsKey(p)", tuc mau nhay cam nao co tan suat thi khong ai tinh muc
-            // giam cua no, va HF luon ra 1 ke ca khi da an sach.
-            List<Pattern> all = new ArrayList<>(watched);
-            for (Pattern p : problem.sensitive()) {
-                if (!all.contains(p)) {
-                    all.add(p);
-                }
-            }
-            Map<Pattern, Long> drop = drops(sanitization, all);
+            return new Session(problem);
+        }
 
-            int lost = 0;
-            long supportBefore = 0;
-            long supportAfter = 0;
-            for (Pattern q : watched) {
-                long before = frequent.get(q);
-                long now = before - drop.getOrDefault(q, 0L);
-                if (now < sigma) {
-                    lost++;
+        /** See {@link #session(HideProblem)}. */
+        public final class Session {
+
+            private final HideProblem problem;
+            private final Set<Pattern> closure;
+            private final List<Pattern> watched = new ArrayList<>();
+            private final List<Pattern> all;
+            private final Map<Integer, Map<Set<Integer>, Map<Pattern, Integer>>> seen = new HashMap<>();
+
+            private Session(HideProblem problem) {
+                this.problem = problem;
+                this.closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+                for (Pattern q : frequent.keySet()) {
+                    if (!closure.contains(q)) {
+                        watched.add(q);
+                    }
                 }
-                supportBefore += before;
-                supportAfter += now;
+                // Mau nhay cam khong bao gio nam trong watched, vi bao dong da loai chung ra, nen
+                // phai them vao day du co tan suat hay khong. Dieu kien cu la
+                // "!frequent.containsKey(p)", tuc mau nhay cam nao co tan suat thi khong ai tinh
+                // muc giam cua no, va HF luon ra 1 ke ca khi da an sach.
+                this.all = new ArrayList<>(watched);
+                for (Pattern p : problem.sensitive()) {
+                    if (!all.contains(p)) {
+                        all.add(p);
+                    }
+                }
             }
 
-            int failed = 0;
-            for (Pattern p : problem.sensitive()) {
-                long before = frequent.containsKey(p)
-                        ? frequent.get(p)
-                        : SupportNO.of(p, database, gap);
-                long now = before - drop.getOrDefault(p, 0L);
-                if (problem.isDatabaseMode()) {
-                    if (now >= problem.threshold()) {
+            /** The drop of every pattern of {@code all} in one masked sequence, remembered. */
+            private Map<Pattern, Integer> dropIn(int s, Set<Integer> masked) {
+                return seen.computeIfAbsent(s, k -> new HashMap<>()).computeIfAbsent(
+                        Set.copyOf(masked), m -> {
+                            EventSequence after = database.get(s).mask(m);
+                            Map<Pattern, Integer> drop = new HashMap<>();
+                            for (Pattern q : all) {
+                                int before = supportIn(q, s);
+                                if (before == 0) {
+                                    continue;
+                                }
+                                int now = SupportNO.of(q, after, gap);
+                                if (now != before) {
+                                    drop.put(q, before - now);
+                                }
+                            }
+                            return drop;
+                        });
+            }
+
+            public Row evaluate(Sanitization sanitization) {
+                Map<Pattern, Long> drop = new HashMap<>();
+                for (Map.Entry<Integer, Set<Integer>> e : sanitization.masked().entrySet()) {
+                    if (e.getValue().isEmpty()) {
+                        continue;
+                    }
+                    for (Map.Entry<Pattern, Integer> d : dropIn(e.getKey(), e.getValue()).entrySet()) {
+                        drop.merge(d.getKey(), (long) d.getValue(), Long::sum);
+                    }
+                }
+
+                int lost = 0;
+                long supportBefore = 0;
+                long supportAfter = 0;
+                for (Pattern q : watched) {
+                    long before = frequent.get(q);
+                    long now = before - drop.getOrDefault(q, 0L);
+                    if (now < sigma) {
+                        lost++;
+                    }
+                    supportBefore += before;
+                    supportAfter += now;
+                }
+
+                int failed = 0;
+                for (Pattern p : problem.sensitive()) {
+                    long before = frequent.containsKey(p)
+                            ? frequent.get(p)
+                            : SupportNO.of(p, database, gap);
+                    long now = before - drop.getOrDefault(p, 0L);
+                    if (problem.isDatabaseMode()) {
+                        if (now >= problem.threshold()) {
+                            failed++;
+                        }
+                    } else if (exceedsPerSequenceLimit(problem, p, sanitization)) {
                         failed++;
                     }
-                } else if (exceedsPerSequenceLimit(problem, p, sanitization)) {
-                    failed++;
                 }
-            }
-            double hidingFailure = problem.sensitive().isEmpty()
-                    ? 0 : (double) failed / problem.sensitive().size();
+                double hidingFailure = problem.sensitive().isEmpty()
+                        ? 0 : (double) failed / problem.sensitive().size();
 
-            double distR = (double) sanitization.maskCount() / database.totalLength();
-            double supDist = supportBefore == 0
-                    ? 0 : (double) (supportBefore - supportAfter) / supportBefore;
-            int frequentAfter = frequent.size() - lost - countClosureLost(closure, drop);
-            return new Row(hidingFailure, lost, 0, distR, supDist, sanitization.maskCount(),
-                    frequent.size(), frequentAfter, watched.size());
+                double distR = (double) sanitization.maskCount() / database.totalLength();
+                double supDist = supportBefore == 0
+                        ? 0 : (double) (supportBefore - supportAfter) / supportBefore;
+                int frequentAfter = frequent.size() - lost - countClosureLost(closure, drop);
+                return new Row(hidingFailure, lost, 0, distR, supDist, sanitization.maskCount(),
+                        frequent.size(), frequentAfter, watched.size());
+            }
         }
 
         private int countClosureLost(Set<Pattern> closure, Map<Pattern, Long> drop) {

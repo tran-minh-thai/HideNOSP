@@ -1,15 +1,21 @@
-"""Gop ket qua ra soat "nhung thu con phai quyet dinh" thanh mot tai lieu theo chu de.
+"""Merge the results of a review of "what is still to be decided" into one document by theme.
 
-Dau vao la ket qua JSON cua mot dot ra soat da chay (dot ra soat liet-ke-quyet-dinh), dau ra la
-config/quyet_dinh_can_chot.md. Giu lai de lan ra soat sau gop duoc theo dung cach, va de thay
-ro cach gop: moi diem chi vao DUNG MOT chu de, khong diem nao bi bo.
+Input: a JSON file whose "result" holds the review items, "confirmed" (items that passed an
+independent check) and "addedByCritic" (items added by a final critical pass); each item has
+title, question, sharpened, sourceKey and blocks. Output: config/quyet_dinh_can_chot.md next to
+this tool, or the path given second. Kept so that a later review is merged the same way, and so
+that the merge can be read: every item goes to exactly ONE theme, and no item is dropped.
 
-Chay: python tools/gop_quyet_dinh.py   (sua SRC cho tro toi ket qua moi)
+Run: python tools/gop_quyet_dinh.py <review result JSON> [<output file>]
 """
-import io, json, re, unicodedata
+import io, json, os, re, sys, unicodedata
 
-SRC = r"review_result.json"
-OUT = r"G:/My Drive/Researching/NCS_LTMN/HideNOSP Project/code/config/quyet_dinh_can_chot.md"
+if len(sys.argv) not in (2, 3):
+    sys.exit("usage: python tools/gop_quyet_dinh.py <review result JSON> [<output file>]")
+SRC = sys.argv[1]
+# The default output is found from this file, not from the directory the command is typed in.
+OUT = sys.argv[2] if len(sys.argv) == 3 else os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config", "quyet_dinh_can_chot.md")
 
 d = json.loads(io.open(SRC, encoding="utf-8", errors="replace").read())["result"]
 items = [dict(x, origin="quet") for x in d["confirmed"]] + \

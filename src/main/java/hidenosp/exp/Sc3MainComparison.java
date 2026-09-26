@@ -12,6 +12,7 @@ import hidenosp.core.EventSequence;
 import hidenosp.core.GapConstraint;
 import hidenosp.core.Pattern;
 import hidenosp.core.SequenceDatabase;
+import hidenosp.hide.AdaptiveCutHide;
 import hidenosp.hide.CutHide;
 import hidenosp.hide.CutHideConfig;
 import hidenosp.hide.HideProblem;
@@ -145,7 +146,7 @@ public final class Sc3MainComparison implements Scenario {
                 long minMasks = boundFromP1(database, sensitive, gap, sigma);
                 if (front != null) {
                     CutHide cutHide = (CutHide) create("cut-hide", problem, frequent, sigma, epsilon,
-                            methodSeed);
+                            methodSeed, context);
                     List<CutHide.ParetoVertex> vertices = cutHide.paretoFront(problem);
                     // Adjacent vertices differ in few sequences: one session remembers the rest.
                     Metrics.Context.Session session = context.session(problem);
@@ -173,12 +174,14 @@ public final class Sc3MainComparison implements Scenario {
                     // repeats lan voi hat giong lien tiep, moi lan mot hang. Viec lay trung vi
                     // thuoc ve khau phan tich, khong lam o day: mot hang mot lan chay thi bang
                     // van con day du de kiem lai.
-                    int runs = create(name.trim(), problem, frequent, sigma, epsilon, methodSeed)
+                    int runs = create(name.trim(), problem, frequent, sigma, epsilon, methodSeed,
+                            context)
                             .isRandomized() ? repeats : 1;
                     for (int k = 0; k < runs; k++) {
                         long thisSeed = methodSeed + k;
                         HidingMethod method =
-                                create(name.trim(), problem, frequent, sigma, epsilon, thisSeed);
+                                create(name.trim(), problem, frequent, sigma, epsilon, thisSeed,
+                                        context);
                         Sanitization sanitization = method.run(problem);
                         Metrics.Row row = context.evaluateMasking(problem, sanitization);
                         // method_key la ten goi tren dong lenh, on dinh; method la ten phuong
@@ -234,7 +237,7 @@ public final class Sc3MainComparison implements Scenario {
     }
 
     private HidingMethod create(String name, HideProblem problem, Map<Pattern, Long> frequent,
-                                int sigma, double epsilon, long seed) {
+                                int sigma, double epsilon, long seed, Metrics.Context context) {
         switch (name.toLowerCase(Locale.ROOT)) {
             case "cut-hide": {
                 Set<Pattern> closure =
@@ -263,6 +266,25 @@ public final class Sc3MainComparison implements Scenario {
                 return new CutHide(CutHideConfig.standard()
                         .withCurves(CutHideConfig.Curves.FRONTIER_DP_WEIGHT_FIRST))
                         .withNearThreshold(band, factor);
+            }
+            case "cut-hide-rw": {
+                // CUT-HIDE with the adaptive side-effect weight: iteration 0 is cut-hide, later
+                // iterations weigh positions by the exact drops of the previous solution. Same
+                // |R|*, never more lost patterns than cut-hide. The drops come from the evaluator
+                // that writes the lost column, so method and metric count them the same way.
+                Set<Pattern> closure =
+                        FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+                List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
+                double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
+                Map<Pattern, Long> watched = new LinkedHashMap<>();
+                for (Map.Entry<Pattern, Long> e : frequent.entrySet()) {
+                    if (!closure.contains(e.getKey())) {
+                        watched.put(e.getKey(), e.getValue());
+                    }
+                }
+                Metrics.Context.Session session = context.session(problem);
+                return new AdaptiveCutHide(band, factor, watched, sigma,
+                        AdaptiveCutHide.DEFAULT_ITERATIONS, session::drops);
             }
             case "cut-hide-uniform":
                 return new CutHide(CutHideConfig.uniformWeights());

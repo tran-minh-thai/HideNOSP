@@ -1,0 +1,122 @@
+# Probe (development machine, Darwin arm64, openjdk version "26.0.1" 2026-04-21), clean clone of commit 5e5a5de (tree 0 modified source files); harness FrontProbe.java sha256 be0ac6e96c122da3; started 2026-09-26 11:30:07
+finished 2026-09-26 11:35:05
+# The twelve pairs that the Pareto front probe (pareto_front_probe_20260926.md) found neither dominated nor tied; the other method's exact |R| and Lost are read from the SC3 files named in each status line.
+
+===== status =====
+exit 0 sepsis repeated 2 9 2 2 (other method cut-hide-sweep from SC3_20260926-005222-764_dev_e1ed80e2aa3f_s2026.csv)
+exit 0 sepsis repeated 9 2 2 9 (other method cut-hide-sweep from SC3_20260926-005222-764_dev_e1ed80e2aa3f_s2026.csv)
+exit 0 sepsis repeated 9 2 9 9 (other method cut-hide-sweep from SC3_20260926-005222-764_dev_e1ed80e2aa3f_s2026.csv)
+exit 0 sepsis repeated 9 2 9 2 (other method cut-hide-sweep from SC3_20260926-005222-764_dev_e1ed80e2aa3f_s2026.csv)
+exit 0 bpi2013 repeated 1 1 1 10 (other method cut-hide-sweep from SC3_20260926-005455-160_dev_e1ed80e2aa3f_s2026.csv)
+exit 0 bpi2013 repeated 1 11 1 0 (other method cut-hide-sweep from SC3_20260926-005455-160_dev_e1ed80e2aa3f_s2026.csv)
+exit 0 dna_mt745584 repeated 4 1 1 4 (other method cut-hide-sweep from SC3_20260926-004316-283_dev_e1ed80e2aa3f_s2026.csv)
+exit 0 bpi2013 repeated 1 11 11 (other method cut-hide-sweep from SC3_20260926-005455-160_dev_e1ed80e2aa3f_s2026.csv)
+exit 0 msnbc distinct 1 4 (other method cut-hide-sweep from SC3_20260926-011957-740_dev_e1ed80e2aa3f_s2026.csv)
+exit 0 protein_sdb4 distinct 7 2 (other method cut-hide-sweep from SC3_20260926-011720-945_dev_e1ed80e2aa3f_s2026.csv)
+exit 0 dna_mt745584 distinct 1 4 (other method hha from SC3_20260926-011337-531_dev_e1ed80e2aa3f_s2026.csv)
+exit 0 msnbc repeated 1 4 1 (other method cut-hide-sweep from SC3_20260926-005649-463_dev_e1ed80e2aa3f_s2026.csv)
+
+===== results (one per set) =====
+bpi2013.txt sigma=500 [0,1] repeated set [1, 11, 11] | other method |R| 3246 Lost 3 | RW_VITAL at |R|* Lost 10 | front with CURRENT weight: 82 vertices, |R| 2394..3086, least Lost within |R| <= 3246: 8, dominates: no | front with RW_VITAL weight: 421 vertices, |R| 2394..4036, least Lost within |R| <= 3246: 4, dominates: no |
+bpi2013.txt sigma=500 [0,1] repeated set [1, 11, 1, 0] | other method |R| 1647 Lost 4 | RW_VITAL at |R|* Lost 4 | front with CURRENT weight: 47 vertices, |R| 1647..1994, least Lost within |R| <= 1647: 5, dominates: no | front with RW_VITAL weight: 221 vertices, |R| 1647..2241, least Lost within |R| <= 1647: 4, dominates: no |
+bpi2013.txt sigma=500 [0,1] repeated set [1, 1, 1, 10] | other method |R| 2769 Lost 1 | RW_VITAL at |R|* Lost 1 | front with CURRENT weight: 5 vertices, |R| 2744..2751, least Lost within |R| <= 2769: 5, dominates: no | front with RW_VITAL weight: 24 vertices, |R| 2744..2827, least Lost within |R| <= 2769: 1, dominates: yes |
+dna_mt745584.txt sigma=2500 [0,3] distinct set [1, 4] | other method |R| 2651 Lost 17 | RW_VITAL at |R|* Lost 16 | front with CURRENT weight: 725 vertices, |R| 2633..3820, least Lost within |R| <= 2651: 18, dominates: no | front with RW_VITAL weight: 744 vertices, |R| 2633..3739, least Lost within |R| <= 2651: 16, dominates: yes |
+dna_mt745584.txt sigma=2500 [0,3] repeated set [4, 1, 1, 4] | other method |R| 224 Lost 1 | RW_VITAL at |R|* Lost 2 | front with CURRENT weight: 194 vertices, |R| 112..387, least Lost within |R| <= 224: 2, dominates: no | front with RW_VITAL weight: 194 vertices, |R| 112..387, least Lost within |R| <= 224: 2, dominates: no |
+msnbc.txt sigma=2000 [0,1] distinct set [1, 4] | other method |R| 11326 Lost 1 | RW_VITAL at |R|* Lost 1 | front with CURRENT weight: 1 vertices, |R| 11326..11326, least Lost within |R| <= 11326: 2, dominates: no | front with RW_VITAL weight: 1 vertices, |R| 11326..11326, least Lost within |R| <= 11326: 1, dominates: no |
+msnbc.txt sigma=2000 [0,1] repeated set [1, 4, 1] | other method |R| 5927 Lost 2 | RW_VITAL at |R|* Lost 4 | front with CURRENT weight: 292 vertices, |R| 4914..5579, least Lost within |R| <= 5927: 3, dominates: no | front with RW_VITAL weight: 573 vertices, |R| 4914..5531, least Lost within |R| <= 5927: 2, dominates: yes |
+protein_sdb4.txt sigma=500 [0,3] distinct set [7, 2] | other method |R| 979 Lost 0 | RW_VITAL at |R|* Lost 1 | front with CURRENT weight: 1 vertices, |R| 979..979, least Lost within |R| <= 979: 1, dominates: no | front with RW_VITAL weight: 1 vertices, |R| 979..979, least Lost within |R| <= 979: 1, dominates: no |
+sepsis.txt sigma=300 [0,1] repeated set [2, 9, 2, 2] | other method |R| 124 Lost 1 | RW_VITAL at |R|* Lost 4 | front with CURRENT weight: 38 vertices, |R| 51..97, least Lost within |R| <= 124: 2, dominates: no | front with RW_VITAL weight: 38 vertices, |R| 51..97, least Lost within |R| <= 124: 2, dominates: no |
+sepsis.txt sigma=300 [0,1] repeated set [9, 2, 2, 9] | other method |R| 226 Lost 1 | RW_VITAL at |R|* Lost 7 | front with CURRENT weight: 61 vertices, |R| 136..213, least Lost within |R| <= 226: 2, dominates: no | front with RW_VITAL weight: 61 vertices, |R| 136..213, least Lost within |R| <= 226: 2, dominates: no |
+sepsis.txt sigma=300 [0,1] repeated set [9, 2, 9, 2] | other method |R| 344 Lost 6 | RW_VITAL at |R|* Lost 9 | front with CURRENT weight: 92 vertices, |R| 195..308, least Lost within |R| <= 344: 7, dominates: no | front with RW_VITAL weight: 90 vertices, |R| 195..297, least Lost within |R| <= 344: 6, dominates: yes |
+sepsis.txt sigma=300 [0,1] repeated set [9, 2, 9, 9] | other method |R| 133 Lost 1 | RW_VITAL at |R|* Lost 3 | front with CURRENT weight: 56 vertices, |R| 58..150, least Lost within |R| <= 133: 2, dominates: no | front with RW_VITAL weight: 56 vertices, |R| 58..150, least Lost within |R| <= 133: 2, dominates: no |
+
+===== counts, generated from the result lines above =====
+12 sets; dominated by a vertex of the front: with the CURRENT weight 0, with the RW_VITAL weight 4; best Lost within the other method |R| equal to its Lost (tie or better at fewer masks not reached): 2; still neither: 6
+
+===== harness source: FrontProbe.java =====
+import hidenosp.core.*; import hidenosp.io.*; import hidenosp.metrics.*; import hidenosp.hide.*; import hidenosp.exp.SensitiveSampling; import hidenosp.index.NettreeCutIndex; import java.util.*; import java.nio.file.*;
+/**
+ * Probe: on one sensitive set, the exact Pareto front between |R| and the surrogate weight, once with
+ * the weight of the method as it stands (CURRENT) and once with the weight RW_VITAL ends on (the
+ * weight of its best iteration), and whether a vertex of either front dominates a given point
+ * (|R|, Lost) of another method.
+ */
+public class FrontProbe {
+  static final int ITERATIONS = 6;
+  public static void main(String[] a) {
+    String file = a[0]; int sigma = Integer.parseInt(a[1]); GapConstraint gap = GapConstraint.of(0, Integer.parseInt(a[2])); boolean repeated = a[3].equals("repeated");
+    int[] items = Arrays.stream(a[4].split(" ")).mapToInt(Integer::parseInt).toArray(); Pattern target = new Pattern(items);
+    int otherMasks = Integer.parseInt(a[5]), otherLost = Integer.parseInt(a[6]);
+    SequenceDatabase db = DatasetReader.read(Paths.get(file), DatasetReader.Format.SPMF).database();
+    Metrics.Context context = Metrics.Context.of(db, gap, 4, sigma);
+    Map<Pattern, Long> f = context.frequent();
+    Pattern p = null; for (SensitiveSampling.Draw d : SensitiveSampling.draw(f, 1, 4, 2026, repeated).draws()) if (d.patterns().get(0).equals(target)) p = target;
+    if (p == null) throw new IllegalStateException("set " + target + " not in the sample");
+    HideProblem problem = new HideProblem(db, List.of(p), gap, HideProblem.Mode.HIDE_DB, sigma, 0.5, 4);
+    Set<Pattern> closure = FrequentPatterns.closure(List.of(p), f.keySet());
+    List<Pattern> watched = new ArrayList<>(); for (Pattern q : f.keySet()) if (!closure.contains(q)) watched.add(q);
+    List<Pattern> band = FrequentPatterns.nearThreshold(f, sigma, 0.5, closure);
+    Metrics.Context.Session session = context.session(problem);
+    int N = db.size();
+    Map<Integer, Map<Pattern, int[]>> vital = new HashMap<>(); Map<Integer, Map<Pattern, Integer>> supIn = new HashMap<>();
+    for (int s = 0; s < N; s++) {
+      if (SupportNO.of(p, db.get(s), gap) == 0) continue;
+      NettreeCutIndex idx = new NettreeCutIndex(db.get(s), gap);
+      Map<Pattern, int[]> vs = new HashMap<>(); Map<Pattern, Integer> su = new HashMap<>();
+      for (Pattern q : watched) { int id = idx.add(q, false); int nu = idx.supNO(id); if (nu == 0) continue; su.put(q, nu); vs.put(q, idx.vitalPositions(id)); }
+      vital.put(s, vs); supIn.put(s, su);
+    }
+    Map<Pattern, Double> factor = new HashMap<>(); for (Pattern q : watched) factor.put(q, 1.0 / (f.get(q) - sigma + 1));
+    double[][] bestW = null; int bestLost = Integer.MAX_VALUE; double[][] currentW = null;
+    for (int it = 0; it < ITERATIONS; it++) {
+      double[][] w = new double[N][];
+      for (int s = 0; s < N; s++) {
+        w[s] = new double[db.get(s).length()];
+        if (!vital.containsKey(s)) continue;
+        for (Pattern q : it == 0 ? band : watched) { int[] vp = vital.get(s).get(q); if (vp == null) continue; double c = it == 0 ? 1.0 / (f.get(q) - sigma + 1) : factor.get(q); for (int pos : vp) w[s][pos] += c; }
+      }
+      if (it == 0) currentW = w;
+      Sanitization san = new CutHide(CutHideConfig.uniformWeights()).withExplicitWeights(w).run(problem);
+      int lost = session.evaluate(san).lost();
+      if (lost < bestLost) { bestLost = lost; bestW = w; }
+      if (it + 1 < ITERATIONS) {
+        Map<Pattern, Long> drop = new HashMap<>();
+        for (Map.Entry<Integer, Set<Integer>> e : san.masked().entrySet()) {
+          if (e.getValue().isEmpty()) continue;
+          EventSequence after = db.get(e.getKey()).mask(e.getValue());
+          for (Map.Entry<Pattern, Integer> sq : supIn.get(e.getKey()).entrySet()) { int now = SupportNO.of(sq.getKey(), after, gap); if (now != sq.getValue()) drop.merge(sq.getKey(), (long) (sq.getValue() - now), Long::sum); }
+        }
+        for (Pattern q : watched) { double m = f.get(q) - sigma + 1, dq = drop.getOrDefault(q, 0L), tau = Math.max(1.0, 0.25 * m); double sg = 1.0 / (1.0 + Math.exp(-(dq - m + 0.5) / tau)); factor.put(q, 1.0 / m + sg * (1 - sg) / tau); }
+      }
+    }
+    StringBuilder out = new StringBuilder(String.format(Locale.ROOT, "%s sigma=%d %s %s set %s | other method |R| %d Lost %d | RW_VITAL at |R|* Lost %d |", Paths.get(file).getFileName(), sigma, gap, a[3], target, otherMasks, otherLost, bestLost));
+    String[] names = {"front with CURRENT weight", "front with RW_VITAL weight"};
+    double[][][] ws = {currentW, bestW};
+    for (int k = 0; k < 2; k++) {
+      List<CutHide.ParetoVertex> front = new CutHide(CutHideConfig.uniformWeights()).withExplicitWeights(ws[k]).paretoFront(problem);
+      int bestWithin = Integer.MAX_VALUE; boolean dominates = false; int minM = Integer.MAX_VALUE, maxM = 0;
+      for (CutHide.ParetoVertex v : front) {
+        int lost = session.evaluate(v.sanitization()).lost(); int m = v.masks();
+        minM = Math.min(minM, m); maxM = Math.max(maxM, m);
+        if (m <= otherMasks) bestWithin = Math.min(bestWithin, lost);
+        if (m <= otherMasks && lost <= otherLost && (m < otherMasks || lost < otherLost)) dominates = true;
+      }
+      out.append(String.format(Locale.ROOT, " %s: %d vertices, |R| %d..%d, least Lost within |R| <= %d: %s, dominates: %s |", names[k], front.size(), minM, maxM, otherMasks, bestWithin == Integer.MAX_VALUE ? "none" : String.valueOf(bestWithin), dominates ? "yes" : "no"));
+    }
+    System.out.println(out);
+  }
+}
+
+===== job list (from the SC3 files) =====
+dna_mt745584	2500	3	repeated	4 1 1 4	224	1	cut-hide-sweep	SC3_20260926-004316-283_dev_e1ed80e2aa3f_s2026.csv
+sepsis	300	1	repeated	2 9 2 2	124	1	cut-hide-sweep	SC3_20260926-005222-764_dev_e1ed80e2aa3f_s2026.csv
+sepsis	300	1	repeated	9 2 9 9	133	1	cut-hide-sweep	SC3_20260926-005222-764_dev_e1ed80e2aa3f_s2026.csv
+sepsis	300	1	repeated	9 2 2 9	226	1	cut-hide-sweep	SC3_20260926-005222-764_dev_e1ed80e2aa3f_s2026.csv
+sepsis	300	1	repeated	9 2 9 2	344	6	cut-hide-sweep	SC3_20260926-005222-764_dev_e1ed80e2aa3f_s2026.csv
+bpi2013	500	1	repeated	1 11 1 0	1647	4	cut-hide-sweep	SC3_20260926-005455-160_dev_e1ed80e2aa3f_s2026.csv
+bpi2013	500	1	repeated	1 1 1 10	2769	1	cut-hide-sweep	SC3_20260926-005455-160_dev_e1ed80e2aa3f_s2026.csv
+bpi2013	500	1	repeated	1 11 11	3246	3	cut-hide-sweep	SC3_20260926-005455-160_dev_e1ed80e2aa3f_s2026.csv
+msnbc	2000	1	repeated	1 4 1	5927	2	cut-hide-sweep	SC3_20260926-005649-463_dev_e1ed80e2aa3f_s2026.csv
+dna_mt745584	2500	3	distinct	1 4	2651	17	hha	SC3_20260926-011337-531_dev_e1ed80e2aa3f_s2026.csv
+protein_sdb4	500	3	distinct	7 2	979	0	cut-hide-sweep	SC3_20260926-011720-945_dev_e1ed80e2aa3f_s2026.csv
+msnbc	2000	1	distinct	1 4	11326	1	cut-hide-sweep	SC3_20260926-011957-740_dev_e1ed80e2aa3f_s2026.csv

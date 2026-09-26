@@ -42,7 +42,7 @@ public final class IlpExact implements HidingMethod {
     /** Refuses instead of running forever; small instances are what this class is for. */
     public static final int MAX_CANDIDATES = 64;
     public static final int MAX_MASKS = 12;
-    private static final int MAX_OPTIMAL_SETS = 20_000;
+    static final int MAX_OPTIMAL_SETS = 20_000;
 
     private Map<Pattern, Long> frequentBefore;
     private Set<Pattern> closure;
@@ -78,6 +78,15 @@ public final class IlpExact implements HidingMethod {
             List<List<int[]>> found = new ArrayList<>();
             search(problem, candidates, 0, k, new ArrayList<>(), found);
             if (!found.isEmpty()) {
+                if (frequentBefore != null && found.size() >= MAX_OPTIMAL_SETS) {
+                    // The search stops at MAX_OPTIMAL_SETS, so the fewest lost patterns among the
+                    // sets found is not the fewest among all minimum sets: refuse rather than return
+                    // an uncertified set under the name of the exact method.
+                    throw new IllegalStateException("at least " + MAX_OPTIMAL_SETS + " hiding sets of "
+                            + "the least size " + k + " (the search stops there), so the fewest lost "
+                            + "patterns among them cannot be certified and exact-minR-minLost refuses "
+                            + "this instance; shrink it");
+                }
                 return build(problem, choose(problem, found));
             }
         }

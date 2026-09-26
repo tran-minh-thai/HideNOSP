@@ -1,0 +1,61 @@
+# Probe (development machine, macOS arm64, OpenJDK 26.0.1), clean clone of commit 5e5a5de; harness LostDiagnosis.java sha256 8e2ecb5f1d66475c (source appended)
+dna_mt745584.txt sigma=2500 [0,3] repeated: sets 20, lost patterns 89 = out of band 0 (of which below 3 sigma 0) + under-seen 85 (drop above the vital count by 7188 in all) + seen 4
+sepsis.txt sigma=300 [0,1] repeated: sets 20, lost patterns 70 = out of band 5 (of which below 3 sigma 5) + under-seen 57 (drop above the vital count by 1672 in all) + seen 8
+protein_sdb4.txt sigma=500 [0,3] repeated: sets 20, lost patterns 37 = out of band 0 (of which below 3 sigma 0) + under-seen 31 (drop above the vital count by 182 in all) + seen 6
+bpi2013.txt sigma=500 [0,1] repeated: sets 20, lost patterns 88 = out of band 45 (of which below 3 sigma 42) + under-seen 13 (drop above the vital count by 170 in all) + seen 30
+msnbc.txt sigma=2000 [0,1] repeated: sets 20, lost patterns 68 = out of band 19 (of which below 3 sigma 18) + under-seen 34 (drop above the vital count by 7146 in all) + seen 15
+dna_mt745584.txt sigma=2500 [0,3] distinct: sets 20, lost patterns 85 = out of band 0 (of which below 3 sigma 0) + under-seen 85 (drop above the vital count by 7871 in all) + seen 0
+protein_sdb4.txt sigma=500 [0,3] distinct: sets 20, lost patterns 38 = out of band 0 (of which below 3 sigma 0) + under-seen 18 (drop above the vital count by 47 in all) + seen 20
+msnbc.txt sigma=2000 [0,1] distinct: sets 20, lost patterns 6 = out of band 5 (of which below 3 sigma 5) + under-seen 0 (drop above the vital count by 0 in all) + seen 1
+DONE
+
+===== harness source: LostDiagnosis.java =====
+import hidenosp.core.*; import hidenosp.io.*; import hidenosp.metrics.*; import hidenosp.hide.*; import hidenosp.exp.SensitiveSampling; import hidenosp.index.NettreeCutIndex; import java.util.*; import java.nio.file.*;
+/** Probe: why are patterns lost? Every lost pattern of CUT-HIDE (standard) is classified as out of the band, under-seen by the vital count, or seen. */
+public class LostDiagnosis {
+  public static void main(String[] a) {
+    String file = a[0]; int sigma = Integer.parseInt(a[1]); GapConstraint gap = GapConstraint.of(0, Integer.parseInt(a[2])); boolean repeated = a[3].equals("repeated");
+    SequenceDatabase db = DatasetReader.read(Paths.get(file), DatasetReader.Format.SPMF).database();
+    Metrics.Context context = Metrics.Context.of(db, gap, 4, sigma);
+    Map<Pattern, Long> f = context.frequent();
+    SensitiveSampling.Result sampling = SensitiveSampling.draw(f, 1, 4, 2026, repeated);
+    int out = 0, under = 0, seen = 0, lostTotal = 0, sets = 0, outNearDoubled = 0;
+    long underGap = 0;
+    for (SensitiveSampling.Draw d : sampling.draws()) {
+      List<Pattern> sens = d.patterns();
+      HideProblem problem = new HideProblem(db, sens, gap, HideProblem.Mode.HIDE_DB, sigma, 0.5, 4);
+      Set<Pattern> closure = FrequentPatterns.closure(sens, f.keySet());
+      List<Pattern> band = FrequentPatterns.nearThreshold(f, sigma, 0.5, closure);
+      double[] factor = FrequentPatterns.weightFactors(band, f, sigma);
+      Sanitization san = new CutHide(CutHideConfig.standard()).withNearThreshold(band, factor).run(problem);
+      List<Pattern> watched = new ArrayList<>(); for (Pattern q : f.keySet()) if (!closure.contains(q)) watched.add(q);
+      Map<Pattern, Long> drop = new HashMap<>(); Map<Pattern, Long> vitalHit = new HashMap<>();
+      for (Map.Entry<Integer, Set<Integer>> e : san.masked().entrySet()) {
+        if (e.getValue().isEmpty()) continue;
+        EventSequence s = db.get(e.getKey()), after = s.mask(e.getValue());
+        NettreeCutIndex idx = null;
+        for (Pattern q : watched) {
+          int before = SupportNO.of(q, s, gap); if (before == 0) continue;
+          int now = SupportNO.of(q, after, gap);
+          if (now != before) drop.merge(q, (long) (before - now), Long::sum);
+          if (idx == null) idx = new NettreeCutIndex(s, gap);
+          int id = idx.add(q, false);
+          long hits = 0; for (int p : idx.vitalPositions(id)) if (e.getValue().contains(p)) hits++;
+          if (hits > 0) vitalHit.merge(q, hits, Long::sum);
+        }
+      }
+      for (Pattern q : watched) {
+        long sup = f.get(q), dq = drop.getOrDefault(q, 0L);
+        if (sup - dq >= sigma) continue;
+        lostTotal++;
+        long vq = vitalHit.getOrDefault(q, 0L);
+        if (sup >= 1.5 * sigma) { out++; if (sup < 3.0 * sigma) outNearDoubled++; }
+        else if (dq > vq) { under++; underGap += dq - vq; }
+        else seen++;
+      }
+      sets++;
+    }
+    System.out.printf(Locale.ROOT, "%s sigma=%d %s %s: sets %d, lost patterns %d = out of band %d (of which below 3 sigma %d) + under-seen %d (drop above the vital count by %d in all) + seen %d%n",
+      Paths.get(file).getFileName(), sigma, gap, a[3], sets, lostTotal, out, outNearDoubled, under, underGap, seen);
+  }
+}

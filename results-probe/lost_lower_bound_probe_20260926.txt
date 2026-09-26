@@ -1,0 +1,314 @@
+# Probe (development machine, Darwin arm64, openjdk version "26.0.1" 2026-04-21), clean clone of commit 5e5a5de (tree 0 modified source files); harness LowerBoundProbe.java sha256 3dcdc4daac4731f0; started 2026-09-26 11:16:52
+finished 2026-09-26 11:19:57
+# rows: dataset;sigma;gmax;kind;set;pattern;|R|;lost CURRENT;lost RW_VITAL;doomed by the min-cut bound
+
+===== per configuration =====
+bpi2013.txt sigma=500 [0,1] repeated: 20 sets; lost CURRENT 88, RW_VITAL 65, doomed (lower bound) 11 over 65 patterns checked; certified optimal: CURRENT 8 sets, RW_VITAL 9 sets
+dna_mt745584.txt sigma=2500 [0,3] distinct: 20 sets; lost CURRENT 85, RW_VITAL 67, doomed (lower bound) 0 over 67 patterns checked; certified optimal: CURRENT 11 sets, RW_VITAL 12 sets
+dna_mt745584.txt sigma=2500 [0,3] repeated: 20 sets; lost CURRENT 89, RW_VITAL 88, doomed (lower bound) 34 over 88 patterns checked; certified optimal: CURRENT 8 sets, RW_VITAL 8 sets
+msnbc.txt sigma=2000 [0,1] distinct: 20 sets; lost CURRENT 6, RW_VITAL 2, doomed (lower bound) 0 over 2 patterns checked; certified optimal: CURRENT 17 sets, RW_VITAL 18 sets
+msnbc.txt sigma=2000 [0,1] repeated: 20 sets; lost CURRENT 68, RW_VITAL 64, doomed (lower bound) 11 over 64 patterns checked; certified optimal: CURRENT 2 sets, RW_VITAL 2 sets
+protein_sdb4.txt sigma=500 [0,3] distinct: 20 sets; lost CURRENT 38, RW_VITAL 27, doomed (lower bound) 0 over 27 patterns checked; certified optimal: CURRENT 17 sets, RW_VITAL 18 sets
+protein_sdb4.txt sigma=500 [0,3] repeated: 20 sets; lost CURRENT 37, RW_VITAL 35, doomed (lower bound) 21 over 35 patterns checked; certified optimal: CURRENT 13 sets, RW_VITAL 13 sets
+sepsis.txt sigma=300 [0,1] repeated: 20 sets; lost CURRENT 70, RW_VITAL 67, doomed (lower bound) 13 over 67 patterns checked; certified optimal: CURRENT 8 sets, RW_VITAL 8 sets
+
+===== rows =====
+bpi2013.txt;500;1;repeated;0;[1, 0, 11, 1];75;1;1;0
+bpi2013.txt;500;1;repeated;1;[1, 1, 5, 5];22;0;0;0
+bpi2013.txt;500;1;repeated;2;[1, 1, 11, 2];3;0;0;0
+bpi2013.txt;500;1;repeated;3;[1, 5, 5];72;1;1;1
+bpi2013.txt;500;1;repeated;4;[1, 11, 5, 1];161;0;0;0
+bpi2013.txt;500;1;repeated;5;[5, 1, 5];91;1;1;0
+bpi2013.txt;500;1;repeated;6;[1, 5, 1, 8];191;0;0;0
+bpi2013.txt;500;1;repeated;7;[11, 11, 10];197;0;0;0
+bpi2013.txt;500;1;repeated;8;[1, 0, 1, 5];540;2;1;0
+bpi2013.txt;500;1;repeated;9;[1, 1, 11, 5];646;0;0;0
+bpi2013.txt;500;1;repeated;10;[11, 0, 1, 1];582;1;0;0
+bpi2013.txt;500;1;repeated;11;[11, 1, 1, 8];822;2;1;0
+bpi2013.txt;500;1;repeated;12;[11, 1, 0, 1];1867;14;9;0
+bpi2013.txt;500;1;repeated;13;[1, 1, 1, 8];1617;0;0;0
+bpi2013.txt;500;1;repeated;14;[11, 1, 1, 10];1579;5;1;0
+bpi2013.txt;500;1;repeated;15;[1, 11, 1, 0];1647;5;4;0
+bpi2013.txt;500;1;repeated;16;[1, 1, 1, 10];2744;5;1;0
+bpi2013.txt;500;1;repeated;17;[1, 11, 11];2394;11;10;1
+bpi2013.txt;500;1;repeated;18;[11, 1, 1];4742;26;23;9
+bpi2013.txt;500;1;repeated;19;[1, 0, 1];2241;14;12;0
+dna_mt745584.txt;2500;3;distinct;0;[1, 4, 2];30;0;0;0
+dna_mt745584.txt;2500;3;distinct;1;[3, 2];75;0;0;0
+dna_mt745584.txt;2500;3;distinct;2;[4, 2, 1];91;0;0;0
+dna_mt745584.txt;2500;3;distinct;3;[2, 4, 1];97;0;0;0
+dna_mt745584.txt;2500;3;distinct;4;[1, 3, 4];172;0;0;0
+dna_mt745584.txt;2500;3;distinct;5;[4, 3, 1];168;0;0;0
+dna_mt745584.txt;2500;3;distinct;6;[3, 1, 4];122;0;0;0
+dna_mt745584.txt;2500;3;distinct;7;[2, 1, 4];148;0;0;0
+dna_mt745584.txt;2500;3;distinct;8;[4, 1, 2];175;1;0;0
+dna_mt745584.txt;2500;3;distinct;9;[4, 1, 3];199;0;0;0
+dna_mt745584.txt;2500;3;distinct;10;[3, 4, 1];222;0;0;0
+dna_mt745584.txt;2500;3;distinct;11;[1, 4, 3];302;0;0;0
+dna_mt745584.txt;2500;3;distinct;12;[3, 1];1060;3;2;0
+dna_mt745584.txt;2500;3;distinct;13;[1, 2];1165;8;6;0
+dna_mt745584.txt;2500;3;distinct;14;[2, 1];1178;8;7;0
+dna_mt745584.txt;2500;3;distinct;15;[4, 2];1120;5;3;0
+dna_mt745584.txt;2500;3;distinct;16;[4, 1];2679;20;18;0
+dna_mt745584.txt;2500;3;distinct;17;[4, 3];1568;10;8;0
+dna_mt745584.txt;2500;3;distinct;18;[1, 4];2633;20;16;0
+dna_mt745584.txt;2500;3;distinct;19;[3, 4];1543;10;7;0
+dna_mt745584.txt;2500;3;repeated;0;[4, 1, 4, 1];61;0;0;0
+dna_mt745584.txt;2500;3;repeated;1;[1, 1, 2];79;1;1;0
+dna_mt745584.txt;2500;3;repeated;2;[1, 4, 1, 4];57;0;0;0
+dna_mt745584.txt;2500;3;repeated;3;[3, 1, 1];35;0;0;0
+dna_mt745584.txt;2500;3;repeated;4;[4, 1, 1, 4];112;2;2;0
+dna_mt745584.txt;2500;3;repeated;5;[1, 4, 4, 1];152;2;2;0
+dna_mt745584.txt;2500;3;repeated;6;[1, 1, 1, 4];81;1;1;1
+dna_mt745584.txt;2500;3;repeated;7;[2, 1, 1];108;3;3;0
+dna_mt745584.txt;2500;3;repeated;8;[4, 4, 1, 1];238;2;2;0
+dna_mt745584.txt;2500;3;repeated;9;[2, 2];232;0;0;0
+dna_mt745584.txt;2500;3;repeated;10;[2, 4, 4];177;0;0;0
+dna_mt745584.txt;2500;3;repeated;11;[4, 4, 4, 1];212;1;1;1
+dna_mt745584.txt;2500;3;repeated;12;[4, 1, 4];551;13;13;8
+dna_mt745584.txt;2500;3;repeated;13;[3, 4, 4];336;3;3;2
+dna_mt745584.txt;2500;3;repeated;14;[4, 3, 4];282;1;1;0
+dna_mt745584.txt;2500;3;repeated;15;[3, 3];405;0;0;0
+dna_mt745584.txt;2500;3;repeated;16;[1, 1];2350;11;11;7
+dna_mt745584.txt;2500;3;repeated;17;[4, 1, 1];809;16;16;5
+dna_mt745584.txt;2500;3;repeated;18;[4, 4];2873;16;16;6
+dna_mt745584.txt;2500;3;repeated;19;[4, 4, 1];1011;17;16;4
+msnbc.txt;2000;1;distinct;0;[3, 12];10;0;0;0
+msnbc.txt;2000;1;distinct;1;[12, 2, 1];111;0;0;0
+msnbc.txt;2000;1;distinct;2;[1, 9];226;0;0;0
+msnbc.txt;2000;1;distinct;3;[12, 3];139;0;0;0
+msnbc.txt;2000;1;distinct;4;[12, 1, 2];390;0;0;0
+msnbc.txt;2000;1;distinct;5;[1, 2, 7];356;0;0;0
+msnbc.txt;2000;1;distinct;6;[8, 2];558;0;0;0
+msnbc.txt;2000;1;distinct;7;[13, 14];250;0;0;0
+msnbc.txt;2000;1;distinct;8;[1, 2, 4];991;0;0;0
+msnbc.txt;2000;1;distinct;9;[11, 2];1250;0;0;0
+msnbc.txt;2000;1;distinct;10;[1, 15];1329;0;0;0
+msnbc.txt;2000;1;distinct;11;[7, 9];599;0;0;0
+msnbc.txt;2000;1;distinct;12;[7, 2];2319;0;0;0
+msnbc.txt;2000;1;distinct;13;[2, 10];2357;0;0;0
+msnbc.txt;2000;1;distinct;14;[1, 7, 4];2684;0;0;0
+msnbc.txt;2000;1;distinct;15;[5, 1];1907;0;0;0
+msnbc.txt;2000;1;distinct;16;[1, 4];11326;2;1;0
+msnbc.txt;2000;1;distinct;17;[7, 6];5898;1;0;0
+msnbc.txt;2000;1;distinct;18;[1, 3];6130;0;0;0
+msnbc.txt;2000;1;distinct;19;[1, 14];10223;3;1;0
+msnbc.txt;2000;1;repeated;0;[1, 1, 1, 10];95;0;0;0
+msnbc.txt;2000;1;repeated;1;[14, 14, 1, 14];37;1;1;0
+msnbc.txt;2000;1;repeated;2;[1, 6, 1, 6];277;1;1;0
+msnbc.txt;2000;1;repeated;3;[12, 12, 12];193;0;0;0
+msnbc.txt;2000;1;repeated;4;[6, 6, 7, 6];313;1;1;0
+msnbc.txt;2000;1;repeated;5;[1, 1, 7, 7];383;1;1;0
+msnbc.txt;2000;1;repeated;6;[1, 14, 14, 1];729;5;5;0
+msnbc.txt;2000;1;repeated;7;[10, 1, 1];1053;1;1;0
+msnbc.txt;2000;1;repeated;8;[1, 12, 1, 12];936;3;3;0
+msnbc.txt;2000;1;repeated;9;[1, 1, 6, 1];802;3;3;0
+msnbc.txt;2000;1;repeated;10;[2, 2, 1, 2];797;2;2;0
+msnbc.txt;2000;1;repeated;11;[6, 1, 6];770;2;2;0
+msnbc.txt;2000;1;repeated;12;[1, 1, 1, 12];2026;4;4;0
+msnbc.txt;2000;1;repeated;13;[12, 1, 1, 1];1450;2;2;0
+msnbc.txt;2000;1;repeated;14;[2, 2, 1, 1];1659;1;1;0
+msnbc.txt;2000;1;repeated;15;[1, 1, 1, 14];1290;5;5;2
+msnbc.txt;2000;1;repeated;16;[1, 4, 1];4914;5;4;1
+msnbc.txt;2000;1;repeated;17;[7, 4, 4];3961;11;9;2
+msnbc.txt;2000;1;repeated;18;[4, 7, 4];5123;13;13;3
+msnbc.txt;2000;1;repeated;19;[1, 2, 1, 1];6499;7;6;3
+protein_sdb4.txt;500;3;distinct;0;[2, 0, 8];2;0;0;0
+protein_sdb4.txt;500;3;distinct;1;[9, 2, 17];44;0;0;0
+protein_sdb4.txt;500;3;distinct;2;[2, 17, 0];12;0;0;0
+protein_sdb4.txt;500;3;distinct;3;[10, 15];4;0;0;0
+protein_sdb4.txt;500;3;distinct;4;[8, 6];105;0;0;0
+protein_sdb4.txt;500;3;distinct;5;[6, 17];132;0;0;0
+protein_sdb4.txt;500;3;distinct;6;[5, 6];112;0;0;0
+protein_sdb4.txt;500;3;distinct;7;[17, 6];214;0;0;0
+protein_sdb4.txt;500;3;distinct;8;[19, 7];328;0;0;0
+protein_sdb4.txt;500;3;distinct;9;[12, 8];435;0;0;0
+protein_sdb4.txt;500;3;distinct;10;[13, 8];289;0;0;0
+protein_sdb4.txt;500;3;distinct;11;[0, 6];261;0;0;0
+protein_sdb4.txt;500;3;distinct;12;[4, 3];588;0;0;0
+protein_sdb4.txt;500;3;distinct;13;[8, 4];603;0;0;0
+protein_sdb4.txt;500;3;distinct;14;[17, 7];652;0;0;0
+protein_sdb4.txt;500;3;distinct;15;[16, 17];740;0;0;0
+protein_sdb4.txt;500;3;distinct;16;[3, 17];949;0;0;0
+protein_sdb4.txt;500;3;distinct;17;[7, 2];979;1;1;0
+protein_sdb4.txt;500;3;distinct;18;[9, 0];1878;36;26;0
+protein_sdb4.txt;500;3;distinct;19;[3, 2];903;1;0;0
+protein_sdb4.txt;500;3;repeated;0;[9, 2, 2];8;0;0;0
+protein_sdb4.txt;500;3;repeated;1;[17, 17, 2];3;0;0;0
+protein_sdb4.txt;500;3;repeated;2;[0, 0, 0, 0];4;0;0;0
+protein_sdb4.txt;500;3;repeated;3;[5, 5, 9];16;1;1;0
+protein_sdb4.txt;500;3;repeated;4;[5, 5, 0];43;1;1;1
+protein_sdb4.txt;500;3;repeated;5;[3, 3, 9];49;1;1;0
+protein_sdb4.txt;500;3;repeated;6;[9, 5, 5];42;1;1;1
+protein_sdb4.txt;500;3;repeated;7;[0, 5, 5];70;1;1;1
+protein_sdb4.txt;500;3;repeated;8;[0, 8, 0];72;2;2;2
+protein_sdb4.txt;500;3;repeated;9;[9, 9, 2];92;1;1;0
+protein_sdb4.txt;500;3;repeated;10;[8, 0, 0];72;0;0;0
+protein_sdb4.txt;500;3;repeated;11;[2, 9, 9];109;1;1;0
+protein_sdb4.txt;500;3;repeated;12;[5, 0, 0];182;2;2;1
+protein_sdb4.txt;500;3;repeated;13;[0, 0, 17];195;2;2;1
+protein_sdb4.txt;500;3;repeated;14;[12, 12];180;0;0;0
+protein_sdb4.txt;500;3;repeated;15;[9, 9, 0];173;3;3;3
+protein_sdb4.txt;500;3;repeated;16;[9, 9];1699;17;15;7
+protein_sdb4.txt;500;3;repeated;17;[8, 8];793;4;4;4
+protein_sdb4.txt;500;3;repeated;18;[4, 4];445;0;0;0
+protein_sdb4.txt;500;3;repeated;19;[7, 7];416;0;0;0
+sepsis.txt;300;1;repeated;0;[9, 9, 9, 2];6;0;0;0
+sepsis.txt;300;1;repeated;1;[2, 2, 9, 9];12;0;0;0
+sepsis.txt;300;1;repeated;2;[1, 9, 2, 9];22;0;0;0
+sepsis.txt;300;1;repeated;3;[2, 9, 9, 9];4;0;0;0
+sepsis.txt;300;1;repeated;4;[2, 9, 2, 2];51;4;4;0
+sepsis.txt;300;1;repeated;5;[2, 2, 9, 2];40;2;2;0
+sepsis.txt;300;1;repeated;6;[1, 2, 9, 2];21;0;0;0
+sepsis.txt;300;1;repeated;7;[9, 9, 2, 2];25;0;0;0
+sepsis.txt;300;1;repeated;8;[2, 9, 9, 2];173;6;6;1
+sepsis.txt;300;1;repeated;9;[9, 2, 9, 9];58;3;3;0
+sepsis.txt;300;1;repeated;10;[9, 2, 2, 9];136;7;7;1
+sepsis.txt;300;1;repeated;11;[9, 9, 9];73;1;1;0
+sepsis.txt;300;1;repeated;12;[2, 9, 2, 9];168;8;7;0
+sepsis.txt;300;1;repeated;13;[9, 2, 9, 2];195;10;9;0
+sepsis.txt;300;1;repeated;14;[2, 9, 9];310;4;4;1
+sepsis.txt;300;1;repeated;15;[2, 2, 9];228;6;6;1
+sepsis.txt;300;1;repeated;16;[9, 9];478;0;0;0
+sepsis.txt;300;1;repeated;17;[2, 9, 2];386;9;8;4
+sepsis.txt;300;1;repeated;18;[9, 2, 9];409;8;8;3
+sepsis.txt;300;1;repeated;19;[2, 2];383;2;2;2
+
+===== harness source: LowerBoundProbe.java =====
+import hidenosp.core.*; import hidenosp.core.flow.NettreeFlow; import hidenosp.io.*; import hidenosp.metrics.*; import hidenosp.hide.*; import hidenosp.exp.SensitiveSampling; import hidenosp.index.NettreeCutIndex; import java.util.*; import java.nio.file.*; import java.io.*;
+/**
+ * Probe: a lower bound on the least Lost among the minimum-mask hiding sets, to tell whether a set
+ * where CURRENT and RW_VITAL lose the same number of patterns is already optimal.
+ *
+ * Bound. For a watched pattern Q, a sequence s and any minimum cut C_s of Q's Nettree in s, masking
+ * the positions X lowers sup_NO(Q, s) by at least |C_s ∩ nodes(X)|: C_s minus the masked nodes still
+ * cuts every surviving occurrence. So for every minimum-mask hiding set X, the total drop D_Q(X) is at
+ * least sum_s |C_s ∩ nodes(X_s)|, an additive weight whose least value over the minimum-mask sets
+ * the exact program computes. If that least value reaches m_Q = sup(Q) - sigma + 1, Q is lost in
+ * every minimum-mask hiding set ("doomed"), and the number of doomed patterns is a lower bound on
+ * the optimum. Two cuts per sequence are tried: the source-side minimum cut, and a minimum cut that
+ * prefers nodes at positions where P's masks can go. The larger least value is kept.
+ */
+public class LowerBoundProbe {
+  static final int ITERATIONS = 6;
+  public static void main(String[] a) throws IOException {
+    String file = a[0]; int sigma = Integer.parseInt(a[1]); GapConstraint gap = GapConstraint.of(0, Integer.parseInt(a[2])); boolean repeated = a[3].equals("repeated");
+    PrintWriter rows = new PrintWriter(new FileWriter(a[4], true));
+    String config = Paths.get(file).getFileName() + ";" + sigma + ";" + a[2] + ";" + a[3];
+    SequenceDatabase db = DatasetReader.read(Paths.get(file), DatasetReader.Format.SPMF).database();
+    Metrics.Context context = Metrics.Context.of(db, gap, 4, sigma);
+    Map<Pattern, Long> f = context.frequent();
+    SensitiveSampling.Result sampling = SensitiveSampling.draw(f, 1, 4, 2026, repeated);
+    int sets = 0; long sumDoomed = 0, sumCur = 0, sumRw = 0, checked = 0; int certCur = 0, certRw = 0;
+    for (SensitiveSampling.Draw d : sampling.draws()) {
+      Pattern p = d.patterns().get(0);
+      HideProblem problem = new HideProblem(db, List.of(p), gap, HideProblem.Mode.HIDE_DB, sigma, 0.5, 4);
+      Set<Pattern> closure = FrequentPatterns.closure(List.of(p), f.keySet());
+      List<Pattern> watched = new ArrayList<>(); for (Pattern q : f.keySet()) if (!closure.contains(q)) watched.add(q);
+      List<Pattern> band = FrequentPatterns.nearThreshold(f, sigma, 0.5, closure);
+      Metrics.Context.Session session = context.session(problem);
+      int N = db.size();
+      // CURRENT, exactly as the method runs.
+      Sanitization cur = new CutHide(CutHideConfig.standard()).withNearThreshold(band, FrequentPatterns.weightFactors(band, f, sigma)).run(problem);
+      // RW_VITAL, as in SurrogateProbe: iteration 0 is CURRENT's weight, then re-weighting on the exact drops.
+      Map<Integer, Map<Pattern, int[]>> vital = new HashMap<>(); Map<Integer, Map<Pattern, Integer>> supIn = new HashMap<>();
+      for (int s = 0; s < N; s++) {
+        EventSequence seq = db.get(s);
+        if (SupportNO.of(p, seq, gap) == 0) continue;
+        NettreeCutIndex idx = new NettreeCutIndex(seq, gap);
+        Map<Pattern, int[]> vs = new HashMap<>(); Map<Pattern, Integer> su = new HashMap<>();
+        for (Pattern q : watched) { int id = idx.add(q, false); int nu = idx.supNO(id); if (nu == 0) continue; su.put(q, nu); vs.put(q, idx.vitalPositions(id)); }
+        vital.put(s, vs); supIn.put(s, su);
+      }
+      Map<Pattern, Double> factor = new HashMap<>(); for (Pattern q : watched) factor.put(q, 1.0 / (f.get(q) - sigma + 1));
+      Sanitization rw = null; int rwLost = Integer.MAX_VALUE;
+      for (int it = 0; it < ITERATIONS; it++) {
+        double[][] w = new double[N][];
+        for (int s = 0; s < N; s++) {
+          w[s] = new double[db.get(s).length()];
+          if (!vital.containsKey(s)) continue;
+          for (Pattern q : it == 0 ? band : watched) {
+            int[] vp = vital.get(s).get(q); if (vp == null) continue;
+            double c = it == 0 ? 1.0 / (f.get(q) - sigma + 1) : factor.get(q);
+            for (int pos : vp) w[s][pos] += c;
+          }
+        }
+        Sanitization san = new CutHide(CutHideConfig.uniformWeights()).withExplicitWeights(w).run(problem);
+        int lost = session.evaluate(san).lost();
+        if (lost < rwLost) { rwLost = lost; rw = san; }
+        if (it + 1 < ITERATIONS) {
+          Map<Pattern, Long> drop = drops(db, gap, san, supIn);
+          for (Pattern q : watched) {
+            double m = f.get(q) - sigma + 1, dq = drop.getOrDefault(q, 0L), tau = Math.max(1.0, 0.25 * m);
+            double sg = 1.0 / (1.0 + Math.exp(-(dq - m + 0.5) / tau));
+            factor.put(q, 1.0 / m + sg * (1 - sg) / tau);
+          }
+        }
+      }
+      int curLost = session.evaluate(cur).lost();
+      // Patterns lost by RW_VITAL's set: every doomed pattern is among them.
+      Map<Pattern, Long> rwDrop = drops(db, gap, rw, supIn);
+      List<Pattern> lostRw = new ArrayList<>();
+      for (Pattern q : watched) if (f.get(q) - rwDrop.getOrDefault(q, 0L) < sigma) lostRw.add(q);
+      if (lostRw.size() != rwLost) throw new IllegalStateException("drop recount " + lostRw.size() + " != session " + rwLost);
+      // P's vital positions per sequence, for the second cut.
+      Map<Integer, Set<Integer>> pVital = new HashMap<>(), pPos = new HashMap<>();
+      for (int s : vital.keySet()) {
+        Nettree np = Nettree.build(p, db.get(s), gap);
+        Set<Integer> vp = new HashSet<>(); for (int i : new NettreeFlow(np).vitalPositions()) vp.add(i);
+        Set<Integer> pp = new HashSet<>(); for (int v = 0; v < np.nodeCount(); v++) pp.add(np.position(v));
+        pVital.put(s, vp); pPos.put(s, pp);
+      }
+      int doomed = 0;
+      for (Pattern q : lostRw) {
+        long m = f.get(q) - sigma + 1;
+        long best = 0;
+        for (int variant = 0; variant < 2 && best < m; variant++) {
+          double[][] w = new double[N][];
+          for (int s = 0; s < N; s++) {
+            w[s] = new double[db.get(s).length()];
+            if (!supIn.containsKey(s) || !supIn.get(s).containsKey(q)) continue;
+            Nettree nq = Nettree.build(q, db.get(s), gap);
+            int[] cutNodes;
+            if (variant == 0) {
+              boolean[] c = new NettreeFlow(nq).minCut(); List<Integer> l = new ArrayList<>(); for (int v = 0; v < c.length; v++) if (c[v]) l.add(v);
+              cutNodes = l.stream().mapToInt(Integer::intValue).toArray();
+            } else {
+              long[] cost = new long[nq.nodeCount()];
+              for (int v = 0; v < cost.length; v++) { int pos = nq.position(v); cost[v] = pVital.get(s).contains(pos) ? 0 : pPos.get(s).contains(pos) ? 1 : 2; }
+              cutNodes = NettreeFlow.minWeightMinCut(nq, cost, null).nodes();
+            }
+            if (cutNodes.length != supIn.get(s).get(q)) throw new IllegalStateException("cut size " + cutNodes.length + " != sup " + supIn.get(s).get(q));
+            for (int v : cutNodes) w[s][nq.position(v)] += 1.0;
+          }
+          Sanitization san = new CutHide(CutHideConfig.uniformWeights()).withExplicitWeights(w).run(problem);
+          long least = 0; for (Map.Entry<Integer, Set<Integer>> e : san.masked().entrySet()) for (int i : e.getValue()) least += Math.round(w[e.getKey()][i]);
+          if (san.maskCount() != cur.maskCount()) throw new IllegalStateException("|R| " + san.maskCount() + " != " + cur.maskCount());
+          best = Math.max(best, least);
+        }
+        checked++;
+        if (best >= m) doomed++;
+      }
+      if (doomed > rwLost || doomed > curLost) throw new IllegalStateException("bound above a solution: " + doomed);
+      rows.printf(Locale.ROOT, "%s;%d;%s;%d;%d;%d;%d%n", config, sets, p, cur.maskCount(), curLost, rwLost, doomed);
+      rows.flush();
+      sumDoomed += doomed; sumCur += curLost; sumRw += rwLost; if (curLost == doomed) certCur++; if (rwLost == doomed) certRw++;
+      sets++;
+    }
+    System.out.printf(Locale.ROOT, "%s sigma=%d %s %s: %d sets; lost CURRENT %d, RW_VITAL %d, doomed (lower bound) %d over %d patterns checked; certified optimal: CURRENT %d sets, RW_VITAL %d sets%n",
+      Paths.get(file).getFileName(), sigma, gap, a[3], sets, sumCur, sumRw, sumDoomed, checked, certCur, certRw);
+    rows.close();
+  }
+  static Map<Pattern, Long> drops(SequenceDatabase db, GapConstraint gap, Sanitization san, Map<Integer, Map<Pattern, Integer>> supIn) {
+    Map<Pattern, Long> drop = new HashMap<>();
+    for (Map.Entry<Integer, Set<Integer>> e : san.masked().entrySet()) {
+      if (e.getValue().isEmpty()) continue;
+      EventSequence after = db.get(e.getKey()).mask(e.getValue());
+      for (Map.Entry<Pattern, Integer> sq : supIn.get(e.getKey()).entrySet()) {
+        int now = SupportNO.of(sq.getKey(), after, gap);
+        if (now != sq.getValue()) drop.merge(sq.getKey(), (long) (sq.getValue() - now), Long::sum);
+      }
+    }
+    return drop;
+  }
+}

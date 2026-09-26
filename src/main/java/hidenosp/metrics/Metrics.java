@@ -203,7 +203,13 @@ public final class Metrics {
                         });
             }
 
-            public Row evaluate(Sanitization sanitization) {
+            /**
+             * The drop in sup_NO over the whole database of every non-sensitive frequent pattern and
+             * every sensitive pattern that the masks lower; patterns left untouched are absent.
+             * {@link #evaluate} counts Lost from exactly this map, and methods that steer by the
+             * exact side effect read it here, so the two never compute it differently.
+             */
+            public Map<Pattern, Long> drops(Sanitization sanitization) {
                 Map<Pattern, Long> drop = new HashMap<>();
                 for (Map.Entry<Integer, Set<Integer>> e : sanitization.masked().entrySet()) {
                     if (e.getValue().isEmpty()) {
@@ -213,6 +219,11 @@ public final class Metrics {
                         drop.merge(d.getKey(), (long) d.getValue(), Long::sum);
                     }
                 }
+                return drop;
+            }
+
+            public Row evaluate(Sanitization sanitization) {
+                Map<Pattern, Long> drop = drops(sanitization);
 
                 int lost = 0;
                 long supportBefore = 0;

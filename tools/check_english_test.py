@@ -197,6 +197,21 @@ def test_corollary_with_a_design_document_label():
     expect_caught("src/main/java/demo/D.java", "class D { // He qua P%dc\n}\n" % 1, "numbering")
 
 
+def test_digest_with_listed_letters_is_not_a_word():
+    root = make_repo({"config/digests.tsv": (
+        "name\tsha256\tuuid\n"
+        "x\t0f9dac7e3cac1b7cacdac9e2bac3de\t533f66a4-dac1-4ac7-8612-1235d65d1f37\n")})
+    try:
+        code, output = run(root)
+        assert code == 0, output
+    finally:
+        shutil.rmtree(root)
+
+
+def test_word_of_hexadecimal_letters_without_a_digit_is_still_a_word():
+    expect_caught("tools/g.py", "# dac biet: cac mau\n", "word")
+
+
 def test_file_that_is_not_utf8():
     expect_caught("tools/f.py", "# ch\u00e1y\n".encode("cp1258"), "encoding")
 

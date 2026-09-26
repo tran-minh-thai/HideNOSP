@@ -23,14 +23,17 @@ The text of every code file, and its path, are checked against three rules.
              that splits completely into two or more listed syllables of three letters or more, one
              of them from WORDS_ANYWHERE, is a violation too (a name written without separators),
              unless it is one of ENGLISH_SPLITS. A path to a documentation file (*.md) is not cut
-             into words: a document may be named in its own language.
+             into words: a document may be named in its own language. A run of the letters a to
+             f that touches a digit belongs to a digest (sha256, a commit, a UUID) and gives no
+             token, or ...9dac7... would read as a word.
   numbering  a section sign followed by a digit, or the Vietnamese name of a theorem, lemma,
              proposition, corollary or definition followed by a number, with or without
              diacritics: the numbering of the paper and of the design documents stays out of code.
 
 Not detected, by design: a free-text phrase in which every word is also an English word or a
 two-letter syllable; the English words Theorem, Lemma and so on followed by a number, which in this
-code always cite a published paper; an abbreviation such as "tk" standing for a Vietnamese name.
+code always cite a published paper; an abbreviation such as "tk" standing for a Vietnamese name; a
+word spelt only with the letters a to f right next to a digit, as in cac2.
 
 The word lists were measured on 2026-09-26 against every file of the repository, and a word was
 kept only when it matched nothing in the English text there; --measure counts them again.
@@ -80,6 +83,7 @@ IDENTIFIER = re.compile(r"[A-Za-z0-9_-]+")
 TOKEN = re.compile(r"[A-Z]+(?![a-z])|[A-Z]?[a-z]+")
 LOWER_RUN = re.compile(r"[a-z]{6,}")
 DOC_PATH = re.compile(r"[A-Za-z0-9_./-]*[A-Za-z0-9_-]+\.md\b")
+HEX_LETTERS = frozenset("abcdefABCDEF")
 ENGLISH_FUNCTION_WORDS = frozenset(
     "and of is are was were for with from this which when what where has have been would should "
     "could must into than over only every its does these those".split())
@@ -152,8 +156,19 @@ def without_marks(text):
     return "".join(c for c in unicodedata.normalize("NFD", text) if unicodedata.category(c) != "Mn")
 
 
+def is_digest_part(identifier, match):
+    """True for a run of hexadecimal letters that touches a digit: part of a digest (sha256, a
+    commit, a UUID), where ...9dac7... would otherwise read as the word dac."""
+    if not set(match.group(0)) <= HEX_LETTERS:
+        return False
+    before = identifier[match.start() - 1] if match.start() else ""
+    after = identifier[match.end()] if match.end() < len(identifier) else ""
+    return before.isdigit() or after.isdigit()
+
+
 def tokens_of(identifier):
-    return [t.lower() for t in TOKEN.findall(identifier)]
+    return [m.group(0).lower() for m in TOKEN.finditer(identifier)
+            if not is_digest_part(identifier, m)]
 
 
 @lru_cache(maxsize=None)
@@ -197,7 +212,8 @@ def word_violations(line):
         short = sum(1 for t in tokens if t in SHORT_SYLLABLES)
         if (any(t in WORDS_ANYWHERE for t in tokens)
                 or (in_names and in_names + short >= 2)
-                or any(is_concatenation(run) for run in LOWER_RUN.findall(identifier))):
+                or any(is_concatenation(m.group(0)) for m in LOWER_RUN.finditer(identifier)
+                       if not is_digest_part(identifier, m))):
             found.append(("word", identifier))
     return found
 
@@ -281,7 +297,9 @@ def check(root, show_list):
             violations[path] = found
 
     checked = len(classes["code"]) - len(missing)
-    print("Checked %d code files (%d lines) in %s" % (checked, lines, os.path.abspath(root)))
+    # The directory name only: a machine path does not belong in a report that may be kept.
+    print("Checked %d code files (%d lines) in repository %s"
+          % (checked, lines, os.path.basename(os.path.abspath(root))))
     print("Not checked: %d documentation files (*.md), %d run-output files (%s)"
           % (len(classes["documentation"]), len(classes["run output"]), ", ".join(OUTPUT_DIRS)))
     exempt = [p for p in SELF if p in classes["code"]]
@@ -345,7 +363,8 @@ def measure(root):
     with open(os.path.abspath(__file__), "rb") as handle:
         digest = hashlib.sha256(handle.read()).hexdigest()
     print("# check_english.py --measure; repository %s at %s (%s); tool sha256 %s"
-          % (os.path.abspath(root), revision, "tree MODIFIED" if dirty else "tree clean", digest))
+          % (os.path.basename(os.path.abspath(root)), revision,
+             "tree MODIFIED" if dirty else "tree clean", digest))
     print("# code, documentation, output: token counts per class of file. english: counts in lines")
     print("# of documentation or output with no diacritic, an English function word, and fewer")
     print("# than two WORDS_ANYWHERE tokens. A WORDS_ANYWHERE word needs 0 in code and in english.")

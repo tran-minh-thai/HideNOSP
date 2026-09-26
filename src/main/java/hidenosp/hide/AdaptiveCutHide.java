@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * CUT-HIDE with an adaptive side-effect weight: the position weight of step 4 is recomputed from
@@ -39,7 +40,10 @@ import java.util.Map;
  * <p>Limit, measured: the re-weighting changes every sequence at once. On the Max-Cut instances all
  * vertices see the same signal, so the solution flips between "mask a everywhere" and "mask b
  * everywhere" and never improves on CUT-HIDE there ({@code AdaptiveCutHideTest}); breaking that
- * symmetry needs moves that change one sequence at a time.
+ * symmetry needs moves that change one sequence at a time. {@link #withLocalSearch} adds them as a
+ * second stage ({@link MaskLocalSearch}), started from the best re-weighted solution: the
+ * re-weighting moves many sequences together, which the deep losses of large supports need, and the
+ * local search moves one or two sequences at a time, which pairs of masks and small supports need.
  *
  * <p>The drops come from the caller's evaluator, the same code that counts Lost in the result files,
  * so the method and the metric cannot disagree about a drop. Only one sensitive pattern, HIDE-DB and
@@ -63,6 +67,9 @@ public final class AdaptiveCutHide implements HidingMethod {
     private final DropOracle oracle;
     private int[] lostPerIteration = new int[0];
     private int chosen = -1;
+    private int searchPasses = -1;
+    private int searchReceivers = -1;
+    private MaskLocalSearch.Result searchResult;
 
     /**
      * @param band B_eps and its factors 1 / m_Q, exactly as given to the standard CUT-HIDE
@@ -90,9 +97,30 @@ public final class AdaptiveCutHide implements HidingMethod {
         this.oracle = oracle;
     }
 
+    /**
+     * Adds the second stage: the local search of {@link MaskLocalSearch} from the best re-weighted
+     * solution, with the saving condition of lemma L9. It never loses more patterns than its start.
+     */
+    public AdaptiveCutHide withLocalSearch(int maxPasses, int receivers) {
+        if (maxPasses < 1 || receivers < 1) {
+            throw new IllegalArgumentException("passes and receivers must be at least 1, got "
+                    + maxPasses + " and " + receivers);
+        }
+        this.searchPasses = maxPasses;
+        this.searchReceivers = receivers;
+        return this;
+    }
+
     @Override
     public String name() {
-        return "CUT-HIDE adaptive weight (" + iterations + " iterations)";
+        return "CUT-HIDE adaptive weight (" + iterations + " iterations)"
+                + (searchPasses > 0 ? " + local search (" + searchPasses + " passes, "
+                + searchReceivers + " receivers)" : "");
+    }
+
+    /** The local search of the last run, or null when it is off. */
+    public MaskLocalSearch.Result searchResult() {
+        return searchResult;
     }
 
     /** Lost of every iteration of the last run, iteration 0 first. */
@@ -116,6 +144,7 @@ public final class AdaptiveCutHide implements HidingMethod {
         Pattern p = problem.sensitive().get(0);
         int n = problem.database().size();
         lostPerIteration = new int[iterations];
+        searchResult = null;
 
         Sanitization best = new CutHide(CutHideConfig.standard())
                 .withNearThreshold(band, bandFactor).run(problem);
@@ -123,13 +152,14 @@ public final class AdaptiveCutHide implements HidingMethod {
         int bestLost = lost(drop);
         lostPerIteration[0] = bestLost;
         chosen = 0;
-        if (iterations == 1) {
+        if (iterations == 1 && searchPasses < 0) {
             return best.method(name());
         }
 
         // Vital positions of every watched pattern in every sequence that carries P: masks go
         // nowhere else, so no other position needs a weight.
         List<Map<Pattern, int[]>> vital = new ArrayList<>(n);
+        Map<Integer, Map<Pattern, int[]>> vitalBySequence = new LinkedHashMap<>();
         for (int s = 0; s < n; s++) {
             EventSequence sequence = problem.database().get(s);
             if (SupportNO.of(p, sequence, problem.gap()) == 0) {
@@ -145,6 +175,7 @@ public final class AdaptiveCutHide implements HidingMethod {
                 }
             }
             vital.add(here);
+            vitalBySequence.put(s, here);
         }
 
         for (int k = 1; k < iterations; k++) {
@@ -178,7 +209,33 @@ public final class AdaptiveCutHide implements HidingMethod {
                 chosen = k;
             }
         }
-        return best.method(name());
+        if (searchPasses < 0) {
+            return best.method(name());
+        }
+
+        searchResult = new MaskLocalSearch(problem, watched, sigma, vitalBySequence, oracle,
+                searchPasses, searchReceivers).run(best);
+        Sanitization searched = new Sanitization(problem.database());
+        for (Map.Entry<Integer, Set<Integer>> e : searchResult.masks().entrySet()) {
+            for (int position : e.getValue()) {
+                searched.mask(e.getKey(), position);
+            }
+        }
+        // Step 8 again: the moves keep the support of P below sigma by construction; check it.
+        long left = SupportNO.of(p, problem.database().mask(searchResult.masks()), problem.gap());
+        if (left >= problem.threshold()) {
+            throw new IllegalStateException("the local search left sup_NO(P) = " + left
+                    + ", not below " + problem.threshold() + "; this is a bug");
+        }
+        // The search counts Lost incrementally; the evaluator must agree, or the search is wrong.
+        int checked = lost(oracle.drops(searched));
+        if (checked != searchResult.lost() || searched.maskCount() != best.maskCount()
+                || searchResult.lost() > bestLost) {
+            throw new IllegalStateException("local search inconsistent: it counted "
+                    + searchResult.lost() + " lost, the evaluator " + checked + ", start " + bestLost
+                    + "; |R| " + searched.maskCount() + " against " + best.maskCount());
+        }
+        return searched.method(name());
     }
 
     /** The patterns of {@code watched} whose support falls below sigma under these drops. */

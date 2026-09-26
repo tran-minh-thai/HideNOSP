@@ -16,6 +16,7 @@ import hidenosp.hide.AdaptiveCutHide;
 import hidenosp.hide.CutHide;
 import hidenosp.hide.CutHideConfig;
 import hidenosp.hide.HideProblem;
+import hidenosp.hide.MaskLocalSearch;
 import hidenosp.hide.PrimalDualCover;
 import hidenosp.hide.Sanitization;
 import hidenosp.io.CsvWriter;
@@ -285,6 +286,19 @@ public final class Sc3MainComparison implements Scenario {
                 Metrics.Context.Session session = context.session(problem);
                 return new AdaptiveCutHide(band, factor, watched, sigma,
                         AdaptiveCutHide.DEFAULT_ITERATIONS, session::drops);
+            }
+            case "cut-hide-rw-ls": {
+                // The method under test of H2 and H2-R since preregistration section 12: the
+                // adaptive weight, then the local search with the saving condition of lemma L9.
+                // Both need one sensitive pattern; with several, CUT-HIDE is the greedy of step 7,
+                // unchanged, and the method column of the row says so.
+                if (problem.sensitive().size() != 1) {
+                    return create("cut-hide", problem, frequent, sigma, epsilon, seed, context);
+                }
+                AdaptiveCutHide adaptive = (AdaptiveCutHide) create("cut-hide-rw", problem, frequent,
+                        sigma, epsilon, seed, context);
+                return adaptive.withLocalSearch(MaskLocalSearch.DEFAULT_PASSES,
+                        MaskLocalSearch.DEFAULT_RECEIVERS);
             }
             case "cut-hide-uniform":
                 return new CutHide(CutHideConfig.uniformWeights());

@@ -57,11 +57,16 @@ nettree_checks.py, probe/  các script dò tìm bằng Python
 results-invariant/      số đo không phụ thuộc máy
 results/                số đo thời gian và bộ nhớ, chỉ từ máy đo đã khai
 results-probe/          số đo dò tìm, không đưa vào bài
+COMMIT_MAP.tsv          mã commit cũ → mới của lần viết lại lịch sử ngày 26/09/2026
 ```
 
 Ba thư mục kết quả có luật riêng và `hidenosp.io.ResultSink` cưỡng chế ngay lúc mở tệp: tệp bất
 biến không được mang cột thời gian hay bộ nhớ, và chỉ máy đo đã khai mới được ghi số thời gian.
 `tools/check_results.py` kiểm lại các luật đó trên tệp có thật trên đĩa.
+
+Lịch sử kho được viết lại ngày 26/09/2026 để sửa lời khai nguồn gốc trong hai tài liệu ở `config/`,
+một script ở `tools/` và hai thông điệp commit; mã, dữ liệu và kết quả không đổi. Tệp kết quả ghi mã
+commit lúc chạy: với commit đã được viết lại, tra mã mới trong [`COMMIT_MAP.tsv`](COMMIT_MAP.tsv).
 
 ## Trạng thái
 

@@ -16,8 +16,9 @@ tìm Python sẵn có cũng chú thích tiếng Anh); tài liệu vận hành nh
 
 - JDK 25 (bản LTS, Eclipse Temurin). Mọi máy dùng cùng JDK 25; `tools/run.py` từ chối chạy lấy
   số vào bài trên phiên bản Java khác. Đổi từ JDK 17 ngày 25/09/2026. Số bất biến của giai đoạn 1
-  (JDK 17, Windows) đã được chạy lại bằng JDK 26 trên macOS ở cùng commit `2f63b56`: 4 cấu hình
-  SC2, 58 dòng, trùng khít sau khi chuẩn hoá ký tự xuống dòng và dấu phân cách đường dẫn.
+  (JDK 17, Windows) đã được chạy lại bằng JDK 26 trên macOS ở cùng commit `3e1811f` (trước lần
+  viết lại lịch sử là `2f63b56`, xem `COMMIT_MAP.tsv`): 4 cấu hình SC2, 58 dòng, trùng khít sau khi
+  chuẩn hoá ký tự xuống dòng và dấu phân cách đường dẫn.
 - Maven 3.9 trở lên. Kho `~/.m2` đã có sẵn junit 5.10.2 nên dịch được ở chế độ offline.
 
 ```bash

@@ -1,0 +1,189 @@
+Statistical analysis of H2 and H3 under config/preregistration.md
+
+SC3 files read:
+  SC3_20260926-105412-166_dev_97ba7c977f33_s2026.csv         140 rows  20260926-105412-166_dev_97ba7c977f33_s2026
+  SC3_20260926-105422-904_dev_97ba7c977f33_s2026.csv         140 rows  20260926-105422-904_dev_97ba7c977f33_s2026
+  SC3_20260926-105423-923_dev_97ba7c977f33_s2026.csv         140 rows  20260926-105423-923_dev_97ba7c977f33_s2026
+  SC3_20260926-105424-932_dev_97ba7c977f33_s2026.csv         140 rows  20260926-105424-932_dev_97ba7c977f33_s2026
+  SC3_20260926-105425-957_dev_97ba7c977f33_s2026.csv         35 rows  20260926-105425-957_dev_97ba7c977f33_s2026
+
+After merging the reruns by their median: 595 rows (from 595)
+
+Rows by scope (section 11): distinct items 315, repeated items 280
+
+##############################################################################
+Scope: distinct-item sensitive patterns, 315 rows, tested as H2
+##############################################################################
+
+==============================================================================
+H2  median of Lost_rel(baseline) - Lost_rel(CUT-HIDE) greater than delta_L = 0.02
+==============================================================================
+
+  PROBE: no group filter (--skip-groups); every row enters H2.
+
+-- hha
+   into Wilcoxon (same |R|)               15 instances
+   baseline uses more masks               30 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                0 instances  (a case section 5 omits)
+   excluded                                0 instances
+   median difference of Lost_rel        +0.0085   (absolute: +3.0 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 27.0, p = 0.9698, n = 15 (0 differences of 0)
+   rank-biserial                        -0.550
+
+-- dbsh
+   into Wilcoxon (same |R|)                3 instances
+   baseline uses more masks               42 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                0 instances  (a case section 5 omits)
+   excluded                                0 instances
+   median difference of Lost_rel        +0.0000   (absolute: +0.0 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 0.0, p = 1, n = 3 (0 differences of 0)
+   rank-biserial                        -1.000
+
+-- sbsh-r1
+   into Wilcoxon (same |R|)                2 instances
+   baseline uses more masks               43 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                0 instances  (a case section 5 omits)
+   excluded                                0 instances
+   median difference of Lost_rel        +0.0011   (absolute: +0.5 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 0.0, p = 1, n = 2 (0 differences of 0)
+   rank-biserial                        -1.000
+
+-- sbsh-rmax
+   into Wilcoxon (same |R|)                2 instances
+   baseline uses more masks               43 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                0 instances  (a case section 5 omits)
+   excluded                                0 instances
+   median difference of Lost_rel        +0.0011   (absolute: +0.5 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 0.0, p = 1, n = 2 (0 differences of 0)
+   rank-biserial                        -1.000
+
+Share of instances excluded: 0/180 = 0.0%  (the threshold of section 5 is 10%)
+
+Holm over the family of 4 tier (b) baselines, alpha = 0.05
+  baseline            raw p       Holm p   verdict
+  hha                0.9698            1   not rejected
+  dbsh                    1            1   not rejected
+  sbsh-r1                 1            1   not rejected
+  sbsh-rmax               1            1   not rejected
+
+==============================================================================
+H3  r = |R|/|R|* above 1 on the main group (r >= 1.10), near 1 on the degenerate group (r <= 1.05)
+==============================================================================
+
+  rows without |R|* (several patterns, or repeated items with g- > 0): 35
+  rows in no group (no matching configuration in SC2): 280
+  Section 2 requires saying so: H3 is tested only on instances of one distinct-item pattern.
+
+-- group main
+   no rows
+
+-- group degenerate
+   no rows
+
+==============================================================================
+Equivalence (section 4): Hodges-Lehmann with a 95% confidence interval, against the locked margins
+==============================================================================
+
+-- lost_rel, equivalence margin +/- 0.02
+   baseline         n         HL                     CI   verdict
+   hha             15     0.0102 [ +0.0043,  +0.0203]   no conclusion
+   dbsh             3     0.0005 [ +0.0000,  +0.0021]   equivalent
+   sbsh-r1          2     0.0011 [ +0.0000,  +0.0021]   equivalent
+   sbsh-rmax        2     0.0011 [ +0.0000,  +0.0021]   equivalent
+
+-- sup_dist, equivalence margin +/- 0.01
+   baseline         n         HL                     CI   verdict
+   hha             15     0.0012 [ +0.0004,  +0.0021]   equivalent
+   dbsh             3     0.0000 [ -0.0000,  +0.0001]   equivalent
+   sbsh-r1          2     0.0000 [ -0.0000,  +0.0001]   equivalent
+   sbsh-rmax        2     0.0000 [ -0.0000,  +0.0001]   equivalent
+
+##############################################################################
+Scope: repeated-item sensitive patterns, 280 rows, tested as H2-R
+##############################################################################
+
+==============================================================================
+H2-R  median of Lost_rel(baseline) - Lost_rel(CUT-HIDE) greater than delta_L = 0.02
+==============================================================================
+
+  PROBE: no group filter (--skip-groups); every row enters H2.
+
+-- hha
+   into Wilcoxon (same |R|)                6 instances
+   baseline uses more masks               34 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                0 instances  (a case section 5 omits)
+   excluded                                0 instances
+   median difference of Lost_rel        +0.0284   (absolute: +5.5 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 16.0, p = 0.1562, n = 6 (0 differences of 0)
+   rank-biserial                        +0.524
+
+-- dbsh
+   into Wilcoxon (same |R|)                5 instances
+   baseline uses more masks               35 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                0 instances  (a case section 5 omits)
+   excluded                                0 instances
+   median difference of Lost_rel        +0.0309   (absolute: +6.0 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 10.0, p = 0.3125, n = 5 (0 differences of 0)
+   rank-biserial                        +0.333
+
+-- sbsh-r1
+   into Wilcoxon (same |R|)                4 instances
+   baseline uses more masks               36 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                0 instances  (a case section 5 omits)
+   excluded                                0 instances
+   median difference of Lost_rel        +0.0155   (absolute: +3.0 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 5.0, p = 0.5625, n = 4 (0 differences of 0)
+   rank-biserial                        +0.000
+
+-- sbsh-rmax
+   into Wilcoxon (same |R|)                4 instances
+   baseline uses more masks               36 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                0 instances  (a case section 5 omits)
+   excluded                                0 instances
+   median difference of Lost_rel        +0.0129   (absolute: +2.5 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 5.0, p = 0.5625, n = 4 (0 differences of 0)
+   rank-biserial                        +0.000
+
+Share of instances excluded: 0/160 = 0.0%  (the threshold of section 5 is 10%)
+
+Holm over the family of 4 tier (b) baselines, alpha = 0.05
+  baseline            raw p       Holm p   verdict
+  hha                0.1562        0.625   not rejected
+  dbsh               0.3125       0.9375   not rejected
+  sbsh-r1            0.5625            1   not rejected
+  sbsh-rmax          0.5625            1   not rejected
+
+==============================================================================
+r = |R|/|R|* per method and group, DESCRIPTIVE (section 11, point 7): no verdict
+==============================================================================
+
+  rows without |R|* (several patterns, or repeated items with g- > 0): 0
+  rows in no group (no matching configuration in SC2): 280
+
+-- group main
+   no rows
+
+-- group degenerate
+   no rows
+
+==============================================================================
+Equivalence (section 4): Hodges-Lehmann with a 95% confidence interval, against the locked margins
+==============================================================================
+
+-- lost_rel, equivalence margin +/- 0.02
+   baseline         n         HL                     CI   verdict
+   hha              6     0.0310 [ +0.0104,  +0.0541]   no conclusion
+   dbsh             5     0.0284 [ +0.0000,  +0.0567]   no conclusion
+   sbsh-r1          4     0.0180 [ +0.0000,  +0.0412]   no conclusion
+   sbsh-rmax        4     0.0168 [ +0.0000,  +0.0412]   no conclusion
+
+-- sup_dist, equivalence margin +/- 0.01
+   baseline         n         HL                     CI   verdict
+   hha              6     0.0069 [ +0.0043,  +0.0194]   no conclusion
+   dbsh             5    -0.0053 [ -0.0168,  +0.0062]   no conclusion
+   sbsh-r1          4    -0.0009 [ -0.0102,  +0.0042]   no conclusion
+   sbsh-rmax        4    -0.0009 [ -0.0102,  +0.0055]   no conclusion
+
+==============================================================================
+Reminder: exit code 0 does NOT mean that H2 is supported. It only means that the
+analysis ran, and the conclusion is in the tables above.

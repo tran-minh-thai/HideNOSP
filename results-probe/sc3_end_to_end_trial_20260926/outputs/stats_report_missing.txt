@@ -1,0 +1,111 @@
+Statistical analysis of H2 and H3 under config/preregistration.md
+
+SC3 files read:
+  SC3_20260926-105412-166_dev_97ba7c977f33_s2026.csv         120 rows  20260926-105412-166_dev_97ba7c977f33_s2026
+  SC3_20260926-105422-904_dev_97ba7c977f33_s2026.csv         120 rows  20260926-105422-904_dev_97ba7c977f33_s2026
+  SC3_20260926-105423-923_dev_97ba7c977f33_s2026.csv         120 rows  20260926-105423-923_dev_97ba7c977f33_s2026
+  SC3_20260926-105424-932_dev_97ba7c977f33_s2026.csv         120 rows  20260926-105424-932_dev_97ba7c977f33_s2026
+  SC3_20260926-105425-957_dev_97ba7c977f33_s2026.csv         30 rows  20260926-105425-957_dev_97ba7c977f33_s2026
+
+After merging the reruns by their median: 510 rows (from 510)
+
+Rows by scope (section 11): distinct items 270, repeated items 240
+
+##############################################################################
+Scope: distinct-item sensitive patterns, 270 rows, tested as H2
+##############################################################################
+
+==============================================================================
+H2  median of Lost_rel(baseline) - Lost_rel(CUT-HIDE) greater than delta_L = 0.02
+==============================================================================
+
+  PROBE: no group filter (--skip-groups); every row enters H2.
+
+  NO 'cut-hide-rw-ls' in the files. H2 compares two sides, and without this side there is
+  nothing to test. The files hold: cut-hide, cut-hide-rw, dbsh, hha, sbsh-r1, sbsh-rmax
+  Note: 'cut-hide-uniform', 'cut-hide' and 'cut-hide-rw' are CONTROL variants and
+  cannot stand in for 'cut-hide-rw-ls' in H2 (preregistration, section 12).
+  H2 NOT TESTED: the exit code is 1.
+
+==============================================================================
+H3  r = |R|/|R|* above 1 on the main group (r >= 1.10), near 1 on the degenerate group (r <= 1.05)
+==============================================================================
+
+  rows without |R|* (several patterns, or repeated items with g- > 0): 30
+  rows in no group (no matching configuration in SC2): 240
+  Section 2 requires saying so: H3 is tested only on instances of one distinct-item pattern.
+
+-- group main
+   no rows
+
+-- group degenerate
+   no rows
+
+==============================================================================
+Equivalence (section 4): Hodges-Lehmann with a 95% confidence interval, against the locked margins
+==============================================================================
+
+-- lost_rel, equivalence margin +/- 0.02
+   baseline         n         HL                     CI   verdict
+   hha              0          -                      -   not enough pairs
+   dbsh             0          -                      -   not enough pairs
+   sbsh-r1          0          -                      -   not enough pairs
+   sbsh-rmax        0          -                      -   not enough pairs
+
+-- sup_dist, equivalence margin +/- 0.01
+   baseline         n         HL                     CI   verdict
+   hha              0          -                      -   not enough pairs
+   dbsh             0          -                      -   not enough pairs
+   sbsh-r1          0          -                      -   not enough pairs
+   sbsh-rmax        0          -                      -   not enough pairs
+
+##############################################################################
+Scope: repeated-item sensitive patterns, 240 rows, tested as H2-R
+##############################################################################
+
+==============================================================================
+H2-R  median of Lost_rel(baseline) - Lost_rel(CUT-HIDE) greater than delta_L = 0.02
+==============================================================================
+
+  PROBE: no group filter (--skip-groups); every row enters H2.
+
+  NO 'cut-hide-rw-ls' in the files. H2 compares two sides, and without this side there is
+  nothing to test. The files hold: cut-hide, cut-hide-rw, dbsh, hha, sbsh-r1, sbsh-rmax
+  Note: 'cut-hide-uniform', 'cut-hide' and 'cut-hide-rw' are CONTROL variants and
+  cannot stand in for 'cut-hide-rw-ls' in H2 (preregistration, section 12).
+  H2-R NOT TESTED: the exit code is 1.
+
+==============================================================================
+r = |R|/|R|* per method and group, DESCRIPTIVE (section 11, point 7): no verdict
+==============================================================================
+
+  rows without |R|* (several patterns, or repeated items with g- > 0): 0
+  rows in no group (no matching configuration in SC2): 240
+
+-- group main
+   no rows
+
+-- group degenerate
+   no rows
+
+==============================================================================
+Equivalence (section 4): Hodges-Lehmann with a 95% confidence interval, against the locked margins
+==============================================================================
+
+-- lost_rel, equivalence margin +/- 0.02
+   baseline         n         HL                     CI   verdict
+   hha              0          -                      -   not enough pairs
+   dbsh             0          -                      -   not enough pairs
+   sbsh-r1          0          -                      -   not enough pairs
+   sbsh-rmax        0          -                      -   not enough pairs
+
+-- sup_dist, equivalence margin +/- 0.01
+   baseline         n         HL                     CI   verdict
+   hha              0          -                      -   not enough pairs
+   dbsh             0          -                      -   not enough pairs
+   sbsh-r1          0          -                      -   not enough pairs
+   sbsh-rmax        0          -                      -   not enough pairs
+
+==============================================================================
+Reminder: exit code 0 does NOT mean that H2 is supported. It only means that the
+analysis ran, and the conclusion is in the tables above.

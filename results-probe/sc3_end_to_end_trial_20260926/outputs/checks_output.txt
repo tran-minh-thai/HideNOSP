@@ -1,0 +1,18 @@
+SC3_20260926-105412-166_dev_97ba7c977f33_s2026.csv: datasets/sepsis.txt 300 1 repeated 1 4, 20 sets, 140 rows
+   Lost summed over sets: cut-hide-rw-ls 67, cut-hide-rw 67, cut-hide 70, hha 116, dbsh 143, sbsh-r1 135, sbsh-rmax 134; sets where cut-hide-rw-ls loses fewer than cut-hide: 3
+SC3_20260926-105422-904_dev_97ba7c977f33_s2026.csv: datasets/dna_mt745584.txt 2500 3 distinct 1 4, 20 sets, 140 rows
+   Lost summed over sets: cut-hide-rw-ls 66, cut-hide-rw 67, cut-hide 85, hha 185, dbsh 141, sbsh-r1 134, sbsh-rmax 132; sets where cut-hide-rw-ls loses fewer than cut-hide: 9
+SC3_20260926-105423-923_dev_97ba7c977f33_s2026.csv: datasets/protein_sdb4.txt 500 3 distinct 1 4, 20 sets, 140 rows
+   Lost summed over sets: cut-hide-rw-ls 26, cut-hide-rw 27, cut-hide 38, hha 172, dbsh 183, sbsh-r1 133, sbsh-rmax 133; sets where cut-hide-rw-ls loses fewer than cut-hide: 3
+SC3_20260926-105424-932_dev_97ba7c977f33_s2026.csv: datasets/bpi2013.txt 500 1 repeated 1 4, 20 sets, 140 rows
+   Lost summed over sets: cut-hide-rw-ls 65, cut-hide-rw 65, cut-hide 88, hha 191, dbsh 301, sbsh-r1 252, sbsh-rmax 242; sets where cut-hide-rw-ls loses fewer than cut-hide: 10
+SC3_20260926-105425-957_dev_97ba7c977f33_s2026.csv: datasets/protein_sdb4.txt 500 3 distinct 5 1, 5 sets, 35 rows
+   Lost summed over sets: cut-hide-rw-ls 70, cut-hide-rw 70, cut-hide 70, hha 264, dbsh 197, sbsh-r1 155, sbsh-rmax 154; sets where cut-hide-rw-ls loses fewer than cut-hide: 0
+
+file complete (no .partial)                                              5 checked, 0 failed
+every key present once per set                                           85 checked, 0 failed
+HF = 0 for the CUT-HIDE keys                                             255 checked, 0 failed
+one pattern: |R| equal across CUT-HIDE keys and equal to |R|*            80 checked, 0 failed
+one pattern: Lost rw-ls <= rw <= cut-hide                                80 checked, 0 failed
+data rows identical to the earlier attempt (same configuration)          4 checked, 0 failed
+several patterns: adaptive keys give the cut-hide row                    10 checked, 0 failed

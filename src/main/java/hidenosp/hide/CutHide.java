@@ -46,6 +46,7 @@ public final class CutHide implements HidingMethod {
     private final CutHideConfig config;
     private List<Pattern> nearThreshold = Collections.emptyList();
     private double[] nearThresholdFactor = new double[0];
+    private double[][] explicitWeights;
 
     public CutHide(CutHideConfig config) {
         this.config = config;
@@ -68,6 +69,15 @@ public final class CutHide implements HidingMethod {
         }
         this.nearThreshold = List.copyOf(patterns);
         this.nearThresholdFactor = factor.clone();
+        return this;
+    }
+
+    /**
+     * Sets the position weight of every position of every sequence directly, in place of the
+     * weights of step 4: for tests against an exhaustive search, and for studies of the weights.
+     */
+    public CutHide withExplicitWeights(double[][] weights) {
+        this.explicitWeights = weights;
         return this;
     }
 
@@ -152,19 +162,124 @@ public final class CutHide implements HidingMethod {
                     + "program only; " + config.allocation() + " is defined for the lambda-sweep "
                     + "curves, so select Curves.LAMBDA_SWEEP for that variant");
         }
-        boolean weightFirst = config.curves() == CutHideConfig.Curves.FRONTIER_DP_WEIGHT_FIRST;
+        FrontierDp.Order order = config.curves() == CutHideConfig.Curves.FRONTIER_DP_WEIGHT_FIRST
+                ? new FrontierDp.Order(1, 0) : new FrontierDp.Order(0, 1);
+        Solved solved = solveOrdered(problem, pattern, scaledWeights(problem), order);
+        for (int s = 0; s < solved.positions().length; s++) {
+            if (solved.positions()[s].length == 0) {
+                continue;
+            }
+            result.recordCertification(true);
+            for (int position : solved.positions()[s]) {
+                result.mask(s, position);
+            }
+        }
+    }
+
+    /** A solution of one sensitive pattern: its masks, its weight, the positions per sequence. */
+    private record Solved(int masks, long weight, int[][] positions) {
+    }
+
+    /** One vertex of the convex Pareto front of proposition P10, with its sanitization. */
+    public record ParetoVertex(int masks, long weight, Sanitization sanitization) {
+    }
+
+    /**
+     * The vertices of the convex Pareto front between |R| and the surrogate weight w(R), exactly
+     * (proposition P10), for one sensitive pattern with g- = 0, in the weights of this
+     * configuration. Sorted by masks: the first vertex is the solution with the fewest masks and
+     * then the least weight (the standard CUT-HIDE), the last the solution with the least weight
+     * and then the fewest masks. Weights are in the scaled unit of {@link CostCurve#SCALE}.
+     */
+    public List<ParetoVertex> paretoFront(HideProblem problem) {
+        if (problem.sensitive().size() != 1 || !FrontierDp.applies(problem.gap())) {
+            throw new IllegalArgumentException("the exact Pareto front needs one sensitive pattern "
+                    + "and g- = 0; got " + problem.sensitive().size() + " patterns, gap "
+                    + problem.gap());
+        }
+        requireNonEmptyBand(problem);
+        Pattern pattern = problem.sensitive().get(0);
+        long[][] scaled = scaledWeights(problem);
+        Solved left = solveOrdered(problem, pattern, scaled, new FrontierDp.Order(0, 1));
+        Solved right = solveOrdered(problem, pattern, scaled, new FrontierDp.Order(1, 0));
+        List<Solved> vertices = new ArrayList<>();
+        vertices.add(left);
+        if (right.masks() != left.masks() || right.weight() != left.weight()) {
+            between(problem, pattern, scaled, left, right, vertices);
+            vertices.add(right);
+        }
+        List<ParetoVertex> out = new ArrayList<>(vertices.size());
+        for (Solved v : vertices) {
+            Sanitization sanitization = new Sanitization(problem.database())
+                    .method("CUT-HIDE Pareto vertex " + config);
+            for (int s = 0; s < v.positions().length; s++) {
+                for (int position : v.positions()[s]) {
+                    sanitization.mask(s, position);
+                }
+            }
+            if (sanitization.maskCount() != v.masks()) {
+                throw new IllegalStateException("a Pareto vertex claims " + v.masks()
+                        + " masks but holds " + sanitization.maskCount());
+            }
+            if (config.verifyPostcondition()) {
+                verify(problem, sanitization);
+            }
+            out.add(new ParetoVertex(v.masks(), v.weight(), sanitization));
+        }
+        return out;
+    }
+
+    /**
+     * Proposition P10(b): the vertices strictly between two adjacent known vertices, found along
+     * the normal of the segment that joins them, added in the order of increasing masks.
+     */
+    private void between(HideProblem problem, Pattern pattern, long[][] scaled, Solved y1, Solved y2,
+                         List<Solved> out) {
+        long a = y2.masks() - y1.masks();
+        long b = y1.weight() - y2.weight();
+        if (a <= 0 || b <= 0) {
+            throw new IllegalStateException("adjacent vertices must trade masks for weight: ("
+                    + y1.masks() + ", " + y1.weight() + ") and (" + y2.masks() + ", " + y2.weight()
+                    + ")");
+        }
+        FrontierDp.Order normal = new FrontierDp.Order(a, b);
+        Solved y = solveOrdered(problem, pattern, scaled, normal);
+        if (normal.scalar(y.masks(), y.weight()) >= normal.scalar(y1.masks(), y1.weight())) {
+            return;
+        }
+        between(problem, pattern, scaled, y1, y, out);
+        out.add(y);
+        between(problem, pattern, scaled, y, y2, out);
+    }
+
+    /** The position weights of every sequence, in the scaled unit of {@link CostCurve#SCALE}. */
+    private long[][] scaledWeights(HideProblem problem) {
+        int n = problem.database().size();
+        long[][] scaled = new long[n][];
+        for (int s = 0; s < n; s++) {
+            EventSequence sequence = problem.database().get(s);
+            double[] weights = positionWeights(problem, sequence, s);
+            scaled[s] = new long[weights.length];
+            for (int i = 0; i < weights.length; i++) {
+                scaled[s][i] = Math.round(weights[i] * CostCurve.SCALE);
+            }
+        }
+        return scaled;
+    }
+
+    /**
+     * One sensitive pattern with g- = 0 under a lexicographic order of (masks, weight): the exact
+     * curve of theorem P8 in every sequence, then the remaining support per sequence (forced
+     * r - 1 for HIDE-SEQ, allocated for HIDE-DB), then the positions the curves store for it.
+     */
+    private Solved solveOrdered(HideProblem problem, Pattern pattern, long[][] scaled,
+                                FrontierDp.Order order) {
         int n = problem.database().size();
         FrontierDp.Curve[] curves = new FrontierDp.Curve[n];
         long total = 0;
         for (int s = 0; s < n; s++) {
-            EventSequence sequence = problem.database().get(s);
-            double[] weights = positionWeights(problem, sequence, s);
-            long[] scaled = new long[weights.length];
-            for (int i = 0; i < weights.length; i++) {
-                scaled[i] = Math.round(weights[i] * CostCurve.SCALE);
-            }
-            curves[s] = FrontierDp.solve(pattern, sequence, problem.gap(), scaled, weightFirst
-                    ? FrontierDp.Objective.WEIGHT_THEN_MASKS : FrontierDp.Objective.MASKS_THEN_WEIGHT);
+            curves[s] = FrontierDp.solve(pattern, problem.database().get(s), problem.gap(),
+                    scaled[s], order);
             total += curves[s].supNO();
         }
         int[] remaining = new int[n];
@@ -190,21 +305,25 @@ public final class CutHide implements HidingMethod {
                     masks[c] = curves[carrying.get(c)].masks();
                     weight[c] = curves[carrying.get(c)].weight();
                 }
-                int[] chosen = Allocation.solveExact(masks, weight, (int) needed, weightFirst);
+                int[] chosen = Allocation.solveExact(masks, weight, (int) needed, order);
                 for (int c = 0; c < carrying.size(); c++) {
                     remaining[carrying.get(c)] = chosen[c];
                 }
             }
         }
+        int totalMasks = 0;
+        long totalWeight = 0;
+        int[][] positions = new int[n][];
         for (int s = 0; s < n; s++) {
             if (remaining[s] >= curves[s].supNO()) {
+                positions[s] = new int[0];
                 continue;
             }
-            result.recordCertification(true);
-            for (int position : curves[s].positions()[remaining[s]]) {
-                result.mask(s, position);
-            }
+            positions[s] = curves[s].positions()[remaining[s]];
+            totalMasks += curves[s].masks()[remaining[s]];
+            totalWeight += curves[s].weight()[remaining[s]];
         }
+        return new Solved(totalMasks, totalWeight, positions);
     }
 
     /** The masks per sequence: the allocation of P7 for HIDE-DB, the forced counts for HIDE-SEQ. */
@@ -492,6 +611,9 @@ public final class CutHide implements HidingMethod {
 
     /** Position weights for one sequence, built from a throw-away index over B_eps only. */
     private double[] positionWeights(HideProblem problem, EventSequence sequence, int sequenceIndex) {
+        if (explicitWeights != null) {
+            return explicitWeights[sequenceIndex];
+        }
         if (config.weighting() == CutHideConfig.Weighting.UNIFORM) {
             return new double[sequence.length()];
         }

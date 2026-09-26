@@ -246,6 +246,59 @@ class FrontierDpTest {
     }
 
     @Test
+    @DisplayName("any order (a*w + b*masks, masks, w) against the subset search")
+    void scalarisedOrderMatchesSubsetSearch() {
+        Random random = new Random(909);
+        int targets = 0;
+        int[] gaps = {0, 1, 2, GapConstraint.UNBOUNDED_MAX};
+        for (int trial = 0; trial < 250; trial++) {
+            int n = random.nextInt(10);
+            int[] events = new int[n];
+            long[] w = new long[n];
+            for (int i = 0; i < n; i++) {
+                events[i] = random.nextInt(2);
+                w[i] = random.nextInt(10);
+            }
+            int[] items = new int[1 + random.nextInt(3)];
+            for (int j = 0; j < items.length; j++) {
+                items[j] = random.nextInt(2);
+            }
+            long a = random.nextInt(6);
+            long b = a == 0 ? 1 + random.nextInt(5) : random.nextInt(6);
+            FrontierDp.Order order = new FrontierDp.Order(a, b);
+            EventSequence s = new EventSequence(trial, events);
+            Pattern p = new Pattern(items);
+            GapConstraint gap = new GapConstraint(0, gaps[random.nextInt(gaps.length)]);
+            FrontierDp.Curve curve = FrontierDp.solve(p, s, gap, w, order);
+            for (int t = 0; t <= curve.supNO(); t++) {
+                long bestMasks = -1;
+                long bestWeight = -1;
+                for (int mask = 0; mask < (1 << n); mask++) {
+                    List<Integer> positions = new ArrayList<>();
+                    long weight = 0;
+                    for (int i = 0; i < n; i++) {
+                        if ((mask & (1 << i)) != 0) {
+                            positions.add(i);
+                            weight += w[i];
+                        }
+                    }
+                    long size = positions.size();
+                    boolean better = bestMasks < 0 || order.before(size, weight, bestMasks, bestWeight);
+                    if (better && SupportNO.of(p, s.mask(positions), gap) <= t) {
+                        bestMasks = size;
+                        bestWeight = weight;
+                    }
+                }
+                String where = p + " in " + s + " gap " + gap + " t " + t + " order " + order;
+                assertEquals(bestMasks, curve.masks()[t], "masks, " + where);
+                assertEquals(bestWeight, curve.weight()[t], "weight, " + where);
+                targets++;
+            }
+        }
+        assertTrue(targets >= 250, "targets: " + targets);
+    }
+
+    @Test
     @DisplayName("the examples of P3: both bounds reached")
     void p3Examples() {
         // P = aa, S = abdacaa, [0,2]: F = 3 and two masks bring it to 0 (lower bound side).

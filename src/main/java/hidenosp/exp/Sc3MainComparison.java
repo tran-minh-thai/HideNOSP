@@ -62,7 +62,7 @@ public final class Sc3MainComparison implements Scenario {
     public String[] options() {
         return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "maxPatternLength",
                 "epsilon", "setsPerStratum", "sensitiveSize", "seed", "methodSeed", "repeats",
-                "methods", "patternKind"};
+                "methods", "patternKind", "pareto"};
     }
 
     @Override
@@ -83,6 +83,10 @@ public final class Sc3MainComparison implements Scenario {
         long methodSeed = options.getLong("methodSeed", seed);
         int repeats = options.getInt("repeats", 1);
         String methodList = options.get("methods", "cut-hide,cut-hide-uniform,occurrence,HH,RR");
+        // Proposition P10: also write the exact convex Pareto front of CUT-HIDE between |R| and the
+        // surrogate weight, one row per vertex, into SC3PARETO_<stamp>.csv (preregistration
+        // section 11, point 6: descriptive). One sensitive pattern and g- = 0 only.
+        boolean pareto = options.getBoolean("pareto", false);
         // distinct (the main scope, mu(P) = 1) or repeated (the repeated-item scope of theorem P8).
         String patternKind = options.get("patternKind", "distinct");
         if (!patternKind.equals("distinct") && !patternKind.equals("repeated")) {
@@ -121,13 +125,47 @@ public final class Sc3MainComparison implements Scenario {
                 "frequent_before", "nonsensitive_before", "frequent_after"};
 
         String[] provenance = {"options " + options.all(), sampling.describe()};
-        try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header, provenance)) {
+        if (pareto && (sensitiveSize != 1 || gap.gmin() != 0)) {
+            throw new IllegalArgumentException("--pareto needs --sensitiveSize=1 and g- = 0, got "
+                    + sensitiveSize + " and " + gap);
+        }
+        String[] frontHeader = {"dataset", "shape", "gap", "sigma", "sensitive_set", "stratum",
+                "vertex", "vertices", "mask_count", "weight", "min_masks", "mask_ratio", "hf",
+                "lost", "lost_rel", "ghost", "sup_dist", "frequent_before", "nonsensitive_before",
+                "frequent_after"};
+        try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header, provenance);
+             CsvWriter front = pareto
+                     ? sink.open(ResultSink.Kind.INVARIANT, id() + "PARETO", frontHeader, provenance)
+                     : null) {
             for (int index = 0; index < draws.size(); index++) {
                 List<Pattern> sensitive = draws.get(index).patterns();
                 String stratum = "p" + draws.get(index).percentile();
                 HideProblem problem = new HideProblem(database, sensitive, gap,
                         HideProblem.Mode.HIDE_DB, sigma, epsilon, maxPatternLength);
                 long minMasks = boundFromP1(database, sensitive, gap, sigma);
+                if (front != null) {
+                    CutHide cutHide = (CutHide) create("cut-hide", problem, frequent, sigma, epsilon,
+                            methodSeed);
+                    List<CutHide.ParetoVertex> vertices = cutHide.paretoFront(problem);
+                    for (int k = 0; k < vertices.size(); k++) {
+                        CutHide.ParetoVertex v = vertices.get(k);
+                        Metrics.Row row = context.evaluateMasking(problem, v.sanitization());
+                        front.writeRow(describe(options), shape(database), gap.toString(),
+                                Integer.toString(sigma), sensitive.toString(), stratum,
+                                Integer.toString(k), Integer.toString(vertices.size()),
+                                Integer.toString(row.maskCount()), Long.toString(v.weight()),
+                                Long.toString(minMasks),
+                                minMasks == 0 ? "" : format((double) row.maskCount() / minMasks),
+                                format(row.hidingFailure()), Integer.toString(row.lost()),
+                                format(row.lostRelative()), Integer.toString(row.ghost()),
+                                format(row.supDist()), Integer.toString(row.frequentBefore()),
+                                Integer.toString(row.nonSensitiveBefore()),
+                                Integer.toString(row.frequentAfter()));
+                    }
+                    System.out.printf("set %d  Pareto front: %d vertices, |R| from %d to %d%n",
+                            index, vertices.size(), vertices.get(0).masks(),
+                            vertices.get(vertices.size() - 1).masks());
+                }
                 for (String name : methodList.split(",")) {
                     // Phuong phap tat dinh chay mot lan; phuong phap ngau nhien chay lai
                     // repeats lan voi hat giong lien tiep, moi lan mot hang. Viec lay trung vi
@@ -173,6 +211,9 @@ public final class Sc3MainComparison implements Scenario {
                 }
             }
             writer.complete();
+            if (front != null) {
+                front.complete();
+            }
         }
     }
 

@@ -108,6 +108,17 @@ public final class Allocation {
      * minimised first and the masks break ties, the order of FrontierDp.Objective.WEIGHT_THEN_MASKS.
      */
     public static int[] solveExact(int[][] masks, long[][] weight, int needed, boolean weightFirst) {
+        return solveExact(masks, weight, needed, weightFirst ? new FrontierDp.Order(1, 0)
+                : new FrontierDp.Order(0, 1));
+    }
+
+    /**
+     * As {@link #solveExact(int[][], long[][], int)} under the lexicographic order of
+     * {@code order}, (a * weight + b * masks, masks, weight): the allocation step of proposition
+     * P10(a). The curves must have been computed under the same order.
+     */
+    public static int[] solveExact(int[][] masks, long[][] weight, int needed,
+                                   FrontierDp.Order order) {
         // The reductions add up to exactly K. Lowering a sequence by more than it has to never
         // helps, because every curve is non-increasing in t (FrontierDpTest checks it), so the
         // exact sum loses nothing and the choice alone identifies the predecessor.
@@ -138,9 +149,8 @@ public final class Allocation {
                     int to = reached + k;
                     long m = bestMasks[reached] + masks[s][f - k];
                     long w = bestWeight[reached] + weight[s][f - k];
-                    boolean better = weightFirst
-                            ? w < nextWeight[to] || (w == nextWeight[to] && m < nextMasks[to])
-                            : m < nextMasks[to] || (m == nextMasks[to] && w < nextWeight[to]);
+                    boolean better = nextMasks[to] == infinite
+                            || order.before(m, w, nextMasks[to], nextWeight[to]);
                     if (better) {
                         nextMasks[to] = m;
                         nextWeight[to] = w;

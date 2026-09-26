@@ -40,12 +40,16 @@ class ScenarioFilesTest {
     }
 
     private static void runOnce(Scenario scenario, String... args) throws IOException {
+        runExpecting(1, scenario, args);
+    }
+
+    private static void runExpecting(int files, Scenario scenario, String... args) throws IOException {
         Path root = Files.createTempDirectory("scenario");
         List<String> allowed = new ArrayList<>(List.of(scenario.options()));
         allowed.add("probe");
         Cli options = new Cli(args, allowed.toArray(new String[0]));
         scenario.run(new ResultSink(root, RunId.create(2026, "dev"), true), options);
-        assertEquals(1, files(root, ".csv").size(), scenario.id() + ": one complete file");
+        assertEquals(files, files(root, ".csv").size(), scenario.id() + ": complete files");
         assertEquals(0, files(root, CsvWriter.PARTIAL).size(), scenario.id() + ": no partial file");
     }
 
@@ -56,6 +60,11 @@ class ScenarioFilesTest {
         runOnce(new Sc2DataRegime(), "--sigma=5", "--gmin=0", "--gmax=3", "--maxPatternLength=3");
         runOnce(new Sc3MainComparison(), "--sigma=10", "--gmin=0", "--gmax=3", "--maxPatternLength=3",
                 "--setsPerStratum=1", "--methods=cut-hide-uniform,HH");
+        // --pareto adds the file of the Pareto front: two complete files.
+        // (sigma = 30: at 10 the near-threshold band of the built-in data is empty and the
+        // standard CUT-HIDE refuses to run, as it should.)
+        runExpecting(2, new Sc3MainComparison(), "--sigma=30", "--gmin=0", "--gmax=3",
+                "--maxPatternLength=3", "--setsPerStratum=1", "--methods=cut-hide", "--pareto=true");
         Path data = Files.createTempFile("sigma", ".txt");
         Files.writeString(data, "0 -1 1 -1 0 -1 1 -1 -2\n1 -1 0 -1 1 -1 -2\n0 -1 0 -1 1 -1 -2\n");
         runOnce(new SigmaScan(), "--dataset=" + data, "--format=SPMF", "--sigma=1,2", "--gmax=1,3",

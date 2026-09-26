@@ -55,6 +55,44 @@ public final class FrontierDp {
         WEIGHT_THEN_MASKS
     }
 
+    /**
+     * The lexicographic order on (a * weight + b * masks, masks, weight), a, b &ge; 0 not both 0.
+     * Every coordinate adds up over positions, so the order is compatible with addition, which is
+     * all the program and its pruning need (proposition P10(a)). MASKS_THEN_WEIGHT is (0, 1) and
+     * WEIGHT_THEN_MASKS is (1, 0). The weighted sum is computed exactly: an overflow throws.
+     */
+    public record Order(long weightFactor, long maskFactor) {
+        public Order {
+            if (weightFactor < 0 || maskFactor < 0 || (weightFactor == 0 && maskFactor == 0)) {
+                throw new IllegalArgumentException("need a, b >= 0, not both 0; got (" + weightFactor
+                        + ", " + maskFactor + ")");
+            }
+        }
+
+        static Order of(Objective objective) {
+            return objective == Objective.WEIGHT_THEN_MASKS ? new Order(1, 0) : new Order(0, 1);
+        }
+
+        /** a * weight + b * masks, exactly. */
+        public long scalar(long masks, long weight) {
+            return Math.addExact(Math.multiplyExact(weightFactor, weight),
+                    Math.multiplyExact(maskFactor, masks));
+        }
+
+        /** True when (masks, weight) comes strictly before (otherMasks, otherWeight). */
+        public boolean before(long masks, long weight, long otherMasks, long otherWeight) {
+            long mine = scalar(masks, weight);
+            long theirs = scalar(otherMasks, otherWeight);
+            if (mine != theirs) {
+                return mine < theirs;
+            }
+            if (masks != otherMasks) {
+                return masks < otherMasks;
+            }
+            return weight < otherWeight;
+        }
+    }
+
     /** True when the gap constraint allows the program, that is g- = 0. */
     public static boolean applies(GapConstraint gap) {
         return gap.gmin() == 0;
@@ -68,14 +106,8 @@ public final class FrontierDp {
 
     /** One partial solution: its cost and the positions it masked, shared as a persistent list. */
     private record Entry(int masks, long weight, Chain chain) {
-        boolean betterThan(Entry other, Objective objective) {
-            if (other == null) {
-                return true;
-            }
-            if (objective == Objective.WEIGHT_THEN_MASKS) {
-                return weight < other.weight || (weight == other.weight && masks < other.masks);
-            }
-            return masks < other.masks || (masks == other.masks && weight < other.weight);
+        boolean betterThan(Entry other, Order order) {
+            return other == null || order.before(masks, weight, other.masks, other.weight);
         }
     }
 
@@ -100,6 +132,17 @@ public final class FrontierDp {
      */
     public static Curve solve(Pattern pattern, EventSequence sequence, GapConstraint gap,
                               long[] positionWeight, Objective objective) {
+        return solve(pattern, sequence, gap, positionWeight, Order.of(objective));
+    }
+
+    /**
+     * As {@link #solve(Pattern, EventSequence, GapConstraint, long[])} under the lexicographic order
+     * (a * weight + b * masks, masks, weight) of {@code order}: {@code masks[t]} and
+     * {@code weight[t]} then describe the best set in that order, which is a non-dominated point
+     * of (|R|, w(R)) for target t (proposition P10(a)).
+     */
+    public static Curve solve(Pattern pattern, EventSequence sequence, GapConstraint gap,
+                              long[] positionWeight, Order objective) {
         if (!applies(gap)) {
             throw new IllegalArgumentException("FrontierDp needs g- = 0, got " + gap
                     + "; with g- > 0 the latest reachable node no longer dominates");
@@ -244,7 +287,7 @@ public final class FrontierDp {
     }
 
     private static void relax(Map<Long, Entry[]> map, long key, int budgets, int c, Entry candidate,
-                              Objective objective) {
+                              Order objective) {
         Entry[] entries = map.computeIfAbsent(key, k -> new Entry[budgets]);
         if (candidate.betterThan(entries[c], objective)) {
             entries[c] = candidate;
@@ -252,7 +295,7 @@ public final class FrontierDp {
     }
 
     /** Drops an entry that uses more budget than another of its state without costing less. */
-    private static void prune(Map<Long, Entry[]> map, Objective objective) {
+    private static void prune(Map<Long, Entry[]> map, Order objective) {
         for (Entry[] entries : map.values()) {
             Entry best = null;
             for (int c = 0; c < entries.length; c++) {

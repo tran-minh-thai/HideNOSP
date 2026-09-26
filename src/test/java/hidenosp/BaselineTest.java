@@ -66,9 +66,9 @@ class BaselineTest {
     }
 
     /**
-     * CUT-HIDE o bien the CO TRONG SO, kem B_eps that su lay tu F_sigma. Phai qua day chu khong
-     * goi thang CutHideConfig.standard(): khong cung cap B_eps thi lop do bao loi, dung theo thiet
-     * ke, vi mot lan chay nhu vay se la bien the trong so deu duoi ten bien the co trong so.
+     * CUT-HIDE in its WEIGHTED variant, with a B_eps really drawn from F_sigma. Go through here
+     * rather than call CutHideConfig.standard() directly: without a B_eps that class throws, by
+     * design, because such a run would be the uniform-weight variant under the weighted one's name.
      */
     private static CutHide weighted(HideProblem problem) {
         long sigma = problem.frequentThreshold();
@@ -83,7 +83,7 @@ class BaselineTest {
                 return new CutHide(CutHideConfig.standard()).withNearThreshold(band, factor);
             }
         }
-        throw new IllegalStateException("khong dung duoc B_eps cho thuc the thu nghiem nay");
+        throw new IllegalStateException("cannot build a B_eps for this test instance");
     }
 
     /** SBSH with F_sigma(D) minus S-plus, which its Annotate and Exclude-SBSH read. */
@@ -209,7 +209,7 @@ class BaselineTest {
     }
 
     @Test
-    @DisplayName("nhieu mau nhay cam: moi baseline tang (a) va (b) van dat HF = 0")
+    @DisplayName("several sensitive patterns: every baseline of tiers (a) and (b) reaches HF = 0")
     void multiplePatternsUnderDatabaseThreshold() {
         SequenceDatabase database = smallDatabase();
         List<Pattern> sensitive = List.of(new Pattern(A, B), new Pattern(B, C));
@@ -242,7 +242,7 @@ class BaselineTest {
     }
 
     @Test
-    @DisplayName("nhieu mau nhay cam: gioi han tung chuoi duoc thoa, ke ca CUT-HIDE")
+    @DisplayName("several sensitive patterns: the per-sequence limit is met, CUT-HIDE included")
     void multiplePatternsUnderPerSequenceLimit() {
         SequenceDatabase database = smallDatabase();
         List<Pattern> sensitive = List.of(new Pattern(A, B), new Pattern(B, C));
@@ -272,17 +272,17 @@ class BaselineTest {
     }
 
     @Test
-    @DisplayName("B_eps rong thi CUT-HIDE co trong so phai BAO LOI, khong tut ve trong so deu")
+    @DisplayName("an empty B_eps makes weighted CUT-HIDE THROW, not fall back to uniform weights")
     void emptyBandIsAnError() {
         SequenceDatabase database = smallDatabase();
         HideProblem problem = problem(database, 6);
-        // cau hinh co trong so nhung khong ai cung cap B_eps
+        // the weighted configuration, but nobody provides a B_eps
         CutHide weighted = new CutHide(CutHideConfig.standard());
         IllegalStateException thrown =
                 org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class,
                         () -> weighted.run(problem));
         assertTrue(thrown.getMessage().contains("B_eps is empty"), thrown.getMessage());
-        // bien the trong so deu thi van chay binh thuong
+        // the uniform-weight variant still runs normally
         assertTrue(new CutHide(CutHideConfig.uniformWeights()).run(problem).maskCount() > 0);
     }
 }

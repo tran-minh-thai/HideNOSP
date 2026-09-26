@@ -55,24 +55,24 @@ class PrimalDualCoverTest {
     }
 
     @Test
-    @DisplayName("an het: khong mau nhay cam nao con lan xuat hien nao")
+    @DisplayName("complete hiding: no sensitive pattern keeps any occurrence")
     void hidesEverything() {
         for (long seed : new long[] {5, 17, 41}) {
             SequenceDatabase database = database(seed, 10, 12, 3);
             HideProblem problem = fullHiding(database,
                     List.of(new Pattern(A, B), new Pattern(B, C), new Pattern(A, B, C)));
             Sanitization result = new PrimalDualCover().run(problem);
-            assertTrue(result.maskCount() > 0, "thuc the rong, phep thu khong kiem tra gi");
+            assertTrue(result.maskCount() > 0, "empty instance: the test would check nothing");
             SequenceDatabase after = result.sanitized();
             for (Pattern p : problem.sensitive()) {
                 assertEquals(0, SupportNO.of(p, after, problem.gap()),
-                        "con lan xuat hien cua " + p + " o hat giong " + seed);
+                        "an occurrence of " + p + " is left at seed " + seed);
             }
         }
     }
 
     @Test
-    @DisplayName("chan duoi that su la chan duoi, va ti so khong vuot l_max")
+    @DisplayName("the lower bound really is a lower bound, and the ratio stays within l_max")
     void boundIsSoundAndTheFactorHolds() {
         for (long seed : new long[] {5, 17, 41}) {
             SequenceDatabase database = database(seed, 10, 12, 3);
@@ -82,70 +82,73 @@ class PrimalDualCoverTest {
             Sanitization result = method.run(problem);
             PrimalDualCover.Bound bound = method.lastBound();
 
-            assertTrue(bound.cost() > 0, "thuc the rong, phep thu khong kiem tra gi");
+            assertTrue(bound.cost() > 0, "empty instance: the test would check nothing");
             assertTrue(bound.maxConstraintSize() >= 2,
-                    "moi rang buoc chi mot bien thi he so khong noi len dieu gi");
-            assertEquals(result.maskCount(), bound.cost(), "chi phi bao cao phai bang |R| that");
+                    "with one variable per constraint the factor would say nothing");
+            assertEquals(result.maskCount(), bound.cost(), "the reported cost must equal |R|");
             assertTrue(bound.lowerBound() <= bound.cost(),
-                    "chan duoi " + bound.lowerBound() + " vuot chi phi " + bound.cost());
+                    "lower bound " + bound.lowerBound() + " exceeds the cost " + bound.cost());
             long lmax = problem.maxPatternLength();
             assertTrue(bound.cost() <= lmax * bound.lowerBound(),
-                    "chi phi " + bound.cost() + " vuot " + lmax + " lan chan duoi "
+                    "cost " + bound.cost() + " exceeds " + lmax + " times the lower bound "
                             + bound.lowerBound());
             assertTrue(bound.maxConstraintSize() <= lmax,
-                    "mot rang buoc rong " + bound.maxConstraintSize() + " bien, qua l_max");
+                    "a constraint has " + bound.maxConstraintSize() + " variables, over l_max");
         }
     }
 
     @Test
-    @DisplayName("mot mau khong lap muc: chan duoi khong vuot toi uu, ma P1c cho biet la sup_NO")
+    @DisplayName("one distinct-item pattern: the bound stays below the optimum, sup_NO by P1c")
     void boundNeverExceedsTheKnownOptimum() {
         for (long seed : new long[] {5, 17, 41}) {
             SequenceDatabase database = database(seed, 10, 12, 3);
             HideProblem problem = fullHiding(database, List.of(new Pattern(A, B)));
-            // Voi mot mau khong lap muc va an het, He qua P1c cho toi uu bang dung sup_NO.
+            // For one distinct-item pattern and complete hiding, corollary P1c gives the optimum:
+            // exactly sup_NO.
             long optimum = PrimalDualCover.optimumForOneDistinctPattern(problem);
-            assertTrue(optimum > 0, "thuc the rong, phep thu khong kiem tra gi");
+            assertTrue(optimum > 0, "empty instance: the test would check nothing");
             PrimalDualCover method = new PrimalDualCover();
             Sanitization result = method.run(problem);
             PrimalDualCover.Bound bound = method.lastBound();
 
             assertTrue(bound.lowerBound() <= optimum,
-                    "chan duoi " + bound.lowerBound() + " vuot toi uu " + optimum);
+                    "lower bound " + bound.lowerBound() + " exceeds the optimum " + optimum);
             assertTrue(result.maskCount() >= optimum,
-                    "dung " + result.maskCount() + " lan che, it hon toi uu " + optimum);
+                    "used " + result.maskCount() + " masks, fewer than the optimum " + optimum);
             assertTrue(result.maskCount() <= 2 * optimum,
-                    "mau dai 2 nen he so la 2, ma dung " + result.maskCount() + " so voi " + optimum);
+                    "the pattern has length 2, so the factor is 2, but it used "
+                            + result.maskCount() + " against " + optimum);
         }
     }
 
     @Test
-    @DisplayName("doi chieu voi bo giai chinh xac tren thuc the nho")
+    @DisplayName("agrees with the exact solver on a small instance")
     void agreesWithTheExactSolverWithinTheFactor() {
         SequenceDatabase database = database(23, 3, 8, 3);
         HideProblem problem = fullHiding(database, List.of(new Pattern(A, B), new Pattern(B, C)));
         long exact = new IlpExact().run(problem).maskCount();
-        assertTrue(exact > 0, "thuc the rong, phep thu khong kiem tra gi");
+        assertTrue(exact > 0, "empty instance: the test would check nothing");
         PrimalDualCover method = new PrimalDualCover();
         long approximate = method.run(problem).maskCount();
         PrimalDualCover.Bound bound = method.lastBound();
 
         assertTrue(bound.lowerBound() <= exact,
-                "chan duoi " + bound.lowerBound() + " vuot toi uu chinh xac " + exact);
-        assertTrue(approximate >= exact, "khong the it hon toi uu");
+                "lower bound " + bound.lowerBound() + " exceeds the exact optimum " + exact);
+        assertTrue(approximate >= exact, "cannot use fewer masks than the optimum");
         assertTrue(approximate <= 2L * exact,
-                "mau dai 2 nen he so 2: " + approximate + " so voi " + exact);
+                "the patterns have length 2, so the factor is 2: " + approximate + " against "
+                        + exact);
     }
 
     @Test
-    @DisplayName("toi tieu: bo bat ky vi tri nao cung lam lo lai mot lan xuat hien")
+    @DisplayName("minimal: dropping any position exposes an occurrence again")
     void theMaskSetIsMinimal() {
         for (long seed : new long[] {5, 17, 41}) {
             SequenceDatabase database = database(seed, 10, 12, 3);
             HideProblem problem = fullHiding(database,
                     List.of(new Pattern(A, B), new Pattern(B, C), new Pattern(A, B, C)));
             Sanitization result = new PrimalDualCover().run(problem);
-            assertTrue(result.maskCount() > 0, "thuc the rong, phep thu khong kiem tra gi");
+            assertTrue(result.maskCount() > 0, "empty instance: the test would check nothing");
 
             for (var entry : result.masked().entrySet()) {
                 int s = entry.getKey();
@@ -160,15 +163,15 @@ class PrimalDualCoverTest {
                             break;
                         }
                     }
-                    assertFalse(stillHidden, "vi tri " + dropped + " o chuoi " + s
-                            + " la thua: bo di van an het");
+                    assertFalse(stillHidden, "position " + dropped + " of sequence " + s
+                            + " is redundant: without it everything is still hidden");
                 }
             }
         }
     }
 
     @Test
-    @DisplayName("tu choi khi nguong lon hon 1, vi he so khong con dung")
+    @DisplayName("refuses a threshold above 1, where the factor no longer holds")
     void refusesPartialHiding() {
         SequenceDatabase database = database(5, 10, 12, 3);
         HideProblem partial = new HideProblem(database, List.of(new Pattern(A, B)),

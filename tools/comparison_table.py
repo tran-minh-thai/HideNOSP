@@ -3,7 +3,7 @@
 For every (dataset, gap, sigma, kind of sensitive pattern) and every method key it gives the number
 of sensitive sets, how many of them the method failed to hide (HF > 0), and the medians of |R|,
 |R| / |R|*, Lost_rel and SupDist over the sets. It is descriptive only: the tests of the
-preregistration live in tools/thong_ke.py. Every row names the file it comes from.
+preregistration live in tools/preregistered_analysis.py. Every row names the file it comes from.
 
 Run: python tools/comparison_table.py <SC3 file or directory> [...]
 """

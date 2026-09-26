@@ -9,7 +9,7 @@ cấu hình có đáng chạy đầy đủ không, và kiểm tra đường ốn
 Chạy bằng cờ `--probe`, khi đó tệp bất biến được chuyển hướng về đây thay vì
 `results-invariant/`. Cấm cột thời gian và cột bộ nhớ, giống `results-invariant/`.
 
-Các số dò tìm bằng Python trong `../kiemtra_v2.py` và `../probe/` cũng thuộc loại này. Các
+Các số dò tìm bằng Python trong `../nettree_checks.py` và `../probe/` cũng thuộc loại này. Các
 script đó in ra màn hình, nên phải hứng đầu ra vào thư mục này; mục 2 của `../RUNBOOK.md` có
 lệnh sẵn.
 

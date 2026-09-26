@@ -52,8 +52,8 @@ src/main/java/hidenosp/
 src/test/java/          các ví dụ chạy tay của bản thiết kế, đóng thành test
 config/                 bảng giao thức, tệp chốt trước
 datasets/               nguồn gốc bộ dữ liệu; dữ liệu thô không vào git
-tools/                  bảng nhãn tập trung, script kiểm luật thư mục kết quả
-kiemtra_v2.py, probe/   các script dò tìm bằng Python
+tools/                  chạy có gắn phiên bản, lấy dữ liệu, phân tích chốt trước, các script kiểm
+nettree_checks.py, probe/  các script dò tìm bằng Python
 results-invariant/      số đo không phụ thuộc máy
 results/                số đo thời gian và bộ nhớ, chỉ từ máy đo đã khai
 results-probe/          số đo dò tìm, không đưa vào bài

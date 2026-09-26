@@ -171,10 +171,10 @@ public final class Metrics {
                         watched.add(q);
                     }
                 }
-                // Mau nhay cam khong bao gio nam trong watched, vi bao dong da loai chung ra, nen
-                // phai them vao day du co tan suat hay khong. Dieu kien cu la
-                // "!frequent.containsKey(p)", tuc mau nhay cam nao co tan suat thi khong ai tinh
-                // muc giam cua no, va HF luon ra 1 ke ca khi da an sach.
+                // A sensitive pattern is never in watched, because the closure has removed it, so
+                // it has to be added here whether it is frequent or not. The old condition was
+                // "!frequent.containsKey(p)": the drop of a frequent sensitive pattern was counted
+                // by nobody, and HF always came out as 1 even after complete hiding.
                 this.all = new ArrayList<>(watched);
                 for (Pattern p : problem.sensitive()) {
                     if (!all.contains(p)) {

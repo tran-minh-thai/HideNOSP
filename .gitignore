@@ -2,30 +2,30 @@
 target/
 *.class
 
-# Dữ liệu thô: không vào git, xem datasets/README.md để biết nguồn và cách lấy.
-# Riêng provenance.tsv thì CÓ vào git: nó chỉ chứa URL, ngày tải, tổng kiểm và kích thước,
-# tức là thứ cho phép người khác lấy lại đúng bytes mà bài đã dùng.
+# Raw data: never in git; datasets/README.md says where it comes from and how to fetch it.
+# provenance.tsv alone DOES go into git: it holds only URLs, fetch dates, checksums and sizes,
+# i.e. what lets someone else get exactly the bytes the paper used.
 datasets/*
 !datasets/README.md
 !datasets/provenance.tsv
 
-# Python dò tìm
+# Python probes
 __pycache__/
 *.pyc
 
-# Rác của Git Bash trên Windows
+# Leftovers of Git Bash on Windows
 *.stackdump
 
-# Trình soạn thảo, hệ điều hành
+# Editors, operating systems
 .idea/
 *.iml
 .vscode/
 .DS_Store
 Thumbs.db
 
-# Quy trình chạy trên máy đo: nằm NGOÀI kho, ở thư mục gốc dự án cùng chỗ với doc/ và paper/.
-# Chặn ở đây để không ai vô tình thêm lại vào kho.
+# The run procedure of the measuring machine lives OUTSIDE the repository, in the project root
+# next to doc/ and paper/. Blocked here so that nobody adds it back by accident.
 run.txt
 
-# Tệp kết quả ĐƯỢC theo dõi: chúng là bằng chứng cho các bảng trong bài.
-# Không thêm results*/ vào đây.
+# Result files ARE tracked: they are the evidence behind the tables of the paper.
+# Do not add results*/ here.

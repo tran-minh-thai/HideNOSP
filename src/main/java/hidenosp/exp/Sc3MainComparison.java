@@ -78,10 +78,10 @@ public final class Sc3MainComparison implements Scenario {
         int perStratum = options.getInt("setsPerStratum", 4);
         int sensitiveSize = options.getInt("sensitiveSize", 1);
         long seed = options.getLong("seed", 2026);
-        // Hat giong cua phuong phap tach roi khoi hat giong lay mau tap nhay cam. Neu dung chung
-        // mot so thi doi hat giong cung doi luon cac tap nhay cam duoc lay, nen muoi lan chay lai
-        // khong con ghep cap duoc voi nhau va quy tac "trung vi tren muoi hat giong" cua
-        // preregistration khong thuc hien duoc.
+        // The seed of the methods is kept apart from the seed that draws the sensitive sets. If the
+        // two shared one number, changing the seed would also change the sensitive sets drawn, so
+        // the ten reruns could no longer be paired with one another and the rule "median over ten
+        // seeds" of the preregistration could not be carried out.
         long methodSeed = options.getLong("methodSeed", seed);
         int repeats = options.getInt("repeats", 1);
         String methodList = options.get("methods", "cut-hide,cut-hide-uniform,occurrence,HH,RR");
@@ -97,8 +97,8 @@ public final class Sc3MainComparison implements Scenario {
         }
 
         SequenceDatabase database = load(options, seed);
-        // F_sigma(D) khai pha MOT lan cho ca cau hinh, khong phai moi lan danh gia: xem Javadoc
-        // cua Metrics.Context.
+        // F_sigma(D) is mined ONCE for the whole configuration, not once per evaluation: see the
+        // Javadoc of Metrics.Context.
         Metrics.Context context = Metrics.Context.of(database, gap, maxPatternLength, sigma);
         Map<Pattern, Long> frequent = context.frequent();
         if (frequent.isEmpty()) {
@@ -171,10 +171,10 @@ public final class Sc3MainComparison implements Scenario {
                             vertices.get(vertices.size() - 1).masks());
                 }
                 for (String name : methodList.split(",")) {
-                    // Phuong phap tat dinh chay mot lan; phuong phap ngau nhien chay lai
-                    // repeats lan voi hat giong lien tiep, moi lan mot hang. Viec lay trung vi
-                    // thuoc ve khau phan tich, khong lam o day: mot hang mot lan chay thi bang
-                    // van con day du de kiem lai.
+                    // A deterministic method runs once; a randomized method runs --repeats
+                    // times with consecutive seeds, one row per run. Taking the median belongs
+                    // to the analysis and is not done here: with one row per run the table stays
+                    // complete enough to be checked again.
                     int runs = create(name.trim(), problem, frequent, sigma, epsilon, methodSeed,
                             context)
                             .isRandomized() ? repeats : 1;
@@ -185,10 +185,11 @@ public final class Sc3MainComparison implements Scenario {
                                         context);
                         Sanitization sanitization = method.run(problem);
                         Metrics.Row row = context.evaluateMasking(problem, sanitization);
-                        // method_key la ten goi tren dong lenh, on dinh; method la ten phuong
-                        // phap tu dat, co the mang tham so vao trong do. SBSH-rmax tu goi minh la
-                        // SBSH-r3 khi l_max = 3, nen phan tich phai bam vao method_key, khong thi
-                        // ho Holm da chot khong bao gio khop duoc ten trong tep.
+                        // method_key is the name given on the command line, and it is stable;
+                        // method is the name the method gives itself, which may carry its
+                        // parameters. SBSH-rmax calls itself SBSH-r3 when l_max = 3, so the
+                        // analysis must key on method_key, or the locked Holm family never
+                        // matches a name in the file.
                         writer.writeRow(describe(options), shape(database),
                                 gap.toString(), Integer.toString(sigma),
                                 sensitive.toString(), stratum,
@@ -212,7 +213,7 @@ public final class Sc3MainComparison implements Scenario {
                         System.out.printf("set %d  %-34s |R| %4d  lost %4d (%.4f)  supDist %.4f%s%n",
                                 index, method.name(), row.maskCount(), row.lost(),
                                 row.lostRelative(), row.supDist(),
-                                method.isRandomized() ? "  hat " + thisSeed : "");
+                                method.isRandomized() ? "  seed " + thisSeed : "");
                     }
                 }
             }
@@ -328,8 +329,8 @@ public final class Sc3MainComparison implements Scenario {
                 return new Sbsh(longestSensitive(problem))
                         .withNonSensitiveFrequent(nonSensitiveFrequent(problem, frequent));
             case "primal-dual":
-                // Chi chay khi sigma = 1; voi sigma khac no nem loi noi ro vi sao, khong im lang
-                // tut xuong mot bien the khac.
+                // Runs only when sigma = 1; with any other sigma it throws an error saying why,
+                // instead of silently falling back to another variant.
                 return new PrimalDualCover();
             case "ilp":
                 return new IlpExact();

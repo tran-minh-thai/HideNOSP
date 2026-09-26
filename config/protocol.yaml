@@ -1,75 +1,78 @@
-# Bảng giao thức 9 dòng (§11.7, quy tắc 2.6.1).
-# Quy tắc 2.6.2: điền ngay ở bản nháp đầu, không đợi tới lúc nộp.
+# The 9-row protocol table (design doc section 11.7, rule 2.6.1).
+# Rule 2.6.2: fill it in at the first draft, not at submission time.
 #
-# Trạng thái ngày 12/09/2026: các dòng CHẶN SC3 đã chốt cùng với
-# config/preregistration.md. Các dòng chỉ chặn lúc nộp (máy đo, cờ JVM, cách đo bộ nhớ,
-# giới hạn thời gian, làm nóng) vẫn để null; chúng không chặn việc chạy SC3 tới SC5 và SC7,
-# vì các kịch bản đó cho số bất biến theo máy. SC6 thì chặn.
+# State on 2026-09-12: the rows that BLOCK SC3 are locked together with
+# config/preregistration.md. The rows that only block submission (measuring machine, JVM flags,
+# memory measurement, time limit, warm-up) are still null; they do not block running SC3 to SC5
+# and SC7, because those scenarios give numbers that do not depend on the machine. SC6 is blocked.
 #
-# Ô null nghĩa là CHƯA CHỐT, không phải không áp dụng.
-# Căn cứ chọn từng giá trị: config/de_xuat_gia_tri_nhom_A.md
+# A null cell means NOT LOCKED YET, not "does not apply".
+# The grounds for every value: config/de_xuat_gia_tri_nhom_A.md
 
-dong_1_nguong_va_pham_vi:
-  # Dải sigma, l_max, [g-, g+] và |S| cho TỪNG bộ dữ liệu.
-  chung_cho_moi_bo:
-    l_max: 4                          # nâng từ 3; §11.5 lấy mẫu nhạy cảm độ dài 2-4, nên
-                                      # l_max = 3 làm mẫu độ dài 4 không nằm trong F_sigma.
-                                      # Chi phí đo được: re o ca sau bo, fifa chi them 0,6 giay.
-    do_dai_mau_nhay_cam: [2, 4]
-    sensitive_size: [1, 5, 10, 20]    # §11.5
-    sensitive_sets_moi_o: 20          # §11.5; toi da, xem preregistration.md muc 9
-    phan_vi_lay_mau: [10, 30, 50, 70, 90]   # nam phan vi sup_NO, moi phan vi 4 tap -> 20
-    cach_lay_mau: >
+row_1_thresholds_and_scope:
+  # The range of sigma, l_max, [g-, g+] and |S| for EVERY dataset.
+  common_to_every_dataset:
+    l_max: 4                          # raised from 3; design doc section 11.5 draws sensitive
+                                      # patterns of length 2-4, and l_max = 3 left the patterns
+                                      # of length 4 outside F_sigma. Measured cost: cheap on all
+                                      # six datasets, fifa takes only 0.6 seconds more.
+    sensitive_pattern_length: [2, 4]
+    sensitive_size: [1, 5, 10, 20]    # design doc section 11.5
+    sensitive_sets_per_cell: 20       # design doc section 11.5; an upper limit, see
+                                      # preregistration.md section 9
+    sampling_percentiles: [10, 30, 50, 70, 90]   # five sup_NO percentiles, 4 sets each -> 20
+    sampling_method: >
       Five equal-rank strata of the candidates sorted by sup_NO, centred on these percentiles;
       up to 4 distinct sets per stratum, never a repeated set (hidenosp.exp.SensitiveSampling,
       preregistration.md section 9, added 2026-09-25 before any SC3 run for the paper).
-    khoang_cach_chung: ["[0,1]", "[0,3]"]
-  theo_bo:
+    common_gaps: ["[0,1]", "[0,3]"]
+  per_dataset:
     dna_mt745584:
       sigma: [2500, 4000]
-      khoang_cach: ["[0,1]", "[0,3]", "[0,10]"]
-      ghi_chu: >
-        sigma phai tu 2500 tro len. Voi |Sigma| = 4 va l_max = 3, khong gian mau chi co
-        4 + 16 + 64 = 84 mau, va o sigma = 1000 thi ca 84 deu pho bien, tuc F_sigma la
-        TOAN BO khong gian mau: khi do Ghost khong the khac 0 va Lost mat y nghia so sanh.
-        O sigma = 2500 thi |F_sigma| = 51 tren 84, la tap con thuc su.
+      gaps: ["[0,1]", "[0,3]", "[0,10]"]
+      note: >
+        sigma must be 2500 or more. With |Sigma| = 4 and l_max = 3 the pattern space holds only
+        4 + 16 + 64 = 84 patterns, and at sigma = 1000 all 84 are frequent, i.e. F_sigma is the
+        WHOLE pattern space: Ghost can then never be nonzero and Lost loses its comparative
+        meaning. At sigma = 2500, |F_sigma| = 51 out of 84, a proper subset.
     msnbc:
       sigma: [1000, 2000, 5000]
-      khoang_cach: ["[0,1]", "[0,3]", "[0,10]"]
-    leviathan: {sigma: [500], khoang_cach: ["[0,1]", "[0,3]"]}
-    bible:     {sigma: [2000], khoang_cach: ["[0,1]", "[0,3]"]}
-    sign:      {sigma: [200], khoang_cach: ["[0,1]", "[0,3]"]}
-    bms1:      {sigma: [100], khoang_cach: ["[0,1]", "[0,3]"]}
-    fifa:      {sigma: [3000], khoang_cach: ["[0,1]", "[0,3]"]}
-    # Added 2026-09-25 (event logs, tools/build_datasets.py). Sigma picked by quy_tac_chon_sigma:
+      gaps: ["[0,1]", "[0,3]", "[0,10]"]
+    leviathan: {sigma: [500], gaps: ["[0,1]", "[0,3]"]}
+    bible:     {sigma: [2000], gaps: ["[0,1]", "[0,3]"]}
+    sign:      {sigma: [200], gaps: ["[0,1]", "[0,3]"]}
+    bms1:      {sigma: [100], gaps: ["[0,1]", "[0,3]"]}
+    fifa:      {sigma: [3000], gaps: ["[0,1]", "[0,3]"]}
+    # Added 2026-09-25 (event logs, tools/build_datasets.py). Sigma picked by sigma_rule:
     # |F_sigma| within [50, 700] at both gaps. Group still to be fixed by the official SC2 run on
     # the measuring machine, with the thresholds of preregistration.md section 3, before any SC3.
-    bpi2013:   {sigma: [500, 1000], khoang_cach: ["[0,1]", "[0,3]"]}
-    bpi2012:   {sigma: [2000, 4000], khoang_cach: ["[0,1]", "[0,3]"]}
-    sepsis:    {sigma: [300], khoang_cach: ["[0,1]", "[0,3]"]}
+    bpi2013:   {sigma: [500, 1000], gaps: ["[0,1]", "[0,3]"]}
+    bpi2012:   {sigma: [2000, 4000], gaps: ["[0,1]", "[0,3]"]}
+    sepsis:    {sigma: [300], gaps: ["[0,1]", "[0,3]"]}
     # Added 2026-09-25: protein files SDB4 and SDB1 of NTP-Miner (tools/build_datasets.py). The
     # two share 64-75% of their sequences (exact match), so they are one source of data; which of
     # them enters H2 is still open, to be fixed in config/preregistration.md before any SC3 run on
     # protein. Sigma fixed before any SC2 run on them: the smallest and the largest sigma of the
     # grid 300..1200 that meet the rule below at both gaps (scenario SIGMA; table 2 of
     # results-probe/protein_groups_and_sigma_rule_probe_20260925.md).
-    protein_sdb4: {sigma: [500, 900], khoang_cach: ["[0,1]", "[0,3]"]}
-    protein_sdb1: {sigma: [400, 800], khoang_cach: ["[0,1]", "[0,3]"]}
-    tong_hop:  {sigma: null, khoang_cach: null}
+    protein_sdb4: {sigma: [500, 900], gaps: ["[0,1]", "[0,3]"]}
+    protein_sdb1: {sigma: [400, 800], gaps: ["[0,1]", "[0,3]"]}
+    synthetic: {sigma: null, gaps: null}
   # Preregistration section 11 (2026-09-26): the repeated-item scope uses the same configurations
   # (sigma, gaps) as above, minus SIGN and BMS1, which have no repeated-item pattern of length 2 to 4
   # in F_sigma, plus dna sigma 4000 [0,1], which has two repeated-item candidates and no distinct one.
-  pham_vi_lap_muc:
+  repeated_item_scope:
     sc2: "--profile=repeated"                 # groups over the repeated-item pool
-    bang_nhom: "config/nhom_cau_hinh_lap_muc.tsv"   # locked from the official SC2 runs
+    group_table: "config/configuration_groups_repeated.tsv"   # locked from the official SC2 runs
     sc3: "--patternKind=repeated"             # sensitive sets drawn from that pool (section 9 rule)
-    phuong_phap_H2R: "cut-hide-rw-ls"         # section 12 (was "cut-hide", section 11 point 4); the
-                                              # same method is tested in H2; tools/thong_ke.py must agree
-    chi_bao_cao: ["protein_sdb1"]             # section 11, point 5
-    mat_pareto: "--pareto=true with --sensitiveSize=1"   # section 11, point 6, descriptive
-  quy_tac_chon_sigma: >
-    Giu |F_sigma| trong khoang [50, 700] VA F_sigma phai la tap con THUC SU cua khong gian
-    mau do dai toi l_max. Moi sigma o tren deu thoa.
+    method_H2R: "cut-hide-rw-ls"              # section 12 (was "cut-hide", section 11 point 4); the
+                                              # same method is tested in H2;
+                                              # tools/preregistered_analysis.py must agree
+    report_only: ["protein_sdb1"]             # section 11, point 5
+    pareto_front: "--pareto=true with --sensitiveSize=1"   # section 11, point 6, descriptive
+  sigma_rule: >
+    Keep |F_sigma| within [50, 700] AND F_sigma must be a PROPER subset of the space of patterns
+    of length up to l_max. Every sigma above meets it.
   # CORRECTION 2026-09-25. The last sentence above is false at l_max = 4. The rule applied by a
   # program (scenario SIGMA, commit a548e53; results-probe/protein_groups_and_sigma_rule_probe_
   # 20260925.md, table 2) puts six of the fifteen dna_mt745584 and msnbc configurations outside
@@ -79,103 +82,109 @@ dong_1_nguong_va_pham_vi:
   # preregistration and are kept; the rule binds the datasets added after that date. What the six
   # cells change: the three dna cells have |F_sigma| of 6 to 16, so Lost_rel moves in coarse steps
   # there and must be read with its denominator; the three msnbc cells only cost more time.
-  ghi_chu: >
-    sigma khai ca dang tuyet doi lan ti le theo tong sup_NO (§11.5). Viec giu ti le hay giu
-    tuyet doi khi so giua cac bo con CHUA CHOT; no chan luc nop chu khong chan SC3.
+  note: >
+    sigma is declared both as an absolute number and as a share of the total sup_NO (design doc
+    section 11.5). Whether the share or the absolute number is kept when comparing subsets is NOT
+    LOCKED YET; it blocks submission, not SC3.
 
-dong_2_nguong_epsilon_cua_B_eps:
-  gia_tri: 0.5                        # dung cho MOI bo
-  kiem_bat_buoc: "B_eps khong duoc rong; neu rong thi bao loi, khong chay tiep im lang"
-  can_cu: >
-    Do |B_eps| tren chin cau hinh. epsilon = 0,10 cho B_eps RONG tren dna [0,3] sigma=1000;
-    khi do buoc 4 gan trong so 0 cho moi vi tri va CUT-HIDE am tham tut ve bien the trong so
-    deu, tuc bien the dang duoc so o SC7 lai chinh la bien the dang chay. epsilon = 1,00 keo
-    24-54% cua F_sigma vao bang, khi do trong so 1/(sup - sigma + 1) gan nhu deu va cum tu
-    "mau gan bien" mat nghia. epsilon = 0,50 cho |B_eps| tu 6 toi 248, khong rong o moi cau
-    hinh da do.
+row_2_epsilon_of_B_eps:
+  value: 0.5                          # for EVERY dataset
+  required_check: "B_eps must not be empty; if it is, report an error, never carry on silently"
+  basis: >
+    |B_eps| measured on nine configurations. epsilon = 0.10 gives an EMPTY B_eps on dna [0,3]
+    sigma=1000; step 4 then gives every position the weight 0 and CUT-HIDE silently falls back to
+    the uniform-weight variant, i.e. the variant compared against in SC7 would be the very variant
+    running. epsilon = 1.00 pulls 24-54% of F_sigma into the band, the weight
+    1/(sup - sigma + 1) is then almost uniform, and "patterns near the threshold" loses its
+    meaning. epsilon = 0.50 gives |B_eps| from 6 to 248, never empty on any configuration measured.
 
-dong_3_hat_giong:
-  lay_mau_tap_nhay_cam: 2026
-  sinh_du_lieu_tong_hop: 2026
-  phuong_phap_ngau_nhien: [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035]
-  cach_tong_hop_phuong_phap_ngau_nhien: "trung vi cua 10 lan chay"
-  giai_thuat_di_truyen: "dung cung 10 hat giong tren"
-  ghi_chu: >
-    HH, HR, RH, RR va GA chay 10 lan vi day la dai luong bat bien theo may; bang so lan lap
-    cua §11.6 chi danh cho do thoi gian. Bien thien quan sat duoc o RR la lon (|R| = 31 va
-    151 tren hai tap nhay cam cua cung mot cau hinh).
+row_3_seeds:
+  sensitive_set_sampling: 2026
+  synthetic_data_generation: 2026
+  randomized_methods: [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035]
+  randomized_methods_aggregation: "median of the 10 runs"
+  genetic_algorithm: "uses the same 10 seeds as above"
+  note: >
+    HH, HR, RH, RR and GA run 10 times because these are quantities that do not depend on the
+    machine; the repetition table of design doc section 11.6 is for timing only. The variation
+    observed in RR is large (|R| = 31 and 151 on two sensitive sets of one configuration).
 
-dong_4_tham_so_sinh_du_lieu_tong_hop:
-  phan_phoi_muc: "đều trên bảng chữ cái"
-  kich_thuoc_bang_chu_cai: null
-  so_chuoi: null
-  do_dai_chuoi: null
-  rho_rep_muc_tieu: null
-  beta_muc_tieu: null
-  ghi_chu: >
-    CHUA CHOT, chan luc nop chu khong chan SC3. Chi bao cao rho_rep va beta DO DUOC
-    (SyntheticGenerator.measure), khong bao cao gia tri muc tieu nhu the da dat.
+row_4_synthetic_data_parameters:
+  item_distribution: "uniform over the alphabet"
+  alphabet_size: null
+  sequence_count: null
+  sequence_length: null
+  target_rho_rep: null
+  target_beta: null
+  note: >
+    NOT LOCKED YET; it blocks submission, not SC3. Report only the MEASURED rho_rep and beta
+    (SyntheticGenerator.measure), never the target values as if they had been reached.
 
-dong_5_moi_truong_chay:
+row_5_run_environment:
   jdk: "Eclipse Temurin 25 (LTS)"   # bytecode target 25 in pom.xml; tools/run.py refuses any
                                     # other Java major version for runs that go into the paper.
                                     # The exact update (25.0.x) is stamped into every result file.
-  co_xms: null
-  co_xmx: null
-  he_dieu_hanh: "Windows"           # measuring machine, separate from the development machine
+  xms_flag: null
+  xmx_flag: null
+  operating_system: "Windows"       # measuring machine, separate from the development machine
   cpu: "AMD Ryzen 9 9950X"
   ram: "64 GB"
-  ten_may_do: null     # truyền vào bằng --machine; lần chạy gắn "dev" không được ghi số thời gian
-  ghi_chu: "CHUA CHOT. Chan SC6, khong chan SC3 toi SC5 va SC7."
+  machine_name: null   # passed with --machine; a run labelled "dev" may not record timing numbers
+  note: "NOT LOCKED YET. Blocks SC6, not SC3 to SC5 and SC7."
 
-dong_6_do_bo_nho:
-  cach_do: "heap đã dùng, lấy mẫu từ trong tiến trình (util.MemoryProbe)"
-  chu_ky_lay_mau_ms: 50
-  bo_nho_thuong_tru: null
-  ghi_chu: >
-    §11.7 doi RSS toi da cua tien trinh. JVM khong cho biet RSS nen phai co script boc ngoai;
-    chua co (TODO trong util.MemoryProbe). Bang nao in so bo nho phai noi ro dang in heap hay
-    RSS. CHUA CHOT, chan SC6.
+row_6_memory_measurement:
+  method: "heap in use, sampled from inside the process (util.MemoryProbe)"
+  sampling_period_ms: 50
+  resident_memory: null
+  note: >
+    Design doc section 11.7 asks for the peak RSS of the process. The JVM does not report RSS, so
+    it takes a wrapper script, which does not exist yet (TODO in util.MemoryProbe). A table that
+    prints memory must say whether it prints heap or RSS. NOT LOCKED YET, blocks SC6.
 
-dong_7_gioi_han_thoi_gian:
-  gioi_han_moi_lan_chay_giay: null
-  ma_qua_thoi_gian: "OT"     # §3.3.14
-  ma_het_bo_nho: "OOM"
-  xu_ly_khi_qua_han: "loai cap khoi Wilcoxon, dem va bao cao rieng (preregistration §5)"
-  nguong_bo_toi_da: 0.10     # loai qua 10% thuc the thi khong ket luan H2
-  ghi_chu: "Gia tri gioi han giay CHUA CHOT; quy tac xu ly thi da chot."
+row_7_time_limit:
+  limit_per_run_seconds: null
+  timeout_code: "OT"     # rule 3.3.14
+  out_of_memory_code: "OOM"
+  when_exceeded: >
+    drop the pair from Wilcoxon, count it and report it apart (preregistration section 5)
+  max_dropped_share: 0.10     # more than 10% of the instances dropped: no conclusion on H2
+  note: "The limit in seconds is NOT LOCKED YET; the rule for handling it is locked."
 
-dong_8_so_lan_lap_va_tong_hop:
-  duoi_1_giay: 15
-  tu_1_den_10_giay: 10
-  tu_10_den_120_giay: 5
-  tren_120_giay: 3
-  tong_hop: "trung bình ± độ lệch chuẩn; đo song song thời gian treo tường và thời gian CPU"
-  ghi_chu: >
-    util.Timing.repetitionsFor cai dung bang nay (§11.6). Bang nay chi ap cho DO THOI GIAN;
-    so lan chay lai cua phuong phap ngau nhien khi do dai luong bat bien nam o dong 3.
+row_8_repetitions_and_aggregation:
+  under_1_second: 15
+  from_1_to_10_seconds: 10
+  from_10_to_120_seconds: 5
+  over_120_seconds: 3
+  aggregation: "mean ± standard deviation; wall-clock time and CPU time measured side by side"
+  note: >
+    util.Timing.repetitionsFor implements this table (design doc section 11.6). It applies to
+    TIMING only; the reruns of the randomized methods that measure invariant quantities are in
+    row 3.
 
-dong_9_quy_trinh_lam_nong:
-  so_lan_lam_nong: null
-  ghi_chu: "CHUA CHOT, chan SC6. util.Timing.measure nhan so lan lam nong lam tham so."
+row_9_warmup_procedure:
+  warmup_runs: null
+  note: "NOT LOCKED YET, blocks SC6. util.Timing.measure takes the number of warm-up runs."
 
-# Ngoài 9 dòng: các quyết định cài đặt phải khai (mục 7 của RUNBOOK.md).
-quyet_dinh_cai_dat:
-  pham_vi_mu_P: 1
-  thang_trong_so: 1000000        # CostCurve.SCALE
-  quan_he_S_cong: "chuỗi con trên dãy mục"
-  tia_theo_tien_to_khi_khai_pha: true
-  ngu_nghia_mask: "-1, không khớp mục nào"
-  tuyen_tinh_hoa_tap_muc: "sắp theo mã mục tăng dần; tỉ lệ vị trí bị ảnh hưởng ghi cạnh bộ dữ liệu"
-  trong_so_nut_khi_mu_lon_hon_1: "gan trong so vi tri cho moi nut cua vi tri do; la lua chon cai dat"
-  thuc_the_nho:
-    so_vi_tri_ung_vien_toi_da: 64    # IlpExact.MAX_CANDIDATES
-    so_lan_che_toi_da: 12            # IlpExact.MAX_MASKS
-  moc_toi_uu_cua_SC3: "exact-minR-minLost"
-  nhieu_mau_duoi_nguong_CSDL: >
-    Lam tron quy hoach tuyen tinh la phuong an chinh (co bao dam he so l_max). GA lai la du
-    phong. Neu ca hai khong kip thi thu pham vi ve |S| = 1 va khai ro, thay vi dua GA vao ma
-    tham so chua chot.
-  phien_ban_ma: >
-    HIDENOSP_REVISION = git rev-parse HEAD, dat trong mot script boc truoc khi goi Runner.
-    BAT BUOC cho moi lan chay lay so vao bai. So hien co dong dau "unversioned" giu lam do tim.
+# Beyond the 9 rows: the implementation decisions that must be declared (section 7 of RUNBOOK.md).
+implementation_decisions:
+  mu_P_scope: 1
+  weight_scale: 1000000        # CostCurve.SCALE
+  S_plus_relation: "subsequence over the item sequence"
+  prefix_pruning_when_mining: true
+  mask_semantics: "-1, matches no item"
+  itemset_linearisation: >
+    sorted by ascending item code; the share of positions affected is recorded next to the dataset
+  node_weight_when_mu_above_1: >
+    every node of a position is given the weight of that position; an implementation choice
+  small_instances:
+    max_candidate_positions: 64    # IlpExact.MAX_CANDIDATES
+    max_masks: 12                  # IlpExact.MAX_MASKS
+  SC3_optimum_reference: "exact-minR-minLost"
+  several_patterns_under_database_threshold: >
+    Linear-programming rounding is the main option (it guarantees a factor of l_max); the hybrid
+    GA is the fallback. If neither is ready in time, narrow the scope to |S| = 1 and say so, rather
+    than bring the GA in with parameters not locked yet.
+  code_version: >
+    HIDENOSP_REVISION = git rev-parse HEAD, set by a wrapper script before Runner is called.
+    MANDATORY for every run whose numbers go into the paper. The existing numbers, whose first line
+    says "unversioned", are kept as probe numbers.

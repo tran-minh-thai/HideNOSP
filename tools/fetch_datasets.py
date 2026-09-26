@@ -24,22 +24,23 @@ BASE = "https://www.philippe-fournier-viger.com/spmf/publicdatasets"
 # name -> (url, local file, format for io.DatasetReader, expected bytes or None, role in section 11.2)
 CATALOGUE = {
     "msnbc": (BASE + "/MSNBC.txt", "msnbc.txt", "SPMF", 2314085,
-              "nhom chinh: nhap chuot theo nhom trang, lap nhieu; [R3] dung ban MSN"),
+              "main group: clicks by page category, much repetition; [R3] uses the MSN copy"),
     "sign":  (BASE + "/SIGN.txt", "sign.txt", "SPMF", 236727,
-              "nhom chinh neu rho_rep du cao: chuoi su kien don muc"),
+              "main group if rho_rep is high enough: single-item event sequences"),
     "fifa":  (BASE + "/FIFA.txt", "fifa.txt", "SPMF", 4939888,
-              "nhom chinh neu rho_rep du cao: chuoi su kien don muc"),
+              "main group if rho_rep is high enough: single-item event sequences"),
     "bms1":  (BASE + "/BMS1_spmf.txt", "bms1.txt", "SPMF", 1525544,
-              "doi chung suy bien: chuoi ngan, it lap; [R3] dung BMS-WebView-1"),
-    # Bo sung dot 2: chon theo dac trung ma dong gop cua bai can (|Sigma| nho, chuoi dai, lap trong chuoi).
+              "degenerate control: short sequences, little repetition; [R3] uses BMS-WebView-1"),
+    # Second batch: chosen for the features the contribution of the paper needs (small |Sigma|, long
+    # sequences, repetition within a sequence).
     "dna":   (BASE + "/MT745584_SPMF.txt", "dna_mt745584.txt", "SPMF", 151789,
-              "ung vien nhom chinh: bo gen COVID-19 MT745584, |Sigma|=4; dang du lieu cua dong NOSEP [R1]"),
+              "main-group candidate: COVID-19 genome MT745584, |Sigma|=4; the kind of data of the NOSEP line [R1]"),
     "bike":  (BASE + "/BIKE.txt", "bike.txt", "SPMF", 1290298,
-              "ung vien: chuoi tram xe dap theo thoi gian, |Sigma|=67; ban cong khai gan nhat voi trucks cua [R20]"),
+              "candidate: bike stations as time sequences, |Sigma|=67; the public dataset closest to the trucks of [R20]"),
     "leviathan": (BASE + "/LEVIATHAN.txt", "leviathan.txt", "SPMF", 1339118,
-              "ung vien: van ban Leviathan theo chuoi tu, dai trung binh 33.8"),
+              "candidate: the text of Leviathan as word sequences, mean length 33.8"),
     "bible": (BASE + "/BIBLE.txt", "bible.txt", "SPMF", 5572333,
-              "ung vien: van ban Kinh thanh theo chuoi tu, dai trung binh 21.6"),
+              "candidate: the text of the Bible as word sequences, mean length 21.6"),
 }
 
 # Raw inputs, stored under datasets/raw/. The Java code never reads them; tools/build_datasets.py
@@ -136,8 +137,8 @@ def read_provenance():
 
 def write_provenance(rows):
     with io.open(PROVENANCE, "w", encoding="utf-8", newline="\n") as handle:
-        handle.write("# Nguon goc bo du lieu, sinh boi tools/fetch_datasets.py.\n")
-        handle.write("# Du lieu tho khong vao git; tep nay thi co, vi no la thu cho phep lay lai dung bytes do.\n")
+        handle.write("# Provenance of the datasets, written by tools/fetch_datasets.py.\n")
+        handle.write("# Raw data stays out of git; this file goes in, because it is what lets anyone fetch the same bytes.\n")
         handle.write("\t".join(HEADER) + "\n")
         for name in sorted(rows):
             handle.write("\t".join(rows[name]) + "\n")

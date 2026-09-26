@@ -78,7 +78,7 @@ class MetricsTest {
     }
 
     @Test
-    @DisplayName("Lost va SupDist gia tang trung khop voi dinh nghia, tren moi phuong phap")
+    @DisplayName("incremental Lost and SupDist match the definition, for every method")
     void incrementalAgreesWithTheDefinition() {
         for (long seed : new long[] {3, 11, 29}) {
             SequenceDatabase database = database(seed);
@@ -94,22 +94,26 @@ class MetricsTest {
                     Metrics.Row fast = context.evaluateMasking(problem, sanitization);
                     int[] slow = byDefinition(problem, sanitization);
                     String where = method.name() + " seed " + seed + " sigma " + sigma;
-                    assertEquals(slow[0], fast.lost(), "Lost khac dinh nghia: " + where);
+                    assertEquals(slow[0], fast.lost(),
+                            "Lost differs from the definition: " + where);
                     double expected = slow[1] == 0 ? 0 : (double) (slow[1] - slow[2]) / slow[1];
-                    assertEquals(expected, fast.supDist(), 1e-9, "SupDist khac dinh nghia: " + where);
-                    assertEquals(0, fast.ghost(), "che khong bao gio sinh mau ma (P5a): " + where);
+                    assertEquals(expected, fast.supDist(), 1e-9,
+                            "SupDist differs from the definition: " + where);
+                    assertEquals(0, fast.ghost(),
+                            "masking never creates a ghost pattern (P5a): " + where);
                 }
             }
         }
     }
 
     @Test
-    @DisplayName("HF gia tang trung khop voi dinh nghia, ke ca khi mau nhay cam co tan suat")
+    @DisplayName("incremental HF matches the definition, even when a sensitive pattern is frequent")
     void incrementalHidingFailureAgreesWithTheDefinition() {
         for (long seed : new long[] {3, 11, 29}) {
             SequenceDatabase database = database(seed);
-            // sigma = 1 la ca dang so: moi mau nhay cam deu nam trong F_sigma(D). Loi cu bo qua
-            // muc giam cua dung nhung mau do, nen HF luon ra 1 ke ca khi da an sach.
+            // sigma = 1 is the case to fear: every sensitive pattern is in F_sigma(D). The old bug
+            // ignored the drop of exactly those patterns, so HF always came out as 1 even after
+            // complete hiding.
             for (int sigma : new int[] {1, 8, 14}) {
                 HideProblem problem = new HideProblem(database,
                         List.of(new Pattern(A, B), new Pattern(B, C)), new GapConstraint(0, 2),
@@ -122,7 +126,7 @@ class MetricsTest {
                     Metrics.Row fast = context.evaluateMasking(problem, sanitization);
                     double slow = Metrics.hidingFailure(problem, sanitization.sanitized());
                     assertEquals(slow, fast.hidingFailure(), 1e-9,
-                            "HF khac dinh nghia: " + method.name() + " seed " + seed
+                            "HF differs from the definition: " + method.name() + " seed " + seed
                                     + " sigma " + sigma);
                 }
             }
@@ -130,7 +134,7 @@ class MetricsTest {
     }
 
     @Test
-    @DisplayName("Context tu choi khi sigma cua no khac sigma dem tac dung phu cua bai toan")
+    @DisplayName("Context refuses a problem that counts side effects at a different sigma")
     void contextRefusesAMismatchedSigma() {
         SequenceDatabase database = database(3);
         HideProblem eight = new HideProblem(database, List.of(new Pattern(A, B)),

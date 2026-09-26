@@ -429,3 +429,23 @@ Lost giảm. SC6 đo thời gian của cả `cut-hide` và `cut-hide-rw-ls` trê
 **Không đổi:** δ_L, α, Wilcoxon một phía với Pratt, họ Holm bốn phần tử, cách lấy mẫu (mục 9), nhóm dữ liệu (mục 10
 và 11), các biên tương đương, mục 11 điểm 5; mục 11 điểm 6 (mặt Pareto) vẫn tính với trọng số của `cut-hide` và
 vẫn là phân tích mô tả.
+
+---
+
+## 13. Ghi chú biên tập ngày 26/09/2026 — đổi tên tệp, không đổi quy tắc nào
+
+Mã nguồn chuyển hẳn sang tiếng Anh, nên ba tên mà mục 10 và mục 11 nhắc tới đổi như sau:
+
+| Tên ở mục 10 và 11 | Tên từ ngày 26/09/2026 |
+|---|---|
+| `tools/thong_ke.py` | `tools/preregistered_analysis.py` |
+| `config/nhom_cau_hinh.tsv` | `config/configuration_groups.tsv` |
+| `config/nhom_cau_hinh_lap_muc.tsv` | `config/configuration_groups_repeated.tsv` |
+
+Lệnh sinh bảng nhóm ở mục 10 điểm 3 nay là
+`python tools/preregistered_analysis.py --sc2 results-invariant --write-groups`. Nhãn nhóm ghi trong
+hai bảng cũng sang tiếng Anh: với ρ_rep, `main` (chính), `intermediate` (trung gian), `degenerate`
+(suy biến); với β, `effective` (có hiệu lực), `between` (trung gian), `degenerate` (suy biến). Khi
+ghi chú này được viết, chưa bảng nhóm nào được sinh, nên không bảng chốt nào phải viết lại.
+
+**Không đổi:** mọi mục 1–12; mọi ngưỡng, phép kiểm, cách ghép cặp và cách lấy mẫu.

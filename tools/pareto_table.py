@@ -6,7 +6,7 @@ configuration it prints, over the sensitive sets: the number of vertices of the 
 for every other method in the SC3 file, the share of sets in which some vertex of the front
 dominates the method in (|R|, Lost_rel): no worse in both, better in one. A method that lands on a
 vertex exactly (same |R| and Lost_rel) is counted apart as a tie: nothing can dominate an optimum.
-It is descriptive: the tests of the preregistration live in tools/thong_ke.py.
+It is descriptive: the tests of the preregistration live in tools/preregistered_analysis.py.
 
 It also checks that the first vertex is the cut-hide row of the same set (same |R| and Lost): the
 two are computed by the same exact program, so a difference is an error, not a result.

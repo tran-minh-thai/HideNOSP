@@ -7,9 +7,10 @@ Two tables:
           split by pattern length, the distinct-item pool, and whether the sigma rule holds.
   groups  one row per (dataset, gap, sigma) of SC2 files written with --profile=pool: the medians of
           rho_rep and beta over the pool and the groups of preregistration section 10, computed by
-          thong_ke.xep_nhom, the same function that writes the locked table. This table is a
-          report only; it never writes config/nhom_cau_hinh.tsv. With --profile=repeated it reads
-          the files of SC2 --profile=repeated instead, the repeated-item pool.
+          preregistered_analysis.group_configurations, the same function that writes the locked
+          table. This table is a report only; it never writes config/configuration_groups.tsv.
+          With --profile=repeated it reads the files of SC2 --profile=repeated instead, the
+          repeated-item pool.
 
 Every row names the file it comes from, so a number in a document can be traced to its artifact.
 
@@ -53,15 +54,16 @@ def dataset_name(label):
     return os.path.splitext(name)[0]
 
 
-# The group labels of thong_ke.xep_nhom, in English; an unknown label stops the report.
-GROUP = {"chinh": "main", "trung gian": "intermediate", "suy bien": "degenerate"}
-BETA_GROUP = {"co hieu luc": "effective", "trung gian": "between", "suy bien": "degenerate"}
+# The group labels of preregistered_analysis.group_configurations; an unknown label stops the
+# report.
+GROUP = ("main", "intermediate", "degenerate")
+BETA_GROUP = ("effective", "between", "degenerate")
 
 
-def label(table, value):
-    if value not in table:
-        raise SystemExit("unknown group label %r from thong_ke.xep_nhom" % value)
-    return table[value]
+def label(labels, value):
+    if value not in labels:
+        raise SystemExit("unknown group label %r from preregistered_analysis" % value)
+    return value
 
 
 def sigma_table(files):
@@ -84,7 +86,7 @@ def sigma_table(files):
 
 
 def groups_table(files, profile="pool"):
-    import preregistered_analysis  # needs numpy; imported here so that the sigma table runs without it
+    import preregistered_analysis  # needs numpy; imported here so the sigma table runs without it
 
     pool_files = [p for p in files if "# profile %s\n" % profile in data_rows(p)[0]]
     source = {}
@@ -93,15 +95,15 @@ def groups_table(files, profile="pool"):
         for r in rows:
             key = (dataset_name(r["dataset"]), r["gap"], int(r["sigma"]))
             source.setdefault(key, set()).add(os.path.basename(path))
-    groups = preregistered_analysis.xep_nhom(pool_files, profile=profile)
+    groups = preregistered_analysis.group_configurations(pool_files, profile=profile)
     print("| dataset | gap | sigma | pool | median rho_rep | median beta | group | beta group "
           "| file |")
     print("|---|---|---:|---:|---:|---:|---|---|---|")
     for key in sorted(groups):
         v = groups[key]
         print("| %s | %s | %d | %d | %.3f | %.3f | %s | %s | %s |" % (
-            key[0], key[1], key[2], v["pool"], v["rho_rep"], v["beta"], label(GROUP, v["nhom"]),
-            label(BETA_GROUP, v["nhom_beta"]),
+            key[0], key[1], key[2], v["pool"], v["rho_rep"], v["beta"], label(GROUP, v["group"]),
+            label(BETA_GROUP, v["beta_group"]),
             ", ".join(sorted(source.get(key, ())))))
     print()
     print("%d configurations from %d %s files (%d files given)"

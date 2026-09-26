@@ -92,19 +92,19 @@ Khi chưa có bộ dữ liệu thật, SC2 và SC3 chạy trên một cơ sở d
 
 ### Script dò tìm Python
 
-`kiemtra_v2.py` và `probe/*.py` in ra màn hình. §8.2 đòi các con số đó nằm ở `results-probe/`,
+`nettree_checks.py` và `probe/*.py` in ra màn hình. §8.2 đòi các con số đó nằm ở `results-probe/`,
 nên phải hứng đầu ra vào đó thay vì chỉ đọc trên màn hình:
 
 ```bash
-python kiemtra_v2.py > results-probe/kiemtra_v2_$(date -u +%Y%m%d-%H%M%S).txt 2>&1
+python nettree_checks.py > results-probe/nettree_checks_$(date -u +%Y%m%d-%H%M%S).txt 2>&1
 ```
 
 ```bash
 cd probe && python oldprob.py > ../results-probe/oldprob_$(date -u +%Y%m%d-%H%M%S).txt 2>&1
 ```
 
-`probe/*.py` nạp `kiemtra_v2` qua `sys.path.insert(0, '..')`, nên phải chạy từ trong `probe/`.
-`probe/sideeffect.py` cần `numpy`. Lô chạy lại gần nhất mất khoảng ba phút cho `kiemtra_v2.py`
+`probe/*.py` nạp `nettree_checks` qua `sys.path.insert(0, '..')`, nên phải chạy từ trong `probe/`.
+`probe/sideeffect.py` cần `numpy`. Lô chạy lại gần nhất mất khoảng ba phút cho `nettree_checks.py`
 và vài giây cho bốn script còn lại; kết quả và bảng đối chiếu với §8.2 nằm ở `results-probe/`.
 
 Không dùng `>>` để ghi thêm vào tệp nằm trên ổ Google Drive: ổ ảo trả kích thước tệp cũ nên lần
@@ -144,7 +144,7 @@ python tools/run.py --probe SIGMA --dataset=datasets/protein_sdb4.txt --format=S
 Dòng cuối in các σ thoả quy tắc ở mọi khoảng cách đã quét; tệp `SIGMA_*.csv` ghi từng cấu hình.
 `python tools/data_regime_tables.py sigma <tệp hoặc thư mục>` in bảng markdown từ các tệp đó, và
 `python tools/data_regime_tables.py groups <tệp hoặc thư mục>` in bảng nhóm từ các tệp SC2 toàn kho
-(chỉ để báo cáo; bảng chốt vẫn do `thong_ke.py --write-groups` ghi).
+(chỉ để báo cáo; bảng chốt vẫn do `preregistered_analysis.py --write-groups` ghi).
 
 Tải MSNBC, SIGN, FIFA và BMS-WebView-1 từ kho công khai của SPMF vào `datasets/`, tính SHA-256
 và ghi `datasets/provenance.tsv`. Chạy lại là không tải lại nếu tổng kiểm còn khớp. Muốn một bộ
@@ -202,10 +202,11 @@ F_σ, tức kho mà SC3 rút tập nhạy cảm. Chạy SC2 với `--profile=poo
 đo, sinh bảng nhóm một lần rồi rà và commit (commit là chốt):
 
 ```bash
-python tools/thong_ke.py --sc2 results-invariant --write-groups
+python tools/preregistered_analysis.py --sc2 results-invariant --write-groups
 ```
 
-`tools/thong_ke.py` so từng cấu hình với `config/nhom_cau_hinh.tsv`, và chỉ kiểm H2 trên nhóm chính.
+`tools/preregistered_analysis.py` (trước ngày 26/09/2026 tên là `tools/thong_ke.py`) so từng cấu hình
+với `config/configuration_groups.tsv`, và chỉ kiểm H2 trên nhóm chính.
 
 **Đã làm, ngày 12/09/2026.** `config/preregistration.md` và `config/protocol.yaml` đã chốt mọi
 tham số chặn SC3; căn cứ từng con số ở `config/de_xuat_gia_tri_nhom_A.md`. Ba việc kỹ thuật phải
@@ -285,6 +286,7 @@ lại tệp mang tên cuối nhưng thiếu các hàng cuối (884/885, 1.448/1.
 | Mặt Pareto lồi chính xác giữa \|R\| và trọng số | `hide.CutHide.paretoFront`, `FrontierDp.Order`; SC3 `--pareto=true` ghi `SC3PARETO_<dấu>.csv` | Mệnh đề P10 của bản thiết kế; `tools/pareto_table.py` ghép với tệp SC3 cùng lượt, đếm tỉ lệ tập mà mặt trội hơn từng phương pháp, kiểm đỉnh đầu là hàng `cut-hide` |
 | Đánh giá nhiều lời giải của cùng một bài toán | `metrics.Metrics.Context.session` | Nhớ hỗ trợ của mỗi (chuỗi, tập vị trí che) đã gặp; hàng giống hệt `evaluateMasking` (`MetricsSessionTest`) |
 | Bảng markdown từ hiện vật (quy tắc σ, nhóm) | `tools/data_regime_tables.py` | Để tài liệu tổng hợp nhúng bảng sinh ra, không chép tay |
+| Kiểm mã chỉ viết tiếng Anh: chữ có dấu, từ không dấu, số hiệu mục và định lý, cả tên tệp | `tools/check_english.py` | Mã thoát 1 khi có vi phạm; tự kiểm bằng tiêm lỗi: `tools/check_english_test.py`; danh sách từ đo lại bằng `--measure` |
 | Lấy mẫu tập nhạy cảm theo năm tầng phân vị, không lặp | `exp.SensitiveSampling` | `preregistration.md` mục 9 |
 | SC1, SC2, SC3 | `exp.Sc1…`, `exp.Sc2…`, `exp.Sc3…` | Chạy được |
 
@@ -313,7 +315,8 @@ riêng có ghi lý do.
 
 `config/quyet_dinh_can_chot.md` liệt kê **mọi** điểm còn phải quyết định của dự án, gộp theo chủ
 đề, tách nhóm chặn SC3 và nhóm chặn lúc nộp. Sinh từ một đợt rà mười nguồn rồi thẩm định lại từng
-điểm; `tools/gop_quyet_dinh.py` gộp kết quả thành tài liệu đó.
+điểm; `tools/merge_decisions.py` gộp kết quả thành tài liệu đó (trước ngày 26/09/2026 tên là
+`tools/gop_quyet_dinh.py`; từ ngày đó chủ đề, từ khoá và tài liệu nó sinh ra viết bằng tiếng Anh).
 
 `config/de_xuat_gia_tri_nhom_A.md` đề xuất **giá trị cụ thể** cho từng điểm chặn SC3, mỗi giá trị
 kèm căn cứ đo được, cái giá phải trả, và cách bác bỏ. Đây là bản để duyệt, chưa phải bản chốt:
@@ -439,11 +442,12 @@ bản thảo hoặc trong bảng giao thức.
     p = 29/256 = 0,113281; `method="auto"` cho đúng số đó, `"exact"` cho 0,211914 và `"approx"`
     cho 0,099370.
 
-    Vậy `tools/thong_ke.py` chốt `method="auto"`, và `tools/thong_ke_test.py` ghim nó bằng phép
+    Vậy `tools/preregistered_analysis.py` chốt `method="auto"`, và `tools/preregistered_analysis_test.py`
+    ghim nó bằng phép
     liệt kê tay chứ không bằng việc tin vào scipy. Bài phải khai "p tính bằng phân bố chính xác
     có điều kiện của Pratt khi cỡ mẫu cho phép".
 
-12. **Ba khoảng trống trong bản chốt, phát hiện khi cài `thong_ke.py`.** Không tự vá, chỉ ghi ra:
+12. **Ba khoảng trống trong bản chốt, phát hiện khi cài `preregistered_analysis.py`.** Không tự vá, chỉ ghi ra:
 
     - **|R| của CUT-HIDE lớn hơn baseline.** Mục 5 định nghĩa hai chế độ báo cáo: cùng |R| thì
       kiểm định, baseline dùng **nhiều hơn** thì báo cáo riêng. Trường hợp CUT-HIDE dùng nhiều

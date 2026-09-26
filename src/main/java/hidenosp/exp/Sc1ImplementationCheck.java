@@ -23,9 +23,9 @@ import java.util.Random;
  * SC1 of section 11.1: the implementation check. Every quantity here is a check, not a finding, and
  * the only acceptable result is zero mismatches.
  *
- * <p>It repeats on small random instances what the probe script {@code kiemtra_v2.py} established
- * in Python, so a difference between the two implementations shows up here rather than inside a
- * result table:
+ * <p>It repeats on small random instances what the probe script {@code nettree_checks.py}
+ * established in Python, so a difference between the two implementations shows up here rather
+ * than inside a result table:
  *
  * <ul>
  *   <li>L0: the max flow equals the exhaustive sup_NO, and a minimum cut has exactly that size;</li>

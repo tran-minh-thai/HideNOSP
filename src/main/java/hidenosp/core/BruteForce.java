@@ -8,8 +8,8 @@ import java.util.List;
  *
  * <p>These methods enumerate occurrences and search over subsets, so they are exponential and must
  * never appear in a timed scenario. They mirror {@code occs} and {@code sup_no_brute} of the probe
- * script {@code kiemtra_v2.py}, which keeps the Java results comparable with the numbers already
- * recorded in section 8.2 of the design doc.
+ * script {@code nettree_checks.py}, which keeps the Java results comparable with the numbers
+ * already recorded in section 8.2 of the design doc.
  */
 public final class BruteForce {
 

@@ -63,7 +63,8 @@ dong_1_nguong_va_pham_vi:
     sc2: "--profile=repeated"                 # groups over the repeated-item pool
     bang_nhom: "config/nhom_cau_hinh_lap_muc.tsv"   # locked from the official SC2 runs
     sc3: "--patternKind=repeated"             # sensitive sets drawn from that pool (section 9 rule)
-    phuong_phap_H2R: "cut-hide"               # section 11, point 4
+    phuong_phap_H2R: "cut-hide-rw-ls"         # section 12 (was "cut-hide", section 11 point 4); the
+                                              # same method is tested in H2; tools/thong_ke.py must agree
     chi_bao_cao: ["protein_sdb1"]             # section 11, point 5
     mat_pareto: "--pareto=true with --sensitiveSize=1"   # section 11, point 6, descriptive
   quy_tac_chon_sigma: >

@@ -54,7 +54,9 @@ class CHOT:
     # muc 2, ho Holm bon phan tu. Day la method_key, tuc ten goi tren dong lenh cua SC3, chu
     # khong phai ten phuong phap tu dat: SBSH-rmax tu goi minh la "SBSH-r3" khi l_max = 3.
     HO_BASELINE = ("hha", "dbsh", "sbsh-r1", "sbsh-rmax")
-    PHUONG_PHAP_CUA_TA = "cut-hide"                          # ve duoc cua hieu so
+    # preregistration section 12: the method under test of H2 and H2-R; config/protocol.yaml
+    # (phuong_phap_H2R) must name the same key, and thong_ke_test.py checks that it does.
+    PHUONG_PHAP_CUA_TA = "cut-hide-rw-ls"                    # ve duoc cua hieu so
 
     RHO_CHINH = 0.20           # muc 3
     RHO_SUY_BIEN = 0.05        # muc 3
@@ -503,8 +505,8 @@ def chay_h2(hang, ghi, nhom=None, ten_gia_thuyet="H2"):
         ghi("  KHONG CO '%s' trong tep. H2 la mot so sanh co ve, khong co ve do thi khong"
             % CHOT.PHUONG_PHAP_CUA_TA)
         ghi("  kiem duoc gi. Trong tep dang co: %s" % ", ".join(co))
-        ghi("  Luu y 'cut-hide-uniform' la bien the DOI CHUNG cua muc 11.4, khong thay duoc cho")
-        ghi("  'cut-hide' o H2.")
+        ghi("  Luu y 'cut-hide-uniform', 'cut-hide' va 'cut-hide-rw' la bien the DOI CHUNG, khong")
+        ghi("  thay duoc cho '%s' o H2 (ban chot truoc, muc 12)." % CHOT.PHUONG_PHAP_CUA_TA)
         return True
 
     ho = [b for b in CHOT.HO_BASELINE if co_mat(hang, b)]

@@ -16,6 +16,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import thong_ke as tk
 
+# The method under test of H2 and H2-R (preregistration section 12); fixtures use it by name.
+TA = tk.CHOT.PHUONG_PHAP_CUA_TA
+
 
 def gan(a, b, sai_so=1e-9, ghi_chu=""):
     if not (abs(a - b) <= sai_so):
@@ -192,13 +195,13 @@ def thu_ghep_cap():
     """Ba thung phai tach dung theo |R|, va HF > 0 phai loai ca cap."""
     hang = [
         # cung |R| -> vao kiem dinh
-        _hang("cut-hide", 10, 0.10, tap="A"), _hang("hha", 10, 0.20, tap="A"),
+        _hang(TA, 10, 0.10, tap="A"), _hang("hha", 10, 0.20, tap="A"),
         # baseline dung nhieu hon -> bao cao rieng
-        _hang("cut-hide", 10, 0.10, tap="B"), _hang("hha", 14, 0.20, tap="B"),
+        _hang(TA, 10, 0.10, tap="B"), _hang("hha", 14, 0.20, tap="B"),
         # CUT-HIDE dung nhieu hon -> thung rieng, khong duoc im lang bo di
-        _hang("cut-hide", 14, 0.10, tap="C"), _hang("hha", 10, 0.20, tap="C"),
+        _hang(TA, 14, 0.10, tap="C"), _hang("hha", 10, 0.20, tap="C"),
         # baseline chua an xong -> loai ca cap
-        _hang("cut-hide", 10, 0.10, tap="D"), _hang("hha", 10, 0.20, hf=0.5, tap="D"),
+        _hang(TA, 10, 0.10, tap="D"), _hang("hha", 10, 0.20, hf=0.5, tap="D"),
     ]
     thung = tk.ghep_cap(hang, "hha", "lost_rel")
     gan(len(thung["kiem"]), 1)
@@ -210,7 +213,7 @@ def thu_ghep_cap():
     assert "HF" in thung["loai"][0][1], thung["loai"][0][1]
 
     # Ma trang thai (OT, OOM) cung loai cap.
-    hang = [_hang("cut-hide", 10, 0.10, tap="E"),
+    hang = [_hang(TA, 10, 0.10, tap="E"),
             _hang("hha", 10, 0.20, tap="E", status="OT")]
     thung = tk.ghep_cap(hang, "hha", "lost_rel")
     gan(len(thung["loai"]), 1)
@@ -282,6 +285,17 @@ def thu_hang_so_khop_ban_chot():
     assert "2026 tới 2035" in van_ban or "2026 toi 2035" in van_ban
     for ten in ("HHA", "DBSH", "SBSH-r1", "SBSH-rmax"):
         assert ten in van_ban, "ho Holm thieu %s trong ban chot" % ten
+    # Section 12: the method under test must be the one the preregistration names, and the one
+    # config/protocol.yaml names for H2-R; one fact, two files, checked here.
+    muc_12 = van_ban.split("## 12.", 1)
+    assert len(muc_12) == 2, "the preregistration has no section 12"
+    assert "`%s`" % tk.CHOT.PHUONG_PHAP_CUA_TA in muc_12[1], \
+        "section 12 does not name %s" % tk.CHOT.PHUONG_PHAP_CUA_TA
+    giao_thuc = _io.open(os.path.join(goc, "config", "protocol.yaml"), encoding="utf-8").read()
+    import re as _re
+    khai = _re.findall(r'^\s*phuong_phap_H2R:\s*"([^"]+)"', giao_thuc, _re.M)
+    assert khai == [tk.CHOT.PHUONG_PHAP_CUA_TA], \
+        "config/protocol.yaml names %s for H2-R, tools/thong_ke.py %s" % (khai, tk.CHOT.PHUONG_PHAP_CUA_TA)
 
 
 def _viet_sc2(duong_dan, hang, profile):
@@ -371,7 +385,7 @@ def thu_h2_chi_tren_nhom_chinh():
     """Section 3 and the design: H2 is tested on the main group, the rest is not pooled in."""
     hang = []
     for ten in ("a", "b"):
-        for pp, lost in (("cut-hide", 0.10), ("hha", 0.20)):
+        for pp, lost in ((TA, 0.10), ("hha", 0.20)):
             r = _hang(pp, 10, lost, tap="T")
             r["dataset"] = ten
             hang.append(r)
@@ -400,7 +414,7 @@ def thu_h2_bo_protein_sdb1():
     """Section 11, point 5: protein_sdb1 is reported, never tested."""
     hang = []
     for ten in ("protein_sdb4", "protein_sdb1"):
-        for pp, lost in (("cut-hide", 0.10), ("hha", 0.20)):
+        for pp, lost in ((TA, 0.10), ("hha", 0.20)):
             r = _hang(pp, 10, lost, tap="T")
             r["dataset"] = ten
             hang.append(r)
@@ -429,9 +443,9 @@ def thu_main_tach_hai_pham_vi():
     import tempfile
     thu_muc = tempfile.mkdtemp()
     _viet_sc3(os.path.join(thu_muc, "SC3_a.csv"),
-              [("[[1, 2]]", "cut-hide", 0.10), ("[[1, 2]]", "hha", 0.30),
-               ("[[3, 3]]", "cut-hide", 0.05), ("[[3, 3]]", "hha", 0.25),
-               ("[[4, 5, 4]]", "cut-hide", 0.05), ("[[4, 5, 4]]", "hha", 0.35)])
+              [("[[1, 2]]", TA, 0.10), ("[[1, 2]]", "hha", 0.30),
+               ("[[3, 3]]", TA, 0.05), ("[[3, 3]]", "hha", 0.25),
+               ("[[4, 5, 4]]", TA, 0.05), ("[[4, 5, 4]]", "hha", 0.35)])
     ra = os.path.join(thu_muc, "bao_cao.txt")
     tk.main(["--sc3", thu_muc, "--sc2", thu_muc, "--bo-qua-xep-nhom", "--ra", ra])
     import io as _io

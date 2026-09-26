@@ -6,12 +6,12 @@ title, question, sharpened, sourceKey and blocks. Output: config/quyet_dinh_can_
 this tool, or the path given second. Kept so that a later review is merged the same way, and so
 that the merge can be read: every item goes to exactly ONE theme, and no item is dropped.
 
-Run: python tools/gop_quyet_dinh.py <review result JSON> [<output file>]
+Run: python tools/merge_decisions.py <review result JSON> [<output file>]
 """
 import io, json, os, re, sys, unicodedata
 
 if len(sys.argv) not in (2, 3):
-    sys.exit("usage: python tools/gop_quyet_dinh.py <review result JSON> [<output file>]")
+    sys.exit("usage: python tools/merge_decisions.py <review result JSON> [<output file>]")
 SRC = sys.argv[1]
 # The default output is found from this file, not from the directory the command is typed in.
 OUT = sys.argv[2] if len(sys.argv) == 3 else os.path.join(

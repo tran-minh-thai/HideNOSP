@@ -84,7 +84,7 @@ def sigma_table(files):
 
 
 def groups_table(files, profile="pool"):
-    import thong_ke  # needs numpy; imported here so that the sigma table runs without it
+    import preregistered_analysis  # needs numpy; imported here so that the sigma table runs without it
 
     pool_files = [p for p in files if "# profile %s\n" % profile in data_rows(p)[0]]
     source = {}
@@ -93,7 +93,7 @@ def groups_table(files, profile="pool"):
         for r in rows:
             key = (dataset_name(r["dataset"]), r["gap"], int(r["sigma"]))
             source.setdefault(key, set()).add(os.path.basename(path))
-    groups = thong_ke.xep_nhom(pool_files, profile=profile)
+    groups = preregistered_analysis.xep_nhom(pool_files, profile=profile)
     print("| dataset | gap | sigma | pool | median rho_rep | median beta | group | beta group "
           "| file |")
     print("|---|---|---:|---:|---:|---:|---|---|---|")

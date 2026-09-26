@@ -3,7 +3,7 @@ Checks: L0 (sup_NO = max node-disjoint paths = min node cut), P1, P2 (optimal se
 subsets of minimum cuts), L5 (vital node <=> node in some minimum cut), greedy vital removal,
 weighted t > 0 (two candidate algorithms against the optimum), convexity of the per-sequence
 cost curve, P3 tightness. Exhaustive search on small random instances.
-Run: python3 kiemtra_v2.py"""
+Run: python3 nettree_checks.py"""
 import itertools, math, random
 from collections import defaultdict
 

@@ -2,7 +2,7 @@
 One sensitive pattern. DBSH (Exclude by symbol-level Cost + Candidates) vs exact min cut (Corollary P1c)."""
 import sys, random
 sys.path.insert(0, '..')
-from kiemtra_v2 import occs, maxflow
+from nettree_checks import occs, maxflow
 G = 10**6
 def supports(P, T): it = iter(T); return all(c in it for c in P)
 def dbsh_seq(P, T):

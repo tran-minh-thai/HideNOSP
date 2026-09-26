@@ -14,7 +14,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-import thong_ke as tk
+import preregistered_analysis as tk
 
 # The method under test of H2 and H2-R (preregistration section 12); fixtures use it by name.
 TA = tk.CHOT.PHUONG_PHAP_CUA_TA

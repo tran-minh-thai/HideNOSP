@@ -1,6 +1,6 @@
 import sys, random, time
 sys.path.insert(0, '..')
-from kiemtra_v2 import maxflow
+from nettree_checks import maxflow
 def count_matches(P, T, g):   # Abul Lemma 3/4 style DP: matches of prefix k ending at j, O(n*m*w)
     n, m = len(T), len(P)
     Q = [[0]*n for _ in range(m)]

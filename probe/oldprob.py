@@ -2,7 +2,7 @@
 sensitive pattern(s) from selected sequences by marking. Probe: Abul's heuristics vs flow-based."""
 import sys, random, itertools
 sys.path.insert(0, '..')
-from kiemtra_v2 import occs, maxflow
+from nettree_checks import occs, maxflow
 import numpy as np
 from scipy.optimize import milp, LinearConstraint, Bounds, linprog
 

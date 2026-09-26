@@ -2,7 +2,7 @@
 full removal from (sup - psi) sequences by marking. Compare Abul HH, flow (min marks), weighted flow."""
 import sys, random, itertools, time
 sys.path.insert(0, '..')
-from kiemtra_v2 import occs, maxflow, nettree
+from nettree_checks import occs, maxflow, nettree
 import numpy as np
 
 def contains(Q, T, g):

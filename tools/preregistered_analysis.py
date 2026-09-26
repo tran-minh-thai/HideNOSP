@@ -36,8 +36,10 @@ Usage:
 The last form locks both group tables; it is run once, from the official SC2 runs.
 
 Exit code 1 when something makes the result unusable (too many instances excluded, groups that
-differ from the locked table, a missing column). Exit code 0 does not mean that H2 is supported; it
-only means that the analysis ran, and the conclusion is in the tables printed.
+differ from the locked table, a missing column), or when H2 or H2-R is not the locked test: the
+method under test absent, no tier (b) baseline, or a Holm family smaller than the locked four.
+Exit code 0 does not mean that H2 is supported; it only means that the analysis ran, and the
+conclusion is in the tables printed.
 """
 import argparse
 import csv
@@ -515,7 +517,8 @@ def run_h2(rows, write, groups=None, hypothesis="H2"):
         write("  nothing to test. The files hold: %s" % ", ".join(keys))
         write("  Note: 'cut-hide-uniform', 'cut-hide' and 'cut-hide-rw' are CONTROL variants and")
         write("  cannot stand in for '%s' in H2 (preregistration, section 12)." % LOCKED.OUR_METHOD)
-        return True
+        write("  %s NOT TESTED: the exit code is 1." % hypothesis)
+        return False
 
     family = [b for b in LOCKED.BASELINE_FAMILY if present(rows, b)]
     absent = [b for b in LOCKED.BASELINE_FAMILY if b not in family]
@@ -528,7 +531,8 @@ def run_h2(rows, write, groups=None, hypothesis="H2"):
     if not family:
         write("")
         write("  No tier (b) baseline in the files. H2 cannot be tested.")
-        return True
+        write("  %s NOT TESTED: the exit code is 1." % hypothesis)
+        return False
 
     results = {}
     total_pairs = 0
@@ -595,6 +599,12 @@ def run_h2(rows, write, groups=None, hypothesis="H2"):
     elif len(results) == 1:
         write("")
         write("Only one baseline could be tested; no Holm correction is needed.")
+    if absent:
+        write("")
+        write("NOT THE LOCKED TEST: the Holm family above has %d of its %d locked members, so the"
+              % (len(family), len(LOCKED.BASELINE_FAMILY)))
+        write("correction and the verdicts differ from those of section 2. The exit code is 1.")
+        return False
     return True
 
 

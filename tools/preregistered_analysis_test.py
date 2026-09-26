@@ -482,6 +482,39 @@ def test_main_splits_two_scopes():
     assert "-> degenerate" in after.split("\n\n")[0], "the repeated scope reads repeated"
 
 
+def test_h2_not_tested_fails_the_run():
+    """Without the method under test, without any tier (b) baseline, or with a Holm family smaller
+    than the locked four, H2 is not the locked test and the exit code must say so. An end-to-end
+    SC3 trial (2026-09-26) found the first case exiting with 0."""
+    import tempfile
+    import io as _io
+    family = pa.LOCKED.BASELINE_FAMILY
+    cases = {
+        "complete": [OURS] + list(family),
+        "no method under test": ["cut-hide", "cut-hide-rw"] + list(family),
+        "no baseline": [OURS, "cut-hide"],
+        "three of the four baselines": [OURS] + list(family[:-1]),
+    }
+    expected = {"complete": 0, "no method under test": 1, "no baseline": 1,
+                "three of the four baselines": 1}
+    for case, methods in cases.items():
+        directory = tempfile.mkdtemp()
+        rows = []
+        for k, sensitive_set in enumerate(("[[1, 2]]", "[[1, 3]]", "[[2, 3]]", "[[1, 4]]", "[[2, 4]]")):
+            for method in methods:
+                lost = 0.05 if method == OURS else 0.10 + 0.01 * k
+                rows.append((sensitive_set, method, lost))
+        _write_sc3(os.path.join(directory, "SC3_a.csv"), rows)
+        report = os.path.join(directory, "report.txt")
+        code = pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--out", report])
+        text = _io.open(report, encoding="utf-8").read()
+        assert code == expected[case], "%s: exit code %d, expected %d" % (case, code, expected[case])
+        if case == "no method under test":
+            assert "H2 NOT TESTED" in text and "Wilcoxon" not in text, case
+        if case == "three of the four baselines":
+            assert "NOT THE LOCKED TEST" in text, case
+
+
 def test_write_both_group_tables():
     """--write-groups writes the pool table and the repeated table (section 11, point 2)."""
     import tempfile

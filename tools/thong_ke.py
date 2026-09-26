@@ -18,12 +18,18 @@ Lam nhung viec sau, theo thu tu:
 6. H3: ti so r = |R|/|R|* tren nhom chinh va nhom suy bien.
 7. Tuong duong (muc 4): uoc luong Hodges-Lehmann kem khoang tin cay, doi chieu voi bien da chot.
 
+Section 11 (2026-09-26): every SC3 row is put in one of two scopes by the items of its sensitive
+patterns, distinct (the main scope, H2) or repeated (H2-R). Each scope is grouped from its own SC2
+profile (pool, repeated) and checked against its own locked table; H2-R repeats the steps above on
+the main group of the repeated scope and is never pooled with H2. Datasets in CHOT.CHI_BAO_CAO
+(protein_sdb1) are reported but never enter a Wilcoxon test.
+
 Cach dung:
 
     python tools/thong_ke.py
     python tools/thong_ke.py --sc3 results-invariant --sc2 results-invariant
     python tools/thong_ke.py --sc3 results-probe --bo-qua-xep-nhom
-    python tools/thong_ke.py --sc2 results-invariant --write-groups   (lock the table, once)
+    python tools/thong_ke.py --sc2 results-invariant --write-groups   (lock both tables, once)
 
 Ma thoat 1 khi co dieu khien ket qua khong dung duoc (ti le loai qua cao, xep nhom lech,
 thieu cot). Ma thoat 0 khong co nghia la H2 duoc ung ho; no chi co nghia la phan tich chay
@@ -67,6 +73,12 @@ class CHOT:
     # runs of the pool profile exist. The script recomputes the groups and compares them.
     BANG_NHOM = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                              "config", "nhom_cau_hinh.tsv")
+    # Section 11: the repeated-item scope has its own locked table, from SC2 --profile=repeated.
+    BANG_NHOM_LAP_MUC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                                     "config", "nhom_cau_hinh_lap_muc.tsv")
+    # Section 11, point 5: reported only, never in a Wilcoxon test (shares 64-75% of its
+    # sequences with protein_sdb4, which is tested).
+    CHI_BAO_CAO = ("protein_sdb1",)
 
 
 # Cot ma phan tich nay khong the thieu. Ban SC3 cu khong co lost_rel va nonsensitive_before.
@@ -116,6 +128,25 @@ def so(x, mac_dinh=float("nan")):
 
 
 # ---------------------------------------------------------------- xep nhom
+
+def pham_vi_cua_tap(chuoi):
+    """The scope of a sensitive set as SC3 prints it, "[[4, 1, 4, 1]]": "distinct" when every
+    pattern has distinct items, "repeated" when every pattern repeats one (section 11, point 4).
+    A set mixing both kinds, or an unreadable one, is an error: the sampling never mixes them."""
+    import re
+    mau = re.findall(r"\[([^\[\]]*)\]", chuoi)
+    if not mau:
+        raise ValueError("sensitive set %r has no pattern" % chuoi)
+    loai = set()
+    for m in mau:
+        muc = [x.strip() for x in m.split(",") if x.strip()]
+        if not muc:
+            raise ValueError("sensitive set %r has an empty pattern" % chuoi)
+        loai.add("distinct" if len(set(muc)) == len(muc) else "repeated")
+    if len(loai) != 1:
+        raise ValueError("sensitive set %r mixes distinct-item and repeated-item patterns" % chuoi)
+    return loai.pop()
+
 
 def muc_cua_mau(chuoi):
     """The items of a pattern as SC2 prints it, "[3, 5, 3]" -> ["3", "5", "3"]."""
@@ -185,7 +216,9 @@ BANG_COT = ("dataset", "gap", "sigma", "pool", "rho_rep_median", "beta_median", 
 def ghi_bang_nhom(nhom, duong_dan):
     """Write the group table: done once, from the official SC2 runs, then committed (locked)."""
     with io.open(duong_dan, "w", encoding="utf-8", newline="\n") as f:
-        f.write("# Groups of preregistration section 10, from SC2 --profile=pool. Locked by commit.\n")
+        profile = "repeated" if duong_dan == CHOT.BANG_NHOM_LAP_MUC else "pool"
+        f.write("# Groups of preregistration section %s, from SC2 --profile=%s. Locked by commit.\n"
+                % ("11" if profile == "repeated" else "10", profile))
         f.write("\t".join(BANG_COT) + "\n")
         for khoa in sorted(nhom):
             v = nhom[khoa]
@@ -208,14 +241,19 @@ def doc_bang_nhom(duong_dan):
     return ra
 
 
-def kiem_xep_nhom(nhom, ghi, bang=None):
+def kiem_xep_nhom(nhom, ghi, bang=None, profile="pool"):
     """Compare every recomputed group with the locked table. Any difference stops the analysis."""
-    bang = doc_bang_nhom(CHOT.BANG_NHOM) if bang is None else bang
+    duong_bang = CHOT.BANG_NHOM if profile == "pool" else CHOT.BANG_NHOM_LAP_MUC
+    bang = doc_bang_nhom(duong_bang) if bang is None else bang
     ghi("")
-    ghi("Groups of the configurations (section 10: medians over the distinct-item candidates;"
-        " rho_rep >= %.2f main, <= %.2f degenerate)" % (CHOT.RHO_CHINH, CHOT.RHO_SUY_BIEN))
+    ghi("Groups of the configurations (section %s: medians over the %s candidates;"
+        " rho_rep >= %.2f main, <= %.2f degenerate)"
+        % ("10" if profile == "pool" else "11",
+           "distinct-item" if profile == "pool" else "repeated-item",
+           CHOT.RHO_CHINH, CHOT.RHO_SUY_BIEN))
     if not nhom:
-        ghi("  NO SC2 file of the pool profile: nothing to group. Run SC2 with --profile=pool.")
+        ghi("  NO SC2 file of the %s profile: nothing to group. Run SC2 with --profile=%s."
+            % (profile, profile))
         return False
     for khoa in sorted(nhom):
         v = nhom[khoa]
@@ -225,7 +263,7 @@ def kiem_xep_nhom(nhom, ghi, bang=None):
     if bang is None:
         ghi("")
         ghi("  The locked table %s does not exist yet. Write it once from the official SC2 runs"
-            % CHOT.BANG_NHOM)
+            % duong_bang)
         ghi("  (--write-groups) and commit it before any SC3 result is read.")
         return False
     lech = []
@@ -426,12 +464,19 @@ def ly_do_loai(ta, doi):
 
 # ---------------------------------------------------------------- H2
 
-def chay_h2(hang, ghi, nhom=None):
+def chay_h2(hang, ghi, nhom=None, ten_gia_thuyet="H2"):
     ghi("")
     ghi("=" * 78)
-    ghi("H2  trung vi cua Lost_rel(baseline) - Lost_rel(CUT-HIDE) lon hon delta_L = %.2f"
-        % CHOT.DELTA_L)
+    ghi("%s  trung vi cua Lost_rel(baseline) - Lost_rel(CUT-HIDE) lon hon delta_L = %.2f"
+        % (ten_gia_thuyet, CHOT.DELTA_L))
     ghi("=" * 78)
+
+    bao_cao = [r for r in hang if r["dataset"] in CHOT.CHI_BAO_CAO]
+    if bao_cao:
+        ghi("")
+        ghi("  %d rows of %s are reported only and do not enter the test (section 11, point 5)."
+            % (len(bao_cao), ", ".join(sorted({r["dataset"] for r in bao_cao}))))
+        hang = [r for r in hang if r["dataset"] not in CHOT.CHI_BAO_CAO]
 
     if nhom is not None:
         # Preregistration section 3 keeps the intermediate group out of H2, and the design keeps
@@ -548,12 +593,21 @@ def co_mat(hang, khoa):
 
 # ---------------------------------------------------------------- H3
 
-def chay_h3(hang, nhom, ghi):
+def chay_h3(hang, nhom, ghi, mo_ta=False):
     ghi("")
     ghi("=" * 78)
-    ghi("H3  r = |R|/|R|* lon hon 1 tren nhom chinh (r >= %.2f), gan 1 tren nhom suy bien (r <= %.2f)"
-        % (CHOT.R_VUOT_1, CHOT.R_GAN_1))
+    if mo_ta:
+        ghi("r = |R|/|R|* per method and group, DESCRIPTIVE (section 11, point 7): no verdict")
+    else:
+        ghi("H3  r = |R|/|R|* lon hon 1 tren nhom chinh (r >= %.2f), gan 1 tren nhom suy bien"
+            " (r <= %.2f)" % (CHOT.R_VUOT_1, CHOT.R_GAN_1))
     ghi("=" * 78)
+    bao_cao = [r for r in hang if r["dataset"] in CHOT.CHI_BAO_CAO]
+    if bao_cao:
+        ghi("")
+        ghi("  %d rows of %s are reported only and left out here (section 11, point 5)."
+            % (len(bao_cao), ", ".join(sorted({r["dataset"] for r in bao_cao}))))
+        hang = [r for r in hang if r["dataset"] not in CHOT.CHI_BAO_CAO]
 
     theo_nhom = defaultdict(lambda: defaultdict(list))
     khong_xep = 0
@@ -570,10 +624,11 @@ def chay_h3(hang, nhom, ghi):
         theo_nhom[thong_tin["nhom"]][r["method"]].append(r["mask_ratio"])  # ten hien thi
 
     ghi("")
-    ghi("  hang khong co |R|* (tap nhieu mau hoac mau lap muc): %d" % khong_co_r)
+    ghi("  rows without |R|* (several patterns, or repeated items with g- > 0): %d" % khong_co_r)
     if khong_xep:
         ghi("  hang khong xep duoc nhom (khong co cau hinh tuong ung trong SC2): %d" % khong_xep)
-    ghi("  muc 2 doi khai ro: H3 chi kiem tren lop thuc the mot mau khong lap muc.")
+    if not mo_ta:
+        ghi("  muc 2 doi khai ro: H3 chi kiem tren lop thuc the mot mau khong lap muc.")
 
     for ten_nhom in ("chinh", "suy bien"):
         ghi("")
@@ -585,6 +640,9 @@ def chay_h3(hang, nhom, ghi):
         for ten in sorted(theo_nhom[ten_nhom]):
             v = theo_nhom[ten_nhom][ten]
             tv = float(np.median(v))
+            if mo_ta:
+                ghi("   %-34s %5d %8.4f %8.4f" % (ten[:34], len(v), tv, max(v)))
+                continue
             if ten_nhom == "chinh":
                 ket = ("vuot 1" if tv >= CHOT.R_VUOT_1
                        else "gan 1" if tv <= CHOT.R_GAN_1 else "khong ket luan")
@@ -593,7 +651,7 @@ def chay_h3(hang, nhom, ghi):
                        else "vuot 1" if tv >= CHOT.R_VUOT_1 else "khong ket luan")
             ghi("   %-34s %5d %8.4f %8.4f   %s" % (ten[:34], len(v), tv, max(v), ket))
 
-    if theo_nhom["chinh"] and all(
+    if not mo_ta and theo_nhom["chinh"] and all(
             float(np.median(v)) <= CHOT.R_GAN_1 for v in theo_nhom["chinh"].values()):
         ghi("")
         ghi("  Moi phuong phap deu cho r gan 1 tren nhom chinh: H3 KHONG bac bo duoc. muc 2 da")
@@ -609,6 +667,7 @@ def chay_tuong_duong(hang, ghi):
     ghi("Tuong duong (muc 4): Hodges-Lehmann kem khoang tin cay %.0f%%, doi chieu bien da chot"
         % (100 * (1 - CHOT.ALPHA)))
     ghi("=" * 78)
+    hang = [r for r in hang if r["dataset"] not in CHOT.CHI_BAO_CAO]
     ho = [b for b in CHOT.HO_BASELINE if co_mat(hang, b)]
     for dai_luong, bien in CHOT.BIEN_TUONG_DUONG.items():
         ghi("")
@@ -658,12 +717,22 @@ def main(argv=None):
         dong_ra.append(s)
 
     if doi_so.write_groups:
-        nhom = xep_nhom(gom_tep(doi_so.sc2, "SC2_"))
+        tep = gom_tep(doi_so.sc2, "SC2_")
+        nhom = xep_nhom(tep)
         if not nhom:
             print("no SC2 file of the pool profile in %s" % doi_so.sc2, file=sys.stderr)
             return 1
         ghi_bang_nhom(nhom, CHOT.BANG_NHOM)
         print("wrote %s (%d configurations)" % (CHOT.BANG_NHOM, len(nhom)))
+        # Section 11, point 2: the repeated-item scope, from SC2 --profile=repeated.
+        lap = xep_nhom(tep, profile="repeated")
+        if lap:
+            ghi_bang_nhom(lap, CHOT.BANG_NHOM_LAP_MUC)
+            print("wrote %s (%d configurations)" % (CHOT.BANG_NHOM_LAP_MUC, len(lap)))
+        else:
+            print("no SC2 file of the repeated profile in %s: %s not written"
+                  % (doi_so.sc2, CHOT.BANG_NHOM_LAP_MUC), file=sys.stderr)
+            return 1
         return 0
 
     tep_sc3 = gom_tep(doi_so.sc3, "SC3_")
@@ -705,22 +774,42 @@ def main(argv=None):
     ghi("")
     ghi("Sau khi gop lan chay lai bang trung vi: %d hang (tu %d)" % (len(hang), len(hang_tho)))
 
-    nhom = {}
-    xep_dung = True
-    tep_sc2 = gom_tep(doi_so.sc2, "SC2_")
-    if tep_sc2:
-        nhom = xep_nhom(tep_sc2)
-        if not doi_so.bo_qua_xep_nhom:
-            xep_dung = kiem_xep_nhom(nhom, ghi)
-    else:
-        ghi("")
-        ghi("  Khong co tep SC2: khong xep nhom duoc, H3 se khong chia nhom chinh/suy bien.")
-        # Without groups H2 has no main group to be tested on; only a probe may go on.
-        xep_dung = doi_so.bo_qua_xep_nhom
+    # Section 11: split by the items of the sensitive patterns, never by file name or option.
+    theo_pham_vi = {"distinct": [], "repeated": []}
+    for r in hang:
+        theo_pham_vi[pham_vi_cua_tap(r["sensitive_set"])].append(r)
+    ghi("")
+    ghi("Rows by scope (section 11): distinct items %d, repeated items %d"
+        % (len(theo_pham_vi["distinct"]), len(theo_pham_vi["repeated"])))
 
-    h2_dung = chay_h2(hang, ghi, None if doi_so.bo_qua_xep_nhom else nhom)
-    chay_h3(hang, nhom, ghi)
-    chay_tuong_duong(hang, ghi)
+    tep_sc2 = gom_tep(doi_so.sc2, "SC2_")
+    tat_ca_dung = True
+    for pham_vi, profile, ten in (("distinct", "pool", "H2"), ("repeated", "repeated", "H2-R")):
+        hang_pv = theo_pham_vi[pham_vi]
+        if not hang_pv:
+            continue
+        ghi("")
+        ghi("#" * 78)
+        ghi("Scope: %s-item sensitive patterns, %d rows, tested as %s" % (pham_vi, len(hang_pv), ten))
+        ghi("#" * 78)
+        nhom = {}
+        xep_dung = True
+        if tep_sc2:
+            nhom = xep_nhom(tep_sc2, profile=profile)
+            if not doi_so.bo_qua_xep_nhom:
+                xep_dung = kiem_xep_nhom(nhom, ghi, profile=profile)
+        else:
+            ghi("")
+            ghi("  Khong co tep SC2: khong xep nhom duoc, H3 se khong chia nhom chinh/suy bien.")
+            # Without groups H2 has no main group to be tested on; only a probe may go on.
+            xep_dung = doi_so.bo_qua_xep_nhom
+
+        h2_dung = chay_h2(hang_pv, ghi, None if doi_so.bo_qua_xep_nhom else nhom, ten)
+        # H3 is preregistered for the main scope; section 11, point 7 makes the ratio of the
+        # repeated scope descriptive.
+        chay_h3(hang_pv, nhom, ghi, mo_ta=(pham_vi == "repeated"))
+        chay_tuong_duong(hang_pv, ghi)
+        tat_ca_dung = tat_ca_dung and h2_dung and xep_dung
 
     ghi("")
     ghi("=" * 78)
@@ -728,7 +817,7 @@ def main(argv=None):
     ghi("chay duoc va ket luan nam trong bang tren.")
 
     xuat(dong_ra, doi_so.ra)
-    return 0 if (h2_dung and xep_dung) else 1
+    return 0 if tat_ca_dung else 1
 
 
 def xuat(dong_ra, duong_dan):

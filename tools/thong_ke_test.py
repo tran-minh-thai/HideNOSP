@@ -382,6 +382,106 @@ def thu_h2_chi_tren_nhom_chinh():
 
 
 
+def thu_pham_vi_cua_tap():
+    """Section 11, point 4: the scope comes from the items of the patterns themselves."""
+    assert tk.pham_vi_cua_tap("[[4, 1, 4, 1]]") == "repeated"
+    assert tk.pham_vi_cua_tap("[[1, 5, 8]]") == "distinct"
+    assert tk.pham_vi_cua_tap("[[1, 2], [3, 4]]") == "distinct"
+    assert tk.pham_vi_cua_tap("[[2, 2], [3, 1, 3]]") == "repeated"
+    for sai in ("[[1, 2], [3, 3]]", "[]", "khong phai tap"):
+        try:
+            tk.pham_vi_cua_tap(sai)
+        except ValueError:
+            continue
+        raise AssertionError("accepted %r" % sai)
+
+
+def thu_h2_bo_protein_sdb1():
+    """Section 11, point 5: protein_sdb1 is reported, never tested."""
+    hang = []
+    for ten in ("protein_sdb4", "protein_sdb1"):
+        for pp, lost in (("cut-hide", 0.10), ("hha", 0.20)):
+            r = _hang(pp, 10, lost, tap="T")
+            r["dataset"] = ten
+            hang.append(r)
+    ra = []
+    tk.chay_h2(hang, lambda s="": ra.append(s), None)
+    assert any("2 rows of protein_sdb1 are reported only" in s for s in ra), ra[:8]
+    assert any("dua vao Wilcoxon (cung |R|)             1 thuc the" in s for s in ra), ra
+
+
+def _viet_sc3(duong_dan, hang):
+    """An SC3 file with the columns the analysis requires; hang = (set, method, lost_rel)."""
+    import io as _io
+    cot = ("dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,"
+           "lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,"
+           "total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,"
+           "frequent_after")
+    with _io.open(duong_dan, "w", encoding="utf-8", newline="\n") as f:
+        f.write("# run x\n" + cot + "\n")
+        for tap, pp, lost in hang:
+            f.write('datasets/x.txt,"N=1,len=1","[0,3]",100,"%s",p10,%s,%s,,0,1,%s,0,0.1,0.1,'
+                    '10,10,1.0,1,1,10,1.0,50,40,49\n' % (tap, pp, pp, lost))
+
+
+def thu_main_tach_hai_pham_vi():
+    """main() runs H2 on the distinct-item rows and H2-R on the repeated-item rows, apart."""
+    import tempfile
+    thu_muc = tempfile.mkdtemp()
+    _viet_sc3(os.path.join(thu_muc, "SC3_a.csv"),
+              [("[[1, 2]]", "cut-hide", 0.10), ("[[1, 2]]", "hha", 0.30),
+               ("[[3, 3]]", "cut-hide", 0.05), ("[[3, 3]]", "hha", 0.25),
+               ("[[4, 5, 4]]", "cut-hide", 0.05), ("[[4, 5, 4]]", "hha", 0.35)])
+    ra = os.path.join(thu_muc, "bao_cao.txt")
+    tk.main(["--sc3", thu_muc, "--sc2", thu_muc, "--bo-qua-xep-nhom", "--ra", ra])
+    import io as _io
+    van_ban = _io.open(ra, encoding="utf-8").read()
+    assert "distinct items 2, repeated items 4" in van_ban, van_ban[:600]
+    assert "distinct-item sensitive patterns, 2 rows, tested as H2" in van_ban
+    assert "repeated-item sensitive patterns, 4 rows, tested as H2-R" in van_ban
+    assert "H2-R  trung vi" in van_ban
+    # Without the bypass each scope reads its own SC2 profile and names its own section.
+    _viet_sc2(os.path.join(thu_muc, "SC2_pool.csv"), [("x", 0.30, 0.5, True)], "pool")
+    # A different group per profile, so reading the wrong profile shows.
+    _viet_sc2(os.path.join(thu_muc, "SC2_rep.csv"), [("x", 0.01, 0.5, False)], "repeated")
+    cu = (tk.CHOT.BANG_NHOM, tk.CHOT.BANG_NHOM_LAP_MUC)
+    tk.CHOT.BANG_NHOM = os.path.join(thu_muc, "khong_co_1.tsv")
+    tk.CHOT.BANG_NHOM_LAP_MUC = os.path.join(thu_muc, "khong_co_2.tsv")
+    try:
+        ma = tk.main(["--sc3", thu_muc, "--sc2", thu_muc, "--ra", ra])
+    finally:
+        tk.CHOT.BANG_NHOM, tk.CHOT.BANG_NHOM_LAP_MUC = cu
+    van_ban = _io.open(ra, encoding="utf-8").read()
+    assert ma == 1, "no locked table yet: the analysis must not pass"
+    assert "section 10: medians over the distinct-item candidates" in van_ban
+    assert "section 11: medians over the repeated-item candidates" in van_ban
+    assert "khong_co_2.tsv does not exist yet" in van_ban
+    truoc, _, sau = van_ban.partition("section 11: medians over the repeated-item candidates")
+    assert "-> chinh" in truoc.split("section 10: medians")[1], "the distinct scope reads pool"
+    assert "-> suy bien" in sau.split("\n\n")[0], "the repeated scope reads repeated"
+
+
+def thu_ghi_hai_bang_nhom():
+    """--write-groups writes the pool table and the repeated table (section 11, point 2)."""
+    import tempfile
+    thu_muc = tempfile.mkdtemp()
+    _viet_sc2(os.path.join(thu_muc, "SC2_pool.csv"), [("x", 0.30, 0.5, True)], "pool")
+    _viet_sc2(os.path.join(thu_muc, "SC2_rep.csv"), [("x", 0.01, 0.5, False)], "repeated")
+    cu = (tk.CHOT.BANG_NHOM, tk.CHOT.BANG_NHOM_LAP_MUC)
+    tk.CHOT.BANG_NHOM = os.path.join(thu_muc, "nhom_cau_hinh.tsv")
+    tk.CHOT.BANG_NHOM_LAP_MUC = os.path.join(thu_muc, "nhom_cau_hinh_lap_muc.tsv")
+    try:
+        assert tk.main(["--sc2", thu_muc, "--write-groups"]) == 0
+        chinh = tk.doc_bang_nhom(tk.CHOT.BANG_NHOM)
+        lap = tk.doc_bang_nhom(tk.CHOT.BANG_NHOM_LAP_MUC)
+        assert chinh[("x", "[0,3]", 100)]["group"] == "chinh", chinh
+        assert lap[("x", "[0,3]", 100)]["group"] == "suy bien", lap
+        import io as _io
+        assert "section 11" in _io.open(tk.CHOT.BANG_NHOM_LAP_MUC, encoding="utf-8").readline()
+    finally:
+        tk.CHOT.BANG_NHOM, tk.CHOT.BANG_NHOM_LAP_MUC = cu
+
+
 def thu_xep_nhom_khong_dem_trung_lan_chay_lai():
     """Two pool files of one configuration (a rerun) count each pattern once."""
     import tempfile

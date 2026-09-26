@@ -355,7 +355,7 @@ thuyết có hướng nào giữa các biến thể của CUT-HIDE, và phương
    nhóm riêng `config/nhom_cau_hinh_lap_muc.tsv`, sinh một lần từ lượt SC2 chính thức trên máy đo, commit là chốt.
 3. **Lấy mẫu tập nhạy cảm.** Như mục 9, trên kho mẫu lặp mục (SC3 `--patternKind=repeated`).
 4. **H2-R.** Như H2 (mục 2): trên nhóm chính **của phạm vi lặp mục**, trung vị hiệu Lost_rel(đường cơ sở) −
-   Lost_rel(`cut-hide`) > δ_L; cùng họ Holm bốn phần tử (HHA, DBSH, SBSH-r1, SBSH-rmax), cùng α = 0,05, δ_L =
+   Lost_rel(`cut-hide`) > δ_L — *sửa ở mục 12 (26/09/2026): phương pháp đang kiểm là `cut-hide-rw-ls`*; cùng họ Holm bốn phần tử (HHA, DBSH, SBSH-r1, SBSH-rmax), cùng α = 0,05, δ_L =
    0,02, Wilcoxon một phía, rank-biserial. Kiểm **riêng**, không gộp hàng với H2. Hàng của hai phạm vi được
    tách theo **chính các mục của mẫu nhạy cảm** trong từng hàng SC3, không theo tên tệp hay tuỳ chọn.
 5. **Tệp protein.** SDB4 (`protein_sdb4`) vào H2 và H2-R; SDB1 (`protein_sdb1`) chỉ báo cáo mô tả, không vào
@@ -370,3 +370,62 @@ thuyết có hướng nào giữa các biến thể của CUT-HIDE, và phương
    cáo mô tả theo từng cấu hình.
 
 **Không đổi:** mọi mục 1–10.
+
+---
+
+## 12. Bổ sung ngày 26/09/2026 — phương pháp đang kiểm của H2 và H2-R (trước mọi lần chạy SC3 lấy số)
+
+**Quyết định của người viết** (26/09/2026): chọn phương án (A) — phương pháp đang kiểm của H2 (mục 2) và H2-R
+(mục 11, điểm 4) đổi từ `cut-hide` sang `cut-hide-rw-ls`, gồm trọng số đại diện thích nghi và tìm kiếm cục bộ
+theo điều kiện cứu được (Bổ đề L9 của bản thiết kế v0.9).
+
+**Lý do.** Bản thiết kế v0.9 chứng minh (Mệnh đề P11, quy dẫn từ MAX-CUT) rằng chọn tập che tối thiểu mất ít mẫu
+nhất là NP-khó ngay cả với một mẫu nhạy cảm hai mục khác nhau, nên không trọng số cố định nào cộng theo vị trí có
+thể bám đúng số mẫu mất; nguyên nhân là tác động theo cặp của các lần che. `cut-hide` dùng đúng một trọng số cố định
+như thế. `cut-hide-rw-ls` dùng mức giảm thật của lời giải trước để tính lại trọng số, rồi đổi tập che từng một hoặc
+hai chuỗi với số mẫu mất tính chính xác.
+
+**Định nghĩa `cut-hide-rw-ls`** (mã: `hidenosp.hide.AdaptiveCutHide` với `withLocalSearch`,
+`hidenosp.hide.MaskLocalSearch`; khoá SC3 `cut-hide-rw-ls`):
+1. *Một mẫu nhạy cảm* (\|𝒮\| = 1; HIDE-DB; g⁻ = 0 ở mọi cấu hình):
+   - vòng 0 đúng là `cut-hide` (trọng số §9.2 bước 4 trên B_ε với ε = 0,5; lời giải chính xác của P8);
+   - vòng 1 tới 5: w(i) = Σ c_Q trên các Q ∈ F_σ \ 𝒮⁺ mà i thiết yếu với Q, với c_Q = 1/m_Q + s(1 − s)/τ_Q,
+     s = 1/(1 + exp(−(d_Q − m_Q + ½)/τ_Q)), τ_Q = max(1, m_Q/4), m_Q = sup_NO(Q, D) − σ + 1, d_Q là mức giảm
+     chính xác của Q dưới lời giải vòng trước; giải lại P8 với số lần che trước. Giữ lời giải có Lost nhỏ nhất
+     trong sáu vòng (hoà thì vòng sớm nhất);
+   - tìm kiếm cục bộ từ lời giải ấy (Thuật toán LS của bản thiết kế): nước một chuỗi và nước phân bổ, tối đa
+     50 lượt, 30 chuỗi nhận rẻ nhất; bỏ mọi nước mà Bổ đề L9 chứng minh không thể giảm Lost.
+2. *Nhiều mẫu nhạy cảm* (\|𝒮\| ∈ {5, 10, 20}): tham lam của §9.2 bước 7, **không đổi** — trùng `cut-hide`, vì
+   trọng số thích nghi và tìm kiếm cục bộ dựa trên lời giải chính xác của P8 cho một mẫu. Cột `method` của hàng SC3
+   ghi rõ nhánh đã chạy.
+
+**Tham số chốt, không chỉnh sau khi thấy số:** sáu vòng (kể cả vòng 0); công thức c_Q và τ_Q như trên; 50 lượt;
+30 chuỗi nhận; ε = 0,5 như `config/protocol.yaml`. Mã giữ chúng ở `AdaptiveCutHide.DEFAULT_ITERATIONS`,
+`MaskLocalSearch.DEFAULT_PASSES`, `MaskLocalSearch.DEFAULT_RECEIVERS`.
+
+**Tính chất có chứng minh, báo cáo như phép kiểm cài đặt (mục 6), không kiểm định:** trên mọi thực thể một mẫu,
+\|R\|(`cut-hide-rw-ls`) = \|R\|* và Lost(`cut-hide-rw-ls`) ≤ Lost(`cut-hide`): vòng 0 là `cut-hide`, và mỗi bước
+sau chỉ được nhận khi Lost giảm. Vì vậy trên **từng** thực thể, hiệu Lost_rel(đường cơ sở) − Lost_rel(phương pháp
+đang kiểm) không nhỏ hơn hiệu tính với `cut-hide`. Việc đổi phương pháp là trội yếu theo cấu trúc, không phải một
+lựa chọn giữa hai phương pháp ngang hàng dựa trên số.
+
+**Khai xuất xứ.** Trước khi mục này được viết, người đề xuất mục này **đã thấy** các lượt thăm dò trên máy phát triển ở đúng tám
+cấu hình × 20 tập của thăm dò mặt Pareto (bộ gen [0,3] σ=2500 và protein SDB4 [0,3] σ=500 ở cả hai phạm vi, MSNBC
+[0,1] σ=2000 ở cả hai phạm vi, Sepsis [0,1] σ=300 và BPI 2013 [0,1] σ=500 ở phạm vi lặp mục), và 480 thực thể nhỏ cắt
+từ các bộ ấy: `results-probe/surrogate_candidates_probe_20260926.txt`, `lost_small_exact_probe_20260926.txt`,
+`lost_local_search_probe_20260926.txt`, `pareto_exceptions_rw_probe_20260926.txt`. Chiều đã thấy: phương pháp mới
+mất ít mẫu hơn `cut-hide` ở một phần các tập và không nhiều hơn ở tập nào (đúng theo cấu trúc). Sáu vòng, công
+thức τ_Q và 30 chuỗi nhận được đặt khi viết từng bộ thăm dò, trước khi chạy nó. **Hai điều được quyết sau khi thấy
+số thăm dò**, khai ở đây: (a) thêm nước phân bổ vào tìm kiếm cục bộ, sau khi thấy bản chỉ có nước một chuỗi trên
+thực thể nhỏ; (b) số lượt 50 (thăm dò thực thể nhỏ dùng 40, thăm dò dữ liệu đầy đủ dùng 50). Bộ lọc L9 không thay
+đổi nước nào được chọn (chứng minh ở Bổ đề L9, kiểm ở `MaskLocalSearchTest`).
+
+**Báo cáo thêm (mô tả, không kiểm định):** `cut-hide` và `cut-hide-rw` chạy trong cùng lượt SC3 như hai biến thể
+loại trừ; bảng mô tả Lost_rel của ba biến thể và số tập mà mỗi bước (trọng số thích nghi, tìm kiếm cục bộ) làm
+Lost giảm. SC6 đo thời gian của cả `cut-hide` và `cut-hide-rw-ls` trên máy đo.
+
+**Thời điểm.** Chưa có lượt SC3 chính thức nào. Mọi số đã thấy là thăm dò trên máy phát triển.
+
+**Không đổi:** δ_L, α, Wilcoxon một phía với Pratt, họ Holm bốn phần tử, cách lấy mẫu (mục 9), nhóm dữ liệu (mục 10
+và 11), các biên tương đương, mục 11 điểm 5; mục 11 điểm 6 (mặt Pareto) vẫn tính với trọng số của `cut-hide` và
+vẫn là phân tích mô tả.

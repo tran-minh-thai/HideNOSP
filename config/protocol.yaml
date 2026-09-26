@@ -56,6 +56,16 @@ dong_1_nguong_va_pham_vi:
     protein_sdb4: {sigma: [500, 900], khoang_cach: ["[0,1]", "[0,3]"]}
     protein_sdb1: {sigma: [400, 800], khoang_cach: ["[0,1]", "[0,3]"]}
     tong_hop:  {sigma: null, khoang_cach: null}
+  # Preregistration section 11 (2026-09-26): the repeated-item scope uses the same configurations
+  # (sigma, gaps) as above, minus SIGN and BMS1, which have no repeated-item pattern of length 2 to 4
+  # in F_sigma, plus dna sigma 4000 [0,1], which has two repeated-item candidates and no distinct one.
+  pham_vi_lap_muc:
+    sc2: "--profile=repeated"                 # groups over the repeated-item pool
+    bang_nhom: "config/nhom_cau_hinh_lap_muc.tsv"   # locked from the official SC2 runs
+    sc3: "--patternKind=repeated"             # sensitive sets drawn from that pool (section 9 rule)
+    phuong_phap_H2R: "cut-hide"               # section 11, point 4
+    chi_bao_cao: ["protein_sdb1"]             # section 11, point 5
+    mat_pareto: "--pareto=true with --sensitiveSize=1"   # section 11, point 6, descriptive
   quy_tac_chon_sigma: >
     Giu |F_sigma| trong khoang [50, 700] VA F_sigma phai la tap con THUC SU cua khong gian
     mau do dai toi l_max. Moi sigma o tren deu thoa.

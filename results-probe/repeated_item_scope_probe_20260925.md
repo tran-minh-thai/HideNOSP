@@ -16,7 +16,9 @@ Logs: `sc2_repeated_probe_log_20260925.txt`, `sc2_repeated_msnbc_rerun_log_20260
 `repeated_item_exactness_probe_20260925.txt`.
 
 SIGN (sigma 200) and BMS1 (sigma 100) have no repeated-item pattern of length 2 to 4 in F_sigma at [0,1] or
-[0,3]: the four runs stop with that message, as they should.
+[0,3]: the four runs stop with that message, as they should. The genome at sigma 4000, [0,1], has no
+distinct-item candidate but two repeated-item ones; it was added on 2026-09-26 (run at `e1ed80e`), so the
+repeated scope has 39 configurations.
 
 ## 1. Groups over the repeated-item pool (SC2 --profile=repeated)
 
@@ -40,6 +42,7 @@ Command: `python tools/data_regime_tables.py groups --profile=repeated results-p
 | dna_mt745584 | [0,10] | 2500 | 260 | 0.859 | 0.064 | main | between | SC2_20260925-145336-674_dev_f5a65b82073d_s2026.csv |
 | dna_mt745584 | [0,10] | 4000 | 54 | 0.895 | 0.046 | main | degenerate | SC2_20260925-145454-052_dev_f5a65b82073d_s2026.csv |
 | dna_mt745584 | [0,1] | 2500 | 3 | 0.892 | 0.450 | main | effective | SC2_20260925-145332-998_dev_f5a65b82073d_s2026.csv |
+| dna_mt745584 | [0,1] | 4000 | 2 | 0.897 | 0.444 | main | effective | SC2_20260926-004410-497_dev_e1ed80e2aa3f_s2026.csv |
 | dna_mt745584 | [0,3] | 2500 | 40 | 0.829 | 0.417 | main | effective | SC2_20260925-145333-544_dev_f5a65b82073d_s2026.csv |
 | dna_mt745584 | [0,3] | 4000 | 6 | 0.904 | 0.364 | main | effective | SC2_20260925-145453-160_dev_f5a65b82073d_s2026.csv |
 | fifa | [0,1] | 3000 | 3 | 0.955 | 0.071 | main | between | SC2_20260925-151141-898_dev_f5a65b82073d_s2026.csv |
@@ -66,7 +69,7 @@ Command: `python tools/data_regime_tables.py groups --profile=repeated results-p
 | sepsis | [0,1] | 300 | 25 | 0.535 | 0.597 | main | effective | SC2_20260925-151414-160_dev_f5a65b82073d_s2026.csv |
 | sepsis | [0,3] | 300 | 140 | 0.480 | 0.226 | main | effective | SC2_20260925-151415-037_dev_f5a65b82073d_s2026.csv |
 
-38 configurations from 38 repeated files (99 files given)
+39 configurations from 39 repeated files (100 files given)
 
 ## 2. Main comparison on repeated-item sensitive sets (SC3 --patternKind=repeated, |S| = 1)
 

@@ -281,6 +281,8 @@ lại tệp mang tên cuối nhưng thiếu các hàng cuối (884/885, 1.448/1.
 | Phân bổ chính xác giữa các chuỗi | `hide.Allocation.solveExact`, `leastMasks` | Theo từ điển (số lần che, trọng số) hoặc ngược lại; bộ nhớ O(K) cho giá trị, một `short` mỗi (chuỗi có hỗ trợ, tổng) cho truy vết |
 | CUT-HIDE một mẫu, mọi μ | `hide.CutHide` với `CutHideConfig.Curves` | `FRONTIER_DP` (mặc định), `FRONTIER_DP_WEIGHT_FIRST`, `LAMBDA_SWEEP` (đối chứng); khóa phương pháp SC3: `cut-hide`, `cut-hide-weight`, `cut-hide-sweep` |
 | Kho mẫu lặp mục | `exp.SensitiveSampling.repeatedPool`; SC2 `--profile=repeated`; SC3 `--patternKind=repeated` | \|R\|* chính xác cho mẫu lặp mục khi g⁻ = 0 (`metrics.DataProfile`) |
+| Mặt Pareto lồi chính xác giữa \|R\| và trọng số | `hide.CutHide.paretoFront`, `FrontierDp.Order`; SC3 `--pareto=true` ghi `SC3PARETO_<dấu>.csv` | Mệnh đề P10 của bản thiết kế; `tools/pareto_table.py` ghép với tệp SC3 cùng lượt, đếm tỉ lệ tập mà mặt trội hơn từng phương pháp, kiểm đỉnh đầu là hàng `cut-hide` |
+| Đánh giá nhiều lời giải của cùng một bài toán | `metrics.Metrics.Context.session` | Nhớ hỗ trợ của mỗi (chuỗi, tập vị trí che) đã gặp; hàng giống hệt `evaluateMasking` (`MetricsSessionTest`) |
 | Bảng markdown từ hiện vật (quy tắc σ, nhóm) | `tools/data_regime_tables.py` | Để tài liệu tổng hợp nhúng bảng sinh ra, không chép tay |
 | Lấy mẫu tập nhạy cảm theo năm tầng phân vị, không lặp | `exp.SensitiveSampling` | `preregistration.md` mục 9 |
 | SC1, SC2, SC3 | `exp.Sc1…`, `exp.Sc2…`, `exp.Sc3…` | Chạy được |

@@ -22,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * The method under test of H2 and H2-R (preregistration section 12) as SC3 runs it: with one
  * sensitive pattern, cut-hide-rw-ls masks as many positions as cut-hide and cut-hide-rw and loses no
- * more patterns than either; with several, it is the greedy of cut-hide and says so in its row.
+ * more patterns than either; with several, it and cut-hide-rw are the greedy of cut-hide and say so
+ * in their rows (an end-to-end SC3 trial found cut-hide-rw stopping the whole run there).
  */
 class MethodUnderTestScenarioTest {
 
@@ -106,14 +107,17 @@ class MethodUnderTestScenarioTest {
                     tested.get("method"));
         }
         Map<String, Map<String, Map<String, String>>> several = run("--sigma=30", "--gmin=0", "--gmax=3",
-                "--maxPatternLength=3", "--setsPerStratum=1", "--sensitiveSize=2", "--methods=cut-hide,cut-hide-rw-ls");
+                "--maxPatternLength=3", "--setsPerStratum=1", "--sensitiveSize=2",
+                "--methods=cut-hide,cut-hide-rw,cut-hide-rw-ls");
         assertTrue(!several.isEmpty(), "no sensitive set of two patterns drawn");
         for (Map.Entry<String, Map<String, Map<String, String>>> e : several.entrySet()) {
             Map<String, String> base = e.getValue().get("cut-hide");
-            Map<String, String> tested = e.getValue().get("cut-hide-rw-ls");
-            assertEquals(base.get("method"), tested.get("method"), "several patterns run the greedy of cut-hide");
-            assertEquals(base.get("mask_count"), tested.get("mask_count"), e.getKey());
-            assertEquals(base.get("lost"), tested.get("lost"), e.getKey());
+            for (String key : List.of("cut-hide-rw", "cut-hide-rw-ls")) {
+                Map<String, String> row = e.getValue().get(key);
+                assertEquals(base.get("method"), row.get("method"), key + " with several patterns runs the greedy of cut-hide");
+                assertEquals(base.get("mask_count"), row.get("mask_count"), key + " " + e.getKey());
+                assertEquals(base.get("lost"), row.get("lost"), key + " " + e.getKey());
+            }
         }
         System.out.printf("Method under test through SC3: %d one-pattern sets, %d two-pattern sets%n",
                 single.size(), several.size());

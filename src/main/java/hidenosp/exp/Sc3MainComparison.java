@@ -274,6 +274,12 @@ public final class Sc3MainComparison implements Scenario {
                 // iterations weigh positions by the exact drops of the previous solution. Same
                 // |R|*, never more lost patterns than cut-hide. The drops come from the evaluator
                 // that writes the lost column, so method and metric count them the same way.
+                // The weight needs one sensitive pattern; with several, CUT-HIDE is the greedy of
+                // step 7, as for cut-hide-rw-ls, and the method column of the row says so. Without
+                // this every SC3 cell with several patterns stopped at this key.
+                if (problem.sensitive().size() != 1) {
+                    return create("cut-hide", problem, frequent, sigma, epsilon, seed, context);
+                }
                 Set<Pattern> closure =
                         FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
                 List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);

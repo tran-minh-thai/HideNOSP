@@ -1,0 +1,70 @@
+class files: before 118, after 118; identical 114, different 4, only before 0, only after 0
+  DIFFERENT main/hidenosp/exp/Sc3MainComparison.class: instructions with string texts blanked are IDENTICAL (1749 lines); string constants only before 1, only after 1
+      -                 hat \u0001
+      +                 seed \u0001
+  DIFFERENT test/hidenosp/BaselineTest.class: instructions with string texts blanked are IDENTICAL (1114 lines); string constants only before 4, only after 4
+      -               B_eps rong thi CUT-HIDE co trong so phai BAO LOI, khong tut ve trong so deu
+      -               khong dung duoc B_eps cho thuc the thu nghiem nay
+      -               nhieu mau nhay cam: gioi han tung chuoi duoc thoa, ke ca CUT-HIDE
+      -               nhieu mau nhay cam: moi baseline tang (a) va (b) van dat HF = 0
+      +               an empty B_eps makes weighted CUT-HIDE THROW, not fall back to uniform weights
+      +               cannot build a B_eps for this test instance
+      +               several sensitive patterns: every baseline of tiers (a) and (b) reaches HF = 0
+      +               several sensitive patterns: the per-sequence limit is met, CUT-HIDE included
+  DIFFERENT test/hidenosp/MetricsTest.class: instructions with string texts blanked are IDENTICAL (589 lines); string constants only before 7, only after 7
+      -               Context tu choi khi sigma cua no khac sigma dem tac dung phu cua bai toan
+      -               HF gia tang trung khop voi dinh nghia, ke ca khi mau nhay cam co tan suat
+      -               HF khac dinh nghia: \u0001 seed \u0001 sigma \u0001
+      -               Lost khac dinh nghia: \u0001
+      -               Lost va SupDist gia tang trung khop voi dinh nghia, tren moi phuong phap
+      -               SupDist khac dinh nghia: \u0001
+      -               che khong bao gio sinh mau ma (P5a): \u0001
+      +               Context refuses a problem that counts side effects at a different sigma
+      +               HF differs from the definition: \u0001 seed \u0001 sigma \u0001
+      +               Lost differs from the definition: \u0001
+      +               SupDist differs from the definition: \u0001
+      +               incremental HF matches the definition, even when a sensitive pattern is frequent
+      +               incremental Lost and SupDist match the definition, for every method
+      +               masking never creates a ghost pattern (P5a): \u0001
+  DIFFERENT test/hidenosp/PrimalDualCoverTest.class: instructions with string texts blanked are IDENTICAL (845 lines); string constants only before 20, only after 20
+      -               an het: khong mau nhay cam nao con lan xuat hien nao
+      -               chan duoi \u0001 vuot chi phi \u0001
+      -               chan duoi \u0001 vuot toi uu \u0001
+      -               chan duoi \u0001 vuot toi uu chinh xac \u0001
+      -               chan duoi that su la chan duoi, va ti so khong vuot l_max
+      -               chi phi \u0001 vuot \u0001 lan chan duoi \u0001
+      -               chi phi bao cao phai bang |R| that
+      -               con lan xuat hien cua \u0001 o hat giong \u0001
+      -               doi chieu voi bo giai chinh xac tren thuc the nho
+      -               dung \u0001 lan che, it hon toi uu \u0001
+      -               khong the it hon toi uu
+      -               mau dai 2 nen he so 2: \u0001 so voi \u0001
+      -               mau dai 2 nen he so la 2, ma dung \u0001 so voi \u0001
+      -               moi rang buoc chi mot bien thi he so khong noi len dieu gi
+      -               mot mau khong lap muc: chan duoi khong vuot toi uu, ma P1c cho biet la sup_NO
+      -               mot rang buoc rong \u0001 bien, qua l_max
+      -               thuc the rong, phep thu khong kiem tra gi
+      -               toi tieu: bo bat ky vi tri nao cung lam lo lai mot lan xuat hien
+      -               tu choi khi nguong lon hon 1, vi he so khong con dung
+      -               vi tri \u0001 o chuoi \u0001 la thua: bo di van an het
+      +               a constraint has \u0001 variables, over l_max
+      +               agrees with the exact solver on a small instance
+      +               an occurrence of \u0001 is left at seed \u0001
+      +               cannot use fewer masks than the optimum
+      +               complete hiding: no sensitive pattern keeps any occurrence
+      +               cost \u0001 exceeds \u0001 times the lower bound \u0001
+      +               empty instance: the test would check nothing
+      +               lower bound \u0001 exceeds the cost \u0001
+      +               lower bound \u0001 exceeds the exact optimum \u0001
+      +               lower bound \u0001 exceeds the optimum \u0001
+      +               minimal: dropping any position exposes an occurrence again
+      +               one distinct-item pattern: the bound stays below the optimum, sup_NO by P1c
+      +               position \u0001 of sequence \u0001 is redundant: without it everything is still hidden
+      +               refuses a threshold above 1, where the factor no longer holds
+      +               the lower bound really is a lower bound, and the ratio stays within l_max
+      +               the pattern has length 2, so the factor is 2, but it used \u0001 against \u0001
+      +               the patterns have length 2, so the factor is 2: \u0001 against \u0001
+      +               the reported cost must equal |R|
+      +               used \u0001 masks, fewer than the optimum \u0001
+      +               with one variable per constraint the factor would say nothing
+classes whose instructions differ beyond string texts: 0

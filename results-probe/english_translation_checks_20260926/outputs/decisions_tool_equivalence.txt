@@ -1,0 +1,21 @@
+## merge_decisions.py against tools/gop_quyet_dinh.py of c516133, PYTHONHASHSEED=0
+themes 51, keyword items sorted 96 (old) / 96 (new), unsorted 4 / 4
+  themes and their item ids            SAME
+  unsorted item ids                    SAME
+  sources and critic note per theme    SAME
+  blocks line per theme                SAME
+  printed counts                       SAME
+## injection last_match
+2 checks DIFFERENT
+## injection no_dedupe
+1 checks DIFFERENT
+## injection blocks_first
+1 checks DIFFERENT
+## keyword wording: injection epsilon -> epsilon value, not caught by design (items are built from the tool's own keywords)
+  themes and their item ids            SAME
+  unsorted item ids                    SAME
+  sources and critic note per theme    SAME
+  blocks line per theme                SAME
+  printed counts                       SAME
+## pre-existing in tools/gop_quyet_dinh.py of c516133: with block texts of equal length, the one printed follows the hash seed
+same input, PYTHONHASHSEED 1 to 4: themes whose printed block text varies: 5 {'A1': ['block 0', 'block 1'], 'A11': ['block 0', 'block 2'], 'A15': ['block 1', 'block 2'], 'B1': ['block 0', 'block 1'], 'B9': ['block 1', 'block 2']}

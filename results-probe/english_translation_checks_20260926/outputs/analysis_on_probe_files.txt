@@ -1,0 +1,13 @@
+# preregistered_analysis.py (translated) against tools/thong_ke.py of c516133, on the files of results-probe/ and results-invariant/
+# columns: comparison, SAME|DIFFERENT, exit codes old/new, report lines, numbers compared, label and verdict words compared
+R1_probe_no_locked_tables                      SAME  exit 1/1  lines 255  numbers 1157  words 213
+R2_probe_skip_groups                           SAME  exit 0/0  lines 162  numbers 598  words 40
+R3_write_groups                                SAME  exit 0/0  lines 2  numbers 18  words 0
+R4_probe_with_locked_tables                    SAME  exit 0/0  lines 251  numbers 1139  words 213
+R5_defaults_no_sc3                             SAME  exit 1/1  lines 1  numbers 1  words 0
+R6_sc2_from_invariant                          SAME  exit 1/1  lines 146  numbers 508  words 32
+R7_single_sc3_file                             SAME  exit 1/1  lines 9  numbers 10  words 0
+R8_missing_sc2_directory                       SAME  exit EXCEPTION FileNotFoundError: [Errno 2] No such file or directory: '/nonexistent-dir'/EXCEPTION FileNotFoundError: [Errno 2] No such file or directory: '/nonexistent-dir'  lines 0  numbers 0  words 0
+R9_write_groups_no_pool                        SAME  exit 1/1  lines 1  numbers 1  words 0
+group table written by R3, pool.tsv: 42 rows old, 42 new, identical once the old labels are mapped: True
+group table written by R3, repeated.tsv: 39 rows old, 39 new, identical once the old labels are mapped: True

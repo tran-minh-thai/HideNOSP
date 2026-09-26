@@ -331,3 +331,42 @@ SC3 không bao giờ ẩn. Cách mới bất lợi hơn cho bài, nên không ph
 **Thời điểm.** Chưa có lần chạy SC3 lấy số nào; chưa có tệp SC2 chính thức nào ở chế độ toàn kho.
 
 **Không đổi:** δ_L, họ Holm bốn phần tử, các ngưỡng, các biên tương đương, cách lấy mẫu của mục 9.
+
+---
+
+## 11. Bổ sung ngày 26/09/2026 — phạm vi mẫu lặp mục (trước mọi lần chạy SC3 lấy số trên phạm vi này)
+
+**Quyết định của người viết** (26/09/2026): duyệt nguyên đề xuất soạn ngày 25/09 — mở phạm vi sang mẫu lặp
+mục; phương pháp của phép kiểm H2-R là `cut-hide`; tệp protein SDB4 vào phép kiểm, SDB1 chỉ báo cáo; và báo
+cáo mặt Pareto của CUT-HIDE như một phân tích mô tả (điểm 6 dưới đây).
+
+**Khai xuất xứ.** Trước khi mục này được viết, người đề xuất mục này **đã thấy** các lượt thăm dò trên máy phát triển:
+`results-probe/repeated_item_exactness_probe_20260925.txt` (lời giải chính xác so với lời giải lát cắt trên
+mẫu lặp mục) và `results-probe/repeated_item_scope_probe_20260925.md` (nhóm dữ liệu trên kho mẫu lặp mục;
+SC3 lặp mục trên năm cấu hình, bảy phương pháp). Chiều đã thấy: mọi biến thể CUT-HIDE mất ít mẫu hơn ba đường
+cơ sở; `cut-hide` mất nhiều mẫu hơn biến thể quét λ ở bốn trên năm cấu hình. Vì vậy mục này **không** đặt giả
+thuyết có hướng nào giữa các biến thể của CUT-HIDE, và phương pháp của H2-R được chọn theo mục tiêu của bài toán
+(\|R\| trước), không theo số đã thấy. **Chưa có** số mặt Pareto nào khi mục này được viết.
+
+1. **Phạm vi.** Mẫu nhạy cảm lặp mục (μ(P) ≥ 2), dài 2 tới 4, thuộc F_σ, với g⁻ = 0 (mọi cấu hình của giao
+   thức). Ở đó Định lý P8 của bản thiết kế cho số lần che tối thiểu chính xác, nên \|R\|* và tỉ số \|R\|/\|R\|*
+   có nghĩa như ở phạm vi chính. Phạm vi chính (μ(P) = 1, mục 1) không đổi.
+2. **Nhóm dữ liệu.** Như mục 10, trên kho mẫu lặp mục (SC2 `--profile=repeated`), cùng ngưỡng của mục 3. Bảng
+   nhóm riêng `config/nhom_cau_hinh_lap_muc.tsv`, sinh một lần từ lượt SC2 chính thức trên máy đo, commit là chốt.
+3. **Lấy mẫu tập nhạy cảm.** Như mục 9, trên kho mẫu lặp mục (SC3 `--patternKind=repeated`).
+4. **H2-R.** Như H2 (mục 2): trên nhóm chính **của phạm vi lặp mục**, trung vị hiệu Lost_rel(đường cơ sở) −
+   Lost_rel(`cut-hide`) > δ_L; cùng họ Holm bốn phần tử (HHA, DBSH, SBSH-r1, SBSH-rmax), cùng α = 0,05, δ_L =
+   0,02, Wilcoxon một phía, rank-biserial. Kiểm **riêng**, không gộp hàng với H2. Hàng của hai phạm vi được
+   tách theo **chính các mục của mẫu nhạy cảm** trong từng hàng SC3, không theo tên tệp hay tuỳ chọn.
+5. **Tệp protein.** SDB4 (`protein_sdb4`) vào H2 và H2-R; SDB1 (`protein_sdb1`) chỉ báo cáo mô tả, không vào
+   phép Wilcoxon nào, vì hai tệp chung 64–75% chuỗi.
+6. **Mặt Pareto (mô tả, không kiểm định).** Với mỗi tập nhạy cảm một mẫu, ở cả hai phạm vi, tính **chính xác**
+   các đỉnh của mặt Pareto lồi giữa \|R\| và trọng số đại diện w(R) của CUT-HIDE (Mệnh đề P10 của bản thiết kế,
+   cùng trọng số như `cut-hide`), và với mỗi đỉnh: \|R\|, w, Lost_rel, SupDist. Báo cáo: số đỉnh; khoảng
+   \|R\|/\|R\|* và Lost_rel trên mặt; với mỗi đường cơ sở của họ Holm, tỉ lệ tập mà có một đỉnh trội hơn nó
+   (không kém ở cả \|R\| và Lost_rel, hơn hẳn ở ít nhất một). Không đỉnh nào thay `cut-hide` trong H2 hay H2-R.
+7. **Mở rộng mục 6.** \|R\| = \|R\|* của `cut-hide` trên phạm vi lặp mục là hệ quả của Định lý P8: báo cáo như
+   phép kiểm cài đặt, không kiểm định. Tỉ số \|R\|(`cut-hide-sweep`)/\|R\|* — cái giá của việc không có P8 — báo
+   cáo mô tả theo từng cấu hình.
+
+**Không đổi:** mọi mục 1–10.

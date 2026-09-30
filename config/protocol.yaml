@@ -127,9 +127,13 @@ row_5_run_environment:
   xms_flag: null
   xmx_flag: null
   operating_system: "Windows"       # measuring machine, separate from the development machine
-  cpu: "AMD Ryzen 9 9950X"
-  ram: "64 GB"
-  machine_name: null   # passed with --machine; a run labelled "dev" may not record timing numbers
+  cpu: null            # to be read on the measuring machine itself, not assumed
+  ram: null            # idem
+  machine_name: "DESKTOP-L8A6EPO"   # declared by the author on 2026-10-01; passed with --machine.
+                                    # It ran the official SC1 and SC2 of 2026-09-30. A run labelled
+                                    # "dev" may not record timing numbers.
+  # An earlier version of this row named an AMD Ryzen 9 9950X with 64 GB, a machine that never ran
+  # anything for this project; that entry was an assumption and is withdrawn.
   note: "NOT LOCKED YET. Blocks SC6, not SC3 to SC5 and SC7."
 
 row_6_memory_measurement:

@@ -1,0 +1,34 @@
+# Three-sequence example of the stages of CUT-HIDE (ccabc, bbaccbc, bacbacb; sensitive ab, sigma 3, gap [0,2], l_max 2, epsilon 0.5), recomputed from the repository classes, 2026-10-01.
+# PROBE on the development machine, not an experiment. Every number here is a count or a weight on this instance, independent of the machine.
+# Code: commit 9bfb7aa plus the new, not yet committed src/test/java/hidenosp/ThreeSequenceExampleTest.java (sha256 d71bee2e545e7f61); tracked files changed: 0.
+# Build: javac --release 25 into target/classes and target/test-classes (Maven cannot build offline here). Java: openjdk version "26.0.1" 2026-04-21; machine: Darwin arm64
+# Command: java -cp target/classes:target/test-classes:<junit-jupiter-api and its dependencies> hidenosp.ThreeSequenceExampleTest
+# Date: 2026-09-30T23:57:00Z
+
+===== A. every number and the checks =====
+frequent patterns with sup_NO: {a=4, ab=4, ac=4, b=7, ba=3, bb=3, bc=6, c=8, cb=4, cc=5}
+near-threshold band with 1/m_Q: {a=0.5, ac=0.5, ba=1.0, bb=1.0, cb=0.5}
+fixed weight, T1 (position=weight): {3=1.0, 4=0.5, 5=0.5}
+fixed weight, T2 (position=weight): {1=1.0, 2=1.0, 3=2.0, 6=0.5}
+fixed weight, T3 (position=weight): {1=2.0, 2=2.0, 3=1.0, 4=2.5, 5=2.0, 6=1.0, 7=1.5}
+stage (i): masks {1=[4], 2=[6]}, lost [cb], supports after {b=5, bc=4, cb=2}
+adaptive coefficients c_Q after stage (i): a=0.6491 ac=0.6491 b=0.2840 ba=1.2350 bb=1.2350 bc=0.3991 c=0.1829 cb=0.7350 cc=0.4034
+adaptive weight, T1: 1=0.5863 2=0.5863 3=1.2983 4=1.4181 5=1.6346
+adaptive weight, T2: 1=1.9181 2=1.9181 3=2.5333 4=0.9855 5=0.9855 6=1.4181 7=0.9855
+adaptive weight, T3: 1=3.1531 2=2.5333 3=2.3696 4=3.8882 5=2.5333 6=2.3696 7=2.2540
+stage (ii): masks {1=[3], 2=[6]}, lost [], supports after {a=3, ac=3, b=6, bc=5, cb=3}, chosen iteration 1
+full method: masks {1=[3], 2=[6]}, local search Result[masks={0=[2], 1=[5]}, lost=0, moves=0, passes=0, evaluated=0, nothingSaveable=true]
+checked 21 stated numbers and outcomes, failed 0
+exit code 0
+
+===== B. fault injection (each on a patched copy of one class, placed ahead on the class path; the patch site was counted and found exactly once) =====
+wider_tau: AdaptiveCutHide uses tau = max(1, m_Q/2) instead of max(1, m_Q/4). Want exit 1 on the adaptive coefficients and weights.
+shifted_fixed_factor: FrequentPatterns.weightFactors uses 1/(sup - sigma + 2). Want exit 1 on the fixed weights.
+  [wider_tau] exit 1 (want 1); checked 21 stated numbers and outcomes, failed 2
+    FAILED c_bc: want 0.4, got 0.36
+    FAILED adaptive weight of position 4 of T1: want 1.42, got 1.37
+  [shifted_fixed_factor] exit 1 (want 1); checked 21 stated numbers and outcomes, failed 3
+    FAILED fixed weight of position 4 of T1: want 0.5, got 0.3333333333333333
+    FAILED fixed weight of position 3 of T1: want 1.0, got 0.6666666666666666
+    FAILED fixed weight of position 6 of T2: want 0.5, got 0.3333333333333333
+Caught: 2 of 2, each on exactly the numbers it changes.

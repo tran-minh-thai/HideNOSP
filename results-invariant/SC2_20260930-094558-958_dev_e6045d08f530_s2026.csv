@@ -1,0 +1,14 @@
+# run 20260930-094558-958_dev_e6045d08f530_s2026
+# host DESKTOP-L8A6EPO
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# kind INVARIANT
+# scenario SC2
+# profile repeated
+# options {dataset=datasets/bible.txt, format=SPMF, sigma=2000, gmin=0, gmax=1, maxPatternLength=4, profile=repeated}
+dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,mask_share,rho_rep,beta,min_masks_exact
+datasets\bible.txt,"[0,1]",2000,"[10, 31, 10]",2007,1530,10660,4,0.000005,0.237668,0.811726,true
+datasets\bible.txt,"[0,1]",2000,"[356, 356]",2843,2841,5267,844,0.001072,0.000703,0.460224,true
+datasets\bible.txt,"[0,1]",2000,"[46, 10, 46]",3310,2540,11695,964,0.001225,0.232628,0.716973,true
+datasets\bible.txt,"[0,1]",2000,"[10, 46, 10]",7974,6109,16858,5395,0.006855,0.233885,0.526990,true

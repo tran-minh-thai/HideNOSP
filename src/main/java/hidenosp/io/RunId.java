@@ -1,8 +1,11 @@
 package hidenosp.io;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 /**
  * The run stamp required by rule 2.6.8: every result file carries one, so a table in the paper can
@@ -16,6 +19,12 @@ import java.time.format.DateTimeFormatter;
  * <p>The stamp holds the time in UTC, the host, the code revision and the seed. The revision is
  * read from the environment variable HIDENOSP_REVISION when present, so a continuous run can pass
  * the commit hash in without this class shelling out to git.
+ *
+ * <p>The header also names the machine: processor model, logical processors and physical memory, so
+ * a timing number can be read against the hardware that produced it without asking anyone. The JVM
+ * reports the last two itself; it cannot name the processor, so tools/run.py reads the model and
+ * passes it in HIDENOSP_CPU. A value that could not be obtained is written as "not reported" with the
+ * reason, never left out and never guessed.
  */
 public record RunId(String timestamp, String host, String revision, long seed, String machineLabel) {
 
@@ -41,12 +50,33 @@ public record RunId(String timestamp, String host, String revision, long seed, S
 
     /** The header lines written at the top of a result file, each already prefixed with a hash. */
     public String[] headerLines() {
+        String[] machine = machineLines(System.getenv());
         return new String[] {
             "# run " + stamp(),
             "# host " + host,
             "# jdk " + System.getProperty("java.version") + " " + System.getProperty("java.vm.name"),
             "# heap_max_bytes " + Runtime.getRuntime().maxMemory(),
             "# seed " + seed,
+            machine[0],
+            machine[1],
+            machine[2],
+        };
+    }
+
+    /** The three machine lines of the header: processor model, logical processors, physical memory. */
+    static String[] machineLines(Map<String, String> env) {
+        String cpu = env.get("HIDENOSP_CPU");
+        if (cpu == null || cpu.isBlank()) {
+            cpu = "not reported: the run did not go through tools/run.py, which reads the model";
+        }
+        OperatingSystemMXBean os = ManagementFactory.getOperatingSystemMXBean();
+        String ram = os instanceof com.sun.management.OperatingSystemMXBean physical
+                ? Long.toString(physical.getTotalMemorySize())
+                : "not reported: this JVM does not expose the physical memory size";
+        return new String[] {
+            "# cpu " + cpu.strip(),
+            "# logical_processors " + Runtime.getRuntime().availableProcessors(),
+            "# ram_bytes " + ram,
         };
     }
 }

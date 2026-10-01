@@ -17,7 +17,9 @@ The wrapper does five things, in this order:
    The three output directories results, results-invariant and results-probe do NOT count: they
    hold the output of the runs themselves, so a batch of runs must not block itself.
 4. On Windows, asks the system not to sleep until the run ends.
-5. Sets HIDENOSP_REVISION and calls hidenosp.exp.Runner with the remaining arguments.
+5. Reads the processor model (the JVM cannot) and passes it in HIDENOSP_CPU; the result header
+   records it next to the logical processors and physical memory that the JVM reports itself.
+6. Sets HIDENOSP_REVISION and calls hidenosp.exp.Runner with the remaining arguments.
 
 Usage:
 
@@ -32,6 +34,7 @@ Options of THIS script (not forwarded to Runner):
     --no-build        skip the rebuild (only when the .class files are known to be current)
 """
 import os
+import platform
 import re
 import subprocess
 import sys
@@ -179,6 +182,35 @@ def keep_awake():
         print("keep-awake: on until this run ends", flush=True)
 
 
+def cpu_model(system=None):
+    """Processor model of this machine, for the header of every result file.
+
+    Standard library only, so it runs on the measuring machine as it is. When the model cannot be
+    read the text says so and why; it is never guessed.
+    """
+    system = system or platform.system()
+    try:
+        if system == "Windows":
+            import winreg
+            key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
+                                 r"HARDWARE\DESCRIPTION\System\CentralProcessor\0")
+            value, _ = winreg.QueryValueEx(key, "ProcessorNameString")
+            return " ".join(str(value).split())
+        if system == "Darwin":
+            out = subprocess.run(["sysctl", "-n", "machdep.cpu.brand_string"],
+                                 capture_output=True, text=True)
+            if out.returncode == 0 and out.stdout.strip():
+                return " ".join(out.stdout.split())
+        if system == "Linux":
+            with open("/proc/cpuinfo", encoding="utf-8") as f:
+                for line in f:
+                    if line.lower().startswith("model name"):
+                        return " ".join(line.split(":", 1)[1].split())
+    except (OSError, ImportError) as e:
+        return "not reported: reading the model on %s failed (%s)" % (system, e)
+    return "not reported: no processor model found on %s" % system
+
+
 def build():
     """Rebuild, so the .class files certainly match the source whose sha is being stamped."""
     mvn = "mvn.cmd" if os.name == "nt" else "mvn"
@@ -245,7 +277,9 @@ def main():
 
     env = dict(os.environ)
     env["HIDENOSP_REVISION"] = rev
+    env["HIDENOSP_CPU"] = cpu_model()
     print("HIDENOSP_REVISION = %s" % rev, flush=True)
+    print("HIDENOSP_CPU = %s" % env["HIDENOSP_CPU"], flush=True)
 
     # Flush before handing the file descriptors to java, otherwise the lines above appear after
     # the output of the run.

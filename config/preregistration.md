@@ -449,3 +449,44 @@ hai bảng cũng sang tiếng Anh: với ρ_rep, `main` (chính), `intermediate`
 ghi chú này được viết, chưa bảng nhóm nào được sinh, nên không bảng chốt nào phải viết lại.
 
 **Không đổi:** mọi mục 1–12; mọi ngưỡng, phép kiểm, cách ghép cặp và cách lấy mẫu.
+
+---
+
+## 14. Bổ sung ngày 02/10/2026 — phạm vi, phương pháp, giới hạn thời gian và thứ tự của đợt SC3 chính thức (trước mọi lần chạy SC3 lấy số)
+
+**Quyết định của người viết** (02/10/2026), chọn trong các phương án người đề xuất đưa ra:
+
+1. **Phạm vi chạy: chỉ nhóm chính.** SC3 chính thức chạy trên mọi dòng `group = main` của hai bảng đã chốt,
+   `config/configuration_groups.tsv` (phạm vi chính, `--patternKind=distinct`) và
+   `config/configuration_groups_repeated.tsv` (phạm vi lặp mục, `--patternKind=repeated`). Cấu hình nhóm trung gian
+   và suy biến **không** chạy SC3 trong đợt này. H2 và H2-R vốn chỉ kiểm trên nhóm chính (mục 10 điểm 4, mục 11
+   điểm 4), nên việc này không đổi phép kiểm nào; nó bỏ phần báo cáo mô tả của các nhóm khác mà mục 10 điểm 4 nhắc
+   tới. Nếu sau này chạy các nhóm ấy thì chúng vẫn chỉ là mô tả. `protein_sdb1` thuộc nhóm chính, chạy, và vẫn chỉ
+   báo cáo (mục 11 điểm 5).
+2. **Phương pháp: bộ của H2.** Bảy khoá: `cut-hide-rw-ls` (phương pháp đang kiểm, mục 12); `cut-hide-rw` và
+   `cut-hide` (hai biến thể loại trừ, mục 12); `hha`, `dbsh`, `sbsh-r1`, `sbsh-rmax` (họ Holm, mục 2). Không phương
+   pháp nào ngẫu nhiên, nên quy ước mười hạt giống của mục 5 không áp dụng ở đợt này.
+3. **Giới hạn thời gian: 1.800 giây** đồng hồ thực cho **một phương pháp trên một tập nhạy cảm**
+   (`--timeLimit=1800`), tính từ lúc gọi phương pháp tới lúc nó trả lời giải; phần đánh giá lời giải và mặt Pareto
+   (mục 11 điểm 6) không tính vào. Vượt giới hạn: hàng mang `status = OT` và để trống mọi cột kết quả; hết bộ nhớ:
+   `status = OOM`. Phương pháp chạy xong thì `status` để trống. Xử lý theo bảng "Loại trừ thực thể" của mục 5,
+   không đổi: loại cặp, đếm, báo cáo; quá 10% thì không kết luận. Trần bộ nhớ mọi lệnh SC3 là `-Xmx8g`.
+   Cài đặt: kiểm hợp tác (`hidenosp.util.Deadline`) khi dựng một Nettree, khi che một vị trí, ở mỗi pha luồng cực
+   đại, mỗi vị trí của quy hoạch động chính xác và mỗi lượt tìm kiếm cục bộ; phép kiểm `Sc3TimeLimitTest`.
+4. **Thứ tự: \|𝒮\| = 1 trước**, ở cả hai phạm vi, kèm mặt Pareto (mục 11 điểm 6); rồi \|𝒮\| = 5, 10, 20. Thời gian
+   của đợt \|𝒮\| = 1 dùng để lên lịch các đợt sau. Mọi tham số chốt ở mục này và mục 12 **không** đổi sau khi thấy
+   kết quả của đợt \|𝒮\| = 1.
+
+Lệnh của từng ô do `tools/sc3_commands.py` sinh từ hai bảng nhóm, không chép tay; công cụ ấy bỏ ô đã có tệp kết quả
+và liệt kê tệp SC3 không khớp ô nào.
+
+**Hệ quả với tính bất biến theo máy.** Hàng không có `OT` hay `OOM` vẫn là đại lượng bất biến theo máy. **Tập hàng
+`OT` thì phụ thuộc máy**, và tập hàng `OOM` phụ thuộc trần bộ nhớ. Vì vậy lượt SC3 chính thức chạy trên máy đo đã
+khai ở hàng 5 của `config/protocol.yaml`, mang `--machine` của máy ấy, và số ca `OT`/`OOM` được báo cáo kèm tên máy
+và trần bộ nhớ.
+
+**Khai xuất xứ.** Khi mục này được viết, người đề xuất đã thấy, ngoài các lượt thăm dò kê ở mục 12, hai lượt thăm
+dò trên máy phát triển: `results-probe/sc3_time_limit_stop_probe_20261002.txt` (giới hạn 2 giây trên MSNBC
+[0,10]: mọi phương pháp dừng chưa tới 0,05 giây sau hạn) và `results-probe/sc3_heavy_cells_timing_probe_20261002.txt` (bảy cấu hình nhóm chính chọn làm ca nặng: ba kho mẫu lặp mục lớn nhất, hai kho mẫu không lặp mục lớn nhất, bộ gen [0,10] σ=2500 lặp mục và MSNBC [0,10] σ=5000 không lặp mục; năm tập mỗi cấu hình, giới hạn 600 giây: không hàng nào `OT`; lâu nhất 42,7 giây cho một phương pháp trên một tập, của `cut-hide-rw-ls` trên MSNBC [0,10] σ=1000 phạm vi lặp mục). Hai lượt ấy có in Lost của các phương pháp ở các tập đã chạy; chiều đã thấy giống mục 12. Giá trị 1.800 giây được đặt **trước** lượt đo thứ hai và không đổi sau nó. Chưa có lượt SC3 chính thức nào.
+
+**Không đổi:** mọi mục 1–13.

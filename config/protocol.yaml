@@ -148,13 +148,23 @@ row_6_memory_measurement:
     prints memory must say whether it prints heap or RSS. NOT LOCKED YET, blocks SC6.
 
 row_7_time_limit:
-  limit_per_run_seconds: null
+  limit_per_run_seconds: 1800   # wall clock, one method on one sensitive set (preregistration
+                                # section 14); SC3 --timeLimit=1800. Counted from the call of the
+                                # method to its sanitization; evaluating it and the Pareto front
+                                # are not counted.
+  mechanism: >
+    cooperative check (hidenosp.util.Deadline) when a Nettree is built, a position is masked, at
+    each phase of a max flow, each position of the exact program and each pass of the local search;
+    tested by Sc3TimeLimitTest
+  heap_for_sc3: "-Xmx8g"        # OOM depends on it, so it is part of the cell
   timeout_code: "OT"     # rule 3.3.14
   out_of_memory_code: "OOM"
   when_exceeded: >
     drop the pair from Wilcoxon, count it and report it apart (preregistration section 5)
   max_dropped_share: 0.10     # more than 10% of the instances dropped: no conclusion on H2
-  note: "The limit in seconds is NOT LOCKED YET; the rule for handling it is locked."
+  note: >
+    Locked on 2026-10-02 for SC3. Which rows are OT depends on the machine and OOM on the heap, so the
+    official SC3 runs carry --machine of row 5 and the count of OT and OOM rows is reported with them.
 
 row_8_repetitions_and_aggregation:
   under_1_second: 15

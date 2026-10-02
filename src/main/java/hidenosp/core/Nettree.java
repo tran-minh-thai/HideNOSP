@@ -1,5 +1,7 @@
 package hidenosp.core;
 
+import hidenosp.util.Deadline;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +46,7 @@ public final class Nettree {
 
     /** Builds NT(P, S) under the gap constraint. Positions holding the mask carry no node. */
     public static Nettree build(Pattern pattern, EventSequence sequence, GapConstraint gap) {
+        Deadline.check();
         int m = pattern.length();
         int n = sequence.length();
         List<int[]> nodes = new ArrayList<>();

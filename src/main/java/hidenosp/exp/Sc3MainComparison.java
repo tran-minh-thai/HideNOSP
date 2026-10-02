@@ -26,6 +26,7 @@ import hidenosp.metrics.DataProfile;
 import hidenosp.metrics.FrequentPatterns;
 import hidenosp.metrics.Metrics;
 import hidenosp.util.Cli;
+import hidenosp.util.Deadline;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public final class Sc3MainComparison implements Scenario {
     public String[] options() {
         return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "maxPatternLength",
                 "epsilon", "setsPerStratum", "sensitiveSize", "seed", "methodSeed", "repeats",
-                "methods", "patternKind", "pareto"};
+                "methods", "patternKind", "pareto", "timeLimit"};
     }
 
     @Override
@@ -89,6 +90,10 @@ public final class Sc3MainComparison implements Scenario {
         // surrogate weight, one row per vertex, into SC3PARETO_<stamp>.csv (preregistration
         // section 11, point 6: descriptive). One sensitive pattern and g- = 0 only.
         boolean pareto = options.getBoolean("pareto", false);
+        // Seconds of wall clock for one method on one sensitive set; 0 means no limit. A method
+        // over the limit gets status OT, one out of memory status OOM, and the analysis drops the
+        // pair and counts it (preregistration section 5).
+        double timeLimit = options.getDouble("timeLimit", 0);
         // distinct (the main scope, mu(P) = 1) or repeated (the repeated-item scope of theorem P8).
         String patternKind = options.get("patternKind", "distinct");
         if (!patternKind.equals("distinct") && !patternKind.equals("repeated")) {
@@ -124,7 +129,7 @@ public final class Sc3MainComparison implements Scenario {
                 "method", "method_seed",
                 "hf", "lost", "lost_rel", "ghost", "dist_r", "sup_dist", "mask_count", "min_masks",
                 "mask_ratio", "certified_pairs", "total_pairs", "lower_bound", "achieved_ratio",
-                "frequent_before", "nonsensitive_before", "frequent_after"};
+                "frequent_before", "nonsensitive_before", "frequent_after", "status"};
 
         String[] provenance = {"options " + options.all(), sampling.describe()};
         if (pareto && (sensitiveSize != 1 || gap.gmin() != 0)) {
@@ -183,7 +188,34 @@ public final class Sc3MainComparison implements Scenario {
                         HidingMethod method =
                                 create(name.trim(), problem, frequent, sigma, epsilon, thisSeed,
                                         context);
-                        Sanitization sanitization = method.run(problem);
+                        String status = "";
+                        Sanitization sanitization = null;
+                        // The time of the method is printed only, never written to the file: this is
+                        // an invariant result file, and the console serves to plan the next batch.
+                        long started = System.nanoTime();
+                        try {
+                            sanitization = Deadline.within(timeLimit, () -> method.run(problem));
+                        } catch (Deadline.Exceeded e) {
+                            status = "OT";
+                        } catch (OutOfMemoryError e) {
+                            status = "OOM";
+                        }
+                        if (sanitization == null) {
+                            // No sanitization to measure: every result column stays empty, and the
+                            // status says why. An empty status means the method finished.
+                            writer.writeRow(describe(options), shape(database),
+                                    gap.toString(), Integer.toString(sigma),
+                                    sensitive.toString(), stratum,
+                                    name.trim().toLowerCase(Locale.ROOT), method.name(),
+                                    method.isRandomized() ? Long.toString(thisSeed) : "",
+                                    "", "", "", "", "", "", "", Long.toString(minMasks),
+                                    "", "", "", "", "", "", "", "", status);
+                            System.out.printf("set %d  %-34s %s after %.1f s (limit %s s)%n", index,
+                                    method.name(), status, (System.nanoTime() - started) / 1e9,
+                                    timeLimit);
+                            continue;
+                        }
+                        double seconds = (System.nanoTime() - started) / 1e9;
                         Metrics.Row row = context.evaluateMasking(problem, sanitization);
                         // method_key is the name given on the command line, and it is stable;
                         // method is the name the method gives itself, which may carry its
@@ -209,10 +241,10 @@ public final class Sc3MainComparison implements Scenario {
                                                 / sanitization.certifiedLowerBound()),
                                 Integer.toString(row.frequentBefore()),
                                 Integer.toString(row.nonSensitiveBefore()),
-                                Integer.toString(row.frequentAfter()));
-                        System.out.printf("set %d  %-34s |R| %4d  lost %4d (%.4f)  supDist %.4f%s%n",
+                                Integer.toString(row.frequentAfter()), status);
+                        System.out.printf("set %d  %-34s |R| %4d  lost %4d (%.4f)  supDist %.4f  %.1f s%s%n",
                                 index, method.name(), row.maskCount(), row.lost(),
-                                row.lostRelative(), row.supDist(),
+                                row.lostRelative(), row.supDist(), seconds,
                                 method.isRandomized() ? "  seed " + thisSeed : "");
                     }
                 }

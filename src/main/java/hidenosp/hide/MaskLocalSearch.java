@@ -4,6 +4,7 @@ import hidenosp.core.EventSequence;
 import hidenosp.core.GapConstraint;
 import hidenosp.core.Pattern;
 import hidenosp.core.SupportNO;
+import hidenosp.util.Deadline;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -122,6 +123,7 @@ public final class MaskLocalSearch {
         int passes = 0;
         boolean nothingSaveable = false;
         while (passes < maxPasses) {
+            Deadline.check();
             if (savingCondition && !anySaveable()) {
                 nothingSaveable = true;
                 break;

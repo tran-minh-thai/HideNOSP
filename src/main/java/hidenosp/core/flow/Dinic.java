@@ -1,5 +1,7 @@
 package hidenosp.core.flow;
 
+import hidenosp.util.Deadline;
+
 import java.util.Arrays;
 
 /**
@@ -114,6 +116,7 @@ public final class Dinic {
     public long maxFlow(int s, int t) {
         long added = 0;
         while (buildLevels(s, t)) {
+            Deadline.check();
             System.arraycopy(head, 0, iter, 0, nodeCount);
             long f;
             while ((f = dfs(s, t, INF)) > 0) {

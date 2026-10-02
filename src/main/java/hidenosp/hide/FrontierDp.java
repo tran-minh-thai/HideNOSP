@@ -4,6 +4,7 @@ import hidenosp.core.EventSequence;
 import hidenosp.core.GapConstraint;
 import hidenosp.core.Pattern;
 import hidenosp.core.SupportNO;
+import hidenosp.util.Deadline;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -171,6 +172,7 @@ public final class FrontierDp {
         int[] d = new int[Math.max(0, m - 1)];
         int[] next = new int[Math.max(0, m - 1)];
         for (int i = 0; i < n; i++) {
+            Deadline.check();
             int item = sequence.at(i);
             if (item == EventSequence.MASK) {
                 continue;

@@ -5,6 +5,7 @@ import hidenosp.core.GapConstraint;
 import hidenosp.core.Nettree;
 import hidenosp.core.Pattern;
 import hidenosp.core.flow.NettreeFlow;
+import hidenosp.util.Deadline;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -146,6 +147,7 @@ public final class NettreeCutIndex {
      * per pattern, indexed as in this structure. Only the affected path counts are invalidated.
      */
     public int[] maskPosition(int i) {
+        Deadline.check();
         int[] drop = new int[patterns.size()];
         if (masked[i]) {
             return drop;

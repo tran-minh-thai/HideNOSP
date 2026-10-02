@@ -6,64 +6,65 @@
 # Questions: does any cell fail at once (empty near-threshold band, no sensitive set, an exception), and where
 # does the time of a cell go? The seconds are console prints, not performance numbers.
 #
-# Written while the run was still going: cells not finished at that time are listed at the end, without numbers.
+# First written when 48 of 54 cells had finished (commit 94f78ee); rewritten with all 54 once the run ended. The numbers
+# of the 48 cells are unchanged.
 #
 # columns: cell (dataset sigma gmax scope), status, cell seconds, seconds of the seven methods summed over the
-# sets, share of the cell outside the methods (mining F_sigma, the Pareto front, evaluation), largest front
-# (vertices), OT rows
-00  dna_mt745584 4000 1 repeated         ok         1.8       1     44%      1  0
-01  dna_mt745584 2500 1 repeated         ok         7.2       2     71%     34  0
-02  fifa 3000 1 repeated                 ok        63.6       7     89%      1  0
-03  fifa 3000 3 repeated                 ok        95.3      28     71%      1  0
-04  dna_mt745584 4000 3 distinct         ok         4.2       2     43%      5  0
-05  bible 2000 1 repeated                ok       169.6      17     90%      3  0
-06  leviathan 500 1 repeated             ok        25.9       4     84%      1  0
-07  protein_sdb1 800 1 repeated          ok         8.0       4     52%     19  0
-08  protein_sdb4 900 1 repeated          ok        12.1       6     51%     18  0
-09  dna_mt745584 4000 3 repeated         ok        21.9       7     68%     66  0
-10  dna_mt745584 2500 1 distinct         ok         4.2       2     43%      2  0
-11  bpi2012 4000 1 repeated              ok        35.4      25     31%      2  0
-12  protein_sdb1 400 1 repeated          ok        28.0      13     52%     11  0
-13  protein_sdb4 500 1 repeated          ok        33.0      16     52%     12  0
-14  leviathan 500 3 repeated             ok        47.4      13     73%     13  0
-15  protein_sdb4 900 3 repeated          ok        45.1      20     55%     42  0
-16  bpi2012 4000 3 repeated              ok        71.8      49     31%      2  0
-17  protein_sdb1 800 3 repeated          ok        34.6      15     55%     42  0
-18  dna_mt745584 4000 10 distinct        ok       123.3      21     83%    416  0
-19  bible 2000 3 repeated                ok       256.6      31     88%     73  0
-20  dna_mt745584 2500 3 distinct         ok       104.0      12     89%    735  0
-21  sepsis 300 1 repeated                ok         7.0       3     54%     86  0
-22  msnbc 5000 1 distinct                ok        77.8      56     28%      1  0
-23  protein_sdb1 800 1 distinct          ok         8.8       5     45%      1  0
-24  msnbc 5000 3 distinct                ok      2005.3     110     95%    507  0
-25  protein_sdb4 900 1 distinct          ok        12.2       6     49%      2  0
-26  dna_mt745584 2500 3 repeated         ok       252.2      15     94%    868  0
-27  dna_mt745584 4000 10 repeated        ok      1433.8      59     96%    644  0
-28  dna_mt745584 2500 10 distinct        ok      1735.9      84     95%   1145  0
-30  bpi2013 1000 1 repeated              ok       167.2      20     88%    210  0
-32  protein_sdb4 500 3 repeated          ok        91.5      41     55%     67  0
-33  msnbc 2000 1 distinct                ok       122.6      86     30%      1  0
-34  protein_sdb1 400 3 repeated          ok        81.3      38     53%     99  0
-35  bpi2013 1000 3 repeated              ok        84.8      30     64%    162  0
-36  bpi2013 500 1 repeated               ok        35.7      23     36%     30  0
-37  msnbc 5000 3 repeated                ok       727.4      77     89%    528  0
-38  sepsis 300 3 repeated                ok        28.0      14     51%    140  0
-39  msnbc 5000 10 repeated               ok      1368.5     123     91%    720  0
-40  protein_sdb1 800 3 distinct          ok        33.4      16     52%     22  0
-41  protein_sdb4 500 1 distinct          ok        29.0      14     51%      1  0
-42  protein_sdb4 900 3 distinct          ok        38.2      18     54%     43  0
-43  protein_sdb1 400 1 distinct          ok        23.7      12     51%      1  0
-44  msnbc 2000 1 repeated                ok       261.4      71     73%    292  0
-45  bpi2013 500 3 repeated               ok       237.0      33     86%    512  0
-47  msnbc 2000 3 repeated                ok      1330.9     152     89%   1371  0
-48  protein_sdb4 500 3 distinct          ok        83.6      40     52%     40  0
-49  protein_sdb1 400 3 distinct          ok        85.0      41     52%     75  0
-50  msnbc 1000 1 repeated                ok       231.6     124     47%    309  0
+# sets, share of the cell outside the methods (mining F_sigma, the Pareto front, evaluation), longest method on
+# one set (seconds), largest front (vertices), OT rows
+00  dna_mt745584 4000 1 repeated         ok         1.8       1    44%    0.4      1  0
+01  dna_mt745584 2500 1 repeated         ok         7.2       2    71%    0.4     34  0
+02  fifa 3000 1 repeated                 ok        63.6       7    89%    2.0      1  0
+03  fifa 3000 3 repeated                 ok        95.3      28    71%    9.5      1  0
+04  dna_mt745584 4000 3 distinct         ok         4.2       2    43%    0.3      5  0
+05  bible 2000 1 repeated                ok       169.6      17    90%    2.7      3  0
+06  leviathan 500 1 repeated             ok        25.9       4    84%    0.6      1  0
+07  protein_sdb1 800 1 repeated          ok         8.0       4    52%    0.4     19  0
+08  protein_sdb4 900 1 repeated          ok        12.1       6    51%    0.5     18  0
+09  dna_mt745584 4000 3 repeated         ok        21.9       7    68%    1.2     66  0
+10  dna_mt745584 2500 1 distinct         ok         4.2       2    43%    0.3      2  0
+11  bpi2012 4000 1 repeated              ok        35.4      25    31%    3.7      2  0
+12  protein_sdb1 400 1 repeated          ok        28.0      13    52%    1.3     11  0
+13  protein_sdb4 500 1 repeated          ok        33.0      16    52%    1.5     12  0
+14  leviathan 500 3 repeated             ok        47.4      13    73%    3.1     13  0
+15  protein_sdb4 900 3 repeated          ok        45.1      20    55%    1.9     42  0
+16  bpi2012 4000 3 repeated              ok        71.8      49    31%    6.4      2  0
+17  protein_sdb1 800 3 repeated          ok        34.6      15    55%    1.5     42  0
+18  dna_mt745584 4000 10 distinct        ok       123.3      21    83%    2.0    416  0
+19  bible 2000 3 repeated                ok       256.6      31    88%    2.6     73  0
+20  dna_mt745584 2500 3 distinct         ok       104.0      12    89%    1.0    735  0
+21  sepsis 300 1 repeated                ok         7.0       3    54%    0.3     86  0
+22  msnbc 5000 1 distinct                ok        77.8      56    28%    5.9      1  0
+23  protein_sdb1 800 1 distinct          ok         8.8       5    45%    0.4      1  0
+24  msnbc 5000 3 distinct                ok      2005.3     110    95%   19.2    507  0
+25  protein_sdb4 900 1 distinct          ok        12.2       6    49%    0.5      2  0
+26  dna_mt745584 2500 3 repeated         ok       252.2      15    94%    1.3    868  0
+27  dna_mt745584 4000 10 repeated        ok      1433.8      59    96%    9.1    644  0
+28  dna_mt745584 2500 10 distinct        ok      1735.9      84    95%    7.4   1145  0
+29  msnbc 5000 10 distinct               FAIL         -      86      -    8.7    396  0   OOM in the Pareto front (CutHide.paretoFront), after 28 method rows
+30  bpi2013 1000 1 repeated              ok       167.2      20    88%    3.4    210  0
+31  msnbc 5000 1 repeated                ok      9581.8      91    99%   24.0   1195  0
+32  protein_sdb4 500 3 repeated          ok        91.5      41    55%    4.0     67  0
+33  msnbc 2000 1 distinct                ok       122.6      86    30%   10.3      1  0
+34  protein_sdb1 400 3 repeated          ok        81.3      38    53%    3.0     99  0
+35  bpi2013 1000 3 repeated              ok        84.8      30    64%    3.2    162  0
+36  bpi2013 500 1 repeated               ok        35.7      23    36%    2.5     30  0
+37  msnbc 5000 3 repeated                ok       727.4      77    89%    7.7    528  0
+38  sepsis 300 3 repeated                ok        28.0      14    51%    1.3    140  0
+39  msnbc 5000 10 repeated               ok      1368.5     123    91%   11.4    720  0
+40  protein_sdb1 800 3 distinct          ok        33.4      16    52%    1.6     22  0
+41  protein_sdb4 500 1 distinct          ok        29.0      14    51%    1.1      1  0
+42  protein_sdb4 900 3 distinct          ok        38.2      18    54%    1.5     43  0
+43  protein_sdb1 400 1 distinct          ok        23.7      12    51%    1.0      1  0
+44  msnbc 2000 1 repeated                ok       261.4      71    73%    6.9    292  0
+45  bpi2013 500 3 repeated               ok       237.0      33    86%    5.3    512  0
+46  dna_mt745584 2500 10 repeated        ok      4032.4      98    98%   14.6   1101  0
+47  msnbc 2000 3 repeated                ok      1330.9     152    89%   17.5   1371  0
+48  protein_sdb4 500 3 distinct          ok        83.6      40    52%    3.3     40  0
+49  protein_sdb1 400 3 distinct          ok        85.0      41    52%    3.3     75  0
+50  msnbc 1000 1 repeated                ok       231.6     124    47%    9.8    309  0
+51  msnbc 2000 10 repeated               ok      4901.1     325    93%   60.1   2446  0
+52  msnbc 1000 3 repeated                ok      1659.5     450    73%   58.7   1807  0
+53  msnbc 1000 10 repeated               ok      1523.5     654    57%   53.7   1147  0
 #
-# not finished when written:
-# 29 msnbc 5000 10 distinct
-# 31 msnbc 5000 1 repeated
-# 46 dna_mt745584 2500 10 repeated
-# 51 msnbc 2000 10 repeated
-# 52 msnbc 1000 3 repeated
-# 53 msnbc 1000 10 repeated
+# Sum of the method seconds over the 54 cells: 3311 s for 5 sets per cell.

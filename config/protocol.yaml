@@ -127,8 +127,10 @@ row_5_run_environment:
   xms_flag: null
   xmx_flag: null
   operating_system: "Windows"       # measuring machine, separate from the development machine
-  cpu: null            # to be read on the measuring machine itself, not assumed
-  ram: null            # idem
+  cpu: "Intel(R) Core(TM) i7-6560U CPU @ 2.20GHz, 4 logical processors"
+  ram: "16597393408 bytes"
+  # cpu and ram as recorded by the machine itself in the header of its result files from commit
+  # a65e55f on, e.g. results-invariant/SC2_20261001-040606-529_dev_4d1cd9170270_s2026.csv.
   machine_name: "DESKTOP-L8A6EPO"   # declared by the author on 2026-10-01; passed with --machine.
                                     # It ran the official SC1 and SC2 of 2026-09-30. A run labelled
                                     # "dev" may not record timing numbers.

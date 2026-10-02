@@ -149,7 +149,9 @@ def matches(cell, options):
 def command(cell):
     args = ["python", "tools/run.py", "--jvm=" + HEAP, "SC3", "--machine=" + MACHINE]
     args += ["--%s=%s" % (key, cell[key]) for key in IDENTITY]
-    return " ".join(args)
+    # Quoted when it holds a comma: PowerShell may read an unquoted a,b as an array. Double quotes
+    # pass the argument whole in PowerShell 5.1 and 7, cmd and bash alike.
+    return " ".join('"%s"' % a if "," in a else a for a in args)
 
 
 def plan(root, size):
@@ -243,6 +245,7 @@ def self_test():
               all(s in first for s in ("--timeLimit=1800", "--methods=" + METHODS, "--jvm=-Xmx8g",
                                        "--machine=" + MACHINE, "--pareto=true", "--patternKind=distinct",
                                        "--dataset=datasets/beta.txt", "--gmax=10")), first)
+        check("an argument with a comma is quoted", '"--methods=' + METHODS + '"' in first, first)
         check("|S|=5 has no Pareto front", "--pareto=false" in command(planned(root, 5)[0]))
 
         def write(name, cell, change=None, drop=None, scenario="SC3", crlf=False):

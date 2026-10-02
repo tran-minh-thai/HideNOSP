@@ -12,6 +12,7 @@ Công cụ phụ trợ, không phải một phần của thuật toán.
 | `preregistered_analysis_test.py` | Ghim phần thống kê vào giá trị tính tay. Chạy trước khi tin vào bảng nào |
 | `check_english.py` | Kiểm mọi tệp mã chỉ viết tiếng Anh; mã thoát 1 khi có vi phạm |
 | `check_english_test.py` | Tiêm từng loại vi phạm vào một kho tạm và đòi `check_english.py` bắt đúng |
+| `sc3_commands.py` | **Sinh lệnh SC3 còn thiếu** từ hai bảng nhóm đã chốt (nhóm chính), bỏ ô đã có tệp kết quả; `--self-test` tiêm lỗi vào quy tắc khớp ô |
 
 `check_results.py` kiểm cùng luật mà `hidenosp.io.ResultSink` cưỡng chế lúc mở tệp, nhưng kiểm
 trên đĩa: một tệp bị chuyển tay, sửa tay, hay sinh bởi bản mã cũ vẫn bị bắt.

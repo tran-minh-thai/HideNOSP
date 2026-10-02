@@ -1,0 +1,101 @@
+# PROBE (thăm dò), not an experiment: development machine, scaled-down cells (1 set per stratum),
+# limit 2 s instead of 1800 s. It answers one question only: once the limit has passed, how soon does
+# a method stop? The times below are not performance numbers.
+#
+# Code: commit 23363b9 for six of the seven files below (same sha256). Sc3MainComparison.java ran in
+# the version d53098ce..., which differs from the committed one (65ae2c4c...) only in that the
+# committed one also prints the method time on finished rows.
+# Classes compiled with javac --release 25 from the working tree; run with java -Xmx8g on the
+# development machine, outside tools/run.py (so the result files say "unversioned"; they were kept
+# in a scratch folder and are not part of this record).
+#
+# Result: 34 OT rows, every one printed as "OT after 2.0 s" with a limit of 2.0 s, i.e. each method
+# stopped less than 0.05 s after its limit (the console prints one decimal).
+#
+## source sha256
+3b4654330913ce3818fe37183ae1372add2017a5221e0acae85f3651300c2ade  src/main/java/hidenosp/util/Deadline.java
+3db52d4c09c90e3ea40715ce823da6bc1d12054bac153dbfd7bbf152504dc043  src/main/java/hidenosp/core/Nettree.java
+7baf4d42e7683ad8f013eef446816cf3a0a0ba9119153399c93552bf6a79c2cb  src/main/java/hidenosp/core/flow/Dinic.java
+8e21cb1069b85dcb67098d2081d7147570367a46e52c8e2d0ea2eaa0e88cb0da  src/main/java/hidenosp/hide/FrontierDp.java
+40e89ce2d9b21118e306f525401c09175d83f1e1a990d59b30d640ed71351dc9  src/main/java/hidenosp/hide/MaskLocalSearch.java
+640be6e62f97725f6e2319462b1895880597723136ebe699aaae31811b998910  src/main/java/hidenosp/index/NettreeCutIndex.java
+d53098ce3cd0559b6a1c492b486e1538ab19b62756c6fe97f10081dba051adff  src/main/java/hidenosp/exp/Sc3MainComparison.java
+## java: openjdk version "26.0.1" 2026-04-21
+## machine: Apple M5, 10 logical processors
+## command: java -Xmx8g -cp <classes> hidenosp.exp.Runner SC3 --probe=true --dataset=datasets/msnbc.txt --format=SPMF --sigma=1000 --gmin=0 --gmax=10 --maxPatternLength=4 --setsPerStratum=1 --sensitiveSize=1 --patternKind=repeated --timeLimit=2 --methods=cut-hide-rw-ls,cut-hide-rw,cut-hide,hha,dbsh,sbsh-r1,sbsh-rmax
+sensitive sets: size 1, repeated-item pool 1450 candidates, 5 of 5 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 290 -> 1, p30: 290 -> 1, p50: 290 -> 1, p70: 290 -> 1, p90: 290 -> 1
+set 0  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) OT after 2.0 s (limit 2.0 s)
+set 0  CUT-HIDE adaptive weight (6 iterations) OT after 2.0 s (limit 2.0 s)
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] OT after 2.0 s (limit 2.0 s)
+set 0  HHA                                |R|   28  lost    0 (0.0000)  supDist 0.0001
+set 0  DBSH                               |R|   28  lost    0 (0.0000)  supDist 0.0001
+set 0  SBSH-r1                            |R|   28  lost    0 (0.0000)  supDist 0.0000
+set 0  SBSH-r4                            |R|   28  lost    0 (0.0000)  supDist 0.0000
+set 1  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) OT after 2.0 s (limit 2.0 s)
+set 1  CUT-HIDE adaptive weight (6 iterations) OT after 2.0 s (limit 2.0 s)
+set 1  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] OT after 2.0 s (limit 2.0 s)
+set 1  HHA                                |R|  465  lost   27 (0.0115)  supDist 0.0038
+set 1  DBSH                               |R|  468  lost   13 (0.0055)  supDist 0.0031
+set 1  SBSH-r1                            |R|  484  lost    3 (0.0013)  supDist 0.0014
+set 1  SBSH-r3                            |R|  484  lost    3 (0.0013)  supDist 0.0014
+set 2  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) OT after 2.0 s (limit 2.0 s)
+set 2  CUT-HIDE adaptive weight (6 iterations) OT after 2.0 s (limit 2.0 s)
+set 2  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] OT after 2.0 s (limit 2.0 s)
+set 2  HHA                                |R|  867  lost   52 (0.0221)  supDist 0.0102
+set 2  DBSH                               |R|  900  lost   49 (0.0208)  supDist 0.0100
+set 2  SBSH-r1                            |R|  980  lost   15 (0.0064)  supDist 0.0070
+set 2  SBSH-r4                            |R|  999  lost   13 (0.0055)  supDist 0.0071
+set 3  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) OT after 2.0 s (limit 2.0 s)
+set 3  CUT-HIDE adaptive weight (6 iterations) OT after 2.0 s (limit 2.0 s)
+set 3  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] OT after 2.0 s (limit 2.0 s)
+set 3  HHA                                |R| 2068  lost  122 (0.0519)  supDist 0.0290
+set 3  DBSH                               |R| 2154  lost  122 (0.0519)  supDist 0.0267
+set 3  SBSH-r1                            OT after 2.0 s (limit 2.0 s)
+set 3  SBSH-r4                            OT after 2.0 s (limit 2.0 s)
+set 4  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) OT after 2.0 s (limit 2.0 s)
+set 4  CUT-HIDE adaptive weight (6 iterations) OT after 2.0 s (limit 2.0 s)
+set 4  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] OT after 2.0 s (limit 2.0 s)
+set 4  HHA                                |R| 3618  lost  102 (0.0434)  supDist 0.0335
+set 4  DBSH                               |R| 3852  lost  117 (0.0498)  supDist 0.0365
+set 4  SBSH-r1                            OT after 2.0 s (limit 2.0 s)
+set 4  SBSH-r4                            OT after 2.0 s (limit 2.0 s)
+done in 90.0 s
+## command: java -Xmx8g -cp <classes> hidenosp.exp.Runner SC3 --probe=true --dataset=datasets/msnbc.txt --format=SPMF --sigma=5000 --gmin=0 --gmax=10 --maxPatternLength=4 --setsPerStratum=1 --sensitiveSize=1 --patternKind=distinct --timeLimit=2 --methods=cut-hide-rw-ls,cut-hide-rw,cut-hide,hha,dbsh,sbsh-r1,sbsh-rmax
+sensitive sets: size 1, pool 63 candidates, 5 of 5 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 12 -> 1, p30: 13 -> 1, p50: 12 -> 1, p70: 13 -> 1, p90: 13 -> 1
+set 0  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) OT after 2.0 s (limit 2.0 s)
+set 0  CUT-HIDE adaptive weight (6 iterations) OT after 2.0 s (limit 2.0 s)
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] OT after 2.0 s (limit 2.0 s)
+set 0  HHA                                |R|  110  lost    1 (0.0043)  supDist 0.0009
+set 0  DBSH                               |R|  110  lost    1 (0.0043)  supDist 0.0005
+set 0  SBSH-r1                            |R|  111  lost    0 (0.0000)  supDist 0.0004
+set 0  SBSH-r3                            |R|  111  lost    0 (0.0000)  supDist 0.0004
+set 1  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) OT after 2.0 s (limit 2.0 s)
+set 1  CUT-HIDE adaptive weight (6 iterations) OT after 2.0 s (limit 2.0 s)
+set 1  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] OT after 2.0 s (limit 2.0 s)
+set 1  HHA                                |R|  511  lost    3 (0.0129)  supDist 0.0039
+set 1  DBSH                               |R|  511  lost    4 (0.0172)  supDist 0.0023
+set 1  SBSH-r1                            |R|  517  lost    1 (0.0043)  supDist 0.0019
+set 1  SBSH-r3                            |R|  517  lost    1 (0.0043)  supDist 0.0019
+set 2  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) OT after 2.0 s (limit 2.0 s)
+set 2  CUT-HIDE adaptive weight (6 iterations) OT after 2.0 s (limit 2.0 s)
+set 2  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] OT after 2.0 s (limit 2.0 s)
+set 2  HHA                                |R| 1540  lost    8 (0.0345)  supDist 0.0116
+set 2  DBSH                               |R| 1540  lost    8 (0.0345)  supDist 0.0074
+set 2  SBSH-r1                            |R| 1584  lost    7 (0.0302)  supDist 0.0069
+set 2  SBSH-r3                            |R| 1649  lost    4 (0.0172)  supDist 0.0070
+set 3  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) OT after 2.0 s (limit 2.0 s)
+set 3  CUT-HIDE adaptive weight (6 iterations) OT after 2.0 s (limit 2.0 s)
+set 3  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] OT after 2.0 s (limit 2.0 s)
+set 3  HHA                                |R| 4720  lost    5 (0.0220)  supDist 0.0079
+set 3  DBSH                               |R| 4720  lost    4 (0.0176)  supDist 0.0073
+set 3  SBSH-r1                            |R| 4806  lost    3 (0.0132)  supDist 0.0071
+set 3  SBSH-r2                            |R| 4806  lost    3 (0.0132)  supDist 0.0071
+set 4  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) OT after 2.0 s (limit 2.0 s)
+set 4  CUT-HIDE adaptive weight (6 iterations) OT after 2.0 s (limit 2.0 s)
+set 4  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] OT after 2.0 s (limit 2.0 s)
+set 4  HHA                                |R| 23820  lost   31 (0.1462)  supDist 0.1010
+set 4  DBSH                               |R| 24260  lost   31 (0.1462)  supDist 0.1079
+set 4  SBSH-r1                            |R| 24878  lost   27 (0.1274)  supDist 0.1014
+set 4  SBSH-r2                            |R| 24878  lost   27 (0.1274)  supDist 0.1014
+done in 59.3 s
+## exit ok

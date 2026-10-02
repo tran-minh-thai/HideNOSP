@@ -11,11 +11,14 @@ Usage:
 
     python tools/sc3_commands.py                 commands for |S| = 1 still missing
     python tools/sc3_commands.py --size=5        the same for |S| = 5
+    python tools/sc3_commands.py --pareto        the Pareto-front batch (|S| = 1, no method)
     python tools/sc3_commands.py --self-test     checks of the matching rules, with planted faults
 
 What is fixed here (preregistration section 14): the seven methods of the H2 set, the time limit
-of 1800 s per method and sensitive set, -Xmx8g, l_max = 4, 4 sets per stratum, the Pareto front
-with |S| = 1 only, and the machine label of the measuring machine. The commands are ordered by the
+of 1800 s per method and sensitive set, -Xmx8g, l_max = 4, 4 sets per stratum, and the machine label
+of the measuring machine. The Pareto front (|S| = 1, descriptive) is a batch of its own: a dry run
+of every cell found that it takes most of the time of a cell and is not under the time limit, so
+the method batches run without it (--pareto=false) and the front batch runs --methods=none. The commands are ordered by the
 size of the candidate pool, smallest first, so the first command is short and shows whether the
 result file is written before a long one starts.
 
@@ -78,7 +81,9 @@ def read_table(path, kind):
     return cells
 
 
-def planned(root, size):
+def planned(root, size, front=False):
+    if front and size != 1:
+        raise ValueError("the Pareto front exists for |S| = 1 only")
     cells = []
     for name, kind in TABLES:
         for cell in read_table(root / name, kind):
@@ -86,9 +91,9 @@ def planned(root, size):
                 "maxPatternLength": "4",
                 "setsPerStratum": "4",
                 "sensitiveSize": str(size),
-                "pareto": "true" if size == 1 else "false",
+                "pareto": "true" if front else "false",
                 "timeLimit": TIME_LIMIT,
-                "methods": METHODS,
+                "methods": "none" if front else METHODS,
             })
             cells.append(cell)
     cells.sort(key=lambda c: (c["pool"], c["patternKind"], c["dataset"], c["gmax"], int(c["sigma"])))
@@ -154,8 +159,8 @@ def command(cell):
     return " ".join('"%s"' % a if "," in a else a for a in args)
 
 
-def plan(root, size):
-    cells = planned(root, size)
+def plan(root, size, front=False):
+    cells = planned(root, size, front)
     files = existing(root)
     todo, done = [], []
     used = set()
@@ -166,9 +171,10 @@ def plan(root, size):
             used.update(hit)
         else:
             todo.append(cell)
-    # A file of another size belongs to another plan, not to this one.
+    # A file of another size, or of the other batch, belongs to another plan, not to this one.
     stray = [name for name, options in files
-             if name not in used and options.get("sensitiveSize") == str(size)]
+             if name not in used and options.get("sensitiveSize") == str(size)
+             and (options.get("methods") == "none") == front]
     return cells, todo, done, stray
 
 
@@ -178,24 +184,27 @@ def describe(cell):
 
 
 def main(argv):
-    size = 1
+    size, front = 1, False
     for arg in argv:
         if arg == "--self-test":
             return self_test()
+        if arg == "--pareto":
+            front = True
+            continue
         match = re.fullmatch(r"--size=(\d+)", arg)
         if match and int(match.group(1)) in SIZES:
             size = int(match.group(1))
         else:
-            print("unknown argument %s; use --size=1|5|10|20 or --self-test" % arg, file=sys.stderr)
+            print("unknown argument %s; use --size=1|5|10|20, --pareto or --self-test" % arg, file=sys.stderr)
             return 1
     try:
-        cells, todo, done, stray = plan(REPO, size)
+        cells, todo, done, stray = plan(REPO, size, front)
     except (OSError, ValueError, KeyError) as error:
         print("cannot build the plan: %s" % error, file=sys.stderr)
         return 1
     kinds = {k: sum(1 for c in cells if c["patternKind"] == k) for _, k in TABLES}
-    print("# SC3 |S|=%d, main group: %d cells (%d pool scope, %d repeated-item scope), %d done, %d to run"
-          % (size, len(cells), kinds["distinct"], kinds["repeated"], len(done), len(todo)))
+    print("# SC3 %s |S|=%d, main group: %d cells (%d pool scope, %d repeated-item scope), %d done, %d to run"
+          % ("Pareto front" if front else "methods", size, len(cells), kinds["distinct"], kinds["repeated"], len(done), len(todo)))
     print("# repository root: %s" % REPO.name)
     for cell, names in done:
         print("# done: %s  <- %s" % (describe(cell), ", ".join(names)))
@@ -243,10 +252,16 @@ def self_test():
         first = command(cells[0])
         check("command carries limit, methods, heap, machine and Pareto",
               all(s in first for s in ("--timeLimit=1800", "--methods=" + METHODS, "--jvm=-Xmx8g",
-                                       "--machine=" + MACHINE, "--pareto=true", "--patternKind=distinct",
+                                       "--machine=" + MACHINE, "--pareto=false", "--patternKind=distinct",
                                        "--dataset=datasets/beta.txt", "--gmax=10")), first)
         check("an argument with a comma is quoted", '"--methods=' + METHODS + '"' in first, first)
-        check("|S|=5 has no Pareto front", "--pareto=false" in command(planned(root, 5)[0]))
+        front = command(planned(root, 1, True)[0])
+        check("the front batch runs no method", "--methods=none" in front and "--pareto=true" in front, front)
+        try:
+            planned(root, 5, True)
+            check("no front batch for |S|=5", False)
+        except ValueError:
+            check("no front batch for |S|=5", True)
 
         def write(name, cell, change=None, drop=None, scenario="SC3", crlf=False):
             options = {key: cell[key] for key in IDENTITY}
@@ -288,6 +303,16 @@ def self_test():
               len(done4) == 2 and any(describe(c) == describe(cells[2]) for c, _ in done4)
               and any(describe(c) == describe(cells[1]) for c in todo4), "%d done" % len(done4))
         (root / "results-invariant" / "SC3_i.csv").unlink()
+
+        fronts = planned(root, 1, True)
+        write("SC3_j.csv", fronts[0])
+        _, _, done5, stray5 = plan(root, 1)
+        _, todo6, done6, _ = plan(root, 1, True)
+        check("a front file is not a method cell, nor stray there", len(done5) == 1 and not stray5,
+              "%d done, stray %s" % (len(done5), stray5))
+        check("a front file marks its front cell done", len(done6) == 1 and len(todo6) == 2,
+              "%d done" % len(done6))
+        (root / "results-invariant" / "SC3_j.csv").unlink()
 
         write("SC3_h.csv", cells[1], change={"dataset": "datasets\\" + Path(cells[1]["dataset"]).name})
         _, todo3, done3, _ = plan(root, 1)

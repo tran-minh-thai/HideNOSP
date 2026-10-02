@@ -65,6 +65,9 @@ class ScenarioFilesTest {
         // standard CUT-HIDE refuses to run, as it should.)
         runExpecting(2, new Sc3MainComparison(), "--sigma=30", "--gmin=0", "--gmax=3",
                 "--maxPatternLength=3", "--setsPerStratum=1", "--methods=cut-hide", "--pareto=true");
+        // --methods=none with --pareto=true: the front alone, and an SC3 file with a header and no row.
+        runExpecting(2, new Sc3MainComparison(), "--sigma=30", "--gmin=0", "--gmax=3",
+                "--maxPatternLength=3", "--setsPerStratum=1", "--methods=none", "--pareto=true");
         Path data = Files.createTempFile("sigma", ".txt");
         Files.writeString(data, "0 -1 1 -1 0 -1 1 -1 -2\n1 -1 0 -1 1 -1 -2\n0 -1 0 -1 1 -1 -2\n");
         runOnce(new SigmaScan(), "--dataset=" + data, "--format=SPMF", "--sigma=1,2", "--gmax=1,3",

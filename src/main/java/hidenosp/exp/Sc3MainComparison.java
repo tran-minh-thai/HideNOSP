@@ -86,6 +86,13 @@ public final class Sc3MainComparison implements Scenario {
         long methodSeed = options.getLong("methodSeed", seed);
         int repeats = options.getInt("repeats", 1);
         String methodList = options.get("methods", "cut-hide,cut-hide-uniform,occurrence,HH,RR");
+        // "none" runs no method: with --pareto=true the run writes only the Pareto front, so the
+        // front can be computed in a batch of its own without a second copy of the method rows.
+        List<String> methodNames = methodList.trim().equalsIgnoreCase("none") ? List.of()
+                : List.of(methodList.split(","));
+        if (methodNames.isEmpty() && !options.getBoolean("pareto", false)) {
+            throw new IllegalArgumentException("--methods=none only makes sense with --pareto=true");
+        }
         // Proposition P10: also write the exact convex Pareto front of CUT-HIDE between |R| and the
         // surrogate weight, one row per vertex, into SC3PARETO_<stamp>.csv (preregistration
         // section 11, point 6: descriptive). One sensitive pattern and g- = 0 only.
@@ -175,7 +182,7 @@ public final class Sc3MainComparison implements Scenario {
                             index, vertices.size(), vertices.get(0).masks(),
                             vertices.get(vertices.size() - 1).masks());
                 }
-                for (String name : methodList.split(",")) {
+                for (String name : methodNames) {
                     // A deterministic method runs once; a randomized method runs --repeats
                     // times with consecutive seeds, one row per run. Taking the median belongs
                     // to the analysis and is not done here: with one row per run the table stays

@@ -69,7 +69,8 @@ row_1_thresholds_and_scope:
                                               # same method is tested in H2;
                                               # tools/preregistered_analysis.py must agree
     report_only: ["protein_sdb1"]             # section 11, point 5
-    pareto_front: "--pareto=true with --sensitiveSize=1"   # section 11, point 6, descriptive
+    pareto_front: "--pareto=true --methods=none with --sensitiveSize=1"   # section 11, point 6, descriptive;
+                                              # a batch of its own since section 14 (2026-10-02)
   sigma_rule: >
     Keep |F_sigma| within [50, 700] AND F_sigma must be a PROPER subset of the space of patterns
     of length up to l_max. Every sigma above meets it.

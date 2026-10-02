@@ -477,6 +477,16 @@ ghi chú này được viết, chưa bảng nhóm nào được sinh, nên khôn
    của đợt \|𝒮\| = 1 dùng để lên lịch các đợt sau. Mọi tham số chốt ở mục này và mục 12 **không** đổi sau khi thấy
    kết quả của đợt \|𝒮\| = 1.
 
+   > **Sửa cùng ngày (02/10/2026), trước mọi lượt SC3 chính thức — quyết định của người viết.** Mặt Pareto **tách
+   > thành một đợt riêng**, không chạy kèm các phương pháp. Lý do đo được: chạy thử cả 54 ô nhóm chính của \|𝒮\| = 1
+   > trên máy phát triển (một tập mỗi tầng; `results-probe/sc3_dry_run_all_cells_probe_20261002.txt`) cho thấy dựng mặt Pareto chiếm 88–95% thời gian của một ô — MSNBC [0,3]
+   > σ=5000 phạm vi chính: 2.005 giây cho năm tập, trong đó bảy phương pháp chỉ 110 giây; một mặt có tới 1.145 đỉnh — và
+   > phần ấy không nằm dưới giới hạn thời gian của điểm 3. Đợt phương pháp chạy `--pareto=false`; đợt mặt Pareto chạy
+   > `--methods=none --pareto=true` trên cùng các ô và cùng cách lấy mẫu (mục 9), nên cùng các tập nhạy cảm. Nội dung của
+   > mục 11 điểm 6 không đổi; chỉ đổi lúc chạy. Bộ sinh: `tools/sc3_commands.py` (đợt phương pháp) và
+   > `tools/sc3_commands.py --pareto` (đợt mặt Pareto). Thứ tự: đợt phương pháp \|𝒮\| = 1 trước, rồi đợt mặt Pareto hoặc
+   > \|𝒮\| = 5, 10, 20 tuỳ thời gian máy.
+
 Lệnh của từng ô do `tools/sc3_commands.py` sinh từ hai bảng nhóm, không chép tay; công cụ ấy bỏ ô đã có tệp kết quả
 và liệt kê tệp SC3 không khớp ô nào.
 

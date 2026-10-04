@@ -463,6 +463,11 @@ ghi chú này được viết, chưa bảng nhóm nào được sinh, nên khôn
    điểm 4), nên việc này không đổi phép kiểm nào; nó bỏ phần báo cáo mô tả của các nhóm khác mà mục 10 điểm 4 nhắc
    tới. Nếu sau này chạy các nhóm ấy thì chúng vẫn chỉ là mô tả. `protein_sdb1` thuộc nhóm chính, chạy, và vẫn chỉ
    báo cáo (mục 11 điểm 5).
+
+   > **Sửa ngày 04/10/2026, sau khi đợt phương pháp \|𝒮\| = 1 đã chạy.** Câu "không đổi phép kiểm nào" ở trên **sai**: H3
+   > (mục 2) cần cả nhóm suy biến ("gần 1 trên nhóm suy biến"). Chỉ chạy nhóm chính thì nửa sau của H3 **không kiểm được**;
+   > bộ phân tích nay nói rõ điều đó. H2 và H2-R đúng là không đổi. Chạy nhóm suy biến hay khai H3 chỉ kiểm nửa đầu là quyết
+   > định còn mở của người viết.
 2. **Phương pháp: bộ của H2.** Bảy khoá: `cut-hide-rw-ls` (phương pháp đang kiểm, mục 12); `cut-hide-rw` và
    `cut-hide` (hai biến thể loại trừ, mục 12); `hha`, `dbsh`, `sbsh-r1`, `sbsh-rmax` (họ Holm, mục 2). Không phương
    pháp nào ngẫu nhiên, nên quy ước mười hạt giống của mục 5 không áp dụng ở đợt này.

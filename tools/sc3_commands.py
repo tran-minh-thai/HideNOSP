@@ -81,12 +81,32 @@ def read_table(path, kind):
     return cells
 
 
+def strata(pool):
+    """Sizes of the five strata of hidenosp.exp.SensitiveSampling for a pool of this size."""
+    return [(k + 1) * pool // 5 - k * pool // 5 for k in range(5)]
+
+
+def absent(root, size):
+    """Main-group cells with no set of this size: no stratum holds that many patterns, so SC3
+    would stop with "the cell does not exist". The pool column of the locked tables equals the pool
+    SC3 draws from (checked on the 54 official files of |S| = 1, 2026-10-04)."""
+    out = []
+    for name, kind in TABLES:
+        for cell in read_table(root / name, kind):
+            if max(strata(cell["pool"])) < size:
+                out.append(cell)
+    out.sort(key=lambda c: (c["pool"], c["patternKind"], c["dataset"], c["gmax"], int(c["sigma"])))
+    return out
+
+
 def planned(root, size, front=False):
     if front and size != 1:
         raise ValueError("the Pareto front exists for |S| = 1 only")
     cells = []
     for name, kind in TABLES:
         for cell in read_table(root / name, kind):
+            if max(strata(cell["pool"])) < size:
+                continue
             cell.update({
                 "maxPatternLength": "4",
                 "setsPerStratum": "4",
@@ -206,6 +226,8 @@ def main(argv):
     print("# SC3 %s |S|=%d, main group: %d cells (%d pool scope, %d repeated-item scope), %d done, %d to run"
           % ("Pareto front" if front else "methods", size, len(cells), kinds["distinct"], kinds["repeated"], len(done), len(todo)))
     print("# repository root: %s" % REPO.name)
+    for cell in absent(REPO, size):
+        print("# no set of size %d: %s, largest stratum %d" % (size, describe(cell), max(strata(cell["pool"]))))
     for cell, names in done:
         print("# done: %s  <- %s" % (describe(cell), ", ".join(names)))
     for name in stray:
@@ -255,6 +277,15 @@ def self_test():
                                        "--machine=" + MACHINE, "--pareto=false", "--patternKind=distinct",
                                        "--dataset=datasets/beta.txt", "--gmax=10")), first)
         check("an argument with a comma is quoted", '"--methods=' + METHODS + '"' in first, first)
+        check("strata as in SensitiveSampling", strata(7) == [1, 1, 2, 1, 2] and strata(25) == [5] * 5,
+              str((strata(7), strata(25))))
+        five = planned(root, 5)
+        check("|S|=5 keeps a pool of 5 or more per stratum, drops pools 2 and 7",
+              [c["pool"] for c in five] == [] and [c["pool"] for c in absent(root, 5)] == [2, 5, 7],
+              str(([c["pool"] for c in five], [c["pool"] for c in absent(root, 5)])))
+        check("|S|=2 keeps pool 7 and drops pools 2 and 5",
+              [c["pool"] for c in planned(root, 2)] == [7] and [c["pool"] for c in absent(root, 2)] == [2, 5],
+              str([c["pool"] for c in planned(root, 2)]))
         front = command(planned(root, 1, True)[0])
         check("the front batch runs no method", "--methods=none" in front and "--pareto=true" in front, front)
         try:

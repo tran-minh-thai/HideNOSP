@@ -554,6 +554,68 @@ def test_groups_count_a_rerun_once():
         return
     raise AssertionError("one pattern with two different profiles was accepted")
 
+def test_h3_keys_on_method_key():
+    """SBSH-rmax names itself SBSH-r2 or SBSH-r3 by the length of the pattern; H3 must still see one
+    baseline. By hand: r = 1.0 and 1.2 for sbsh-rmax -> one row, n = 2, median 1.1 -> "above 1";
+    hha r = 1.0, 1.0 -> "near 1"; cut-hide is shown without a verdict; no degenerate row -> the
+    second half of H3 is reported as not tested."""
+    rows = []
+    for k, (display, ratio) in enumerate((("SBSH-r2", 1.0), ("SBSH-r3", 1.2))):
+        r = _row("sbsh-rmax", 10, 0.1, sensitive_set="S%d" % k)
+        r["method"], r["mask_ratio"] = display, ratio
+        rows.append(r)
+        h = _row("hha", 10, 0.1, sensitive_set="S%d" % k)
+        rows.append(h)
+        c = _row(OURS, 10, 0.1, sensitive_set="S%d" % k)
+        c["method"] = "CUT-HIDE adaptive weight"
+        rows.append(c)
+    groups = {("d", "[0,2]", 20): {"group": "main"}}
+    out = []
+    pa.run_h3(rows, groups, lambda s="": out.append(s))
+    lines = [s for s in out if s.strip().startswith(("sbsh", "SBSH", "hha", OURS))]
+    assert not any("SBSH-r" in s for s in lines), lines
+    sb = [s for s in lines if s.strip().startswith("sbsh-rmax")]
+    assert len(sb) == 1 and " 2 " in sb[0] and "1.1000" in sb[0] and "above 1" in sb[0], sb
+    assert any(s.strip().startswith("hha") and "near 1" in s for s in lines), lines
+    assert any(s.strip().startswith(OURS) and "not judged" in s for s in lines), lines
+    assert any("second half of H3" in s and "NOT TESTED" in s for s in out), out
+
+
+def test_dominance_counts():
+    """Section 5 pairs. By hand, against hha (lost = lost_rel * 100 in _row):
+    A same |R|, ours 10 < 20; B same |R|, 30 > 20; C baseline more masks, 10 = 10;
+    D baseline more masks, 30 > 10 (a trade-off); E ours uses more masks; F excluded (HF > 0).
+    -> instances 5 (F not counted), same |R| 1 0 1, baseline more 0 1 1, ours more 1,
+    no worse on both 2/5."""
+    pairs = (("A", 10, 0.10, 10, 0.20), ("B", 10, 0.30, 10, 0.20), ("C", 10, 0.10, 12, 0.10),
+             ("D", 10, 0.30, 12, 0.10), ("E", 12, 0.10, 10, 0.20))
+    rows = []
+    for name, mo, lo, mb, lb in pairs:
+        rows += [_row(OURS, mo, lo, sensitive_set=name), _row("hha", mb, lb, sensitive_set=name)]
+    rows += [_row(OURS, 10, 0.10, sensitive_set="F"), _row("hha", 10, 0.20, hf=0.5, sensitive_set="F")]
+    out = []
+    pa.run_dominance(rows, None, lambda s="": out.append(s))
+    line = [s for s in out if s.strip().startswith("hha")]
+    assert len(line) == 1, out
+    numbers = [int(x) for x in re.findall(r"\d+", line[0].replace("/", " "))]
+    assert numbers == [5, 1, 0, 1, 0, 1, 1, 1, 2, 5], (numbers, line[0])
+    assert any("1 excluded instances not counted" in s for s in out), out
+    # The same rows of H2: a degenerate-group row and a report-only row are left out.
+    extra = [_row(OURS, 10, 0.10, sensitive_set="G"), _row("hha", 10, 0.20, sensitive_set="G")]
+    for r in extra:
+        r["dataset"] = "protein_sdb1"
+    degenerate = [_row(OURS, 10, 0.10, sensitive_set="H"), _row("hha", 10, 0.20, sensitive_set="H")]
+    for r in degenerate:
+        r["dataset"] = "e"
+    extra += degenerate
+    groups = {("d", "[0,2]", 20): {"group": "main"}, ("protein_sdb1", "[0,2]", 20): {"group": "main"},
+              ("e", "[0,2]", 20): {"group": "degenerate"}}
+    out = []
+    pa.run_dominance(rows + extra, groups, lambda s="": out.append(s))
+    line = [s for s in out if s.strip().startswith("hha")]
+    assert re.findall(r"\d+", line[0])[0] == "5", line
+
+
 TESTS = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
 
 

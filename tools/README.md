@@ -47,6 +47,9 @@ Nó tự kiểm ba thứ và **dừng với mã thoát 1** khi không ổn: tệ
 ra), xếp nhóm cấu hình tính lại từ SC2 lệch so với bảng đã chốt ở mục 3, và tỉ lệ thực thể bị
 loại vượt 10%.
 
+Bên cạnh H2 nó in bảng cặp (|R|, Lost) mà mục 5 của bản chốt đã định cho các thực thể đường cơ sở dùng
+nhiều lần che hơn — mô tả, không kiểm định. H3 nhóm theo `method_key`, không theo tên hiển thị.
+
 Mã thoát 0 **không** có nghĩa là H2 được ủng hộ. Nó chỉ có nghĩa là phân tích chạy được.
 
 Chạy `python tools/preregistered_analysis_test.py` trước. Các phép thử ở đó ghim Pratt, rank-biserial,

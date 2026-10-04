@@ -612,6 +612,59 @@ def present(rows, key):
     return any(r["method_key"] == key for r in rows)
 
 
+# ---------------------------------------------------------------- pairs (|R|, Lost), section 5
+
+def run_dominance(rows, groups, write):
+    """The report that section 5 asks for beside H2, DESCRIPTIVE: no test.
+
+    Section 5 sends the instances where the baseline uses more masks to a report "as pairs (|R|,
+    Lost)", because comparing Lost at two values of |R| compares two different things. For each
+    tier (b) baseline this counts, on the same rows as H2 (main group, report-only datasets left
+    out), how often CUT-HIDE loses fewer, as many or more patterns, in each regime of |R|, and on
+    how many instances it is no worse on both |R| and Lost.
+    """
+    write("")
+    write("=" * 78)
+    write("Pairs (|R|, Lost) of section 5, DESCRIPTIVE: %s against each tier (b) baseline"
+          % LOCKED.OUR_METHOD)
+    write("=" * 78)
+    rows = [r for r in rows if r["dataset"] not in LOCKED.REPORT_ONLY]
+    if groups is not None:
+        rows = [r for r in rows
+                if (groups.get((r["dataset"], r["gap"], r["sigma"])) or {}).get("group") == "main"]
+        write("  rows: main group, without %s (the rows of H2): %d"
+              % (", ".join(LOCKED.REPORT_ONLY), len(rows)))
+    else:
+        write("  PROBE: no group filter (--skip-groups): %d rows" % len(rows))
+    if not present(rows, LOCKED.OUR_METHOD):
+        write("  no '%s' row: nothing to pair" % LOCKED.OUR_METHOD)
+        return
+    write("  Lost compared as numbers of patterns; '<' means %s loses fewer." % LOCKED.OUR_METHOD)
+    write("  %-10s %9s | %-20s | %-20s | %9s %13s"
+          % ("baseline", "instances", "same |R|: < = >", "baseline more: < = >", "ours more",
+             "no worse both"))
+    for name in LOCKED.BASELINE_FAMILY:
+        if not present(rows, name):
+            write("  %-10s absent from the files" % name)
+            continue
+        bins = pair_up(rows, name, "lost_rel")
+
+        def split(entries):
+            less = sum(1 for e in entries if e[2]["lost"] < e[3]["lost"])
+            same = sum(1 for e in entries if e[2]["lost"] == e[3]["lost"])
+            return less, same, len(entries) - less - same
+
+        same_r, more_r = split(bins["tested"]), split(bins["baseline more"])
+        total = len(bins["tested"]) + len(bins["baseline more"]) + len(bins["ours more"])
+        no_worse = same_r[0] + same_r[1] + more_r[0] + more_r[1]
+        write("  %-10s %9d | %6d %6d %6d | %6d %6d %6d | %9d %6d/%d"
+              % (name, total, same_r[0], same_r[1], same_r[2], more_r[0], more_r[1], more_r[2],
+                 len(bins["ours more"]), no_worse, total))
+        if bins["excluded"]:
+            write("  %-10s %d excluded instances not counted (status or HF > 0)"
+                  % ("", len(bins["excluded"])))
+
+
 # ---------------------------------------------------------------- H3
 
 def run_h3(rows, groups, write, descriptive=False):
@@ -642,7 +695,10 @@ def run_h3(rows, groups, write, descriptive=False):
         if info is None:
             ungrouped += 1
             continue
-        by_group[info["group"]][r["method"]].append(r["mask_ratio"])  # the display name
+        # Keyed on method_key, the stable name given on the command line. The display name carries
+        # parameters: SBSH-rmax calls itself SBSH-r2, -r3 or -r4 by the length of the pattern, so
+        # keying on it split one baseline into three rows (found on the official SC3 of 2026-10-04).
+        by_group[info["group"]][r["method_key"]].append(r["mask_ratio"])
 
     write("")
     write("  rows without |R|* (several patterns, or repeated items with g- > 0): %d" % without_r)
@@ -665,7 +721,10 @@ def run_h3(rows, groups, write, descriptive=False):
             if descriptive:
                 write("   %-34s %5d %8.4f %8.4f" % (name[:34], len(v), med, max(v)))
                 continue
-            if group == "main":
+            if name not in LOCKED.BASELINE_FAMILY:
+                # Section 2 states H3 for the tier (b) baselines; other methods are shown only.
+                verdict = "(not a tier (b) baseline: shown, not judged)"
+            elif group == "main":
                 verdict = ("above 1" if med >= LOCKED.R_ABOVE_1
                            else "near 1" if med <= LOCKED.R_NEAR_1 else "no conclusion")
             else:
@@ -673,10 +732,15 @@ def run_h3(rows, groups, write, descriptive=False):
                            else "above 1" if med >= LOCKED.R_ABOVE_1 else "no conclusion")
             write("   %-34s %5d %8.4f %8.4f   %s" % (name[:34], len(v), med, max(v), verdict))
 
-    if not descriptive and by_group["main"] and all(
-            float(np.median(v)) <= LOCKED.R_NEAR_1 for v in by_group["main"].values()):
+    family_main = [v for k, v in by_group["main"].items() if k in LOCKED.BASELINE_FAMILY]
+    if not descriptive and not by_group["degenerate"]:
         write("")
-        write("  Every method gives r near 1 on the main group: H3 is NOT rejected. Section 2")
+        write("  The second half of H3 (r near 1 on the degenerate group) is NOT TESTED: the SC3")
+        write("  files hold no row of the degenerate group.")
+    if not descriptive and family_main and all(
+            float(np.median(v)) <= LOCKED.R_NEAR_1 for v in family_main):
+        write("")
+        write("  Every tier (b) baseline gives r near 1 on the main group: H3 is NOT rejected. Section 2")
         write("  anticipated this case -- it is a negative result to be reported under rule 3.4.9,")
         write("  not an implementation error.")
 
@@ -831,6 +895,7 @@ def main(argv=None):
             groups_valid = args.skip_groups
 
         h2_valid = run_h2(scope_rows, write, None if args.skip_groups else groups, name)
+        run_dominance(scope_rows, None if args.skip_groups else groups, write)
         # H3 is preregistered for the main scope; section 11, point 7 makes the ratio of the
         # repeated scope descriptive.
         run_h3(scope_rows, groups, write, descriptive=(scope == "repeated"))

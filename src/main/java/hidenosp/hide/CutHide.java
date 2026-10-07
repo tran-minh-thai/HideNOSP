@@ -391,8 +391,15 @@ public final class CutHide implements HidingMethod {
         }
     }
 
-    /** The best position of one sequence together with what masking it would buy. */
-    private record Candidate(int sequence, int position, double weight, int[] drop) {
+    /**
+     * The best position of one sequence together with what masking it would buy. {@code drop}
+     * marks the patterns the position is vital for and is what step 7 ranks by; {@code exactDrop}
+     * is the drop in sup_NO that masking it really causes, which is what the ledger subtracts. The
+     * two agree when mu(P) = 1; with repeated items one position carries several nodes and its
+     * mask can lower a support by more than one.
+     */
+    private record Candidate(int sequence, int position, double weight, int[] drop,
+                             int[] exactDrop) {
 
         double ratio(long[] needed) {
             int gain = 0;
@@ -479,14 +486,11 @@ public final class CutHide implements HidingMethod {
                         + "further, yet the database threshold is still exceeded: still needed "
                         + Arrays.toString(needed) + ", threshold " + problem.threshold());
             }
-            // The drop is measured, not taken from the candidate. A vital position lowers its
-            // pattern by exactly one only when mu(P) = 1: with repeated items one position carries
-            // several nodes, and masking it can lower a support by more than one. Counting one
-            // there left the ledger above the true support, so the greedy went on masking patterns
-            // already hidden and then stopped with nothing left to lower (the official SC3 of
-            // |S| = 5 stopped this way on repeated-item cells).
-            int[] drop = measuredDrop(problem, pick.sequence(),
-                    masked.getOrDefault(pick.sequence(), Set.of()), pick.position(), needed);
+            // The ledger subtracts the exact drop, not the vital marks. Counting one per vital
+            // position left the ledger above the true support on repeated-item patterns, so the
+            // greedy went on masking patterns already hidden and then stopped with nothing left to
+            // lower (the official SC3 of |S| = 5 stopped this way on repeated-item cells).
+            int[] drop = pick.exactDrop();
             masked.computeIfAbsent(pick.sequence(), k -> new TreeSet<>()).add(pick.position());
             result.mask(pick.sequence(), pick.position());
             for (int p = 0; p < patternCount; p++) {
@@ -505,26 +509,6 @@ public final class CutHide implements HidingMethod {
                 }
             }
         }
-    }
-
-    /**
-     * The drop in sup_NO of every pattern that still counts, in one sequence, when one more position
-     * is masked on top of those already masked there; 0 for the patterns that no longer count.
-     */
-    private static int[] measuredDrop(HideProblem problem, int sequenceIndex, Set<Integer> already,
-                                      int position, long[] needed) {
-        EventSequence original = problem.database().get(sequenceIndex);
-        EventSequence before = already.isEmpty() ? original : original.mask(already);
-        EventSequence after = before.mask(position);
-        int[] drop = new int[needed.length];
-        for (int p = 0; p < needed.length; p++) {
-            if (needed[p] > 0) {
-                Pattern pattern = problem.sensitive().get(p);
-                drop[p] = SupportNO.of(pattern, before, problem.gap())
-                        - SupportNO.of(pattern, after, problem.gap());
-            }
-        }
-        return drop;
     }
 
     /** Rebuilds one sequence's index over its current mask and returns its best position. */
@@ -561,14 +545,20 @@ public final class CutHide implements HidingMethod {
             if (dropAt[i] == null || here.contains(i)) {
                 continue;
             }
-            Candidate candidate = new Candidate(sequenceIndex, i, w[i], dropAt[i]);
+            Candidate candidate = new Candidate(sequenceIndex, i, w[i], dropAt[i], null);
             double ratio = candidate.ratio(needed);
             if (ratio > bestRatio) {
                 bestRatio = ratio;
                 best = candidate;
             }
         }
-        return best;
+        if (best == null) {
+            return null;
+        }
+        // The index is not used again, so masking the chosen position on it is free; its flow
+        // repair returns the exact drop of every pattern (remark O1 for several nodes).
+        return new Candidate(best.sequence(), best.position(), best.weight(), best.drop(),
+                index.maskPosition(best.position()));
     }
 
     private static boolean[] satisfiedFlags(long[] needed) {

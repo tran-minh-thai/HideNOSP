@@ -472,13 +472,25 @@ public final class CutHide implements HidingMethod {
                 }
             }
             if (pick == null) {
+                // Cannot happen while the ledger is exact: a pattern that still counts has a
+                // positive support in some sequence, and by L0 (Menger on the Nettree) any node of
+                // a least vertex cut there is vital, so that sequence offers a position.
                 throw new IllegalStateException("no position lowers a sensitive support any "
-                        + "further, yet the database threshold is still exceeded");
+                        + "further, yet the database threshold is still exceeded: still needed "
+                        + Arrays.toString(needed) + ", threshold " + problem.threshold());
             }
+            // The drop is measured, not taken from the candidate. A vital position lowers its
+            // pattern by exactly one only when mu(P) = 1: with repeated items one position carries
+            // several nodes, and masking it can lower a support by more than one. Counting one
+            // there left the ledger above the true support, so the greedy went on masking patterns
+            // already hidden and then stopped with nothing left to lower (the official SC3 of
+            // |S| = 5 stopped this way on repeated-item cells).
+            int[] drop = measuredDrop(problem, pick.sequence(),
+                    masked.getOrDefault(pick.sequence(), Set.of()), pick.position(), needed);
             masked.computeIfAbsent(pick.sequence(), k -> new TreeSet<>()).add(pick.position());
             result.mask(pick.sequence(), pick.position());
             for (int p = 0; p < patternCount; p++) {
-                needed[p] = Math.max(0, needed[p] - pick.drop()[p]);
+                needed[p] = Math.max(0, needed[p] - drop[p]);
             }
             best[pick.sequence()] = bestInSequence(problem, pick.sequence(), masked, weights, needed);
 
@@ -493,6 +505,26 @@ public final class CutHide implements HidingMethod {
                 }
             }
         }
+    }
+
+    /**
+     * The drop in sup_NO of every pattern that still counts, in one sequence, when one more position
+     * is masked on top of those already masked there; 0 for the patterns that no longer count.
+     */
+    private static int[] measuredDrop(HideProblem problem, int sequenceIndex, Set<Integer> already,
+                                      int position, long[] needed) {
+        EventSequence original = problem.database().get(sequenceIndex);
+        EventSequence before = already.isEmpty() ? original : original.mask(already);
+        EventSequence after = before.mask(position);
+        int[] drop = new int[needed.length];
+        for (int p = 0; p < needed.length; p++) {
+            if (needed[p] > 0) {
+                Pattern pattern = problem.sensitive().get(p);
+                drop[p] = SupportNO.of(pattern, before, problem.gap())
+                        - SupportNO.of(pattern, after, problem.gap());
+            }
+        }
+        return drop;
     }
 
     /** Rebuilds one sequence's index over its current mask and returns its best position. */

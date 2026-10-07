@@ -505,3 +505,42 @@ dò trên máy phát triển: `results-probe/sc3_time_limit_stop_probe_20261002.
 [0,10]: mọi phương pháp dừng chưa tới 0,05 giây sau hạn) và `results-probe/sc3_heavy_cells_timing_probe_20261002.txt` (bảy cấu hình nhóm chính chọn làm ca nặng: ba kho mẫu lặp mục lớn nhất, hai kho mẫu không lặp mục lớn nhất, bộ gen [0,10] σ=2500 lặp mục và MSNBC [0,10] σ=5000 không lặp mục; năm tập mỗi cấu hình, giới hạn 600 giây: không hàng nào `OT`; lâu nhất 42,7 giây cho một phương pháp trên một tập, của `cut-hide-rw-ls` trên MSNBC [0,10] σ=1000 phạm vi lặp mục). Hai lượt ấy có in Lost của các phương pháp ở các tập đã chạy; chiều đã thấy giống mục 12. Giá trị 1.800 giây được đặt **trước** lượt đo thứ hai và không đổi sau nó. Chưa có lượt SC3 chính thức nào.
 
 **Không đổi:** mọi mục 1–13.
+
+---
+
+## 15. Bổ sung ngày 07/10/2026 — sửa lỗi cài đặt của bước 7 với mẫu lặp mục (trước mọi kết quả SC3 \|𝒮\| > 1 chính thức)
+
+**Sự cố.** Đợt phương pháp \|𝒮\| = 5 trên máy đo (mã `8f8c601`, cùng mã với `5627876`) dừng ở 10 ô với thông báo "no
+position lowers a sensitive support any further, yet the database threshold is still exceeded". Chạy lại bằng đúng mã ấy
+trên máy phát triển với khoá `cut-hide`: đúng 10 trên 34 ô dừng, cả 10 đều ở phạm vi lặp mục.
+
+**Nguyên nhân.** Thuật toán tham lam của §9.2 bước 7 (nhiều mẫu, HIDE-DB) ghi mức giảm của mỗi lần che là 1 cho mỗi mẫu
+mà vị trí ấy thiết yếu. Điều đó đúng khi μ(P) = 1. Với mẫu lặp mục, một vị trí mang nhiều nút của Nettree, nên che nó có
+thể làm sup_NO giảm hơn 1. Sổ nhu cầu vì thế cao hơn độ hỗ trợ thật: thuật toán che tiếp những mẫu đã ẩn xong, và dừng
+khi không còn gì để giảm. Ở các ô lặp mục không dừng, nó **che thừa mà không báo**.
+
+**Sửa (commit `dcb0f17`, tăng tốc ở `a8b1bad`).** Sổ nhu cầu trừ **mức giảm thật** của mỗi lần che, đọc từ luồng cực đại
+của chỉ mục mà bước 7 vốn dựng cho chuỗi ấy; không trừ dấu "thiết yếu" của ứng viên nữa. Quy tắc chọn vị trí của bước 7
+(tỉ số tổng mức giảm trên 1 + w(i), xếp theo dấu thiết yếu) **không đổi**. Với sổ chính xác, bước 7 luôn dừng với HF = 0 sau tối đa
+Σ nhu cầu vòng: một mẫu còn cần giảm có sup_NO > 0 ở một chuỗi nào đó, và theo L0 (Menger trên Nettree) mọi nút của một
+tập cắt đỉnh nhỏ nhất ở đó đều thiết yếu, nên chuỗi ấy luôn có ứng viên.
+
+**Đo hệ quả** (mọi số là thăm dò trên máy phát triển, khoá `cut-hide`, cùng lệnh với đợt chính thức):
+- \|𝒮\| = 1: không đổi; nhánh một mẫu (lời giải chính xác của P8) không dùng bước 7. Kết quả chính thức của mục 14 giữ
+  nguyên.
+- \|𝒮\| = 5, phạm vi không lặp mục: 14 ô, 257 hàng, **0** hàng khác mã cũ.
+- \|𝒮\| = 5, phạm vi lặp mục: 34/34 ô chạy được (mã cũ 24/34); trên 10 ô mã cũ chạy được, 177 hàng đổi |R| hoặc Lost,
+  bản sửa dùng ít lần che hơn ở cả 177, Lost không tăng ở 176.
+- \|𝒮\| = 5, 10, 20: 34/34, 27/27, 21/21 ô chạy được; hai cách lấy mức giảm thật (tính lại sup_NO, và đọc từ luồng của
+  chỉ mục) cho cùng 1.579/1.579 hàng. Hồ sơ: `results-probe/sc3_several_patterns_ledger_probe_20261007.txt`.
+- Bài kiểm `CutHideSeveralPatternsTest`: 2.289 thực thể ngẫu nhiên, 2.107 có mẫu lặp mục, mọi mẫu ẩn theo định nghĩa;
+  mã cũ trượt bài này với đúng thông báo của máy đo.
+
+**Hệ quả cho đợt chạy.** Mọi tệp SC3 \|𝒮\| = 5 do mã `8f8c601` sinh ra bị bỏ (chưa tệp nào được commit) và chạy lại bằng mã
+đã sửa. Không có kết quả \|𝒮\| > 1 chính thức nào trước mục này.
+
+**Khai xuất xứ.** Người đề xuất đã thấy kết quả \|𝒮\| = 1 chính thức (mục 14) và các lượt chạy lại ở trên (chỉ khoá `cut-hide`,
+không có đường cơ sở), chưa thấy kết quả \|𝒮\| > 1 chính thức nào. Sửa đổi là sửa lỗi ghi sổ, không chọn giữa các phương án.
+
+**Không đổi:** mọi mục 1–14.
+

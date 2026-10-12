@@ -1,0 +1,266 @@
+# PROBE, not an experiment: the refinement for several sensitive patterns (proposition P15; SC3 probe key
+# cut-hide-refine = the step-7 greedy of cut-hide followed by REFINE) on every main-group SC3 cell of |S| = 5, 10, 20,
+# development machine (Apple M5, JDK 26.0.1), four cells at a time, -Xmx8g, outside tools/run.py, with the options of
+# tools/sc3_commands.py --size=5|10|20 and --methods=cut-hide-refine. Classes compiled from commit 22db94c, which is why the
+# result files call the run "unversioned". Seconds are console prints of parallel runs, not performance numbers.
+#
+# The rows are compared with the official rows of the measuring machine (results-invariant/SC3_*DESKTOP-L8A6EPO*.csv): for
+# |S| > 1 the official key cut-hide-rw-ls is the same step-7 greedy (Sc3MainComparison.create), so the comparison isolates
+# the refinement. The bound is the conflict bound of results-invariant/SC3LB_*.csv. The comparison script is at the end.
+#
+# Run lines: cell number, exit code, cell seconds, OT count, cell (dataset sigma gmax scope), first exception.
+
+## |S| = 5
+00 exit 0      3 s ot 0  dna_mt745584 2500 3 distinct       []
+01 exit 0      2 s ot 0  sepsis 300 1 repeated              []
+02 exit 0    103 s ot 0  msnbc 5000 1 distinct              []
+03 exit 0     12 s ot 0  protein_sdb1 800 1 distinct        []
+04 exit 0    154 s ot 0  msnbc 5000 3 distinct              []
+05 exit 0     15 s ot 0  protein_sdb4 900 1 distinct        []
+06 exit 0     23 s ot 0  dna_mt745584 2500 3 repeated       []
+07 exit 0     29 s ot 0  dna_mt745584 4000 10 repeated      []
+08 exit 0     51 s ot 0  dna_mt745584 2500 10 distinct      []
+09 exit 0    201 s ot 0  msnbc 5000 10 distinct             []
+10 exit 0     22 s ot 0  bpi2013 1000 1 repeated            []
+11 exit 0    163 s ot 0  msnbc 5000 1 repeated              []
+12 exit 0    140 s ot 0  protein_sdb4 500 3 repeated        []
+13 exit 0    163 s ot 0  msnbc 2000 1 distinct              []
+14 exit 0     91 s ot 0  protein_sdb1 400 3 repeated        []
+15 exit 0     35 s ot 0  bpi2013 1000 3 repeated            []
+16 exit 0     25 s ot 0  bpi2013 500 1 repeated             []
+17 exit 0    152 s ot 0  msnbc 5000 3 repeated              []
+18 exit 0     16 s ot 0  sepsis 300 3 repeated              []
+19 exit 0    181 s ot 0  msnbc 5000 10 repeated             []
+20 exit 0     46 s ot 0  protein_sdb1 800 3 distinct        []
+21 exit 0     34 s ot 0  protein_sdb4 500 1 distinct        []
+22 exit 0     39 s ot 0  protein_sdb4 900 3 distinct        []
+23 exit 0     23 s ot 0  protein_sdb1 400 1 distinct        []
+24 exit 0    114 s ot 0  msnbc 2000 1 repeated              []
+25 exit 0     30 s ot 0  bpi2013 500 3 repeated             []
+26 exit 0     54 s ot 0  dna_mt745584 2500 10 repeated      []
+27 exit 0    197 s ot 0  msnbc 2000 3 repeated              []
+28 exit 0     68 s ot 0  protein_sdb4 500 3 distinct        []
+29 exit 0     77 s ot 0  protein_sdb1 400 3 distinct        []
+30 exit 0    133 s ot 0  msnbc 1000 1 repeated              []
+31 exit 0    238 s ot 0  msnbc 2000 10 repeated             []
+32 exit 0    224 s ot 0  msnbc 1000 3 repeated              []
+33 exit 0    460 s ot 0  msnbc 1000 10 repeated             []
+## done
+
+## |S| = 10
+00 exit 0     31 s ot 0  dna_mt745584 4000 10 repeated      []
+01 exit 0     50 s ot 0  dna_mt745584 2500 10 distinct      []
+02 exit 0    205 s ot 0  msnbc 5000 10 distinct             []
+03 exit 0     38 s ot 0  bpi2013 1000 1 repeated            []
+04 exit 0    173 s ot 0  msnbc 5000 1 repeated              []
+05 exit 0     96 s ot 0  protein_sdb4 500 3 repeated        []
+06 exit 0    155 s ot 0  msnbc 2000 1 distinct              []
+07 exit 0     81 s ot 0  protein_sdb1 400 3 repeated        []
+08 exit 0     47 s ot 0  bpi2013 1000 3 repeated            []
+09 exit 0     34 s ot 0  bpi2013 500 1 repeated             []
+10 exit 0    205 s ot 0  msnbc 5000 3 repeated              []
+11 exit 0     14 s ot 0  sepsis 300 3 repeated              []
+12 exit 0    296 s ot 0  msnbc 5000 10 repeated             []
+13 exit 0     34 s ot 0  protein_sdb1 800 3 distinct        []
+14 exit 0     34 s ot 0  protein_sdb4 500 1 distinct        []
+15 exit 0     44 s ot 0  protein_sdb4 900 3 distinct        []
+16 exit 0     30 s ot 0  protein_sdb1 400 1 distinct        []
+17 exit 0    206 s ot 0  msnbc 2000 1 repeated              []
+18 exit 0     40 s ot 0  bpi2013 500 3 repeated             []
+19 exit 0     69 s ot 0  dna_mt745584 2500 10 repeated      []
+20 exit 0    309 s ot 0  msnbc 2000 3 repeated              []
+21 exit 0     82 s ot 0  protein_sdb4 500 3 distinct        []
+22 exit 0     75 s ot 0  protein_sdb1 400 3 distinct        []
+23 exit 0    231 s ot 0  msnbc 1000 1 repeated              []
+24 exit 0    392 s ot 0  msnbc 2000 10 repeated             []
+25 exit 0    354 s ot 0  msnbc 1000 3 repeated              []
+26 exit 0    552 s ot 0  msnbc 1000 10 repeated             []
+## done
+
+## |S| = 20
+00 exit 0     75 s ot 0  msnbc 2000 1 distinct              []
+01 exit 0    117 s ot 0  protein_sdb1 400 3 repeated        []
+02 exit 0    111 s ot 0  bpi2013 1000 3 repeated            []
+03 exit 0     91 s ot 0  bpi2013 500 1 repeated             []
+04 exit 0    509 s ot 0  msnbc 5000 3 repeated              []
+05 exit 0     24 s ot 0  sepsis 300 3 repeated              []
+06 exit 0    623 s ot 0  msnbc 5000 10 repeated             []
+07 exit 0     52 s ot 0  protein_sdb1 800 3 distinct        []
+08 exit 0     55 s ot 0  protein_sdb4 500 1 distinct        []
+09 exit 0     62 s ot 0  protein_sdb4 900 3 distinct        []
+10 exit 0     45 s ot 0  protein_sdb1 400 1 distinct        []
+11 exit 0    458 s ot 0  msnbc 2000 1 repeated              []
+12 exit 0     92 s ot 0  bpi2013 500 3 repeated             []
+13 exit 0    114 s ot 0  dna_mt745584 2500 10 repeated      []
+14 exit 0    658 s ot 0  msnbc 2000 3 repeated              []
+15 exit 0    104 s ot 0  protein_sdb4 500 3 distinct        []
+16 exit 0     89 s ot 0  protein_sdb1 400 3 distinct        []
+17 exit 0    435 s ot 0  msnbc 1000 1 repeated              []
+18 exit 0    706 s ot 0  msnbc 2000 10 repeated             []
+19 exit 0    621 s ot 0  msnbc 1000 3 repeated              []
+20 exit 0    895 s ot 0  msnbc 1000 10 repeated             []
+## done
+
+## comparison (refcmp.py over the 82 probe directories)
+probe files 82, probe sets 1579, official sets (|S|>1, main) 1579
+official sets without a probe row: 0
+
+== distinct, |S| = 5: 257 sets (0 with a status)
+   fewer masks than the greedy: 77/257; relative saving median 0.0000, max 0.0484
+   Lost raised on 0/257, lowered on 6/257; change median 0, min -9, max 0
+   |R| = bound: greedy 31/257, refined 31/257
+   ratio to the bound median: greedy 1.3003, refined 1.2958, hha 3.5142; max: greedy 3.4720, refined 3.4720
+   sets where hha uses fewer masks: against the greedy 0, against the refined 0
+
+== distinct, |S| = 10: 180 sets (0 with a status)
+   fewer masks than the greedy: 78/180; relative saving median 0.0000, max 0.0490
+   Lost raised on 0/180, lowered on 6/180; change median 0.0, min -2, max 0
+   |R| = bound: greedy 2/180, refined 2/180
+   ratio to the bound median: greedy 1.3583, refined 1.3527, hha 3.8425; max: greedy 2.9443, refined 2.9436
+   sets where hha uses fewer masks: against the greedy 0, against the refined 0
+
+== distinct, |S| = 20: 123 sets (0 with a status)
+   fewer masks than the greedy: 68/123; relative saving median 0.0003, max 0.0122
+   Lost raised on 0/123, lowered on 0/123; change median 0, min 0, max 0
+   |R| = bound: greedy 0/123, refined 0/123
+   ratio to the bound median: greedy 1.5800, refined 1.5796, hha 5.6338; max: greedy 3.0197, refined 3.0175
+   sets where hha uses fewer masks: against the greedy 0, against the refined 0
+
+== repeated, |S| = 5: 385 sets (0 with a status)
+   fewer masks than the greedy: 326/385; relative saving median 0.0165, max 0.3522
+   Lost raised on 26/385, lowered on 99/385; change median 0, min -65, max 5
+   |R| = bound: greedy 0/385, refined 3/385
+   ratio to the bound median: greedy 1.9074, refined 1.8214, hha 5.2168; max: greedy 7.9001, refined 7.7652
+   sets where hha uses fewer masks: against the greedy 25, against the refined 3
+
+== repeated, |S| = 10: 357 sets (0 with a status)
+   fewer masks than the greedy: 316/357; relative saving median 0.0198, max 0.3121
+   Lost raised on 14/357, lowered on 117/357; change median 0, min -56, max 3
+   |R| = bound: greedy 0/357, refined 0/357
+   ratio to the bound median: greedy 2.0036, refined 1.9467, hha 6.1031; max: greedy 6.0315, refined 5.6701
+   sets where hha uses fewer masks: against the greedy 17, against the refined 0
+
+== repeated, |S| = 20: 277 sets (0 with a status)
+   fewer masks than the greedy: 265/277; relative saving median 0.0278, max 0.2063
+   Lost raised on 10/277, lowered on 118/277; change median 0, min -72, max 4
+   |R| = bound: greedy 0/277, refined 0/277
+   ratio to the bound median: greedy 2.2729, refined 2.1881, hha 7.2503; max: greedy 5.7745, refined 5.7143
+   sets where hha uses fewer masks: against the greedy 15, against the refined 0
+
+No problem: every refined set is hidden, never above the greedy, never below the bound.
+
+## Lost rises: proposition P15(c) allows them only where step (i) replaced a one-pattern component.
+## The result files do not record replacements, so this checks the necessary condition only.
+Lost raised on 50 sets; of these, with at least one one-pattern component (where a replacement can happen): 50
+
+## refcmp.py (repository path written as <repository>; arguments: the probe directories)
+"""Compare the probe rows of cut-hide-refine with the official SC3 rows (several patterns) and the SC3LB bounds.
+
+    python refcmp.py PROBE_DIR... 
+
+Joins on (dataset, gap, sigma, scope, |S|, sensitive set). Stops with status 1 when a probe set has no
+official row or no bound, when a refined row is not hidden (hf > 0), uses more masks than the official
+greedy row, or uses fewer masks than the conflict bound.
+"""
+import csv, glob, io, re, statistics, sys
+from collections import defaultdict
+from pathlib import Path
+
+REPO = Path("<repository>")
+
+def rows_of(path):
+    with io.open(path, encoding="utf-8", newline="") as h:
+        return list(csv.DictReader([l for l in h if not l.startswith("#")]))
+
+def options_of(path):
+    with io.open(path, encoding="utf-8", newline="") as h:
+        for l in h:
+            if l.startswith("# options"):
+                return dict(re.findall(r"(\w+)=([^,}]+)", l))
+    raise ValueError(path)
+
+def stem(t):
+    return Path(t.replace("\\", "/")).stem
+
+def key(r, o):
+    return (stem(r["dataset"]), r["gap"], r["sigma"], o["patternKind"], o["sensitiveSize"], r["sensitive_set"])
+
+official = defaultdict(dict)
+for p in sorted(glob.glob(str(REPO / "results-invariant" / "SC3_*DESKTOP-L8A6EPO*.csv"))):
+    o = options_of(p)
+    if o.get("methods") == "none" or o.get("sensitiveSize") == "1" or o.get("group", "main") != "main":
+        continue
+    for r in rows_of(p):
+        official[key(r, o)][r["method_key"]] = r
+bounds = {}
+for p in sorted(glob.glob(str(REPO / "results-invariant" / "SC3LB_*.csv"))):
+    for r in rows_of(p):
+        bounds[(stem(r["dataset"]), r["gap"], r["sigma"], r["pattern_kind"], r["sensitive_size"], r["sensitive_set"])] = r
+probe = {}
+files = 0
+for d in sys.argv[1:]:
+    for p in sorted(glob.glob(d + "/*/results-probe/SC3_*.csv")):
+        files += 1
+        o = options_of(p)
+        for r in rows_of(p):
+            if r["method_key"] == "cut-hide-refine":
+                probe[key(r, o)] = r
+
+problems = []
+print("probe files %d, probe sets %d, official sets (|S|>1, main) %d" % (files, len(probe), len(official)))
+missing = [k for k in official if k not in probe]
+print("official sets without a probe row: %d" % len(missing))
+groups = defaultdict(list)
+for k, r in probe.items():
+    if k not in official or "cut-hide-rw-ls" not in official[k]:
+        problems.append("no official row: %s" % (k,)); continue
+    if k not in bounds:
+        problems.append("no bound: %s" % (k,)); continue
+    groups[(k[3], int(k[4]))].append(k)
+
+for (scope, size), keys in sorted(groups.items()):
+    stats = defaultdict(int)
+    dm, dl, ro, rr, rh = [], [], [], [], []
+    hha_better_before = hha_better_after = 0
+    for k in keys:
+        new, old, hha, b = probe[k], official[k]["cut-hide-rw-ls"], official[k].get("hha"), bounds[k]
+        if new["status"] or old["status"]:
+            stats["status"] += 1; continue
+        stats["n"] += 1
+        mn, mo = int(new["mask_count"]), int(old["mask_count"])
+        lb = int(b["conflict_bound"])
+        if float(new["hf"]) > 0: problems.append("not hidden: %s" % (k,))
+        if mn > mo: problems.append("more masks %d > %d: %s" % (mn, mo, k))
+        if mn < lb: problems.append("below bound %d < %d: %s" % (mn, lb, k))
+        ln, lo = int(new["lost"]), int(old["lost"])
+        stats["fewer"] += mn < mo
+        stats["lost_up"] += ln > lo
+        stats["lost_down"] += ln < lo
+        stats["reach"] += mn == lb
+        stats["reach_before"] += mo == lb
+        dm.append((mo - mn) / mo if mo else 0.0)
+        dl.append(ln - lo)
+        if lb:
+            ro.append(mo / lb); rr.append(mn / lb)
+        if hha and not hha["status"]:
+            mh = int(hha["mask_count"])
+            hha_better_before += mh < mo
+            hha_better_after += mh < mn
+            if lb: rh.append(mh / lb)
+    n = stats["n"]
+    print("\n== %s, |S| = %d: %d sets (%d with a status)" % (scope, size, n, stats["status"]))
+    print("   fewer masks than the greedy: %d/%d; relative saving median %.4f, max %.4f"
+          % (stats["fewer"], n, statistics.median(dm), max(dm)))
+    print("   Lost raised on %d/%d, lowered on %d/%d; change median %s, min %d, max %d"
+          % (stats["lost_up"], n, stats["lost_down"], n, statistics.median(dl), min(dl), max(dl)))
+    print("   |R| = bound: greedy %d/%d, refined %d/%d" % (stats["reach_before"], n, stats["reach"], n))
+    print("   ratio to the bound median: greedy %.4f, refined %.4f, hha %.4f; max: greedy %.4f, refined %.4f"
+          % (statistics.median(ro), statistics.median(rr), statistics.median(rh), max(ro), max(rr)))
+    print("   sets where hha uses fewer masks: against the greedy %d, against the refined %d"
+          % (hha_better_before, hha_better_after))
+print()
+if problems:
+    print("PROBLEMS (%d):" % len(problems))
+    for p in problems[:20]: print("  " + p)
+    sys.exit(1)
+print("No problem: every refined set is hidden, never above the greedy, never below the bound.")

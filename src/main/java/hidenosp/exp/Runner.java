@@ -72,6 +72,7 @@ public final class Runner {
                 new Sc1ImplementationCheck(),
                 new Sc2DataRegime(),
                 new Sc3MainComparison(),
+                new Sc3LowerBound(),
                 new Sc4PerSequenceLimit(),
                 new Sc5DeletionGhosts(),
                 new Sc6Scalability(),

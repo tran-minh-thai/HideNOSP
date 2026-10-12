@@ -87,6 +87,8 @@ class LowerBoundTest {
         int withSharedItems = 0;
         int boundBelowOptimum = 0;
         int allSingletons = 0;
+        int conflictTighter = 0;
+        int conflictBelowOptimum = 0;
         for (int trial = 0; trial < 3000 && instances < 300; trial++) {
             int alphabet = 3 + random.nextInt(2);
             int sequences = 1 + random.nextInt(3);
@@ -137,6 +139,15 @@ class LowerBoundTest {
                 assertTrue(b.lowerBound() >= single, "bound " + b.lowerBound() + " below the optimum " + single
                         + " of " + p + " alone, " + where);
             }
+            assertTrue(b.conflictBound() <= opt, "conflict bound " + b.conflictBound() + " above optimum " + opt
+                    + ", " + where);
+            assertTrue(b.conflictBound() >= b.lowerBound(), "conflict bound below the component bound, " + where);
+            if (b.conflictBound() > b.lowerBound()) {
+                conflictTighter++;
+            }
+            if (b.conflictBound() < opt) {
+                conflictBelowOptimum++;
+            }
             if (b.isOptimum()) {
                 allSingletons++;
                 assertEquals(opt, b.lowerBound(), "one pattern per component, " + where);
@@ -158,8 +169,10 @@ class LowerBoundTest {
             assertEquals(opt, sum, "optimum splits over components, " + where);
         }
         System.out.printf("Lower bound: %d instances, %d with one pattern per component, %d with shared items,"
-                + " bound strictly below the optimum on %d%n", instances, allSingletons, withSharedItems,
-                boundBelowOptimum);
+                + " bound strictly below the optimum on %d; conflict bound above the component bound on %d,"
+                + " still below the optimum on %d%n", instances, allSingletons, withSharedItems,
+                boundBelowOptimum, conflictTighter, conflictBelowOptimum);
+        assertTrue(conflictTighter >= 1, "the conflict bound must be larger somewhere, or it adds nothing measurable");
         assertTrue(allSingletons >= 30 && withSharedItems >= 30, "both kinds of instance must occur");
         assertTrue(boundBelowOptimum >= 1, "some instance must show the bound below the optimum,"
                 + " or the check cannot tell the bound from the optimum");

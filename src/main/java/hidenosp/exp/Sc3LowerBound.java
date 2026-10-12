@@ -1,12 +1,15 @@
 package hidenosp.exp;
 
+import hidenosp.core.EventSequence;
 import hidenosp.core.GapConstraint;
+import hidenosp.core.Nettree;
 import hidenosp.core.Pattern;
 import hidenosp.core.SequenceDatabase;
 import hidenosp.hide.HideProblem;
 import hidenosp.io.CsvWriter;
 import hidenosp.io.DatasetReader;
 import hidenosp.io.ResultSink;
+import hidenosp.index.PathCounts;
 import hidenosp.metrics.DataProfile;
 import hidenosp.metrics.Metrics;
 import hidenosp.util.Cli;
@@ -30,6 +33,13 @@ import java.util.StringJoiner;
  * optimum, and it is the optimum itself when every component holds one pattern. The single-pattern
  * optima come from {@link DataProfile} (exact for distinct items, and for repeated items with
  * g- = 0); a row says when one of them is not exact.
+ *
+ * <p>A second, larger bound looks at positions instead of items. Let U(P) be the positions that lie
+ * on at least one occurrence of P (a node of NT(P, S) on a source-to-sink path). A mask outside U(P)
+ * leaves P untouched, so any solution puts at least OPT({P}) masks inside U(P). Patterns whose U
+ * sets are pairwise disjoint therefore need the sum of their optima, and the bound is the largest
+ * such sum: a maximum-weight independent set of the graph that links P and Q when U(P) and U(Q)
+ * meet. Patterns in different components never meet, so this bound is at least the first.
  */
 public final class Sc3LowerBound implements Scenario {
 
@@ -51,7 +61,7 @@ public final class Sc3LowerBound implements Scenario {
 
     /** The bound of one sensitive set, with what it is made of. */
     public record Bound(int components, int singletons, long lowerBound, long[] singleOptima,
-                        int[] component, boolean optimaExact) {
+                        int[] component, boolean optimaExact, long conflictBound, int conflicts) {
 
         /** True when every component holds one pattern, so the bound is the optimum. */
         public boolean isOptimum() {
@@ -102,7 +112,73 @@ public final class Sc3LowerBound implements Scenario {
                 singletons++;
             }
         }
-        return new Bound(largest.size(), singletons, bound, optimum, component, exact);
+        long[] meets = conflictGraph(database, sensitive, gap);
+        int edges = 0;
+        for (int k = 0; k < n; k++) {
+            edges += Long.bitCount(meets[k]);
+        }
+        long conflictBound = heaviestIndependentSet(meets, optimum, 0, 0L, 0L);
+        return new Bound(largest.size(), singletons, bound, optimum, component, exact, conflictBound,
+                edges / 2);
+    }
+
+    /**
+     * Bit k of {@code meets[j]} is set when some position of some sequence lies on an occurrence of
+     * both pattern j and pattern k.
+     */
+    static long[] conflictGraph(SequenceDatabase database, List<Pattern> sensitive, GapConstraint gap) {
+        int n = sensitive.size();
+        if (n > 63) {
+            throw new IllegalArgumentException("at most 63 sensitive patterns, got " + n);
+        }
+        long[] meets = new long[n];
+        for (EventSequence sequence : database.sequences()) {
+            long[] onPosition = new long[sequence.length()];
+            for (int k = 0; k < n; k++) {
+                Nettree tree = Nettree.build(sensitive.get(k), sequence, gap);
+                if (tree.nodeCount() == 0) {
+                    continue;
+                }
+                PathCounts counts = PathCounts.of(tree, null);
+                for (int v = 0; v < tree.nodeCount(); v++) {
+                    // Positive counts stay positive under saturation, so this test is exact.
+                    if (counts.forward(v) > 0 && counts.backward(v) > 0) {
+                        onPosition[tree.position(v)] |= 1L << k;
+                    }
+                }
+            }
+            for (long set : onPosition) {
+                if (Long.bitCount(set) < 2) {
+                    continue;
+                }
+                for (int k = 0; k < n; k++) {
+                    if ((set >>> k & 1L) != 0) {
+                        meets[k] |= set & ~(1L << k);
+                    }
+                }
+            }
+        }
+        return meets;
+    }
+
+    /** Largest total weight of a set of patterns no two of which meet, by exhaustive branching. */
+    static long heaviestIndependentSet(long[] meets, long[] weight, int next, long chosen, long blocked) {
+        if (next == meets.length) {
+            long total = 0;
+            for (int k = 0; k < meets.length; k++) {
+                if ((chosen >>> k & 1L) != 0) {
+                    total += weight[k];
+                }
+            }
+            return total;
+        }
+        long skip = heaviestIndependentSet(meets, weight, next + 1, chosen, blocked);
+        if ((blocked >>> next & 1L) != 0) {
+            return skip;
+        }
+        long take = heaviestIndependentSet(meets, weight, next + 1, chosen | 1L << next,
+                blocked | meets[next]);
+        return Math.max(skip, take);
     }
 
     private static int find(int[] parent, int k) {
@@ -148,7 +224,8 @@ public final class Sc3LowerBound implements Scenario {
 
         String[] header = {"dataset", "shape", "gap", "sigma", "pattern_kind", "sensitive_size",
             "sensitive_set", "stratum", "patterns", "components", "singleton_components",
-            "lower_bound", "bound_is_optimum", "single_optima", "component_of", "optima_exact"};
+            "lower_bound", "bound_is_optimum", "single_optima", "component_of", "optima_exact",
+            "conflict_bound", "conflict_edges"};
         String[] provenance = {"options " + options.all(), sampling.describe()};
         try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header, provenance)) {
             for (SensitiveSampling.Draw draw : sampling.draws()) {
@@ -160,7 +237,8 @@ public final class Sc3LowerBound implements Scenario {
                         Integer.toString(sensitive.size()), Integer.toString(b.components()),
                         Integer.toString(b.singletons()), Long.toString(b.lowerBound()),
                         Boolean.toString(b.isOptimum()), join(b.singleOptima()),
-                        join(b.component()), Boolean.toString(b.optimaExact()));
+                        join(b.component()), Boolean.toString(b.optimaExact()),
+                        Long.toString(b.conflictBound()), Integer.toString(b.conflicts()));
             }
             writer.complete();
         }

@@ -1,0 +1,477 @@
+# Output of tools/preregistered_analysis.py on every official SC3 file of the method batches, |S| = 1, 5, 10, 20
+# (54 + 34 + 27 + 21 cells, DESKTOP-L8A6EPO; |S| = 1 at 3037456 and ea78cad, |S| > 1 at 5ef9bb4, 1886e12, b93f6c9),
+# run from the repository root with the analysis at commit d5c59b8 as
+#   python tools/preregistered_analysis.py --sc3 results-invariant --sc2 results-invariant --out <this file>
+
+Statistical analysis of H2 and H3 under config/preregistration.md
+
+SC3 files read:
+  SC3_20261003-064629-647_DESKTOP-L8A6EPO_9c4609bf535f_s2026.csv 14 rows  20261003-064629-647_DESKTOP-L8A6EPO_9c4609bf535f_s2026
+  SC3_20261003-065029-579_DESKTOP-L8A6EPO_9c4609bf535f_s2026.csv 21 rows  20261003-065029-579_DESKTOP-L8A6EPO_9c4609bf535f_s2026
+  SC3_20261003-070813-776_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 14 rows  20261003-070813-776_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-070852-183_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 21 rows  20261003-070852-183_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-070917-842_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 21 rows  20261003-070917-842_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-071227-411_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 21 rows  20261003-071227-411_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-072020-873_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 28 rows  20261003-072020-873_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-072116-743_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 28 rows  20261003-072116-743_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-073802-282_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 28 rows  20261003-073802-282_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-074032-438_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 28 rows  20261003-074032-438_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-074202-664_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 35 rows  20261003-074202-664_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-074455-169_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 42 rows  20261003-074455-169_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-074643-506_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 63 rows  20261003-074643-506_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-074733-960_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 77 rows  20261003-074733-960_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-075223-902_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 77 rows  20261003-075223-902_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-075414-229_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 77 rows  20261003-075414-229_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-075622-380_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 91 rows  20261003-075622-380_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-080220-203_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 91 rows  20261003-080220-203_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-080608-033_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 98 rows  20261003-080608-033_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-081458-429_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 105 rows  20261003-081458-429_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-081746-644_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 133 rows  20261003-081746-644_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-082127-782_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 133 rows  20261003-082127-782_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-090739-289_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-090739-289_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-091335-832_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-091335-832_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-091526-631_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-091526-631_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-092911-187_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-092911-187_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-093106-558_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-093106-558_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-095602-989_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-095602-989_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-095908-139_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-095908-139_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-100253-270_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-100253-270_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-101332-951_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-101332-951_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-103520-368_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-103520-368_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-133236-509_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-133236-509_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-133658-648_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-133658-648_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-134953-611_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-134953-611_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-135907-365_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-135907-365_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261003-141503-866_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261003-141503-866_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-005544-531_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-005544-531_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-010140-578_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-010140-578_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-010556-967_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-010556-967_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-012410-460_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-012410-460_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-012725-310_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-012725-310_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-020015-013_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-020015-013_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-020413-442_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-020413-442_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-020859-944_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-020859-944_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-021355-843_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-021355-843_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-021827-892_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-021827-892_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-023902-058_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-023902-058_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-025037-010_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-025037-010_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-031141-804_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-031141-804_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-034501-464_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-034501-464_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-035614-395_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-035614-395_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-041137-584_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-041137-584_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-043829-120_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-043829-120_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-054155-104_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-054155-104_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261004-064733-748_DESKTOP-L8A6EPO_3037456d4336_s2026.csv 140 rows  20261004-064733-748_DESKTOP-L8A6EPO_3037456d4336_s2026
+  SC3_20261007-103337-931_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 21 rows  20261007-103337-931_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-103457-866_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 35 rows  20261007-103457-866_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-103514-429_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 98 rows  20261007-103514-429_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-124540-938_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-124540-938_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-124638-478_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-124638-478_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-131619-334_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-131619-334_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-131800-095_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-131800-095_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-132006-741_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-132006-741_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-132257-561_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-132257-561_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-133021-539_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-133021-539_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-140211-103_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-140211-103_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-140619-327_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-140619-327_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-142842-966_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-142842-966_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-143601-223_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-143601-223_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-145517-361_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-145517-361_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-150228-111_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-150228-111_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-150805-643_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-150805-643_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-151219-163_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-151219-163_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261007-153949-674_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261007-153949-674_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-001114-220_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-001114-220_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-005528-978_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-005528-978_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-005817-001_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-005817-001_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-010141-555_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-010141-555_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-010740-079_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-010740-079_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-011059-304_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-011059-304_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-013500-421_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-013500-421_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-014236-099_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-014236-099_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-015413-174_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-015413-174_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-023517-878_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-023517-878_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-024308-735_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-024308-735_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-025010-397_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-025010-397_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-030941-847_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-030941-847_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-035904-323_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-035904-323_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-044246-630_DESKTOP-L8A6EPO_a499770ace67_s2026.csv 140 rows  20261008-044246-630_DESKTOP-L8A6EPO_a499770ace67_s2026
+  SC3_20261008-063639-746_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 119 rows  20261008-063639-746_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-064016-890_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-064016-890_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-064715-965_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-064715-965_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-074621-764_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-074621-764_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-075240-011_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-075240-011_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-083719-396_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-083719-396_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-084458-635_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-084458-635_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-092719-802_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-092719-802_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-093521-643_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-093521-643_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-094441-791_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-094441-791_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-095138-987_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-095138-987_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-114955-860_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-114955-860_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-115215-858_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-115215-858_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-130229-695_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-130229-695_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-132248-749_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-132248-749_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-132640-987_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-132640-987_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-133203-901_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-133203-901_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-133532-306_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-133532-306_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-142118-194_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-142118-194_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-142917-187_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-142917-187_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261008-143919-685_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261008-143919-685_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261009-003514-218_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261009-003514-218_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261009-004416-654_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261009-004416-654_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261009-021705-388_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261009-021705-388_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261009-025649-499_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261009-025649-499_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261009-050519-480_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261009-050519-480_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261009-060423-239_DESKTOP-L8A6EPO_5ef9bb4de343_s2026.csv 140 rows  20261009-060423-239_DESKTOP-L8A6EPO_5ef9bb4de343_s2026
+  SC3_20261009-081624-432_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 21 rows  20261009-081624-432_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-083747-792_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 119 rows  20261009-083747-792_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-084735-434_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-084735-434_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-090556-157_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-090556-157_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-114919-773_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-114919-773_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-133928-390_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-133928-390_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-134300-603_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-134300-603_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-161724-604_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-161724-604_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-162320-302_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-162320-302_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-162935-079_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-162935-079_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-163650-191_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-163650-191_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-164208-161_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-164208-161_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-181406-615_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-181406-615_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-182853-043_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-182853-043_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-184327-242_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-184327-242_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-204425-447_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-204425-447_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-205641-444_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-205641-444_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-210736-476_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-210736-476_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261009-223358-396_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261009-223358-396_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261010-014543-103_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261010-014543-103_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+  SC3_20261010-041947-046_DESKTOP-L8A6EPO_1886e1206f5c_s2026.csv 140 rows  20261010-041947-046_DESKTOP-L8A6EPO_1886e1206f5c_s2026
+
+After merging the reruns by their median: 17024 rows (from 17059)
+
+Rows by scope (section 11): distinct items 6104, repeated items 10920
+
+##############################################################################
+Scope: distinct-item sensitive patterns, 6104 rows, tested as H2
+##############################################################################
+
+Groups of the configurations (section 10: medians over the distinct-item candidates; rho_rep >= 0.20 main, <= 0.05 degenerate)
+  bible            [0,1]   sigma 2000   pool   17  rho_rep 0.119  beta 0.520  -> intermediate / beta effective
+  bible            [0,3]   sigma 2000   pool   37  rho_rep 0.109  beta 0.475  -> intermediate / beta effective
+  bms1             [0,1]   sigma 100    pool  259  rho_rep 0.000  beta 0.000  -> degenerate / beta degenerate
+  bms1             [0,3]   sigma 100    pool  376  rho_rep 0.000  beta 0.000  -> degenerate / beta degenerate
+  bpi2012          [0,1]   sigma 2000   pool  116  rho_rep 0.000  beta 0.180  -> degenerate / beta between
+  bpi2012          [0,1]   sigma 4000   pool   42  rho_rep 0.000  beta 0.006  -> degenerate / beta degenerate
+  bpi2012          [0,3]   sigma 2000   pool  384  rho_rep 0.000  beta 0.181  -> degenerate / beta between
+  bpi2012          [0,3]   sigma 4000   pool  110  rho_rep 0.000  beta 0.134  -> degenerate / beta between
+  bpi2013          [0,1]   sigma 500    pool   75  rho_rep 0.041  beta 0.443  -> degenerate / beta effective
+  bpi2013          [0,1]   sigma 1000   pool   34  rho_rep 0.041  beta 0.201  -> degenerate / beta effective
+  bpi2013          [0,3]   sigma 500    pool  113  rho_rep 0.035  beta 0.188  -> degenerate / beta between
+  bpi2013          [0,3]   sigma 1000   pool   73  rho_rep 0.045  beta 0.149  -> degenerate / beta between
+  dna_mt745584     [0,10]  sigma 2500   pool   60  rho_rep 0.848  beta 0.052  -> main / beta between
+  dna_mt745584     [0,10]  sigma 4000   pool   19  rho_rep 0.892  beta 0.037  -> main / beta degenerate
+  dna_mt745584     [0,1]   sigma 2500   pool    9  rho_rep 0.822  beta 0.441  -> main / beta effective
+  dna_mt745584     [0,3]   sigma 2500   pool   23  rho_rep 0.818  beta 0.360  -> main / beta effective
+  dna_mt745584     [0,3]   sigma 4000   pool    4  rho_rep 0.890  beta 0.238  -> main / beta effective
+  fifa             [0,1]   sigma 3000   pool    5  rho_rep 0.008  beta 0.384  -> degenerate / beta effective
+  fifa             [0,3]   sigma 3000   pool   30  rho_rep 0.007  beta 0.303  -> degenerate / beta effective
+  leviathan        [0,1]   sigma 500    pool   14  rho_rep 0.111  beta 0.588  -> intermediate / beta effective
+  leviathan        [0,3]   sigma 500    pool   40  rho_rep 0.109  beta 0.591  -> intermediate / beta effective
+  msnbc            [0,10]  sigma 1000   pool  886  rho_rep 0.142  beta 0.074  -> intermediate / beta between
+  msnbc            [0,10]  sigma 2000   pool  294  rho_rep 0.184  beta 0.044  -> intermediate / beta degenerate
+  msnbc            [0,10]  sigma 5000   pool   63  rho_rep 0.279  beta 0.021  -> main / beta degenerate
+  msnbc            [0,1]   sigma 1000   pool  226  rho_rep 0.141  beta 0.503  -> intermediate / beta effective
+  msnbc            [0,1]   sigma 2000   pool   98  rho_rep 0.215  beta 0.407  -> main / beta effective
+  msnbc            [0,1]   sigma 5000   pool   28  rho_rep 0.350  beta 0.244  -> main / beta effective
+  msnbc            [0,3]   sigma 1000   pool  434  rho_rep 0.127  beta 0.315  -> intermediate / beta effective
+  msnbc            [0,3]   sigma 2000   pool  178  rho_rep 0.171  beta 0.253  -> intermediate / beta effective
+  msnbc            [0,3]   sigma 5000   pool   38  rho_rep 0.282  beta 0.143  -> main / beta between
+  protein_sdb1     [0,1]   sigma 400    pool  181  rho_rep 0.495  beta 0.829  -> main / beta effective
+  protein_sdb1     [0,1]   sigma 800    pool   31  rho_rep 0.597  beta 0.796  -> main / beta effective
+  protein_sdb1     [0,3]   sigma 400    pool  411  rho_rep 0.536  beta 0.739  -> main / beta effective
+  protein_sdb1     [0,3]   sigma 800    pool  157  rho_rep 0.645  beta 0.691  -> main / beta effective
+  protein_sdb4     [0,1]   sigma 500    pool  177  rho_rep 0.490  beta 0.831  -> main / beta effective
+  protein_sdb4     [0,1]   sigma 900    pool   38  rho_rep 0.583  beta 0.802  -> main / beta effective
+  protein_sdb4     [0,3]   sigma 500    pool  371  rho_rep 0.552  beta 0.731  -> main / beta effective
+  protein_sdb4     [0,3]   sigma 900    pool  178  rho_rep 0.640  beta 0.700  -> main / beta effective
+  sepsis           [0,1]   sigma 300    pool   60  rho_rep 0.000  beta 0.440  -> degenerate / beta effective
+  sepsis           [0,3]   sigma 300    pool  305  rho_rep 0.000  beta 0.137  -> degenerate / beta between
+  sign             [0,1]   sigma 200    pool    8  rho_rep 0.000  beta 0.338  -> degenerate / beta effective
+  sign             [0,3]   sigma 200    pool   15  rho_rep 0.000  beta 0.109  -> degenerate / beta between
+  42 configurations, all as locked.
+
+==============================================================================
+H2  median of Lost_rel(baseline) - Lost_rel(CUT-HIDE) greater than delta_L = 0.02
+==============================================================================
+
+  1960 rows of protein_sdb1 are reported only and do not enter the test (section 11, point 5).
+
+  rows by group: main 4144
+  H2 is tested on the 4144 rows of the main group only.
+
+-- hha
+   into Wilcoxon (same |R|)              106 instances
+   baseline uses more masks              486 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                0 instances  (a case section 5 omits)
+   excluded                                0 instances
+   median difference of Lost_rel        +0.0048   (absolute: +1.0 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 589.0, p = 1, n = 106 (0 differences of 0)
+   rank-biserial                        -0.792
+
+-- dbsh
+   into Wilcoxon (same |R|)               65 instances
+   baseline uses more masks              527 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                0 instances  (a case section 5 omits)
+   excluded                                0 instances
+   median difference of Lost_rel        +0.0032   (absolute: +1.0 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 66.0, p = 1, n = 65 (0 differences of 0)
+   rank-biserial                        -0.938
+
+-- sbsh-r1
+   into Wilcoxon (same |R|)               50 instances
+   baseline uses more masks              542 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                0 instances  (a case section 5 omits)
+   excluded                                0 instances
+   median difference of Lost_rel        +0.0000   (absolute: +0.0 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 78.0, p = 1, n = 50 (0 differences of 0)
+   rank-biserial                        -0.878
+
+-- sbsh-rmax
+   into Wilcoxon (same |R|)               50 instances
+   baseline uses more masks              542 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                0 instances  (a case section 5 omits)
+   excluded                                0 instances
+   median difference of Lost_rel        +0.0000   (absolute: +0.0 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 77.0, p = 1, n = 50 (0 differences of 0)
+   rank-biserial                        -0.879
+
+Share of instances excluded: 0/2368 = 0.0%  (the threshold of section 5 is 10%)
+
+Holm over the family of 4 tier (b) baselines, alpha = 0.05
+  baseline            raw p       Holm p   verdict
+  sbsh-r1                 1            1   not rejected
+  sbsh-rmax               1            1   not rejected
+  dbsh                    1            1   not rejected
+  hha                     1            1   not rejected
+
+==============================================================================
+Pairs (|R|, Lost) of section 5, DESCRIPTIVE: cut-hide-rw-ls against each tier (b) baseline
+==============================================================================
+  rows: main group, without protein_sdb1 (the rows of H2): 4144
+  Lost compared as numbers of patterns; '<' means cut-hide-rw-ls loses fewer.
+  baseline   instances | same |R|: < = >      | baseline more: < = > | ours more no worse both
+  hha              592 |     64     42      0 |    475     11      0 |         0    592/592
+  dbsh             592 |     36     29      0 |    473     50      4 |         0    588/592
+  sbsh-r1          592 |     22     28      0 |    413    123      6 |         0    586/592
+  sbsh-rmax        592 |     22     28      0 |    411    124      7 |         0    585/592
+
+==============================================================================
+H3  r = |R|/|R|* above 1 on the main group (r >= 1.10), near 1 on the degenerate group (r <= 1.05)
+==============================================================================
+
+  1960 rows of protein_sdb1 are reported only and left out here (section 11, point 5).
+
+  rows without |R|* (several patterns, or repeated items with g- > 0): 2520
+  Section 2 requires saying so: H3 is tested only on instances of one distinct-item pattern.
+
+-- group main
+   method                                 n   median      max   verdict
+   cut-hide                             232   1.0000   1.0000   (not a tier (b) baseline: shown, not judged)
+   cut-hide-rw                          232   1.0000   1.0000   (not a tier (b) baseline: shown, not judged)
+   cut-hide-rw-ls                       232   1.0000   1.0000   (not a tier (b) baseline: shown, not judged)
+   dbsh                                 232   1.0222   1.5000   near 1
+   hha                                  232   1.0002   1.1250   near 1
+   sbsh-r1                              232   1.0317   1.8408   near 1
+   sbsh-rmax                            232   1.0339   2.2714   near 1
+
+-- group degenerate
+   no rows
+
+  The second half of H3 (r near 1 on the degenerate group) is NOT TESTED: the SC3
+  files hold no row of the degenerate group.
+
+  Every tier (b) baseline gives r near 1 on the main group: H3 is NOT rejected. Section 2
+  anticipated this case -- it is a negative result to be reported under rule 3.4.9,
+  not an implementation error.
+
+==============================================================================
+Equivalence (section 4): Hodges-Lehmann with a 95% confidence interval, against the locked margins
+==============================================================================
+
+-- lost_rel, equivalence margin +/- 0.02
+   baseline         n         HL                     CI   verdict
+   hha            106     0.0073 [ +0.0049,  +0.0095]   equivalent
+   dbsh            65     0.0058 [ +0.0043,  +0.0081]   equivalent
+   sbsh-r1         50     0.0048 [ +0.0016,  +0.0051]   equivalent
+   sbsh-rmax       50     0.0048 [ +0.0016,  +0.0050]   equivalent
+
+-- sup_dist, equivalence margin +/- 0.01
+   baseline         n         HL                     CI   verdict
+   hha            106     0.0009 [ +0.0005,  +0.0013]   equivalent
+   dbsh            65    -0.0000 [ -0.0003,  +0.0001]   equivalent
+   sbsh-r1         50    -0.0005 [ -0.0011,  -0.0001]   equivalent
+   sbsh-rmax       50    -0.0005 [ -0.0011,  -0.0001]   equivalent
+
+##############################################################################
+Scope: repeated-item sensitive patterns, 10920 rows, tested as H2-R
+##############################################################################
+
+Groups of the configurations (section 11: medians over the repeated-item candidates; rho_rep >= 0.20 main, <= 0.05 degenerate)
+  bible            [0,1]   sigma 2000   pool    4  rho_rep 0.233  beta 0.622  -> main / beta effective
+  bible            [0,3]   sigma 2000   pool   19  rho_rep 0.251  beta 0.668  -> main / beta effective
+  bpi2012          [0,1]   sigma 2000   pool   24  rho_rep 0.109  beta 0.212  -> intermediate / beta effective
+  bpi2012          [0,1]   sigma 4000   pool   11  rho_rep 0.767  beta 0.149  -> main / beta between
+  bpi2012          [0,3]   sigma 2000   pool   69  rho_rep 0.000  beta 0.179  -> degenerate / beta between
+  bpi2012          [0,3]   sigma 4000   pool   14  rho_rep 0.742  beta 0.141  -> main / beta between
+  bpi2013          [0,1]   sigma 500    pool  112  rho_rep 0.233  beta 0.387  -> main / beta effective
+  bpi2013          [0,1]   sigma 1000   pool   64  rho_rep 0.354  beta 0.311  -> main / beta effective
+  bpi2013          [0,3]   sigma 500    pool  204  rho_rep 0.283  beta 0.171  -> main / beta between
+  bpi2013          [0,3]   sigma 1000   pool  110  rho_rep 0.328  beta 0.098  -> main / beta between
+  dna_mt745584     [0,10]  sigma 2500   pool  260  rho_rep 0.859  beta 0.064  -> main / beta between
+  dna_mt745584     [0,10]  sigma 4000   pool   54  rho_rep 0.895  beta 0.046  -> main / beta degenerate
+  dna_mt745584     [0,1]   sigma 2500   pool    3  rho_rep 0.892  beta 0.450  -> main / beta effective
+  dna_mt745584     [0,1]   sigma 4000   pool    2  rho_rep 0.897  beta 0.444  -> main / beta effective
+  dna_mt745584     [0,3]   sigma 2500   pool   40  rho_rep 0.829  beta 0.417  -> main / beta effective
+  dna_mt745584     [0,3]   sigma 4000   pool    6  rho_rep 0.904  beta 0.364  -> main / beta effective
+  fifa             [0,1]   sigma 3000   pool    3  rho_rep 0.955  beta 0.071  -> main / beta between
+  fifa             [0,3]   sigma 3000   pool    3  rho_rep 0.949  beta 0.055  -> main / beta between
+  leviathan        [0,1]   sigma 500    pool    4  rho_rep 0.600  beta 0.113  -> main / beta between
+  leviathan        [0,3]   sigma 500    pool   13  rho_rep 0.250  beta 0.769  -> main / beta effective
+  msnbc            [0,10]  sigma 1000   pool 1450  rho_rep 0.214  beta 0.071  -> main / beta between
+  msnbc            [0,10]  sigma 2000   pool  591  rho_rep 0.283  beta 0.050  -> main / beta degenerate
+  msnbc            [0,10]  sigma 5000   pool  155  rho_rep 0.445  beta 0.027  -> main / beta degenerate
+  msnbc            [0,1]   sigma 1000   pool  422  rho_rep 0.341  beta 0.496  -> main / beta effective
+  msnbc            [0,1]   sigma 2000   pool  195  rho_rep 0.418  beta 0.419  -> main / beta effective
+  msnbc            [0,1]   sigma 5000   pool   64  rho_rep 0.435  beta 0.342  -> main / beta effective
+  msnbc            [0,3]   sigma 1000   pool  885  rho_rep 0.216  beta 0.303  -> main / beta effective
+  msnbc            [0,3]   sigma 2000   pool  362  rho_rep 0.349  beta 0.229  -> main / beta effective
+  msnbc            [0,3]   sigma 5000   pool  121  rho_rep 0.441  beta 0.150  -> main / beta between
+  protein_sdb1     [0,1]   sigma 400    pool   11  rho_rep 0.553  beta 0.863  -> main / beta effective
+  protein_sdb1     [0,1]   sigma 800    pool    4  rho_rep 0.671  beta 0.843  -> main / beta effective
+  protein_sdb1     [0,3]   sigma 400    pool  104  rho_rep 0.478  beta 0.878  -> main / beta effective
+  protein_sdb1     [0,3]   sigma 800    pool   15  rho_rep 0.698  beta 0.755  -> main / beta effective
+  protein_sdb4     [0,1]   sigma 500    pool   11  rho_rep 0.569  beta 0.863  -> main / beta effective
+  protein_sdb4     [0,1]   sigma 900    pool    5  rho_rep 0.616  beta 0.853  -> main / beta effective
+  protein_sdb4     [0,3]   sigma 500    pool   78  rho_rep 0.469  beta 0.878  -> main / beta effective
+  protein_sdb4     [0,3]   sigma 900    pool   13  rho_rep 0.709  beta 0.751  -> main / beta effective
+  sepsis           [0,1]   sigma 300    pool   25  rho_rep 0.535  beta 0.597  -> main / beta effective
+  sepsis           [0,3]   sigma 300    pool  140  rho_rep 0.480  beta 0.226  -> main / beta effective
+  39 configurations, all as locked.
+
+==============================================================================
+H2-R  median of Lost_rel(baseline) - Lost_rel(CUT-HIDE) greater than delta_L = 0.02
+==============================================================================
+
+  749 rows of protein_sdb1 are reported only and do not enter the test (section 11, point 5).
+
+  rows by group: main 10171
+  H2 is tested on the 10171 rows of the main group only.
+
+-- hha
+   into Wilcoxon (same |R|)               31 instances
+   baseline uses more masks             1365 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks               57 instances  (a case section 5 omits)
+   excluded                                0 instances
+   NOTE: in 57 instances CUT-HIDE uses more masks than the baseline. Section 5
+   defines two regimes (same |R|, and the baseline using more), not this case.
+   Dropping it silently would favour us, so it is counted apart for a decision.
+   median difference of Lost_rel        +0.0361   (absolute: +10.0 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 400.0, p = 0.001443, n = 31 (0 differences of 0)
+   rank-biserial                        +0.613
+
+-- dbsh
+   into Wilcoxon (same |R|)               29 instances
+   baseline uses more masks             1423 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                1 instances  (a case section 5 omits)
+   excluded                                0 instances
+   NOTE: in 1 instances CUT-HIDE uses more masks than the baseline. Section 5
+   defines two regimes (same |R|, and the baseline using more), not this case.
+   Dropping it silently would favour us, so it is counted apart for a decision.
+   median difference of Lost_rel        +0.0286   (absolute: +9.0 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 306.0, p = 0.02762, n = 29 (0 differences of 0)
+   rank-biserial                        +0.407
+
+-- sbsh-r1
+   into Wilcoxon (same |R|)               23 instances
+   baseline uses more masks             1429 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                1 instances  (a case section 5 omits)
+   excluded                                0 instances
+   NOTE: in 1 instances CUT-HIDE uses more masks than the baseline. Section 5
+   defines two regimes (same |R|, and the baseline using more), not this case.
+   Dropping it silently would favour us, so it is counted apart for a decision.
+   median difference of Lost_rel        +0.0044   (absolute: +1.0 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 66.0, p = 0.9865, n = 23 (0 differences of 0)
+   rank-biserial                        -0.522
+
+-- sbsh-rmax
+   into Wilcoxon (same |R|)               22 instances
+   baseline uses more masks             1430 instances  (reported apart, not tested)
+   CUT-HIDE uses more masks                1 instances  (a case section 5 omits)
+   excluded                                0 instances
+   NOTE: in 1 instances CUT-HIDE uses more masks than the baseline. Section 5
+   defines two regimes (same |R|, and the baseline using more), not this case.
+   Dropping it silently would favour us, so it is counted apart for a decision.
+   median difference of Lost_rel        +0.0044   (absolute: +1.0 patterns)
+   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 58.0, p = 0.9877, n = 22 (0 differences of 0)
+   rank-biserial                        -0.542
+
+Share of instances excluded: 0/5812 = 0.0%  (the threshold of section 5 is 10%)
+
+Holm over the family of 4 tier (b) baselines, alpha = 0.05
+  baseline            raw p       Holm p   verdict
+  hha              0.001443     0.005772   H0 rejected
+  dbsh              0.02762      0.08286   not rejected
+  sbsh-r1            0.9865            1   not rejected
+  sbsh-rmax          0.9877            1   not rejected
+
+==============================================================================
+Pairs (|R|, Lost) of section 5, DESCRIPTIVE: cut-hide-rw-ls against each tier (b) baseline
+==============================================================================
+  rows: main group, without protein_sdb1 (the rows of H2): 10171
+  Lost compared as numbers of patterns; '<' means cut-hide-rw-ls loses fewer.
+  baseline   instances | same |R|: < = >      | baseline more: < = > | ours more no worse both
+  hha             1453 |     27      4      0 |   1216    125     24 |        57   1372/1453
+  dbsh            1453 |     22      7      0 |   1276    121     26 |         1   1426/1453
+  sbsh-r1         1453 |     13     10      0 |   1186    173     70 |         1   1382/1453
+  sbsh-rmax       1453 |     12     10      0 |   1173    179     78 |         1   1374/1453
+
+==============================================================================
+r = |R|/|R|* per method and group, DESCRIPTIVE (section 11, point 7): no verdict
+==============================================================================
+
+  749 rows of protein_sdb1 are reported only and left out here (section 11, point 5).
+
+  rows without |R|* (several patterns, or repeated items with g- > 0): 6734
+
+-- group main
+   method                                 n   median      max   verdict
+   cut-hide                             491   1.0000   1.0000
+   cut-hide-rw                          491   1.0000   1.0000
+   cut-hide-rw-ls                       491   1.0000   1.0000
+   dbsh                                 491   1.5043   4.0455
+   hha                                  491   1.2819   3.8614
+   sbsh-r1                              491   1.5448   4.1977
+   sbsh-rmax                            491   1.5662   4.8692
+
+-- group degenerate
+   no rows
+
+==============================================================================
+Equivalence (section 4): Hodges-Lehmann with a 95% confidence interval, against the locked margins
+==============================================================================
+
+-- lost_rel, equivalence margin +/- 0.02
+   baseline         n         HL                     CI   verdict
+   hha             31     0.0401 [ +0.0260,  +0.0628]   different beyond the margin
+   dbsh            29     0.0352 [ +0.0191,  +0.0606]   no conclusion
+   sbsh-r1         23     0.0077 [ +0.0022,  +0.0185]   equivalent
+   sbsh-rmax       22     0.0073 [ +0.0022,  +0.0176]   equivalent
+
+-- sup_dist, equivalence margin +/- 0.01
+   baseline         n         HL                     CI   verdict
+   hha             31     0.0126 [ +0.0088,  +0.0171]   no conclusion
+   dbsh            29     0.0083 [ +0.0034,  +0.0145]   no conclusion
+   sbsh-r1         23     0.0021 [ +0.0002,  +0.0037]   equivalent
+   sbsh-rmax       22     0.0020 [ -0.0000,  +0.0037]   equivalent
+
+==============================================================================
+Reminder: exit code 0 does NOT mean that H2 is supported. It only means that the
+analysis ran, and the conclusion is in the tables above.

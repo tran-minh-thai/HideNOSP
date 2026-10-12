@@ -1,0 +1,95 @@
+# Output of tools/reduced_optimum_table.py on the 82 SC3OPT files of commit 66a6fee (development machine; invariant
+# counts: optimum, bounds and mask counts do not depend on the machine), run from the repository root as
+#   python tools/reduced_optimum_table.py --out <this file>
+# Each SC3OPT file was produced by
+#   java -Xmx6g -cp <classes of 66a6fee> hidenosp.exp.Runner SC3OPT <the options of tools/sc3_commands.py --size=5|10|20,
+#        without --machine, --methods, --pareto, --timeLimit> --sequencesPerInstance=8,16
+# with HIDENOSP_REVISION set to the commit, from the repository root.
+
+SC3OPT files: 82
+
+== distinct scope, |S| = 5, instances of 8 sequences: 257 solved, 0 skipped {}
+   weights: {'side-effect': 257}; instances with a window: 222; binding patterns median 5; optimum median 11
+   median ratio to the bound: greedy 1.1538, refined 1.1333, optimum 1.1111 (over 257 with bound > 0)
+   median ratio to the optimum: greedy 1.0000, refined 1.0000
+   optimum = bound: 100/257; refined = optimum: 197/257; greedy = optimum: 180/257
+   share of log(refined / bound) due to the bound, over 164 instances with refined > bound: 0.7901
+
+== distinct scope, |S| = 5, instances of 16 sequences: 257 solved, 0 skipped {}
+   weights: {'side-effect': 257}; instances with a window: 240; binding patterns median 5; optimum median 18
+   median ratio to the bound: greedy 1.2500, refined 1.2308, optimum 1.1765 (over 257 with bound > 0)
+   median ratio to the optimum: greedy 1.0294, refined 1.0000
+   optimum = bound: 57/257; refined = optimum: 144/257; greedy = optimum: 127/257
+   share of log(refined / bound) due to the bound, over 211 instances with refined > bound: 0.7607
+
+== distinct scope, |S| = 10, instances of 8 sequences: 180 solved, 0 skipped {}
+   weights: {'side-effect': 180}; instances with a window: 167; binding patterns median 8.0; optimum median 13.0
+   median ratio to the bound: greedy 1.1667, refined 1.1538, optimum 1.1292 (over 180 with bound > 0)
+   median ratio to the optimum: greedy 1.0000, refined 1.0000
+   optimum = bound: 51/180; refined = optimum: 124/180; greedy = optimum: 106/180
+   share of log(refined / bound) due to the bound, over 136 instances with refined > bound: 0.7592
+
+== distinct scope, |S| = 10, instances of 16 sequences: 180 solved, 0 skipped {}
+   weights: {'side-effect': 180}; instances with a window: 177; binding patterns median 9.0; optimum median 21.0
+   median ratio to the bound: greedy 1.2344, refined 1.2222, optimum 1.1667 (over 180 with bound > 0)
+   median ratio to the optimum: greedy 1.0455, refined 1.0385
+   optimum = bound: 22/180; refined = optimum: 85/180; greedy = optimum: 66/180
+   share of log(refined / bound) due to the bound, over 168 instances with refined > bound: 0.6902
+
+== distinct scope, |S| = 20, instances of 8 sequences: 123 solved, 0 skipped {}
+   weights: {'side-effect': 123}; instances with a window: 123; binding patterns median 11; optimum median 12
+   median ratio to the bound: greedy 1.1667, refined 1.1667, optimum 1.1111 (over 123 with bound > 0)
+   median ratio to the optimum: greedy 1.0588, refined 1.0000
+   optimum = bound: 40/123; refined = optimum: 68/123; greedy = optimum: 60/123
+   share of log(refined / bound) due to the bound, over 97 instances with refined > bound: 0.6287
+
+== distinct scope, |S| = 20, instances of 16 sequences: 123 solved, 0 skipped {}
+   weights: {'side-effect': 123}; instances with a window: 123; binding patterns median 10; optimum median 13
+   median ratio to the bound: greedy 1.2143, refined 1.1875, optimum 1.1250 (over 123 with bound > 0)
+   median ratio to the optimum: greedy 1.0833, refined 1.0667
+   optimum = bound: 28/123; refined = optimum: 43/123; greedy = optimum: 32/123
+   share of log(refined / bound) due to the bound, over 112 instances with refined > bound: 0.6085
+
+== repeated scope, |S| = 5, instances of 8 sequences: 385 solved, 0 skipped {}
+   weights: {'side-effect': 385}; instances with a window: 287; binding patterns median 5; optimum median 10
+   median ratio to the bound: greedy 1.3333, refined 1.2500, optimum 1.1111 (over 385 with bound > 0)
+   median ratio to the optimum: greedy 1.1250, refined 1.0909
+   optimum = bound: 160/385; refined = optimum: 167/385; greedy = optimum: 111/385
+   share of log(refined / bound) due to the bound, over 297 instances with refined > bound: 0.5812
+
+== repeated scope, |S| = 5, instances of 16 sequences: 385 solved, 0 skipped {}
+   weights: {'side-effect': 384, 'uniform': 1}; instances with a window: 344; binding patterns median 5; optimum median 16
+   median ratio to the bound: greedy 1.4375, refined 1.3333, optimum 1.1538 (over 385 with bound > 0)
+   median ratio to the optimum: greedy 1.2000, refined 1.1176
+   optimum = bound: 121/385; refined = optimum: 97/385; greedy = optimum: 60/385
+   share of log(refined / bound) due to the bound, over 340 instances with refined > bound: 0.5565
+
+== repeated scope, |S| = 10, instances of 8 sequences: 357 solved, 0 skipped {}
+   weights: {'side-effect': 357}; instances with a window: 280; binding patterns median 8; optimum median 11
+   median ratio to the bound: greedy 1.3750, refined 1.2727, optimum 1.1429 (over 357 with bound > 0)
+   median ratio to the optimum: greedy 1.1667, refined 1.0833
+   optimum = bound: 117/357; refined = optimum: 128/357; greedy = optimum: 75/357
+   share of log(refined / bound) due to the bound, over 306 instances with refined > bound: 0.6239
+
+== repeated scope, |S| = 10, instances of 16 sequences: 357 solved, 0 skipped {}
+   weights: {'side-effect': 357}; instances with a window: 331; binding patterns median 9; optimum median 18
+   median ratio to the bound: greedy 1.4706, refined 1.3684, optimum 1.1765 (over 357 with bound > 0)
+   median ratio to the optimum: greedy 1.2174, refined 1.1304
+   optimum = bound: 74/357; refined = optimum: 59/357; greedy = optimum: 31/357
+   share of log(refined / bound) due to the bound, over 344 instances with refined > bound: 0.5320
+
+== repeated scope, |S| = 20, instances of 8 sequences: 277 solved, 0 skipped {}
+   weights: {'side-effect': 273, 'uniform': 4}; instances with a window: 216; binding patterns median 10; optimum median 10
+   median ratio to the bound: greedy 1.4545, refined 1.3333, optimum 1.1538 (over 277 with bound > 0)
+   median ratio to the optimum: greedy 1.2222, refined 1.1250
+   optimum = bound: 84/277; refined = optimum: 71/277; greedy = optimum: 32/277
+   share of log(refined / bound) due to the bound, over 253 instances with refined > bound: 0.5105
+
+== repeated scope, |S| = 20, instances of 16 sequences: 277 solved, 0 skipped {}
+   weights: {'side-effect': 276, 'uniform': 1}; instances with a window: 262; binding patterns median 9; optimum median 12
+   median ratio to the bound: greedy 1.5000, refined 1.4000, optimum 1.1176 (over 277 with bound > 0)
+   median ratio to the optimum: greedy 1.2941, refined 1.2000
+   optimum = bound: 90/277; refined = optimum: 32/277; greedy = optimum: 22/277
+   share of log(refined / bound) due to the bound, over 268 instances with refined > bound: 0.4085
+
+No problem: every file complete, bound <= optimum <= refined <= greedy on every instance.

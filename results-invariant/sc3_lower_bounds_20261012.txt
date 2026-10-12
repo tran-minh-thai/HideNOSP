@@ -1,0 +1,107 @@
+# Output of tools/lower_bound_table.py (commit 7b0cb44), run from the repository root as
+#   python tools/lower_bound_table.py --out <this file>
+# on the 136 SC3LB files of commit 7b0cb44 (development machine; invariant counts) and the official SC3 files of the
+# method batches (DESKTOP-L8A6EPO). Ratios are |R| over the conflict bound, so they bound the ratio to the optimum from above.
+
+Bound rows: 2432; SC3 sets: 2432; joined: 2432; bound without SC3: 0; SC3 without bound: 0
+
+== distinct scope, |S| = 1: 312 sets
+   components per set: median 1.0, min 1, max 1; one pattern per component (bound = optimum): 312/312
+   conflict bound above the component bound: 0/312 sets; median ratio conflict/component 1.0000
+   method                sets  |R| = bound median ratio  max ratio
+   cut-hide-rw-ls         312     312/312        1.0000     1.0000
+   cut-hide-rw            312     312/312        1.0000     1.0000
+   cut-hide               312     312/312        1.0000     1.0000
+   hha                    312     157/312        1.0000     1.1250
+   dbsh                   312      79/312        1.0246     1.5000
+   sbsh-r1                312      63/312        1.0314     1.8408
+   sbsh-rmax              312      63/312        1.0323     2.2714
+
+== distinct scope, |S| = 5: 257 sets
+   components per set: median 2, min 1, max 4; one pattern per component (bound = optimum): 0/257
+   conflict bound above the component bound: 127/257 sets; median ratio conflict/component 1.0000
+   method                sets  |R| = bound median ratio  max ratio
+   cut-hide-rw-ls         257      31/257        1.3003     3.4720
+   cut-hide-rw            257      31/257        1.3003     3.4720
+   cut-hide               257      31/257        1.3003     3.4720
+   hha                    257       0/257        3.5142    47.1131
+   dbsh                   257       0/257        1.9496     4.6210
+   sbsh-r1                257       0/257        1.8394     4.1370
+   sbsh-rmax              257       0/257        1.8394     4.1370
+
+== distinct scope, |S| = 10: 180 sets
+   components per set: median 1.0, min 1, max 5; one pattern per component (bound = optimum): 0/180
+   conflict bound above the component bound: 161/180 sets; median ratio conflict/component 1.6775
+   method                sets  |R| = bound median ratio  max ratio
+   cut-hide-rw-ls         180       2/180        1.3583     2.9443
+   cut-hide-rw            180       2/180        1.3583     2.9443
+   cut-hide               180       2/180        1.3583     2.9443
+   hha                    180       0/180        3.8425    50.2826
+   dbsh                   180       0/180        2.5419     6.0290
+   sbsh-r1                180       0/180        2.3600     5.5538
+   sbsh-rmax              180       0/180        2.3600     5.5846
+
+== distinct scope, |S| = 20: 123 sets
+   components per set: median 1, min 1, max 3; one pattern per component (bound = optimum): 0/123
+   conflict bound above the component bound: 123/123 sets; median ratio conflict/component 2.9328
+   method                sets  |R| = bound median ratio  max ratio
+   cut-hide-rw-ls         123       0/123        1.5800     3.0197
+   cut-hide-rw            123       0/123        1.5800     3.0197
+   cut-hide               123       0/123        1.5800     3.0197
+   hha                    123       0/123        5.6338    40.7736
+   dbsh                   123       0/123        3.8690     7.9906
+   sbsh-r1                123       0/123        3.4817     6.8302
+   sbsh-rmax              123       0/123        3.4817     6.8491
+
+== repeated scope, |S| = 1: 541 sets
+   components per set: median 1, min 1, max 1; one pattern per component (bound = optimum): 541/541
+   conflict bound above the component bound: 0/541 sets; median ratio conflict/component 1.0000
+   method                sets  |R| = bound median ratio  max ratio
+   cut-hide-rw-ls         541     541/541        1.0000     1.0000
+   cut-hide-rw            541     541/541        1.0000     1.0000
+   cut-hide               541     541/541        1.0000     1.0000
+   hha                    541      31/541        1.2850     3.8614
+   dbsh                   541      29/541        1.4932     4.0455
+   sbsh-r1                541      23/541        1.5274     4.1977
+   sbsh-rmax              541      22/541        1.5382     4.8692
+
+== repeated scope, |S| = 5: 385 sets
+   components per set: median 1, min 1, max 5; one pattern per component (bound = optimum): 3/385
+   conflict bound above the component bound: 175/385 sets; median ratio conflict/component 1.0000
+   method                sets  |R| = bound median ratio  max ratio
+   cut-hide-rw-ls         385       0/385        1.9074     7.9001
+   cut-hide-rw            385       0/385        1.9074     7.9001
+   cut-hide               385       0/385        1.9074     7.9001
+   hha                    385       0/385        5.2168    54.1851
+   dbsh                   385       0/385        2.9201     9.6056
+   sbsh-r1                385       0/385        2.7826     9.6908
+   sbsh-rmax              385       0/385        2.8045     9.6908
+   sets where hha uses fewer masks than cut-hide-rw-ls: 25; ratio to the bound there: cut-hide-rw-ls median 1.5671, hha median 1.4164
+
+== repeated scope, |S| = 10: 357 sets
+   components per set: median 1, min 1, max 9; one pattern per component (bound = optimum): 0/357
+   conflict bound above the component bound: 299/357 sets; median ratio conflict/component 1.4660
+   method                sets  |R| = bound median ratio  max ratio
+   cut-hide-rw-ls         357       0/357        2.0036     6.0315
+   cut-hide-rw            357       0/357        2.0036     6.0315
+   cut-hide               356       0/356        2.0041     6.0315
+   hha                    357       0/357        6.1031    68.3250
+   dbsh                   357       0/357        3.7732    11.2532
+   sbsh-r1                357       0/357        3.4360     9.6292
+   sbsh-rmax              357       0/357        3.4582     9.6292
+   sets where hha uses fewer masks than cut-hide-rw-ls: 17; ratio to the bound there: cut-hide-rw-ls median 1.4974, hha median 1.3652
+
+== repeated scope, |S| = 20: 277 sets
+   components per set: median 1, min 1, max 9; one pattern per component (bound = optimum): 0/277
+   conflict bound above the component bound: 268/277 sets; median ratio conflict/component 1.7050
+   method                sets  |R| = bound median ratio  max ratio
+   cut-hide-rw-ls         277       0/277        2.2729     5.7745
+   cut-hide-rw            276       0/276        2.2700     5.7745
+   cut-hide               277       0/277        2.2729     5.7745
+   hha                    277       0/277        7.2503    84.2341
+   dbsh                   277       0/277        4.7888    14.4389
+   sbsh-r1                277       0/277        4.2151    10.8640
+   sbsh-rmax              277       0/277        4.2254    10.8640
+   sets where hha uses fewer masks than cut-hide-rw-ls: 15; ratio to the bound there: cut-hide-rw-ls median 1.2755, hha median 1.2125
+
+No problem: the join is complete, every |S| = 1 bound equals min_masks, no method is below the bound.

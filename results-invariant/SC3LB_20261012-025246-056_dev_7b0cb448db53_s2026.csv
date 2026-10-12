@@ -1,0 +1,16 @@
+# run 20261012-025246-056_dev_7b0cb448db53_s2026
+# host unknown-host
+# jdk 26.0.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu not reported: the run did not go through tools/run.py, which reads the model
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3LB
+# options {dataset=datasets/fifa.txt, format=SPMF, sigma=3000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated}
+# sensitive sets: size 1, repeated-item pool 3 candidates, 3 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 0 -> 0, p70: 1 -> 1, p90: 1 -> 1
+dataset,shape,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,patterns,components,singleton_components,lower_bound,bound_is_optimum,single_optima,component_of,optima_exact,conflict_bound,conflict_edges
+datasets/fifa.txt,"N=20450,len=741092","[0,1]",3000,repeated,1,"[[17, 17, 17, 17]]",p30,1,1,1,630,true,630,0,true,630,0
+datasets/fifa.txt,"N=20450,len=741092","[0,1]",3000,repeated,1,"[[17, 17, 17]]",p70,1,1,1,917,true,917,0,true,917,0
+datasets/fifa.txt,"N=20450,len=741092","[0,1]",3000,repeated,1,"[[17, 17]]",p90,1,1,1,1512,true,1512,0,true,1512,0

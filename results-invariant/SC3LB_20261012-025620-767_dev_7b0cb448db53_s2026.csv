@@ -1,0 +1,33 @@
+# run 20261012-025620-767_dev_7b0cb448db53_s2026
+# host unknown-host
+# jdk 26.0.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu not reported: the run did not go through tools/run.py, which reads the model
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3LB
+# options {dataset=datasets/bpi2013.txt, format=SPMF, sigma=1000, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated}
+# sensitive sets: size 1, repeated-item pool 110 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 22 -> 4, p30: 22 -> 4, p50: 22 -> 4, p70: 22 -> 4, p90: 22 -> 4
+dataset,shape,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,patterns,components,singleton_components,lower_bound,bound_is_optimum,single_optima,component_of,optima_exact,conflict_bound,conflict_edges
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[1, 1, 2, 1]]",p10,1,1,1,41,true,41,0,true,41,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[1, 11, 1, 2]]",p10,1,1,1,17,true,17,0,true,17,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[0, 1, 0, 1]]",p10,1,1,1,5,true,5,0,true,5,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[1, 1, 0, 5]]",p10,1,1,1,135,true,135,0,true,135,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[5, 1, 1, 1]]",p30,1,1,1,91,true,91,0,true,91,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[11, 1, 11, 8]]",p30,1,1,1,211,true,211,0,true,211,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[1, 5, 1, 10]]",p30,1,1,1,264,true,264,0,true,264,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[1, 11, 5, 1]]",p30,1,1,1,292,true,292,0,true,292,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[11, 11, 10, 8]]",p50,1,1,1,720,true,720,0,true,720,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[1, 1, 11, 0]]",p50,1,1,1,1200,true,1200,0,true,1200,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[11, 1, 1, 0]]",p50,1,1,1,856,true,856,0,true,856,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[1, 1, 5, 1]]",p50,1,1,1,1273,true,1273,0,true,1273,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[1, 11, 1, 8]]",p70,1,1,1,2586,true,2586,0,true,2586,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[11, 11, 11, 1]]",p70,1,1,1,1172,true,1172,0,true,1172,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[1, 1, 1, 5]]",p70,1,1,1,1899,true,1899,0,true,1899,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[11, 1, 1, 10]]",p70,1,1,1,2276,true,2276,0,true,2276,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[11, 11, 1, 1]]",p90,1,1,1,2457,true,2457,0,true,2457,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[11, 11]]",p90,1,1,1,3801,true,3801,0,true,3801,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[1, 1, 11]]",p90,1,1,1,7199,true,7199,0,true,7199,0
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,repeated,1,"[[11, 1, 11, 1]]",p90,1,1,1,4037,true,4037,0,true,4037,0

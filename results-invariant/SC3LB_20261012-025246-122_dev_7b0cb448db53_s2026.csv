@@ -1,0 +1,17 @@
+# run 20261012-025246-122_dev_7b0cb448db53_s2026
+# host unknown-host
+# jdk 26.0.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu not reported: the run did not go through tools/run.py, which reads the model
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3LB
+# options {dataset=datasets/bible.txt, format=SPMF, sigma=2000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated}
+# sensitive sets: size 1, repeated-item pool 4 candidates, 4 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+dataset,shape,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,patterns,components,singleton_components,lower_bound,bound_is_optimum,single_optima,component_of,optima_exact,conflict_bound,conflict_edges
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,1,1,1,4,true,4,0,true,4,0
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,repeated,1,"[[356, 356]]",p50,1,1,1,844,true,844,0,true,844,0
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,1,1,1,964,true,964,0,true,964,0
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,1,1,1,5395,true,5395,0,true,5395,0

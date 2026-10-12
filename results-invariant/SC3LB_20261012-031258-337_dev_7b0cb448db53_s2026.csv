@@ -1,0 +1,16 @@
+# run 20261012-031258-337_dev_7b0cb448db53_s2026
+# host unknown-host
+# jdk 26.0.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu not reported: the run did not go through tools/run.py, which reads the model
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3LB
+# options {dataset=datasets/msnbc.txt, format=SPMF, sigma=2000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=20, patternKind=distinct}
+# sensitive sets: size 20, pool 98 candidates, 3 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 19 -> 0, p30: 20 -> 1, p50: 19 -> 0, p70: 20 -> 1, p90: 20 -> 1
+dataset,shape,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,patterns,components,singleton_components,lower_bound,bound_is_optimum,single_optima,component_of,optima_exact,conflict_bound,conflict_edges
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",2000,distinct,20,"[[13, 14], [2, 8], [7, 1, 4], [1, 6, 2], [2, 12, 1], [1, 17], [1, 2, 7], [1, 2, 14], [1, 6, 7], [2, 1, 4], [12, 1, 2], [9, 4], [1, 2, 6], [12, 14], [1, 4, 2], [2, 7, 4], [15, 1], [2, 1, 12], [2, 11], [8, 2]]",p30,20,1,0,558,false,250;291;297;299;305;325;356;373;379;385;390;411;417;456;475;481;535;537;546;558,0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0,true,1960,131
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",2000,distinct,20,"[[9, 7], [3, 2], [5, 1], [2, 3], [10, 2], [1, 5], [7, 2], [2, 14], [9, 1], [2, 10], [1, 7, 4], [12, 2], [2, 7], [2, 12], [2, 6], [6, 2], [10, 1], [4, 2], [2, 4], [3, 1]]",p70,20,1,0,5291,false,1658;1887;1907;2058;2238;2274;2319;2338;2344;2357;2684;2906;3220;3472;3757;3995;4338;4729;4805;5291,0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0,true,11754,105
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",2000,distinct,20,"[[1, 10], [11, 1], [7, 6], [1, 3], [1, 11], [6, 7], [6, 1], [1, 6], [4, 1], [14, 1], [1, 14], [4, 7], [12, 1], [7, 1], [1, 4], [1, 12], [1, 7], [7, 4], [2, 1], [1, 2]]",p90,20,1,0,26797,false,5682;5742;5898;6130;6809;7330;7346;9181;9538;9686;10223;10445;10455;10598;11326;12164;12172;14958;22716;26797,0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0,true,41755,142

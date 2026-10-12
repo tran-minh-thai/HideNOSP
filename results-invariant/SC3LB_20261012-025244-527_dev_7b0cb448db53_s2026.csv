@@ -1,0 +1,16 @@
+# run 20261012-025244-527_dev_7b0cb448db53_s2026
+# host unknown-host
+# jdk 26.0.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu not reported: the run did not go through tools/run.py, which reads the model
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3LB
+# options {dataset=datasets/dna_mt745584.txt, format=SPMF, sigma=2500, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated}
+# sensitive sets: size 1, repeated-item pool 3 candidates, 3 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 0 -> 0, p70: 1 -> 1, p90: 1 -> 1
+dataset,shape,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,patterns,components,singleton_components,lower_bound,bound_is_optimum,single_optima,component_of,optima_exact,conflict_bound,conflict_edges
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,1]",2500,repeated,1,"[[4, 4, 4]]",p30,1,1,1,83,true,83,0,true,83,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,1]",2500,repeated,1,"[[1, 1]]",p70,1,1,1,1064,true,1064,0,true,1064,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,1]",2500,repeated,1,"[[4, 4]]",p90,1,1,1,1321,true,1321,0,true,1321,0

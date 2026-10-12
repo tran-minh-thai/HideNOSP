@@ -1,0 +1,32 @@
+# run 20261012-025456-164_dev_7b0cb448db53_s2026
+# host unknown-host
+# jdk 26.0.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu not reported: the run did not go through tools/run.py, which reads the model
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3LB
+# options {dataset=datasets/bible.txt, format=SPMF, sigma=2000, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated}
+# sensitive sets: size 1, repeated-item pool 19 candidates, 19 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 3 -> 3, p30: 4 -> 4, p50: 4 -> 4, p70: 4 -> 4, p90: 4 -> 4
+dataset,shape,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,patterns,components,singleton_components,lower_bound,bound_is_optimum,single_optima,component_of,optima_exact,conflict_bound,conflict_edges
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[46, 46, 10]]",p10,1,1,1,27,true,27,0,true,27,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[356, 10, 10]]",p10,1,1,1,127,true,127,0,true,127,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[10, 10, 46, 10]]",p10,1,1,1,222,true,222,0,true,222,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[46, 10, 46, 10]]",p30,1,1,1,327,true,327,0,true,327,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[10, 46, 10, 10]]",p30,1,1,1,317,true,317,0,true,317,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[356, 356]]",p30,1,1,1,862,true,862,0,true,862,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[31, 10, 10]]",p30,1,1,1,745,true,745,0,true,745,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[10, 10, 31]]",p50,1,1,1,717,true,717,0,true,717,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[10, 46, 46]]",p50,1,1,1,719,true,719,0,true,719,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[46, 10, 10]]",p50,1,1,1,1176,true,1176,0,true,1176,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[10, 46, 10, 46]]",p50,1,1,1,1426,true,1426,0,true,1426,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[10, 31, 10]]",p70,1,1,1,2123,true,2123,0,true,2123,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[10, 10, 10]]",p70,1,1,1,1099,true,1099,0,true,1099,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[10, 10, 46]]",p70,1,1,1,2196,true,2196,0,true,2196,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[46, 46]]",p70,1,1,1,2146,true,2146,0,true,2146,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[31, 31]]",p90,1,1,1,2609,true,2609,0,true,2609,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[46, 10, 46]]",p90,1,1,1,2893,true,2893,0,true,2893,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[10, 46, 10]]",p90,1,1,1,8105,true,8105,0,true,8105,0
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,repeated,1,"[[10, 10]]",p90,1,1,1,10538,true,10538,0,true,10538,0

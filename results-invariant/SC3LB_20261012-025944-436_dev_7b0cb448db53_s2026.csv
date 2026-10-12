@@ -1,0 +1,33 @@
+# run 20261012-025944-436_dev_7b0cb448db53_s2026
+# host unknown-host
+# jdk 26.0.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu not reported: the run did not go through tools/run.py, which reads the model
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3LB
+# options {dataset=datasets/msnbc.txt, format=SPMF, sigma=5000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=5, patternKind=repeated}
+# sensitive sets: size 5, repeated-item pool 64 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 12 -> 4, p30: 13 -> 4, p50: 13 -> 4, p70: 13 -> 4, p90: 13 -> 4
+dataset,shape,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,patterns,components,singleton_components,lower_bound,bound_is_optimum,single_optima,component_of,optima_exact,conflict_bound,conflict_edges
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[1, 1, 7, 1], [4, 4, 7, 4], [1, 7, 1, 1], [4, 7, 4, 4], [4, 7, 4, 7]]",p10,5,1,0,342,false,133;137;168;212;342,0;0;0;0;0,true,342,10
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[1, 1, 4, 1], [1, 1, 7, 1], [4, 7, 7], [1, 1, 6], [7, 1, 7]]",p10,5,1,0,288,false,106;133;259;263;288,0;0;0;0;0,true,522,9
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[15, 15], [1, 1, 4, 1], [4, 4, 7, 4], [1, 7, 7], [7, 1, 7]]",p10,5,2,1,415,false,127;106;137;261;288,0;1;1;1;1,true,415,6
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[4, 4, 7, 4], [1, 7, 1, 1], [1, 1, 6], [4, 7, 4, 4], [4, 7, 4, 7]]",p10,5,1,0,342,false,137;168;263;212;342,0;0;0;0;0,true,605,7
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[1, 1, 2, 2], [4, 1, 1], [4, 4, 7], [1, 1, 14, 1], [1, 14, 1, 1]]",p30,5,1,0,526,false,364;419;526;424;431,0;0;0;0;0,true,957,7
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[1, 1, 2, 2], [6, 7, 6], [4, 4, 7], [7, 1, 1], [1, 11, 1]]",p30,5,1,0,1016,false,364;480;526;759;1016,0;0;0;0;0,true,1542,6
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[1, 1, 2, 2], [6, 7, 6], [4, 4, 7], [12, 12], [14, 14]]",p30,5,4,3,2202,false,364;480;526;549;763,0;1;1;3;4,true,2202,1
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[1, 1, 2, 2], [4, 4, 7], [1, 6, 1], [14, 14], [1, 11, 1]]",p30,5,3,2,2305,false,364;526;620;763;1016,0;1;0;3;0,true,2305,3
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[1, 1, 12, 1], [1, 2, 2, 1], [2, 1, 2, 1], [7, 7, 7], [7, 4, 7, 4]]",p50,5,2,0,2603,false,680;952;1228;850;1375,0;0;0;3;3,true,2603,4
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[2, 2, 2], [14, 1, 1], [1, 1, 7], [1, 1, 14], [7, 7, 7]]",p50,5,2,1,1818,false,586;1001;1050;1232;850,0;1;1;1;1,true,2668,4
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[1, 1, 12, 1], [1, 2, 2, 1], [1, 1, 7], [4, 4, 4], [12, 1, 1]]",p50,5,2,1,1871,false,680;952;1050;714;1157,0;0;0;3;0,true,1871,6
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[1, 1, 12, 1], [1, 2, 2, 1], [14, 1, 1], [12, 1, 1], [2, 1, 2, 1]]",p50,5,1,0,1228,false,680;952;1001;1157;1228,0;0;0;0;0,true,1228,10
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[2, 2, 1], [7, 4, 4], [1, 4, 1], [1, 14, 1], [4, 7, 4]]",p70,5,1,0,2728,false,1680;1748;1914;2369;2728,0;0;0;0;0,true,5097,6
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[2, 1, 1, 1], [1, 7, 1], [1, 2, 2], [4, 7, 4], [2, 1, 2]]",p70,5,1,0,2958,false,1562;2292;2958;2728;2926,0;0;0;0;0,true,5686,7
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[2, 2, 1], [7, 4, 4], [2, 1, 1, 1], [1, 7, 1], [1, 14, 1]]",p70,5,1,0,2369,false,1680;1748;1562;2292;2369,0;0;0;0;0,true,4117,7
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[2, 2, 1], [1, 2, 1, 2], [1, 7, 1], [1, 14, 1], [2, 1, 2]]",p70,5,1,0,2926,false,1680;1723;2292;2369;2926,0;0;0;0;0,true,2926,10
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[1, 1, 2], [2, 2], [1, 1, 1, 1], [1, 1, 1], [1, 1]]",p90,5,1,0,36059,false,7455;7271;8477;15858;36059,0;0;0;0;0,true,43330,7
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[6, 6], [1, 2, 1, 1], [1, 1, 2, 1], [7, 7], [1, 1, 1, 1]]",p90,5,3,2,17573,false,2858;3499;3510;6238;8477,0;1;1;3;1,true,17573,3
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[1, 2, 1, 1], [1, 2, 1], [1, 1, 1, 1], [1, 1, 1], [1, 1]]",p90,5,1,0,36059,false,3499;10042;8477;15858;36059,0;0;0;0;0,true,36059,10
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",5000,repeated,5,"[[1, 12, 1], [2, 1, 1], [4, 4], [2, 2], [1, 1, 1, 1]]",p90,5,2,1,13187,false,3467;6010;4710;7271;8477,0;0;2;0;0,true,20458,4

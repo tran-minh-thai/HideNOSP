@@ -1,0 +1,33 @@
+# run 20261012-030046-776_dev_7b0cb448db53_s2026
+# host unknown-host
+# jdk 26.0.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu not reported: the run did not go through tools/run.py, which reads the model
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3LB
+# options {dataset=datasets/sepsis.txt, format=SPMF, sigma=300, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=5, patternKind=repeated}
+# sensitive sets: size 5, repeated-item pool 140 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 28 -> 4, p30: 28 -> 4, p50: 28 -> 4, p70: 28 -> 4, p90: 28 -> 4
+dataset,shape,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,patterns,components,singleton_components,lower_bound,bound_is_optimum,single_optima,component_of,optima_exact,conflict_bound,conflict_edges
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[3, 2, 6, 2], [1, 2, 2, 10], [8, 1, 9, 9], [8, 2, 8, 9], [8, 9, 8, 2]]",p10,5,1,0,17,false,1;10;17;17;17,0;0;0;0;0,true,18,9
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[9, 8, 9, 8], [9, 9, 8, 9], [9, 8, 8, 9], [8, 2, 8, 2], [8, 1, 2, 2]]",p10,5,1,0,31,false,2;2;5;11;31,0;0;0;0;0,true,31,10
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[2, 8, 9, 8], [2, 7, 1, 2], [2, 2, 8], [7, 6, 2, 2], [9, 8, 8]]",p10,5,1,0,18,false,2;10;6;18;18,0;0;0;0;0,true,36,8
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[9, 8, 9, 8], [2, 7, 1, 2], [9, 8, 8, 9], [8, 1, 9, 9], [8, 8, 9, 2]]",p10,5,1,0,17,false,2;10;5;17;11,0;0;0;0;0,true,17,8
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[9, 6, 2, 9], [6, 2, 9, 2], [8, 2, 8], [2, 1, 2, 10], [4, 9, 1, 9]]",p30,5,1,0,89,false,51;61;31;83;89,0;0;0;0;0,true,120,9
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[9, 9, 8], [6, 9, 2, 9], [1, 2, 2, 9], [1, 2, 9, 9], [2, 8, 2, 2]]",p30,5,1,0,79,false,20;56;72;79;34,0;0;0;0;0,true,79,10
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[6, 2, 9, 2], [8, 2, 8], [9, 6, 9, 2], [2, 6, 9, 2], [4, 9, 6, 9]]",p30,5,1,0,87,false,61;31;79;80;87,0;0;0;0;0,true,118,9
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[8, 9, 8, 9], [9, 9, 2, 10], [8, 8, 2], [6, 1, 2, 2], [2, 6, 9, 2]]",p30,5,1,0,80,false,19;39;22;56;80,0;0;0;0;0,true,80,9
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[8, 2, 2, 2], [1, 9, 9, 2], [8, 8], [8, 9, 9, 9], [9, 8, 9, 9]]",p50,5,1,0,85,false,32;85;62;44;57,0;0;0;0;0,true,147,9
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[5, 2, 1, 2], [9, 1, 9, 9], [2, 9, 8, 9], [9, 1, 2, 2], [4, 2, 1, 2]]",p50,5,1,0,113,false,94;68;53;94;113,0;0;0;0;0,true,113,10
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[5, 2, 1, 2], [2, 9, 2, 10], [8, 8], [8, 9, 9, 9], [9, 9, 10]]",p50,5,1,0,130,false,94;114;62;44;130,0;0;0;0;0,true,286,5
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[5, 2, 1, 2], [8, 2, 2, 2], [9, 6, 1, 9], [4, 2, 1, 2], [2, 1, 2, 2]]",p50,5,1,0,113,false,94;32;110;113;94,0;0;0;0;0,true,142,9
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[9, 2, 8, 9], [1, 9, 2, 9], [9, 2, 1, 2], [1, 2, 2], [8, 2, 9, 2]]",p70,5,1,0,232,false,89;150;165;232;186,0;0;0;0;0,true,232,10
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[2, 2, 10], [2, 1, 2, 9], [1, 9, 9], [1, 2, 2], [8, 9, 9]]",p70,5,1,0,232,false,150;156;207;232;217,0;0;0;0;0,true,449,7
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[2, 2, 10], [9, 2, 8, 9], [1, 9, 2, 9], [8, 2, 9, 2], [9, 8, 9]]",p70,5,1,0,186,false,150;89;150;186;167,0;0;0;0;0,true,317,9
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[2, 8, 9, 9], [1, 9, 9], [2, 8, 2], [8, 2, 9, 2], [8, 9, 2, 9]]",p70,5,1,0,215,false,110;207;141;186;215,0;0;0;0;0,true,348,9
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[2, 2, 2, 9], [9, 9, 2, 2], [2, 2, 9, 2], [9, 2, 2, 9], [9, 2, 9, 2]]",p90,5,1,0,582,false,187;310;328;483;582,0;0;0;0;0,true,582,10
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[2, 1, 2], [2, 2, 2, 9], [9, 2, 9, 2], [2, 2, 9], [2, 9, 2]]",p90,5,1,0,859,false,316;187;582;604;859,0;0;0;0;0,true,859,10
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[9, 9, 9, 2], [9, 2, 9, 2], [9, 9, 9], [9, 9, 2], [9, 2, 2]]",p90,5,1,0,747,false,238;582;395;701;747,0;0;0;0;0,true,747,10
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,repeated,5,"[[2, 2, 2, 2], [9, 9, 2, 9], [2, 9, 2, 2], [9, 2, 2, 9], [9, 2, 2]]",p90,5,1,0,747,false,121;357;386;483;747,0;0;0;0;0,true,747,10

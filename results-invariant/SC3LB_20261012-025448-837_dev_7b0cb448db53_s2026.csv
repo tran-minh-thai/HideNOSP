@@ -1,0 +1,32 @@
+# run 20261012-025448-837_dev_7b0cb448db53_s2026
+# host unknown-host
+# jdk 26.0.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu not reported: the run did not go through tools/run.py, which reads the model
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3LB
+# options {dataset=datasets/dna_mt745584.txt, format=SPMF, sigma=4000, gmin=0, gmax=10, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=distinct}
+# sensitive sets: size 1, pool 19 candidates, 19 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 3 -> 3, p30: 4 -> 4, p50: 4 -> 4, p70: 4 -> 4, p90: 4 -> 4
+dataset,shape,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,patterns,components,singleton_components,lower_bound,bound_is_optimum,single_optima,component_of,optima_exact,conflict_bound,conflict_edges
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[2, 1, 4]]",p10,1,1,1,8,true,8,0,true,8,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[1, 2, 4]]",p10,1,1,1,58,true,58,0,true,58,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[4, 1, 2]]",p10,1,1,1,61,true,61,0,true,61,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[3, 1, 4]]",p30,1,1,1,136,true,136,0,true,136,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[4, 1, 3]]",p30,1,1,1,159,true,159,0,true,159,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[4, 3, 1]]",p30,1,1,1,173,true,173,0,true,173,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[1, 3, 4]]",p30,1,1,1,201,true,201,0,true,201,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[3, 4, 1]]",p50,1,1,1,247,true,247,0,true,247,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[1, 4, 3]]",p50,1,1,1,311,true,311,0,true,311,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[2, 1]]",p50,1,1,1,597,true,597,0,true,597,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[4, 2]]",p50,1,1,1,653,true,653,0,true,653,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[1, 2]]",p70,1,1,1,685,true,685,0,true,685,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[2, 4]]",p70,1,1,1,686,true,686,0,true,686,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[3, 1]]",p70,1,1,1,735,true,735,0,true,735,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[1, 3]]",p70,1,1,1,778,true,778,0,true,778,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[3, 4]]",p90,1,1,1,1089,true,1089,0,true,1089,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[4, 3]]",p90,1,1,1,1089,true,1089,0,true,1089,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[1, 4]]",p90,1,1,1,2615,true,2615,0,true,2615,0
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,10]",4000,distinct,1,"[[4, 1]]",p90,1,1,1,2631,true,2631,0,true,2631,0

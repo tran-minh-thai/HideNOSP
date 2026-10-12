@@ -544,3 +544,24 @@ không có đường cơ sở), chưa thấy kết quả \|𝒮\| > 1 chính th�
 
 **Không đổi:** mọi mục 1–14.
 
+---
+
+## 16. Bổ sung ngày 12/10/2026 — chạy nhóm suy biến cho nửa sau của H3 (trước mọi lượt SC3 trên nhóm này)
+
+**Quyết định của người viết** (12/10/2026): chạy SC3 \|𝒮\| = 1, đợt phương pháp, trên **mọi dòng `group = degenerate`** của hai
+bảng đã chốt — 16 cấu hình ở phạm vi chính và 1 ở phạm vi lặp mục. Cùng bảy phương pháp, cùng giới hạn 1.800 giây, cùng
+`-Xmx8g`, cùng cách lấy mẫu (mục 9), cùng máy đo. Lệnh: `tools/sc3_commands.py --group=degenerate`.
+
+**Phép kiểm.** H3 (mục 2) như đã chốt: nửa sau "r gần 1 trên nhóm suy biến" (r ≤ 1,05) cho bốn đường cơ sở tầng (b), trên phạm
+vi chính. Ô lặp mục chỉ mô tả (mục 11 điểm 7). Hàng nhóm suy biến **không** vào H2, H2-R, bảng cặp (|R|, Lost) hay phép kiểm tương
+đương (mục 10 điểm 4); bộ phân tích lọc theo nhóm ở cả bốn chỗ (lọc ở phần tương đương thêm ngày 12/10, trước khi có hàng suy biến
+nào, kèm bài kiểm `test_equivalence_on_main_group_only`). Nhóm trung gian vẫn không chạy: không giả thuyết nào dùng nó.
+
+**Khai xuất xứ.** Người đề xuất đã thấy nửa đầu của H3 trên nhóm chính (bốn đường cơ sở "gần 1" ở phạm vi chính, mục 14 ghi chú sửa)
+và lượt chạy thử trên máy phát triển ở dưới; chưa thấy số chính thức nào của nhóm suy biến. Việc chạy là để hoàn tất phép kiểm đã
+chốt ở mục 2, không chọn theo số.
+
+**Chạy thử** (thăm dò trên máy phát triển, `results-probe/sc3_degenerate_dry_run_probe_20261012.txt`): 17/17 ô chạy được, 0 lỗi,
+0 hàng OT; phương pháp lâu nhất 49,9 giây trên một tập; tổng thời gian các ô 8350 giây.
+
+**Không đổi:** mọi mục 1–15.

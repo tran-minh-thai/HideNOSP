@@ -45,6 +45,7 @@ import argparse
 import csv
 import io
 import os
+import re
 import sys
 from collections import defaultdict
 
@@ -91,6 +92,9 @@ class LOCKED:
 
 
 # Columns this analysis cannot do without. Old SC3 files have no lost_rel and nonsensitive_before.
+# Preregistration section 17: the method of the secondary refinement batch, kept out of every test.
+SECONDARY_METHOD = "cut-hide-refine"
+
 REQUIRED_COLUMNS = ("lost_rel", "nonsensitive_before", "mask_count", "hf", "method_key",
                     "sensitive_set")
 
@@ -844,9 +848,18 @@ def main(argv=None):
     # old and new files, and dropping the whole batch for one old file throws the good ones away.
     raw_rows = []
     skipped = []
+    secondary = []
     for path in sc3_files:
         comments, rows = read_csv(path)
         header = next((c for c in comments if c.startswith("# run ")), "# run ?")
+        # Section 17: the refinement batch (key cut-hide-refine) is a secondary analysis added after
+        # the |S| > 1 results were seen. Its rows never enter H2, H2-R, H3 or the row counts here.
+        options = next((c for c in comments if c.startswith("# options ")), "")
+        if re.search(r"[{ ]methods=%s[,}]" % re.escape(SECONDARY_METHOD), options):
+            secondary.append(os.path.basename(path))
+            write("  %-58s %d rows  SECONDARY (section 17), not read here"
+                  % (os.path.basename(path), len(rows)))
+            continue
         missing = [c for c in REQUIRED_COLUMNS if not rows or c not in rows[0]]
         if missing:
             skipped.append((os.path.basename(path), missing))
@@ -856,6 +869,10 @@ def main(argv=None):
         write("  %-58s %d rows  %s" % (os.path.basename(path), len(rows), header[6:]))
         raw_rows.extend(rows)
 
+    if secondary:
+        write("")
+        write("  %d files of the refinement batch (section 17) are left to the secondary analysis."
+              % len(secondary))
     if skipped:
         write("")
         write("  %d files skipped because an old version of the code wrote them. If they hold"

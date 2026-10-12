@@ -431,7 +431,7 @@ def test_h2_leaves_out_protein_sdb1():
     assert any("into Wilcoxon (same |R|)                1 instances" in s for s in out), out
 
 
-def _write_sc3(path, rows):
+def _write_sc3(path, rows, options=None):
     """An SC3 file with the columns the analysis requires; rows = (set, method, lost_rel)."""
     import io as _io
     columns = ("dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,"
@@ -439,7 +439,7 @@ def _write_sc3(path, rows):
                "certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,"
                "nonsensitive_before,frequent_after")
     with _io.open(path, "w", encoding="utf-8", newline="\n") as f:
-        f.write("# run x\n" + columns + "\n")
+        f.write("# run x\n" + ("# options {%s}\n" % options if options else "") + columns + "\n")
         for sensitive_set, method, lost in rows:
             f.write('datasets/x.txt,"N=1,len=1","[0,3]",100,"%s",p10,%s,%s,,0,1,%s,0,0.1,0.1,'
                     '10,10,1.0,1,1,10,1.0,50,40,49\n' % (sensitive_set, method, method, lost))
@@ -480,6 +480,35 @@ def test_main_splits_two_scopes():
     before, _, after = text.partition("section 11: medians over the repeated-item candidates")
     assert "-> main" in before.split("section 10: medians")[1], "the distinct scope reads pool"
     assert "-> degenerate" in after.split("\n\n")[0], "the repeated scope reads repeated"
+
+
+def test_refinement_batch_is_not_read():
+    """Section 17: a file of the refinement batch (methods=cut-hide-refine) is listed and left out.
+    By hand: the main file has 2 distinct-item and 4 repeated-item rows; a refinement file with 3 more
+    rows must leave the counts at 2 and 4, and name the file as secondary. A file whose methods list
+    only mentions the key inside a longer list (the H2 set never does, but a wider set might) is read."""
+    import tempfile
+    import io as _io
+    directory = tempfile.mkdtemp()
+    _write_sc3(os.path.join(directory, "SC3_a.csv"),
+               [("[[1, 2]]", OURS, 0.10), ("[[1, 2]]", "hha", 0.30),
+                ("[[3, 3]]", OURS, 0.05), ("[[3, 3]]", "hha", 0.25),
+                ("[[4, 5, 4]]", OURS, 0.05), ("[[4, 5, 4]]", "hha", 0.35)])
+    _write_sc3(os.path.join(directory, "SC3_b.csv"),
+               [("[[1, 2]]", "cut-hide-refine", 0.00), ("[[3, 3]]", "cut-hide-refine", 0.00),
+                ("[[4, 5, 4]]", "cut-hide-refine", 0.00)],
+               options="dataset=datasets/x.txt, sensitiveSize=5, methods=cut-hide-refine")
+    report = os.path.join(directory, "report.txt")
+    pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--out", report])
+    text = _io.open(report, encoding="utf-8").read()
+    assert "distinct items 2, repeated items 4" in text, text[:800]
+    assert "SC3_b.csv" in text and "SECONDARY (section 17)" in text, text[:800]
+    assert "1 files of the refinement batch" in text
+    _write_sc3(os.path.join(directory, "SC3_c.csv"), [("[[6, 7]]", "cut-hide-refine-x", 0.00)],
+               options="dataset=datasets/x.txt, methods=cut-hide-refine-x")
+    pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--out", report])
+    text = _io.open(report, encoding="utf-8").read()
+    assert "distinct items 3, repeated items 4" in text, "another key is not the refinement batch"
 
 
 def test_h2_not_tested_fails_the_run():

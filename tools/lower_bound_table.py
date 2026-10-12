@@ -31,7 +31,8 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 OURS = "cut-hide-rw-ls"
-METHODS = ("cut-hide-rw-ls", "cut-hide-rw", "cut-hide", "hha", "dbsh", "sbsh-r1", "sbsh-rmax")
+REFINED = "cut-hide-refine"   # preregistration section 17: secondary, its own batch of SC3 files
+METHODS = ("cut-hide-rw-ls", REFINED, "cut-hide-rw", "cut-hide", "hha", "dbsh", "sbsh-r1", "sbsh-rmax")
 
 
 def rows_of(path):
@@ -142,6 +143,11 @@ def main(argv):
             rh = [int(results[k]["hha"]["mask_count"]) / int(bounds[k]["conflict_bound"]) for k in worse]
             write("   sets where hha uses fewer masks than %s: %d; ratio to the bound there: %s median %.4f, hha median %.4f"
                   % (OURS, len(worse), OURS, statistics.median(ro), statistics.median(rh)))
+        both = [k for k in keys if REFINED in results[k] and not results[k][REFINED]["status"]
+                and not results[k]["hha"]["status"]]
+        if both:
+            fewer = sum(int(results[k]["hha"]["mask_count"]) < int(results[k][REFINED]["mask_count"]) for k in both)
+            write("   sets where hha uses fewer masks than %s: %d of %d with both" % (REFINED, fewer, len(both)))
 
     write("")
     if problems:

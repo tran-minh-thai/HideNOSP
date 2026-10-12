@@ -565,3 +565,52 @@ chốt ở mục 2, không chọn theo số.
 0 hàng OT; phương pháp lâu nhất 49,9 giây trên một tập; tổng thời gian các ô 8350 giây.
 
 **Không đổi:** mọi mục 1–15.
+
+---
+
+## 17. Bổ sung ngày 12/10/2026 — phân tích phụ: phần tinh chỉnh lời giải nhiều mẫu (SAU khi đã thấy kết quả \|𝒮\| > 1 chính thức)
+
+**Quyết định của người viết** (12/10/2026): phần tinh chỉnh của Mệnh đề P15 (bản thiết kế §8.1) được đo trên máy đo như một
+**phân tích phụ, mô tả**. Phương pháp đang kiểm của H2 và H2-R **không đổi**: vẫn là `cut-hide-rw-ls` như mục 12, mà với
+\|𝒮\| > 1 là thuật toán tham lam của §9.2 bước 7.
+
+**Vì sao không đổi phương pháp đang kiểm.** Mục này được viết **sau khi** đã thấy kết quả H2 và H2-R chính thức ở \|𝒮\| = 1, 5,
+10, 20 (`results-invariant/sc3_all_sizes_analysis_20261012.txt`): phạm vi chính không bác bỏ giả thuyết không với đường cơ sở
+nào; phạm vi lặp mục bác bỏ với `hha` (p Holm 0,0058), không bác bỏ với `dbsh` (p Holm 0,083) và hai biến thể SBSH. Phần tinh
+chỉnh làm giảm \|R\|, nên nó đổi chính tập thực thể vào Wilcoxon (mục 5: chỉ cặp cùng \|R\|), và đổi Lost ở nhiều tập. Đưa nó
+vào H2 lúc này là đổi kết cục sau khi thấy số. Kết quả H2 và H2-R đã báo cáo giữ nguyên, và là kết quả kiểm định duy nhất.
+
+**Định nghĩa `cut-hide-refine`** (khoá SC3; mã `CutHideConfig.withRefineSeveral()`, commit `22db94c`): với \|𝒮\| > 1, thuật toán
+tham lam bước 7 của `cut-hide`, rồi REFINE của P15: (i) thay phần lời giải trên mỗi thành phần một mẫu của đồ thị mục chung bằng
+lời giải một mẫu chính xác (P1 khi μ(P) = 1, P8 khi g⁻ = 0) khi lời giải ấy dùng ít lần che hơn hẳn; (ii) bỏ ngược từng lần che
+mà bỏ đi mọi mẫu vẫn ẩn. Với \|𝒮\| = 1 khoá này là `cut-hide`, nên lô này không chạy \|𝒮\| = 1.
+
+**Tính chất có chứng minh, báo cáo như phép kiểm cài đặt (mục 6), không kiểm định:** trên mọi tập, \|R\|(`cut-hide-refine`) ≤
+\|R\|(`cut-hide`) và tập che tối thiểu theo bao hàm; khi bước (i) không thay gì thì Lost không tăng. Bước (i) **được phép** làm Lost
+tăng; số tập như vậy được báo cáo.
+
+**Chạy.** Mọi ô nhóm chính \|𝒮\| = 5, 10, 20 (34 + 27 + 21 ô), **một** phương pháp `--methods=cut-hide-refine`, mọi tham số
+khác như mục 14 (1.800 giây, `-Xmx8g`, cách lấy mẫu mục 9, máy đo của `config/protocol.yaml`, JDK đã khoá). Đường cơ sở không
+chạy lại: hàng của chúng ở đợt chính thức là đại lượng bất biến theo máy (mục 14) và được ghép theo tập nhạy cảm. Lệnh do
+`tools/sc3_commands.py --refine --size=5|10|20` sinh; công cụ ấy coi một tệp là của lô này khi `methods=cut-hide-refine`, và không
+lẫn nó với lô phương pháp (bài tự kiểm của công cụ, có tiêm lỗi).
+
+**Phân tích, chỉ mô tả.** `tools/preregistered_analysis.py` **không đọc** tệp của lô này (liệt kê tên, ghi "SECONDARY (section
+17)"; bài kiểm `test_refinement_batch_is_not_read`; báo cáo H2/H2-R/H3 trên dữ liệu chính thức trùng khít từng byte trước và sau
+khi thêm quy tắc này). Được báo cáo: (a) \|R\| so với cận xung đột LB_U (Mệnh đề P14(e), `tools/lower_bound_table.py`), trung vị
+và số tập đạt cận; (b) số tập mà `hha` dùng ít lần che hơn; (c) thay đổi Lost so với `cut-hide-rw-ls`: số tập tăng, giảm, trung
+vị; (d) số ca `OT`/`OOM`. Không câu nào của bài được trình bày số của lô này như một phép kiểm H2.
+
+**Báo cáo kèm, mô tả: tối ưu trên thực thể nhỏ.** `SC3OPT` (commit `66a6fee`) dựng, cho mỗi tập nhạy cảm của SC3, thực thể 8 và
+16 chuỗi thật (hoặc đoạn liền của chuỗi thật), giải đúng tối ưu bằng `SequenceSplitExact`, và so cận, tối ưu, tham lam, tinh
+chỉnh. Kết quả ở `results-invariant/sc3_reduced_optimum_20261012.txt` (bất biến theo máy, chạy trên máy phát triển). Thực thể nhỏ
+có ngưỡng riêng và chỉ gồm chuỗi ngắn hoặc đoạn liền, nên chỉ mô tả cách chia khoảng cách tới cận, không thay số trên dữ liệu
+đầy đủ.
+
+**Khai xuất xứ.** Khi viết mục này, người đề xuất đã thấy: kết quả H2, H2-R, H3 chính thức ở mọi cỡ; bảng cận dưới
+(`results-invariant/sc3_lower_bounds_20261012.txt`); lượt thăm dò `cut-hide-refine` trên mọi ô \|𝒮\| > 1 ở máy phát triển
+(`results-probe/sc3_refine_several_probe_20261012.txt`: 1.579/1.579 tập, \|R\|/LB_U trung vị giảm 0,000–0,006 ở phạm vi chính và
+0,06–0,09 ở phạm vi lặp mục; số tập `hha` ít lần che hơn từ 57 còn 3); và kết quả `SC3OPT` ở trên. Định nghĩa REFINE được viết
+và kiểm (`RefineSeveralTest`) trước lượt thăm dò; không tham số nào của nó được chỉnh sau khi thấy số.
+
+**Không đổi:** mọi mục 1–16.

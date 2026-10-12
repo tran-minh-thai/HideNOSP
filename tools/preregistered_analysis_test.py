@@ -616,6 +616,25 @@ def test_dominance_counts():
     assert re.findall(r"\d+", line[0])[0] == "5", line
 
 
+def test_equivalence_on_main_group_only():
+    """Section 4 is the companion of H2, so it uses the rows of H2: a degenerate-group pair must not
+    enter the interval. By hand: two main pairs with differences 0.10 and 0.10 -> n = 2; adding two
+    degenerate pairs must leave n = 2."""
+    rows = []
+    for name, group_rows in (("a", ("S1", "S2")), ("b", ("S3", "S4"))):
+        for s_ in group_rows:
+            for method, lost in ((OURS, 0.10), ("hha", 0.20)):
+                r = _row(method, 10, lost, sensitive_set=s_)
+                r["dataset"] = name
+                rows.append(r)
+    groups = {("a", "[0,2]", 20): {"group": "main"}, ("b", "[0,2]", 20): {"group": "degenerate"}}
+    out = []
+    pa.run_equivalence(rows, lambda s="": out.append(s), groups)
+    line = [s for s in out if s.strip().startswith("hha")]
+    assert line and re.findall(r"\d+", line[0])[0] == "2", (line, out)
+    assert any("rows: main group" in s and ": 4" in s for s in out), out
+
+
 TESTS = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
 
 

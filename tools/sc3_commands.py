@@ -1,8 +1,9 @@
 """Print the SC3 commands that are still missing, from the two locked group tables.
 
-Why a generator and not a hand-written list. The cells of SC3 are the main-group rows of
-config/configuration_groups.tsv (pool scope, sensitive patterns without repeated items) and of
-config/configuration_groups_repeated.tsv (repeated-item scope), at one size of the sensitive set.
+Why a generator and not a hand-written list. The cells of SC3 are the rows of one group (main by
+default) of config/configuration_groups.tsv (pool scope, sensitive patterns without repeated items)
+and of config/configuration_groups_repeated.tsv (repeated-item scope), at one size of the sensitive
+set.
 A cell is done when results-invariant/ holds a complete SC3 file whose options line names that
 cell. Both lists change as results come in, so the commands are derived from them each time instead
 of being copied by hand.
@@ -12,6 +13,8 @@ Usage:
     python tools/sc3_commands.py                 commands for |S| = 1 still missing
     python tools/sc3_commands.py --size=5        the same for |S| = 5
     python tools/sc3_commands.py --pareto        the Pareto-front batch (|S| = 1, no method)
+    python tools/sc3_commands.py --group=degenerate   the degenerate-group cells (the second half of
+                                                      H3 is stated on them; preregistration section 16)
     python tools/sc3_commands.py --self-test     checks of the matching rules, with planted faults
 
 What is fixed here (preregistration section 14): the seven methods of the H2 set, the time limit
@@ -45,6 +48,8 @@ TIME_LIMIT = "1800"
 HEAP = "-Xmx8g"
 MACHINE = "DESKTOP-L8A6EPO"
 SIZES = (1, 5, 10, 20)
+GROUPS = ("main", "intermediate", "degenerate")
+PLANNED_GROUPS = ("main", "degenerate")   # groups a batch can be generated for
 
 TABLES = (
     ("config/configuration_groups.tsv", "distinct"),
@@ -57,14 +62,16 @@ IDENTITY = ("dataset", "format", "sigma", "gmin", "gmax", "maxPatternLength", "s
             "sensitiveSize", "patternKind", "pareto", "timeLimit", "methods")
 
 
-def read_table(path, kind):
-    """Main-group rows of one locked table, as cell dictionaries."""
+def read_table(path, kind, group="main"):
+    """The rows of one group of one locked table, as cell dictionaries."""
     cells = []
     with io.open(path, encoding="utf-8", newline="") as handle:
         lines = [line for line in handle if not line.startswith("#")]
     for row in csv.DictReader(lines, delimiter="\t"):
         row = {k.strip(): (v or "").strip() for k, v in row.items()}
-        if row["group"] != "main":
+        if row["group"] not in GROUPS:
+            raise ValueError("%s: unknown group %r" % (Path(path).as_posix(), row["group"]))
+        if row["group"] != group:
             continue
         match = re.fullmatch(r"\[(\d+),(\d+)\]", row["gap"])
         if not match:
@@ -86,25 +93,25 @@ def strata(pool):
     return [(k + 1) * pool // 5 - k * pool // 5 for k in range(5)]
 
 
-def absent(root, size):
+def absent(root, size, group="main"):
     """Main-group cells with no set of this size: no stratum holds that many patterns, so SC3
     would stop with "the cell does not exist". The pool column of the locked tables equals the pool
     SC3 draws from (checked on the 54 official files of |S| = 1, 2026-10-04)."""
     out = []
     for name, kind in TABLES:
-        for cell in read_table(root / name, kind):
+        for cell in read_table(root / name, kind, group):
             if max(strata(cell["pool"])) < size:
                 out.append(cell)
     out.sort(key=lambda c: (c["pool"], c["patternKind"], c["dataset"], c["gmax"], int(c["sigma"])))
     return out
 
 
-def planned(root, size, front=False):
+def planned(root, size, front=False, group="main"):
     if front and size != 1:
         raise ValueError("the Pareto front exists for |S| = 1 only")
     cells = []
     for name, kind in TABLES:
-        for cell in read_table(root / name, kind):
+        for cell in read_table(root / name, kind, group):
             if max(strata(cell["pool"])) < size:
                 continue
             cell.update({
@@ -179,8 +186,8 @@ def command(cell):
     return " ".join('"%s"' % a if "," in a else a for a in args)
 
 
-def plan(root, size, front=False):
-    cells = planned(root, size, front)
+def plan(root, size, front=False, group="main"):
+    cells = planned(root, size, front, group)
     files = existing(root)
     todo, done = [], []
     used = set()
@@ -191,10 +198,13 @@ def plan(root, size, front=False):
             used.update(hit)
         else:
             todo.append(cell)
-    # A file of another size, or of the other batch, belongs to another plan, not to this one.
+    # A file of another size, of the other batch or of another group belongs to another plan; a
+    # file is stray only when it matches no cell of any group at this size and batch.
+    others = [c for g in GROUPS if g != group for c in planned(root, size, front, g)]
     stray = [name for name, options in files
              if name not in used and options.get("sensitiveSize") == str(size)
-             and (options.get("methods") == "none") == front]
+             and (options.get("methods") == "none") == front
+             and not any(matches(c, options) for c in others)]
     return cells, todo, done, stray
 
 
@@ -204,29 +214,36 @@ def describe(cell):
 
 
 def main(argv):
-    size, front = 1, False
+    size, front, group = 1, False, "main"
     for arg in argv:
         if arg == "--self-test":
             return self_test()
         if arg == "--pareto":
             front = True
             continue
+        if arg.startswith("--group="):
+            group = arg.split("=", 1)[1]
+            if group not in PLANNED_GROUPS:
+                print("unknown group %s; use --group=%s" % (group, "|".join(PLANNED_GROUPS)), file=sys.stderr)
+                return 1
+            continue
         match = re.fullmatch(r"--size=(\d+)", arg)
         if match and int(match.group(1)) in SIZES:
             size = int(match.group(1))
         else:
-            print("unknown argument %s; use --size=1|5|10|20, --pareto or --self-test" % arg, file=sys.stderr)
+            print("unknown argument %s; use --size=1|5|10|20, --pareto, --group=main|degenerate or --self-test"
+                  % arg, file=sys.stderr)
             return 1
     try:
-        cells, todo, done, stray = plan(REPO, size, front)
+        cells, todo, done, stray = plan(REPO, size, front, group)
     except (OSError, ValueError, KeyError) as error:
         print("cannot build the plan: %s" % error, file=sys.stderr)
         return 1
     kinds = {k: sum(1 for c in cells if c["patternKind"] == k) for _, k in TABLES}
-    print("# SC3 %s |S|=%d, main group: %d cells (%d pool scope, %d repeated-item scope), %d done, %d to run"
-          % ("Pareto front" if front else "methods", size, len(cells), kinds["distinct"], kinds["repeated"], len(done), len(todo)))
+    print("# SC3 %s |S|=%d, %s group: %d cells (%d pool scope, %d repeated-item scope), %d done, %d to run"
+          % ("Pareto front" if front else "methods", size, group, len(cells), kinds["distinct"], kinds["repeated"], len(done), len(todo)))
     print("# repository root: %s" % REPO.name)
-    for cell in absent(REPO, size):
+    for cell in absent(REPO, size, group):
         print("# no set of size %d: %s, largest stratum %d" % (size, describe(cell), max(strata(cell["pool"]))))
     for cell, names in done:
         print("# done: %s  <- %s" % (describe(cell), ", ".join(names)))
@@ -344,6 +361,22 @@ def self_test():
         check("a front file marks its front cell done", len(done6) == 1 and len(todo6) == 2,
               "%d done" % len(done6))
         (root / "results-invariant" / "SC3_j.csv").unlink()
+
+        degenerate = planned(root, 1, False, "degenerate")
+        check("degenerate group plans its rows only", [describe(c) for c in degenerate]
+              == ["repeated gamma [0,3] sigma=30 pool=3"], str([describe(c) for c in degenerate]))
+        write("SC3_k.csv", degenerate[0])
+        _, _, _, stray7 = plan(root, 1)
+        _, todo8, done8, stray8 = plan(root, 1, False, "degenerate")
+        check("a degenerate file is not stray in the main plan", "SC3_k.csv" not in stray7, str(stray7))
+        check("a degenerate file marks its degenerate cell done", len(done8) == 1 and not todo8 and not stray8,
+              "%d done" % len(done8))
+        (root / "results-invariant" / "SC3_k.csv").unlink()
+        intermediate = planned(root, 1, False, "intermediate")
+        write("SC3_m.csv", intermediate[0])
+        _, _, _, stray9 = plan(root, 1)
+        check("an intermediate-group file is not stray either", "SC3_m.csv" not in stray9, str(stray9))
+        (root / "results-invariant" / "SC3_m.csv").unlink()
 
         write("SC3_h.csv", cells[1], change={"dataset": "datasets\\" + Path(cells[1]["dataset"]).name})
         _, todo3, done3, _ = plan(root, 1)

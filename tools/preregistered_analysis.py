@@ -747,13 +747,22 @@ def run_h3(rows, groups, write, descriptive=False):
 
 # ---------------------------------------------------------------- equivalence, section 4
 
-def run_equivalence(rows, write):
+def run_equivalence(rows, write, groups=None):
     write("")
     write("=" * 78)
     write("Equivalence (section 4): Hodges-Lehmann with a %.0f%% confidence interval, against the"
           " locked margins" % (100 * (1 - LOCKED.ALPHA)))
     write("=" * 78)
     rows = [r for r in rows if r["dataset"] not in LOCKED.REPORT_ONLY]
+    # The companion of H2, so on the rows of H2: the main group (section 10, point 4). Without this
+    # filter the pairs of the degenerate group, run for H3 only, would enter the intervals.
+    if groups is not None:
+        rows = [r for r in rows
+                if (groups.get((r["dataset"], r["gap"], r["sigma"])) or {}).get("group") == "main"]
+        write("  rows: main group, without %s (the rows of H2): %d"
+              % (", ".join(LOCKED.REPORT_ONLY), len(rows)))
+    else:
+        write("  PROBE: no group filter (--skip-groups): %d rows" % len(rows))
     family = [b for b in LOCKED.BASELINE_FAMILY if present(rows, b)]
     for quantity, margin in LOCKED.EQUIVALENCE_MARGIN.items():
         write("")
@@ -899,7 +908,7 @@ def main(argv=None):
         # H3 is preregistered for the main scope; section 11, point 7 makes the ratio of the
         # repeated scope descriptive.
         run_h3(scope_rows, groups, write, descriptive=(scope == "repeated"))
-        run_equivalence(scope_rows, write)
+        run_equivalence(scope_rows, write, None if args.skip_groups else groups)
         all_valid = all_valid and h2_valid and groups_valid
 
     write("")

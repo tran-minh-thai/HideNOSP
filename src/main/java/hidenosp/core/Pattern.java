@@ -48,6 +48,16 @@ public final class Pattern implements Comparable<Pattern> {
         return items;
     }
 
+    /** True when the item occurs in the pattern. */
+    public boolean contains(int item) {
+        for (int x : items) {
+            if (x == item) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** mu(P); the pattern has distinct items when this is 1. */
     public int mu() {
         return mu;

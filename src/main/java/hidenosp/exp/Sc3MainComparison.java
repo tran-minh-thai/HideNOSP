@@ -287,6 +287,19 @@ public final class Sc3MainComparison implements Scenario {
                 double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
                 return new CutHide(CutHideConfig.standard()).withNearThreshold(band, factor);
             }
+            case "cut-hide-refine": {
+                // A probe of proposition P15, not in the H2 set: with several patterns, the greedy of
+                // step 7 followed by the exact solution of each one-pattern component (when smaller)
+                // and the reverse delete. One pattern is cut-hide unchanged.
+                if (problem.sensitive().size() == 1) {
+                    return create("cut-hide", problem, frequent, sigma, epsilon, seed, context);
+                }
+                Set<Pattern> closure =
+                        FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+                List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
+                double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
+                return new CutHide(CutHideConfig.standard().withRefineSeveral()).withNearThreshold(band, factor);
+            }
             case "cut-hide-sweep": {
                 // CUT-HIDE without theorem P8: the lambda-sweep curves, and for a repeated-item
                 // pattern the masks of a cut (P3). The ablation that measures what P8 adds.

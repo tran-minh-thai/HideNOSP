@@ -6,7 +6,7 @@ package hidenosp.hide;
  * always names the variant that produced it.
  */
 public record CutHideConfig(Weighting weighting, boolean refineLambda, AllocationRule allocation,
-                            boolean verifyPostcondition, Curves curves) {
+                            boolean verifyPostcondition, Curves curves, boolean refineSeveral) {
 
     public enum Weighting {
         /** Every position weighs the same; the cut then minimises only the number of masks. */
@@ -45,23 +45,36 @@ public record CutHideConfig(Weighting weighting, boolean refineLambda, Allocatio
     /** The configuration the paper reports as CUT-HIDE. */
     public static CutHideConfig standard() {
         return new CutHideConfig(Weighting.VITAL_NODE, true, AllocationRule.DYNAMIC_PROGRAM, true,
-                Curves.FRONTIER_DP);
+                Curves.FRONTIER_DP, false);
     }
 
     /** The variant without side-effect weights, the first row of SC7. */
     public static CutHideConfig uniformWeights() {
         return new CutHideConfig(Weighting.UNIFORM, true, AllocationRule.DYNAMIC_PROGRAM, true,
-                Curves.FRONTIER_DP);
+                Curves.FRONTIER_DP, false);
     }
 
     /** This configuration with the curves computed the other way, for SC7 and the ablations. */
     public CutHideConfig withCurves(Curves other) {
-        return new CutHideConfig(weighting, refineLambda, allocation, verifyPostcondition, other);
+        return new CutHideConfig(weighting, refineLambda, allocation, verifyPostcondition, other,
+                refineSeveral);
+    }
+
+    /**
+     * This configuration with the several-pattern refinement of proposition P15: after the greedy
+     * of step 7, each component of the shared-item graph holding one pattern is replaced by the
+     * exact single-pattern solution when that uses fewer masks, then masks are removed in reverse
+     * order of choice while every pattern stays hidden. One sensitive pattern is unaffected.
+     */
+    public CutHideConfig withRefineSeveral() {
+        return new CutHideConfig(weighting, refineLambda, allocation, verifyPostcondition, curves, true);
     }
 
     @Override
     public String toString() {
+        // The refinement is named only when on, so the configurations that existed before it keep the
+        // display name already written in the result files.
         return "CutHide[" + weighting + ", refineLambda=" + refineLambda + ", " + allocation + ", "
-                + curves + "]";
+                + curves + (refineSeveral ? ", refineSeveral" : "") + "]";
     }
 }

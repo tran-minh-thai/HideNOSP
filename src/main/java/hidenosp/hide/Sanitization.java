@@ -22,6 +22,8 @@ public final class Sanitization {
     private long certifiedPairs;
     private long totalPairs;
     private long certifiedLowerBound;
+    private int replacedComponents;
+    private int removedMasks;
 
     public Sanitization(SequenceDatabase original) {
         this.original = original;
@@ -39,6 +41,34 @@ public final class Sanitization {
     /** Records one masked position; repeated calls on the same position are idempotent. */
     public void mask(int sequenceIndex, int position) {
         masked.computeIfAbsent(sequenceIndex, k -> new TreeSet<>()).add(position);
+    }
+
+    /** Removes one masked position; a sequence left with no mask is dropped from the map. */
+    public void unmask(int sequenceIndex, int position) {
+        Set<Integer> set = masked.get(sequenceIndex);
+        if (set != null) {
+            set.remove(position);
+            if (set.isEmpty()) {
+                masked.remove(sequenceIndex);
+            }
+        }
+    }
+
+    /**
+     * Records what the several-pattern refinement of CUT-HIDE changed: components of one pattern
+     * replaced by the exact single-pattern solution, and masks removed by the reverse delete.
+     */
+    public void recordRefinement(int replacedComponents, int removedMasks) {
+        this.replacedComponents += replacedComponents;
+        this.removedMasks += removedMasks;
+    }
+
+    public int replacedComponents() {
+        return replacedComponents;
+    }
+
+    public int removedMasks() {
+        return removedMasks;
     }
 
     public Set<Integer> maskedIn(int sequenceIndex) {

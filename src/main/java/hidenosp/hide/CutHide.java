@@ -4,8 +4,10 @@ import hidenosp.baseline.HidingMethod;
 import hidenosp.core.EventSequence;
 import hidenosp.core.Nettree;
 import hidenosp.core.Pattern;
+import hidenosp.core.SequenceDatabase;
 import hidenosp.core.SupportNO;
 import hidenosp.index.NettreeCutIndex;
+import hidenosp.util.Deadline;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -458,6 +460,7 @@ public final class CutHide implements HidingMethod {
 
         Map<Integer, Set<Integer>> masked = new HashMap<>();
         Map<Integer, double[]> weights = new HashMap<>();
+        List<int[]> order = new ArrayList<>();
         Candidate[] best = new Candidate[sequenceCount];
         for (int s : carrying) {
             best[s] = bestInSequence(problem, s, masked, weights, needed);
@@ -493,6 +496,7 @@ public final class CutHide implements HidingMethod {
             int[] drop = pick.exactDrop();
             masked.computeIfAbsent(pick.sequence(), k -> new TreeSet<>()).add(pick.position());
             result.mask(pick.sequence(), pick.position());
+            order.add(new int[] {pick.sequence(), pick.position()});
             for (int p = 0; p < patternCount; p++) {
                 needed[p] = Math.max(0, needed[p] - drop[p]);
             }
@@ -509,6 +513,112 @@ public final class CutHide implements HidingMethod {
                 }
             }
         }
+        if (config.refineSeveral()) {
+            refineSeveral(problem, result, order);
+        }
+    }
+
+    /**
+     * The several-pattern refinement of proposition P15, on a solution that hides every pattern.
+     *
+     * <p>First, every component of the shared-item graph that holds a single pattern P: its masks
+     * are those whose item belongs to P (proposition P14(a)), and they are replaced by the exact
+     * single-pattern solution of P when that uses fewer masks. Second, the reverse delete: masks
+     * are visited in reverse order of choice (the replacing masks last) and a mask is removed when
+     * every pattern stays hidden without it. Removing a mask never lowers a support (P5(a)), so
+     * the delete lowers |R| and never raises Lost; the result is minimal under inclusion.
+     */
+    private void refineSeveral(HideProblem problem, Sanitization result, List<int[]> order) {
+        List<Pattern> sensitive = problem.sensitive();
+        SequenceDatabase database = problem.database();
+        int n = sensitive.size();
+        int[] component = SharedItems.components(sensitive);
+        int[] size = new int[n];
+        for (int k = 0; k < n; k++) {
+            size[component[k]]++;
+        }
+        List<int[]> appended = new ArrayList<>();
+        int replaced = 0;
+        for (int k = 0; k < n; k++) {
+            if (size[component[k]] != 1) {
+                continue;
+            }
+            Pattern p = sensitive.get(k);
+            List<int[]> part = new ArrayList<>();
+            for (Map.Entry<Integer, Set<Integer>> e : result.masked().entrySet()) {
+                int[] events = database.get(e.getKey()).events();
+                for (int position : e.getValue()) {
+                    if (p.contains(events[position])) {
+                        part.add(new int[] {e.getKey(), position});
+                    }
+                }
+            }
+            HideProblem single = new HideProblem(database, List.of(p), problem.gap(), problem.mode(),
+                    problem.threshold(), problem.epsilon(), problem.maxPatternLength(),
+                    problem.frequentThreshold());
+            Sanitization exact = new Sanitization(database);
+            runSinglePattern(single, p, exact);
+            if (exact.maskCount() < part.size()) {
+                for (int[] m : part) {
+                    result.unmask(m[0], m[1]);
+                }
+                for (Map.Entry<Integer, Set<Integer>> e : exact.masked().entrySet()) {
+                    for (int position : e.getValue()) {
+                        result.mask(e.getKey(), position);
+                        appended.add(new int[] {e.getKey(), position});
+                    }
+                }
+                replaced++;
+            }
+        }
+
+        long[] total = new long[n];
+        SequenceDatabase current = result.sanitized();
+        for (int k = 0; k < n; k++) {
+            total[k] = SupportNO.of(sensitive.get(k), current, problem.gap());
+        }
+        List<int[]> visit = new ArrayList<>();
+        for (int i = order.size() - 1; i >= 0; i--) {
+            visit.add(order.get(i));
+        }
+        for (int i = appended.size() - 1; i >= 0; i--) {
+            visit.add(appended.get(i));
+        }
+        int removed = 0;
+        for (int[] m : visit) {
+            Deadline.check();
+            int s = m[0];
+            int position = m[1];
+            Set<Integer> here = result.maskedIn(s);
+            if (!here.contains(position)) {
+                continue;
+            }
+            EventSequence original = database.get(s);
+            EventSequence before = original.mask(here);
+            Set<Integer> without = new TreeSet<>(here);
+            without.remove(position);
+            EventSequence after = original.mask(without);
+            int item = original.events()[position];
+            long[] changed = new long[n];
+            boolean hidden = true;
+            for (int k = 0; k < n && hidden; k++) {
+                Pattern p = sensitive.get(k);
+                if (!p.contains(item)) {
+                    continue;
+                }
+                long rise = SupportNO.of(p, after, problem.gap()) - SupportNO.of(p, before, problem.gap());
+                changed[k] = rise;
+                hidden = total[k] + rise < problem.threshold();
+            }
+            if (hidden) {
+                result.unmask(s, position);
+                for (int k = 0; k < n; k++) {
+                    total[k] += changed[k];
+                }
+                removed++;
+            }
+        }
+        result.recordRefinement(replaced, removed);
     }
 
     /** Rebuilds one sequence's index over its current mask and returns its best position. */

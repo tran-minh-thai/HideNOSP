@@ -6,6 +6,7 @@ import hidenosp.core.Nettree;
 import hidenosp.core.Pattern;
 import hidenosp.core.SequenceDatabase;
 import hidenosp.hide.HideProblem;
+import hidenosp.hide.SharedItems;
 import hidenosp.io.CsvWriter;
 import hidenosp.io.DatasetReader;
 import hidenosp.io.ResultSink;
@@ -73,19 +74,7 @@ public final class Sc3LowerBound implements Scenario {
     public static Bound bound(SequenceDatabase database, List<Pattern> sensitive, GapConstraint gap,
                               HideProblem.Mode mode, int sigma) {
         int n = sensitive.size();
-        int[] parent = new int[n];
-        for (int k = 0; k < n; k++) {
-            parent[k] = k;
-        }
-        Map<Integer, Integer> firstWithItem = new HashMap<>();
-        for (int k = 0; k < n; k++) {
-            for (int item : sensitive.get(k).items()) {
-                Integer other = firstWithItem.putIfAbsent(item, k);
-                if (other != null) {
-                    union(parent, k, other);
-                }
-            }
-        }
+        int[] component = SharedItems.components(sensitive);
         long[] optimum = new long[n];
         boolean exact = true;
         for (int k = 0; k < n; k++) {
@@ -95,10 +84,8 @@ public final class Sc3LowerBound implements Scenario {
         }
         Map<Integer, Long> largest = new HashMap<>();
         Map<Integer, Integer> size = new HashMap<>();
-        int[] component = new int[n];
         for (int k = 0; k < n; k++) {
-            int root = find(parent, k);
-            component[k] = root;
+            int root = component[k];
             largest.merge(root, optimum[k], Math::max);
             size.merge(root, 1, Integer::sum);
         }
@@ -179,22 +166,6 @@ public final class Sc3LowerBound implements Scenario {
         long take = heaviestIndependentSet(meets, weight, next + 1, chosen | 1L << next,
                 blocked | meets[next]);
         return Math.max(skip, take);
-    }
-
-    private static int find(int[] parent, int k) {
-        while (parent[k] != k) {
-            parent[k] = parent[parent[k]];
-            k = parent[k];
-        }
-        return k;
-    }
-
-    private static void union(int[] parent, int a, int b) {
-        int ra = find(parent, a);
-        int rb = find(parent, b);
-        if (ra != rb) {
-            parent[Math.max(ra, rb)] = Math.min(ra, rb);
-        }
     }
 
     @Override

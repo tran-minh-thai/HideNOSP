@@ -1,0 +1,34 @@
+# cell SC2 leviathan [0,1] sigma=500 pool
+# machine ADMIN-PC
+# exit 0 after 50 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 6f494896ecaa
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC2 data regime: rho_rep, beta and the bound of P1 per dataset and per sigma
+# run 20261101-131710-150_ADMIN-PC_6f494896ecaa_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+dataset datasets\leviathan.txt, |D| = 5834, total length 197251, alphabet 9025, linearised share 0.0
+|F_sigma(D)| = 73 at sigma = 500, gap [0,1], l_max = 4
+[18, 14]           sup_NO   540  sup_seq   495  rho_rep 0.083  beta 0.817  min masks    41 (0.0002 of D)
+[29, 8]            sup_NO   581  sup_seq   528  rho_rep 0.091  beta 0.785  min masks    82 (0.0004 of D)
+[30, 17]           sup_NO   627  sup_seq   570  rho_rep 0.091  beta 0.304  min masks   128 (0.0006 of D)
+[3, 8]             sup_NO   640  sup_seq   548  rho_rep 0.144  beta 0.561  min masks   141 (0.0007 of D)
+[17, 8]            sup_NO   652  sup_seq   602  rho_rep 0.077  beta 0.758  min masks   153 (0.0008 of D)
+[71, 290]          sup_NO   681  sup_seq   611  rho_rep 0.103  beta 0.398  min masks   182 (0.0009 of D)
+[17, 71]           sup_NO   696  sup_seq   630  rho_rep 0.095  beta 0.640  min masks   197 (0.0010 of D)
+[29, 17]           sup_NO   762  sup_seq   677  rho_rep 0.112  beta 0.526  min masks   263 (0.0013 of D)
+[8, 14]            sup_NO   774  sup_seq   688  rho_rep 0.111  beta 0.780  min masks   275 (0.0014 of D)
+[14, 8]            sup_NO   776  sup_seq   677  rho_rep 0.128  beta 0.757  min masks   277 (0.0014 of D)
+[21, 8]            sup_NO  1170  sup_seq   986  rho_rep 0.157  beta 0.527  min masks   671 (0.0034 of D)
+[71, 8]            sup_NO  1326  sup_seq  1096  rho_rep 0.173  beta 0.609  min masks   827 (0.0042 of D)
+[18, 8]            sup_NO  2469  sup_seq  1757  rho_rep 0.288  beta 0.568  min masks  1970 (0.0100 of D)
+[8, 18]            sup_NO  4160  sup_seq  2676  rho_rep 0.357  beta 0.371  min masks  3661 (0.0186 of D)
+pool of 14 distinct-item candidates: median rho_rep 0.111, median beta 0.588
+done in 45.2 s

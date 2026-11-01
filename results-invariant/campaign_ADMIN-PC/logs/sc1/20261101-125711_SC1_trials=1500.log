@@ -1,0 +1,27 @@
+# cell SC1 trials=1500
+# machine ADMIN-PC
+# exit 0 after 4 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 79f62488bee9
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC1 implementation check: flow against exhaustive sup_NO, P1, L5, incremental update
+# run 20261101-125714-517_ADMIN-PC_79f62488bee9_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+check       L0 flow equals brute force                              1500 instances       0 mismatches
+check       L0 minimum cut size                                     1500 instances       0 mismatches
+check       P5a masking never raises sup_NO                         7498 instances       0 mismatches
+observation P5b deletion raised sup_NO, finite maximum gap          5665 instances      49 cases
+check       L5 vital node lowers sup_NO                             4820 instances       0 mismatches
+check       P5b deletion is monotone when the gap is unbounded      1833 instances       0 mismatches
+check       P1 least masks equals F minus t                          917 instances       0 mismatches
+check       incremental update equals rebuild                       1220 instances       0 mismatches
+check       F_sigma pruning equals enumeration                        40 instances       0 mismatches
+SC1 passed: no mismatch
+done in 0.3 s

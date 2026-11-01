@@ -614,3 +614,34 @@ có ngưỡng riêng và chỉ gồm chuỗi ngắn hoặc đoạn liền, nên 
 và kiểm (`RefineSeveralTest`) trước lượt thăm dò; không tham số nào của nó được chỉnh sau khi thấy số.
 
 **Không đổi:** mọi mục 1–16.
+
+---
+
+## 18. Bổ sung ngày 01/11/2026 — đổi máy đo, chạy lại toàn bộ, và trần bộ nhớ của đợt mặt Pareto
+
+**Quyết định của người viết** (01/11/2026):
+
+1. **Máy đo của dự án đổi sang một máy Dell XPS 64 GB (Windows 11).** Mọi số vào bài lấy từ máy này. Tên máy, bộ xử lý, bộ nhớ
+   và JDK do chính máy ấy ghi vào `results-invariant/campaign_<tên máy>/ENV_LOCK.json` ở bước đầu của lượt chạy, và vào đầu mỗi
+   tệp kết quả; hàng 5 của `config/protocol.yaml` điền từ tệp ấy. JDK giữ đúng bản của máy cũ: Eclipse Temurin 25.0.4.1+1.
+2. **Chạy lại toàn bộ trên máy mới**, theo thứ tự: SC1; SC2 trên 81 cấu hình của hai bảng nhóm; SC3 đợt phương pháp nhóm chính
+   \|𝒮\| = 1, 5, 10, 20 (mục 14); nhóm suy biến (mục 16); lô tinh chỉnh (mục 17, phân tích phụ); SC3LB; SC3OPT (thực thể 8 và 16
+   chuỗi); đợt mặt Pareto. Danh sách ô do `tools/campaign.py` sinh từ các bảng đã khoá, cùng các bộ sinh của mục 14.
+3. **Đợt mặt Pareto chạy với `-Xmx32g`.** Mọi lô khác giữ `-Xmx8g` như mục 14 điểm 3. Đợt mặt Pareto là phân tích mô tả (mục 11
+   điểm 6), chạy riêng với `--methods=none`, nên trần của nó không đổi hàng phương pháp nào. Lý do đo được: một ô thăm dò hết bộ
+   nhớ ở 6 GB. Chưa có số mặt Pareto chính thức nào.
+
+**Bất biến theo máy là phép đối chiếu tái lập.** Mục 14 đã nêu: hàng không `OT` hay `OOM` là đại lượng bất biến theo máy. Vì vậy
+mọi cột đếm của hàng ấy trên máy mới phải **trùng** hàng tương ứng của DESKTOP-L8A6EPO; lệch là lỗi, phải giải thích trước khi dùng
+số của máy mới. Tập hàng `OT` được phép khác (phụ thuộc máy) và được báo cáo kèm tên máy. SC2 trên máy mới là phép tái lập bảng
+nhóm: bảng sinh lại từ SC2 của máy mới phải trùng hai bảng đã khoá; lệch thì báo, **không** sửa bảng đã khoá.
+
+**Phân tích một máy.** `tools/preregistered_analysis.py` từ chối khi tệp SC3 đến từ hơn một máy mà không có `--machine`
+(bài kiểm `test_one_machine_per_analysis`, có tiêm lỗi), và chỉ đọc tệp của máy được nêu. Tệp của DESKTOP-L8A6EPO giữ trong kho
+làm hồ sơ và làm phép đối chiếu, không vào bảng của bài.
+
+**Khai xuất xứ.** Khi viết mục này, người đề xuất đã thấy mọi kết quả chính thức của DESKTOP-L8A6EPO (H2, H2-R, nửa đầu H3, bảng
+cặp), bảng cận dưới, kết quả SC3OPT và lượt thăm dò `cut-hide-refine`; chưa thấy số chính thức nào của nhóm suy biến và của mặt
+Pareto. Việc đổi máy và chạy lại là quyết định về môi trường, không chọn theo số: mọi tham số của mục 1–17 giữ nguyên.
+
+**Không đổi:** mọi mục 1–17.

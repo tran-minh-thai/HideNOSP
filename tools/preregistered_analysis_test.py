@@ -511,6 +511,38 @@ def test_refinement_batch_is_not_read():
     assert "distinct items 3, repeated items 4" in text, "another key is not the refinement batch"
 
 
+def test_one_machine_per_analysis():
+    """Files of two machines are refused unless --machine names one; with it only that machine is read.
+    By hand: machine A has the 6 rows of test_main_splits_two_scopes, machine B one more distinct row."""
+    import tempfile
+    import io as _io
+    directory = tempfile.mkdtemp()
+    _write_sc3(os.path.join(directory, "SC3_a.csv"),
+               [("[[1, 2]]", OURS, 0.10), ("[[1, 2]]", "hha", 0.30),
+                ("[[3, 3]]", OURS, 0.05), ("[[3, 3]]", "hha", 0.25),
+                ("[[4, 5, 4]]", OURS, 0.05), ("[[4, 5, 4]]", "hha", 0.35)])
+    _write_sc3(os.path.join(directory, "SC3_b.csv"), [("[[6, 7]]", OURS, 0.10)])
+    for name, machine in (("SC3_a.csv", "A"), ("SC3_b.csv", "B")):
+        path = os.path.join(directory, name)
+        text = _io.open(path, encoding="utf-8").read().replace("# run x", "# run 20261101-000000-000_%s_abc_s2026" % machine)
+        _io.open(path, "w", encoding="utf-8", newline="\n").write(text)
+    report = os.path.join(directory, "report.txt")
+    import contextlib
+    err = _io.StringIO()
+    with contextlib.redirect_stderr(err):
+        code = pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--out", report])
+    # The exit code alone proves nothing: this tiny fixture also fails H2 for lack of pairs.
+    assert code == 1 and "come from 2 machines" in err.getvalue(), (code, err.getvalue())
+    assert not os.path.exists(report), "a refused analysis must not write a report"
+    pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--machine", "A", "--out", report])
+    text = _io.open(report, encoding="utf-8").read()
+    assert "distinct items 2, repeated items 4" in text, text[:600]
+    pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--machine", "B", "--out", report])
+    text = _io.open(report, encoding="utf-8").read()
+    assert "distinct items 1, repeated items 0" in text, text[:600]
+    assert pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--machine", "C", "--out", report]) == 1
+
+
 def test_h2_not_tested_fails_the_run():
     """Without the method under test, without any tier (b) baseline, or with a Holm family smaller
     than the locked four, H2 is not the locked test and the exit code must say so. An end-to-end

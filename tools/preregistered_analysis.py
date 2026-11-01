@@ -126,6 +126,18 @@ def collect_files(directory, prefix):
     return out
 
 
+def machine_of(path):
+    """The machine field of the run stamp in the header of a result file, or "?" without a stamp."""
+    with io.open(path, encoding="utf-8-sig", newline="") as f:
+        for line in f:
+            if not line.startswith("#"):
+                break
+            match = re.match(r"^# run \d{8}-\d{6}(?:-\d{3})?_([^_]+)_", line)
+            if match:
+                return match.group(1)
+    return "?"
+
+
 def dataset_name(label):
     """Normalise a dataset label: SC2 writes a path, SC3 a path or 'synthetic'."""
     label = label.replace("\\", "/").strip()
@@ -807,6 +819,9 @@ def main(argv=None):
                         help="do not compare the configurations with the locked table (probe runs)")
     parser.add_argument("--out", default="",
                         help="write the report to this file instead of the screen")
+    parser.add_argument("--machine", default="",
+                        help="read only the SC3 files whose run stamp names this machine; required "
+                             "when the files come from more than one machine")
     parser.add_argument("--write-groups", action="store_true",
                         help="write config/configuration_groups.tsv from the SC2 pool files and "
                              "stop; done once, from the official runs, and committed")
@@ -839,6 +854,23 @@ def main(argv=None):
     sc3_files = collect_files(args.sc3, "SC3_")
     if not sc3_files:
         print("no SC3 file found in %s" % args.sc3, file=sys.stderr)
+        return 1
+    # One machine per analysis. Rows of two machines are the same cells measured twice; merged as
+    # reruns they would be averaged into one row without a word (the OT rows depend on the machine).
+    by_machine = {}
+    for path in sc3_files:
+        by_machine.setdefault(machine_of(path), []).append(path)
+    if args.machine:
+        sc3_files = by_machine.get(args.machine, [])
+        if not sc3_files:
+            print("no SC3 file of machine %s in %s; machines found: %s" % (
+                args.machine, args.sc3, ", ".join("%s (%d)" % (m, len(v)) for m, v in sorted(by_machine.items()))),
+                file=sys.stderr)
+            return 1
+    elif len(by_machine) > 1:
+        print("the SC3 files come from %d machines: %s. Name one with --machine." % (
+            len(by_machine), ", ".join("%s (%d files)" % (m, len(v)) for m, v in sorted(by_machine.items()))),
+            file=sys.stderr)
         return 1
 
     write("Statistical analysis of H2 and H3 under config/preregistration.md")

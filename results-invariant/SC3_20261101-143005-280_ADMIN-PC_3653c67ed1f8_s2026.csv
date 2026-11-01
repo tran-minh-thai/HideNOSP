@@ -1,0 +1,41 @@
+# run 20261101-143005-280_ADMIN-PC_3653c67ed1f8_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/leviathan.txt, format=SPMF, sigma=500, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,cut-hide-rw,cut-hide,hha,dbsh,sbsh-r1,sbsh-rmax}
+# sensitive sets: size 1, repeated-item pool 4 candidates, 4 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,status
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[8, 18, 8]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002844,0.010157,561,561,1.000000,0,0,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[8, 18, 8]]",p30,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.002844,0.010157,561,561,1.000000,493,493,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[8, 18, 8]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.002844,0.010157,561,561,1.000000,493,493,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[8, 18, 8]]",p30,hha,HHA,,0.000000,0,0.000000,0,0.003022,0.012116,596,561,1.062389,0,0,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[8, 18, 8]]",p30,dbsh,DBSH,,0.000000,0,0.000000,0,0.003022,0.013831,596,561,1.062389,0,0,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[8, 18, 8]]",p30,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.003022,0.013713,596,561,1.062389,0,0,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[8, 18, 8]]",p30,sbsh-rmax,SBSH-r3,,0.000000,0,0.000000,0,0.003022,0.013713,596,561,1.062389,0,0,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1, 1]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001480,0.010444,292,292,1.000000,0,0,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1, 1]]",p50,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.001480,0.010444,292,292,1.000000,30,30,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1, 1]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001480,0.010444,292,292,1.000000,30,30,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1, 1]]",p50,hha,HHA,,0.000000,0,0.000000,0,0.002261,0.013335,446,292,1.527397,0,0,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1, 1]]",p50,dbsh,DBSH,,0.000000,0,0.000000,0,0.003964,0.018478,782,292,2.678082,0,0,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1, 1]]",p50,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.003762,0.017533,742,292,2.541096,0,0,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1, 1]]",p50,sbsh-rmax,SBSH-r4,,0.000000,0,0.000000,0,0.003762,0.017533,742,292,2.541096,0,0,0,,73,72,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.007092,0.025031,1399,1399,1.000000,0,0,0,,73,71,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1]]",p70,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.007092,0.025031,1399,1399,1.000000,759,759,0,,73,71,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.007092,0.025031,1399,1399,1.000000,759,759,0,,73,71,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1]]",p70,hha,HHA,,0.000000,0,0.000000,0,0.008760,0.028993,1728,1399,1.235168,0,0,0,,73,71,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1]]",p70,dbsh,DBSH,,0.000000,0,0.000000,0,0.010281,0.032593,2028,1399,1.449607,0,0,0,,73,71,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1]]",p70,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.010236,0.032448,2019,1399,1.443174,0,0,0,,73,71,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1, 1]]",p70,sbsh-rmax,SBSH-r3,,0.000000,0,0.000000,0,0.010236,0.032448,2019,1399,1.443174,0,0,0,,73,71,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.014489,0.023690,2858,2858,1.000000,0,0,0,,73,70,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1]]",p90,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.014489,0.023690,2858,2858,1.000000,994,994,0,,73,70,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.014489,0.023690,2858,2858,1.000000,994,994,0,,73,70,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1]]",p90,hha,HHA,,0.000000,0,0.000000,0,0.015427,0.025223,3043,2858,1.064731,0,0,0,,73,70,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1]]",p90,dbsh,DBSH,,0.000000,0,0.000000,0,0.016902,0.027635,3334,2858,1.166550,0,0,0,,73,70,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1]]",p90,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.016735,0.027361,3301,2858,1.155003,0,0,0,,73,70,72,
+datasets/leviathan.txt,"N=5834,len=197251","[0,1]",500,"[[1, 1]]",p90,sbsh-rmax,SBSH-r2,,0.000000,0,0.000000,0,0.016735,0.027361,3301,2858,1.155003,0,0,0,,73,70,72,

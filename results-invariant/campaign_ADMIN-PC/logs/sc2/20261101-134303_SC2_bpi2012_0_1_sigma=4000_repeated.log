@@ -1,0 +1,31 @@
+# cell SC2 bpi2012 [0,1] sigma=4000 repeated
+# machine ADMIN-PC
+# exit 0 after 10 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 674026896346
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC2 data regime: rho_rep, beta and the bound of P1 per dataset and per sigma
+# run 20261101-134305-626_ADMIN-PC_674026896346_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+dataset datasets\bpi2012.txt, |D| = 13087, total length 164506, alphabet 23, linearised share 0.0
+|F_sigma(D)| = 67 at sigma = 4000, gap [0,1], l_max = 4
+[12, 15, 21, 21]   sup_NO  4586  sup_seq  4085  rho_rep 0.109  beta 0.212  min masks   587 (0.0036 of D)
+[15, 21, 21]       sup_NO  4586  sup_seq  4085  rho_rep 0.109  beta 0.212  min masks   587 (0.0036 of D)
+[20, 20, 20, 20]   sup_NO  5963  sup_seq   992  rho_rep 0.834  beta 0.149  min masks   672 (0.0041 of D)
+[20, 20, 20]       sup_NO  7394  sup_seq  1236  rho_rep 0.833  beta 0.108  min masks  1577 (0.0096 of D)
+[21, 21, 21, 21]   sup_NO  8262  sup_seq  2204  rho_rep 0.733  beta 0.203  min masks  1733 (0.0105 of D)
+[19, 19, 19, 19]   sup_NO  8412  sup_seq  1650  rho_rep 0.804  beta 0.099  min masks  1760 (0.0107 of D)
+[20, 20]           sup_NO  9106  sup_seq  1444  rho_rep 0.841  beta 0.067  min masks  3246 (0.0197 of D)
+[19, 19, 19]       sup_NO 10630  sup_seq  2215  rho_rep 0.792  beta 0.127  min masks  3307 (0.0201 of D)
+[21, 21, 21]       sup_NO 11633  sup_seq  3080  rho_rep 0.735  beta 0.150  min masks  3817 (0.0232 of D)
+[19, 19]           sup_NO 13855  sup_seq  3222  rho_rep 0.767  beta 0.165  min masks  6288 (0.0382 of D)
+[21, 21]           sup_NO 16224  sup_seq  4086  rho_rep 0.748  beta 0.097  min masks  7595 (0.0462 of D)
+pool of 11 repeated-item candidates: median rho_rep 0.767, median beta 0.149
+done in 7.2 s

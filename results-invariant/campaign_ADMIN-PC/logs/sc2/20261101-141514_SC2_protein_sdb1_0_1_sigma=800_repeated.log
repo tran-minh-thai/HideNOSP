@@ -1,0 +1,24 @@
+# cell SC2 protein_sdb1 [0,1] sigma=800 repeated
+# machine ADMIN-PC
+# exit 0 after 6 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = d2f3d14f20c8
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC2 data regime: rho_rep, beta and the bound of P1 per dataset and per sigma
+# run 20261101-141517-280_ADMIN-PC_d2f3d14f20c8_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+dataset datasets\protein_sdb1.txt, |D| = 507, total length 91875, alphabet 20, linearised share 0.0
+|F_sigma(D)| = 55 at sigma = 800, gap [0,1], l_max = 4
+[17, 17]           sup_NO   916  sup_seq   349  rho_rep 0.619  beta 0.843  min masks    59 (0.0006 of D)
+[5, 5]             sup_NO  1047  sup_seq   356  rho_rep 0.660  beta 0.846  min masks   134 (0.0015 of D)
+[9, 9]             sup_NO  1197  sup_seq   380  rho_rep 0.683  beta 0.843  min masks   257 (0.0028 of D)
+[0, 0]             sup_NO  1682  sup_seq   417  rho_rep 0.752  beta 0.780  min masks   638 (0.0069 of D)
+pool of 4 repeated-item candidates: median rho_rep 0.671, median beta 0.843
+done in 3.3 s

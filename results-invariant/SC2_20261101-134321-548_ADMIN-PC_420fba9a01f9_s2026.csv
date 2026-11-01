@@ -1,0 +1,27 @@
+# run 20261101-134321-548_ADMIN-PC_420fba9a01f9_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC2
+# profile repeated
+# options {machine=ADMIN-PC, dataset=datasets/bpi2012.txt, format=SPMF, sigma=4000, gmin=0, gmax=3, maxPatternLength=4, profile=repeated}
+dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,mask_share,rho_rep,beta,min_masks_exact
+datasets\bpi2012.txt,"[0,3]",4000,"[12, 15, 21, 21]",4777,4272,5822,778,0.004729,0.105715,0.179492,true
+datasets\bpi2012.txt,"[0,3]",4000,"[12, 21, 21]",4777,4272,5822,778,0.004729,0.105715,0.179492,true
+datasets\bpi2012.txt,"[0,3]",4000,"[14, 12, 21, 21]",4777,4272,5822,778,0.004729,0.105715,0.179492,true
+datasets\bpi2012.txt,"[0,3]",4000,"[14, 15, 21, 21]",4777,4272,5822,778,0.004729,0.105715,0.179492,true
+datasets\bpi2012.txt,"[0,3]",4000,"[15, 21, 21]",4777,4272,5822,778,0.004729,0.105715,0.179492,true
+datasets\bpi2012.txt,"[0,3]",4000,"[20, 20, 20, 20]",6401,1029,7005,1228,0.007465,0.839244,0.086224,true
+datasets\bpi2012.txt,"[0,3]",4000,"[20, 20, 20]",7792,1261,8286,2375,0.014437,0.838167,0.059619,true
+datasets\bpi2012.txt,"[0,3]",4000,"[19, 19, 19, 19]",8434,1653,9339,2556,0.015537,0.804008,0.096905,true
+datasets\bpi2012.txt,"[0,3]",4000,"[21, 21, 21, 21]",8749,2324,10372,2948,0.017920,0.734370,0.156479,true
+datasets\bpi2012.txt,"[0,3]",4000,"[20, 20]",9423,1463,9760,4147,0.025209,0.844742,0.034529,true
+datasets\bpi2012.txt,"[0,3]",4000,"[19, 19, 19]",10656,2221,12180,4491,0.027300,0.791573,0.125123,true
+datasets\bpi2012.txt,"[0,3]",4000,"[21, 21, 21]",12318,3268,13691,6106,0.037117,0.734697,0.100285,true
+datasets\bpi2012.txt,"[0,3]",4000,"[19, 19]",13893,3236,16600,8163,0.049621,0.767077,0.163072,true
+datasets\bpi2012.txt,"[0,3]",4000,"[21, 21]",17098,4273,17965,10954,0.066587,0.750088,0.048261,true

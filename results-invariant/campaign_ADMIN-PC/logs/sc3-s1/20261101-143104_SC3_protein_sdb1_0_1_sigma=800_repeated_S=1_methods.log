@@ -1,0 +1,47 @@
+# cell SC3 protein_sdb1 [0,1] sigma=800 repeated S=1 methods
+# machine ADMIN-PC
+# exit 0 after 12 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 4419d8fd0b38
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3 main comparison on HIDE-DB: Lost, Ghost, SupDist, |R| and HF against the baselines
+# run 20261101-143106-552_ADMIN-PC_4419d8fd0b38_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, repeated-item pool 4 candidates, 4 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+WARNING: the pool gives 4 distinct sets, not 20; the cell runs with these and the result file header says so. No set is repeated to make up the number.
+set 0  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|   59  lost    0 (0.0000)  supDist 0.0005  0.9 s
+set 0  CUT-HIDE adaptive weight (6 iterations) |R|   59  lost    0 (0.0000)  supDist 0.0005  0.5 s
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|   59  lost    0 (0.0000)  supDist 0.0005  0.1 s
+set 0  HHA                                |R|  116  lost    1 (0.0185)  supDist 0.0014  0.0 s
+set 0  DBSH                               |R|  117  lost    0 (0.0000)  supDist 0.0015  0.0 s
+set 0  SBSH-r1                            |R|  117  lost    0 (0.0000)  supDist 0.0014  0.1 s
+set 0  SBSH-r2                            |R|  117  lost    0 (0.0000)  supDist 0.0014  0.1 s
+set 1  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  134  lost    0 (0.0000)  supDist 0.0014  0.4 s
+set 1  CUT-HIDE adaptive weight (6 iterations) |R|  134  lost    0 (0.0000)  supDist 0.0014  0.4 s
+set 1  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  134  lost    0 (0.0000)  supDist 0.0014  0.1 s
+set 1  HHA                                |R|  235  lost    1 (0.0185)  supDist 0.0033  0.0 s
+set 1  DBSH                               |R|  248  lost    1 (0.0185)  supDist 0.0039  0.0 s
+set 1  SBSH-r1                            |R|  248  lost    1 (0.0185)  supDist 0.0036  0.1 s
+set 1  SBSH-r2                            |R|  248  lost    1 (0.0185)  supDist 0.0036  0.1 s
+set 2  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  257  lost    0 (0.0000)  supDist 0.0028  0.4 s
+set 2  CUT-HIDE adaptive weight (6 iterations) |R|  257  lost    0 (0.0000)  supDist 0.0028  0.4 s
+set 2  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  257  lost    0 (0.0000)  supDist 0.0028  0.1 s
+set 2  HHA                                |R|  376  lost    1 (0.0185)  supDist 0.0062  0.0 s
+set 2  DBSH                               |R|  400  lost    1 (0.0185)  supDist 0.0067  0.0 s
+set 2  SBSH-r1                            |R|  398  lost    1 (0.0185)  supDist 0.0065  0.1 s
+set 2  SBSH-r2                            |R|  398  lost    1 (0.0185)  supDist 0.0065  0.1 s
+set 3  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  638  lost    0 (0.0000)  supDist 0.0067  0.5 s
+set 3  CUT-HIDE adaptive weight (6 iterations) |R|  638  lost    0 (0.0000)  supDist 0.0067  0.5 s
+set 3  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  638  lost    0 (0.0000)  supDist 0.0067  0.1 s
+set 3  HHA                                |R|  784  lost    1 (0.0185)  supDist 0.0108  0.0 s
+set 3  DBSH                               |R|  885  lost    1 (0.0185)  supDist 0.0128  0.0 s
+set 3  SBSH-r1                            |R|  883  lost    1 (0.0185)  supDist 0.0126  0.1 s
+set 3  SBSH-r2                            |R|  883  lost    1 (0.0185)  supDist 0.0126  0.1 s
+done in 9.9 s

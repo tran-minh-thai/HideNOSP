@@ -135,9 +135,11 @@ row_5_run_environment:
   # declared by the author. Its host name, processor and memory are written by the machine itself
   # into results-invariant/campaign_<host name>/ENV_LOCK.json at the first step of its campaign, and
   # into the header of every result file; the three fields below are filled from that file.
-  cpu: null
-  ram: null
-  machine_name: null
+  cpu: "Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz, 12 logical processors"
+  ram: "68452814848 bytes"
+  machine_name: "ADMIN-PC"          # read from results-invariant/campaign_ADMIN-PC/ENV_LOCK.json on branch
+                                    # campaign-admin-pc (lock commit of 2026-11-01): Windows-11-10.0.26300,
+                                    # JDK 25.0.4.1+1-LTS Eclipse Adoptium, source tree c9810c5 = commit c16f727
   previous_machine:                 # every official SC1, SC2 and SC3 number up to 2026-10-12
     machine_name: "DESKTOP-L8A6EPO"
     cpu: "Intel(R) Core(TM) i7-6560U CPU @ 2.20GHz, 4 logical processors"

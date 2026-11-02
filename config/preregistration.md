@@ -1,647 +1,737 @@
-# Chốt trước khi chạy SC3
+# Locked before running SC3
 
-Quy tắc 2.4.7: ngưỡng hiệu ứng thực tiễn và phép kiểm phải chốt **trước** khi chạy SC3.
-Tệp này là bản chốt đó.
+> **Language.** This file is the English translation of the Vietnamese original as of commit `c16f727`
+> (2026-11-01), which stays in the git history. Section numbers, values, dates, file names and decisions are
+> unchanged; decimal commas are written as decimal points. Each section keeps the date on which the original
+> was committed.
 
-**Trạng thái: ĐÃ CHỐT, ngày 12/09/2026.** Commit ghi tệp này là bằng chứng thời điểm. Từ đây,
-sửa bất kỳ con số nào dưới đây đều phải là một commit riêng, ghi rõ lý do sửa, và nếu sửa sau
-khi đã thấy kết quả SC3 thì phải khai điều đó trong bài.
+Rule 2.4.7: the practical-effect threshold and the tests must be locked **before** SC3 runs.
+This file is that lock.
 
-Căn cứ chọn từng giá trị: `config/de_xuat_gia_tri_nhom_A.md`. Số liệu làm căn cứ:
-`results-invariant/giai_doan_1_tom_tat.md` và `results-invariant/khao_sat_bo_du_lieu.md`, đều
-từ SC1 và SC2, chạy độc lập với SC3.
+**Status: LOCKED, 2026-09-12.** The commit that recorded this file is the evidence of the date. From
+here on, changing any number below must be a separate commit stating the reason, and a change made
+after seeing SC3 results must be declared in the paper.
 
-**Khai xuất xứ.** Các giá trị dưới đây do người đề xuất soạn và người viết duyệt. Người đề xuất
-**đã thấy** chiều của một lần chạy SC3 dò tìm trên dữ liệu tổng hợp thay thế (`results-probe/`), nên mọi
-ngưỡng được neo vào thang của dữ liệu (cỡ `F_σ`, khoảng trống trong phân bố ρ_rep) chứ không neo
-vào khoảng cách đã quan sát giữa các phương pháp. Ba con số có thể chịu ảnh hưởng nhiều nhất nếu
-việc đó gây thiên lệch là δ_L và hai biên tương đương ở §3; chúng được đánh dấu riêng.
+Rationale for each value: `config/de_xuat_gia_tri_nhom_A.md`. Data behind it:
+`results-invariant/giai_doan_1_tom_tat.md` and `results-invariant/khao_sat_bo_du_lieu.md`, both
+from SC1 and SC2, run independently of SC3.
+
+**Provenance.** The values below were drafted by the proposer and approved by the author. The
+proposer **had seen** the direction of one exploratory SC3 run on substitute synthetic data
+(`results-probe/`), so every threshold is anchored to the scale of the data (the size of `F_σ`, the
+gaps in the distribution of ρ_rep), not to the distance observed between methods. The three numbers
+that could be most affected if this introduced a bias are δ_L and the two equivalence margins of §3;
+they are marked separately.
 
 ---
 
-## 1. Phạm vi
+## 1. Scope
 
-**Phạm vi chính của bài là μ(P) = 1**, tức mẫu nhạy cảm không lặp mục. Trong phạm vi đó, P1, P2,
-P6(b) và lời giải chính xác đều đứng vững.
+**The main scope of the paper is μ(P) = 1**, that is, sensitive patterns without repeated items. In
+that scope, P1, P2, P6(b) and the exact solution all hold.
 
-Mẫu lặp mục (μ(P) ≥ 2) báo cáo ở một mục riêng, dùng cận P3 và bộ giải chính xác trên thực thể
-nhỏ, và khai rõ độ khó là câu hỏi mở.
+Patterns with repeated items (μ(P) ≥ 2) are reported in a separate section, using bound P3 and the
+exact solver on small instances, and the hardness is stated as an open question.
 
-Phần hạn chế phải ghi đúng con số sau, đo ở ℓ_max = 4 và lấy trung vị:
+The limitations section must state the following numbers, measured at ℓ_max = 4, medians:
 
-| Bộ | ρ_rep μ(P) = 1 | ρ_rep μ(P) ≥ 2 | Chênh |
+| Dataset | ρ_rep μ(P) = 1 | ρ_rep μ(P) ≥ 2 | Difference |
 |---|---|---|---|
-| dna_mt745584 | 0,845 | 0,878 | 0,033 |
-| msnbc | 0,218 | 0,364 | 0,146 |
-| fifa | 0,008 | 0,952 | 0,944 |
+| dna_mt745584 | 0.845 | 0.878 | 0.033 |
+| msnbc | 0.218 | 0.364 | 0.146 |
+| fifa | 0.008 | 0.952 | 0.944 |
 
-Đọc bảng: trên **cả ba** bộ, lớp lặp mục có tỉ lệ lặp cao hơn. Điều biện minh cho việc giữ phạm
-vi ở μ(P) = 1 **không** phải là lớp không lặp mục lặp nhiều hơn, mà là trên bộ nhóm chính mạnh
-nhất (dna) hai lớp **gần bằng nhau**: 0,845 so với 0,878, chênh 0,033. Nghĩa là ở đó, thu phạm vi
-về μ(P) = 1 gần như không mất gì. Trên MSNBC thì cái giá lớn hơn (chênh 0,146), và trên FIFA thì
-toàn bộ tỉ lệ lặp nằm ở lớp lặp mục (0,952 so với 0,008) — nhưng FIFA là đối chứng suy biến nên
-điều đó không đổi kết luận.
+Reading the table: on **all three** datasets the repeated-item class has the higher repetition rate.
+What justifies keeping the scope at μ(P) = 1 is **not** that the class without repeated items repeats
+more, but that on the strongest main-group dataset (dna) the two classes are **nearly equal**: 0.845
+against 0.878, a difference of 0.033. So there, narrowing the scope to μ(P) = 1 loses almost nothing.
+On MSNBC the cost is larger (difference 0.146), and on FIFA the whole repetition rate sits in the
+repeated-item class (0.952 against 0.008) — but FIFA is the degenerate control, so this does not change
+the conclusion.
 
-> **Đính chính.** Bản đầu của tệp này ghi "trên bộ gen MT745584 thì ngược lại (0,806 so với
-> 0,773)", tức lớp không lặp mục lặp nhiều hơn. Con số đó đo ở ℓ_max = 3 và lấy **trung bình**;
-> đo lại ở ℓ_max = 4 đã chốt và lấy **trung vị** thì chiều đảo lại. Kết luận giữ μ(P) = 1 không
-> đổi, nhưng lý do biện minh đổi từ "cao hơn" thành "gần bằng nhau", và phần hạn chế phải viết
-> theo bảng trên chứ không theo câu cũ.
+> **Correction.** The first version of this file said "on the genome dataset MT745584 it is the other
+> way round (0.806 against 0.773)", i.e. the class without repeated items repeats more. That number was
+> measured at ℓ_max = 3 and as a **mean**; measured again at the locked ℓ_max = 4 and as a **median**, the
+> direction reverses. The conclusion to keep μ(P) = 1 is unchanged, but the justification changes from
+> "higher" to "nearly equal", and the limitations section must follow the table above, not the old sentence.
 
-Trọng số nút khi μ(P) ≥ 2: gán trọng số vị trí cho mọi nút của vị trí đó. Đây là **lựa chọn cài
-đặt**, không phải hệ quả của mệnh đề nào, vì P1 và P2 không áp dụng ở đó.
+Node weights when μ(P) ≥ 2: every node of a position gets the weight of that position. This is an
+**implementation choice**, not a consequence of any proposition, because P1 and P2 do not apply there.
 
 ---
 
-## 2. Giả thuyết
+## 2. Hypotheses
 
 ### H2
 
-Trên các thực thể (bộ dữ liệu, σ, tập nhạy cảm), trung vị của hiệu
-`Lost_rel(baseline) − Lost_rel(CUT-HIDE)` lớn hơn ngưỡng thực tiễn δ_L.
+Over the instances (dataset, σ, sensitive set), the median of the difference
+`Lost_rel(baseline) − Lost_rel(CUT-HIDE)` exceeds the practical threshold δ_L.
 
-**Đại lượng.** `Lost_rel = Lost / |F_σ(D) \ 𝒮⁺|`, mẫu số là số mẫu phổ biến không nhạy cảm
-trước khi sửa, tức cột `frequent_before` của SC3 trừ đi cỡ bao đóng 𝒮⁺.
+**Quantity.** `Lost_rel = Lost / |F_σ(D) \ 𝒮⁺|`; the denominator is the number of non-sensitive
+frequent patterns before sanitisation, i.e. the SC3 column `frequent_before` minus the size of the
+closure 𝒮⁺.
 
-| Mục | Giá trị chốt |
+| Item | Locked value |
 |---|---|
-| **δ_L** | **0,02** (hai điểm phần trăm) |
-| Đơn vị lặp | một thực thể = bộ ba (bộ dữ liệu, σ, tập nhạy cảm) |
-| Phép kiểm | Wilcoxon dấu hạng, một phía |
-| Hiệu chỉnh đa phép kiểm | Holm trên **4** baseline tầng (b) |
-| Cỡ hiệu ứng | rank-biserial = (W⁺ − W⁻)/(W⁺ + W⁻) |
-| Mức ý nghĩa | α = 0,05 |
+| **δ_L** | **0.02** (two percentage points) |
+| Unit of replication | one instance = the triple (dataset, σ, sensitive set) |
+| Test | Wilcoxon signed-rank, one-sided |
+| Multiple-testing correction | Holm over the **4** tier (b) baselines |
+| Effect size | rank-biserial = (W⁺ − W⁻)/(W⁺ + W⁻) |
+| Significance level | α = 0.05 |
 
-**Vì sao đại lượng tương đối.** |F_σ| đo được trải hơn một bậc, từ 51 (dna σ=2500) tới 672
-(msnbc σ=1000). Một δ_L tuyệt đối duy nhất sẽ nghiêm với bộ nhỏ và lỏng với bộ lớn, tức trộn hai
-thang vào cùng một phép Wilcoxon. Báo cáo **kèm** trung vị hiệu tuyệt đối trong cùng bảng.
+**Why a relative quantity.** The measured |F_σ| spans more than an order of magnitude, from 51 (dna
+σ=2500) to 672 (msnbc σ=1000). A single absolute δ_L would be strict on small datasets and lax on
+large ones, mixing two scales in one Wilcoxon test. The median absolute difference is reported
+**alongside** in the same table.
 
-**Vì sao 0,02.** Một điểm phần trăm trên dna (|F| ≈ 51) chưa tới nửa mẫu, nên mọi chênh lệch dù
-một mẫu cũng vượt ngưỡng và δ_L mất tác dụng. 0,02 tương ứng khoảng một mẫu trên dna và 6,5 mẫu
-trên msnbc σ=2000.
+**Why 0.02.** One percentage point on dna (|F| ≈ 51) is less than half a pattern, so any difference,
+even of one pattern, would exceed the threshold and δ_L would have no effect. 0.02 corresponds to about
+one pattern on dna and 6.5 patterns on msnbc σ=2000.
 
-**Không** dùng Σ|S| hay |R|\* làm mẫu số: Σ|S| là mẫu số của DistR, |R|\* là cận số lần che.
+Σ|S| and |R|\* are **not** used as the denominator: Σ|S| is the denominator of DistR, |R|\* is the bound
+on the number of masks.
 
 ### H3
 
-Tỉ số `r = |R| / |R|*` của baseline tầng (b) lớn hơn 1 trên nhóm chính, và gần 1 trên nhóm suy
-biến.
+The ratio `r = |R| / |R|*` of the tier (b) baselines is above 1 on the main group, and near 1 on the
+degenerate group.
 
-| Mục | Giá trị chốt |
+| Item | Locked value |
 |---|---|
-| "vượt 1" | r ≥ **1,10** |
-| "gần 1" | r ≤ **1,05** |
-| vùng 1,05 < r < 1,10 | không kết luận |
+| "above 1" | r ≥ **1.10** |
+| "near 1" | r ≤ **1.05** |
+| region 1.05 < r < 1.10 | no conclusion |
 
-**Lường trước một kết quả âm.** Trên lần chạy dò, mọi phương pháp đều cho r = 1,000, tức không
-baseline nào dùng thừa lần che. Nếu điều đó lặp lại trên dữ liệu thật thì H3 **không bác bỏ
-được**, và đó là kết quả âm phải báo cáo theo quy tắc 3.4.9, không phải lỗi.
+**Anticipating a negative result.** In the exploratory run every method gave r = 1.000, i.e. no
+baseline used extra masks. If that repeats on real data, H3 **cannot be rejected**, and it is a
+negative result to be reported under rule 3.4.9, not an error.
 
-### Họ baseline cho Holm
+### Baseline family for Holm
 
-Họ gồm **bốn** baseline tầng (b): HHA, DBSH, SBSH-r1, SBSH-rmax.
+The family consists of **four** tier (b) baselines: HHA, DBSH, SBSH-r1, SBSH-rmax.
 
-Tầng (a) — heuristic đếm lần xuất hiện, HH, HR, RH, RR — báo cáo **mô tả**, không kiểm định:
-chúng tồn tại để chứng minh bài toán không tự giải (§11.3), không để kiểm giả thuyết.
+Tier (a) — occurrence-counting heuristics, HH, HR, RH, RR — is reported **descriptively**, not tested:
+these exist to show that the problem does not solve itself (§11.3), not to test hypotheses.
 
-Nếu SBSH không đối chiếu được với Thuật toán 2 và 3 của [R3] thì bỏ SBSH khỏi bảng, họ còn **hai**,
-và phải sửa dòng này **trước** khi chạy.
+If SBSH cannot be checked against Algorithms 2 and 3 of [R3], SBSH is dropped from the table, the family
+has **two** members, and this line must be changed **before** running.
 
 ---
 
-## 3. Phân nhóm dữ liệu
+## 3. Data groups
 
-Ngưỡng áp trên **cấu hình**, tức bộ ba (bộ dữ liệu, σ, [g⁻,g⁺]) — **không** phải trên bộ dữ liệu.
-Căn cứ: trên msnbc σ=2000, đổi khoảng cách từ [0,1] sang [0,10] làm β tụt từ 0,432 xuống 0,043;
-β là tính chất của cấu hình chứ không của bộ.
+The thresholds apply to a **configuration**, the triple (dataset, σ, [g⁻,g⁺]) — **not** to a dataset.
+Reason: on msnbc σ=2000, changing the gap from [0,1] to [0,10] drops β from 0.432 to 0.043; β is a
+property of the configuration, not of the dataset.
 
-Thống kê gộp trong một cấu hình: **trung vị** ρ_rep (và trung vị β) trên các mẫu nhạy cảm đã lấy.
-Không dùng trung bình, vì phân bố lệch: msnbc [0,3] σ=2000 trải 0,106–0,575.
+Summary statistic within a configuration: the **median** ρ_rep (and median β) over the sampled
+sensitive patterns. Not the mean, because the distribution is skewed: msnbc [0,3] σ=2000 spans
+0.106–0.575.
 
-| Nhóm | Điều kiện |
+| Group | Condition |
 |---|---|
-| Nhóm chính | ρ_rep ≥ **0,20** |
-| Nhóm trung gian | **0,05 < ρ_rep < 0,20** |
-| Đối chứng suy biến | ρ_rep ≤ **0,05** |
-| Ràng buộc khoảng cách có hiệu lực | β ≥ **0,20** |
-| Đối chứng ràng buộc suy biến | β ≤ **0,05** |
+| Main group | ρ_rep ≥ **0.20** |
+| Intermediate group | **0.05 < ρ_rep < 0.20** |
+| Degenerate control | ρ_rep ≤ **0.05** |
+| Gap constraint effective | β ≥ **0.20** |
+| Degenerate-constraint control | β ≤ **0.05** |
 
-**Nhóm trung gian không dùng để kiểm H2 hay H3.** Nó chỉ để minh hoạ rằng ρ_rep và β là hai đại
-lượng độc lập: bible và leviathan có ρ_rep quanh 0,15 nhưng β tới 0,50–0,61.
+**The intermediate group is not used to test H2 or H3.** It only illustrates that ρ_rep and β are two
+independent quantities: bible and leviathan have ρ_rep around 0.15 but β up to 0.50–0.61.
 
-**Vì sao 0,05 và 0,20.** Trung vị ρ_rep của 25 cấu hình, đo ở ℓ_max = 4, sắp tăng dần cho thấy
-hai **khe thưa** rõ rệt:
+**Why 0.05 and 0.20.** The median ρ_rep of 25 configurations, measured at ℓ_max = 4 and sorted in
+increasing order, shows two clear **sparse gaps**:
 
-- từ 0,010 (fifa) nhảy lên 0,120 (bible) — khe rộng 0,110, ngưỡng **0,05** nằm giữa;
-- từ 0,181 (msnbc σ=1000) nhảy lên 0,265 (msnbc σ=2000) — khe rộng 0,084, ngưỡng **0,20** nằm giữa.
+- from 0.010 (fifa) it jumps to 0.120 (bible) — a gap of width 0.110, with the threshold **0.05** inside;
+- from 0.181 (msnbc σ=1000) it jumps to 0.265 (msnbc σ=2000) — a gap of width 0.084, with the threshold
+  **0.20** inside.
 
-Ngưỡng đặt ở chỗ thưa nên phân nhóm không nhạy với việc xê dịch vài phần trăm.
+The thresholds sit in sparse regions, so the grouping is insensitive to shifts of a few percent.
 
-> **Ghi chú về việc đo lại.** Hai ngưỡng này chốt dựa trên số đo ở ℓ_max = 3. Sau khi protocol
-> chốt ℓ_max = 4, toàn bộ SC2 đã chạy lại và hai ngưỡng **vẫn nằm trong khe thưa**, nên chúng
-> không bị sửa. Đây là đo lại để kiểm, không phải chọn lại sau khi thấy kết quả.
+> **Note on the remeasurement.** These two thresholds were locked from measurements at ℓ_max = 3.
+> After the protocol locked ℓ_max = 4, all of SC2 was rerun and both thresholds **still lie in the
+> sparse gaps**, so they were not changed. This was a remeasurement to check, not a reselection after
+> seeing results.
 
-> **Thay bởi mục 10 (25/09/2026).** Thống kê gộp và bảng phân nhóm dưới đây tính theo trung vị
-> trên **mẫu SC2 đã lấy**, gồm cả mẫu lặp mục. Từ ngày 25/09 nhóm được tính trên **mẫu không lặp
-> mục** (mục 10); bảng dưới giữ lại làm lịch sử, không còn là bảng chốt.
+> **Superseded by section 10 (2026-09-25).** The summary statistic and the grouping table below are
+> medians over the **sampled SC2 patterns**, including patterns with repeated items. From 2026-09-25
+> the groups are computed over **patterns without repeated items** (section 10); the table below is kept
+> as history and is no longer the locked table.
 
-**Phân nhóm suy ra từ dữ liệu đã đo:**
+**Grouping derived from the measured data:**
 
-Áp trên **cấu hình** (25 cấu hình, ℓ_max = 4, trung vị):
+Applied to **configurations** (25 configurations, ℓ_max = 4, medians):
 
-| Nhóm | Số cấu hình | Gồm |
+| Group | Configurations | Members |
 |---|---|---|
-| Chính | 12 | dna ở cả 6 cấu hình; msnbc ở σ ∈ {2000, 5000} |
-| Trung gian | 7 | **msnbc σ=1000** (cả ba khoảng cách), bible, leviathan |
-| Suy biến | 6 | sign, bms1, fifa |
+| Main | 12 | dna in all 6 configurations; msnbc at σ ∈ {2000, 5000} |
+| Intermediate | 7 | **msnbc σ=1000** (all three gaps), bible, leviathan |
+| Degenerate | 6 | sign, bms1, fifa |
 
-**Lưu ý quan trọng nảy ra từ việc áp ngưỡng trên cấu hình:** msnbc ở σ = 1000 có trung vị ρ_rep
-0,172–0,181, tức **dưới** 0,20, nên ba cấu hình đó thuộc nhóm trung gian chứ không phải nhóm chính.
-MSNBC chỉ là bộ nhóm chính từ σ = 2000 trở lên. Nếu áp ngưỡng trên "bộ" thay vì trên "cấu hình"
-thì chi tiết này biến mất — đó chính là lý do đơn vị áp ngưỡng được chốt là cấu hình.
+**An important point that arises from applying the thresholds per configuration:** msnbc at σ = 1000
+has a median ρ_rep of 0.172–0.181, i.e. **below** 0.20, so those three configurations belong to the
+intermediate group, not to the main group. MSNBC is a main-group dataset only from σ = 2000 upward. If
+the thresholds were applied per "dataset" instead of per "configuration", this detail would vanish —
+which is exactly why the configuration is locked as the unit.
 
-Ngoài ra, mọi cấu hình khoảng cách [0,10] đều có β ≤ 0,085 (dna σ=4000 thì β = 0,044), tức thuộc
-**đối chứng ràng buộc suy biến** dù ρ_rep rất cao. Chúng dùng để cho thấy ràng buộc khoảng cách
-mất hiệu lực khi nới rộng, không dùng làm bằng chứng cho đóng góp về ràng buộc.
+Moreover, every configuration with gap [0,10] has β ≤ 0.085 (dna σ=4000 has β = 0.044), i.e. it belongs
+to the **degenerate-constraint control** even though ρ_rep is very high. These configurations show that
+the gap constraint loses its effect when widened; they are not used as evidence for the contribution
+about the constraint.
 
-Phân nhóm này chốt tại đây và **không sửa** sau khi thấy kết quả SC3 (quy tắc 2.3.10). Bộ dữ liệu
-mới thêm sau ngày chốt phải được xếp nhóm bằng đúng hai ngưỡng trên, trước khi chạy SC3 trên nó.
+This grouping is locked here and is **not changed** after seeing SC3 results (rule 2.3.10). A dataset
+added after the lock date must be grouped with exactly the two thresholds above, before SC3 runs on it.
 
 ---
 
-## 4. Kết luận "không khác biệt"
+## 4. "No difference" conclusions
 
-Khi muốn kết luận hai phương pháp không khác nhau, dùng khoảng tin cậy của hiệu số cùng biên
-tương đương chốt trước, không dùng "p > 0,05".
+To conclude that two methods do not differ, use the confidence interval of the difference together with
+a pre-locked equivalence margin, not "p > 0.05".
 
-| Đại lượng | Biên tương đương |
+| Quantity | Equivalence margin |
 |---|---|
-| Lost_rel | ± **0,02** (bằng đúng δ_L) |
-| SupDist | ± **0,01** |
+| Lost_rel | ± **0.02** (exactly δ_L) |
+| SupDist | ± **0.01** |
 
-Biên tương đương đặt bằng ngưỡng hiệu ứng để không sinh ra một vùng rộng mà kết quả vừa không
-khác biệt vừa không tương đương.
+The equivalence margin is set equal to the effect threshold so as not to create a wide region where a
+result is neither different nor equivalent.
 
-**Con số yếu căn cứ nhất trong tệp này là ±0,01 cho SupDist.** Nó là một quy ước, chưa neo vào
-độ tản đo được. Nếu muốn thay bằng con số có căn cứ, cách hợp lệ là chạy **một** phương pháp duy
-nhất trên nhiều tập nhạy cảm và đo độ tản của SupDist giữa các tập — việc đó không lộ chiều so
-sánh giữa các phương pháp. Thay thì phải là một commit riêng, trước SC3.
+**The least grounded number in this file is ±0.01 for SupDist.** It is a convention, not yet anchored to
+a measured spread. The valid way to replace it with a grounded number is to run **one** single method
+on many sensitive sets and measure the spread of SupDist across sets — this does not reveal the direction
+of any comparison between methods. A replacement must be a separate commit, before SC3.
 
 ---
 
-## 5. Quy ước tính toán
+## 5. Computation conventions
 
 ### Wilcoxon
 
-| Mục | Quy ước chốt |
+| Item | Locked convention |
 |---|---|
-| Hiệu đúng bằng 0 | **Pratt**: giữ lại khi xếp hạng, không loại bỏ |
-| Hạng buộc | hạng trung bình |
-| Cỡ hiệu ứng | rank-biserial |
+| Difference exactly 0 | **Pratt**: kept when ranking, not dropped |
+| Tied ranks | average rank |
+| Effect size | rank-biserial |
 
-Lost là số nguyên nhỏ nên số cặp có hiệu bằng 0 sẽ nhiều. Wilcoxon gốc vứt chúng đi, làm mất
-thông tin "hai phương pháp ngang nhau" và thổi phồng cỡ hiệu ứng.
+Lost is a small integer, so there will be many pairs with zero difference. The original Wilcoxon
+discards them, losing the information "the two methods are equal" and inflating the effect size.
 
-### Ghép cặp cho H2
+### Pairing for H2
 
-Mỗi phương pháp chạy **tới khi HF = 0**, với |R| tự chọn. Hai chế độ báo cáo tách rời:
+Each method runs **until HF = 0**, with |R| of its own choosing. Two reporting modes are kept apart:
 
-1. Thực thể mà mọi phương pháp dùng **cùng** |R|: đưa vào Wilcoxon cho H2.
-2. Thực thể mà baseline dùng **nhiều hơn**: báo cáo riêng dạng cặp (|R|, Lost), **không** kiểm
-   định. Kết luận ở đó mạnh hơn và không cần thống kê.
+1. Instances where every method uses the **same** |R|: these go into the Wilcoxon test for H2.
+2. Instances where a baseline uses **more**: reported separately as pairs (|R|, Lost), **not** tested.
+   The conclusion there is stronger and needs no statistics.
 
-So Lost ở hai mức |R| khác nhau là so hai thứ khác nhau; ép baseline dừng ở |R|\* thì nó chưa ẩn
-xong nên Lost cũng không so được.
+Comparing Lost at two different |R| compares two different things; forcing a baseline to stop at |R|\*
+leaves it not yet done hiding, so its Lost cannot be compared either.
 
-### Loại trừ thực thể
+### Excluding instances
 
-| Tình huống | Xử lý |
+| Situation | Handling |
 |---|---|
-| Một phương pháp còn HF > 0 | loại cặp khỏi Wilcoxon, đếm và báo cáo riêng |
-| Quá giới hạn thời gian | loại cặp, ghi mã OT, báo cáo số ca |
-| Hết bộ nhớ | loại cặp, ghi mã OOM, báo cáo số ca |
-| Tỉ lệ thực thể bị loại > **10%** | **không kết luận** H2, và nói rõ vì sao |
+| A method leaves HF > 0 | drop the pair from Wilcoxon, count and report separately |
+| Time limit exceeded | drop the pair, record code OT, report the count |
+| Out of memory | drop the pair, record code OOM, report the count |
+| Share of excluded instances > **10%** | **no conclusion** on H2, and say why |
 
-Gán một giá trị phạt cho ca HF > 0 là bịa dữ liệu, nên không làm.
+Assigning a penalty value to a case with HF > 0 would be fabricating data, so it is not done.
 
-### Phương pháp ngẫu nhiên
+### Randomised methods
 
-HH, HR, RH, RR và giải thuật di truyền: chạy **10 lần** với hạt giống **2026 tới 2035**, lấy
-**trung vị** Lost và |R| làm giá trị của phương pháp đó trên thực thể đó.
+HH, HR, RH, RR and the genetic algorithm: run **10 times** with seeds **2026 to 2035**, and take the
+**median** Lost and |R| as the value of that method on that instance.
 
-Đây là đại lượng bất biến theo máy nên bảng số lần lặp của §11.6 không áp dụng — bảng đó dành cho
-đo thời gian. Biến thiên quan sát được ở RR là lớn (|R| = 31 và 151 trên hai tập nhạy cảm của
-cùng một cấu hình), nên một lần chạy là không đủ.
-
----
-
-## 6. Những gì KHÔNG cần kiểm định
-
-- **HF.** Bằng 0 theo thiết kế với CUT-HIDE (bước 8 kiểm lại sau mỗi lần chạy). Nói một lần,
-  không đưa vào bảng so sánh (quy tắc 2.4.2).
-- **Ghost của phép che.** Bằng 0 theo P5(a). Đây là hệ quả của định lý, không đo như một phát
-  hiện (quy tắc 1.2.2). Chỉ nhánh xoá ở SC5 mới báo cáo Ghost.
-- **\|R\| của các phương pháp chính xác.** Bằng \|R\|\* theo P1. Chênh lệch ở đây là lỗi cài đặt,
-  không phải kết quả.
+This is a machine-invariant quantity, so the repetition table of §11.6 does not apply — that table is for
+timing. The observed variation of RR is large (|R| = 31 and 151 on two sensitive sets of the same
+configuration), so one run is not enough.
 
 ---
 
-## 7. Thứ tự chạy đã định
+## 6. What does NOT need testing
 
-1. SC1 phải xanh (0 ca lệch) trước mọi kịch bản khác. **Đã xong**, 1.500 thực thể, 0 ca lệch.
-2. SC2 chạy trước SC3 và quyết định phân nhóm. **Đã xong**, 16 cấu hình; phân nhóm ở §3.
-3. SC3, SC4, SC5, SC7, SC8: số bất biến theo máy.
-4. SC6 chạy sau cùng, trên máy đo đã khai, với `--machine=<tên máy>`.
-
-Trước lần chạy SC3 đầu tiên lấy số vào bài, phải xong ba việc kỹ thuật ghi ở
-`config/protocol.yaml`: gắn `HIDENOSP_REVISION` vào dấu định danh lần chạy, nâng ℓ_max lên 4, và
-kiểm rằng B_ε không rỗng ở mọi cấu hình.
+- **HF.** Zero by design with CUT-HIDE (step 8 re-checks after every run). Stated once, not put in the
+  comparison table (rule 2.4.2).
+- **Ghost of masking.** Zero by P5(a). This is a consequence of a theorem, not measured as a finding
+  (rule 1.2.2). Only the deletion branch of SC5 reports Ghost.
+- **\|R\| of the exact methods.** Equal to \|R\|\* by P1. A difference here is an implementation error,
+  not a result.
 
 ---
 
-## 8. Xử lý kết quả âm
+## 7. Fixed run order
 
-Nếu trọng số nút thiết yếu không cải thiện Lost (rủi ro đã lường ở §12), báo cáo kết quả âm
-đủ ba điều kiện của quy tắc 3.4.9. Đóng góp lý thuyết (bài toán, chỉ mục, P1–P7) không phụ
-thuộc vào chiều của kết quả này.
+1. SC1 must be green (0 mismatches) before any other scenario. **Done**, 1,500 instances, 0 mismatches.
+2. SC2 runs before SC3 and decides the grouping. **Done**, 16 configurations; grouping in §3.
+3. SC3, SC4, SC5, SC7, SC8: machine-invariant numbers.
+4. SC6 runs last, on the declared measuring machine, with `--machine=<machine name>`.
 
-Tương tự với H3: xem mục lường trước ở §2.
-
----
-
-## 9. Bổ sung ngày 25/09/2026 — cách lấy mẫu tập nhạy cảm (trước mọi lần chạy SC3 lấy số)
-
-**Lý do bổ sung.** `protocol.yaml` dòng 1 chốt năm phân vị sup_NO, mỗi phân vị 4 tập, nhưng mã
-trước ngày này **không** thực hiện điều đó: nó trộn ngẫu nhiên kho ứng viên cho từng tập, độc lập
-nhau, nên có thể lặp tập. Đo trên dữ liệu thật (`results-probe/sbsh_feasibility_and_sampling_20260925.md`):
-trên bộ gen, 20 tập mỗi ô chỉ cho 1 đến 14 tập khác nhau tuỳ cấu hình, vì kho ứng viên chỉ có 4
-đến 23 mẫu. Đếm tập lặp như những đơn vị riêng sẽ thổi phồng cỡ mẫu của phép Wilcoxon.
-
-**Thời điểm.** Chưa có lần chạy SC3 lấy số nào. Các lượt SC3 đã chạy đều là thăm dò: trên dữ liệu
-tổng hợp trước ngày chốt, và ba lượt thăm dò khả thi ngày 25/09 (DBSH và SBSH trên bộ gen và
-MSNBC), trong đó chỉ cột HF được đọc.
-
-**Quy tắc chốt**, nay đã cài ở `hidenosp.exp.SensitiveSampling` (test: `SensitiveSamplingTest`):
-
-1. Kho ứng viên là các mẫu của F_σ dài từ 2 tới 4 và không lặp mục (phạm vi μ(P) = 1 ở §1).
-2. Kho được sắp theo sup_NO tăng dần (hoà thì theo thứ tự mẫu) và cắt thành năm tầng bằng nhau
-   theo hạng, tâm ở p10, p30, p50, p70, p90.
-3. Mỗi tầng cho tối đa **4 tập khác nhau** cỡ |𝒮|, rút từ riêng tầng đó bằng hạt giống 2026 (mỗi
-   tầng một bộ sinh suy ra từ hạt giống). Tầng có ít mẫu hơn |𝒮| không cho tập nào; tầng có ít tổ
-   hợp hơn 4 thì cho mọi tổ hợp.
-4. **Không bao giờ lặp một tập để đủ 20.** Ô (cấu hình, |𝒮|) nào rút được ít hơn 20 tập vẫn chạy
-   với số tập có được; số đó ghi ở đầu tệp kết quả và phải có trong bảng của bài. Ô không rút được
-   tập nào thì không tồn tại và không chạy; bài ghi rõ vì sao (cỡ kho ứng viên).
-5. Đơn vị lặp của H2 vẫn là (bộ dữ liệu, σ, khoảng cách, tập nhạy cảm), nay mọi đơn vị là khác
-   nhau. Tập rút thiếu không phải "thực thể bị loại" của §5, nên không tính vào ngưỡng 10%.
-
-Tuỳ chọn dòng lệnh đổi theo: `--sensitiveSets` bỏ, thay bằng `--setsPerStratum` (mặc định 4).
-
-**Không đổi:** δ_L, họ Holm bốn phần tử, ngưỡng phân nhóm, các biên tương đương.
+Before the first SC3 run whose numbers go into the paper, three technical tasks recorded in
+`config/protocol.yaml` must be done: attach `HIDENOSP_REVISION` to the run identifier, raise ℓ_max to 4,
+and check that B_ε is non-empty in every configuration.
 
 ---
 
-## 10. Bổ sung ngày 25/09/2026 — nhóm dữ liệu tính trên mẫu không lặp mục (trước mọi lần chạy SC3 lấy số)
+## 8. Handling a negative result
 
-**Quyết định của người viết**, sau khi đo ba nhật ký tiến trình mới: trung vị ρ_rep và β của một
-cấu hình được lấy trên **mẫu không lặp mục**, không phải trên mọi mẫu SC2 lấy ra.
+If the vital-node weights do not improve Lost (the risk anticipated in §12), report the negative result
+meeting the three conditions of rule 3.4.9. The theoretical contribution (the problem, the index, P1–P7)
+does not depend on the direction of this result.
 
-**Lý do.** SC3 chỉ ẩn mẫu không lặp mục (mục 1 và mục 9), nên nhóm phải mô tả đúng loại mẫu đó.
-Trung vị trên mọi mẫu trộn cả mẫu lặp mục, và có bộ mà hai loại khác hẳn nhau: BPI 2013 ở [0,1]
-σ=1000 có trung vị 0,254 trên mọi mẫu nhưng 0,021 trên mẫu không lặp mục
-(`results-probe/SC2_20260925-122652-529`). Cách cũ xếp cấu hình đó vào nhóm chính vì những mẫu mà
-SC3 không bao giờ ẩn. Cách mới bất lợi hơn cho bài, nên không phải chọn sau khi nhìn để có lợi.
-
-**Quy tắc chốt**, cài ở `tools/thong_ke.py` và SC2 (`--profile=pool`):
-
-1. Với mỗi cấu hình (bộ dữ liệu, σ, [g⁻,g⁺]), trung vị ρ_rep và trung vị β lấy trên **toàn bộ**
-   kho ứng viên của mục 9 — mọi mẫu của F_σ dài 2 tới 4, không lặp mục — chứ không trên một mẫu
-   con. SC2 chạy với `--profile=pool` ghi ra đúng kho đó; tệp SC2 lấy mẫu con không dùng để xếp nhóm.
-2. Ngưỡng giữ nguyên như mục 3: nhóm chính ρ_rep ≥ 0,20; suy biến ≤ 0,05; β ≥ 0,20 có hiệu lực,
-   ≤ 0,05 suy biến.
-3. Bảng nhóm của từng cấu hình được sinh **một lần** từ các lượt SC2 chính thức trên máy đo
-   (`python tools/thong_ke.py --sc2 results-invariant --write-groups`) thành
-   `config/nhom_cau_hinh.tsv`, và commit tệp đó là chốt. Phân tích so từng cấu hình với bảng; lệch
-   là dừng. Bảng thay cho các con số 12/7/6 ở mục 3.
-4. **H2 kiểm trên nhóm chính.** Mục 3 đã ghi "nhóm trung gian không dùng để kiểm H2 hay H3", và bản
-   thiết kế (§8.4) để nhóm suy biến ngoài nhóm chứng minh đóng góp; mã phân tích trước ngày này gộp
-   mọi cấu hình vào H2, trái với cả hai. Nay chỉ hàng của nhóm chính vào Wilcoxon; các nhóm khác báo
-   cáo mô tả. Đây là thi hành điều đã chốt, không phải quyết định mới.
-
-**Thời điểm.** Chưa có lần chạy SC3 lấy số nào; chưa có tệp SC2 chính thức nào ở chế độ toàn kho.
-
-**Không đổi:** δ_L, họ Holm bốn phần tử, các ngưỡng, các biên tương đương, cách lấy mẫu của mục 9.
+Likewise for H3: see the anticipation in §2.
 
 ---
 
-## 11. Bổ sung ngày 26/09/2026 — phạm vi mẫu lặp mục (trước mọi lần chạy SC3 lấy số trên phạm vi này)
+## 9. Addendum of 2026-09-25 — how sensitive sets are sampled (before any SC3 run for the paper)
 
-**Quyết định của người viết** (26/09/2026): duyệt nguyên đề xuất soạn ngày 25/09 — mở phạm vi sang mẫu lặp
-mục; phương pháp của phép kiểm H2-R là `cut-hide`; tệp protein SDB4 vào phép kiểm, SDB1 chỉ báo cáo; và báo
-cáo mặt Pareto của CUT-HIDE như một phân tích mô tả (điểm 6 dưới đây).
+**Reason for the addendum.** `protocol.yaml` row 1 locks five percentiles of sup_NO, 4 sets per
+percentile, but the code before this date did **not** do that: it shuffled the candidate pool for each
+set independently, so sets could repeat. Measured on real data
+(`results-probe/sbsh_feasibility_and_sampling_20260925.md`): on the genome dataset, 20 sets per cell gave
+only 1 to 14 distinct sets depending on the configuration, because the candidate pool had only 4 to 23
+patterns. Counting repeated sets as separate units would inflate the sample size of the Wilcoxon test.
 
-**Khai xuất xứ.** Trước khi mục này được viết, người đề xuất mục này **đã thấy** các lượt thăm dò trên máy phát triển:
-`results-probe/repeated_item_exactness_probe_20260925.txt` (lời giải chính xác so với lời giải lát cắt trên
-mẫu lặp mục) và `results-probe/repeated_item_scope_probe_20260925.md` (nhóm dữ liệu trên kho mẫu lặp mục;
-SC3 lặp mục trên năm cấu hình, bảy phương pháp). Chiều đã thấy: mọi biến thể CUT-HIDE mất ít mẫu hơn ba đường
-cơ sở; `cut-hide` mất nhiều mẫu hơn biến thể quét λ ở bốn trên năm cấu hình. Vì vậy mục này **không** đặt giả
-thuyết có hướng nào giữa các biến thể của CUT-HIDE, và phương pháp của H2-R được chọn theo mục tiêu của bài toán
-(\|R\| trước), không theo số đã thấy. **Chưa có** số mặt Pareto nào khi mục này được viết.
+**Timing.** No SC3 run for the paper has taken place. The SC3 runs so far were all exploratory: on
+synthetic data before the lock date, and three feasibility probes on 2026-09-25 (DBSH and SBSH on the
+genome dataset and MSNBC), of which only the HF column was read.
 
-1. **Phạm vi.** Mẫu nhạy cảm lặp mục (μ(P) ≥ 2), dài 2 tới 4, thuộc F_σ, với g⁻ = 0 (mọi cấu hình của giao
-   thức). Ở đó Định lý P8 của bản thiết kế cho số lần che tối thiểu chính xác, nên \|R\|* và tỉ số \|R\|/\|R\|*
-   có nghĩa như ở phạm vi chính. Phạm vi chính (μ(P) = 1, mục 1) không đổi.
-2. **Nhóm dữ liệu.** Như mục 10, trên kho mẫu lặp mục (SC2 `--profile=repeated`), cùng ngưỡng của mục 3. Bảng
-   nhóm riêng `config/nhom_cau_hinh_lap_muc.tsv`, sinh một lần từ lượt SC2 chính thức trên máy đo, commit là chốt.
-3. **Lấy mẫu tập nhạy cảm.** Như mục 9, trên kho mẫu lặp mục (SC3 `--patternKind=repeated`).
-4. **H2-R.** Như H2 (mục 2): trên nhóm chính **của phạm vi lặp mục**, trung vị hiệu Lost_rel(đường cơ sở) −
-   Lost_rel(`cut-hide`) > δ_L — *sửa ở mục 12 (26/09/2026): phương pháp đang kiểm là `cut-hide-rw-ls`*; cùng họ Holm bốn phần tử (HHA, DBSH, SBSH-r1, SBSH-rmax), cùng α = 0,05, δ_L =
-   0,02, Wilcoxon một phía, rank-biserial. Kiểm **riêng**, không gộp hàng với H2. Hàng của hai phạm vi được
-   tách theo **chính các mục của mẫu nhạy cảm** trong từng hàng SC3, không theo tên tệp hay tuỳ chọn.
-5. **Tệp protein.** SDB4 (`protein_sdb4`) vào H2 và H2-R; SDB1 (`protein_sdb1`) chỉ báo cáo mô tả, không vào
-   phép Wilcoxon nào, vì hai tệp chung 64–75% chuỗi.
-6. **Mặt Pareto (mô tả, không kiểm định).** Với mỗi tập nhạy cảm một mẫu, ở cả hai phạm vi, tính **chính xác**
-   các đỉnh của mặt Pareto lồi giữa \|R\| và trọng số đại diện w(R) của CUT-HIDE (Mệnh đề P10 của bản thiết kế,
-   cùng trọng số như `cut-hide`), và với mỗi đỉnh: \|R\|, w, Lost_rel, SupDist. Báo cáo: số đỉnh; khoảng
-   \|R\|/\|R\|* và Lost_rel trên mặt; với mỗi đường cơ sở của họ Holm, tỉ lệ tập mà có một đỉnh trội hơn nó
-   (không kém ở cả \|R\| và Lost_rel, hơn hẳn ở ít nhất một). Không đỉnh nào thay `cut-hide` trong H2 hay H2-R.
-7. **Mở rộng mục 6.** \|R\| = \|R\|* của `cut-hide` trên phạm vi lặp mục là hệ quả của Định lý P8: báo cáo như
-   phép kiểm cài đặt, không kiểm định. Tỉ số \|R\|(`cut-hide-sweep`)/\|R\|* — cái giá của việc không có P8 — báo
-   cáo mô tả theo từng cấu hình.
+**Locked rule**, now implemented in `hidenosp.exp.SensitiveSampling` (test: `SensitiveSamplingTest`):
 
-**Không đổi:** mọi mục 1–10.
+1. The candidate pool is the patterns of F_σ of length 2 to 4 without repeated items (scope μ(P) = 1 of §1).
+2. The pool is sorted by increasing sup_NO (ties by pattern order) and cut into five equal strata by
+   rank, centred at p10, p30, p50, p70, p90.
+3. Each stratum gives at most **4 distinct sets** of size |𝒮|, drawn from that stratum alone with seed
+   2026 (one generator per stratum, derived from the seed). A stratum with fewer patterns than |𝒮| gives
+   no set; a stratum with fewer than 4 combinations gives all of them.
+4. **A set is never repeated to reach 20.** A cell (configuration, |𝒮|) that yields fewer than 20 sets
+   still runs with the sets it has; that number is written at the top of the result file and must appear
+   in the paper's table. A cell that yields no set does not exist and does not run; the paper states why
+   (the size of the candidate pool).
+5. The unit of replication of H2 is still (dataset, σ, gap, sensitive set), and now every unit is
+   distinct. A set that could not be drawn is not an "excluded instance" of §5 and does not count toward
+   the 10% threshold.
+
+The command-line option changes accordingly: `--sensitiveSets` is removed, replaced by
+`--setsPerStratum` (default 4).
+
+**Unchanged:** δ_L, the four-member Holm family, the grouping thresholds, the equivalence margins.
 
 ---
 
-## 12. Bổ sung ngày 26/09/2026 — phương pháp đang kiểm của H2 và H2-R (trước mọi lần chạy SC3 lấy số)
+## 10. Addendum of 2026-09-25 — data groups computed on patterns without repeated items (before any SC3 run for the paper)
 
-**Quyết định của người viết** (26/09/2026): chọn phương án (A) — phương pháp đang kiểm của H2 (mục 2) và H2-R
-(mục 11, điểm 4) đổi từ `cut-hide` sang `cut-hide-rw-ls`, gồm trọng số đại diện thích nghi và tìm kiếm cục bộ
-theo điều kiện cứu được (Bổ đề L9 của bản thiết kế v0.9).
+**Decision of the author**, after measuring three new process event logs: the median ρ_rep and β of a
+configuration are taken over **patterns without repeated items**, not over every pattern SC2 draws.
 
-**Lý do.** Bản thiết kế v0.9 chứng minh (Mệnh đề P11, quy dẫn từ MAX-CUT) rằng chọn tập che tối thiểu mất ít mẫu
-nhất là NP-khó ngay cả với một mẫu nhạy cảm hai mục khác nhau, nên không trọng số cố định nào cộng theo vị trí có
-thể bám đúng số mẫu mất; nguyên nhân là tác động theo cặp của các lần che. `cut-hide` dùng đúng một trọng số cố định
-như thế. `cut-hide-rw-ls` dùng mức giảm thật của lời giải trước để tính lại trọng số, rồi đổi tập che từng một hoặc
-hai chuỗi với số mẫu mất tính chính xác.
+**Reason.** SC3 hides only patterns without repeated items (sections 1 and 9), so the groups must
+describe exactly that kind of pattern. The median over all patterns mixes in patterns with repeated
+items, and on some datasets the two kinds differ sharply: BPI 2013 at [0,1] σ=1000 has a median of 0.254
+over all patterns but 0.021 over patterns without repeated items
+(`results-probe/SC2_20260925-122652-529`). The old rule put that configuration into the main group
+because of patterns that SC3 never hides. The new rule is less favourable to the paper, so it is not a
+choice made after looking in order to gain.
 
-**Định nghĩa `cut-hide-rw-ls`** (mã: `hidenosp.hide.AdaptiveCutHide` với `withLocalSearch`,
-`hidenosp.hide.MaskLocalSearch`; khoá SC3 `cut-hide-rw-ls`):
-1. *Một mẫu nhạy cảm* (\|𝒮\| = 1; HIDE-DB; g⁻ = 0 ở mọi cấu hình):
-   - vòng 0 đúng là `cut-hide` (trọng số §9.2 bước 4 trên B_ε với ε = 0,5; lời giải chính xác của P8);
-   - vòng 1 tới 5: w(i) = Σ c_Q trên các Q ∈ F_σ \ 𝒮⁺ mà i thiết yếu với Q, với c_Q = 1/m_Q + s(1 − s)/τ_Q,
-     s = 1/(1 + exp(−(d_Q − m_Q + ½)/τ_Q)), τ_Q = max(1, m_Q/4), m_Q = sup_NO(Q, D) − σ + 1, d_Q là mức giảm
-     chính xác của Q dưới lời giải vòng trước; giải lại P8 với số lần che trước. Giữ lời giải có Lost nhỏ nhất
-     trong sáu vòng (hoà thì vòng sớm nhất);
-   - tìm kiếm cục bộ từ lời giải ấy (Thuật toán LS của bản thiết kế): nước một chuỗi và nước phân bổ, tối đa
-     50 lượt, 30 chuỗi nhận rẻ nhất; bỏ mọi nước mà Bổ đề L9 chứng minh không thể giảm Lost.
-2. *Nhiều mẫu nhạy cảm* (\|𝒮\| ∈ {5, 10, 20}): tham lam của §9.2 bước 7, **không đổi** — trùng `cut-hide`, vì
-   trọng số thích nghi và tìm kiếm cục bộ dựa trên lời giải chính xác của P8 cho một mẫu. Cột `method` của hàng SC3
-   ghi rõ nhánh đã chạy.
+**Locked rule**, implemented in `tools/thong_ke.py` and SC2 (`--profile=pool`):
 
-**Tham số chốt, không chỉnh sau khi thấy số:** sáu vòng (kể cả vòng 0); công thức c_Q và τ_Q như trên; 50 lượt;
-30 chuỗi nhận; ε = 0,5 như `config/protocol.yaml`. Mã giữ chúng ở `AdaptiveCutHide.DEFAULT_ITERATIONS`,
-`MaskLocalSearch.DEFAULT_PASSES`, `MaskLocalSearch.DEFAULT_RECEIVERS`.
+1. For each configuration (dataset, σ, [g⁻,g⁺]), the median ρ_rep and median β are taken over the
+   **whole** candidate pool of section 9 — every pattern of F_σ of length 2 to 4 without repeated items —
+   not over a subsample. SC2 run with `--profile=pool` writes exactly that pool; an SC2 file of a
+   subsample is not used for grouping.
+2. The thresholds stay as in section 3: main group ρ_rep ≥ 0.20; degenerate ≤ 0.05; β ≥ 0.20 effective,
+   ≤ 0.05 degenerate.
+3. The group table of each configuration is generated **once** from the official SC2 runs on the
+   measuring machine (`python tools/thong_ke.py --sc2 results-invariant --write-groups`) into
+   `config/nhom_cau_hinh.tsv`, and committing that file is the lock. The analysis compares each
+   configuration with the table; a mismatch stops it. The table replaces the numbers 12/7/6 of section 3.
+4. **H2 is tested on the main group.** Section 3 already says "the intermediate group is not used to test
+   H2 or H3", and the design (§8.4) keeps the degenerate group outside the group that demonstrates the
+   contribution; the analysis code before this date pooled every configuration into H2, contrary to both.
+   Now only main-group rows enter Wilcoxon; the other groups are reported descriptively. This carries out
+   what was already locked; it is not a new decision.
 
-**Tính chất có chứng minh, báo cáo như phép kiểm cài đặt (mục 6), không kiểm định:** trên mọi thực thể một mẫu,
-\|R\|(`cut-hide-rw-ls`) = \|R\|* và Lost(`cut-hide-rw-ls`) ≤ Lost(`cut-hide`): vòng 0 là `cut-hide`, và mỗi bước
-sau chỉ được nhận khi Lost giảm. Vì vậy trên **từng** thực thể, hiệu Lost_rel(đường cơ sở) − Lost_rel(phương pháp
-đang kiểm) không nhỏ hơn hiệu tính với `cut-hide`. Việc đổi phương pháp là trội yếu theo cấu trúc, không phải một
-lựa chọn giữa hai phương pháp ngang hàng dựa trên số.
+**Timing.** No SC3 run for the paper has taken place; no official SC2 file in whole-pool mode exists yet.
 
-**Khai xuất xứ.** Trước khi mục này được viết, người đề xuất mục này **đã thấy** các lượt thăm dò trên máy phát triển ở đúng tám
-cấu hình × 20 tập của thăm dò mặt Pareto (bộ gen [0,3] σ=2500 và protein SDB4 [0,3] σ=500 ở cả hai phạm vi, MSNBC
-[0,1] σ=2000 ở cả hai phạm vi, Sepsis [0,1] σ=300 và BPI 2013 [0,1] σ=500 ở phạm vi lặp mục), và 480 thực thể nhỏ cắt
-từ các bộ ấy: `results-probe/surrogate_candidates_probe_20260926.txt`, `lost_small_exact_probe_20260926.txt`,
-`lost_local_search_probe_20260926.txt`, `pareto_exceptions_rw_probe_20260926.txt`. Chiều đã thấy: phương pháp mới
-mất ít mẫu hơn `cut-hide` ở một phần các tập và không nhiều hơn ở tập nào (đúng theo cấu trúc). Sáu vòng, công
-thức τ_Q và 30 chuỗi nhận được đặt khi viết từng bộ thăm dò, trước khi chạy nó. **Hai điều được quyết sau khi thấy
-số thăm dò**, khai ở đây: (a) thêm nước phân bổ vào tìm kiếm cục bộ, sau khi thấy bản chỉ có nước một chuỗi trên
-thực thể nhỏ; (b) số lượt 50 (thăm dò thực thể nhỏ dùng 40, thăm dò dữ liệu đầy đủ dùng 50). Bộ lọc L9 không thay
-đổi nước nào được chọn (chứng minh ở Bổ đề L9, kiểm ở `MaskLocalSearchTest`).
-
-**Báo cáo thêm (mô tả, không kiểm định):** `cut-hide` và `cut-hide-rw` chạy trong cùng lượt SC3 như hai biến thể
-loại trừ; bảng mô tả Lost_rel của ba biến thể và số tập mà mỗi bước (trọng số thích nghi, tìm kiếm cục bộ) làm
-Lost giảm. SC6 đo thời gian của cả `cut-hide` và `cut-hide-rw-ls` trên máy đo.
-
-**Thời điểm.** Chưa có lượt SC3 chính thức nào. Mọi số đã thấy là thăm dò trên máy phát triển.
-
-**Không đổi:** δ_L, α, Wilcoxon một phía với Pratt, họ Holm bốn phần tử, cách lấy mẫu (mục 9), nhóm dữ liệu (mục 10
-và 11), các biên tương đương, mục 11 điểm 5; mục 11 điểm 6 (mặt Pareto) vẫn tính với trọng số của `cut-hide` và
-vẫn là phân tích mô tả.
+**Unchanged:** δ_L, the four-member Holm family, the thresholds, the equivalence margins, the sampling of
+section 9.
 
 ---
 
-## 13. Ghi chú biên tập ngày 26/09/2026 — đổi tên tệp, không đổi quy tắc nào
+## 11. Addendum of 2026-09-26 — the scope of patterns with repeated items (before any SC3 run for the paper in this scope)
 
-Mã nguồn chuyển hẳn sang tiếng Anh, nên ba tên mà mục 10 và mục 11 nhắc tới đổi như sau:
+**Decision of the author** (2026-09-26): approve as a whole the proposal drafted on 2026-09-25 — open the
+scope to patterns with repeated items; the method of the H2-R test is `cut-hide`; the protein file SDB4
+enters the test, SDB1 is only reported; and the Pareto front of CUT-HIDE is reported as a descriptive
+analysis (point 6 below).
 
-| Tên ở mục 10 và 11 | Tên từ ngày 26/09/2026 |
+**Provenance.** Before this section was written, its proposer **had seen** the exploratory runs on the
+development machine: `results-probe/repeated_item_exactness_probe_20260925.txt` (the exact solution
+against the cut solution on patterns with repeated items) and
+`results-probe/repeated_item_scope_probe_20260925.md` (data groups over the pool of patterns with
+repeated items; SC3 with repeated items on five configurations, seven methods). Direction seen: every
+CUT-HIDE variant loses fewer patterns than the three baselines; `cut-hide` loses more patterns than the
+λ-sweep variant in four of five configurations. This section therefore sets **no** directional hypothesis
+between the variants of CUT-HIDE, and the method of H2-R is chosen by the objective of the problem
+(\|R\| first), not by the numbers seen. **No** Pareto-front number existed when this section was written.
+
+1. **Scope.** Sensitive patterns with repeated items (μ(P) ≥ 2), of length 2 to 4, in F_σ, with g⁻ = 0
+   (every configuration of the protocol). There, Theorem P8 of the design gives the exact minimum number
+   of masks, so \|R\|* and the ratio \|R\|/\|R\|* mean the same as in the main scope. The main scope
+   (μ(P) = 1, section 1) is unchanged.
+2. **Data groups.** As in section 10, over the pool of patterns with repeated items (SC2
+   `--profile=repeated`), with the same thresholds as section 3. A separate group table
+   `config/nhom_cau_hinh_lap_muc.tsv`, generated once from the official SC2 run on the measuring machine;
+   committing it is the lock.
+3. **Sampling sensitive sets.** As in section 9, over the pool of patterns with repeated items (SC3
+   `--patternKind=repeated`).
+4. **H2-R.** As H2 (section 2): on the main group **of the repeated-item scope**, the median difference
+   Lost_rel(baseline) − Lost_rel(`cut-hide`) > δ_L — *changed in section 12 (2026-09-26): the method
+   under test is `cut-hide-rw-ls`*; the same four-member Holm family (HHA, DBSH, SBSH-r1, SBSH-rmax), the
+   same α = 0.05, δ_L = 0.02, one-sided Wilcoxon, rank-biserial. Tested **separately**, rows not pooled
+   with H2. The rows of the two scopes are separated by **the items of the sensitive patterns themselves**
+   in each SC3 row, not by file name or option.
+5. **Protein files.** SDB4 (`protein_sdb4`) enters H2 and H2-R; SDB1 (`protein_sdb1`) is only reported
+   descriptively, in no Wilcoxon test, because the two files share 64–75% of their sequences.
+6. **Pareto front (descriptive, not tested).** For each one-pattern sensitive set, in both scopes, compute
+   **exactly** the vertices of the convex Pareto front between \|R\| and the surrogate weight w(R) of
+   CUT-HIDE (Proposition P10 of the design, the same weights as `cut-hide`), and for each vertex: \|R\|, w,
+   Lost_rel, SupDist. Report: the number of vertices; the range of \|R\|/\|R\|* and of Lost_rel on the
+   front; for each baseline of the Holm family, the share of sets where some vertex dominates it (no worse
+   in both \|R\| and Lost_rel, strictly better in at least one). No vertex replaces `cut-hide` in H2 or H2-R.
+7. **Extension of section 6.** \|R\| = \|R\|* of `cut-hide` in the repeated-item scope is a consequence of
+   Theorem P8: reported as an implementation check, not tested. The ratio
+   \|R\|(`cut-hide-sweep`)/\|R\|* — the cost of not having P8 — is reported descriptively per configuration.
+
+**Unchanged:** all of sections 1–10.
+
+---
+
+## 12. Addendum of 2026-09-26 — the method under test of H2 and H2-R (before any SC3 run for the paper)
+
+**Decision of the author** (2026-09-26): option (A) — the method under test of H2 (section 2) and H2-R
+(section 11, point 4) changes from `cut-hide` to `cut-hide-rw-ls`, which adds adaptive surrogate weights
+and a local search under the rescue condition (Lemma L9 of design v0.9).
+
+**Reason.** Design v0.9 proves (Proposition P11, a reduction from MAX-CUT) that choosing a minimum mask set
+that loses the fewest patterns is NP-hard even for one sensitive pattern of two distinct items, so no fixed
+weight that adds up over positions can track the number of lost patterns exactly; the cause is the pairwise
+interaction of masks. `cut-hide` uses exactly such a fixed weight. `cut-hide-rw-ls` uses the actual drops of
+the previous solution to recompute the weights, then changes the mask set one or two sequences at a time,
+with the number of lost patterns computed exactly.
+
+**Definition of `cut-hide-rw-ls`** (code: `hidenosp.hide.AdaptiveCutHide` with `withLocalSearch`,
+`hidenosp.hide.MaskLocalSearch`; SC3 key `cut-hide-rw-ls`):
+1. *One sensitive pattern* (\|𝒮\| = 1; HIDE-DB; g⁻ = 0 in every configuration):
+   - round 0 is exactly `cut-hide` (the weights of §9.2 step 4 on B_ε with ε = 0.5; the exact solution of P8);
+   - rounds 1 to 5: w(i) = Σ c_Q over the Q ∈ F_σ \ 𝒮⁺ for which i is vital, with c_Q = 1/m_Q + s(1 − s)/τ_Q,
+     s = 1/(1 + exp(−(d_Q − m_Q + ½)/τ_Q)), τ_Q = max(1, m_Q/4), m_Q = sup_NO(Q, D) − σ + 1, d_Q the exact
+     drop of Q under the solution of the previous round; solve P8 again with the earlier number of masks.
+     Keep the solution with the smallest Lost over the six rounds (ties: the earliest round);
+   - local search from that solution (Algorithm LS of the design): one-sequence moves and allocation moves,
+     at most 50 passes, the 30 cheapest receiving sequences; drop every move that Lemma L9 proves cannot
+     lower Lost.
+2. *Several sensitive patterns* (\|𝒮\| ∈ {5, 10, 20}): the greedy of §9.2 step 7, **unchanged** — identical
+   to `cut-hide`, because the adaptive weights and the local search rest on the exact one-pattern solution
+   of P8. The `method` column of the SC3 row states the branch that ran.
+
+**Parameters locked, not tuned after seeing numbers:** six rounds (round 0 included); the formulas of c_Q and
+τ_Q as above; 50 passes; 30 receiving sequences; ε = 0.5 as in `config/protocol.yaml`. The code keeps them in
+`AdaptiveCutHide.DEFAULT_ITERATIONS`, `MaskLocalSearch.DEFAULT_PASSES`, `MaskLocalSearch.DEFAULT_RECEIVERS`.
+
+**Proven properties, reported as implementation checks (section 6), not tested:** on every one-pattern
+instance, \|R\|(`cut-hide-rw-ls`) = \|R\|* and Lost(`cut-hide-rw-ls`) ≤ Lost(`cut-hide`): round 0 is
+`cut-hide`, and every later step is accepted only when Lost drops. Hence on **every** instance the difference
+Lost_rel(baseline) − Lost_rel(method under test) is no smaller than the difference computed with `cut-hide`.
+The change of method is a weak dominance by construction, not a choice between two peer methods based on
+numbers.
+
+**Provenance.** Before this section was written, its proposer **had seen** the exploratory runs on the
+development machine on exactly the eight configurations × 20 sets of the Pareto-front probe (genome [0,3]
+σ=2500 and protein SDB4 [0,3] σ=500 in both scopes, MSNBC [0,1] σ=2000 in both scopes, Sepsis [0,1] σ=300 and
+BPI 2013 [0,1] σ=500 in the repeated-item scope), and 480 small instances cut from those datasets:
+`results-probe/surrogate_candidates_probe_20260926.txt`, `lost_small_exact_probe_20260926.txt`,
+`lost_local_search_probe_20260926.txt`, `pareto_exceptions_rw_probe_20260926.txt`. Direction seen: the new
+method loses fewer patterns than `cut-hide` on part of the sets and more on none (as the construction
+guarantees). The six rounds, the formula of τ_Q and the 30 receiving sequences were set when each probe was
+written, before running it. **Two things were decided after seeing probe numbers**, declared here: (a) adding
+allocation moves to the local search, after seeing the version with one-sequence moves only on small
+instances; (b) the number of passes, 50 (the small-instance probe used 40, the full-data probe 50). The L9
+filter does not change which move is chosen (proved in Lemma L9, checked in `MaskLocalSearchTest`).
+
+**Additional reporting (descriptive, not tested):** `cut-hide` and `cut-hide-rw` run in the same SC3 run as
+two ablation variants; a descriptive table of Lost_rel of the three variants and of the number of sets where
+each step (adaptive weights, local search) lowers Lost. SC6 times both `cut-hide` and `cut-hide-rw-ls` on the
+measuring machine.
+
+**Timing.** No official SC3 run has taken place. Every number seen is exploratory, on the development machine.
+
+**Unchanged:** δ_L, α, one-sided Wilcoxon with Pratt, the four-member Holm family, the sampling (section 9),
+the data groups (sections 10 and 11), the equivalence margins, section 11 point 5; section 11 point 6 (the
+Pareto front) is still computed with the weights of `cut-hide` and is still a descriptive analysis.
+
+---
+
+## 13. Editorial note of 2026-09-26 — file renames, no rule changed
+
+The source code moved entirely to English, so three names mentioned in sections 10 and 11 change as follows:
+
+| Name in sections 10 and 11 | Name from 2026-09-26 |
 |---|---|
 | `tools/thong_ke.py` | `tools/preregistered_analysis.py` |
 | `config/nhom_cau_hinh.tsv` | `config/configuration_groups.tsv` |
 | `config/nhom_cau_hinh_lap_muc.tsv` | `config/configuration_groups_repeated.tsv` |
 
-Lệnh sinh bảng nhóm ở mục 10 điểm 3 nay là
-`python tools/preregistered_analysis.py --sc2 results-invariant --write-groups`. Nhãn nhóm ghi trong
-hai bảng cũng sang tiếng Anh: với ρ_rep, `main` (chính), `intermediate` (trung gian), `degenerate`
-(suy biến); với β, `effective` (có hiệu lực), `between` (trung gian), `degenerate` (suy biến). Khi
-ghi chú này được viết, chưa bảng nhóm nào được sinh, nên không bảng chốt nào phải viết lại.
+The command that generates the group table in section 10 point 3 is now
+`python tools/preregistered_analysis.py --sc2 results-invariant --write-groups`. The group labels written in
+the two tables are also in English: for ρ_rep, `main`, `intermediate`, `degenerate`; for β, `effective`,
+`between`, `degenerate`. When this note was written no group table had been generated, so no locked table
+had to be rewritten.
 
-**Không đổi:** mọi mục 1–12; mọi ngưỡng, phép kiểm, cách ghép cặp và cách lấy mẫu.
-
----
-
-## 14. Bổ sung ngày 02/10/2026 — phạm vi, phương pháp, giới hạn thời gian và thứ tự của đợt SC3 chính thức (trước mọi lần chạy SC3 lấy số)
-
-**Quyết định của người viết** (02/10/2026), chọn trong các phương án người đề xuất đưa ra:
-
-1. **Phạm vi chạy: chỉ nhóm chính.** SC3 chính thức chạy trên mọi dòng `group = main` của hai bảng đã chốt,
-   `config/configuration_groups.tsv` (phạm vi chính, `--patternKind=distinct`) và
-   `config/configuration_groups_repeated.tsv` (phạm vi lặp mục, `--patternKind=repeated`). Cấu hình nhóm trung gian
-   và suy biến **không** chạy SC3 trong đợt này. H2 và H2-R vốn chỉ kiểm trên nhóm chính (mục 10 điểm 4, mục 11
-   điểm 4), nên việc này không đổi phép kiểm nào; nó bỏ phần báo cáo mô tả của các nhóm khác mà mục 10 điểm 4 nhắc
-   tới. Nếu sau này chạy các nhóm ấy thì chúng vẫn chỉ là mô tả. `protein_sdb1` thuộc nhóm chính, chạy, và vẫn chỉ
-   báo cáo (mục 11 điểm 5).
-
-   > **Sửa ngày 04/10/2026, sau khi đợt phương pháp \|𝒮\| = 1 đã chạy.** Câu "không đổi phép kiểm nào" ở trên **sai**: H3
-   > (mục 2) cần cả nhóm suy biến ("gần 1 trên nhóm suy biến"). Chỉ chạy nhóm chính thì nửa sau của H3 **không kiểm được**;
-   > bộ phân tích nay nói rõ điều đó. H2 và H2-R đúng là không đổi. Chạy nhóm suy biến hay khai H3 chỉ kiểm nửa đầu là quyết
-   > định còn mở của người viết.
-2. **Phương pháp: bộ của H2.** Bảy khoá: `cut-hide-rw-ls` (phương pháp đang kiểm, mục 12); `cut-hide-rw` và
-   `cut-hide` (hai biến thể loại trừ, mục 12); `hha`, `dbsh`, `sbsh-r1`, `sbsh-rmax` (họ Holm, mục 2). Không phương
-   pháp nào ngẫu nhiên, nên quy ước mười hạt giống của mục 5 không áp dụng ở đợt này.
-3. **Giới hạn thời gian: 1.800 giây** đồng hồ thực cho **một phương pháp trên một tập nhạy cảm**
-   (`--timeLimit=1800`), tính từ lúc gọi phương pháp tới lúc nó trả lời giải; phần đánh giá lời giải và mặt Pareto
-   (mục 11 điểm 6) không tính vào. Vượt giới hạn: hàng mang `status = OT` và để trống mọi cột kết quả; hết bộ nhớ:
-   `status = OOM`. Phương pháp chạy xong thì `status` để trống. Xử lý theo bảng "Loại trừ thực thể" của mục 5,
-   không đổi: loại cặp, đếm, báo cáo; quá 10% thì không kết luận. Trần bộ nhớ mọi lệnh SC3 là `-Xmx8g`.
-   Cài đặt: kiểm hợp tác (`hidenosp.util.Deadline`) khi dựng một Nettree, khi che một vị trí, ở mỗi pha luồng cực
-   đại, mỗi vị trí của quy hoạch động chính xác và mỗi lượt tìm kiếm cục bộ; phép kiểm `Sc3TimeLimitTest`.
-4. **Thứ tự: \|𝒮\| = 1 trước**, ở cả hai phạm vi, kèm mặt Pareto (mục 11 điểm 6); rồi \|𝒮\| = 5, 10, 20. Thời gian
-   của đợt \|𝒮\| = 1 dùng để lên lịch các đợt sau. Mọi tham số chốt ở mục này và mục 12 **không** đổi sau khi thấy
-   kết quả của đợt \|𝒮\| = 1.
-
-   > **Sửa cùng ngày (02/10/2026), trước mọi lượt SC3 chính thức — quyết định của người viết.** Mặt Pareto **tách
-   > thành một đợt riêng**, không chạy kèm các phương pháp. Lý do đo được: chạy thử cả 54 ô nhóm chính của \|𝒮\| = 1
-   > trên máy phát triển (một tập mỗi tầng; `results-probe/sc3_dry_run_all_cells_probe_20261002.txt`) cho thấy dựng mặt Pareto chiếm 88–95% thời gian của một ô — MSNBC [0,3]
-   > σ=5000 phạm vi chính: 2.005 giây cho năm tập, trong đó bảy phương pháp chỉ 110 giây; một mặt có tới 1.145 đỉnh — và
-   > phần ấy không nằm dưới giới hạn thời gian của điểm 3. Đợt phương pháp chạy `--pareto=false`; đợt mặt Pareto chạy
-   > `--methods=none --pareto=true` trên cùng các ô và cùng cách lấy mẫu (mục 9), nên cùng các tập nhạy cảm. Nội dung của
-   > mục 11 điểm 6 không đổi; chỉ đổi lúc chạy. Bộ sinh: `tools/sc3_commands.py` (đợt phương pháp) và
-   > `tools/sc3_commands.py --pareto` (đợt mặt Pareto). Thứ tự: đợt phương pháp \|𝒮\| = 1 trước, rồi đợt mặt Pareto hoặc
-   > \|𝒮\| = 5, 10, 20 tuỳ thời gian máy.
-
-Lệnh của từng ô do `tools/sc3_commands.py` sinh từ hai bảng nhóm, không chép tay; công cụ ấy bỏ ô đã có tệp kết quả
-và liệt kê tệp SC3 không khớp ô nào.
-
-**Hệ quả với tính bất biến theo máy.** Hàng không có `OT` hay `OOM` vẫn là đại lượng bất biến theo máy. **Tập hàng
-`OT` thì phụ thuộc máy**, và tập hàng `OOM` phụ thuộc trần bộ nhớ. Vì vậy lượt SC3 chính thức chạy trên máy đo đã
-khai ở hàng 5 của `config/protocol.yaml`, mang `--machine` của máy ấy, và số ca `OT`/`OOM` được báo cáo kèm tên máy
-và trần bộ nhớ.
-
-**Khai xuất xứ.** Khi mục này được viết, người đề xuất đã thấy, ngoài các lượt thăm dò kê ở mục 12, hai lượt thăm
-dò trên máy phát triển: `results-probe/sc3_time_limit_stop_probe_20261002.txt` (giới hạn 2 giây trên MSNBC
-[0,10]: mọi phương pháp dừng chưa tới 0,05 giây sau hạn) và `results-probe/sc3_heavy_cells_timing_probe_20261002.txt` (bảy cấu hình nhóm chính chọn làm ca nặng: ba kho mẫu lặp mục lớn nhất, hai kho mẫu không lặp mục lớn nhất, bộ gen [0,10] σ=2500 lặp mục và MSNBC [0,10] σ=5000 không lặp mục; năm tập mỗi cấu hình, giới hạn 600 giây: không hàng nào `OT`; lâu nhất 42,7 giây cho một phương pháp trên một tập, của `cut-hide-rw-ls` trên MSNBC [0,10] σ=1000 phạm vi lặp mục). Hai lượt ấy có in Lost của các phương pháp ở các tập đã chạy; chiều đã thấy giống mục 12. Giá trị 1.800 giây được đặt **trước** lượt đo thứ hai và không đổi sau nó. Chưa có lượt SC3 chính thức nào.
-
-**Không đổi:** mọi mục 1–13.
+**Unchanged:** all of sections 1–12; every threshold, test, pairing and sampling rule.
 
 ---
 
-## 15. Bổ sung ngày 07/10/2026 — sửa lỗi cài đặt của bước 7 với mẫu lặp mục (trước mọi kết quả SC3 \|𝒮\| > 1 chính thức)
+## 14. Addendum of 2026-10-02 — scope, methods, time limit and order of the official SC3 batch (before any SC3 run for the paper)
 
-**Sự cố.** Đợt phương pháp \|𝒮\| = 5 trên máy đo (mã `8f8c601`, cùng mã với `5627876`) dừng ở 10 ô với thông báo "no
-position lowers a sensitive support any further, yet the database threshold is still exceeded". Chạy lại bằng đúng mã ấy
-trên máy phát triển với khoá `cut-hide`: đúng 10 trên 34 ô dừng, cả 10 đều ở phạm vi lặp mục.
+**Decision of the author** (2026-10-02), chosen among the options the proposer put forward:
 
-**Nguyên nhân.** Thuật toán tham lam của §9.2 bước 7 (nhiều mẫu, HIDE-DB) ghi mức giảm của mỗi lần che là 1 cho mỗi mẫu
-mà vị trí ấy thiết yếu. Điều đó đúng khi μ(P) = 1. Với mẫu lặp mục, một vị trí mang nhiều nút của Nettree, nên che nó có
-thể làm sup_NO giảm hơn 1. Sổ nhu cầu vì thế cao hơn độ hỗ trợ thật: thuật toán che tiếp những mẫu đã ẩn xong, và dừng
-khi không còn gì để giảm. Ở các ô lặp mục không dừng, nó **che thừa mà không báo**.
+1. **Scope of the run: the main group only.** The official SC3 runs on every row `group = main` of the two
+   locked tables, `config/configuration_groups.tsv` (main scope, `--patternKind=distinct`) and
+   `config/configuration_groups_repeated.tsv` (repeated-item scope, `--patternKind=repeated`).
+   Configurations of the intermediate and degenerate groups do **not** run SC3 in this batch. H2 and H2-R are
+   tested only on the main group anyway (section 10 point 4, section 11 point 4), so this changes no test; it
+   drops the descriptive reporting of the other groups mentioned in section 10 point 4. If those groups run
+   later, they remain descriptive only. `protein_sdb1` belongs to the main group, runs, and is still only
+   reported (section 11 point 5).
 
-**Sửa (commit `dcb0f17`, tăng tốc ở `a8b1bad`).** Sổ nhu cầu trừ **mức giảm thật** của mỗi lần che, đọc từ luồng cực đại
-của chỉ mục mà bước 7 vốn dựng cho chuỗi ấy; không trừ dấu "thiết yếu" của ứng viên nữa. Quy tắc chọn vị trí của bước 7
-(tỉ số tổng mức giảm trên 1 + w(i), xếp theo dấu thiết yếu) **không đổi**. Với sổ chính xác, bước 7 luôn dừng với HF = 0 sau tối đa
-Σ nhu cầu vòng: một mẫu còn cần giảm có sup_NO > 0 ở một chuỗi nào đó, và theo L0 (Menger trên Nettree) mọi nút của một
-tập cắt đỉnh nhỏ nhất ở đó đều thiết yếu, nên chuỗi ấy luôn có ứng viên.
+   > **Correction of 2026-10-04, after the method batch with \|𝒮\| = 1 had run.** The sentence "this changes
+   > no test" above is **wrong**: H3 (section 2) needs the degenerate group as well ("near 1 on the degenerate
+   > group"). Running only the main group, the second half of H3 **cannot be tested**; the analysis now says
+   > so. H2 and H2-R are indeed unchanged. Running the degenerate group, or declaring that H3 tests only its
+   > first half, is a decision left open to the author.
+2. **Methods: the set of H2.** Seven keys: `cut-hide-rw-ls` (the method under test, section 12); `cut-hide-rw`
+   and `cut-hide` (the two ablation variants, section 12); `hha`, `dbsh`, `sbsh-r1`, `sbsh-rmax` (the Holm
+   family, section 2). No method is randomised, so the ten-seed convention of section 5 does not apply to
+   this batch.
+3. **Time limit: 1,800 seconds** of wall-clock time for **one method on one sensitive set**
+   (`--timeLimit=1800`), counted from calling the method until it returns its solution; evaluating the
+   solution and the Pareto front (section 11 point 6) are not counted. Over the limit: the row carries
+   `status = OT` and every result column is left empty; out of memory: `status = OOM`. A method that
+   finishes leaves `status` empty. Handling follows the table "Excluding instances" of section 5, unchanged:
+   drop the pair, count, report; above 10%, no conclusion. The memory cap of every SC3 command is `-Xmx8g`.
+   Implementation: cooperative checks (`hidenosp.util.Deadline`) when building a Nettree, when masking a
+   position, in each maximum-flow phase, at each position of the exact dynamic program and in each pass of the
+   local search; test `Sc3TimeLimitTest`.
+4. **Order: \|𝒮\| = 1 first**, in both scopes, together with the Pareto front (section 11 point 6); then
+   \|𝒮\| = 5, 10, 20. The timing of the \|𝒮\| = 1 batch is used to schedule the later batches. No parameter
+   locked in this section or in section 12 is changed after seeing the results of the \|𝒮\| = 1 batch.
 
-**Đo hệ quả** (mọi số là thăm dò trên máy phát triển, khoá `cut-hide`, cùng lệnh với đợt chính thức):
-- \|𝒮\| = 1: không đổi; nhánh một mẫu (lời giải chính xác của P8) không dùng bước 7. Kết quả chính thức của mục 14 giữ
-  nguyên.
-- \|𝒮\| = 5, phạm vi không lặp mục: 14 ô, 257 hàng, **0** hàng khác mã cũ.
-- \|𝒮\| = 5, phạm vi lặp mục: 34/34 ô chạy được (mã cũ 24/34); trên 10 ô mã cũ chạy được, 177 hàng đổi |R| hoặc Lost,
-  bản sửa dùng ít lần che hơn ở cả 177, Lost không tăng ở 176.
-- \|𝒮\| = 5, 10, 20: 34/34, 27/27, 21/21 ô chạy được; hai cách lấy mức giảm thật (tính lại sup_NO, và đọc từ luồng của
-  chỉ mục) cho cùng 1.579/1.579 hàng. Hồ sơ: `results-probe/sc3_several_patterns_ledger_probe_20261007.txt`.
-- Bài kiểm `CutHideSeveralPatternsTest`: 2.289 thực thể ngẫu nhiên, 2.107 có mẫu lặp mục, mọi mẫu ẩn theo định nghĩa;
-  mã cũ trượt bài này với đúng thông báo của máy đo.
+   > **Correction of the same day (2026-10-02), before any official SC3 run — decision of the author.** The
+   > Pareto front **is split into a batch of its own**, not run together with the methods. Measured reason: a
+   > trial run of all 54 main-group cells of \|𝒮\| = 1 on the development machine (one set per stratum;
+   > `results-probe/sc3_dry_run_all_cells_probe_20261002.txt`) showed that building the Pareto front takes
+   > 88–95% of the time of a cell — MSNBC [0,3] σ=5000 main scope: 2,005 seconds for five sets, of which the
+   > seven methods took only 110 seconds; one front has up to 1,145 vertices — and that part is not under the
+   > time limit of point 3. The method batch runs `--pareto=false`; the Pareto-front batch runs
+   > `--methods=none --pareto=true` on the same cells with the same sampling (section 9), hence the same
+   > sensitive sets. The content of section 11 point 6 is unchanged; only when it runs changes. Generators:
+   > `tools/sc3_commands.py` (method batch) and `tools/sc3_commands.py --pareto` (Pareto-front batch). Order:
+   > the method batch with \|𝒮\| = 1 first, then the Pareto-front batch or \|𝒮\| = 5, 10, 20 depending on
+   > machine time.
 
-**Hệ quả cho đợt chạy.** Mọi tệp SC3 \|𝒮\| = 5 do mã `8f8c601` sinh ra bị bỏ (chưa tệp nào được commit) và chạy lại bằng mã
-đã sửa. Không có kết quả \|𝒮\| > 1 chính thức nào trước mục này.
+The command of each cell is generated by `tools/sc3_commands.py` from the two group tables, not copied by hand;
+that tool skips cells that already have a result file and lists SC3 files that match no cell.
 
-**Khai xuất xứ.** Người đề xuất đã thấy kết quả \|𝒮\| = 1 chính thức (mục 14) và các lượt chạy lại ở trên (chỉ khoá `cut-hide`,
-không có đường cơ sở), chưa thấy kết quả \|𝒮\| > 1 chính thức nào. Sửa đổi là sửa lỗi ghi sổ, không chọn giữa các phương án.
+**Consequence for machine invariance.** Rows without `OT` or `OOM` are still machine-invariant quantities.
+**The set of `OT` rows depends on the machine**, and the set of `OOM` rows depends on the memory cap. Therefore
+the official SC3 run is made on the measuring machine declared in row 5 of `config/protocol.yaml`, with
+`--machine` of that machine, and the counts of `OT`/`OOM` cases are reported with the machine name and the
+memory cap.
 
-**Không đổi:** mọi mục 1–14.
+**Provenance.** When this section was written, the proposer had seen, besides the probes listed in section 12,
+two probes on the development machine: `results-probe/sc3_time_limit_stop_probe_20261002.txt` (a limit of 2
+seconds on MSNBC [0,10]: every method stopped less than 0.05 seconds after the deadline) and
+`results-probe/sc3_heavy_cells_timing_probe_20261002.txt` (seven main-group configurations chosen as heavy
+cases: the three largest pools of patterns with repeated items, the two largest pools of patterns without
+repeated items, genome [0,10] σ=2500 with repeated items and MSNBC [0,10] σ=5000 without repeated items; five
+sets per configuration, a limit of 600 seconds: no row `OT`; the longest 42.7 seconds for one method on one
+set, by `cut-hide-rw-ls` on MSNBC [0,10] σ=1000 in the repeated-item scope). Both probes printed the Lost of
+the methods on the sets they ran; the direction seen matches section 12. The value of 1,800 seconds was set
+**before** the second probe and not changed after it. No official SC3 run has taken place.
 
----
-
-## 16. Bổ sung ngày 12/10/2026 — chạy nhóm suy biến cho nửa sau của H3 (trước mọi lượt SC3 trên nhóm này)
-
-**Quyết định của người viết** (12/10/2026): chạy SC3 \|𝒮\| = 1, đợt phương pháp, trên **mọi dòng `group = degenerate`** của hai
-bảng đã chốt — 16 cấu hình ở phạm vi chính và 1 ở phạm vi lặp mục. Cùng bảy phương pháp, cùng giới hạn 1.800 giây, cùng
-`-Xmx8g`, cùng cách lấy mẫu (mục 9), cùng máy đo. Lệnh: `tools/sc3_commands.py --group=degenerate`.
-
-**Phép kiểm.** H3 (mục 2) như đã chốt: nửa sau "r gần 1 trên nhóm suy biến" (r ≤ 1,05) cho bốn đường cơ sở tầng (b), trên phạm
-vi chính. Ô lặp mục chỉ mô tả (mục 11 điểm 7). Hàng nhóm suy biến **không** vào H2, H2-R, bảng cặp (|R|, Lost) hay phép kiểm tương
-đương (mục 10 điểm 4); bộ phân tích lọc theo nhóm ở cả bốn chỗ (lọc ở phần tương đương thêm ngày 12/10, trước khi có hàng suy biến
-nào, kèm bài kiểm `test_equivalence_on_main_group_only`). Nhóm trung gian vẫn không chạy: không giả thuyết nào dùng nó.
-
-**Khai xuất xứ.** Người đề xuất đã thấy nửa đầu của H3 trên nhóm chính (bốn đường cơ sở "gần 1" ở phạm vi chính, mục 14 ghi chú sửa)
-và lượt chạy thử trên máy phát triển ở dưới; chưa thấy số chính thức nào của nhóm suy biến. Việc chạy là để hoàn tất phép kiểm đã
-chốt ở mục 2, không chọn theo số.
-
-**Chạy thử** (thăm dò trên máy phát triển, `results-probe/sc3_degenerate_dry_run_probe_20261012.txt`): 17/17 ô chạy được, 0 lỗi,
-0 hàng OT; phương pháp lâu nhất 49,9 giây trên một tập; tổng thời gian các ô 8350 giây.
-
-**Không đổi:** mọi mục 1–15.
-
----
-
-## 17. Bổ sung ngày 12/10/2026 — phân tích phụ: phần tinh chỉnh lời giải nhiều mẫu (SAU khi đã thấy kết quả \|𝒮\| > 1 chính thức)
-
-**Quyết định của người viết** (12/10/2026): phần tinh chỉnh của Mệnh đề P15 (bản thiết kế §8.1) được đo trên máy đo như một
-**phân tích phụ, mô tả**. Phương pháp đang kiểm của H2 và H2-R **không đổi**: vẫn là `cut-hide-rw-ls` như mục 12, mà với
-\|𝒮\| > 1 là thuật toán tham lam của §9.2 bước 7.
-
-**Vì sao không đổi phương pháp đang kiểm.** Mục này được viết **sau khi** đã thấy kết quả H2 và H2-R chính thức ở \|𝒮\| = 1, 5,
-10, 20 (`results-invariant/sc3_all_sizes_analysis_20261012.txt`): phạm vi chính không bác bỏ giả thuyết không với đường cơ sở
-nào; phạm vi lặp mục bác bỏ với `hha` (p Holm 0,0058), không bác bỏ với `dbsh` (p Holm 0,083) và hai biến thể SBSH. Phần tinh
-chỉnh làm giảm \|R\|, nên nó đổi chính tập thực thể vào Wilcoxon (mục 5: chỉ cặp cùng \|R\|), và đổi Lost ở nhiều tập. Đưa nó
-vào H2 lúc này là đổi kết cục sau khi thấy số. Kết quả H2 và H2-R đã báo cáo giữ nguyên, và là kết quả kiểm định duy nhất.
-
-**Định nghĩa `cut-hide-refine`** (khoá SC3; mã `CutHideConfig.withRefineSeveral()`, commit `22db94c`): với \|𝒮\| > 1, thuật toán
-tham lam bước 7 của `cut-hide`, rồi REFINE của P15: (i) thay phần lời giải trên mỗi thành phần một mẫu của đồ thị mục chung bằng
-lời giải một mẫu chính xác (P1 khi μ(P) = 1, P8 khi g⁻ = 0) khi lời giải ấy dùng ít lần che hơn hẳn; (ii) bỏ ngược từng lần che
-mà bỏ đi mọi mẫu vẫn ẩn. Với \|𝒮\| = 1 khoá này là `cut-hide`, nên lô này không chạy \|𝒮\| = 1.
-
-**Tính chất có chứng minh, báo cáo như phép kiểm cài đặt (mục 6), không kiểm định:** trên mọi tập, \|R\|(`cut-hide-refine`) ≤
-\|R\|(`cut-hide`) và tập che tối thiểu theo bao hàm; khi bước (i) không thay gì thì Lost không tăng. Bước (i) **được phép** làm Lost
-tăng; số tập như vậy được báo cáo.
-
-**Chạy.** Mọi ô nhóm chính \|𝒮\| = 5, 10, 20 (34 + 27 + 21 ô), **một** phương pháp `--methods=cut-hide-refine`, mọi tham số
-khác như mục 14 (1.800 giây, `-Xmx8g`, cách lấy mẫu mục 9, máy đo của `config/protocol.yaml`, JDK đã khoá). Đường cơ sở không
-chạy lại: hàng của chúng ở đợt chính thức là đại lượng bất biến theo máy (mục 14) và được ghép theo tập nhạy cảm. Lệnh do
-`tools/sc3_commands.py --refine --size=5|10|20` sinh; công cụ ấy coi một tệp là của lô này khi `methods=cut-hide-refine`, và không
-lẫn nó với lô phương pháp (bài tự kiểm của công cụ, có tiêm lỗi).
-
-**Phân tích, chỉ mô tả.** `tools/preregistered_analysis.py` **không đọc** tệp của lô này (liệt kê tên, ghi "SECONDARY (section
-17)"; bài kiểm `test_refinement_batch_is_not_read`; báo cáo H2/H2-R/H3 trên dữ liệu chính thức trùng khít từng byte trước và sau
-khi thêm quy tắc này). Được báo cáo: (a) \|R\| so với cận xung đột LB_U (Mệnh đề P14(e), `tools/lower_bound_table.py`), trung vị
-và số tập đạt cận; (b) số tập mà `hha` dùng ít lần che hơn; (c) thay đổi Lost so với `cut-hide-rw-ls`: số tập tăng, giảm, trung
-vị; (d) số ca `OT`/`OOM`. Không câu nào của bài được trình bày số của lô này như một phép kiểm H2.
-
-**Báo cáo kèm, mô tả: tối ưu trên thực thể nhỏ.** `SC3OPT` (commit `66a6fee`) dựng, cho mỗi tập nhạy cảm của SC3, thực thể 8 và
-16 chuỗi thật (hoặc đoạn liền của chuỗi thật), giải đúng tối ưu bằng `SequenceSplitExact`, và so cận, tối ưu, tham lam, tinh
-chỉnh. Kết quả ở `results-invariant/sc3_reduced_optimum_20261012.txt` (bất biến theo máy, chạy trên máy phát triển). Thực thể nhỏ
-có ngưỡng riêng và chỉ gồm chuỗi ngắn hoặc đoạn liền, nên chỉ mô tả cách chia khoảng cách tới cận, không thay số trên dữ liệu
-đầy đủ.
-
-**Khai xuất xứ.** Khi viết mục này, người đề xuất đã thấy: kết quả H2, H2-R, H3 chính thức ở mọi cỡ; bảng cận dưới
-(`results-invariant/sc3_lower_bounds_20261012.txt`); lượt thăm dò `cut-hide-refine` trên mọi ô \|𝒮\| > 1 ở máy phát triển
-(`results-probe/sc3_refine_several_probe_20261012.txt`: 1.579/1.579 tập, \|R\|/LB_U trung vị giảm 0,000–0,006 ở phạm vi chính và
-0,06–0,09 ở phạm vi lặp mục; số tập `hha` ít lần che hơn từ 57 còn 3); và kết quả `SC3OPT` ở trên. Định nghĩa REFINE được viết
-và kiểm (`RefineSeveralTest`) trước lượt thăm dò; không tham số nào của nó được chỉnh sau khi thấy số.
-
-**Không đổi:** mọi mục 1–16.
+**Unchanged:** all of sections 1–13.
 
 ---
 
-## 18. Bổ sung ngày 01/11/2026 — đổi máy đo, chạy lại toàn bộ, và trần bộ nhớ của đợt mặt Pareto
+## 15. Addendum of 2026-10-07 — fix of an implementation error of step 7 with patterns with repeated items (before any official SC3 result with \|𝒮\| > 1)
 
-**Quyết định của người viết** (01/11/2026):
+**Incident.** The method batch with \|𝒮\| = 5 on the measuring machine (code `8f8c601`, the same code as
+`5627876`) stopped on 10 cells with the message "no position lowers a sensitive support any further, yet the
+database threshold is still exceeded". Rerun with exactly that code on the development machine with key
+`cut-hide`: exactly 10 of 34 cells stopped, all 10 in the repeated-item scope.
 
-1. **Máy đo của dự án đổi sang một máy Dell XPS 64 GB (Windows 11).** Mọi số vào bài lấy từ máy này. Tên máy, bộ xử lý, bộ nhớ
-   và JDK do chính máy ấy ghi vào `results-invariant/campaign_<tên máy>/ENV_LOCK.json` ở bước đầu của lượt chạy, và vào đầu mỗi
-   tệp kết quả; hàng 5 của `config/protocol.yaml` điền từ tệp ấy. JDK giữ đúng bản của máy cũ: Eclipse Temurin 25.0.4.1+1.
-2. **Chạy lại toàn bộ trên máy mới**, theo thứ tự: SC1; SC2 trên 81 cấu hình của hai bảng nhóm; SC3 đợt phương pháp nhóm chính
-   \|𝒮\| = 1, 5, 10, 20 (mục 14); nhóm suy biến (mục 16); lô tinh chỉnh (mục 17, phân tích phụ); SC3LB; SC3OPT (thực thể 8 và 16
-   chuỗi); đợt mặt Pareto. Danh sách ô do `tools/campaign.py` sinh từ các bảng đã khoá, cùng các bộ sinh của mục 14.
-3. **Đợt mặt Pareto chạy với `-Xmx32g`.** Mọi lô khác giữ `-Xmx8g` như mục 14 điểm 3. Đợt mặt Pareto là phân tích mô tả (mục 11
-   điểm 6), chạy riêng với `--methods=none`, nên trần của nó không đổi hàng phương pháp nào. Lý do đo được: một ô thăm dò hết bộ
-   nhớ ở 6 GB. Chưa có số mặt Pareto chính thức nào.
+**Cause.** The greedy of §9.2 step 7 (several patterns, HIDE-DB) recorded the drop of each mask as 1 for every
+pattern for which that position is vital. That is right when μ(P) = 1. With patterns with repeated items, a
+position carries several Nettree nodes, so masking it can lower sup_NO by more than 1. The need ledger was
+therefore higher than the actual support: the algorithm kept masking patterns that were already hidden, and
+stopped when nothing was left to lower. In the repeated-item cells where it did not stop, it **masked more
+than needed without saying so**.
 
-**Bất biến theo máy là phép đối chiếu tái lập.** Mục 14 đã nêu: hàng không `OT` hay `OOM` là đại lượng bất biến theo máy. Vì vậy
-mọi cột đếm của hàng ấy trên máy mới phải **trùng** hàng tương ứng của DESKTOP-L8A6EPO; lệch là lỗi, phải giải thích trước khi dùng
-số của máy mới. Tập hàng `OT` được phép khác (phụ thuộc máy) và được báo cáo kèm tên máy. SC2 trên máy mới là phép tái lập bảng
-nhóm: bảng sinh lại từ SC2 của máy mới phải trùng hai bảng đã khoá; lệch thì báo, **không** sửa bảng đã khoá.
+**Fix (commit `dcb0f17`, speed-up in `a8b1bad`).** The need ledger subtracts the **actual drop** of each mask,
+read from the maximum flow of the index that step 7 already builds for that sequence; it no longer subtracts
+the "vital" mark of the candidate. The position-selection rule of step 7 (the ratio of the total drop to
+1 + w(i), ordered by the vital mark) is **unchanged**. With an exact ledger, step 7 always stops with HF = 0
+after at most Σ need rounds: a pattern that still needs lowering has sup_NO > 0 in some sequence, and by L0
+(Menger on the Nettree) every node of a minimum vertex cut there is vital, so that sequence always has a
+candidate.
 
-**Phân tích một máy.** `tools/preregistered_analysis.py` từ chối khi tệp SC3 đến từ hơn một máy mà không có `--machine`
-(bài kiểm `test_one_machine_per_analysis`, có tiêm lỗi), và chỉ đọc tệp của máy được nêu. Tệp của DESKTOP-L8A6EPO giữ trong kho
-làm hồ sơ và làm phép đối chiếu, không vào bảng của bài.
+**Measured consequences** (every number is exploratory on the development machine, key `cut-hide`, the same
+commands as the official batch):
+- \|𝒮\| = 1: unchanged; the one-pattern branch (the exact solution of P8) does not use step 7. The official
+  results of section 14 stand.
+- \|𝒮\| = 5, main scope: 14 cells, 257 rows, **0** rows different from the old code.
+- \|𝒮\| = 5, repeated-item scope: 34/34 cells run (old code 24/34); on the 10 cells the old code ran, 177 rows
+  change |R| or Lost, the fix uses fewer masks in all 177, and Lost does not increase in 176.
+- \|𝒮\| = 5, 10, 20: 34/34, 27/27, 21/21 cells run; the two ways of obtaining the actual drop (recomputing
+  sup_NO, and reading it from the flow of the index) give the same 1,579/1,579 rows. Record:
+  `results-probe/sc3_several_patterns_ledger_probe_20261007.txt`.
+- Test `CutHideSeveralPatternsTest`: 2,289 random instances, 2,107 with patterns with repeated items, every
+  pattern hidden by definition; the old code fails this test with exactly the message of the measuring machine.
 
-**Khai xuất xứ.** Khi viết mục này, người đề xuất đã thấy mọi kết quả chính thức của DESKTOP-L8A6EPO (H2, H2-R, nửa đầu H3, bảng
-cặp), bảng cận dưới, kết quả SC3OPT và lượt thăm dò `cut-hide-refine`; chưa thấy số chính thức nào của nhóm suy biến và của mặt
-Pareto. Việc đổi máy và chạy lại là quyết định về môi trường, không chọn theo số: mọi tham số của mục 1–17 giữ nguyên.
+**Consequence for the batch.** Every SC3 file with \|𝒮\| = 5 produced by code `8f8c601` is discarded (none had
+been committed) and rerun with the fixed code. No official result with \|𝒮\| > 1 existed before this section.
 
-**Không đổi:** mọi mục 1–17.
+**Provenance.** The proposer had seen the official \|𝒮\| = 1 results (section 14) and the reruns above (key
+`cut-hide` only, no baseline), and no official result with \|𝒮\| > 1. The change fixes a ledger error; it does
+not choose between options.
+
+**Unchanged:** all of sections 1–14.
+
+---
+
+## 16. Addendum of 2026-10-12 — running the degenerate group for the second half of H3 (before any SC3 run on this group)
+
+**Decision of the author** (2026-10-12): run SC3 \|𝒮\| = 1, method batch, on **every row `group = degenerate`**
+of the two locked tables — 16 configurations in the main scope and 1 in the repeated-item scope. The same seven
+methods, the same 1,800-second limit, the same `-Xmx8g`, the same sampling (section 9), the same measuring
+machine. Command: `tools/sc3_commands.py --group=degenerate`.
+
+**Test.** H3 (section 2) as locked: the second half, "r near 1 on the degenerate group" (r ≤ 1.05), for the four
+tier (b) baselines, in the main scope. The repeated-item cell is only descriptive (section 11 point 7). Rows of
+the degenerate group do **not** enter H2, H2-R, the table of pairs (|R|, Lost) or the equivalence test (section
+10 point 4); the analysis filters by group in all four places (the filter in the equivalence part was added on
+2026-10-12, before any degenerate row existed, with the test `test_equivalence_on_main_group_only`). The
+intermediate group still does not run: no hypothesis uses it.
+
+**Provenance.** The proposer had seen the first half of H3 on the main group (the four baselines "near 1" in the
+main scope, the correction note of section 14) and the trial run on the development machine below; no official
+number of the degenerate group had been seen. The run completes the test locked in section 2; it is not chosen
+by numbers.
+
+**Trial run** (exploratory on the development machine,
+`results-probe/sc3_degenerate_dry_run_probe_20261012.txt`): 17/17 cells run, 0 errors, 0 rows OT; the longest
+method took 49.9 seconds on one set; the total time of the cells was 8350 seconds.
+
+**Unchanged:** all of sections 1–15.
+
+---
+
+## 17. Addendum of 2026-10-12 — secondary analysis: the refinement of solutions for several patterns (AFTER the official results with \|𝒮\| > 1 had been seen)
+
+**Decision of the author** (2026-10-12): the refinement of Proposition P15 (design §8.1) is measured on the
+measuring machine as a **secondary, descriptive analysis**. The method under test of H2 and H2-R is
+**unchanged**: still `cut-hide-rw-ls` as in section 12, which for \|𝒮\| > 1 is the greedy of §9.2 step 7.
+
+**Why the method under test does not change.** This section is written **after** the official H2 and H2-R
+results with \|𝒮\| = 1, 5, 10, 20 had been seen (`results-invariant/sc3_all_sizes_analysis_20261012.txt`): the
+main scope does not reject the null hypothesis against any baseline; the repeated-item scope rejects it against
+`hha` (Holm p 0.0058), and does not reject it against `dbsh` (Holm p 0.083) or the two SBSH variants. The
+refinement lowers \|R\|, so it changes the very set of instances that enter Wilcoxon (section 5: only pairs with
+the same \|R\|), and changes Lost on many sets. Bringing it into H2 now would change the outcome after seeing
+the numbers. The H2 and H2-R results already reported stand, and are the only test results.
+
+**Definition of `cut-hide-refine`** (SC3 key; code `CutHideConfig.withRefineSeveral()`, commit `22db94c`): for
+\|𝒮\| > 1, the step-7 greedy of `cut-hide`, then REFINE of P15: (i) replace the part of the solution on each
+one-pattern component of the shared-item graph with the exact one-pattern solution (P1 when μ(P) = 1, P8 when
+g⁻ = 0) when that solution uses strictly fewer masks; (ii) reverse-delete each mask whose removal leaves every
+pattern hidden. For \|𝒮\| = 1 this key is `cut-hide`, so this batch does not run \|𝒮\| = 1.
+
+**Proven properties, reported as implementation checks (section 6), not tested:** on every set,
+\|R\|(`cut-hide-refine`) ≤ \|R\|(`cut-hide`) and the mask set is inclusion-minimal; when step (i) replaces
+nothing, Lost does not increase. Step (i) **may** increase Lost; the number of such sets is reported.
+
+**Run.** Every main-group cell with \|𝒮\| = 5, 10, 20 (34 + 27 + 21 cells), **one** method
+`--methods=cut-hide-refine`, every other parameter as in section 14 (1,800 seconds, `-Xmx8g`, the sampling of
+section 9, the measuring machine of `config/protocol.yaml`, the locked JDK). The baselines are not rerun: their
+rows in the official batch are machine-invariant quantities (section 14) and are paired by sensitive set. The
+commands are generated by `tools/sc3_commands.py --refine --size=5|10|20`; that tool treats a file as belonging
+to this batch when `methods=cut-hide-refine`, and does not confuse it with the method batch (the tool's own
+self-test, with fault injection).
+
+**Analysis, descriptive only.** `tools/preregistered_analysis.py` **does not read** the files of this batch (it
+lists their names and writes "SECONDARY (section 17)"; test `test_refinement_batch_is_not_read`; the H2/H2-R/H3
+report on the official data is byte-identical before and after this rule was added). Reported: (a) \|R\|
+against the conflict bound LB_U (Proposition P14(e), `tools/lower_bound_table.py`), the median and the number of
+sets that reach the bound; (b) the number of sets where `hha` uses fewer masks; (c) the change of Lost against
+`cut-hide-rw-ls`: the number of sets that increase, that decrease, the median; (d) the number of `OT`/`OOM`
+cases. No sentence of the paper presents the numbers of this batch as a test of H2.
+
+**Reported alongside, descriptive: the optimum on small instances.** `SC3OPT` (commit `66a6fee`) builds, for each
+SC3 sensitive set, instances of 8 and 16 real sequences (or contiguous windows of real sequences), solves them to
+optimality with `SequenceSplitExact`, and compares the bound, the optimum, the greedy and the refinement. Results
+in `results-invariant/sc3_reduced_optimum_20261012.txt` (machine-invariant, run on the development machine). The
+small instances have their own thresholds and contain only short sequences or contiguous windows, so they only
+describe how the distance to the bound splits; they do not replace the numbers on the full data.
+
+**Provenance.** When writing this section, the proposer had seen: the official H2, H2-R, H3 results at every
+size; the lower-bound table (`results-invariant/sc3_lower_bounds_20261012.txt`); the exploratory
+`cut-hide-refine` run on every cell with \|𝒮\| > 1 on the development machine
+(`results-probe/sc3_refine_several_probe_20261012.txt`: 1,579/1,579 sets, median \|R\|/LB_U lower by
+0.000–0.006 in the main scope and by 0.06–0.09 in the repeated-item scope; the number of sets where `hha` uses
+fewer masks went from 57 to 3); and the `SC3OPT` results above. The definition of REFINE was written and tested
+(`RefineSeveralTest`) before the exploratory run; none of its parameters was tuned after seeing numbers.
+
+**Unchanged:** all of sections 1–16.
+
+---
+
+## 18. Addendum of 2026-11-01 — change of measuring machine, full rerun, and the memory cap of the Pareto-front batch
+
+**Decision of the author** (2026-11-01):
+
+1. **The measuring machine of the project changes to a Dell XPS with 64 GB (Windows 11).** Every number in the
+   paper comes from this machine. The machine name, processor, memory and JDK are written by that machine itself
+   into `results-invariant/campaign_<machine name>/ENV_LOCK.json` at the first step of the run, and at the top of
+   every result file; row 5 of `config/protocol.yaml` is filled from that file. The JDK stays exactly that of the
+   old machine: Eclipse Temurin 25.0.4.1+1.
+2. **Full rerun on the new machine**, in this order: SC1; SC2 on the 81 configurations of the two group tables;
+   the SC3 method batch of the main group with \|𝒮\| = 1, 5, 10, 20 (section 14); the degenerate group (section
+   16); the refinement batch (section 17, secondary analysis); SC3LB; SC3OPT (instances of 8 and 16 sequences);
+   the Pareto-front batch. The list of cells is generated by `tools/campaign.py` from the locked tables, with the
+   generators of section 14.
+3. **The Pareto-front batch runs with `-Xmx32g`.** Every other batch keeps `-Xmx8g` as in section 14 point 3. The
+   Pareto-front batch is a descriptive analysis (section 11 point 6), run separately with `--methods=none`, so its
+   cap changes no method row. Measured reason: an exploratory cell ran out of memory at 6 GB. No official
+   Pareto-front number exists yet.
+
+**Machine invariance is the reproduction check.** Section 14 stated that rows without `OT` or `OOM` are
+machine-invariant quantities. Therefore every count column of such a row on the new machine must **equal** the
+corresponding row of DESKTOP-L8A6EPO; a difference is an error and must be explained before the numbers of the new
+machine are used. The set of `OT` rows may differ (it depends on the machine) and is reported with the machine
+name. SC2 on the new machine reproduces the group tables: the tables regenerated from SC2 of the new machine must
+equal the two locked tables; a difference is reported, and the locked tables are **not** changed.
+
+**One machine per analysis.** `tools/preregistered_analysis.py` refuses when the SC3 files come from more than one
+machine and no `--machine` is given (test `test_one_machine_per_analysis`, with fault injection), and reads only
+the files of the named machine. The files of DESKTOP-L8A6EPO stay in the repository as a record and as the
+reproduction check; they do not enter the paper's tables.
+
+**Provenance.** When writing this section, the proposer had seen every official result of DESKTOP-L8A6EPO (H2,
+H2-R, the first half of H3, the table of pairs), the lower-bound table, the SC3OPT results and the exploratory
+`cut-hide-refine` run; no official number of the degenerate group or of the Pareto front had been seen. Changing
+the machine and rerunning is a decision about the environment, not a choice by numbers: every parameter of
+sections 1–17 is unchanged.
+
+**Unchanged:** all of sections 1–17.

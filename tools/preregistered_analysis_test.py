@@ -283,21 +283,37 @@ def test_constants_match_the_preregistration():
         print("  skipped: config/preregistration.md not found")
         return
     text = _io.open(path, encoding="utf-8").read()
-    for name, needle in (("DELTA_L", "0,02"), ("RHO_MAIN", "0,20"), ("RHO_DEGENERATE", "0,05"),
-                         ("R_ABOVE_1", "1,10"), ("R_NEAR_1", "1,05")):
-        assert needle in text, "%s (%s) not found in the locked file" % (name, needle)
-    assert "**10%**" in text or "10%" in text
-    # The locked file is not written in English: the word joining the two seeds is matched by a
-    # pattern, so that the needle does not depend on the language of the file.
-    assert re.search(r"\b2026\s+\S+\s+2035\b", text), "no seeds 2026 to 2035 in the locked file"
-    for name in ("HHA", "DBSH", "SBSH-r1", "SBSH-rmax"):
-        assert name in text, "the Holm family lacks %s in the locked file" % name
+    # Each constant is looked for in the line of the file that locks it, built from the value in
+    # LOCKED, so that a number that appears elsewhere in the file cannot satisfy the check.
+    L = pa.LOCKED
+    margin = L.EQUIVALENCE_MARGIN
+    for name, needle in (
+            ("DELTA_L", "| **δ_L** | **%.2f** (" % L.DELTA_L),
+            ("ALPHA", "| Significance level | α = %.2f |" % L.ALPHA),
+            ("RHO_MAIN", "| Main group | ρ_rep ≥ **%.2f** |" % L.RHO_MAIN),
+            ("RHO_DEGENERATE", "| Degenerate control | ρ_rep ≤ **%.2f** |" % L.RHO_DEGENERATE),
+            ("BETA_EFFECTIVE", "| Gap constraint effective | β ≥ **%.2f** |" % L.BETA_EFFECTIVE),
+            ("BETA_DEGENERATE", "| Degenerate-constraint control | β ≤ **%.2f** |" % L.BETA_DEGENERATE),
+            ("R_ABOVE_1", '| "above 1" | r ≥ **%.2f** |' % L.R_ABOVE_1),
+            ("R_NEAR_1", '| "near 1" | r ≤ **%.2f** |' % L.R_NEAR_1),
+            ("EQUIVALENCE_MARGIN lost_rel", "| Lost_rel | ± **%.2f** (" % margin["lost_rel"]),
+            ("EQUIVALENCE_MARGIN sup_dist", "| SupDist | ± **%.2f** |" % margin["sup_dist"]),
+            ("MAX_EXCLUDED_SHARE", "| Share of excluded instances > **%d%%** |" % round(100 * L.MAX_EXCLUDED_SHARE)),
+            ("SEEDS", "with seeds **%d to %d**" % (L.SEEDS[0], L.SEEDS[-1]))):
+        assert needle in text, "%s: '%s' not found in the locked file" % (name, needle)
+    family = re.search(r"^The family consists of \*\*four\*\* tier \(b\) baselines: (.*)\.$", text, re.M)
+    assert family, "no line naming the Holm family in the locked file"
+    assert [x.strip().lower() for x in family.group(1).split(",")] == list(L.BASELINE_FAMILY), \
+        "the Holm family of the locked file is %s, LOCKED has %s" % (family.group(1), L.BASELINE_FAMILY)
     # Section 12: the method under test must be the one the preregistration names, and the one
     # config/protocol.yaml names for H2-R; one fact, two files, checked here.
-    section_12 = text.split("## 12.", 1)
+    # The decision sentence of section 12 is read, not any mention: the name occurs many times later.
+    section_12 = text.split("\n## 12.", 1)
     assert len(section_12) == 2, "the preregistration has no section 12"
-    assert "`%s`" % pa.LOCKED.OUR_METHOD in section_12[1], \
-        "section 12 does not name %s" % pa.LOCKED.OUR_METHOD
+    section_12 = section_12[1].split("\n## 13.", 1)[0]
+    decided = re.findall(r"changes from `cut-hide` to `([^`]+)`", section_12)
+    assert decided == [pa.LOCKED.OUR_METHOD], \
+        "section 12 decides %s as the method under test, LOCKED has %s" % (decided, pa.LOCKED.OUR_METHOD)
     protocol = _io.open(os.path.join(root, "config", "protocol.yaml"), encoding="utf-8").read()
     declared = re.findall(r'^\s*method_H2R:\s*"([^"]+)"', protocol, re.M)
     assert declared == [pa.LOCKED.OUR_METHOD], \

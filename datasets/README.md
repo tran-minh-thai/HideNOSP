@@ -1,8 +1,8 @@
 # datasets/
 
 > **Language.** This file is the English translation of the Vietnamese original as of commit `ea39da4`
-> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
-> decimal commas are written as decimal points.
+> (2026-11-02), which stays in the git history. Values, dates and decisions are unchanged, file names
+> are those after the renaming of 2026-11-02; decimal commas are written as decimal points.
 
 Raw data does **not** go into git (see `.gitignore`). This directory keeps the provenance, how the
 data is obtained and how it is converted, so that someone else can rebuild exactly the files the
@@ -13,7 +13,7 @@ by SC2**, not copied from someone else's description (§11.2).
 
 ## Dataset table (§11.2)
 
-| File | Source | Role (measured by SC2, see `../results-invariant/khao_sat_bo_du_lieu.md`) | Status |
+| File | Source | Role (measured by SC2, see `../results-invariant/dataset_survey.md`) | Status |
 |---|---|---|---|
 | `dna_mt745584.txt` | SPMF `MT745584_SPMF.txt` | **Main group**: COVID-19 genome, ρ_rep 0.786; the data type of [R1] | downloaded |
 | `msnbc.txt` | SPMF `MSNBC.txt` | **Main group**: ρ_rep 0.323; [R3] uses the MSN version | downloaded |

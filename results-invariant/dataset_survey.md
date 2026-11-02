@@ -1,8 +1,9 @@
 # Dataset survey: inheritance from related work, and additions by measured properties
 
 > **Language.** This file is the English translation of the Vietnamese original as of commit `5ffe329`
-> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
-> decimal commas are written as decimal points.
+> (2026-11-02), which stays in the git history. Values, dates and decisions are unchanged, file names
+> are those after the renaming of 2026-11-02; decimal commas are written as decimal points. This file
+> was named `results-invariant/khao_sat_bo_du_lieu.md` until 2026-11-02.
 
 Date: 2026-09-12. Every ρ_rep and β number below is **measured by the project's own SC2**, not copied
 from other people's descriptions (§11.2). Source files: `SC2_20260912-*.csv` in this folder.
@@ -112,7 +113,7 @@ the paper is strongest where the theory is weakest. On DNA this is **reversed**:
 repeated items have a mean ρ_rep of 0.806, even higher than the 0.773 of repeated-item patterns. That
 means keeping the scope at μ(P) = 1, where P1, P2 and the exact solution all hold, **no longer has to be
 paid for by giving up the high-repetition data regime**. The three options raised in section
-3 of `giai_doan_1_tom_tat.md` now have one clearly dominant option: keep μ(P) = 1 as the main scope, and
+3 of `phase1_summary.md` now have one clearly dominant option: keep μ(P) = 1 as the main scope, and
 bring MSNBC in as evidence that on other data it is the repeated-item class that repeats more, with
 exactly the numbers.
 

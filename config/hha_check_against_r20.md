@@ -1,8 +1,9 @@
 # Checking HHA against [R20] and [R2] — 2026-09-25
 
 > **Language.** This file is the English translation of the Vietnamese original as of commit `ea39da4`
-> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
-> decimal commas are written as decimal points.
+> (2026-11-02), which stays in the git history. Values, dates and decisions are unchanged, file names
+> are those after the renaming of 2026-11-02; decimal commas are written as decimal points. This file
+> was named `config/doi_chieu_hha_r20.md` until 2026-11-02.
 
 **Sources whose algorithm sections were read in full.**
 

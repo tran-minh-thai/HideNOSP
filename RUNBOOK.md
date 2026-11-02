@@ -1,8 +1,9 @@
 # RUNBOOK — HideNOSP code repository
 
 > **Language.** This file is the English translation of the Vietnamese original as of commit `ea39da4`
-> (2026-11-02), which stays in the git history. Section numbers, values, dates, file names and decisions
-> are unchanged; decimal commas are written as decimal points.
+> (2026-11-02), which stays in the git history. Section numbers, values, dates and decisions are
+> unchanged, file names are those after the renaming of 2026-11-02; decimal commas are written as
+> decimal points.
 
 This repository implements the **Nettree cut index** and the **CUT-HIDE** algorithm of
 `doc/THIET_KE_NGHIEN_CUU_AN_MAU_LAP.md`, together with the baselines and the scenarios SC1–SC8.
@@ -216,7 +217,7 @@ python tools/preregistered_analysis.py --sc2 results-invariant --write-groups
 with `config/configuration_groups.tsv`, and tests H2 only on the main group.
 
 **Done, on 2026-09-12.** `config/preregistration.md` and `config/protocol.yaml` have locked every
-parameter that blocks SC3; the rationale for each number is in `config/de_xuat_gia_tri_nhom_A.md`. Three technical tasks must be
+parameter that blocks SC3; the rationale for each number is in `config/group_a_proposed_values.md`. Three technical tasks must be
 done before the SC3 run whose numbers go into the paper: attach `HIDENOSP_REVISION`, raise `--maxPatternLength` to 4,
 and check that B_ε is non-empty.
 
@@ -279,9 +280,9 @@ left files carrying the final name but missing the last rows (884/885, 1,448/1,4
 | ρ_rep, β, \|R\|\* | `metrics.DataProfile` | §8.4 |
 | Tier (a) baselines | `baseline.RandomMasking` (HH/HR/RH/RR), `baseline.OccurrenceCountHeuristic` | §11.3; runs with any \|𝒮\| |
 | Empty-B_ε check reports an error | `hide.CutHide.requireNonEmptyBand` | Locked in `protocol.yaml` row 2 |
-| Tier (b) baseline: HHA | `baseline.Hha` | [R20], [R2] Algorithm 1; reproduces exactly Example 2 of [R20] and Figures 1(d), 4(b) of [R3] (`HhaPaperExampleTest`); two ways of computing δ for SC6. Cross-check: `config/doi_chieu_hha_r20.md` |
+| Tier (b) baseline: HHA | `baseline.Hha` | [R20], [R2] Algorithm 1; reproduces exactly Example 2 of [R20] and Figures 1(d), 4(b) of [R3] (`HhaPaperExampleTest`); two ways of computing δ for SC6. Cross-check: `config/hha_check_against_r20.md` |
 | Tier (b) baseline: DBSH | `baseline.Dbsh` | [R3], Algorithm 4 together with 1 and 3; reproduces exactly Figure 1(e), Figure 4(b), Example 1 (`DbshPaperExampleTest`). Shares Cost (`SymbolCover`) and Exclude (`Exclude`) with SBSH |
-| Tier (b) baseline: SBSH | `baseline.Sbsh` | [R3], Algorithm 5 together with 1–3 and section 4.3; reproduces exactly Figure 1(f), Figure 4(b) and Example 3 of the paper (`SbshPaperExampleTest`). Points the paper leaves open: `config/doi_chieu_sbsh_r3.md` section 6 |
+| Tier (b) baseline: SBSH | `baseline.Sbsh` | [R3], Algorithm 5 together with 1–3 and section 4.3; reproduces exactly Figure 1(f), Figure 4(b) and Example 3 of the paper (`SbshPaperExampleTest`). Points the paper leaves open: `config/sbsh_check_against_r3.md` section 6 |
 | Tier (c) baseline: exact solver | `baseline.IlpExact` | Branch and bound, small instances; option to minimise lost patterns |
 | Downloading datasets with checksums | `tools/fetch_datasets.py` | §11.2; only checks, does not overwrite the record; checks the MD5 published by the source |
 | Building SPMF files from raw data (XES logs, HAUP-Hider databases, protein) | `tools/build_datasets.py` | Role-assignment rule written in the file; the build must match the record |
@@ -321,12 +322,12 @@ top of every result file; copy them from there.
 (rule 2.4.7). **Locked on 2026-09-12**; changing any number from here on must be a separate
 commit stating the reason.
 
-`config/quyet_dinh_can_chot.md` lists **every** point the project still has to decide, grouped by
+`config/open_decisions.md` lists **every** point the project still has to decide, grouped by
 theme, separating the group that blocks SC3 from the group that blocks submission. Produced from a review of ten sources, then each
 point was checked again; `tools/merge_decisions.py` merges the results into that document (before 2026-09-26 named
 `tools/gop_quyet_dinh.py`; from that date the themes, the keywords and the document it generates are written in English).
 
-`config/de_xuat_gia_tri_nhom_A.md` proposes **concrete values** for each point that blocks SC3, each value
+`config/group_a_proposed_values.md` proposes **concrete values** for each point that blocks SC3, each value
 with a measured rationale, the price to pay, and how to refute it. This is a version for approval, not yet the locked version:
 locking means writing the numbers into the two files above and committing.
 

@@ -7,7 +7,7 @@ Supporting tools, not part of the algorithm.
 | `run.py` | **Runs a scenario stamped with the code version.** Use it for every run whose numbers go into the paper |
 | `fetch_datasets.py` | Downloads the public datasets, computes SHA-256, writes `datasets/provenance.tsv` |
 | `check_results.py` | Re-checks the results-directory rule of design section 11.8 on the files actually on disk |
-| `merge_decisions.py` | Merges review results into `config/quyet_dinh_can_chot.md` (before 2026-09-26: `gop_quyet_dinh.py`) |
+| `merge_decisions.py` | Merges review results into `config/open_decisions.md` (before 2026-09-26: `gop_quyet_dinh.py`) |
 | `preregistered_analysis.py` | **Analysis of H2 and H3** exactly as `config/preregistration.md` locks it (before 2026-09-26: `thong_ke.py`) |
 | `preregistered_analysis_test.py` | Pins the statistics to hand-computed values. Run it before trusting any table |
 | `check_english.py` | Checks that every code file is written in English only, and that no documentation file holds a Vietnamese letter; exit code 1 on a violation |

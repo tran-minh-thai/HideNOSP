@@ -1,8 +1,9 @@
 # What is still to be decided
 
 > **Language.** This file is the English translation of the Vietnamese original as of commit `ea39da4`
-> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
-> decimal commas are written as decimal points.
+> (2026-11-02), which stays in the git history. Values, dates and decisions are unchanged, file names
+> are those after the renaming of 2026-11-02; decimal commas are written as decimal points. This file
+> was named `config/quyet_dinh_can_chot.md` until 2026-11-02.
 
 Merged automatically from a review of 10 sources of the project: `config/preregistration.md`, `config/protocol.yaml`,
 `RUNBOOK.md`, the research design from four angles (gates and risks, theory, experimental design,
@@ -84,11 +85,11 @@ Three separate tasks, do not merge them. (1) Fill the two grouping thresholds in
 
 **The ρ_rep threshold for a dataset to enter the group demonstrating the contribution**
 
-Set two numbers for config/preregistration.md before looking at any SC3 result: the threshold ρ_rep_high for a configuration to enter the group demonstrating the contribution, and the threshold ρ_rep_low to enter the degenerate control group (unit: dimensionless ratio in [0,1], taken as the mean ρ_rep of the sensitive patterns sampled in SC2). The measurements already exist, so the choice is finite and clear: an upper threshold in the interval (0.154; 0.323) separates {dna, msnbc} from {leviathan, bible}; a lower threshold around 0.05 puts {fifa, sign, bms1, bike} into the degenerate group; the band in between decides whether leviathan and bible form an intermediate group or are excluded. Together with the corresponding β threshold. The author decides (it may not be inferred backwards from the wish that a given dataset go into a given group — khao_sat_bo_du_lieu.md section 4 itself recalls this); TRUCKS is no longer in the list because its source could not be obtained.
+Set two numbers for config/preregistration.md before looking at any SC3 result: the threshold ρ_rep_high for a configuration to enter the group demonstrating the contribution, and the threshold ρ_rep_low to enter the degenerate control group (unit: dimensionless ratio in [0,1], taken as the mean ρ_rep of the sensitive patterns sampled in SC2). The measurements already exist, so the choice is finite and clear: an upper threshold in the interval (0.154; 0.323) separates {dna, msnbc} from {leviathan, bible}; a lower threshold around 0.05 puts {fifa, sign, bms1, bike} into the degenerate group; the band in between decides whether leviathan and bible form an intermediate group or are excluded. Together with the corresponding β threshold. The author decides (it may not be inferred backwards from the wish that a given dataset go into a given group — dataset_survey.md section 4 itself recalls this); TRUCKS is no longer in the list because its source could not be obtained.
 
 **ρ_rep thresholds separating the main group and the degenerate group**
 
-Fill two numbers into preregistration.md line 28: ρ_rep ≥ a goes into the main group, ρ_rep ≤ b into the degenerate control group (a, b are dimensionless real numbers in [0,1]). The measured range is now continuous rather than split into clusters: bms1 and sign 0.000; fifa 0.008; bible 0.153 and leviathan 0.154; msnbc 0.323; dna_mt745584 0.786. One must choose between three kinds of cut: (i) a = b (no grey zone, every configuration is assigned a group — then where the cut lies decides which group leviathan/bible go into); (ii) a > b with a grey zone, and it must be stated whether configurations falling into the grey zone are excluded from both groups or go into a third, "intermediate" group as khao_sat_bo_du_lieu.md §4 proposes; (iii) thresholds by percentiles of the SC2 table itself instead of absolute numbers. With grounds, and the grounds may not be "so that dataset X goes into group Y". The author decides.
+Fill two numbers into preregistration.md line 28: ρ_rep ≥ a goes into the main group, ρ_rep ≤ b into the degenerate control group (a, b are dimensionless real numbers in [0,1]). The measured range is now continuous rather than split into clusters: bms1 and sign 0.000; fifa 0.008; bible 0.153 and leviathan 0.154; msnbc 0.323; dna_mt745584 0.786. One must choose between three kinds of cut: (i) a = b (no grey zone, every configuration is assigned a group — then where the cut lies decides which group leviathan/bible go into); (ii) a > b with a grey zone, and it must be stated whether configurations falling into the grey zone are excluded from both groups or go into a third, "intermediate" group as dataset_survey.md §4 proposes; (iii) thresholds by percentiles of the SC2 table itself instead of absolute numbers. With grounds, and the grounds may not be "so that dataset X goes into group Y". The author decides.
 
 **ρ_rep and β thresholds for assigning the degenerate group**
 
@@ -112,11 +113,11 @@ Correct preregistration.md line 59 to match §8.4 of the research design, which 
 
 **The FIFA evidence [17, 17, 17] is in results-probe**
 
-Decide the fate of one sentence in giai_doan_1_tom_tat.md lines 85–86. Two options: (i) rerun the FIFA configuration [0,3] σ=3000 without --probe, with a sampling range wide enough for the pattern [17, 17, 17] to land in results-invariant/, then keep the sentence; (ii) delete the sentence. Option (ii) is now much cheaper because the update block of the same day in §3 has replaced the pillar evidence with the DNA dataset (ρ_rep of patterns without repeated items 0.806 against 0.773 for repeated-item patterns), so §3 no longer needs the FIFA number. Note that this pattern is a repeated-item pattern (min_masks_exact=false), i.e. outside the scope μ(P)=1 locked in the code, so even if rerun it could not enter SC3. Does not block SC3; must be handled before any paragraph of §3 is copied into the manuscript. The author decides.
+Decide the fate of one sentence in phase1_summary.md lines 85–86. Two options: (i) rerun the FIFA configuration [0,3] σ=3000 without --probe, with a sampling range wide enough for the pattern [17, 17, 17] to land in results-invariant/, then keep the sentence; (ii) delete the sentence. Option (ii) is now much cheaper because the update block of the same day in §3 has replaced the pillar evidence with the DNA dataset (ρ_rep of patterns without repeated items 0.806 against 0.773 for repeated-item patterns), so §3 no longer needs the FIFA number. Note that this pattern is a repeated-item pattern (min_masks_exact=false), i.e. outside the scope μ(P)=1 locked in the code, so even if rerun it could not enter SC3. Does not block SC3; must be handled before any paragraph of §3 is copied into the manuscript. The author decides.
 
 **β threshold for the constraint control group**
 
-Lock a real number in [0,1]: β ≤ ? means the instance is a constraint control (the gap constraint loses its effect), together with the unit of measurement — the mean β over the sensitive patterns of the configuration, or the minimum value. The measured numbers limit the choice: bms1 β 0.094 (suggests a double degeneracy), msnbc at [0,10] drops to 0.043 while at [0,1] it is 0.432, bible 0.500, leviathan 0.612. Note the consequence: because β and ρ_rep pull in opposite directions with the gap width (giai_doan_1_tom_tat.md:62-63), a strict β threshold will automatically exclude the wide-gap configurations, which have high ρ_rep — so the β threshold must be chosen at the same time as locking which [g⁻,g⁺] configuration is used for the main group, and the reason for choosing that configuration must be recorded.
+Lock a real number in [0,1]: β ≤ ? means the instance is a constraint control (the gap constraint loses its effect), together with the unit of measurement — the mean β over the sensitive patterns of the configuration, or the minimum value. The measured numbers limit the choice: bms1 β 0.094 (suggests a double degeneracy), msnbc at [0,10] drops to 0.043 while at [0,1] it is 0.432, bible 0.500, leviathan 0.612. Note the consequence: because β and ρ_rep pull in opposite directions with the gap width (phase1_summary.md:62-63), a strict β threshold will automatically exclude the wide-gap configurations, which have high ρ_rep — so the β threshold must be chosen at the same time as locking which [g⁻,g⁺] configuration is used for the main group, and the reason for choosing that configuration must be recorded.
 
 **Lock σ and the gap width for each dataset**
 
@@ -128,7 +129,7 @@ Lock a real number in [0,1]: ρ_rep ≥ ? means the instance (dataset, σ, gap) 
 
 **ρ_rep threshold of the degenerate control group**
 
-Lock two things at once: (a) ρ_rep ≤ ? is the degenerate control (measured data: sign and bms1 exactly 0.000; fifa 0.008; bike 0.052 — any threshold in the range 0.01–0.05 collects exactly the first three datasets); (b) how to handle instances falling into the band between the two thresholds — choose one: exclude them entirely from the H3 table, or form a third, 'intermediate' group as khao_sat_bo_du_lieu.md:81 proposes and state clearly that this group is not used to test H3 but only illustrates that ρ_rep and β are independent of each other. If (b) is chosen, §1 of preregistration.md must be corrected to have three groups, not two.
+Lock two things at once: (a) ρ_rep ≤ ? is the degenerate control (measured data: sign and bms1 exactly 0.000; fifa 0.008; bike 0.052 — any threshold in the range 0.01–0.05 collects exactly the first three datasets); (b) how to handle instances falling into the band between the two thresholds — choose one: exclude them entirely from the H3 table, or form a third, 'intermediate' group as dataset_survey.md:81 proposes and state clearly that this group is not used to test H3 but only illustrates that ρ_rep and β are independent of each other. If (b) is chosen, §1 of preregistration.md must be corrected to have three groups, not two.
 
 **The role of each dataset after measuring rho_rep**
 
@@ -144,7 +145,7 @@ After the full text of [R11] is available, or after activating the reduced readi
 
 **l_max and gap [g-, g+] for each dataset (row 1)**
 
-Two separate questions. (a) ℓ_max: keep 3 (and change §11.5 'length 2-4' to 2-3 to match), or raise it to 4 and accept the increased cost of mining F_σ on msnbc/fifa? (b) For each main-group dataset, lock the [g⁻,g⁺] used for SC3: [0,1] (high β ~0.43 but lower ρ_rep) or [0,3] (balanced), following exactly the measurements in giai_doan_1_tom_tat.md. The author locks it before SC3; changing it afterwards means rerunning all of SC3.
+Two separate questions. (a) ℓ_max: keep 3 (and change §11.5 'length 2-4' to 2-3 to match), or raise it to 4 and accept the increased cost of mining F_σ on msnbc/fifa? (b) For each main-group dataset, lock the [g⁻,g⁺] used for SC3: [0,1] (high β ~0.43 but lower ρ_rep) or [0,3] (balanced), following exactly the measurements in phase1_summary.md. The author locks it before SC3; changing it afterwards means rerunning all of SC3.
 
 **Target rho_rep and beta when generating data**
 
@@ -288,7 +289,7 @@ Raised by: `design-theory`, `phase1-findings`, `runbook`
 
 **Node weight when a pattern has μ(P) ≥ 2**
 
-Lock the SCOPE of mu(P) for the main table, choosing one of the three options listed in giai_doan_1_tom_tat.md section 3: (1) keep the scope at mu(P) = 1, declaring in the limitations section that it is the class of patterns that repeat less on MSNBC (0.218 against 0.434) but repeat MORE on DNA (0.806 against 0.773); (2) open to mu(P) >= 2, using bound P3 and IlpExact on small instances to measure the gap to the optimum, accepting that there is no exact result for that class; (3) already done -- add DNA. New evidence from khao_sat_bo_du_lieu.md section 3(c) makes option 1 clearly better, so this is a confirmation and not a reconsideration from scratch. Along with this, if (2) is chosen, a row must be added to protocol.yaml implementation_decisions recording how weights are assigned when mu(P) >= 2 (currently only in RUNBOOK, not yet in the protocol table). WHO DECIDES: the author. URGENT: before SC3, because the scope of mu(P) decides which patterns are drawn into the sensitive set.
+Lock the SCOPE of mu(P) for the main table, choosing one of the three options listed in phase1_summary.md section 3: (1) keep the scope at mu(P) = 1, declaring in the limitations section that it is the class of patterns that repeat less on MSNBC (0.218 against 0.434) but repeat MORE on DNA (0.806 against 0.773); (2) open to mu(P) >= 2, using bound P3 and IlpExact on small instances to measure the gap to the optimum, accepting that there is no exact result for that class; (3) already done -- add DNA. New evidence from dataset_survey.md section 3(c) makes option 1 clearly better, so this is a confirmation and not a reconsideration from scratch. Along with this, if (2) is chosen, a row must be added to protocol.yaml implementation_decisions recording how weights are assigned when mu(P) >= 2 (currently only in RUNBOOK, not yet in the protocol table). WHO DECIDES: the author. URGENT: before SC3, because the scope of mu(P) decides which patterns are drawn into the sensitive set.
 
 **A ceiling for the ratio |R|*/Σ|S| and the handling of extreme patterns**
 

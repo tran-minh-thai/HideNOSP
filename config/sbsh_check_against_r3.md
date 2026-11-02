@@ -1,8 +1,9 @@
 # A25 — Checking SBSH against [R3]
 
 > **Language.** This file is the English translation of the Vietnamese original as of commit `ea39da4`
-> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
-> decimal commas are written as decimal points.
+> (2026-11-02), which stays in the git history. Values, dates and decisions are unchanged, file names
+> are those after the renaming of 2026-11-02; decimal commas are written as decimal points. This file
+> was named `config/doi_chieu_sbsh_r3.md` until 2026-11-02.
 
 **Source.** A. Gkoulalas-Divanis, G. Loukides, "Revisiting sequential pattern hiding to enhance
 utility", *KDD 2011*, pp. 1316–1324, doi 10.1145/2020408.2020605. Copy in the library:

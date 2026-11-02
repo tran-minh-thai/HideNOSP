@@ -1,8 +1,9 @@
 # Proposed concrete values for group A (the decisions that block SC3)
 
 > **Language.** This file is the English translation of the Vietnamese original as of commit `ea39da4`
-> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
-> decimal commas are written as decimal points.
+> (2026-11-02), which stays in the git history. Values, dates and decisions are unchanged, file names
+> are those after the renaming of 2026-11-02; decimal commas are written as decimal points. This file
+> was named `config/de_xuat_gia_tri_nhom_A.md` until 2026-11-02.
 
 This is a **proposal for the author to approve**, not yet the locked version. Locking means writing the numbers into
 `preregistration.md` and `protocol.yaml` and then committing — the git history serves as evidence of the time.

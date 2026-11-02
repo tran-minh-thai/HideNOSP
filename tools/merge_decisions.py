@@ -2,7 +2,7 @@
 
 Input: a JSON file whose "result" holds the review items, "confirmed" (items that passed an
 independent check) and "addedByCritic" (items added by a final critical pass); each item has
-title, question, sharpened, sourceKey and blocks. Output: config/quyet_dinh_can_chot.md next to
+title, question, sharpened, sourceKey and blocks. Output: config/open_decisions.md next to
 this tool, or the path given second. Kept so that a later review is merged the same way, and so
 that the merge can be read: every item goes to exactly ONE theme, and no item is dropped.
 
@@ -19,7 +19,7 @@ if len(sys.argv) not in (2, 3):
 SRC = sys.argv[1]
 # The default output is found from this file, not from the directory the command is typed in.
 OUT = sys.argv[2] if len(sys.argv) == 3 else os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config", "quyet_dinh_can_chot.md")
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config", "open_decisions.md")
 
 d = json.loads(io.open(SRC, encoding="utf-8", errors="replace").read())["result"]
 items = [dict(x, origin="review") for x in d["confirmed"]] + \

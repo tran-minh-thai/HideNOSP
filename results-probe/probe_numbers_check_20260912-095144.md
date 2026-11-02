@@ -1,8 +1,9 @@
 # Comparison of §8.2 with run batch 20260912-095144
 
 > **Language.** This file is the English translation of the Vietnamese original as of commit `5ffe329`
-> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
-> decimal commas are written as decimal points.
+> (2026-11-02), which stays in the git history. Values, dates and decisions are unchanged, file names
+> are those after the renaming of 2026-11-02; decimal commas are written as decimal points. This file
+> was named `results-probe/doi_chieu_82_20260912-095144.md` until 2026-11-02.
 
 This batch reruns all probe measurements of §8.2 of the research design, so that each number in that
 table has a source file alongside it. These are **probe measurements**, not put into the paper as

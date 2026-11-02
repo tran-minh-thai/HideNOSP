@@ -1,12 +1,13 @@
 # Phase 1: SC1 and SC2 on real data
 
 > **Language.** This file is the English translation of the Vietnamese original as of commit `5ffe329`
-> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
-> decimal commas are written as decimal points.
+> (2026-11-02), which stays in the git history. Values, dates and decisions are unchanged, file names
+> are those after the renaming of 2026-11-02; decimal commas are written as decimal points. This file
+> was named `results-invariant/giai_doan_1_tom_tat.md` until 2026-11-02.
 
 > **Rerun on 2026-09-12 at ℓ_max = 4**, after `protocol.yaml` locked that value, and entirely
 > through `tools/run.py`, so every file carries the version stamp `2f63b567ccf1`. The replacement ρ_rep
-> and β table is in `khao_sat_bo_du_lieu.md`. The ℓ_max = 3 set of numbers below is kept for comparison; it
+> and β table is in `dataset_survey.md`. The ℓ_max = 3 set of numbers below is kept for comparison; it
 > **no longer matches the protocol** because §11.4 row 5 requires every method to use the same ℓ_max.
 
 Run date: 2026-09-12. Machine: development machine (every number here is machine-invariant, so that
@@ -114,7 +115,7 @@ SC3:
 > patterns **without repeated items** there is 0.806 — **higher** than the repeated-item patterns
 > (0.773), i.e. exactly the reverse of MSNBC. Keeping the scope at μ(P) = 1 no longer has to be paid for
 > by giving up the high-repetition data regime, so option 1 becomes the dominant choice. Numbers and the
-> proposed role for each dataset: `khao_sat_bo_du_lieu.md`.
+> proposed role for each dataset: `dataset_survey.md`.
 
 ---
 
@@ -124,7 +125,7 @@ SC3:
 |---|---|
 | SC1 green | done |
 | SC2 on four public datasets | done |
-| Obtain the DNA dataset and run SC2 on it | **done**, see `khao_sat_bo_du_lieu.md`; the result reverses the conclusion of section 3 |
+| Obtain the DNA dataset and run SC2 on it | **done**, see `dataset_survey.md`; the result reverses the conclusion of section 3 |
 | Obtain the trucks dataset of [R20] | no public source found yet |
 | Lock the ρ_rep and β grouping thresholds in `config/preregistration.md` | **done** 2026-09-12: ≥0.20 main group, ≤0.05 degenerate, applied per configuration |
 | Lock δ_L and the equivalence margins | **done** 2026-09-12: δ_L = 0.02 on relative Lost; margins ±0.02 and ±0.01 |

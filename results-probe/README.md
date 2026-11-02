@@ -1,22 +1,28 @@
 # results-probe/
 
-Số đo **dò tìm** trên máy phát triển, và mọi lần chạy trên dữ liệu tổng hợp thay thế khi chưa
-có bộ dữ liệu thật.
+> **Language.** This file is the English translation of the Vietnamese original as of commit `5ffe329`
+> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
+> decimal commas are written as decimal points.
 
-Những con số này **không vào bài như kết quả** (§8.2). Chúng dùng để: dò phản ví dụ, xem một
-cấu hình có đáng chạy đầy đủ không, và kiểm tra đường ống trước khi chạy thật.
+**Probe** measurements on the development machine, and every run on substitute synthetic data while
+no real dataset is available yet.
 
-Chạy bằng cờ `--probe`, khi đó tệp bất biến được chuyển hướng về đây thay vì
-`results-invariant/`. Cấm cột thời gian và cột bộ nhớ, giống `results-invariant/`.
+These numbers **do not enter the paper as results** (§8.2). They are used to: search for
+counterexamples, see whether a configuration is worth a full run, and check the pipeline before the
+real run.
 
-Các số dò tìm bằng Python trong `../nettree_checks.py` và `../probe/` cũng thuộc loại này. Các
-script đó in ra màn hình, nên phải hứng đầu ra vào thư mục này; mục 2 của `../RUNBOOK.md` có
-lệnh sẵn.
+Run with the flag `--probe`; the invariant file is then redirected here instead of
+`results-invariant/`. Timing columns and memory columns are forbidden, as in `results-invariant/`.
 
-`probe/timing.py` in ra **giây**, tức số phụ thuộc máy. Nó vẫn nằm ở đây chứ không ở `results/`,
-vì đó là một phép dò trên máy phát triển: §8.2 của bản thiết kế xếp nó vào nhóm dò tìm. Số của
-nó **không bao giờ** được chuyển sang `results/` hay in vào bài; muốn có số thời gian cho bài
-thì chạy SC6 trên máy đo đã khai.
+The Python probe numbers in `../nettree_checks.py` and `../probe/` also belong to this kind. Those
+scripts print to the screen, so their output must be captured into this directory; section 2 of
+`../RUNBOOK.md` has the ready-made commands.
 
-Không dùng `>>` để ghi thêm vào tệp nằm trên ổ Google Drive: ổ ảo này trả kích thước tệp cũ,
-nên lần ghi thêm đè lên giữa tệp. Hãy ghi ra đĩa cục bộ rồi chép sang.
+`probe/timing.py` prints **seconds**, that is, machine-dependent numbers. It still lives here and
+not in `results/`, because it is a probe on the development machine: §8.2 of the research design
+places it in the probe group. Its numbers are **never** moved to `results/` or printed in the paper;
+to get timing numbers for the paper, run SC6 on the declared measuring machine.
+
+Do not use `>>` to append to a file located on the Google Drive disk: this virtual disk reports the
+old file size, so the append overwrites the middle of the file. Write to a local disk and then copy
+over.

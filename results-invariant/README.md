@@ -1,12 +1,17 @@
 # results-invariant/
 
-Số đo **không phụ thuộc máy**: Lost, Ghost, |R|, HF, SupDist, DistR, kích thước Nettree,
-tỉ lệ cặp (S, k) được chứng nhận tối ưu.
+> **Language.** This file is the English translation of the Vietnamese original as of commit `5ffe329`
+> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
+> decimal commas are written as decimal points.
 
-Máy nào chạy cũng cho cùng kết quả, nên không cần khai máy đo. Đổi lại, **cấm cột thời gian và
-cột bộ nhớ** ở đây; `hidenosp.io.ResultSink` từ chối mở tệp có cột như vậy.
+**Machine-invariant** measurements: Lost, Ghost, |R|, HF, SupDist, DistR, Nettree size, share of (S,
+k) pairs certified optimal.
 
-Tên tệp: `SCn_<thời điểm UTC>_<máy>_<phiên bản mã>_s<hạt giống>.csv`, và dấu định danh lần chạy
-lặp lại trong phần chú thích đầu tệp (quy tắc 2.6.8).
+Any machine that runs them gives the same result, so no measuring machine needs to be declared. In
+return, **timing columns and memory columns are forbidden** here; `hidenosp.io.ResultSink` refuses
+to open a file with such columns.
 
-Tệp ở đây được theo dõi bởi git: chúng là bằng chứng cho các bảng trong bài.
+File name: `SCn_<UTC time>_<machine>_<code version>_s<seed>.csv`, and the run identifier stamp is
+repeated in the comment header of the file (rule 2.6.8).
+
+Files here are tracked by git: they are the evidence for the tables in the paper.

@@ -1,134 +1,142 @@
-# Giai đoạn 1: SC1 và SC2 trên dữ liệu thật
+# Phase 1: SC1 and SC2 on real data
 
-> **Đã chạy lại ngày 12/09/2026 ở ℓ_max = 4**, sau khi `protocol.yaml` chốt giá trị đó, và toàn bộ
-> qua `tools/run.py` nên mỗi tệp mang dấu phiên bản `2f63b567ccf1`. Bảng ρ_rep và β thay thế nằm ở
-> `khao_sat_bo_du_lieu.md`. Bộ số ℓ_max = 3 dưới đây giữ lại để đối chiếu; nó **không còn khớp
-> giao thức** vì §11.4 dòng 5 đòi mọi phương pháp dùng cùng ℓ_max.
+> **Language.** This file is the English translation of the Vietnamese original as of commit `5ffe329`
+> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
+> decimal commas are written as decimal points.
 
-Ngày chạy: 2026-09-12. Máy: máy phát triển (mọi số ở đây bất biến theo máy, nên điều đó không
-ảnh hưởng). Mã: xem dấu định danh ở đầu từng tệp CSV trong thư mục này.
+> **Rerun on 2026-09-12 at ℓ_max = 4**, after `protocol.yaml` locked that value, and entirely
+> through `tools/run.py`, so every file carries the version stamp `2f63b567ccf1`. The replacement ρ_rep
+> and β table is in `khao_sat_bo_du_lieu.md`. The ℓ_max = 3 set of numbers below is kept for comparison; it
+> **no longer matches the protocol** because §11.4 row 5 requires every method to use the same ℓ_max.
 
-Giai đoạn 1 theo §12b là **cài đặt, SC1–SC2, chốt `config/preregistration.md`**. Hai bước đầu đã
-xong; bước ba còn chờ quyết định của người viết, và §4 dưới đây nêu rõ quyết định nào.
+Run date: 2026-09-12. Machine: development machine (every number here is machine-invariant, so that
+has no effect). Code: see the identifier stamp at the head of each CSV file in this folder.
+
+Phase 1 under §12b is **implementation, SC1–SC2, locking `config/preregistration.md`**. The first two
+steps are done; the third still awaits the author's decision, and §4 below states which decision.
 
 ---
 
-## 1. SC1: kiểm cài đặt
+## 1. SC1: implementation check
 
-`Runner SC1 --trials=1500 --seed=2026`, tệp `SC1_20260912-*.csv`.
+`Runner SC1 --trials=1500 --seed=2026`, file `SC1_20260912-*.csv`.
 
-| Phép kiểm | Số thực thể | Ca lệch |
+| Check | Instances | Mismatches |
 |---|---|---|
-| L0: luồng cực đại = sup_NO vét cạn | 1.500 | 0 |
-| L0: cỡ lát cắt nhỏ nhất = sup_NO | 1.500 | 0 |
-| P1: số lần che tối thiểu = F − t | 1.069 | 0 |
-| L5: nút thiết yếu ⇔ che làm giảm sup_NO | 4.079 | 0 |
-| Cập nhật gia tăng = dựng lại | 1.391 | 0 |
-| P5(a): che không bao giờ làm tăng sup_NO | 7.394 | 0 |
-| P5(b): xoá đơn điệu khi g⁺ = ∞ | 1.719 | 0 |
-| Khai phá `F_σ` có tỉa = vét cạn | 40 | 0 |
+| L0: maximum flow = exhaustive sup_NO | 1,500 | 0 |
+| L0: minimum cut size = sup_NO | 1,500 | 0 |
+| P1: minimum number of masks = F − t | 1,069 | 0 |
+| L5: vital node ⇔ masking decreases sup_NO | 4,079 | 0 |
+| Incremental update = rebuild | 1,391 | 0 |
+| P5(a): masking never increases sup_NO | 7,394 | 0 |
+| P5(b): deletion is monotone when g⁺ = ∞ | 1,719 | 0 |
+| Mining `F_σ` with pruning = exhaustive | 40 | 0 |
 
-Quan sát kèm theo (không phải phép kiểm): xoá với g⁺ hữu hạn làm **tăng** sup_NO ở 54 trên 5.675
-lần, đúng như P5(b) dự đoán. Đây là căn cứ thực nghiệm cho việc chọn phép che làm phép sửa chính.
+Accompanying observation (not a check): deletion with a finite g⁺ **increases** sup_NO in 54 of 5,675
+cases, exactly as P5(b) predicts. This is the empirical ground for choosing masking as the main edit operation.
 
-**Kết luận: SC1 xanh.** Mọi kịch bản sau được phép chạy.
+**Conclusion: SC1 green.** Every later scenario is allowed to run.
 
 ---
 
-## 2. SC2: chế độ dữ liệu
+## 2. SC2: data regime
 
-Bốn bộ công khai, tải bằng `tools/fetch_datasets.py`, tổng kiểm ghi ở `datasets/provenance.tsv`.
-Mười cấu hình (bộ, σ, khoảng cách), mỗi cấu hình lấy mẫu mẫu nhạy cảm theo phân vị của sup_NO.
+Four public datasets, downloaded with `tools/fetch_datasets.py`, checksums recorded in `datasets/provenance.tsv`.
+Ten configurations (dataset, σ, gap), each configuration sampling sensitive patterns by percentiles of sup_NO.
 
-| Bộ | σ | Khoảng cách | ρ_rep nhỏ/tb/lớn | β nhỏ/tb/lớn | \|R\|\*/Σ\|S\| lớn nhất |
+| Dataset | σ | Gap | ρ_rep min/mean/max | β min/mean/max | max \|R\|\*/Σ\|S\| |
 |---|---|---|---|---|---|
-| bms1 | 100 | [0,3] | 0,000 / 0,000 / 0,000 | 0,000 / 0,117 / 0,522 | 0,0024 |
-| bms1 | 300 | [0,3] | 0,000 / 0,000 / 0,000 | 0,000 / 0,071 / 0,366 | 0,0032 |
-| fifa | 3000 | [0,3] | 0,005 / 0,008 / 0,013 | 0,185 / 0,289 / 0,467 | 0,0025 |
-| sign | 100 | [0,3] | 0,000 / 0,000 / 0,000 | 0,010 / 0,256 / 0,534 | 0,0080 |
-| sign | 200 | [0,3] | 0,000 / 0,000 / 0,000 | 0,000 / 0,163 / 0,339 | 0,0054 |
-| msnbc | 1000 | [0,3] | 0,064 / 0,190 / 0,470 | 0,111 / 0,311 / 0,445 | 0,0231 |
-| msnbc | 2000 | [0,1] | 0,085 / 0,321 / 0,524 | 0,146 / 0,432 / 0,618 | 0,0536 |
-| msnbc | 2000 | [0,3] | 0,106 / 0,293 / 0,575 | 0,047 / 0,232 / 0,319 | 0,0374 |
-| msnbc | 2000 | [0,10] | 0,158 / 0,415 / 0,750 | 0,010 / 0,043 / 0,077 | 0,2056 |
-| msnbc | 5000 | [0,3] | 0,195 / 0,395 / 0,750 | 0,080 / 0,173 / 0,271 | 0,1836 |
+| bms1 | 100 | [0,3] | 0.000 / 0.000 / 0.000 | 0.000 / 0.117 / 0.522 | 0.0024 |
+| bms1 | 300 | [0,3] | 0.000 / 0.000 / 0.000 | 0.000 / 0.071 / 0.366 | 0.0032 |
+| fifa | 3000 | [0,3] | 0.005 / 0.008 / 0.013 | 0.185 / 0.289 / 0.467 | 0.0025 |
+| sign | 100 | [0,3] | 0.000 / 0.000 / 0.000 | 0.010 / 0.256 / 0.534 | 0.0080 |
+| sign | 200 | [0,3] | 0.000 / 0.000 / 0.000 | 0.000 / 0.163 / 0.339 | 0.0054 |
+| msnbc | 1000 | [0,3] | 0.064 / 0.190 / 0.470 | 0.111 / 0.311 / 0.445 | 0.0231 |
+| msnbc | 2000 | [0,1] | 0.085 / 0.321 / 0.524 | 0.146 / 0.432 / 0.618 | 0.0536 |
+| msnbc | 2000 | [0,3] | 0.106 / 0.293 / 0.575 | 0.047 / 0.232 / 0.319 | 0.0374 |
+| msnbc | 2000 | [0,10] | 0.158 / 0.415 / 0.750 | 0.010 / 0.043 / 0.077 | 0.2056 |
+| msnbc | 5000 | [0,3] | 0.195 / 0.395 / 0.750 | 0.080 / 0.173 / 0.271 | 0.1836 |
 
-### Đọc bảng
+### Reading the table
 
-**Chỉ MSNBC đủ tư cách vào nhóm chính.** SIGN và BMS1 có ρ_rep đúng bằng 0 ở mọi mẫu đã lấy:
-trên hai bộ đó sup_NO suy biến hoàn toàn thành độ hỗ trợ theo chuỗi, nên chúng không nói được gì
-về đóng góp của bài. FIFA có ρ_rep khoảng 0,008, tức cũng suy biến trên các mẫu không lặp mục.
-BMS1 còn suy biến cả ở β (trung bình 0,117, nhiều mẫu bằng 0), đúng vai đối chứng kép mà §11.2
-dự kiến cho nó.
+**Only MSNBC qualifies for the main group.** SIGN and BMS1 have ρ_rep exactly 0 in every sampled
+pattern: on those two datasets sup_NO degenerates completely into sequence-based support, so they say
+nothing about the paper's contribution. FIFA has ρ_rep of about 0.008, i.e. it is also degenerate on
+patterns without repeated items. BMS1 is degenerate in β as well (mean 0.117, many patterns equal to
+0), exactly the double-control role that §11.2 planned for it.
 
-Đây chính là rủi ro §12 đã lường: "Dữ liệu thật có ρ_rep thấp, làm sup_NO suy biến". Nó đã xảy ra,
-và xảy ra với ba trên bốn bộ.
+This is exactly the risk §12 anticipated: "Real data has low ρ_rep, making sup_NO degenerate". It has
+happened, and it happened with three of the four datasets.
 
-**β và ρ_rep kéo ngược nhau theo độ rộng khoảng cách.** Trên MSNBC ở σ = 2000: nới [0,1] lên
-[0,10] làm ρ_rep trung bình tăng từ 0,321 lên 0,415 nhưng β tụt từ 0,432 xuống 0,043. Khoảng cách
-càng rộng thì mẫu càng lặp được nhiều, nhưng ràng buộc càng mất hiệu lực. Cấu hình cho cả hai đại
-lượng ở mức dùng được là **[0,3]**, và [0,1] nếu muốn β cao.
+**β and ρ_rep pull in opposite directions with the gap width.** On MSNBC at σ = 2000: widening [0,1] to
+[0,10] raises the mean ρ_rep from 0.321 to 0.415 but drops β from 0.432 to 0.043. The wider the gap,
+the more a pattern can repeat, but the more the constraint loses its effect. The configuration that
+gives both quantities at a usable level is **[0,3]**, and [0,1] if a high β is wanted.
 
-**σ càng cao thì ρ_rep càng cao.** MSNBC [0,3]: σ = 1000 cho ρ_rep trung bình 0,190; σ = 5000 cho
-0,395. Mẫu càng phổ biến thì càng lặp trong từng chuỗi.
+**The higher σ, the higher ρ_rep.** MSNBC [0,3]: σ = 1000 gives a mean ρ_rep of 0.190; σ = 5000 gives
+0.395. The more frequent a pattern, the more it repeats within each sequence.
 
 ---
 
-## 3. Một căng thẳng phải xử lý trước khi viết bài
+## 3. A tension to resolve before writing the paper
 
-Tách các mẫu đã lấy ở MSNBC theo μ(P):
+Splitting the sampled patterns on MSNBC by μ(P):
 
-| Bộ | Mẫu không lặp mục (μ = 1) | | Mẫu lặp mục (μ ≥ 2) | |
+| Dataset | Patterns without repeated items (μ = 1) | | Repeated-item patterns (μ ≥ 2) | |
 |---|---|---|---|---|
-| | n | ρ_rep trung bình | n | ρ_rep trung bình |
-| msnbc | 31 | 0,218 | 29 | **0,434** |
-| fifa | 10 | 0,008 | 0 | — |
-| sign | 20 | 0,000 | 0 | — |
-| bms1 | 20 | 0,000 | 0 | — |
+| | n | mean ρ_rep | n | mean ρ_rep |
+| msnbc | 31 | 0.218 | 29 | **0.434** |
+| fifa | 10 | 0.008 | 0 | — |
+| sign | 20 | 0.000 | 0 | — |
+| bms1 | 20 | 0.000 | 0 | — |
 
-Trên MSNBC, mẫu lặp mục có tỉ lệ lặp **gấp đôi** mẫu không lặp mục (0,434 so với 0,218; lớn nhất
-0,750 so với 0,555). Ngoài ra, mẫu duy nhất có ρ_rep rất cao gặp ở FIFA là `[17, 17, 17]`, với
-sup_NO 4.999 so với sup_seq 256, tức ρ_rep = 0,949 — cũng là mẫu lặp mục.
+On MSNBC, repeated-item patterns have **twice** the repetition rate of patterns without repeated items
+(0.434 against 0.218; maximum 0.750 against 0.555). In addition, the only pattern with a very high
+ρ_rep found on FIFA is `[17, 17, 17]`, with sup_NO 4,999 against sup_seq 256, i.e. ρ_rep = 0.949 — also
+a repeated-item pattern.
 
-Nói cách khác: **chế độ dữ liệu mà sup_NO thực sự khác sup_seq lại tập trung ở đúng lớp mẫu mà
-lý thuyết của bài yếu nhất.** P1 và P2 chỉ đúng khi μ(P) = 1; với μ(P) ≥ 2 chỉ có hai cận của P3,
-và §8.1 ghi độ khó của trường hợp đó là câu hỏi mở. Bài không được lảng tránh chỗ này. Ba cách
-xử lý, chọn trước khi chạy SC3:
+In other words: **the data regime in which sup_NO really differs from sup_seq is concentrated in exactly
+the class of patterns where the paper's theory is weakest.** P1 and P2 hold only when μ(P) = 1; for
+μ(P) ≥ 2 there are only the two bounds of P3, and §8.1 records the hardness of that case as an open
+question. The paper must not evade this point. Three ways to handle it, to be chosen before running
+SC3:
 
-1. Giữ phạm vi ở μ(P) = 1, khai rõ trong phần hạn chế rằng đó là lớp mẫu có tỉ lệ lặp thấp hơn,
-   kèm đúng con số 0,218 so với 0,434 ở trên.
-2. Mở phạm vi sang μ(P) ≥ 2, dùng cận P3 và bộ giải chính xác trên thực thể nhỏ để đo khoảng cách
-   tới tối ưu, chấp nhận không có kết quả chính xác cho lớp đó.
-3. Bổ sung bộ dữ liệu có tỉ lệ lặp cao **cho cả mẫu không lặp mục**, tức chuỗi DNA mà §11.2 đã dự
-   kiến và dòng NOSEP [R1] dùng. Đây là cách duy nhất làm nhóm chính rộng hơn một bộ.
+1. Keep the scope at μ(P) = 1, stating clearly in the limitations section that this is the class of
+   patterns with the lower repetition rate, with exactly the numbers 0.218 against 0.434 above.
+2. Open the scope to μ(P) ≥ 2, using the bound P3 and the exact solver on small instances to measure
+   the distance to the optimum, accepting that there is no exact result for that class.
+3. Add a dataset with a high repetition rate **also for patterns without repeated items**, namely the
+   DNA sequences that §11.2 already planned and that the NOSEP line [R1] uses. This is the only way to
+   make the main group wider than one dataset.
 
-> **Cập nhật cùng ngày: phương án 3 đã làm, và nó gỡ luôn căng thẳng này.** Bộ gen MT745584
-> (498 chuỗi × 60, |Σ| = 4) cho ρ_rep trung bình 0,786, và quan trọng hơn, ρ_rep của mẫu **không
-> lặp mục** ở đó là 0,806 — **cao hơn** mẫu lặp mục (0,773), tức ngược hẳn MSNBC. Giữ phạm vi ở
-> μ(P) = 1 nay không còn phải trả giá bằng việc bỏ chế độ dữ liệu lặp cao, nên phương án 1 trở
-> thành lựa chọn trội. Số liệu và vai đề nghị cho từng bộ: `khao_sat_bo_du_lieu.md`.
+> **Update the same day: option 3 has been done, and it also removes this tension.** The genome dataset
+> MT745584 (498 sequences × 60, |Σ| = 4) gives a mean ρ_rep of 0.786, and more importantly, ρ_rep of the
+> patterns **without repeated items** there is 0.806 — **higher** than the repeated-item patterns
+> (0.773), i.e. exactly the reverse of MSNBC. Keeping the scope at μ(P) = 1 no longer has to be paid for
+> by giving up the high-repetition data regime, so option 1 becomes the dominant choice. Numbers and the
+> proposed role for each dataset: `khao_sat_bo_du_lieu.md`.
 
 ---
 
-## 4. Việc còn lại của giai đoạn 1
+## 4. Remaining work of phase 1
 
-| Việc | Trạng thái |
+| Task | Status |
 |---|---|
-| SC1 xanh | xong |
-| SC2 trên bốn bộ công khai | xong |
-| Lấy bộ DNA và chạy SC2 trên đó | **xong**, xem `khao_sat_bo_du_lieu.md`; kết quả đảo ngược kết luận ở mục 3 |
-| Lấy bộ trucks của [R20] | chưa tìm được nguồn công khai |
-| Chốt ngưỡng phân nhóm ρ_rep và β trong `config/preregistration.md` | **xong** 12/09/2026: ≥0,20 nhóm chính, ≤0,05 suy biến, áp trên cấu hình |
-| Chốt δ_L và biên tương đương | **xong** 12/09/2026: δ_L = 0,02 trên Lost tương đối; biên ±0,02 và ±0,01 |
-| Quyết phạm vi μ(P) theo mục 3 | **xong** 12/09/2026: giữ μ(P) = 1 làm phạm vi chính |
+| SC1 green | done |
+| SC2 on four public datasets | done |
+| Obtain the DNA dataset and run SC2 on it | **done**, see `khao_sat_bo_du_lieu.md`; the result reverses the conclusion of section 3 |
+| Obtain the trucks dataset of [R20] | no public source found yet |
+| Lock the ρ_rep and β grouping thresholds in `config/preregistration.md` | **done** 2026-09-12: ≥0.20 main group, ≤0.05 degenerate, applied per configuration |
+| Lock δ_L and the equivalence margins | **done** 2026-09-12: δ_L = 0.02 on relative Lost; margins ±0.02 and ±0.01 |
+| Decide the μ(P) scope per section 3 | **done** 2026-09-12: keep μ(P) = 1 as the main scope |
 
-`config/preregistration.md` đã chốt và đã commit ngày 12/09/2026, nên SC3 được phép chạy lấy số
-vào bài — sau khi xong ba việc kỹ thuật ghi ở §7 của tệp đó.
+`config/preregistration.md` was locked and committed on 2026-09-12, so SC3 is allowed to run to produce
+numbers for the paper — after the three technical tasks recorded in §7 of that file are done.
 
 ---
 
-## 5. Tệp gốc
+## 5. Source files
 
-Trong thư mục này: `SC1_20260912-*.csv` và các tệp `SC2_20260912-*.csv` (mười cấu hình của đợt đầu, cộng sáu cấu hình của đợt bổ sung bộ dữ liệu). Mỗi tệp mang dấu định
-danh lần chạy ở tên và ở phần chú thích đầu tệp. Không tệp nào có cột thời gian hay bộ nhớ, đúng
-luật của `results-invariant/`.
+In this folder: `SC1_20260912-*.csv` and the files `SC2_20260912-*.csv` (ten configurations of the first round, plus six configurations of the round that added datasets). Each file carries the run
+identifier stamp in its name and in the comment header of the file. No file has a time or memory
+column, as the rule of `results-invariant/` requires.

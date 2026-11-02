@@ -1,272 +1,298 @@
-# A25 — Đối chiếu SBSH với [R3]
+# A25 — Checking SBSH against [R3]
 
-**Nguồn.** A. Gkoulalas-Divanis, G. Loukides, "Revisiting sequential pattern hiding to enhance
-utility", *KDD 2011*, tr. 1316–1324, doi 10.1145/2020408.2020605. Bản trong thư viện:
+> **Language.** This file is the English translation of the Vietnamese original as of commit `ea39da4`
+> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
+> decimal commas are written as decimal points.
+
+**Source.** A. Gkoulalas-Divanis, G. Loukides, "Revisiting sequential pattern hiding to enhance
+utility", *KDD 2011*, pp. 1316–1324, doi 10.1145/2020408.2020605. Copy in the library:
 `ThuVienBaiBao/14_PPDM_AnGiauLuatNhayCam/[2011] Revisiting Sequential Pattern Hiding to Enhance
-Utility.pdf`, 9 trang. Đã đọc Thuật toán 1 (Cost), 2 (Annotate), 3 (Exclude), 4 (DBSH),
-5 (SBSH) và §4.3.
+Utility.pdf`, 9 pages. Read: Algorithms 1 (Cost), 2 (Annotate), 3 (Exclude), 4 (DBSH),
+5 (SBSH) and §4.3.
 
-**Trạng thái.** Phần **sự kiện** của A25 đã xong: ba câu hỏi đều có câu trả lời dứt khoát dưới
-đây. Phần **quyết định** — giữ cách cài hiện tại và khai là "biến thể của chúng tôi", hay thay
-bằng đúng thủ tục của tác giả — vẫn thuộc về người viết.
+**Status.** The **facts** part of A25 is done: the three questions all have a definite answer
+below. The **decision** part — keep the current implementation and declare it "our variant", or
+replace it with exactly the authors' procedure — still belongs to the author.
 
 ---
 
-## 1. Nhãn xám bao phủ vị trí nào?
+## 1. Which positions does the gray label cover?
 
-**Cả hai phương án trong câu hỏi đều sai.** Câu hỏi giả định nhãn màu nói về cấu trúc lát cắt
-(vị trí có mang nút nhạy cảm hay không, có nằm trên lát cắt hay không). Thuật toán 2 không nói
-về chuyện đó chút nào: nó tô màu theo **tác dụng phụ lên mẫu KHÔNG nhạy cảm**.
+**Both options in the question are wrong.** The question assumes that the colour label is about
+the structure of the cut (whether a position carries a sensitive node, whether it lies on the
+cut). Algorithm 2 says nothing at all about that: it colours by **side effect on NONsensitive
+patterns**.
 
-Nguyên văn Thuật toán 2, `Annotate(p, D, TN, σ)`:
+Algorithm 2, restated in this project's notation (σ for the paper's ψ, patterns for sequences), `Annotate(p, D, TN, σ)`:
 
 ```
-1. TN_p  ← các mẫu không nhạy cảm phổ biến trong TN có chứa sự kiện thứ p của T
-2. nếu (không mẫu n_j ∈ TN_p nào có sup(n_j, D) = σ)
-3.     trả về ĐEN
-4. ngược lại
-5.     với mỗi (n_j ∈ TN_p sao cho sup(n_j, D) = σ)
-6.         nếu (sup(n_j, D) < σ sau khi xoá sự kiện thứ p của T)
-7.             trả về ĐỎ
-8. trả về XÁM
+1. TN_p  ← the nonsensitive frequent patterns in TN that contain the p-th event of T
+2. if (no pattern n_j ∈ TN_p has sup(n_j, D) = σ)
+3.     return BLACK
+4. else
+5.     for each (n_j ∈ TN_p such that sup(n_j, D) = σ)
+6.         if (sup(n_j, D) < σ after deleting the p-th event of T)
+7.             return RED
+8. return GRAY
 ```
 
-Vậy:
+So:
 
-| Màu | Nghĩa |
+| Colour | Meaning |
 |---|---|
-| **Đen** | Không mẫu không nhạy cảm nào chứa vị trí này đang nằm **đúng** ở ngưỡng σ. Xoá vô hại |
-| **Đỏ** | Có mẫu nằm đúng ở ngưỡng, **và** xoá vị trí này đẩy ít nhất một mẫu xuống dưới σ |
-| **Xám** | Có mẫu nằm đúng ở ngưỡng, **nhưng** phép kiểm cục bộ không thấy mẫu nào tụt xuống |
+| **Black** | No nonsensitive pattern containing this position sits **exactly** at the threshold σ. Deleting it is harmless |
+| **Red** | Some pattern sits exactly at the threshold, **and** deleting this position pushes at least one pattern below σ |
+| **Gray** | Some pattern sits exactly at the threshold, **but** the local check sees no pattern dropping |
 
-Xám là **chưa chắc**, không phải là "không liên quan". Lý do có nhãn xám: phép kiểm ở bước 6 xét
-từng vị trí một, trong khi các lần xoá thì cộng dồn. Vì thế SBSH (Thuật toán 5, bước 32) **chạy
-lại `Annotate` trên chính vị trí đó ngay lúc sắp xoá**, và chỉ xoá nếu nó **vẫn còn** xám.
+Gray means **not yet certain**, not "irrelevant". The reason for a gray label: the check in step 6
+considers one position at a time, while the deletions accumulate. That is why SBSH (Algorithm 5,
+step 32) **runs `Annotate` again on that very position just before deleting it**, and deletes only
+if it is **still** gray.
 
-Phạm vi tô màu: bước 4 của Thuật toán 5 dùng một biến thể `Annotate-T` tô **mọi vị trí ứng với
-một sự kiện nằm trong một mẫu nhạy cảm** s ∈ TS. Tức miền tô màu đúng bằng các vị trí mang sự
-kiện nhạy cảm; ba màu chia nhau miền đó.
+Scope of the colouring: step 4 of Algorithm 5 uses a variant `Annotate-T` that colours **every
+position corresponding to an event that lies in a sensitive pattern** s ∈ TS. That is, the
+colouring domain is exactly the positions carrying a sensitive event; the three colours share that
+domain.
 
-### Lệch với `Sbsh.java`
+### Deviation in `Sbsh.java`
 
-`annotate()` hiện tại tô: ĐEN cho vị trí thiết yếu của mẫu nhạy cảm, ĐỎ cho vị trí thiết yếu của
-mẫu ở ngưỡng, và XÁM là **giá trị mặc định của mọi vị trí còn lại**. Ba chỗ lệch:
+The current `annotate()` colours: BLACK for a vital position of a sensitive pattern, RED for a
+vital position of a pattern at the threshold, and GRAY is **the default value of every other
+position**. Three deviations:
 
-1. **Xám của ta nằm NGOÀI miền tô màu của họ.** Ta hiểu xám là "không mang nút nhạy cảm"; họ
-   hiểu xám là "có mang, nhưng chưa chắc về tác dụng phụ". Đây đúng là điều mà TODO nghi ngờ.
-2. **Nhánh xám của Thuật toán 5 hoàn toàn vắng mặt ở ta.** Vòng lặp của ta chỉ chọn trong
-   `index.vitalPositions(p)`, tức chỉ vị trí thiết yếu, nên không vị trí xám nào được chọn bao
-   giờ. Bước 32–37 của họ (chạy lại Annotate rồi xoá) không có tương ứng.
-3. **Đỏ thì gần đúng.** Ta lấy "vị trí thiết yếu của một mẫu ở ngưỡng". Dưới `sup_NO`, thiết yếu
-   nghĩa là che nó làm độ hỗ trợ giảm ít nhất 1, tức từ σ xuống σ−1 < σ — đúng điều kiện bước 6.
-   Chỗ này khớp.
+1. **Our gray lies OUTSIDE their colouring domain.** We read gray as "does not carry a sensitive
+   node"; they read gray as "does carry one, but the side effect is not yet certain". This is
+   exactly what the TODO suspected.
+2. **The gray branch of Algorithm 5 is entirely absent in ours.** Our loop chooses only from
+   `index.vitalPositions(p)`, that is, only vital positions, so no gray position is ever chosen.
+   Their steps 32–37 (run Annotate again, then delete) have no counterpart.
+3. **Red is nearly right.** We take "a vital position of a pattern at the threshold". Under
+   `sup_NO`, vital means that masking it lowers the support by at least 1, that is from σ to
+   σ−1 < σ — exactly the condition of step 6. This part matches.
 
 ---
 
-## 2. Bán kính r đếm theo cung hay theo vị trí?
+## 2. Is the radius r counted in edges or in positions?
 
-**Theo CUNG của đồ thị khớp.** Nguyên văn §4.3:
+**In EDGES of the matching graph.** §4.3 verbatim:
 
 > "we restrict ourselves to considering positions that are reachable from p by following at most
 > r edges in G_{S,T}, where (radius) r ∈ [1, max_{j=1..|S|} |s_j|] is a parameter that controls
 > the part of G_{S,T} to be searched."
 
-Ví dụ 3 của bài xác nhận: với vị trí 3, r = 1 cho {4, 5, 6}; r = 2 cho {0, 1} "vì các nút mang
-nhãn đó **đi được tới từ nút nhãn 3 bằng cách theo hai cung**".
+Example 3 of the paper confirms it: for position 3, r = 1 gives {4, 5, 6}; r = 2 gives {0, 1}
+"because the nodes carrying those labels **are reachable from the node labelled 3 by following two
+edges**".
 
-Cung của đồ thị khớp nối hai tầng liên tiếp, nên r cung = r tầng. **Cách đọc hiện tại của
-`Sbsh.java` ("in Nettree levels away from the red node") là ĐÚNG.** Đây là điểm duy nhất trong
-ba điểm mà cài đặt của ta khớp với bài.
+An edge of the matching graph joins two consecutive levels, so r edges = r levels. **The current
+reading of `Sbsh.java` ("in Nettree levels away from the red node") is RIGHT.** This is the only
+one of the three points where our implementation matches the paper.
 
-### Nhưng miền của r thì lệch
+### But the domain of r deviates
 
-Bài chốt r ∈ [1, **độ dài mẫu nhạy cảm dài nhất**]. `Sc3MainComparison` gọi
-`new Sbsh(problem.maxPatternLength())` cho `sbsh-rmax`, tức lấy **ℓ_max**. Hai cái chỉ trùng nhau
-khi tập nhạy cảm có chứa một mẫu dài đúng ℓ_max. Với `--sensitiveSize=1` và mẫu lấy theo phân vị
-thì phần lớn thực thể **không** thoả. Phải sửa thành `max` độ dài trên tập nhạy cảm, nếu không
-"r lớn nhất" của SC7 không phải cái mà bài định nghĩa.
+The paper locks r ∈ [1, **the length of the longest sensitive pattern**]. `Sc3MainComparison` calls
+`new Sbsh(problem.maxPatternLength())` for `sbsh-rmax`, that is, it takes **ℓ_max**. The two
+coincide only when the sensitive set contains a pattern of length exactly ℓ_max. With
+`--sensitiveSize=1` and patterns drawn by percentile, most instances do **not** satisfy that. It
+must be changed to the `max` length over the sensitive set, otherwise the "largest r" of SC7 is not
+the one the paper defines.
 
 ---
 
-## 3. C-PA và C-SA khác Replace thường ở chỗ nào?
+## 3. How do C-PA and C-SA differ from an ordinary Replace?
 
-`Replace` **không phải** một thủ tục khác: nó là **cực tiểu của hai phép tìm có hướng**.
+`Replace` is **not** a separate procedure: it is **the minimum of two directed searches**.
 
-| Hàm | Làm gì |
+| Function | What it does |
 |---|---|
-| `C-PA(p, G, r)` | Tìm tập vị trí (i) toàn **đen**, (ii) chặn **mọi** đường đi đầy đủ qua nút p, (iii) nằm ở **tầng TRƯỚC** tầng của p, (iv) tới được từ p trong ≤ r cung. Bắt đầu từ 1 cung, mỗi vòng tăng một, **dừng ngay lần đầu tìm được một tập** hoặc khi vượt r |
-| `C-SA(p, G, r)` | Y hệt, nhưng ở **tầng SAU** |
-| `Replace(p, G, r)` | Gọi cả hai, trả về **tập NHỎ HƠN** trong hai tập |
+| `C-PA(p, G, r)` | Finds a set of positions that (i) are all **black**, (ii) block **every** complete path through node p, (iii) lie at a **level BEFORE** the level of p, (iv) are reachable from p in ≤ r edges. Starts from 1 edge, increases by one each round, **stops at the first time a set is found** or when r is exceeded |
+| `C-SA(p, G, r)` | Exactly the same, but at a **level AFTER** |
+| `Replace(p, G, r)` | Calls both, returns the **SMALLER set** of the two |
 
-### Lệch với `Sbsh.java`
+### Deviation in `Sbsh.java`
 
-`replace()` của ta quét **mọi** tầng trong bán kính (`|level − redLevel| ≤ radius`) ở **cả hai
-phía trong cùng một vòng**, rồi lấy tập nhỏ nhất toàn cục. Khác ở chỗ:
+Our `replace()` scans **every** level within the radius (`|level − redLevel| ≤ radius`) on **both
+sides in the same round**, then takes the globally smallest set. The differences:
 
-- Họ **dừng ở lần đầu tìm thấy**, tính theo khoảng cách tăng dần, **riêng từng phía**. Ta **tối
-  ưu trong toàn bán kính**. Nên tập của ta nhỏ hơn hoặc bằng tập của họ, và ta không tái hiện
-  được hành vi "gần thì lấy luôn dù to" của họ.
-- Vì mỗi phía dừng độc lập, `Replace` của họ so hai tập **gần nhất mỗi phía**, không phải hai
-  tập nhỏ nhất mỗi phía.
+- They **stop at the first find**, by increasing distance, **separately for each side**. We
+  **optimise over the whole radius**. So our set is smaller than or equal to theirs, and we cannot
+  reproduce their behaviour of "near, so take it at once even if large".
+- Because each side stops independently, their `Replace` compares the two **nearest sets, one per
+  side**, not the two smallest sets, one per side.
 
-Hệ quả cho SC7: biến thể "r nhỏ nhất" và "r lớn nhất" ở ta đo một thứ khác với ở bài. Ở ta, tăng
-r chỉ mở rộng không gian tối ưu nên tập chỉ nhỏ đi; ở họ, tăng r có thể đổi hẳn tập được chọn.
-
----
-
-## 4. Một lệch nữa, không nằm trong ba câu hỏi: `Exclude-SBSH` vắng mặt
-
-Thuật toán 5 bước 1 gọi `Exclude-SBSH`, một biến thể của Thuật toán 3 **loại khỏi D_S chuỗi
-đang chứa NHIỀU mẫu nhạy cảm NHẤT**, phá hoà bằng cách chọn tuỳ ý khi nhiều chuỗi cùng chi phí.
-Bài nói thẳng lựa chọn này "có thể giảm đáng kể số tác dụng phụ, như thực nghiệm của chúng tôi
-xác nhận".
-
-`Sbsh.run()` không có bước này: nó duyệt chuỗi theo đúng thứ tự chỉ số. `Dbsh` thì **có** Exclude
-(sắp theo chi phí rồi làm sạch cái rẻ trước, tương đương với cách sắp giảm dần rồi loại của
-Thuật toán 3).
-
-Vì đại lượng mà H2 kiểm là **Lost**, tức chính là tác dụng phụ, thiếu `Exclude-SBSH` nhiều khả
-năng là chỗ lệch **nặng nhất** trong bốn chỗ — nó làm SBSH yếu đi đúng ở mặt mà SBSH sinh ra để
-mạnh.
+Consequence for SC7: the "smallest r" and "largest r" variants measure something different in ours
+than in the paper. In ours, increasing r only widens the optimisation space, so the set only gets
+smaller; in theirs, increasing r can change the chosen set altogether.
 
 ---
 
-## 5. Tóm tắt và việc phải quyết
+## 4. One more deviation, outside the three questions: `Exclude-SBSH` is absent
 
-| # | Điểm | Cài đặt hiện tại |
+Algorithm 5 step 1 calls `Exclude-SBSH`, a variant of Algorithm 3 that **removes from D_S the
+sequence containing the LARGEST NUMBER of sensitive patterns**, breaking ties arbitrarily when
+several sequences have the same cost. The paper says plainly that this choice "can considerably
+reduce the number of side effects, as our experiments confirm".
+
+`Sbsh.run()` has no such step: it walks the sequences in plain index order. `Dbsh` **does** have
+Exclude (sort by cost, then sanitize the cheap ones first, equivalent to the sort-descending-then-
+remove approach of Algorithm 3).
+
+Because the quantity that H2 tests is **Lost**, which is exactly the side effect, the missing
+`Exclude-SBSH` is likely the **heaviest** of the four deviations — it weakens SBSH exactly on the
+side where SBSH was made to be strong.
+
+---
+
+## 5. Summary and what must be decided
+
+| # | Point | Current implementation |
 |---|---|---|
-| 1 | Nhãn xám | **Sai**, và nhánh xám của Thuật toán 5 vắng mặt |
-| 2 | Bán kính đếm theo cung | **Đúng** |
-| 2b | Miền r = độ dài mẫu nhạy cảm dài nhất | **Sai**, đang lấy ℓ_max |
-| 3 | C-PA / C-SA / Replace | **Khác**: ta tối ưu toàn bán kính, họ dừng ở lần đầu, riêng từng phía |
-| 4 | `Exclude-SBSH` | **Vắng mặt** |
+| 1 | Gray label | **Wrong**, and the gray branch of Algorithm 5 is absent |
+| 2 | Radius counted in edges | **Right** |
+| 2b | Domain of r = length of the longest sensitive pattern | **Wrong**, takes ℓ_max |
+| 3 | C-PA / C-SA / Replace | **Different**: we optimise over the whole radius, they stop at the first find, separately for each side |
+| 4 | `Exclude-SBSH` | **Absent** |
 
-Đúng 1 trên 5. Phần lý lịch của `preregistration.md` §2 viết: nếu SBSH không đối chiếu được thì
-bỏ khỏi bảng, họ Holm còn hai. Đối chiếu thì đã xong, nhưng kết quả là **cài đặt hiện tại không
-phải SBSH của [R3]**.
+Exactly 1 out of 5. The background part of `preregistration.md` §2 says: if SBSH cannot be
+checked, it is dropped from the table and the Holm family keeps two. The check is done, but the
+result is that **the current implementation is not the SBSH of [R3]**.
 
-**Ba phương án, người viết chọn:**
+**Three options, for the author to choose:**
 
-1. **Sửa cho đúng bài.** Tốn công nhất, nhưng giữ được họ Holm bốn phần tử và giữ được câu "đúng
-   đối thủ của họ" ở §12a. Bốn việc: viết lại `annotate` theo Thuật toán 2, thêm nhánh xám, tách
-   `replace` thành C-PA và C-SA dừng-ở-lần-đầu, thêm `Exclude-SBSH`. Sửa cả miền r.
-2. **Giữ nguyên và khai là biến thể.** Rẻ, nhưng khi ấy hai dòng SBSH trong bảng không còn là
-   đường cơ sở của [R3] mà là hai biến thể của ta, nên **phải rút khỏi họ Holm** — họ còn hai
-   (HHA, DBSH), và `preregistration.md` §2 phải sửa **trước** khi chạy SC3.
-3. **Sửa phần rẻ, khai phần còn lại.** Thêm `Exclude-SBSH` và sửa miền r (hai việc nhỏ, đánh
-   trúng chỗ lệch nặng nhất), khai rõ nhãn xám và Replace là biến thể. Vẫn phải quyết xem như
-   thế có còn gọi là SBSH được không.
+1. **Fix it to match the paper.** The most work, but it keeps the four-member Holm family and keeps
+   the sentence "precisely their competitor" in §12a. Four tasks: rewrite `annotate` following
+   Algorithm 2, add the gray branch, split `replace` into stop-at-first-find C-PA and C-SA, add
+   `Exclude-SBSH`. Also fix the domain of r.
+2. **Keep it as is and declare it a variant.** Cheap, but then the two SBSH rows in the table are
+   no longer the baseline of [R3] but two variants of ours, so they **must be withdrawn from the
+   Holm family** — the family keeps two (HHA, DBSH), and `preregistration.md` §2 must be changed
+   **before** running SC3.
+3. **Fix the cheap part, declare the rest.** Add `Exclude-SBSH` and fix the domain of r (two small
+   tasks, hitting the heaviest deviation), declare the gray label and Replace as variants. It still
+   has to be decided whether that can still be called SBSH.
 
-Dù chọn gì, phải làm **trước** khi chạy SC3 lấy số vào bài, và nếu sửa `preregistration.md` thì
-đó là một commit riêng ghi rõ lý do, theo đúng đoạn đầu của tệp đó.
+Whatever is chosen, it must be done **before** running SC3 for the numbers in the paper, and if
+`preregistration.md` is changed, that is a separate commit stating the reason, exactly as the
+opening paragraph of that file says.
 
 ---
 
-## 6. Cập nhật 25/09/2026 — đã sửa theo phương án 1 (sửa cho đúng bài)
+## 6. Update 2026-09-25 — fixed following option 1 (fix it to match the paper)
 
-Người viết chọn phương án 1. `baseline/Sbsh.java` viết lại theo Thuật toán 5, cùng Thuật toán 1
-(Cost, dùng cho Candidates-SBSH và cho thứ tự của Exclude-SBSH), Thuật toán 2 (Annotate) và
-C-PA, C-SA, Replace của mục 4.3. Bảng ở mục 5 trên đây mô tả bản cài **trước** ngày này; cả năm
-điểm nay đã theo bài:
+The author chose option 1. `baseline/Sbsh.java` was rewritten following Algorithm 5, together with
+Algorithm 1 (Cost, used for Candidates-SBSH and for the order of Exclude-SBSH), Algorithm 2
+(Annotate) and C-PA, C-SA, Replace of section 4.3. The table in section 5 above describes the
+implementation **before** this date; all five points now follow the paper:
 
-| # | Điểm | Bản cài từ 25/09 |
+| # | Point | Implementation from 2026-09-25 |
 |---|---|---|
-| 1 | Nhãn xám | Theo Thuật toán 2 (xám = có mẫu không nhạy cảm nằm đúng ngưỡng nhưng xoá vị trí này không làm nó tụt); nhánh xám của Thuật toán 5 (tô màu lại rồi mới xoá) đã có |
-| 2 | Bán kính đếm theo cung | Giữ nguyên, đúng |
-| 2b | Miền r | `sbsh-rmax` lấy độ dài mẫu nhạy cảm dài nhất của tập, không lấy ℓ_max |
-| 3 | C-PA / C-SA / Replace | Mỗi phía tăng k từ 1, dừng ở k đầu tiên tìm được; Replace lấy tập nhỏ hơn |
-| 4 | Exclude-SBSH | Đã có (xem điểm mới dưới đây) |
+| 1 | Gray label | Following Algorithm 2 (gray = some nonsensitive pattern sits exactly at the threshold but deleting this position does not make it drop); the gray branch of Algorithm 5 (colour again, then delete) is in place |
+| 2 | Radius counted in edges | Unchanged, right |
+| 2b | Domain of r | `sbsh-rmax` takes the length of the longest sensitive pattern of the set, not ℓ_max |
+| 3 | C-PA / C-SA / Replace | Each side increases k from 1, stops at the first k that finds a set; Replace takes the smaller set |
+| 4 | Exclude-SBSH | In place (see the new finding below) |
 
-**Phát hiện mới khi đọc lại toàn văn: bài tự mâu thuẫn về Exclude-SBSH.** Mục 5.2.2 viết
-nguyên văn: "a variant of Algorithm 3 that removes the transaction that supports the largest
+**New finding when rereading the full text: the paper contradicts itself on Exclude-SBSH.** Section
+5.2.2 says verbatim: "a variant of Algorithm 3 that removes the transaction that supports the largest
 number of sensitive sequences from D_S, breaking ties arbitrarily if many transactions have the
-same sanitization cost". Mục 5.2.3 giải thích lựa chọn trong ví dụ bằng mẫu **không** nhạy cảm:
-"Although both T1 and T2 have a sanitization cost of 1 [...] T2 supports fewer nonsensitive
-frequent sequences. [...] SBSH selects this transaction instead of T1." Tính tay trên Hình 1:
+same sanitization cost". Section 5.2.3 explains the choice in the example by **non**sensitive
+patterns: "Although both T1 and T2 have a sanitization cost of 1 [...] T2 supports fewer nonsensitive
+frequent sequences. [...] SBSH selects this transaction instead of T1." Computed by hand on Fig. 1:
 
-- đọc theo số mẫu **nhạy cảm**, T7 (hỗ trợ 2 mẫu nhạy cảm) được làm sạch trước T8, nên T7 mất
-  d và f thành `* * h h h`, trái với Hình 1(f) in `d f * * *`;
-- đọc theo số mẫu **không nhạy cảm** (giảm dần), rồi Cost (giảm dần, như Thuật toán 3), rồi chỉ
-  số chuỗi, thì ra đúng Hình 1(f) và đúng tác dụng phụ ở Hình 4(b).
+- reading by the number of **sensitive** patterns, T7 (supporting 2 sensitive patterns) is sanitized
+  before T8, so T7 loses d and f and becomes `* * h h h`, contrary to Fig. 1(f), which prints `d f * * *`;
+- reading by the number of **nonsensitive** patterns (descending), then Cost (descending, as in
+  Algorithm 3), then sequence index, gives exactly Fig. 1(f) and exactly the side effects of Fig. 4(b).
 
-Bản cài theo cách đọc thứ hai. Thứ tự cuối cùng (chỉ số chuỗi) bài để "tuỳ ý"; chọn giảm dần thì
-tái tạo đúng Hình 1(f), chọn tăng dần thì T2 và T3 đổi vai — cả hai đều đúng với bài.
+The implementation follows the second reading. The last order (sequence index) the paper leaves
+"arbitrary"; choosing descending reproduces Fig. 1(f) exactly, choosing ascending makes T2 and T3
+swap roles — both are consistent with the paper.
 
-**Những chỗ bài để ngỏ và cách đã chọn** (ghi cả trong Javadoc của lớp):
+**What the paper leaves open, and the choices made** (also recorded in the Javadoc of the class):
 
-1. "P[i] = ∅" đọc là hết mảng P; vị trí không còn nút nào trên đường đầy đủ thì bỏ qua.
-2. Thuật toán 5 chỉ xử lý vị trí xám **vẫn** xám khi tô lại. Tô lại ra đen hoặc đỏ thì cập nhật
-   nhãn và để vòng sau xử lý theo nhánh đó (nếu không, vòng lặp đứng yên mãi).
-3. C-PA/C-SA ở khoảng cách k lấy **cả tầng** cách k cung, chỉ gồm nút còn trên đường đầy đủ, và
-   nhận khi mọi vị trí trong tầng mang nhãn đen. Hoà giữa C-PA và C-SA thì lấy C-PA.
-4. Hoà trong phủ tập tham lam: ký hiệu xuất hiện trước trong chuỗi — tái tạo đúng Ví dụ 1.
+1. "P[i] = ∅" is read as the end of array P; a position with no node left on a complete path is skipped.
+2. Algorithm 5 only handles a gray position that is **still** gray when coloured again. If colouring
+   again gives black or red, the label is updated and the next round handles it by that branch
+   (otherwise the loop stands still forever).
+3. C-PA/C-SA at distance k take the **whole level** k edges away, containing only nodes still on a
+   complete path, and accept when every position in the level is labelled black. A tie between C-PA
+   and C-SA takes C-PA.
+4. Ties in the greedy set cover: the symbol that appears earlier in the sequence — reproduces Example 1
+   exactly.
 
-**Bằng chứng** (`src/test/java/hidenosp/baseline/SbshPaperExampleTest.java`), chạy ở chế độ
-`SEQUENCE_COUNT` tức bài toán của chính bài báo, không có khoảng cách tối đa:
+**Evidence** (`src/test/java/hidenosp/baseline/SbshPaperExampleTest.java`), run in
+`SEQUENCE_COUNT` mode, that is the problem of the paper itself, with no maximum gap:
 
-- Hình 1(f): đúng các vị trí bị che {T2: 0; T6: 0; T7: 2, 3, 4; T8: 1}, khoảng cách 6 (Hình 4(b));
-- Hình 4(b): đúng ba tác dụng phụ ⟨a,c⟩, ⟨a,e⟩, ⟨d,g⟩;
-- Ví dụ 3 / Hình 2(e): Replace(3, G, 1) = {4, 5, 6}, Replace(3, G, 2) = {0, 1};
-- hai ca tự dựng (không có trong bài) cho nhánh xám và cho "tính độ hỗ trợ như thể các vị trí đã
-  đánh dấu đã bị xoá" dưới sup_NO.
+- Fig. 1(f): exactly the masked positions {T2: 0; T6: 0; T7: 2, 3, 4; T8: 1}, distance 6 (Fig. 4(b));
+- Fig. 4(b): exactly the three side effects ⟨a,c⟩, ⟨a,e⟩, ⟨d,g⟩;
+- Example 3 / Fig. 2(e): Replace(3, G, 1) = {4, 5, 6}, Replace(3, G, 2) = {0, 1};
+- two hand-built cases (not in the paper) for the gray branch and for "compute the support as if the
+  marked positions had already been deleted" under sup_NO.
 
-Tiêm lỗi: 10 lỗi (khoá sắp xếp của Exclude-SBSH, thứ tự hoà, bỏ điều kiện đen của Replace, lấy
-tập lớn hơn, Annotate đọc độ hỗ trợ ban đầu, bỏ tô màu lại, đếm theo số chuỗi ở chế độ sup_NO,
-không bao giờ thay vị trí đỏ, tô màu lại bỏ qua các vị trí đã đánh dấu, C-SA tìm sai hướng) —
-bắt được 10/10. Ví dụ của bài không có vị trí xám nào nên hai lỗi về nhánh xám chỉ bị bắt sau
-khi thêm hai ca tự dựng.
+Fault injection: 10 faults (the sort key of Exclude-SBSH, the tie order, dropping the black condition
+of Replace, taking the larger set, Annotate reading the initial support, dropping the colouring again,
+counting by number of sequences in sup_NO mode, never replacing a red position, colouring again
+skipping the marked positions, C-SA searching in the wrong direction) — 10/10 caught. The paper's
+example has no gray position, so the two faults on the gray branch were caught only after the two
+hand-built cases were added.
 
-**Chuyển sang sup_NO** (bản SC3 dùng): chỉ thay hàm độ hỗ trợ ở ba chỗ bài đọc độ hỗ trợ — ngân
-sách giữ lại của Exclude-SBSH (tổng sup_NO của các chuỗi được giữ ≤ σ − 1 cho mỗi mẫu nhạy cảm),
-phép so ngưỡng của Annotate, và điều kiện lặp. Phép sửa là che thay cho xoá, như mọi phương pháp.
+**Transfer to sup_NO** (the version SC3 uses): only the support function is replaced, at the three
+places where the paper reads support — the retention budget of Exclude-SBSH (total sup_NO of the
+kept sequences ≤ σ − 1 for each sensitive pattern), the threshold comparison of Annotate, and the
+loop condition. The modification is masking instead of deletion, as for every method.
 
-**Họ Holm giữ nguyên bốn phần tử** (HHA, DBSH, SBSH-r1, SBSH-rmax) như `preregistration.md` §2;
-không phải sửa bản chốt.
+**The Holm family keeps its four members** (HHA, DBSH, SBSH-r1, SBSH-rmax) as in `preregistration.md`
+§2; the locked version does not need to change.
 
-**Còn lại, không thuộc SBSH nhưng lộ ra khi làm việc này:** `Dbsh` tính Cost bằng tổng, theo từng
-mẫu, số vị trí trên đường của ký hiệu rẻ nhất — **không** phải Thuật toán 1 (phủ tập tham lam,
-trọng số là số lần xuất hiện của ký hiệu trong chuỗi). Hai đường cơ sở của cùng một bài đang
-dùng hai hàm Cost khác nhau; phải đối chiếu DBSH với Thuật toán 3–4 trước khi chạy SC3 lấy số.
+**Remaining, not part of SBSH but exposed by this work:** `Dbsh` computes Cost as the sum, over
+patterns, of the number of positions on the paths of the cheapest symbol — **not** Algorithm 1
+(greedy set cover, weight = number of occurrences of the symbol in the sequence). Two baselines of
+the same paper are using two different Cost functions; DBSH must be checked against Algorithms 3–4
+before running SC3 for the numbers.
 
 ---
 
-## 7. Cập nhật 25/09/2026 (lượt 2) — DBSH đã sửa theo bài; đính chính mục 6 về Exclude
+## 7. Update 2026-09-25 (pass 2) — DBSH fixed to match the paper; correction to section 6 on Exclude
 
-**Đính chính mục 6.** Mục 6 ghi phép chuyển của Exclude-SBSH là "tổng sup_NO của các chuỗi **được
-giữ** ≤ σ − 1". Sai cách đọc Thuật toán 3. Nguyên văn mục 5.1: "moves the transaction to D′
-without sanitizing it only if every sensitive sequence supported by T has been **encountered**
-fewer than (ψ − 1) times" — bộ đếm M(s) tăng với **mọi** giao dịch đã duyệt, kể cả giao dịch bị
-làm sạch. Tính tay Hình 1(e): chỉ cách đọc này ra đúng việc DBSH làm sạch T8 (mà T5 đã bị làm sạch
-thì ⟨d,f,g⟩ đã dưới ngưỡng). Hình 1(f) của SBSH ra cùng một kết quả dưới cả hai cách đọc, nên test
-của SBSH không bắt được lỗi này; test của DBSH bắt được. Hai thuật toán nay dùng chung **một** cài
-đặt Exclude (`baseline/Exclude.java`), nên cả hai theo cách đọc đúng.
+**Correction to section 6.** Section 6 records the transfer of Exclude-SBSH as "total sup_NO of the
+**kept** sequences ≤ σ − 1". That is a wrong reading of Algorithm 3. Section 5.1 verbatim: "moves
+the transaction to D′ without sanitizing it only if every sensitive sequence supported by T has been
+**encountered** fewer than (ψ − 1) times" — the counter M(s) increases with **every** transaction
+visited, including sanitized ones. Computed by hand on Fig. 1(e): only this reading gives exactly
+DBSH sanitizing T8 (whereas once T5 has been sanitized, ⟨d,f,g⟩ is already below the threshold).
+Fig. 1(f) of SBSH gives the same result under both readings, so the SBSH test could not catch this
+fault; the DBSH test does. The two algorithms now share **one** Exclude implementation
+(`baseline/Exclude.java`), so both follow the right reading.
 
-**DBSH** (`baseline/Dbsh.java`) viết lại theo Thuật toán 4, với Thuật toán 1 (Cost, phủ tập tham
-lam theo ký hiệu, trọng số = số lần xuất hiện của ký hiệu trong chuỗi) và Thuật toán 3 (Exclude).
-Bản trước lệch ba chỗ:
+**DBSH** (`baseline/Dbsh.java`) was rewritten following Algorithm 4, with Algorithm 1 (Cost, greedy
+set cover over symbols, weight = number of occurrences of the symbol in the sequence) and Algorithm
+3 (Exclude). The previous version deviated in three places:
 
-| Điểm | Bản trước | Bản từ 25/09 |
+| Point | Previous version | Version from 2026-09-25 |
 |---|---|---|
-| Cost | Tổng theo từng mẫu của số vị trí trên đường của ký hiệu rẻ nhất | Thuật toán 1: phủ tập tham lam, trọng số chia cho số mẫu ký hiệu phủ |
-| Exclude | Làm sạch chuỗi rẻ trước cho tới khi đủ mức giảm | Thuật toán 3: duyệt theo Cost giảm dần, giữ chuỗi khi mọi mẫu nó hỗ trợ mới gặp dưới ψ − 1 lần (đếm cả chuỗi bị làm sạch) |
-| Làm sạch một chuỗi | Bỏ dần đơn vị sup_NO tới đúng mức cần | Thuật toán 4: với từng tập con S_j, bỏ các vị trí của ký hiệu đã chọn tới khi chuỗi không còn hỗ trợ mẫu nào của S_j — tức làm sạch **hết** chuỗi được chọn, như bài |
+| Cost | Sum over patterns of the number of positions on the paths of the cheapest symbol | Algorithm 1: greedy set cover, weight divided by the number of patterns the symbol covers |
+| Exclude | Sanitize the cheap sequences first until the reduction is sufficient | Algorithm 3: visit by descending Cost, keep a sequence when every pattern it supports has been encountered fewer than ψ − 1 times (counting the sanitized sequences too) |
+| Sanitizing one sequence | Remove sup_NO units one by one down to exactly the level needed | Algorithm 4: for each subset S_j, remove the positions of the chosen symbol until the sequence no longer supports any pattern of S_j — that is, sanitize the chosen sequence **completely**, as in the paper |
 
-**Chỗ bài để ngỏ và cách đã chọn.** Hoà ở Exclude ("arbitrary") lấy chỉ số chuỗi lớn trước — tái
-tạo đúng Hình 1(e). Vị trí của ký hiệu đã chọn mà không nằm trên đường đầy đủ nào thì bỏ qua:
-Candidates làm việc trên đồ thị khớp, vốn chỉ giữ nút trên đường đầy đủ (Định nghĩa 4.1), và đây
-cũng là cách đọc có lợi nhất cho DBSH. Thứ tự trong P[j]: vị trí tăng dần.
+**What the paper leaves open, and the choices made.** A tie in Exclude ("arbitrary") takes the larger
+sequence index first — reproduces Fig. 1(e) exactly. A position of the chosen symbol that lies on no
+complete path is skipped: Candidates works on the matching graph, which keeps only nodes on complete
+paths (Definition 4.1), and this is also the reading most favourable to DBSH. Order within P[j]:
+increasing position.
 
-**Hệ quả của phép chuyển cần khai trong bài.** Dưới sup_NO, DBSH vẫn làm sạch hết mỗi chuỗi được
-chọn, nên có thể dùng nhiều lần che hơn mức cần để tụt dưới σ. Đó là hành vi của DBSH theo bài,
-không phải khiếm khuyết của phép chuyển; bản trước ngày này đã "chỉnh" DBSH cho sup_NO một cách mà
-tác giả chưa từng làm.
+**Consequence of the transfer that must be declared in the paper.** Under sup_NO, DBSH still
+sanitizes each chosen sequence completely, so it may use more masks than needed to drop below σ.
+That is the behaviour of DBSH according to the paper, not a defect of the transfer; the version
+before this date had "adjusted" DBSH for sup_NO in a way the authors never did.
 
-**Bằng chứng** (`src/test/java/hidenosp/baseline/DbshPaperExampleTest.java`): tái tạo đúng Hình
-1(e) (T1: 0; T5: 0, 1; T6: 0; T8: 1), khoảng cách 5 và năm tác dụng phụ ⟨a,c⟩, ⟨a,e⟩, ⟨d,f⟩,
-⟨d,g⟩, ⟨f,g⟩ của Hình 4(b), và Cost của Ví dụ 1 (bằng 2). Thêm hai ca tự dựng: vị trí ngoài đường
-đầy đủ bị bỏ qua; Cost chia trọng số cho số mẫu được phủ. Tiêm 7 lỗi (Exclude chỉ đếm chuỗi được
-giữ, Cost tăng dần, hoà tăng dần, Cost không chia, không bỏ qua vị trí ngoài đường, hoà theo lần
-xuất hiện cuối, dừng khi một mẫu của S_j hết): bắt được 7/7. Chạy lại 10 lỗi tiêm của SBSH sau khi
-tách phần dùng chung: vẫn bắt được 10/10.
+**Evidence** (`src/test/java/hidenosp/baseline/DbshPaperExampleTest.java`): reproduces exactly Fig.
+1(e) (T1: 0; T5: 0, 1; T6: 0; T8: 1), distance 5 and the five side effects ⟨a,c⟩, ⟨a,e⟩, ⟨d,f⟩,
+⟨d,g⟩, ⟨f,g⟩ of Fig. 4(b), and the Cost of Example 1 (equal to 2). Plus two hand-built cases: a
+position outside the complete paths is skipped; Cost divides the weight by the number of patterns
+covered. 7 faults injected (Exclude counting only the kept sequences, ascending Cost, ascending ties,
+Cost not divided, positions outside the paths not skipped, ties by last occurrence, stopping when one
+pattern of S_j is gone): 7/7 caught. The 10 SBSH fault injections rerun after splitting off the
+shared part: still 10/10 caught.
 
-**Còn lại:** HHA của [R20] chưa được đối chiếu từng dòng với bài gốc theo cách tương tự.
+**Remaining:** HHA of [R20] has not yet been checked line by line against the original paper in the
+same way.

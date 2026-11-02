@@ -38,8 +38,8 @@ CLEAN = {
     "config/settings.yaml": "row_1_thresholds:\n  sigma: [100, 200]   # design doc section 11.5\n",
     "config/table.tsv": "key\tlabel\ncut-hide\tCUT-HIDE\n",
     ".gitignore": "target/\n",
-    "README.md": "# M\u1eabu nh\u1ea1y c\u1ea3m\n"
-                  "T\u00e0i li\u1ec7u vi\u1ebft b\u1eb1ng ti\u1ebfng Vi\u1ec7t.\n",
+    "README.md": "# Notes\nSee config/quyet_dinh_can_chot.md and \u00a711.8 of the design; "
+                  "the library folder ThuVienBaiBao/14_PPDM_AnGiauLuatNhayCam keeps its name.\n",
     "results-probe/probe_log.txt": "chay xong, khong co loi\n",
     "target/ignored.py": "# khong duoc theo doi: git bo qua tep nay\n",
 }
@@ -111,7 +111,7 @@ def test_clean_repository_passes_and_counts_its_files():
         code, output = run(root)
         assert code == 0, output
         assert "Checked %d code files" % N_CLEAN_CODE in output, output
-        assert "1 documentation files" in output and "1 run-output files" in output, output
+        assert "Checked 1 documentation files" in output and "1 run-output files" in output, output
     finally:
         shutil.rmtree(root)
 
@@ -261,6 +261,14 @@ def test_the_word_rule_is_off_only_for_the_two_files_that_hold_the_lists():
         shutil.rmtree(root)
     expect_caught("tools/check_english_test.py", "# m\u1eabu\n", "diacritic")
     expect_caught("tools/check_english.py", "# see \u00a73.1\n", "numbering")
+
+
+def test_diacritic_in_a_documentation_file():
+    expect_caught("docs/notes.md", "# Notes\nT\u00e0i li\u1ec7u.\n", "diacritic")
+
+
+def test_diacritic_in_the_name_of_a_documentation_file():
+    expect_caught("docs/ghi_ch\u00fa.md", "# Notes\n", "diacritic")
 
 
 def test_measure_counts_a_word_in_the_documentation():

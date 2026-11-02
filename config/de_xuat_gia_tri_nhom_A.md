@@ -1,257 +1,263 @@
-# Đề xuất giá trị cụ thể cho nhóm A (các quyết định chặn SC3)
+# Proposed concrete values for group A (the decisions that block SC3)
 
-Đây là **đề xuất để bạn duyệt**, chưa phải bản chốt. Chốt là việc ghi con số vào
-`preregistration.md` và `protocol.yaml` rồi commit — lịch sử git làm bằng chứng thời điểm.
+> **Language.** This file is the English translation of the Vietnamese original as of commit `ea39da4`
+> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
+> decimal commas are written as decimal points.
 
-Mỗi mục có bốn phần: **Đề xuất**, **Căn cứ** (số đo được, không phải cảm tính), **Cái giá phải
-trả**, và **Cách bác bỏ** — điều gì xảy ra thì con số này sai.
+This is a **proposal for the author to approve**, not yet the locked version. Locking means writing the numbers into
+`preregistration.md` and `protocol.yaml` and then committing — the git history serves as evidence of the time.
 
----
-
-## Một cảnh báo phải đọc trước
-
-Quy tắc 2.4.7 tồn tại để ngăn việc chốt ngưỡng **sau khi** đã thấy chiều của kết quả so sánh.
-Tôi phải khai: trong quá trình dựng khung, tôi **đã chạy và đã thấy** một lần SC3 dò tìm trên dữ
-liệu tổng hợp thay thế, trong đó CUT-HIDE mất ít mẫu hơn các baseline.
-
-Vì vậy mọi con số dưới đây được neo vào **thang của dữ liệu** (cỡ của `F_σ`, khoảng trống trong
-phân bố ρ_rep), **không** neo vào khoảng cách đã quan sát giữa các phương pháp. Nếu bạn muốn tệp
-chốt trước sạch tuyệt đối về mặt phương pháp luận, hãy tự chọn lại δ_L và biên tương đương; hai
-con số đó là chỗ duy nhất mà việc đã thấy chiều có thể gây thiên lệch.
-
-Cách hiệu chỉnh **hợp lệ** nếu muốn căn cứ thực nghiệm cho δ_L: chạy **một** phương pháp duy
-nhất trên nhiều tập nhạy cảm và đo độ tản của Lost giữa các tập. Việc đó không lộ chiều so sánh,
-và δ_L nên ít nhất bằng độ tản đó.
+Each item has four parts: **Proposal**, **Grounds** (measured numbers, not intuition), **The cost to
+pay**, and **How to refute** — what would have to happen for this number to be wrong.
 
 ---
 
-## A1. Ngưỡng hiệu ứng thực tiễn δ_L cho H2
+## A warning to read first
 
-**Đề xuất.** Đổi đại lượng của H2 sang **Lost tương đối**:
+Rule 2.4.7 exists to prevent locking a threshold **after** having seen the direction of the comparison result.
+The proposer must declare: while building the framework, the proposer **ran and saw** one exploratory SC3 run on substitute
+synthetic data, in which CUT-HIDE lost fewer patterns than the baselines.
 
-> Lost_rel = Lost / |F_σ(D) \ 𝒮⁺|, với mẫu số là số mẫu phổ biến không nhạy cảm trước khi sửa.
+Therefore every number below is anchored to the **scale of the data** (the size of `F_σ`, the gaps in
+the distribution of ρ_rep), **not** to the distance observed between methods. If the author wants the pre-locked
+file to be absolutely clean methodologically, the author chooses δ_L and the equivalence margin again; those two
+numbers are the only place where having seen the direction could introduce a bias.
 
-và đặt **δ_L = 0,02** (hai điểm phần trăm). Báo cáo kèm trung vị hiệu **tuyệt đối** trong cùng
-bảng, để người đọc thấy cả hai thang.
-
-**Căn cứ.** |F_σ| đo được trải hơn một bậc: 51 (dna σ=2500) tới 672 (msnbc σ=1000). Một δ_L
-tuyệt đối duy nhất sẽ nghiêm với dna (2 mẫu = 4% của 51) và lỏng với msnbc (2 mẫu = 0,3% của
-672); trộn hai thang đó vào một phép Wilcoxon là trộn hai thứ khác nhau. Chuẩn hoá theo
-|F_σ \ 𝒮⁺| làm đơn vị lặp đồng nhất. Mẫu số này **đã có sẵn** ở cột `frequent_before` của SC3,
-không phải sửa mã đo.
-
-Vì sao 0,02 chứ không nhỏ hơn: 1 điểm phần trăm trên dna (|F| ≈ 51) chưa tới nửa mẫu, nên mọi
-chênh lệch dù chỉ một mẫu cũng vượt ngưỡng và δ_L mất hết tác dụng. 0,02 tương ứng khoảng 1 mẫu
-trên dna và 6,5 mẫu trên msnbc σ=2000.
-
-**KHÔNG dùng** Σ|S| hay |R|\* làm mẫu số: Σ|S| là mẫu số của DistR, |R|\* là cận số lần che.
-Lấy chúng làm mẫu số cho Lost là lỗi định nghĩa.
-
-**Cái giá.** Trên bộ có |F_σ| nhỏ, một mẫu chênh lệch đã gần chạm ngưỡng, nên H2 dễ được ủng hộ
-ở đó hơn. Phải nói rõ điều này trong phần hạn chế.
-
-**Cách bác bỏ.** Nếu độ tản của Lost giữa các tập nhạy cảm (đo bằng một phương pháp duy nhất)
-lớn hơn 2 điểm phần trăm, thì δ_L = 0,02 nằm trong nhiễu và phải nâng lên.
+The **valid** way to calibrate, if an empirical ground for δ_L is wanted: run **one** single method
+on many sensitive sets and measure the spread of Lost across the sets. This does not reveal the direction of
+the comparison, and δ_L should be at least as large as that spread.
 
 ---
 
-## A2. Ngưỡng ρ_rep và β, đơn vị áp, và vùng ở giữa
+## A1. Practical-effect threshold δ_L of H2
 
-**Đề xuất.**
+**Proposal.** Change the quantity of H2 to **relative Lost**:
 
-| Mục | Giá trị |
+> Lost_rel = Lost / |F_σ(D) \ 𝒮⁺|, where the denominator is the number of non-sensitive frequent patterns before sanitisation.
+
+and set **δ_L = 0.02** (two percentage points). Report the median **absolute** difference alongside in the
+same table, so that the reader sees both scales.
+
+**Grounds.** The measured |F_σ| spans more than an order of magnitude: 51 (dna σ=2500) to 672 (msnbc σ=1000). A
+single absolute δ_L would be strict on dna (2 patterns = 4% of 51) and lax on msnbc (2 patterns = 0.3% of
+672); mixing those two scales in one Wilcoxon test mixes two different things. Normalising by
+|F_σ \ 𝒮⁺| makes the units of replication homogeneous. This denominator is **already available** in the SC3 column
+`frequent_before`, with no change to the measuring code.
+
+Why 0.02 and not smaller: 1 percentage point on dna (|F| ≈ 51) is less than half a pattern, so any
+difference, even of only one pattern, exceeds the threshold and δ_L loses all its effect. 0.02 corresponds to
+about 1 pattern on dna and 6.5 patterns on msnbc σ=2000.
+
+**Do NOT use** Σ|S| or |R|\* as the denominator: Σ|S| is the denominator of DistR, |R|\* is the bound on the
+number of masks. Taking them as the denominator of Lost is a definitional error.
+
+**Cost.** On a dataset with a small |F_σ|, a difference of one pattern already comes close to the threshold,
+so H2 is more easily supported there. This must be stated clearly in the limitations section.
+
+**How to refute.** If the spread of Lost across sensitive sets (measured with one single method)
+is larger than 2 percentage points, then δ_L = 0.02 lies within the noise and must be raised.
+
+---
+
+## A2. Thresholds of ρ_rep and β, the unit they apply to, and the band in between
+
+**Proposal.**
+
+| Item | Value |
 |---|---|
-| Đơn vị áp ngưỡng | **cấu hình** = bộ ba (bộ dữ liệu, σ, [g⁻,g⁺]) |
-| Thống kê gộp | **trung vị** ρ_rep trên các mẫu nhạy cảm đã lấy của cấu hình đó |
-| Nhóm chính | ρ_rep ≥ **0,20** |
-| Đối chứng suy biến | ρ_rep ≤ **0,05** |
-| Vùng giữa | 0,05 < ρ_rep < 0,20 → **nhóm trung gian**, không dùng kiểm H2/H3 |
-| Ràng buộc có hiệu lực | β ≥ **0,20** |
-| Đối chứng ràng buộc suy biến | β ≤ **0,05** |
+| Unit the thresholds apply to | **configuration** = the triple (dataset, σ, [g⁻,g⁺]) |
+| Summary statistic | **median** ρ_rep over the sampled sensitive patterns of that configuration |
+| Main group | ρ_rep ≥ **0.20** |
+| Degenerate control | ρ_rep ≤ **0.05** |
+| Band in between | 0.05 < ρ_rep < 0.20 → **intermediate group**, not used to test H2/H3 |
+| Constraint effective | β ≥ **0.20** |
+| Degenerate-constraint control | β ≤ **0.05** |
 
-**Căn cứ.**
+**Grounds.**
 
-*Đơn vị là cấu hình, không phải bộ.* Trên msnbc σ=2000, đổi khoảng cách từ [0,1] sang [0,10]
-làm β tụt từ 0,432 xuống 0,043. β là tính chất của **cấu hình**, không của bộ dữ liệu; gán vai
-cho "bộ" sẽ gán sai. Cùng lẽ đó, ρ_rep trên msnbc đi từ 0,190 (σ=1000) lên 0,395 (σ=5000).
+*The unit is the configuration, not the dataset.* On msnbc σ=2000, changing the gap from [0,1] to [0,10]
+drops β from 0.432 to 0.043. β is a property of the **configuration**, not of the dataset; assigning roles
+to a "dataset" would assign them wrongly. By the same reasoning, ρ_rep on msnbc goes from 0.190 (σ=1000) up to
+0.395 (σ=5000).
 
-*Vì sao 0,05 và 0,20.* Trung bình ρ_rep đo được, sắp tăng dần: 0,000 (sign, bms1), 0,008 (fifa),
-0,052 (bike), 0,153 (bible), 0,154 (leviathan), 0,323 (msnbc), 0,786 (dna). Có **hai khe thưa**
-trong phân bố: giữa 0,052 và 0,153, và giữa 0,154 và 0,323. Hai ngưỡng đề xuất rơi vào hai khe
-đó, nên kết luận phân nhóm **không nhạy** với việc xê dịch ngưỡng vài phần trăm. Chọn ngưỡng ở
-chỗ thưa của phân bố là chọn theo nguyên tắc; nó khác hẳn với chọn con số vừa đủ để bộ mình thích
-lọt vào nhóm mình muốn.
+*Why 0.05 and 0.20.* The measured mean ρ_rep, sorted in increasing order: 0.000 (sign, bms1), 0.008 (fifa),
+0.052 (bike), 0.153 (bible), 0.154 (leviathan), 0.323 (msnbc), 0.786 (dna). There are **two sparse gaps**
+in the distribution: between 0.052 and 0.153, and between 0.154 and 0.323. The two proposed thresholds fall into
+those two gaps, so the grouping conclusion is **insensitive** to shifting the thresholds by a few percent. Choosing
+thresholds in the sparse parts of the distribution is choosing by principle; it is entirely different from choosing a
+number just large enough for a favoured dataset to land in the group one wants.
 
-*Vì sao trung vị chứ không trung bình.* Phân bố lệch: msnbc [0,3] σ=2000 trải 0,106–0,575. Trung
-vị tính được ngay từ CSV của SC2 (mỗi dòng một mẫu), không phải sửa mã.
+*Why the median and not the mean.* The distribution is skewed: msnbc [0,3] σ=2000 spans 0.106–0.575. The
+median can be computed directly from the SC2 CSV (one row per pattern), with no change to the code.
 
-**Hệ quả với dữ liệu hiện có.** Nhóm chính: **dna, msnbc**. Trung gian: **bible, leviathan**.
-Suy biến: **sign, bms1, fifa, bike**.
+**Consequence for the current data.** Main group: **dna, msnbc**. Intermediate: **bible, leviathan**.
+Degenerate: **sign, bms1, fifa, bike**.
 
-**Cái giá.** Nhóm trung gian không dùng để kiểm giả thuyết, nên công sức chạy bible và leviathan
-chỉ đổi lấy một hình minh hoạ rằng ρ_rep và β độc lập nhau. Đó vẫn là điều đáng in.
+**Cost.** The intermediate group is not used to test hypotheses, so the effort of running bible and leviathan
+buys only an illustration that ρ_rep and β are independent of each other. That is still worth printing.
 
-**Cách bác bỏ.** Nếu một bộ mới rơi đúng vào 0,05–0,20 và quan trọng với bài, thì ranh giới đang
-cắt qua chỗ đông chứ không phải chỗ thưa, và phải chọn lại.
-
----
-
-## A4. Biên tương đương cho Lost và SupDist
-
-**Đề xuất.** Lost: **±0,02** trên thang tương đối, tức bằng đúng δ_L. SupDist: **±0,01**.
-
-**Căn cứ.** Biên tương đương nên bằng ngưỡng hiệu ứng; nếu đặt nhỏ hơn sẽ sinh một vùng rộng mà
-kết quả "vừa không khác biệt vừa không tương đương", tức không kết luận được gì. SupDist vốn là
-tỉ số không thứ nguyên trong [0,1] nên ±0,01 là một điểm phần trăm độ hỗ trợ.
-
-**Thành thật:** ±0,01 cho SupDist là con số **yếu căn cứ nhất** trong toàn bộ tài liệu này. Nên
-đặt lại sau khi đo độ tản của SupDist bằng một phương pháp duy nhất (xem cách hiệu chỉnh hợp lệ
-ở đầu tệp).
+**How to refute.** If a new dataset falls right into 0.05–0.20 and matters to the paper, then the boundary is
+cutting through a dense region rather than a sparse one, and must be chosen again.
 
 ---
 
-## A5. Nghĩa định lượng của "gần 1" trong H3
+## A4. Equivalence margins for Lost and SupDist
 
-**Đề xuất.** Với tỉ số r = |R| / |R|\*: "vượt 1" nghĩa là **r ≥ 1,10**; "gần 1" nghĩa là
-**r ≤ 1,05**. Vùng 1,05 < r < 1,10 không kết luận.
+**Proposal.** Lost: **±0.02** on the relative scale, i.e. exactly equal to δ_L. SupDist: **±0.01**.
 
-**Căn cứ.** H3 cần một vùng đệm giữa hai vế, nếu không thì mọi r > 1 dù nhỏ đều thành "vượt".
-5% và 10% là hai mốc quy ước, và vùng đệm giữ cho hai vế loại trừ nhau.
+**Grounds.** The equivalence margin should equal the effect threshold; setting it smaller would create a wide
+region where a result is "neither different nor equivalent", i.e. nothing can be concluded. SupDist is by nature
+a dimensionless ratio in [0,1], so ±0.01 is one percentage point of support.
 
-**Cảnh báo.** Trên lần chạy dò, mọi phương pháp chính xác **và** heuristic đều cho r = 1,000 —
-tức không baseline nào dùng thừa lần che. Nếu điều đó lặp lại trên dữ liệu thật thì **H3 không
-bác bỏ được**, và đó là một kết quả âm phải báo cáo chứ không phải một lỗi. Nên chuẩn bị trước
-câu chữ cho tình huống này.
-
----
-
-## A6. Họ baseline đưa vào hiệu chỉnh Holm
-
-**Đề xuất.** Họ = **bốn** baseline tầng (b): HHA, DBSH, SBSH-r1, SBSH-rmax. Hiệu chỉnh Holm
-trên 4 phép so. Tầng (a) (occurrence, HH, HR, RH, RR) báo cáo **mô tả**, không kiểm định.
-
-**Căn cứ.** Tầng (a) tồn tại để chứng minh bài toán không tự giải (§11.3), không phải để kiểm
-giả thuyết; đưa chúng vào họ chỉ làm Holm khắt khe hơn mà không thêm nội dung. Họ 4 giữ được lực
-kiểm định cho đúng những so sánh mà bài dựa vào.
-
-**Cách bác bỏ.** Nếu SBSH không đối chiếu được với [R3] (xem A25) thì họ còn 2, phải khai lại
-trước khi chạy.
+**To be honest:** ±0.01 for SupDist is the **least grounded** number in this whole document. It should be
+reset after measuring the spread of SupDist with one single method (see the valid way to calibrate
+at the top of the file).
 
 ---
 
-## A7. Ghép cặp H2: cùng ngân sách |R| hay tự chọn
+## A5. The quantitative meaning of "near 1" in H3
 
-**Đề xuất.** Chạy mỗi phương pháp **tới khi HF = 0** với |R| tự chọn, rồi tách hai chế độ báo cáo:
+**Proposal.** For the ratio r = |R| / |R|\*: "above 1" means **r ≥ 1.10**; "near 1" means
+**r ≤ 1.05**. The region 1.05 < r < 1.10 gives no conclusion.
 
-1. Thực thể mà mọi phương pháp dùng **cùng** |R|: đưa vào Wilcoxon cho H2.
-2. Thực thể mà baseline dùng **nhiều hơn**: báo cáo riêng dạng cặp (|R|, Lost), không kiểm định.
-   Kết luận ở đó mạnh hơn và không cần thống kê: baseline vừa che nhiều hơn vừa mất nhiều hơn.
+**Grounds.** H3 needs a buffer between its two parts; otherwise every r > 1, however small, becomes "above".
+5% and 10% are two conventional marks, and the buffer keeps the two parts mutually exclusive.
 
-**Căn cứ.** So Lost ở hai mức |R| khác nhau là so hai thứ khác nhau. Ép baseline dừng đúng ở
-|R|\* thì nó chưa ẩn xong (HF > 0), và khi đó Lost cũng không so được. Tách hai chế độ là cách
-duy nhất giữ cho mỗi so sánh có nghĩa.
+**Warning.** On the probe run, every exact **and** heuristic method gave r = 1.000 —
+i.e. no baseline used extra masks. If that repeats on real data, **H3 cannot be
+rejected**, and that is a negative result to be reported, not an error. The wording for this
+situation should be prepared in advance.
 
 ---
 
-## A8. Quy ước tính Wilcoxon
+## A6. The family of baselines in the Holm correction
 
-**Đề xuất.**
+**Proposal.** The family = the **four** tier (b) baselines: HHA, DBSH, SBSH-r1, SBSH-rmax. Holm correction
+over 4 comparisons. Tier (a) (occurrence, HH, HR, RH, RR) is reported **descriptively**, not tested.
 
-| Mục | Giá trị |
+**Grounds.** Tier (a) exists to show that the problem does not solve itself (§11.3), not to test
+hypotheses; putting them into the family only makes Holm stricter without adding content. A family of 4 keeps the
+statistical power for exactly the comparisons the paper relies on.
+
+**How to refute.** If SBSH cannot be checked against [R3] (see A25), the family drops to 2, and this must be
+declared again before running.
+
+---
+
+## A7. Pairing for H2: the same |R| budget, or each method choosing its own
+
+**Proposal.** Run each method **until HF = 0** with |R| of its own choosing, then keep two reporting modes apart:
+
+1. Instances where every method uses the **same** |R|: put into the Wilcoxon test for H2.
+2. Instances where a baseline uses **more**: reported separately as pairs (|R|, Lost), not tested.
+   The conclusion there is stronger and needs no statistics: the baseline both masks more and loses more.
+
+**Grounds.** Comparing Lost at two different levels of |R| compares two different things. Forcing a baseline to
+stop exactly at |R|\* leaves it not yet done hiding (HF > 0), and then Lost cannot be compared either. Separating
+the two modes is the only way to keep each comparison meaningful.
+
+---
+
+## A8. Wilcoxon conventions
+
+**Proposal.**
+
+| Item | Value |
 |---|---|
-| Hiệu đúng bằng 0 | dùng **Pratt** (giữ lại khi xếp hạng), không dùng Wilcoxon gốc (loại bỏ) |
-| Hạng buộc | hạng trung bình |
-| Cỡ hiệu ứng | rank-biserial = (W⁺ − W⁻)/(W⁺ + W⁻) |
-| Mức ý nghĩa | α = 0,05, một phía |
+| Difference exactly 0 | use **Pratt** (kept when ranking), not the original Wilcoxon (dropped) |
+| Tied ranks | average rank |
+| Effect size | rank-biserial = (W⁺ − W⁻)/(W⁺ + W⁻) |
+| Significance level | α = 0.05, one-sided |
 
-**Căn cứ.** Lost là số nguyên nhỏ nên số cặp có hiệu bằng 0 sẽ nhiều. Wilcoxon gốc vứt chúng đi,
-làm mất thông tin "hai phương pháp ngang nhau" và thổi phồng cỡ hiệu ứng. Pratt giữ lại.
+**Grounds.** Lost is a small integer, so there will be many pairs with a difference of 0. The original Wilcoxon
+throws them away, losing the information "the two methods are equal" and inflating the effect size. Pratt keeps them.
 
 ---
 
-## A9. Quy tắc loại trừ thực thể hỏng
+## A9. The exclusion rule for failed instances
 
-**Đề xuất.**
+**Proposal.**
 
-| Tình huống | Xử lý |
+| Situation | Handling |
 |---|---|
-| Một phương pháp còn HF > 0 | **loại cặp** khỏi Wilcoxon, đếm và báo cáo riêng |
-| Quá giới hạn thời gian | loại cặp, ghi mã OT, báo cáo số ca |
-| Hết bộ nhớ | loại cặp, ghi mã OOM, báo cáo số ca |
-| Tỉ lệ thực thể bị loại > 10% | **không kết luận** H2, và nói rõ vì sao |
+| A method still has HF > 0 | **drop the pair** from Wilcoxon, count and report separately |
+| Time limit exceeded | drop the pair, record code OT, report the number of cases |
+| Out of memory | drop the pair, record code OOM, report the number of cases |
+| Share of excluded instances > 10% | **no conclusion** on H2, and say why |
 
-**Căn cứ.** Lost chỉ so được khi cả hai phương pháp đã ẩn xong; gán một giá trị phạt cho ca
-HF > 0 là bịa dữ liệu. Ngưỡng 10% để tránh việc loại trừ âm thầm biến mẫu thành mẫu chọn lọc.
-
----
-
-## A10. Số lần chạy lại của các phương pháp ngẫu nhiên
-
-**Đề xuất.** HH, HR, RH, RR và GA: **10 lần** với 10 hạt giống khai trước (2026 tới 2035), lấy
-**trung vị** Lost và |R| làm giá trị của phương pháp đó trên thực thể đó.
-
-**Căn cứ.** Đây là đại lượng **bất biến theo máy**, nên bảng số lần lặp của §11.6 không áp dụng
-— bảng đó dành cho đo thời gian. Biến thiên quan sát được ở RR là lớn (|R| = 31 và 151 trên hai
-tập nhạy cảm khác nhau của cùng một cấu hình), nên một lần chạy là không đủ.
+**Grounds.** Lost can be compared only when both methods have finished hiding; assigning a penalty value to a
+case with HF > 0 is fabricating data. The 10% threshold is there to prevent exclusion from silently turning the
+sample into a selected sample.
 
 ---
 
-## A11. Lưới σ, ℓ_max, khoảng cách và |𝒮|
+## A10. The number of reruns of the randomized methods
 
-**Đề xuất.**
+**Proposal.** HH, HR, RH, RR and GA: **10 runs** with 10 pre-declared seeds (2026 to 2035), taking the
+**median** Lost and |R| as the value of that method on that instance.
 
-| Tham số | Giá trị |
+**Grounds.** This is a **machine-invariant** quantity, so the repetition table of §11.6 does not apply
+— that table is for timing. The observed variation of RR is large (|R| = 31 and 151 on two different
+sensitive sets of the same configuration), so one run is not enough.
+
+---
+
+## A11. The grid of σ, ℓ_max, gaps and |𝒮|
+
+**Proposal.**
+
+| Parameter | Value |
 |---|---|
-| ℓ_max | **4** cho mọi bộ |
-| Khoảng cách | [0,1] và [0,3] cho mọi bộ; thêm [0,10] cho dna và msnbc |
+| ℓ_max | **4** for every dataset |
+| Gap | [0,1] and [0,3] for every dataset; plus [0,10] for dna and msnbc |
 | σ dna | **2500, 4000** |
 | σ msnbc | **1000, 2000, 5000** |
 | σ leviathan / bible | 500 / 2000 |
 | σ sign / bms1 / fifa | 200 / 100 / 3000 |
-| \|𝒮\| | {1, 5, 10, 20}, mỗi ô 20 tập (đúng §11.5) |
+| \|𝒮\| | {1, 5, 10, 20}, 20 sets per cell (as in §11.5) |
 
-**Căn cứ.**
+**Grounds.**
 
-*ℓ_max = 4* là bắt buộc để khớp §11.5, vốn nói tập nhạy cảm lấy mẫu **độ dài 2–4**. Với ℓ_max = 3
-thì mẫu độ dài 4 không nằm trong F_σ nên không lấy mẫu được — đây là một chỗ **không nhất quán
-đang có** giữa §11.5 và mọi lần chạy SC2 đã làm. Chi phí đo được:
+*ℓ_max = 4* is required to match §11.5, which says the sensitive sets draw patterns **of length 2–4**. With
+ℓ_max = 3, patterns of length 4 are not in F_σ and so cannot be drawn — this is an **existing
+inconsistency** between §11.5 and every SC2 run done so far. The measured cost:
 
-| Bộ | σ | \|F\| ở ℓ_max=3 | giây | \|F\| ở ℓ_max=4 | giây |
+| Dataset | σ | \|F\| at ℓ_max=3 | seconds | \|F\| at ℓ_max=4 | seconds |
 |---|---|---|---|---|---|
-| dna | 2500 | 51 | 0,7 | 67 | 1,2 |
-| msnbc | 2000 | 327 | 8,7 | 556 | 20,1 |
-| leviathan | 500 | 106 | 53,6 | 108 | 60,6 |
-| bms1 | 100 | 652 | 6,7 | 662 | 7,4 |
-| sign | 200 | 95 | 2,8 | 95 | 2,7 |
-| fifa | 3000 | 78 | 123,0 | 79 | 123,6 |
+| dna | 2500 | 51 | 0.7 | 67 | 1.2 |
+| msnbc | 2000 | 327 | 8.7 | 556 | 20.1 |
+| leviathan | 500 | 106 | 53.6 | 108 | 60.6 |
+| bms1 | 100 | 652 | 6.7 | 662 | 7.4 |
+| sign | 200 | 95 | 2.8 | 95 | 2.7 |
+| fifa | 3000 | 78 | 123.0 | 79 | 123.6 |
 
-Rẻ ở **cả sáu bộ**, không có ngoại lệ. Trên sign không có mẫu độ dài 4 nào phổ biến (95 → 95),
-fifa chỉ thêm một mẫu và tốn thêm 0,6 giây, leviathan thêm hai mẫu. Lý do: chi phí khai phá dồn
-ở **mức 2**, nơi số ứng viên là |L₁| × |Σ|; tới mức 4 thì phép chiếu đã thu hẹp tập chuỗi phải
-quét nên mở rộng gần như miễn phí. Chỗ đắt nhất là fifa với |Σ| = 2990, và cái đắt đó đã phải trả
-ngay ở ℓ_max = 3.
+Cheap on **all six datasets**, with no exception. On sign no pattern of length 4 is frequent (95 → 95),
+fifa adds only one pattern and costs 0.6 seconds more, leviathan adds two patterns. Reason: the mining cost is
+concentrated at **level 2**, where the number of candidates is |L₁| × |Σ|; by level 4 the projection has already
+narrowed the set of sequences to scan, so the extension is almost free. The most expensive case is fifa with
+|Σ| = 2990, and that cost is already paid at ℓ_max = 3.
 
-Nói cách khác, lý lẽ "ℓ_max = 3 cho rẻ" không đứng: nó không rẻ hơn đáng kể, mà lại làm mẫu độ
-dài 4 của §11.5 không lấy mẫu được.
+In other words, the argument "ℓ_max = 3 for cheapness" does not stand: it is not significantly cheaper, yet it
+makes the length-4 patterns of §11.5 impossible to draw.
 
-*σ cho dna phải ≥ 2500.* Với |Σ| = 4 và ℓ_max = 3, không gian mẫu chỉ có 4 + 16 + 64 = 84 mẫu,
-và ở σ = 1000 thì |F_σ| = **84**, tức **mọi** mẫu đều phổ biến. Khi F_σ là toàn bộ không gian,
-Ghost không thể khác 0 và Lost mất ý nghĩa so sánh. Ở σ = 2500 thì |F_σ| = 51 trên 84, là tập con
-thực sự. Đây là ràng buộc chỉ lộ ra khi đo, không suy được từ thiết kế.
+*σ for dna must be ≥ 2500.* With |Σ| = 4 and ℓ_max = 3, the pattern space has only 4 + 16 + 64 = 84 patterns,
+and at σ = 1000, |F_σ| = **84**, i.e. **every** pattern is frequent. When F_σ is the whole space,
+Ghost cannot differ from 0 and Lost loses its comparative meaning. At σ = 2500, |F_σ| = 51 out of 84, a proper
+subset. This is a constraint that only shows up when measured, and cannot be derived from the design.
 
-*Quy tắc chung để chọn σ:* giữ |F_σ| trong khoảng [50, 700] **và** F_σ là tập con thực sự của
-không gian mẫu. Mọi σ đề xuất ở trên đều thoả.
+*General rule for choosing σ:* keep |F_σ| within [50, 700] **and** F_σ a proper subset of the
+pattern space. Every σ proposed above satisfies this.
 
 ---
 
-## A12. Ngưỡng ε của B_ε
+## A12. The ε threshold of B_ε
 
-**Đề xuất.** **ε = 0,5** cho mọi bộ. Thêm một phép kiểm chạy-thời-gian: nếu B_ε rỗng thì **báo
-lỗi**, không chạy tiếp im lặng.
+**Proposal.** **ε = 0.5** for every dataset. Add a run-time check: if B_ε is empty, **report
+an error** rather than silently continuing.
 
-**Căn cứ.** Số đo |B_ε| theo ε:
+**Grounds.** Measured |B_ε| by ε:
 
-| Cấu hình | \|F_σ\| | ε=0,05 | ε=0,10 | ε=0,25 | ε=0,50 | ε=1,00 |
+| Configuration | \|F_σ\| | ε=0.05 | ε=0.10 | ε=0.25 | ε=0.50 | ε=1.00 |
 |---|---|---|---|---|---|---|
 | dna [0,3] σ=1000 | 84 | 0 | **0** | 1 | 6 | 20 |
 | dna [0,3] σ=2500 | 51 | 7 | 19 | 24 | 36 | 42 |
@@ -262,140 +268,141 @@ lỗi**, không chạy tiếp im lặng.
 | leviathan [0,3] σ=500 | 106 | 6 | 11 | 26 | 42 | 66 |
 | bms1 [0,3] σ=100 | 652 | 34 | 81 | 159 | 248 | 349 |
 
-ε = 0,10 cho B_ε **rỗng** trên dna [0,3] σ=1000. Khi đó bước 4 gán trọng số 0 cho mọi vị trí và
-CUT-HIDE âm thầm tụt về biến thể trọng số đều — tức biến thể đang được so ở SC7 lại chính là
-biến thể đang chạy, mà không ai biết. Đây là loại lỗi im lặng nguy hiểm nhất.
+ε = 0.10 gives an **empty** B_ε on dna [0,3] σ=1000. Then step 4 assigns weight 0 to every position and
+CUT-HIDE silently falls back to the uniform-weight variant — i.e. the variant being compared against in SC7 is
+the very variant being run, without anyone knowing. This is the most dangerous kind of silent error.
 
-ε = 1,00 kéo 24–54% của F_σ vào băng; khi đó trọng số 1/(sup − σ + 1) gần như đều và cụm từ "mẫu
-gần biên" mất nghĩa.
+ε = 1.00 pulls 24–54% of F_σ into the band; then the weight 1/(sup − σ + 1) is almost uniform and the phrase
+"patterns near the border" loses its meaning.
 
-ε = 0,50 cho |B_ε| từ 6 tới 248, tức 7–38% của F_σ, và **không rỗng ở mọi cấu hình đã đo**.
+ε = 0.50 gives |B_ε| from 6 to 248, i.e. 7–38% of F_σ, and is **non-empty in every configuration measured**.
 
-**Cái giá.** B_ε lớn làm bước 3 đắt hơn; §12 đã lường rủi ro này và §11.1 bắt SC6 báo cáo phân rã
-chi phí theo pha. Với ε = 0,5, |B_ε| lớn nhất đo được là 248 (bms1, một bộ đối chứng).
-
----
-
-## A13. Các phân vị sup_NO để lấy mẫu tập nhạy cảm
-
-**Đề xuất.** Năm phân vị của sup_NO trên các ứng viên: **p10, p30, p50, p70, p90**; mỗi phân vị
-**4 tập** → đúng 20 tập mỗi ô như §11.5 đòi. Ứng viên là mẫu độ dài 2–4 trong F_σ.
-
-**Căn cứ.** §11.5 đã chốt 20 tập mỗi ô; năm phân vị đều nhau là cách chia đơn giản nhất cho ra
-đúng 20 và phủ cả hai đầu phân bố. Số đo cho thấy phân bố sup_NO rất lệch (msnbc σ=2000: p10 =
-2313, p50 = 3800, p90 = 13368, lớn nhất 115180), nên lấy mẫu chỉ ở đầu trên sẽ cho một bức tranh
-sai.
+**Cost.** A large B_ε makes step 3 more expensive; §12 already anticipated this risk and §11.1 requires SC6 to
+report the cost broken down by phase. With ε = 0.5, the largest |B_ε| measured is 248 (bms1, a control dataset).
 
 ---
 
-## A14. Phạm vi μ(P)
+## A13. The sup_NO percentiles that draw the sensitive sets
 
-**Đề xuất.** Giữ **μ(P) = 1** làm phạm vi chính của bài. Mẫu lặp mục báo cáo ở một mục riêng,
-dùng cận P3 và bộ giải chính xác trên thực thể nhỏ, và khai rõ độ khó là câu hỏi mở.
+**Proposal.** Five percentiles of sup_NO over the candidates: **p10, p30, p50, p70, p90**; **4 sets**
+per percentile → exactly 20 sets per cell, as §11.5 requires. The candidates are the patterns of length 2–4 in F_σ.
 
-**Căn cứ.** Trên dna, ρ_rep của mẫu **không lặp mục** là 0,806, **cao hơn** mẫu lặp mục 0,773.
-Nghĩa là giữ phạm vi hẹp không còn phải trả giá bằng việc bỏ chế độ dữ liệu lặp cao — đó chính là
-lý do đợt bổ sung dữ liệu được làm. Trong phạm vi μ = 1, P1, P2, P6(b) và lời giải chính xác đều
-đứng vững.
-
-**Kèm theo.** Trọng số nút khi μ ≥ 2 giữ nguyên cách cài hiện tại (gán trọng số vị trí cho mọi
-nút của vị trí đó) và **khai là lựa chọn cài đặt**, vì P1 và P2 vốn không áp dụng ở đó.
-
-**Cái giá.** Phải khai trong phần hạn chế rằng trên msnbc thì lớp lặp mục mới là lớp lặp nhiều
-(0,434 so với 0,218), kèm đúng con số, để không bị đọc là né tránh.
+**Grounds.** §11.5 already locked 20 sets per cell; five evenly spaced percentiles are the simplest split that gives
+exactly 20 and covers both ends of the distribution. The measurements show that the sup_NO distribution is very
+skewed (msnbc σ=2000: p10 = 2313, p50 = 3800, p90 = 13368, maximum 115180), so sampling only at the upper end
+would give a wrong picture.
 
 ---
 
-## A15. Nhiều mẫu nhạy cảm dưới ngưỡng cơ sở dữ liệu
+## A14. The scope of μ(P)
 
-**Đề xuất.** **Làm tròn quy hoạch tuyến tính** làm phương án chính. GA lai là dự phòng, chỉ dùng
-nếu LP không cài kịp. Nếu cả hai không kịp thì **thu phạm vi bài về |𝒮| = 1** và khai rõ, thay vì
-đưa GA vào mà tham số chưa chốt.
+**Proposal.** Keep **μ(P) = 1** as the main scope of the paper. Patterns with repeated items are reported in a
+separate section, using bound P3 and the exact solver on small instances, and the hardness is stated as an open question.
 
-**Căn cứ.** LP làm tròn có **bảo đảm hệ số ℓ_max**, đã nằm trong danh sách đóng góp §7. GA không
-có bảo đảm nào và cần chốt trước ít nhất bốn tham số (cỡ quần thể, số thế hệ, tỉ lệ lai ghép, tỉ
-lệ đột biến), tức làm phình thêm bề mặt quyết định đúng lúc đang cần thu hẹp nó.
+**Grounds.** On dna, the ρ_rep of patterns **without repeated items** is 0.806, **higher than** that of patterns
+with repeated items, 0.773. This means that keeping the scope narrow no longer costs giving up the high-repetition
+data regime — which is exactly why the round of additional data was done. In the scope μ = 1, P1, P2, P6(b) and
+the exact solution all hold.
 
----
+**In addition.** Node weights when μ ≥ 2 keep the current implementation (assign the weight of a position to every
+node of that position) and are **declared as an implementation choice**, since P1 and P2 do not apply there in the
+first place.
 
-## A16. "Thực thể nhỏ" và biến thể ILP làm mốc
-
-**Đề xuất.** "Thực thể nhỏ" = thực thể có **≤ 64 vị trí ứng viên** và cần **≤ 12 lần che** —
-đúng hai hằng số `MAX_CANDIDATES` và `MAX_MASKS` đã cài trong `IlpExact`. Ghi hai con số này vào
-bảng giao thức. SC3 lấy **`exact-minR-minLost`** làm mốc tối ưu.
-
-**Căn cứ.** Định nghĩa "nhỏ" bằng đúng giới hạn mà mã cưỡng chế thì không có khoảng cách giữa
-tuyên bố và cài đặt. Chọn biến thể `minLost` vì mục tiêu thứ hai của §2 là số mẫu mất;
-`exact-minR` chỉ trả lời "cần bao nhiêu lần che", mà câu đó P1 đã trả lời bằng công thức.
+**Cost.** It must be stated in the limitations section that on msnbc it is the repeated-item class that repeats more
+(0.434 against 0.218), with the exact numbers, so as not to be read as evasion.
 
 ---
 
-## A17. Gắn phiên bản mã vào tệp kết quả
+## A15. Several sensitive patterns under a database threshold
 
-**Đề xuất.** Thêm một script bọc đặt `HIDENOSP_REVISION = git rev-parse HEAD` rồi mới gọi
-`Runner`. **Chạy lại** mọi lần chạy lấy số vào bài. Số hiện có (đóng dấu `unversioned`) giữ
-nguyên làm số dò tìm.
+**Proposal.** **Linear programming rounding** as the main option. The hybrid GA is the fallback, used only
+if LP cannot be implemented in time. If neither is ready in time, **narrow the scope of the paper to |𝒮| = 1** and
+state it clearly, instead of bringing in GA with its parameters not yet locked.
 
-**Căn cứ.** Mọi tệp kết quả hiện tại mang dấu `unversioned`, nên không truy được về commit nào
-sinh ra chúng. Quy tắc 2.6.8 đòi dấu định danh lần chạy; dấu đó đang thiếu đúng thành phần quan
-trọng nhất.
-
----
-
-## A23. Gộp vào một lần chốt
-
-**Đề xuất.** Ghi toàn bộ A1–A17 vào `preregistration.md` và `protocol.yaml` trong **một commit
-duy nhất**, trước lần chạy SC3 đầu tiên không kèm `--probe`. Cùng commit đó chuyển kết luận
-go/no-go của §12a từ "tạm" sang chính thức.
+**Grounds.** LP rounding has an **ℓ_max factor guarantee**, already in the list of contributions in §7. GA has
+no guarantee and needs at least four parameters locked in advance (population size, number of generations,
+crossover rate, mutation rate), i.e. it inflates the decision surface exactly when it needs narrowing.
 
 ---
 
-## A24. Baseline tầng (a) khi tập nhạy cảm có nhiều hơn một mẫu
+## A16. "Small instance" and the ILP variant taken as the reference
 
-**Đề xuất.** Mở rộng `RandomMasking`: chọn vị trí ngẫu nhiên trong **hợp** các Nettree của mọi
-mẫu nhạy cảm, dừng khi mọi mẫu đạt ngưỡng. Giữ nguyên bốn tổ hợp HH/HR/RH/RR.
+**Proposal.** "Small instance" = an instance with **≤ 64 candidate positions** that needs **≤ 12 masks** —
+exactly the two constants `MAX_CANDIDATES` and `MAX_MASKS` implemented in `IlpExact`. Write these two numbers
+into the protocol table. SC3 takes **`exact-minR-minLost`** as the optimal reference.
 
-**Căn cứ.** Hiện `RandomMasking` ném lỗi khi |𝒮| > 1, nên ô |𝒮| ∈ {5, 10, 20} của §11.5 không có
-đối chứng tầng (a). Cách mở rộng trên là cách đơn giản nhất còn giữ đúng tinh thần "đối chứng
-tầm thường".
-
----
-
-## A25. Đối chiếu SBSH với [R3]
-
-**Đề xuất.** Mở [R3], đối chiếu Thuật toán 2 và 3. Cho tới khi đối chiếu xong, **không đưa số
-SBSH vào bài**. Nếu không đối chiếu được thì bỏ SBSH khỏi bảng và khai lý do, đồng thời sửa họ
-Holm ở A6 từ 4 xuống 2.
-
-**Căn cứ.** Bản cài hiện tại dựng lại từ mô tả trong bản thiết kế, không từ thuật toán gốc. Ba
-chỗ cần kiểm: nhãn xám bao gồm những gì, bán kính tính theo cung hay theo vị trí, và C-PA với
-C-SA khác gì Replace thường. In một con số mang tên SBSH mà chưa đối chiếu là gán cho [R3] một
-kết quả có thể không phải của họ.
+**Grounds.** Defining "small" by exactly the limits the code enforces leaves no gap between the claim
+and the implementation. The `minLost` variant is chosen because the second objective of §2 is the number of lost patterns;
+`exact-minR` only answers "how many masks are needed", a question P1 already answers with a formula.
 
 ---
 
-## Bảng tóm tắt để chép vào preregistration
+## A17. Stamping the code version into the result files
 
-| Mã | Tham số | Giá trị đề xuất |
+**Proposal.** Add a wrapper script that sets `HIDENOSP_REVISION = git rev-parse HEAD` before calling
+`Runner`. **Rerun** every run whose numbers go into the paper. The existing numbers (stamped `unversioned`) are
+kept as exploratory numbers.
+
+**Grounds.** Every current result file carries the stamp `unversioned`, so it cannot be traced back to the commit
+that produced it. Rule 2.6.8 requires a run identifier stamp; that stamp is missing exactly its most
+important component.
+
+---
+
+## A23. Bundling everything into one lock
+
+**Proposal.** Write all of A1–A17 into `preregistration.md` and `protocol.yaml` in **one single
+commit**, before the first SC3 run without `--probe`. The same commit turns the go/no-go conclusion
+of §12a from "provisional" into official.
+
+---
+
+## A24. Tier (a) baselines when a sensitive set holds more than one pattern
+
+**Proposal.** Extend `RandomMasking`: choose a random position in the **union** of the Nettrees of all
+sensitive patterns, stopping when every pattern reaches the threshold. Keep the four combinations HH/HR/RH/RR unchanged.
+
+**Grounds.** Currently `RandomMasking` throws an error when |𝒮| > 1, so the cells |𝒮| ∈ {5, 10, 20} of §11.5 have no
+tier (a) control. The extension above is the simplest one that still keeps the spirit of a "trivial
+control".
+
+---
+
+## A25. Checking SBSH against [R3]
+
+**Proposal.** Open [R3] and check Algorithms 2 and 3. Until the check is done, **put no SBSH
+number into the paper**. If the check cannot be done, drop SBSH from the table and state the reason, and at the
+same time change the Holm family in A6 from 4 down to 2.
+
+**Grounds.** The current implementation was rebuilt from the description in the research design, not from the
+original algorithm. Three points need checking: what the grey label covers, whether the radius is counted in arcs or
+in positions, and how C-PA and C-SA differ from plain Replace. Printing a number labelled SBSH before the check
+attributes to [R3] a result that may not be theirs.
+
+---
+
+## Summary table to copy into preregistration
+
+| Code | Parameter | Proposed value |
 |---|---|---|
-| A1 | δ_L (trên Lost tương đối) | 0,02 |
-| A2 | đơn vị áp ngưỡng | cấu hình (bộ, σ, khoảng cách) |
-| A2 | thống kê gộp | trung vị |
-| A2 | ρ_rep nhóm chính / suy biến | ≥ 0,20 / ≤ 0,05 |
-| A2 | β có hiệu lực / suy biến | ≥ 0,20 / ≤ 0,05 |
-| A4 | biên tương đương Lost / SupDist | ±0,02 / ±0,01 |
-| A5 | H3: vượt 1 / gần 1 | r ≥ 1,10 / r ≤ 1,05 |
-| A6 | họ Holm | 4 baseline tầng (b) |
-| A7 | ghép cặp H2 | chạy tới HF = 0; kiểm định chỉ trên thực thể cùng \|R\| |
-| A8 | hiệu bằng 0 / hạng buộc / cỡ hiệu ứng | Pratt / hạng trung bình / rank-biserial |
-| A9 | loại trừ | HF>0, OT, OOM loại cặp; >10% thì không kết luận |
-| A10 | lần chạy lại phương pháp ngẫu nhiên | 10, hạt giống 2026–2035, lấy trung vị |
+| A1 | δ_L (on relative Lost) | 0.02 |
+| A2 | unit the thresholds apply to | configuration (dataset, σ, gap) |
+| A2 | summary statistic | median |
+| A2 | ρ_rep main group / degenerate | ≥ 0.20 / ≤ 0.05 |
+| A2 | β effective / degenerate | ≥ 0.20 / ≤ 0.05 |
+| A4 | equivalence margin Lost / SupDist | ±0.02 / ±0.01 |
+| A5 | H3: above 1 / near 1 | r ≥ 1.10 / r ≤ 1.05 |
+| A6 | Holm family | 4 tier (b) baselines |
+| A7 | H2 pairing | run until HF = 0; test only on instances with the same \|R\| |
+| A8 | difference of 0 / tied ranks / effect size | Pratt / average rank / rank-biserial |
+| A9 | exclusion | HF>0, OT, OOM drop the pair; >10% means no conclusion |
+| A10 | reruns of randomized methods | 10, seeds 2026–2035, take the median |
 | A11 | ℓ_max | 4 |
-| A11 | khoảng cách | [0,1], [0,3]; thêm [0,10] cho dna và msnbc |
+| A11 | gap | [0,1], [0,3]; plus [0,10] for dna and msnbc |
 | A11 | σ dna / msnbc | 2500, 4000 / 1000, 2000, 5000 |
-| A12 | ε của B_ε | 0,5, kèm kiểm B_ε không rỗng |
-| A13 | phân vị lấy mẫu | p10, p30, p50, p70, p90; 4 tập mỗi phân vị |
-| A14 | phạm vi μ(P) | 1 |
-| A15 | nhiều mẫu, ngưỡng CSDL | LP làm tròn; GA dự phòng |
-| A16 | thực thể nhỏ / mốc ILP | ≤64 ứng viên và ≤12 lần che / exact-minR-minLost |
-| A17 | phiên bản mã | HIDENOSP_REVISION từ git, chạy lại số vào bài |
+| A12 | ε of B_ε | 0.5, with a check that B_ε is non-empty |
+| A13 | sampling percentiles | p10, p30, p50, p70, p90; 4 sets per percentile |
+| A14 | scope of μ(P) | 1 |
+| A15 | several patterns, database threshold | LP rounding; GA as fallback |
+| A16 | small instance / ILP reference | ≤64 candidates and ≤12 masks / exact-minR-minLost |
+| A17 | code version | HIDENOSP_REVISION from git, rerun the numbers that go into the paper |

@@ -1,602 +1,606 @@
-# Những thứ còn phải quyết định
+# What is still to be decided
 
-Sinh tự động từ một đợt rà 10 nguồn của dự án: `config/preregistration.md`, `config/protocol.yaml`,
-`RUNBOOK.md`, bản thiết kế nghiên cứu ở bốn góc (cổng và rủi ro, lý thuyết, thiết kế thực nghiệm,
-khoảng trống), kết quả giai đoạn 1, mã nguồn (`TODO(code)` và `UnsupportedOperationException`),
-và bản thảo. Mỗi điểm đã được thẩm định lại bằng một lượt rà độc lập: mở tệp được dẫn, kiểm trích dẫn,
-và grep cả tài liệu lẫn mã nguồn xem chỗ khác đã quyết chưa. Một lượt phê bình rà cuối để tìm
-loại quyết định mà không ai chạm tới.
+> **Language.** This file is the English translation of the Vietnamese original as of commit `ea39da4`
+> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
+> decimal commas are written as decimal points.
 
-89 điểm qua thẩm định, cộng 12 điểm do phê bình bổ sung, gộp lại thành 29 chủ đề dưới đây.
+Merged automatically from a review of 10 sources of the project: `config/preregistration.md`, `config/protocol.yaml`,
+`RUNBOOK.md`, the research design from four angles (gates and risks, theory, experimental design,
+gaps), the results of phase 1, the source code (`TODO(code)` and `UnsupportedOperationException`),
+and the manuscript. Every item was checked again by an independent review: open the file cited, check the quotation,
+and grep both the documents and the source code for whether it has already been decided elsewhere. A final critical pass
+looked for kinds of decision that nobody had touched.
 
-**Cách đọc.** Nhóm A chặn SC3: chưa chốt thì mọi lần chạy SC3 phải kèm `--probe` và số không
-dùng được trong bài. Nhóm B chặn lúc nộp chứ không chặn chạy.
+89 items passed the check, plus 12 items added by the critical pass, merged into the 29 themes below.
+
+**How to read it.** Group A blocks SC3: until they are locked, every SC3 run must carry `--probe` and its numbers
+cannot be used in the paper. Group B blocks submission, not the runs.
 
 ---
 
-## A. Chặn SC3 — phải chốt trước khi chạy so sánh chính
+## A. Blocks SC3 — to be locked before the main comparison runs
 
-### A1. Ngưỡng hiệu ứng thực tiễn δ_L cho H2
+### A1. Practical-effect threshold δ_L of H2
 
-Nguồn nêu: `design-experiment`, `design-gate`, `paper`, `phase1-findings`, `preregistration`, `runbook`
+Raised by: `design-experiment`, `design-gate`, `paper`, `phase1-findings`, `preregistration`, `runbook`
 
-**Giá trị và đơn vị của ngưỡng thực tiễn δ_L**
+**Value and unit of the practical threshold δ_L**
 
-Điền δ_L vào preregistration.md dòng 22 và quyết đơn vị. Phải chọn giữa: (i) hằng số tuyệt đối tính bằng số mẫu không nhạy cảm bị mất — đơn giản nhưng vô nghĩa ở đầu nhỏ và bất khả thi ở đầu lớn, vì quy mô thực thể trải năm bậc (min_masks từ 1 tới 87.107 trên bảng SC2); (ii) tỉ lệ theo |F_σ(D)| trước khi sửa, tức δ_L là phần trăm số mẫu phổ biến bị mất; (iii) tỉ lệ theo chính Lost của baseline, tức hiệu tương đối. Lưu ý ràng buộc: đơn vị lặp của H2 là (bộ, σ, tập nhạy cảm) nên δ_L phải là ngưỡng áp trên trung vị của hiệu qua các thực thể cỡ khác nhau — nếu chọn (i) thì phải nói rõ vì sao trộn được các thực thể đó vào một phép Wilcoxon. SC3 chạy sau khi điền; cột frequent_before/frequent_after của SC3 cho đúng mẫu số nếu chọn (ii). Người viết quyết.
+Fill δ_L into preregistration.md line 22 and decide the unit. One must choose between: (i) an absolute constant counted in lost non-sensitive patterns — simple but meaningless at the small end and infeasible at the large end, because the scale of the instances spans five orders of magnitude (min_masks from 1 to 87,107 in the SC2 table); (ii) a share of |F_σ(D)| before sanitisation, i.e. δ_L is the percentage of frequent patterns lost; (iii) a share of the baseline's own Lost, i.e. a relative difference. Note the constraint: the unit of replication of H2 is (dataset, σ, sensitive set), so δ_L must be a threshold applied to the median of the difference across instances of different sizes — if (i) is chosen, it must be stated clearly why those instances can be mixed in one Wilcoxon test. SC3 runs after it is filled in; the frequent_before/frequent_after columns of SC3 give the right denominator if (ii) is chosen. The author decides.
 
-**Ngưỡng hiệu ứng thực tiễn δ_L**
+**Practical-effect threshold δ_L**
 
-Dien BA con so vao preregistration.md, khong phai mot: (a) delta_L o dong 22, don vi = so mau khong nhay cam bi mat (so nguyen tuyet doi hay ti le tren |F_sigma(D) \ S+|? phai noi ro don vi truoc khi chon so); (b) bien tuong duong cho Lost o dong 40; (c) bien tuong duong cho SupDist o dong 41 (don vi khac han -- SupDist la ti so khong thu nguyen). Can cu kha di de chon delta_L: hoac lay tu bien do cua Lost tren chay do tim trong results-probe/SC3_*.csv, hoac neo vao M2 cua [R20]/[R3] (ti le mau pho bien bi mat) de so sanh duoc. AI QUYET: nguoi viet. GAP: truoc SC3 -- quy tac 2.4.7 cam chay SC3 lay ket qua khi chua chot; H2 khong kiem dinh duoc va moi ket luan 'khong khac biet' deu khong phat bieu duoc.
+Fill THREE numbers into preregistration.md, not one: (a) delta_L at line 22, unit = number of lost non-sensitive patterns (absolute integer or share of |F_sigma(D) \ S+|? the unit must be stated before choosing the number); (b) the equivalence margin for Lost at line 40; (c) the equivalence margin for SupDist at line 41 (an entirely different unit -- SupDist is a dimensionless ratio). Possible grounds for choosing delta_L: either take it from the range of Lost in the exploratory runs in results-probe/SC3_*.csv, or anchor it to M2 of [R20]/[R3] (share of frequent patterns lost) so that it is comparable. WHO DECIDES: the author. URGENT: before SC3 -- rule 2.4.7 forbids running SC3 to take results while it is not locked; H2 cannot be tested and no 'no difference' conclusion can be stated.
 
-**Chốt ngưỡng hiệu ứng thực tiễn δ_L cho H2**
+**Lock the practical-effect threshold δ_L of H2**
 
-Chọn δ_L theo một trong hai dạng, và ghi căn cứ: (a) số tuyệt đối — δ_L = k mẫu không nhạy cảm bị mất (k nguyên, ví dụ 1, 2 hay 5), hoặc (b) tỉ lệ trên |F_σ(D) \ 𝒮⁺| tức cột frequent_before của SC3 (ví dụ 1% hay 2%), rồi quy về số nguyên cho từng thực thể. Lưu ý dạng (b) làm δ_L đổi theo thực thể nên Wilcoxon phải chạy trên hiệu đã trừ δ_L riêng từng thực thể. Không dùng Σ|S| hay |R|* làm mẫu số — Σ|S| là mẫu số của DistR, |R|* là cận số lần che. Căn cứ nên lấy từ quy mô thực đo: probe SC3 (results-probe/SC3_20260912-102131) có frequent_before = 84 và Lost của baseline trong khoảng 1–5, nên δ_L = 1 gần như chắc chắn quá lỏng còn δ_L = 10 sẽ làm H2 không thể bác bỏ.
+Choose δ_L in one of two forms, and record the grounds: (a) an absolute number — δ_L = k lost non-sensitive patterns (k an integer, e.g. 1, 2 or 5), or (b) a share of |F_σ(D) \ 𝒮⁺|, i.e. the frequent_before column of SC3 (e.g. 1% or 2%), then converted to an integer for each instance. Note that form (b) makes δ_L vary with the instance, so Wilcoxon must run on the differences after subtracting each instance's own δ_L. Do not use Σ|S| or |R|* as the denominator — Σ|S| is the denominator of DistR, |R|* is the bound on the number of masks. The grounds should come from the measured scale: the SC3 probe (results-probe/SC3_20260912-102131) has frequent_before = 84 and the baseline's Lost in the range 1–5, so δ_L = 1 is almost certainly too lax while δ_L = 10 would make H2 impossible to reject.
 
-**Câu kết quả thực nghiệm trong tóm tắt**
+**The sentence on the experimental results in the abstract**
 
-Câu kết quả duy nhất trong tóm tắt lấy đại lượng nào và trên kịch bản nào: (i) hiệu Lost giữa CUT-HIDE và baseline mạnh nhất ở cùng |R| và HF=0, đơn vị là số mẫu không nhạy cảm bị mất, lấy từ SC3 trên nhóm chính (dna_mt745584, msnbc); (ii) tỉ số |R|/|R|* của baseline tầng (b) khi đổi mục tiêu sang sup_NO, đơn vị là tỉ số không thứ nguyên, từ SC3; hay (iii) side-effects (%) và distance (%) so với HHA/DBSH/SBSH trên bài toán cũ, từ SC8. Lưu ý (i) chỉ viết được sau khi δ_L trong preregistration.md được điền và SC3 chạy không cờ --probe; (iii) hiện bị chặn vì SC8 chưa cài và trucks chưa có nguồn.
+Which quantity, and on which scenario, the only result sentence in the abstract uses: (i) the Lost difference between CUT-HIDE and the strongest baseline at the same |R| and HF=0, unit = number of lost non-sensitive patterns, taken from SC3 on the main group (dna_mt745584, msnbc); (ii) the ratio |R|/|R|* of the tier (b) baselines when the objective is switched to sup_NO, unit = dimensionless ratio, from SC3; or (iii) side-effects (%) and distance (%) against HHA/DBSH/SBSH on the old problem, from SC8. Note that (i) can only be written after δ_L in preregistration.md is filled in and SC3 runs without the --probe flag; (iii) is currently blocked because SC8 is not implemented and trucks has no source.
 
-**Biên tương đương cho Lost và SupDist**
+**Equivalence margins for Lost and SupDist**
 
-Điền hai biên tương đương ở preregistration.md §2 và quyết dạng của chúng. Lost: chọn biên tuyệt đối tính bằng số mẫu phổ biến bị mất, hay biên tỉ lệ theo |F_σ(D)|. SupDist: SupDist đã là đại lượng chuẩn hoá hay chưa cần kiểm trong Metrics trước khi quyết — nếu nó là tổng chênh lệch sup_NO thô thì biên tuyệt đối vô dụng vì sup_NO trải từ 100 (sign) tới 89.106 (msnbc), phải dùng biên tỉ lệ theo sup_NO của chính cấu hình. Hai biên này phải nhất quán với δ_L ở điểm [6]: không được δ_L theo tỉ lệ còn biên tương đương theo tuyệt đối. Chốt trước khi nhìn bất kỳ số SC3 nào. Người viết quyết.
+Fill in the two equivalence margins in preregistration.md §2 and decide their form. Lost: choose an absolute margin counted in lost frequent patterns, or a margin proportional to |F_σ(D)|. SupDist: whether SupDist is already a normalised quantity must be checked in Metrics before deciding — if it is a raw sum of sup_NO differences, an absolute margin is useless because sup_NO spans from 100 (sign) to 89,106 (msnbc), and a margin proportional to the configuration's own sup_NO must be used. These two margins must be consistent with δ_L in item [6]: δ_L may not be proportional while the equivalence margin is absolute. Lock before looking at any SC3 number. The author decides.
 
-**Chốt δ_L, ngưỡng hiệu ứng thực tiễn của H2**
+**Lock δ_L, the practical-effect threshold of H2**
 
-Chọn δ_L là số nguyên tuyệt đối bao nhiêu mẫu không nhạy cảm bị mất (ví dụ δ_L = 1, 2 hay 5), HAY chuyển sang dạng tương đối (tỉ lệ trên |F_σ(D) \ 𝒮⁺|, vì |F_σ| của dna, msnbc, bms1 chênh nhau hàng chục lần nên một ngưỡng tuyệt đối không so được giữa các bộ)? Căn cứ sẵn có để neo giá trị: số dò tìm ở §7 dòng 45 (Lost trung bình 6,02 của HHA so với 1,95 của lát cắt có trọng số trên 60 CSDL tổng hợp, tức hiệu ~4). Người viết quyết, ghi vào preregistration.md dòng 22 kèm một câu căn cứ, rồi commit trước lần chạy SC3 đầu tiên không kèm --probe.
+Choose δ_L as an absolute integer, how many lost non-sensitive patterns (e.g. δ_L = 1, 2 or 5), OR switch to a relative form (a share of |F_σ(D) \ 𝒮⁺|, because |F_σ| of dna, msnbc, bms1 differ by tens of times, so an absolute threshold is not comparable across datasets)? Grounds already available to anchor the value: the exploratory numbers in §7 line 45 (mean Lost 6.02 for HHA against 1.95 for the weighted cut on 60 synthetic databases, i.e. a difference of ~4). The author decides, records it in preregistration.md line 22 with one sentence of grounds, then commits before the first SC3 run without --probe.
 
-**Biên tương đương cho Lost**
+**Equivalence margin for Lost**
 
-Chốt biên tương đương cho Lost: ± bao nhiêu mẫu không nhạy cảm bị mất (cùng đơn vị đếm với Lost ở doc §2 dòng 61), và nói rõ quan hệ với δ_L của H2: đặt bằng δ_L (một con số duy nhất, dễ biện minh, nhưng khi đó 'hơn δ_L' và 'không khác quá δ_L' dùng chung một ranh giới nên mọi cặp sẽ rơi đúng một trong hai kết luận), hay đặt độc lập và nhỏ hơn δ_L (chặt hơn, nhưng phải nêu căn cứ riêng). Cần trước khi chạy SC3 lấy số vào bài, vì §2 cấm thay bằng 'p > 0,05' nên không có biên này thì mọi cặp so sánh hoà ở SC3 treo không kết luận được.
+Lock the equivalence margin for Lost: ± how many lost non-sensitive patterns (the same counting unit as Lost in doc §2 line 61), and state its relation to δ_L of H2: set it equal to δ_L (a single number, easy to justify, but then 'more than δ_L' and 'not differing by more than δ_L' share one boundary, so every pair falls into exactly one of the two conclusions), or set it independently and smaller than δ_L (stricter, but its own grounds must be stated). Needed before running SC3 to take numbers into the paper, because §2 forbids replacing it with 'p > 0.05', so without this margin every comparison pair that comes out even in SC3 hangs without a conclusion.
 
-**Nội dung tệp preregistration.md**
+**The content of the preregistration.md file**
 
-Điền bốn ô null còn lại của config/preregistration.md rồi commit (git log làm bằng chứng thời điểm): δ_L với đơn vị là số mẫu không nhạy cảm bị mất trên một thực thể (bộ dữ liệu, σ, tập nhạy cảm), biên tương đương cho Lost, biên tương đương cho SupDist, và hai ngưỡng phân nhóm ρ_rep của H3 (trùng điểm [8]). Bộ phép kiểm không phải quyết, đã chốt ở §10. Người viết quyết; đây là chặn cứng của SC3.
+Fill in the four remaining null cells of config/preregistration.md, then commit (the git log as evidence of the time): δ_L with the unit = number of lost non-sensitive patterns per instance (dataset, σ, sensitive set), the equivalence margin for Lost, the equivalence margin for SupDist, and the two grouping thresholds ρ_rep of H3 (same as item [8]). The set of tests is not to be decided, it is already locked in §10. The author decides; this is a hard block on SC3.
 
-> Chặn: Không chạy được SC3 để lấy số vào bài: giả thuyết H2 phát biểu là "trung vị hiệu lớn hơn δ_L", không có δ_L thì Wilcoxon một phía không có giả thuyết vô hiệu để kiểm. Theo chính tệp này, mọi lần chạy SC3 buộc phải kèm cờ --probe và kết quả rơi vào results-probe/, không dùng được trong bài.
+> Blocks: SC3 cannot be run to take numbers into the paper: hypothesis H2 states "the median difference exceeds δ_L", and without δ_L the one-sided Wilcoxon test has no null hypothesis to test. According to this very file, every SC3 run must carry the --probe flag and its results fall into results-probe/, unusable in the paper.
 
-### A2. Ngưỡng ρ_rep và β để phân nhóm: giá trị, đơn vị áp, và vùng ở giữa
+### A2. Thresholds of ρ_rep and β for the groups: values, the unit they apply to, and the band in between
 
-Nguồn nêu: `design-experiment`, `design-gap`, `design-gate`, `design-theory`, `paper`, `phase1-findings`, `phebinh`, `preregistration`, `protocol`, `runbook`  (có điểm do lượt phê bình bổ sung)
+Raised by: `design-experiment`, `design-gap`, `design-gate`, `design-theory`, `paper`, `phase1-findings`, `phebinh`, `preregistration`, `protocol`, `runbook`  (includes items added by the critical pass)
 
-**Ngưỡng phân nhóm ρ_rep và β cho đối chứng suy biến**
+**Grouping thresholds ρ_rep and β for the degenerate control**
 
-Chon hai so thuc trong [0,1] de dien vao preregistration.md dong 28-29: (a) nguong rho_rep tach nhom chinh; (b) nguong beta cho doi chung rang buoc. Pho rho_rep trung binh da do: dna 0,786 | msnbc 0,323 | leviathan 0,154 | bible 0,153 | bike 0,052 | fifa 0,008 | sign 0,000 | bms1 0,000. Moi lat cat trong khoang (0,052; 0,153) giu dung {dna, msnbc} lam nhom chinh; lat cat trong (0,008; 0,052) keo them leviathan/bible/bike vao. Phai chon mot con so, khong duoc de khoang trong giua nguong chinh va nguong suy bien (dong 28 dang co hai o rieng: neu dat khac nhau thi cac bo roi vao khe giua se khong co vai). AI QUYET: nguoi viet -- day la cam ket phuong phap luan, KHONG duoc suy nguoc tu mong muon bo nao vao nhom nao (quy tac 2.3.10). GAP: truoc SC3 -- moi lan chay SC3 hien phai kem --probe, bang H3 va muc 'chung minh dong gop' [2.2.4] treo lai cho den khi tep nay duoc dien va commit.
+Choose two real numbers in [0,1] to fill into preregistration.md lines 28-29: (a) the rho_rep threshold separating the main group; (b) the beta threshold for the constraint control. The measured spectrum of mean rho_rep: dna 0.786 | msnbc 0.323 | leviathan 0.154 | bible 0.153 | bike 0.052 | fifa 0.008 | sign 0.000 | bms1 0.000. Every cut in the interval (0.052; 0.153) keeps exactly {dna, msnbc} as the main group; a cut in (0.008; 0.052) pulls in leviathan/bible/bike as well. One number must be chosen; no empty band may be left between the main threshold and the degenerate threshold (line 28 currently has two separate cells: if they are set differently, the datasets that fall into the slot between them have no role). WHO DECIDES: the author -- this is a methodological commitment, it may NOT be inferred backwards from the wish that a given dataset go into a given group (rule 2.3.10). URGENT: before SC3 -- every SC3 run must currently carry --probe, and the H3 table and the item 'demonstrating the contribution' [2.2.4] hang until this file is filled in and committed.
 
-**Số phận SC8 khi không có bộ TRUCKS**
+**What becomes of SC8 without the TRUCKS dataset**
 
-Quyết hình hài SC8 khi không có TRUCKS. Ba phương án: (i) chạy trên hai bộ MSN(=msnbc) và BMS-WebView-1 với đúng ngưỡng ψ của [R3], khai thẳng trong bài rằng TRUCKS không có nguồn công khai; (ii) thay TRUCKS bằng một bộ khác và khai là thay — bike đã bị chính khao_sat §4 xếp "không dùng" vì ρ_rep 0,052 và chuỗi trung bình 7,3, nên nếu chọn hướng này phải tìm bộ khác; (iii) bỏ SC8. Phương án (iii) đắt vì §12a đã đặt SC8 làm chân dự phòng cho toàn bài ("bài có thể đứng ngay cả khi bỏ phần bài toán mới: chỉ mục cắt Nettree và CUT-HIDE cải thiện được bài toán cũ"). Việc chặn trước cả ba: phải mở lại toàn văn [R3] và [R20] để chép đúng tên bản dữ liệu và giá trị ψ — tra cứu công khai đã thử và không dựng lại được. Và SC8 vẫn chưa cài (Sc8OriginalProblem.java là TODO), nên quyết định này chưa gấp bằng nhóm ngưỡng, nhưng phải xong trước khi viết phần thực nghiệm.
+Decide the shape of SC8 without TRUCKS. Three options: (i) run on the two datasets MSN(=msnbc) and BMS-WebView-1 with exactly the ψ thresholds of [R3], stating plainly in the paper that TRUCKS has no public source; (ii) replace TRUCKS with another dataset and declare the replacement — bike has already been classed "not used" by khao_sat §4 itself because of ρ_rep 0.052 and a mean sequence length of 7.3, so if this direction is chosen another dataset must be found; (iii) drop SC8. Option (iii) is expensive because §12a has made SC8 the fallback leg of the whole paper ("the paper can stand even if the part on the new problem is dropped: the Nettree cut index and CUT-HIDE can improve the old problem"). What blocks all three first: the full texts of [R3] and [R20] must be reopened to copy the exact name of the data version and the value of ψ — a public lookup has been tried and could not reconstruct them. And SC8 is still not implemented (Sc8OriginalProblem.java is a TODO), so this decision is less urgent than the group of thresholds, but it must be done before writing the experimental section.
 
-**H3 trên nhóm suy biến là kiểm định hay đồng nhất thức**
+**H3 on the degenerate group: a test or an identity**
 
-Quyết cách phát biểu nửa sau của H3 ("tỉ số |R|/|R|* gần 1 trên nhóm suy biến"). Hai lựa chọn: (i) giữ nguyên như một giả thuyết được kiểm định — phải chấp nhận rằng trên sign và bms1 tỉ số bằng 1 do định nghĩa (sup_NO ≡ sup_seq ở đúng 40/40 dòng), nên phản biện chỉ ra được là vòng quanh; (ii) tách làm hai: nửa đầu (tỉ số > 1 trên nhóm ρ_rep cao) giữ là giả thuyết, nửa sau hạ thành PHÉP KIỂM CÀI ĐẶT đặt cạnh SC1, báo cáo một lần và không đưa vào bảng so sánh theo quy tắc 2.4.2. Kèm theo phải quyết ngay: nửa sau có được đếm là một phép kiểm trong hiệu chỉnh Holm hay không — nếu đếm mà nó là đồng nhất thức thì số phép kiểm bị thổi lên và p hiệu chỉnh sai. Lưu ý không gộp fifa (ρ_rep 0,005–0,013) và bible/leviathan (0,15) vào lập luận đồng nhất thức: chỉ sign và bms1 mới đúng bằng 0. Người viết quyết, trước khi chạy SC3 vì nó đổi số phép kiểm.
+Decide how to state the second half of H3 ("ratio |R|/|R|* near 1 on the degenerate group"). Two options: (i) keep it as a hypothesis that is tested — one must accept that on sign and bms1 the ratio equals 1 by definition (sup_NO ≡ sup_seq on exactly 40/40 rows), so a reviewer can point out that it is circular; (ii) split it in two: the first half (ratio > 1 on the high-ρ_rep group) stays a hypothesis, the second half is demoted to an IMPLEMENTATION CHECK placed beside SC1, reported once and not put in the comparison table, under rule 2.4.2. Along with this, decide immediately whether the second half counts as a test in the Holm correction — if it counts while being an identity, the number of tests is inflated and the adjusted p is wrong. Note: do not lump fifa (ρ_rep 0.005–0.013) and bible/leviathan (0.15) into the identity argument: only sign and bms1 are exactly 0. The author decides, before running SC3, because it changes the number of tests.
 
-**Lưới σ và độ rộng khoảng cách đưa vào bài**
+**The grid of σ and gap widths that goes into the paper**
 
-Dien protocol.yaml dong_1_theo_bo cho tung bo thuc su dung: sigma (ca tuyet doi lan ti le theo tong sup_NO, theo ghi_chu dong 22-24), l_max (mac dinh ma = 3, xac nhan hay doi), [g-, g+], va |S| (mac dinh ma [1,5,10,20], 20 tap moi o). Hai cau hoi con phai tra loi truoc do: (a) don vi lap cua H2 la mot bo ba (bo, sigma, tap nhay cam) -- vay bao nhieu cau hinh moi bo vao bang chinh? msnbc dang co 5, dna 3, cac bo khac 1-2, chenh lech nay lam lech trong so Wilcoxon; (b) khoang cach: SC2 cho thay rho_rep va beta keo nguoc nhau ([0,1] cho beta cao, [0,10] cho rho_rep cao, [0,3] can bang) -- chot mot khoang cach chung cho moi bo hay bao cao ca luoi? AI QUYET: nguoi viet, dua tren bang SC2 da co (khong can chay them de quyet, chi can chay them de lam day o). GAP: truoc SC3, vi phan nhom o diem [0] chot theo cau hinh chu khong theo bo.
+Fill in protocol.yaml row_1 per_dataset for each dataset actually used: sigma (both absolute and as a share of the total sup_NO, per the note on lines 22-24), l_max (code default = 3, confirm or change), [g-, g+], and |S| (code default [1,5,10,20], 20 sets per cell). Two questions must still be answered first: (a) the unit of replication of H2 is a triple (dataset, sigma, sensitive set) -- so how many configurations per dataset go into the main table? msnbc currently has 5, dna 3, the other datasets 1-2, and this imbalance skews the weights of the Wilcoxon test; (b) gap: SC2 shows that rho_rep and beta pull in opposite directions ([0,1] gives high beta, [0,10] gives high rho_rep, [0,3] is balanced) -- lock one common gap for every dataset, or report the whole grid? WHO DECIDES: the author, based on the SC2 table already available (no further runs are needed to decide, only to fill the cells). URGENT: before SC3, because the grouping in item [0] is locked per configuration, not per dataset.
 
-**Bộ dữ liệu thực nghiệm mới là ứng viên**
+**Candidate new experimental datasets**
 
-Ba việc rời nhau, đừng gộp. (1) Điền hai ngưỡng phân nhóm vào preregistration.md trước khi chạy SC3: ρ_rep ≥ ? là nhóm chính và ρ_rep ≤ ? là đối chứng suy biến (dải đo được: dna 0,786; msnbc 0,323; leviathan 0,154; bible 0,153; bike 0,052; fifa 0,008; sign và bms1 đúng 0,000 — nên ngưỡng phải rơi vào khe 0,008–0,153 hoặc 0,154–0,323 và không được suy ngược từ mong muốn bộ nào vào nhóm nào), cộng ngưỡng β cho nhóm đối chứng ràng buộc. (2) Chốt bốn tham số sinh dữ liệu tổng hợp trong protocol.yaml dòng 4: |Σ|, số chuỗi, độ dài chuỗi, và dải ρ_rep/β mục tiêu — nhớ chỉ báo cáo giá trị ĐO ĐƯỢC. (3) Với trucks: chấp nhận chạy SC8 trên hai bộ (MSN, BMS-WebView-1) và khai rõ không lấy được, hay thay bằng bike, hay xin dữ liệu từ tác giả [R20]? Lưu ý bike đã bị chính bảng đo loại (ρ_rep 0,052, độ dài trung bình 7,3).
+Three separate tasks, do not merge them. (1) Fill the two grouping thresholds into preregistration.md before running SC3: ρ_rep ≥ ? is the main group and ρ_rep ≤ ? is the degenerate control (measured range: dna 0.786; msnbc 0.323; leviathan 0.154; bible 0.153; bike 0.052; fifa 0.008; sign and bms1 exactly 0.000 — so the threshold must fall into the slot 0.008–0.153 or 0.154–0.323 and may not be inferred backwards from the wish that a given dataset go into a given group), plus the β threshold for the constraint control group. (2) Lock the four synthetic-data generation parameters in protocol.yaml row 4: |Σ|, number of sequences, sequence length, and the target ρ_rep/β range — remembering to report only MEASURED values. (3) For trucks: accept running SC8 on two datasets (MSN, BMS-WebView-1) and state clearly that it could not be obtained, or replace it with bike, or ask the author of [R20] for the data? Note that bike has already been excluded by the measurement table itself (ρ_rep 0.052, mean length 7.3).
 
-**Ngưỡng ρ_rep để một bộ dữ liệu vào nhóm chứng minh đóng góp**
+**The ρ_rep threshold for a dataset to enter the group demonstrating the contribution**
 
-Đặt hai con số cho config/preregistration.md trước khi nhìn bất kỳ kết quả SC3 nào: ngưỡng ρ_rep_cao để một cấu hình vào nhóm chứng minh đóng góp, và ngưỡng ρ_rep_thap để vào nhóm đối chứng suy biến (đơn vị: tỉ lệ không thứ nguyên trong [0,1], lấy theo trung bình ρ_rep của các mẫu nhạy cảm đã lấy ở SC2). Số đo đã có nên lựa chọn là hữu hạn và rõ: một ngưỡng trên trong khoảng (0,154; 0,323) tách {dna, msnbc} khỏi {leviathan, bible}; ngưỡng dưới quanh 0,05 gộp {fifa, sign, bms1, bike} vào nhóm suy biến; khoảng giữa quyết định leviathan và bible là nhóm trung gian hay bị loại. Kèm ngưỡng β tương ứng. Người viết quyết (không được suy ngược từ mong muốn bộ nào vào nhóm nào — chính khao_sat_bo_du_lieu.md mục 4 nhắc điều này); TRUCKS không còn trong danh sách vì không lấy được nguồn.
+Set two numbers for config/preregistration.md before looking at any SC3 result: the threshold ρ_rep_high for a configuration to enter the group demonstrating the contribution, and the threshold ρ_rep_low to enter the degenerate control group (unit: dimensionless ratio in [0,1], taken as the mean ρ_rep of the sensitive patterns sampled in SC2). The measurements already exist, so the choice is finite and clear: an upper threshold in the interval (0.154; 0.323) separates {dna, msnbc} from {leviathan, bible}; a lower threshold around 0.05 puts {fifa, sign, bms1, bike} into the degenerate group; the band in between decides whether leviathan and bible form an intermediate group or are excluded. Together with the corresponding β threshold. The author decides (it may not be inferred backwards from the wish that a given dataset go into a given group — khao_sat_bo_du_lieu.md section 4 itself recalls this); TRUCKS is no longer in the list because its source could not be obtained.
 
-**Ngưỡng ρ_rep phân nhóm chính và nhóm suy biến**
+**ρ_rep thresholds separating the main group and the degenerate group**
 
-Điền hai con số vào preregistration.md dòng 28: ρ_rep ≥ a vào nhóm chính, ρ_rep ≤ b vào nhóm đối chứng suy biến (a, b là số thực không thứ nguyên trong [0,1]). Dải đo được nay liên tục chứ không tách cụm: bms1 và sign 0,000; fifa 0,008; bible 0,153 và leviathan 0,154; msnbc 0,323; dna_mt745584 0,786. Phải chọn giữa ba kiểu cắt: (i) a = b (không vùng xám, mọi cấu hình đều bị gán một nhóm — khi đó cắt ở đâu quyết định leviathan/bible vào nhóm nào); (ii) a > b có vùng xám, và phải nói rõ cấu hình rơi vào vùng xám thì bị loại khỏi cả hai nhóm hay vào nhóm thứ ba "trung gian" như khao_sat_bo_du_lieu.md §4 đề nghị; (iii) ngưỡng theo phân vị của chính bảng SC2 thay vì số tuyệt đối. Kèm căn cứ, và căn cứ không được là "để bộ X vào nhóm Y". Người viết quyết.
+Fill two numbers into preregistration.md line 28: ρ_rep ≥ a goes into the main group, ρ_rep ≤ b into the degenerate control group (a, b are dimensionless real numbers in [0,1]). The measured range is now continuous rather than split into clusters: bms1 and sign 0.000; fifa 0.008; bible 0.153 and leviathan 0.154; msnbc 0.323; dna_mt745584 0.786. One must choose between three kinds of cut: (i) a = b (no grey zone, every configuration is assigned a group — then where the cut lies decides which group leviathan/bible go into); (ii) a > b with a grey zone, and it must be stated whether configurations falling into the grey zone are excluded from both groups or go into a third, "intermediate" group as khao_sat_bo_du_lieu.md §4 proposes; (iii) thresholds by percentiles of the SC2 table itself instead of absolute numbers. With grounds, and the grounds may not be "so that dataset X goes into group Y". The author decides.
 
-**Ngưỡng ρ_rep và β để xếp nhóm suy biến**
+**ρ_rep and β thresholds for assigning the degenerate group**
 
-Điền ba con số vào preregistration.md mục 1 rồi commit (git log làm bằng chứng thời điểm) trước lần chạy SC3 đầu tiên: (a) ngưỡng ρ_rep tối thiểu để vào nhóm chính; (b) ngưỡng ρ_rep tối đa để xếp vào nhóm đối chứng suy biến; (c) ngưỡng β tối đa cho nhóm đối chứng ràng buộc. Đơn vị: tỉ lệ không thứ nguyên trong [0,1], ρ_rep = 1 − sup_seq/sup_NO và β = 1 − sup_NO(có khoảng cách)/sup_NO([0,∞)). Bảng SC2 đo được cho sẵn một khe tự nhiên ở ρ_rep giữa 0,154 (leviathan) và 0,323 (msnbc), và β của bms1 là 0,094 — nhưng theo quy tắc 2.3.10 không được suy ngược ngưỡng từ mong muốn bộ nào vào nhóm nào, nên phải viết căn cứ trước. Người viết quyết. GẤP: chặn H3, chặn việc phân nhóm SC2 → SC3, và chừng nào chưa chốt thì mọi lần chạy SC3 phải kèm cờ --probe.
+Fill three numbers into preregistration.md section 1, then commit (the git log as evidence of the time) before the first SC3 run: (a) the minimum ρ_rep threshold to enter the main group; (b) the maximum ρ_rep threshold to be placed in the degenerate control group; (c) the maximum β threshold for the constraint control group. Unit: dimensionless ratio in [0,1], ρ_rep = 1 − sup_seq/sup_NO and β = 1 − sup_NO(with gap)/sup_NO([0,∞)). The measured SC2 table already offers a natural slot in ρ_rep between 0.154 (leviathan) and 0.323 (msnbc), and β of bms1 is 0.094 — but under rule 2.3.10 the thresholds may not be inferred backwards from the wish that a given dataset go into a given group, so the grounds must be written first. The author decides. URGENT: blocks H3, blocks the grouping SC2 → SC3, and as long as it is not locked every SC3 run must carry the --probe flag.
 
-**Ngưỡng β cho nhóm đối chứng ràng buộc**
+**β threshold for the constraint control group**
 
-Điền số vào preregistration.md dòng 29: β ≤ b_0 (số thực không thứ nguyên) thì cấu hình là đối chứng ràng buộc vô hiệu, và nêu cấu hình nào đóng vai đó. Dải β đo được: bms1 tb 0,094 (nhiều mẫu bằng 0), msnbc [0,10] σ=2000 tb 0,043, sign tb 0,209, fifa tb 0,289, dna tb 0,467, bible tb 0,500, leviathan tb 0,612. Kèm theo phải chốt luật ưu tiên khi một cấu hình vừa đạt ngưỡng nhóm chính theo ρ_rep vừa đạt ngưỡng đối chứng theo β — msnbc [0,10] σ=2000 là đúng ca đó (ρ_rep 0,415 cao, β 0,043 thấp): nó vào nhóm chính, vào đối chứng ràng buộc, vào cả hai, hay bị loại. Chọn giữa hai kiểu đối chứng: đối chứng tự nhiên (bms1, có sẵn β thấp lẫn ρ_rep = 0) hay đối chứng dựng bằng cách nới khoảng cách trên chính bộ nhóm chính. Người viết quyết.
+Fill a number into preregistration.md line 29: β ≤ b_0 (a dimensionless real number) means the configuration is a control with an ineffective constraint, and state which configuration plays that role. Measured β range: bms1 mean 0.094 (many patterns equal to 0), msnbc [0,10] σ=2000 mean 0.043, sign mean 0.209, fifa mean 0.289, dna mean 0.467, bible mean 0.500, leviathan mean 0.612. Along with this, the priority rule must be locked for a configuration that meets both the main-group threshold by ρ_rep and the control threshold by β — msnbc [0,10] σ=2000 is exactly that case (ρ_rep 0.415 high, β 0.043 low): does it go into the main group, into the constraint control, into both, or is it excluded. Choose between two kinds of control: a natural control (bms1, which already has both low β and ρ_rep = 0) or a control built by widening the gap on a main-group dataset itself. The author decides.
 
-**Ngưỡng phân nhóm ρ_rep và β cho H3**
+**Grouping thresholds ρ_rep and β for H3**
 
-Điền ba con số vào preregistration.md dòng 28–29, chọn trong khoảng trống mà bảng SC2 đã để lộ sẵn: ρ_rep đo được là 0,786 (dna), 0,323 (msnbc), 0,154/0,153 (leviathan/bible), 0,052 (bike), 0,008 (fifa), 0,000 (sign, bms1). Vậy phải chọn ngưỡng nhóm chính (ứng viên tự nhiên: ρ_rep ≥ 0,30 giữ cả dna và msnbc; hay ≥ 0,20 để kéo thêm?) và ngưỡng suy biến (≤ 0,05 hay ≤ 0,01?), đồng thời quyết nhóm trung gian leviathan/bible thuộc bên nào hay đứng riêng. Với β ≤ _null_ của 'nhóm đối chứng ràng buộc' còn phải nói rõ β thấp hay β cao mới là đối chứng (β đo được: bms1 0,094 thấp nhất, bible 0,500 và leviathan 0,612 cao nhất) — hiện phát biểu 'β ≤ null' mâu thuẫn với việc β thấp nghĩa là ràng buộc MẤT hiệu lực.
+Fill three numbers into preregistration.md lines 28–29, choosing within the empty bands that the SC2 table has already exposed: the measured ρ_rep is 0.786 (dna), 0.323 (msnbc), 0.154/0.153 (leviathan/bible), 0.052 (bike), 0.008 (fifa), 0.000 (sign, bms1). So one must choose the main-group threshold (natural candidate: ρ_rep ≥ 0.30 keeps both dna and msnbc; or ≥ 0.20 to pull in more?) and the degenerate threshold (≤ 0.05 or ≤ 0.01?), and at the same time decide whether the intermediate group leviathan/bible belongs to one side or stands alone. For β ≤ _null_ of the 'constraint control group' it must also be stated whether low β or high β is the control (measured β: bms1 0.094 lowest, bible 0.500 and leviathan 0.612 highest) — at present the statement 'β ≤ null' contradicts the fact that low β means the constraint LOSES its effect.
 
-**Mẫu lặp mục: đóng câu hỏi mở hay thu hẹp phạm vi**
+**Repeated-item patterns: close the open question or narrow the scope**
 
-Xác nhận và ghi thành văn phạm vi mẫu nhạy cảm, chọn một: (A) chốt μ(P) = 1 làm phạm vi chính — đúng như Sc3MainComparison.sampleSensitiveSets đang lọc — rồi khai bộ lọc này ở §11.5 và protocol.yaml dòng 1, và viết ở phần hạn chế đúng con số ρ_rep 0,218 so với 0,434 của MSNBC cùng 0,806 so với 0,773 của DNA; hoặc (B) mở phạm vi sang μ(P) ≥ 2, khi đó phải nói CUT-HIDE nhắm cận nào của P3 (⌈(F−t)/μ⌉ hay F−t) làm mục tiêu che, khai sai số theo hệ số μ(P), bỏ bộ lọc hasDistinctItems và dùng IlpExact đo khoảng cách tới tối ưu trên thực thể nhỏ. Người viết quyết. GẤP: trước SC3, vì nó định nghĩa quần thể lấy mẫu 𝒮 và cách trả lời vế 'độ khó thay đổi thế nào khi mẫu lặp mục' của RQ1.
+Confirm and put in writing the scope of the sensitive patterns, choosing one: (A) lock μ(P) = 1 as the main scope — exactly as Sc3MainComparison.sampleSensitiveSets currently filters — then declare this filter in §11.5 and in row 1 of protocol.yaml, and write in the limitations section exactly the numbers ρ_rep 0.218 against 0.434 for MSNBC and 0.806 against 0.773 for DNA; or (B) open the scope to μ(P) ≥ 2, in which case one must say which bound of P3 CUT-HIDE targets as the masking objective (⌈(F−t)/μ⌉ or F−t), declare the error by the factor μ(P), drop the hasDistinctItems filter and use IlpExact to measure the distance to the optimum on small instances. The author decides. URGENT: before SC3, because it defines the sampling population 𝒮 and how to answer the part of RQ1 'how does the hardness change when patterns repeat items'.
 
-**Đơn vị áp ngưỡng: theo bộ, theo cấu hình hay theo mẫu**
+**The unit the threshold applies to: per dataset, per configuration or per pattern**
 
-Sửa preregistration.md dòng 59 cho khớp §8.4 của bản thiết kế, vốn đã chốt đơn vị phân nhóm là CẤU HÌNH chứ không phải bộ. Phần còn thực sự mở là định nghĩa chính xác trục của cấu hình: §8.4 ghi (D, 𝒮, σ) nhưng SC2 quét (bộ, σ, [g⁻,g⁺]) và độ rộng khoảng cách đổi ρ_rep trung bình tới 30% tương đối trên chính msnbc σ=2000. Chọn một trong hai: cấu hình = (bộ, σ, [g⁻,g⁺]) và ρ_rep của cấu hình = trung bình trên các mẫu đã lấy; hay cấu hình = (bộ, σ, [g⁻,g⁺], tập nhạy cảm) tức phân nhóm ở mức đơn vị lặp của H2. Ràng buộc cứng: đơn vị phân nhóm của H3 phải trùng hoặc lồng khớp với đơn vị lặp của Wilcoxon ở H2, mà §11.6 đã chốt là (bộ dữ liệu, σ, tập nhạy cảm). Người viết quyết.
+Correct preregistration.md line 59 to match §8.4 of the research design, which has already locked the grouping unit as the CONFIGURATION, not the dataset. What is truly still open is the exact definition of the axes of a configuration: §8.4 writes (D, 𝒮, σ) but SC2 sweeps (dataset, σ, [g⁻,g⁺]), and the gap width changes the mean ρ_rep by up to 30% relative on msnbc σ=2000 itself. Choose one of the two: configuration = (dataset, σ, [g⁻,g⁺]) and the ρ_rep of a configuration = the mean over the sampled patterns; or configuration = (dataset, σ, [g⁻,g⁺], sensitive set), i.e. grouping at the level of the unit of replication of H2. Hard constraint: the grouping unit of H3 must coincide with, or nest exactly into, the unit of replication of the Wilcoxon test of H2, which §11.6 has locked as (dataset, σ, sensitive set). The author decides.
 
-**Bằng chứng FIFA [17, 17, 17] nằm ở results-probe**
+**The FIFA evidence [17, 17, 17] is in results-probe**
 
-Quyết số phận một câu ở giai_doan_1_tom_tat.md dòng 85–86. Hai lựa chọn: (i) chạy lại cấu hình FIFA [0,3] σ=3000 không kèm --probe với dải lấy mẫu đủ rộng để mẫu [17, 17, 17] rơi vào results-invariant/, rồi giữ câu; (ii) xoá câu. Phương án (ii) nay rẻ hơn hẳn vì khối cập nhật cùng ngày ở §3 đã thay bằng chứng trụ cột bằng bộ DNA (ρ_rep mẫu không lặp mục 0,806 so với mẫu lặp mục 0,773), nên §3 không còn cần con số FIFA. Chú ý mẫu đó là mẫu lặp mục (min_masks_exact=false), tức nằm ngoài phạm vi μ(P)=1 đã chốt trong mã, nên kể cả chạy lại nó cũng không vào được SC3. Không chặn SC3; phải xử trước khi bất kỳ đoạn nào của §3 được chép vào bản thảo. Người viết quyết.
+Decide the fate of one sentence in giai_doan_1_tom_tat.md lines 85–86. Two options: (i) rerun the FIFA configuration [0,3] σ=3000 without --probe, with a sampling range wide enough for the pattern [17, 17, 17] to land in results-invariant/, then keep the sentence; (ii) delete the sentence. Option (ii) is now much cheaper because the update block of the same day in §3 has replaced the pillar evidence with the DNA dataset (ρ_rep of patterns without repeated items 0.806 against 0.773 for repeated-item patterns), so §3 no longer needs the FIFA number. Note that this pattern is a repeated-item pattern (min_masks_exact=false), i.e. outside the scope μ(P)=1 locked in the code, so even if rerun it could not enter SC3. Does not block SC3; must be handled before any paragraph of §3 is copied into the manuscript. The author decides.
 
-**Ngưỡng β cho nhóm đối chứng ràng buộc**
+**β threshold for the constraint control group**
 
-Chốt một số thực trong [0,1]: β ≤ ? thì thực thể là đối chứng ràng buộc (ràng buộc khoảng cách mất hiệu lực), kèm đơn vị đo — trung bình β trên các mẫu nhạy cảm của cấu hình hay giá trị nhỏ nhất. Số đã đo giới hạn lựa chọn: bms1 β 0,094 (đề nghị suy biến kép), msnbc ở [0,10] tụt còn 0,043 trong khi ở [0,1] là 0,432, bible 0,500, leviathan 0,612. Lưu ý hệ quả: vì β và ρ_rep kéo ngược nhau theo độ rộng khoảng cách (giai_doan_1_tom_tat.md:62-63), một ngưỡng β chặt sẽ tự động loại các cấu hình khoảng cách rộng vốn có ρ_rep cao — nên phải chọn ngưỡng β đồng thời với việc chốt cấu hình [g⁻,g⁺] nào dùng cho nhóm chính, và ghi lý do vì sao chọn cấu hình đó.
+Lock a real number in [0,1]: β ≤ ? means the instance is a constraint control (the gap constraint loses its effect), together with the unit of measurement — the mean β over the sensitive patterns of the configuration, or the minimum value. The measured numbers limit the choice: bms1 β 0.094 (suggests a double degeneracy), msnbc at [0,10] drops to 0.043 while at [0,1] it is 0.432, bible 0.500, leviathan 0.612. Note the consequence: because β and ρ_rep pull in opposite directions with the gap width (giai_doan_1_tom_tat.md:62-63), a strict β threshold will automatically exclude the wide-gap configurations, which have high ρ_rep — so the β threshold must be chosen at the same time as locking which [g⁻,g⁺] configuration is used for the main group, and the reason for choosing that configuration must be recorded.
 
-**Chốt σ và độ rộng khoảng cách cho từng bộ**
+**Lock σ and the gap width for each dataset**
 
-Điền dòng 1 của protocol.yaml (sigma, l_max, gap, sensitive_size) cho từng bộ sẽ chạy SC3–SC5, SC7, SC8. Với msnbc phải chọn σ ∈ {1000, 2000, 5000} — chọn khác nhau đổi ρ_rep trung bình từ 0,190 lên 0,395, tức đổi hẳn độ thuyết phục — và [g⁻,g⁺] ∈ {[0,1], [0,3], [0,10]}. Với dna_mt745584 hiện chỉ có 3 cấu hình đo được (σ 1000 và 2500, gap [0,1] và [0,3]); phải quyết chạy thêm SC2 trước rồi mới chốt, hay chốt ngay theo khuyến nghị [0,1] của khao_sat §3(b). Ràng buộc: mọi baseline phải so ở cùng cấu hình, và σ phải khai cả tuyệt đối lẫn tỉ lệ theo Σ sup_NO (§11.5). Người viết quyết, sau khi có thêm số quét σ cho dna/leviathan/bible.
+Fill in row 1 of protocol.yaml (sigma, l_max, gap, sensitive_size) for each dataset that will run SC3–SC5, SC7, SC8. For msnbc one must choose σ ∈ {1000, 2000, 5000} — different choices change the mean ρ_rep from 0.190 to 0.395, i.e. they change the persuasiveness entirely — and [g⁻,g⁺] ∈ {[0,1], [0,3], [0,10]}. For dna_mt745584 only 3 configurations are measured so far (σ 1000 and 2500, gap [0,1] and [0,3]); decide whether to run more SC2 first and lock afterwards, or to lock now following the recommendation [0,1] of khao_sat §3(b). Constraint: every baseline must be compared at the same configuration, and σ must be declared both in absolute terms and as a share of Σ sup_NO (§11.5). The author decides, after more σ-sweep numbers are available for dna/leviathan/bible.
 
-**Ngưỡng ρ_rep để một cấu hình vào nhóm chính**
+**ρ_rep threshold for a configuration to enter the main group**
 
-Chốt một số thực trong [0,1]: ρ_rep ≥ ? thì thực thể (bộ, σ, khoảng cách) vào nhóm chính. Đồng thời chốt đơn vị đo: lấy trung bình ρ_rep của các mẫu nhạy cảm trong cấu hình đó, hay đòi TỪNG mẫu nhạy cảm đều đạt ngưỡng (tức lấy giá trị nhỏ nhất). Số liệu SC2 đã đo ràng buộc lựa chọn: ngưỡng > 0,323 loại msnbc và chỉ còn dna (0,786) trong nhóm chính; ngưỡng ≤ 0,15 kéo cả leviathan/bible vào. Nếu chọn theo giá trị nhỏ nhất thì msnbc khó qua vì phân vị thấp của nó dưới 0,218. Phải điền và commit trước lần chạy SC3 lấy số vào bài; nhìn kết quả SC3 rồi mới chọn là vi phạm quy tắc 2.3.10.
+Lock a real number in [0,1]: ρ_rep ≥ ? means the instance (dataset, σ, gap) goes into the main group. At the same time lock the unit of measurement: take the mean ρ_rep of the sensitive patterns in that configuration, or require EVERY sensitive pattern to meet the threshold (i.e. take the minimum). The measured SC2 data constrain the choice: a threshold > 0.323 excludes msnbc and leaves only dna (0.786) in the main group; a threshold ≤ 0.15 pulls in leviathan/bible as well. If the minimum is chosen, msnbc will hardly pass because its low percentile is below 0.218. It must be filled in and committed before the SC3 run that takes numbers into the paper; choosing only after looking at the SC3 results violates rule 2.3.10.
 
-**Ngưỡng ρ_rep của nhóm đối chứng suy biến**
+**ρ_rep threshold of the degenerate control group**
 
-Chốt hai thứ cùng lúc: (a) ρ_rep ≤ ? là đối chứng suy biến (số liệu đã đo: sign và bms1 đúng bằng 0,000; fifa 0,008; bike 0,052 — mọi ngưỡng trong khoảng 0,01–0,05 đều gom đúng ba bộ đầu); (b) thực thể rơi vào khoảng giữa hai ngưỡng thì xử lý ra sao — chọn một: loại hẳn khỏi bảng H3, hay lập nhóm thứ ba 'trung gian' như khao_sat_bo_du_lieu.md:81 đề nghị và khai rõ nhóm này không dùng để kiểm H3 mà chỉ minh hoạ ρ_rep và β độc lập nhau. Nếu chọn (b) thì phải sửa §1 của preregistration.md để có ba nhóm chứ không phải hai.
+Lock two things at once: (a) ρ_rep ≤ ? is the degenerate control (measured data: sign and bms1 exactly 0.000; fifa 0.008; bike 0.052 — any threshold in the range 0.01–0.05 collects exactly the first three datasets); (b) how to handle instances falling into the band between the two thresholds — choose one: exclude them entirely from the H3 table, or form a third, 'intermediate' group as khao_sat_bo_du_lieu.md:81 proposes and state clearly that this group is not used to test H3 but only illustrates that ρ_rep and β are independent of each other. If (b) is chosen, §1 of preregistration.md must be corrected to have three groups, not two.
 
-**Vai của từng bộ dữ liệu sau khi đo rho_rep**
+**The role of each dataset after measuring rho_rep**
 
-Điền và commit vào config/preregistration.md mục H3 ba số: ngưỡng ρ_rep trung bình để vào nhóm chính, ngưỡng ρ_rep để vào nhóm đối chứng suy biến, và ngưỡng β cho nhóm ràng buộc-có-hiệu-lực; bảng SC2 tách rất rõ (0,000 / 0,008 / 0,052 so với 0,154 / 0,323 / 0,786) nên một lát cắt quanh 0,10 là suy được từ dữ liệu. Kèm theo: chốt vai của cả tám bộ đã đo và ghi dứt khoát rằng TRUCKS bị loại khỏi SC8 vì không có nguồn công khai, hoặc nêu nguồn thay thế. Suy ra từ dữ liệu SC2 đã có; phải chốt và commit TRƯỚC khi chạy SC3.
+Fill in and commit into config/preregistration.md, section H3, three numbers: the mean ρ_rep threshold to enter the main group, the ρ_rep threshold to enter the degenerate control group, and the β threshold for the effective-constraint group; the SC2 table separates very clearly (0.000 / 0.008 / 0.052 against 0.154 / 0.323 / 0.786), so a cut around 0.10 can be inferred from the data. Along with this: lock the role of all eight measured datasets and state definitively that TRUCKS is excluded from SC8 because it has no public source, or name an alternative source. Inferred from the SC2 data already available; must be locked and committed BEFORE running SC3.
 
-**Câu hỏi mở P3 khi mẫu lặp mục (mu >= 2)**
+**The open question P3 when patterns repeat items (mu >= 2)**
 
-Quyết một dòng cho config/preregistration.md và cho mã: tập nhạy cảm lấy mẫu ở SC3/SC4 có lọc về μ(P)=1 hay không. Nếu lọc, phải thêm bộ lọc vào Sc3MainComparison.sampleSensitiveSets và khai trong phần hạn chế kèm đúng số đã đo (MSNBC: ρ_rep trung bình 0,218 cho μ=1 so với 0,434 cho μ≥2; DNA: 0,806 so với 0,773). Nếu không lọc thì phải cài xong nhánh cận P3 và ILP chính xác để đo khoảng cách tới tối ưu cho lớp μ≥2. Người viết quyết. Gấp trước SC3 vì nó đổi đơn vị lặp và đổi toàn bộ bảng kết quả.
+Decide one line for config/preregistration.md and for the code: whether the sensitive sets sampled in SC3/SC4 are filtered down to μ(P)=1 or not. If filtered, the filter must be added to Sc3MainComparison.sampleSensitiveSets and declared in the limitations section with exactly the measured numbers (MSNBC: mean ρ_rep 0.218 for μ=1 against 0.434 for μ≥2; DNA: 0.806 against 0.773). If not filtered, the branch of bound P3 and the exact ILP must be finished in order to measure the distance to the optimum for the class μ≥2. The author decides. Urgent before SC3, because it changes the unit of replication and changes the whole result table.
 
-**Chốt trạng thái của khoảng trống G1 và G5**
+**Lock the state of the research gaps G1 and G5**
 
-Sau khi có toàn văn [R11], hoặc sau khi kích hoạt mức đọc rút gọn (§12a mục 3), quyết ba việc trong §3: G1 chuyển 'mạnh, tạm' sang 'mạnh, chính thức' hay hạ xuống 'yếu'; G5 giữ 'tạm' hay đóng lại theo đúng phạm vi rà của §4; và phát biểu lại G1 theo cơ chế (không dùng câu phủ định tuyệt đối, theo ràng buộc (b) của §12a mục 3), kèm số ρ_rep đã đo. Cần đọc tài liệu gốc. Hạn: trước khi viết phần tuyên bố khoảng trống của bản thảo.
+After the full text of [R11] is available, or after activating the reduced reading level (§12a item 3), decide three things in §3: G1 moves from 'strong, provisional' to 'strong, official' or is lowered to 'weak'; G5 stays 'provisional' or is closed according to exactly the scope of the review in §4; and restate G1 by mechanism (without an absolute negative sentence, per constraint (b) of §12a item 3), with the measured ρ_rep numbers. The original documents must be read. Deadline: before writing the research-gap claim of the manuscript.
 
-**l_max va khoang cach [g-, g+] tung bo (dong 1)**
+**l_max and gap [g-, g+] for each dataset (row 1)**
 
-Hai câu hỏi tách nhau. (a) ℓ_max: giữ 3 (và sửa §11.5 'độ dài 2-4' thành 2-3 cho khớp), hay nâng lên 4 và chấp nhận chi phí khai phá F_σ tăng trên msnbc/fifa? (b) Với mỗi bộ nhóm chính, chốt [g⁻,g⁺] dùng cho SC3: [0,1] (β cao ~0,43 nhưng ρ_rep thấp hơn) hay [0,3] (cân bằng), theo đúng số đo ở giai_doan_1_tom_tat.md. Người viết chốt trước SC3; đổi sau là phải chạy lại toàn bộ SC3.
+Two separate questions. (a) ℓ_max: keep 3 (and change §11.5 'length 2-4' to 2-3 to match), or raise it to 4 and accept the increased cost of mining F_σ on msnbc/fifa? (b) For each main-group dataset, lock the [g⁻,g⁺] used for SC3: [0,1] (high β ~0.43 but lower ρ_rep) or [0,3] (balanced), following exactly the measurements in giai_doan_1_tom_tat.md. The author locks it before SC3; changing it afterwards means rerunning all of SC3.
 
-**Muc tieu rho_rep va beta khi sinh du lieu**
+**Target rho_rep and beta when generating data**
 
-Chốt lưới mục tiêu khi sinh: mấy mức ρ_rep (ví dụ {0; 0,3; 0,8}) nhân mấy mức β (ví dụ {0; 0,3; 0,6}), mỗi ô bao nhiêu bản sinh, và quy tắc dò plantedPerSequence/spacing để tiệm cận mục tiêu. Người viết chốt trước SC6; bài vẫn chỉ in giá trị đo được, mục tiêu chỉ nằm ở dòng 4 bảng giao thức.
+Lock the target grid for generation: how many ρ_rep levels (e.g. {0; 0.3; 0.8}) times how many β levels (e.g. {0; 0.3; 0.6}), how many generated copies per cell, and the rule for tuning plantedPerSequence/spacing to approach the target. The author locks it before SC6; the paper still prints only measured values, the targets sit only in row 4 of the protocol table.
 
-**Bộ chuỗi thời gian rời rạc hoá của dòng NOSEP**
+**The discretised time-series datasets of the NOSEP line**
 
-Quyết dứt điểm: (a) lấy một bộ chuỗi thời gian rời rạc hoá để phủ nốt loại dữ liệu thứ ba mà [R1] dùng — khi đó phải chốt kho và bộ cụ thể (UCR: bộ nào), phương pháp rời rạc hoá (SAX hay chia khoảng đều), số ký hiệu của bảng chữ cái và cỡ cửa sổ, rồi chạy SC2 để đo ρ_rep và β trước khi gán vai; hay (b) khai rõ trong bài rằng phạm vi dữ liệu chỉ gồm chuỗi sự kiện có sẵn dạng rời rạc (nhấp chuột, gen, văn bản, giao dịch) và [R1] dùng thêm chuỗi thời gian là khác biệt về phạm vi đánh giá, không phải thiếu sót. Lưu ý nếu chọn (a) thì tham số rời rạc hoá trở thành một dòng mới của bảng giao thức, vì ρ_rep phụ thuộc trực tiếp vào số ký hiệu.
+Decide once and for all: (a) take a discretised time-series dataset to cover the third kind of data that [R1] uses — then lock the archive and the specific dataset (UCR: which dataset), the discretisation method (SAX or equal-width intervals), the alphabet size and the window size, then run SC2 to measure ρ_rep and β before assigning a role; or (b) state clearly in the paper that the data scope covers only event sequences already in discrete form (clicks, genes, text, transactions) and that [R1]'s additional use of time series is a difference in evaluation scope, not a shortcoming. Note that if (a) is chosen, the discretisation parameters become a new row of the protocol table, because ρ_rep depends directly on the alphabet size.
 
-> Chặn: Hai trong ba loại dữ liệu của [R1] đã có (DNA, và BMS1 chính là Gazelle), loại thứ ba chưa. Phản biện dòng NOSEP hỏi ngay vì sao thiếu. Chọn (a) muộn thì phải chạy lại cả SC2 lẫn SC3 cho bộ mới sau khi đã chốt phân nhóm, mà quy tắc 2.3.10 cấm sửa phân nhóm sau khi nhìn kết quả SC3.
+> Blocks: Two of the three kinds of data of [R1] are already present (DNA, and BMS1, which is Gazelle), the third is not. A reviewer from the NOSEP line will immediately ask why it is missing. Choosing (a) late means rerunning both SC2 and SC3 for the new dataset after the grouping has been locked, and rule 2.3.10 forbids changing the grouping after looking at SC3 results.
 
-### A4. Biên tương đương cho Lost và SupDist
+### A4. Equivalence margins for Lost and SupDist
 
-Nguồn nêu: `design-experiment`, `preregistration`
+Raised by: `design-experiment`, `preregistration`
 
-**Phép kiểm và tiêu chí định lượng "gần 1" của H3**
+**The test and the quantitative criterion "near 1" for H3**
 
-Khai đủ bốn thứ cho H3 như đã khai cho H2: (a) phép kiểm cho vế 'lớn hơn 1 trên nhóm chính' — Wilcoxon dấu hạng một phía trên tỉ số |R|/|R|* với giả thuyết vô hiệu trung vị = 1, hay kiểm trên log tỉ số; (b) mức α (0,05 cho đồng bộ với H2?) và có gộp H3 vào cùng họ Holm với H2 hay tách họ riêng; (c) cỡ hiệu ứng báo cáo (rank-biserial cho đồng bộ?); (d) biên tương đương định lượng 'gần 1' trên nhóm suy biến — tỉ số nằm trong [1, 1+?] thì coi là gần 1, ví dụ ±0,05 hay ±0,10. Đồng thời khai phạm vi: vì Sc3MainComparison.boundFromP1 chỉ tính |R|* cho tập nhạy cảm một mẫu không lặp mục (mọi trường hợp khác cột mask_ratio trống), H3 chỉ kiểm trên lớp thực thể đó — phải nói rõ trong phát biểu H3 chứ không để ngầm.
+Declare all four things for H3 as was done for H2: (a) the test for the part 'greater than 1 on the main group' — one-sided Wilcoxon signed-rank on the ratio |R|/|R|* with null hypothesis median = 1, or a test on the log ratio; (b) the level α (0.05 to align with H2?) and whether H3 joins the same Holm family as H2 or forms a separate family; (c) the effect size reported (rank-biserial to align?); (d) the quantitative equivalence margin for 'near 1' on the degenerate group — a ratio within [1, 1+?] is considered near 1, e.g. ±0.05 or ±0.10. At the same time declare the scope: because Sc3MainComparison.boundFromP1 computes |R|* only for a sensitive set of one pattern without repeated items (in every other case the mask_ratio column is empty), H3 is tested only on that class of instances — this must be said explicitly in the statement of H3, not left implicit.
 
-**Biên tương đương cho SupDist**
+**Equivalence margin for SupDist**
 
-Chốt một số thực: biên tương đương cho SupDist là ± bao nhiêu, tính trên thang đã định sẵn của doc §2 dòng 65 — tỉ lệ không thứ nguyên trong [0,1] (Metrics.Row.supDist), KHÔNG phải chênh lệch sup_NO tuyệt đối và KHÔNG chuẩn hoá theo σ; đừng mở lại câu hỏi thang đo. Số đo probe SC3 cho thấy bậc độ lớn cần nhắm: sup_dist của các phương pháp nằm quanh 0,1345–0,1481, tức chênh lệch giữa các phương pháp cỡ 0,01. Biên ± 0,05 sẽ tuyên bố mọi thứ là tương đương; biên ± 0,001 sẽ không bao giờ kết luận được tương đương.
+Lock a real number: the equivalence margin for SupDist is ± how much, computed on the scale already defined in doc §2 line 65 — a dimensionless ratio in [0,1] (Metrics.Row.supDist), NOT an absolute sup_NO difference and NOT normalised by σ; do not reopen the question of the scale. The SC3 probe numbers show the order of magnitude to aim at: the sup_dist of the methods lies around 0.1345–0.1481, i.e. differences between methods of about 0.01. A margin of ± 0.05 would declare everything equivalent; a margin of ± 0.001 would never conclude equivalence.
 
-**Phép kiểm cho H3 và nghĩa của "gần 1"**
+**The test for H3 and the meaning of "near 1"**
 
-H3 kiểm bằng gì: (a) kiểm một mẫu trên tỉ số |R|/|R|* của nhóm chính với H₀: trung vị ≤ 1 (Wilcoxon dấu hạng một phía, cùng đơn vị lặp (bộ, σ, tập nhạy cảm) như H2), cộng (b) một kiểm TƯƠNG ĐƯƠNG hai một phía (TOST) trên nhóm suy biến với biên tương đương phải chốt (ví dụ |R|/|R|* ∈ [1; 1,05] mới gọi là 'gần 1')? Hay chỉ báo cáo khoảng tin cậy không kiểm? Phải chốt: phép kiểm, đơn vị lặp, biên định nghĩa 'gần 1', và có đưa H3 vào hiệu chỉnh Holm chung với H2 hay tách. Ghi vào preregistration.md §1 mục H3.
+What tests H3: (a) a one-sample test on the ratio |R|/|R|* of the main group with H₀: median ≤ 1 (one-sided Wilcoxon signed-rank, the same unit of replication (dataset, σ, sensitive set) as H2), plus (b) an EQUIVALENCE test by two one-sided tests (TOST) on the degenerate group with an equivalence margin to be locked (e.g. |R|/|R|* ∈ [1; 1.05] to be called 'near 1')? Or only report a confidence interval without a test? To be locked: the test, the unit of replication, the margin defining 'near 1', and whether H3 goes into the Holm correction together with H2 or separately. Record it in preregistration.md §1 under H3.
 
-> Chặn: Không kiểm định được H3. Mục H2 khai đủ bốn thứ (phép kiểm Wilcoxon một phía, hiệu chỉnh Holm, cỡ hiệu ứng rank-biserial, α = 0,05) còn mục H3 chỉ khai ngưỡng phân nhóm, không khai phép kiểm. §2 lại chỉ chốt biên tương đương cho Lost và SupDist, không có biên cho tỉ số |R|/|R|*, nên vế "gần 1 trên nhóm suy biến" hiện không có tiêu chí nào để kết luận đúng hay sai.
+> Blocks: H3 cannot be tested. The H2 section declares all four things (one-sided Wilcoxon test, Holm correction, rank-biserial effect size, α = 0.05) while the H3 section declares only the grouping thresholds, not the test. §2 moreover locks equivalence margins only for Lost and SupDist, with no margin for the ratio |R|/|R|*, so the part "near 1 on the degenerate group" currently has no criterion for concluding true or false.
 
-### A6. Họ baseline đưa vào hiệu chỉnh Holm
+### A6. The family of baselines in the Holm correction
 
-Nguồn nêu: `design-experiment`, `phebinh`, `preregistration`  (có điểm do lượt phê bình bổ sung)
+Raised by: `design-experiment`, `phebinh`, `preregistration`  (includes items added by the critical pass)
 
-**Họ baseline đưa vào hiệu chỉnh Holm**
+**The family of baselines in the Holm correction**
 
-Liệt kê đích danh tên các baseline trong họ so sánh của H2 (chọn từ 14 tên mà Sc3MainComparison.create nhận: occurrence, HH, HR, RH, RR ở tầng (a); hha, dbsh, sbsh-r1, sbsh-rmax ở tầng (b); ilp, ilp-lost, ga ở tầng (c)), và từ đó ghi thẳng số m dùng cho Holm. Chốt thêm: họ tính RIÊNG cho từng chỉ số (Lost một họ, SupDist một họ, |R| một họ) hay GỘP chung mọi chỉ số vào một họ — gộp làm m tăng gấp ba và làm H2 khó bác bỏ hơn nhiều. Ghi rõ baseline nào chưa cài xong nhưng vẫn nằm trong họ, để m không co lại khi đến lúc chạy. Phải chốt trước SC3: mặc định CLI hiện tại (5 phương pháp, không có tầng (b) nào) không thay được bản chốt, và để quyết sau khi nhìn kết quả là chọn lọc báo cáo.
+List by name the baselines in the comparison family of H2 (chosen from the 14 names that Sc3MainComparison.create accepts: occurrence, HH, HR, RH, RR in tier (a); hha, dbsh, sbsh-r1, sbsh-rmax in tier (b); ilp, ilp-lost, ga in tier (c)), and from that write down directly the number m used for Holm. Also lock: is the family counted SEPARATELY for each metric (Lost one family, SupDist one family, |R| one family) or are all metrics POOLED into one family — pooling triples m and makes H2 much harder to reject. State clearly which baselines are not yet fully implemented but are still in the family, so that m does not shrink when it comes time to run. Must be locked before SC3: the current CLI default (5 methods, no tier (b) at all) cannot stand in for the lock, and deciding after seeing the results is selective reporting.
 
-**Thiếu H1; nhãn H1, H2 mang hai nghĩa**
+**H1 missing; the labels H1, H2 carry two meanings**
 
-Hai quyết định tách rời: (1) có thêm giả thuyết cho RQ4 (số mẫu ma của xoá khi g⁺ hữu hạn, SC5) và RQ5 (chi phí của HIDE-SEQ, SC4) hay khai rõ trong bài rằng RQ1/RQ4/RQ5 trả lời bằng mệnh đề và mô tả, không bằng kiểm định — nếu thêm thì phải chốt phép kiểm và ngưỡng trong preregistration cùng lúc với H2; (2) chọn sơ đồ đặt tên để hai heuristic của P6(c) không trùng nhãn giả thuyết — ví dụ đổi heuristic thành A1/A2 hoặc HEU-1/HEU-2 (sửa doc dòng 274, 212, 305, 403 và Sc7DesignVariants.java:11,23, WorkedExamplesTest.java:96), hoặc đánh số lại giả thuyết. Phải làm trước khi chốt preregistration vì Holm 'theo số baseline' và số giả thuyết phụ thuộc quyết định (1).
+Two separate decisions: (1) whether to add hypotheses for RQ4 (the number of ghost patterns of deletion when g⁺ is finite, SC5) and RQ5 (the cost of HIDE-SEQ, SC4), or to state clearly in the paper that RQ1/RQ4/RQ5 are answered by propositions and description, not by tests — if they are added, the test and the threshold must be locked in the preregistration at the same time as H2; (2) choose a naming scheme so that the two heuristics of P6(c) do not share labels with the hypotheses — e.g. rename the heuristics A1/A2 or HEU-1/HEU-2 (correcting doc lines 274, 212, 305, 403 and Sc7DesignVariants.java:11,23, WorkedExamplesTest.java:96), or renumber the hypotheses. Must be done before locking the preregistration, because Holm 'by the number of baselines' and the number of hypotheses depend on decision (1).
 
-**Baseline [R11] chốt sau khi có toàn văn**
+**Baseline [R11] locked after the full text is available**
 
-Đặt một hạn chót cho ba bước lấy toàn văn ở §12a (CESTI/thư viện trường; thư cho Meng Zhang; ResearchGate). Hết hạn mà chưa có: kích hoạt sẵn nhánh đã viết ở §12a mục 3 — [R11] KHÔNG vào tầng (b), doc §11.3 dòng 429 bị xoá khỏi bảng baseline và [R11] chỉ còn ở phần công trình liên quan. Việc này phải xong trước khi chốt preregistration, vì Holm 'hiệu chỉnh theo số baseline' (doc dòng 382) đòi danh sách baseline đóng trước khi chạy SC3. Nếu có toàn văn thì quyết thêm: chuyển sang sup_NO bằng cách nào và có áp được cho r > 1 hay không.
+Set a deadline for the three steps of obtaining the full text in §12a (CESTI/university library; a letter to Meng Zhang; ResearchGate). If it has not been obtained by the deadline: activate the branch already written in §12a item 3 — [R11] does NOT enter tier (b), doc §11.3 line 429 is removed from the baseline table and [R11] remains only in the related-work section. This must be done before locking the preregistration, because Holm 'corrected by the number of baselines' (doc line 382) requires the baseline list to be closed before SC3 runs. If the full text is available, decide in addition: how to switch it to sup_NO and whether it can be applied for r > 1.
 
-**Công cụ tính thống kê và nơi lưu kết quả kiểm định**
+**The statistics tool and where the test results are kept**
 
-Chốt ai tính Wilcoxon, Holm, rank-biserial và khoảng tin cậy: (a) thêm một script Python dùng scipy (kho hiện đã có numpy và scipy trong probe/, nhưng chưa có tệp thống kê nào và chưa khai phiên bản), (b) viết bằng R kèm tệp renv, hay (c) tự cài trong Java để giữ lời hứa 'không phụ thuộc thư viện ngoài'. Kèm hai thứ phải quyết cùng lúc: tệp đầu ra của phép kiểm (p, p sau Holm, cỡ hiệu ứng, khoảng tin cậy, số cặp) nằm ở thư mục nào trong ba thư mục kết quả và mang dấu định danh lần chạy nào — hiện ResultSink chỉ mở tệp cho kịch bản SCn, không có đường cho tệp dẫn xuất; và phiên bản công cụ khai ở dòng nào của bảng giao thức (dòng 5 chỉ có JDK).
+Lock who computes Wilcoxon, Holm, rank-biserial and the confidence intervals: (a) add a Python script using scipy (the repository already has numpy and scipy in probe/, but no statistics file yet and no declared versions), (b) write it in R with an renv file, or (c) implement it in Java to keep the promise of 'no dependence on external libraries'. Together with two things that must be decided at the same time: in which of the three result directories the output file of the tests (p, p after Holm, effect size, confidence interval, number of pairs) lives and which run identifier it carries — currently ResultSink only opens files for scenario SCn, with no path for derived files; and in which row of the protocol table the tool version is declared (row 5 has only the JDK).
 
-> Chặn: Mọi con số p của bài hiện chưa có công cụ nào sinh ra, và không có chỗ hợp lệ để lưu. Kết quả kiểm định tính bằng tay trên máy rồi chép vào bài là loại số không truy lại được, trái với quy tắc 2.6.8 mà cả kho đang cưỡng chế cho tệp CSV.
+> Blocks: No p-value of the paper is currently produced by any tool, and there is no valid place to store it. Test results computed by hand on a machine and then copied into the paper are the kind of number that cannot be traced back, contrary to rule 2.6.8, which the whole repository enforces for the CSV files.
 
-### A7. Ghép cặp H2: cùng ngân sách |R| hay để mỗi phương pháp tự chọn
+### A7. Pairing for H2: the same |R| budget, or each method choosing its own
 
-Nguồn nêu: `phebinh`  (có điểm do lượt phê bình bổ sung)
+Raised by: `phebinh`  (includes items added by the critical pass)
 
-**So Lost ở cùng ngân sách |R| hay để mỗi phương pháp tự chọn**
+**Compare Lost at the same |R| budget, or let each method choose its own**
 
-Chốt cách ghép cặp của H2: (a) mỗi phương pháp chạy tới khi HF = 0 với số lần che TỰ CHỌN, rồi so hiệu Lost thô — khi đó phải báo cáo kèm |R| và thừa nhận rằng một phương pháp che nhiều hơn thì đương nhiên mất nhiều mẫu hơn, tức hiệu Lost lẫn cả hai nguyên nhân; (b) ép mọi phương pháp về CÙNG |R| (lấy |R| của CUT-HIDE, hoặc |R|* của P1 khi có) rồi mới so Lost — khi đó phải thêm tham số ngân sách che vào giao diện HidingMethod và định nghĩa việc gì xảy ra khi baseline không ẩn hết ở ngân sách đó; hay (c) không so điểm mà so ĐƯỜNG đánh đổi Lost theo |R|, khi đó phải chốt lưới ngân sách và cách tóm tắt đường thành một số để đưa vào Wilcoxon. Bảng SC3 ở §11.1 hứa 'đường đánh đổi' nhưng mã chỉ chạy mỗi phương pháp đúng một lần, không có nút vặn ngân sách.
+Lock the pairing of H2: (a) each method runs until HF = 0 with a SELF-CHOSEN number of masks, then the raw Lost difference is compared — then |R| must be reported alongside, and it must be admitted that a method that masks more naturally loses more patterns, i.e. the Lost difference mixes both causes; (b) force every method to the SAME |R| (take the |R| of CUT-HIDE, or the |R|* of P1 when available) before comparing Lost — then a masking-budget parameter must be added to the HidingMethod interface, and it must be defined what happens when a baseline does not hide everything within that budget; or (c) compare not points but the TRADE-OFF CURVE of Lost against |R|, in which case the budget grid must be locked, together with how to summarise a curve into one number to feed into Wilcoxon. The SC3 table in §11.1 promises a 'trade-off curve' but the code runs each method exactly once, with no budget knob.
 
-**Xử lý thực thể hỏng trong phép kiểm ghép cặp**
+**Handling of failed instances in the paired test**
 
-Khai trước quy tắc loại trừ cho phân tích H2/H3, ba ca rời nhau: (1) hàng baseline có HF > 0 (không ẩn hết) — bỏ cả cặp khỏi Wilcoxon, hay giữ và gán Lost một giá trị phạt đã định, hay báo cáo riêng thành tỉ lệ thất bại; (2) hàng mang mã OT hoặc OOM — cùng câu hỏi, và phải nói rõ vì bỏ ô chậm nhất là thiên vị có lợi cho phương pháp chậm; (3) hàng có cột mask_ratio trống (|S| > 1 hoặc mẫu lặp mục, nơi |R|* không định nghĩa) — H3 chạy trên tập con nào. Kèm quy tắc báo cáo: bảng phải in số cặp đưa vào kiểm và số cặp bị loại theo từng lý do.
+Declare in advance the exclusion rule for the H2/H3 analysis, in three separate cases: (1) baseline rows with HF > 0 (not everything hidden) — drop the whole pair from Wilcoxon, or keep it and assign Lost a predetermined penalty value, or report it separately as a failure rate; (2) rows carrying the code OT or OOM — the same question, and it must be stated clearly, because dropping the slowest cells is a bias in favour of the slow method; (3) rows with an empty mask_ratio column (|S| > 1 or a repeated-item pattern, where |R|* is not defined) — on which subset H3 runs. Together with a reporting rule: the table must print the number of pairs entering the test and the number of pairs excluded for each reason.
 
-> Chặn: H2 hiện phát biểu trên hiệu Lost mà không kiểm soát |R|, nên một kết quả thắng có thể chỉ phản ánh việc CUT-HIDE che ít lần hơn chứ không phải chọn vị trí khéo hơn; phản biện bẻ được ngay. Không chốt thì không viết được chú thích bảng SC3 và không dựng được 'đường đánh đổi' mà chính §11.1 hứa.
+> Blocks: H2 currently states the Lost difference without controlling |R|, so a win may only reflect that CUT-HIDE masks fewer times, not that it chooses positions more cleverly; a reviewer can break it immediately. Without locking it, the caption of the SC3 table cannot be written and the 'trade-off curve' that §11.1 itself promises cannot be built.
 
-### A8. Quy ước tính Wilcoxon: hiệu bằng 0, hạng buộc, cỡ hiệu ứng
+### A8. Wilcoxon conventions: zero differences, ties, effect size
 
-Nguồn nêu: `phebinh`  (có điểm do lượt phê bình bổ sung)
+Raised by: `phebinh`  (includes items added by the critical pass)
 
-**Số lần chạy lại của các phương pháp ngẫu nhiên**
+**Number of reruns of the randomized methods**
 
-Chốt số lần chạy lại và cách tổng hợp cho các phương pháp NGẪU NHIÊN khi đo các chỉ số BẤT BIẾN theo máy (Lost, Ghost, SupDist, |R|), tức HH, HR, RH, RR và GA: mỗi thực thể chạy 1 lần với hạt giống 2026 như mã đang làm, hay chạy k lần với k hạt giống khác nhau (k = ?) rồi lấy trung bình, trung vị, hay lần chạy tốt nhất. Nếu lấy nhiều lần thì phải quyết đơn vị lặp của Wilcoxon vẫn là (bộ, σ, tập nhạy cảm) với giá trị đã tổng hợp, chứ không được đếm mỗi lần chạy là một quan sát độc lập. Dòng 8 của bảng giao thức hiện chỉ quy định số lần lặp cho ĐO THỜI GIAN, không phủ ca này.
+Lock the number of reruns and how to aggregate them for the RANDOMIZED methods when measuring the MACHINE-INVARIANT metrics (Lost, Ghost, SupDist, |R|), i.e. HH, HR, RH, RR and GA: each instance runs 1 time with seed 2026 as the code currently does, or runs k times with k different seeds (k = ?) and takes the mean, the median, or the best run. If several runs are taken, it must be decided that the unit of replication of Wilcoxon remains (dataset, σ, sensitive set) with the aggregated value, and each run may not be counted as an independent observation. Row 8 of the protocol table currently specifies the number of repetitions only for TIME MEASUREMENT and does not cover this case.
 
-**Quy ước tính Wilcoxon: hiệu bằng 0, hạng buộc, cỡ hiệu ứng**
+**Wilcoxon conventions: zero differences, ties, effect size**
 
-Khai ba quy ước tính toán mà tệp chốt trước đang bỏ trống: (a) các thực thể có hiệu ĐÚNG BẰNG 0 (rất dễ xảy ra vì Lost là số nguyên nhỏ, probe SC3 cho Lost trong khoảng 1–5) xử lý theo Wilcoxon cổ điển (loại bỏ, giảm n) hay theo Pratt (giữ và cho hạng) — hai cách cho p khác nhau; (b) tính p CHÍNH XÁC (phân phối hoán vị, khả thi khi n nhỏ) hay xấp xỉ chuẩn có hiệu chỉnh liên tục và hiệu chỉnh hạng buộc; (c) công thức rank-biserial dùng bản nào (r = (W+ − W−)/(W+ + W−) hay 1 − 2W−/(n(n+1)/2)) và tính trên n trước hay sau khi bỏ các hiệu bằng 0.
+Declare three computational conventions that the preregistration file leaves blank: (a) instances whose difference is EXACTLY 0 (very likely, because Lost is a small integer; the SC3 probe gives Lost in the range 1–5) are handled by classical Wilcoxon (dropped, reducing n) or by Pratt (kept and ranked) — the two give different p; (b) compute the EXACT p (permutation distribution, feasible when n is small) or a normal approximation with continuity correction and tie correction; (c) which version of the rank-biserial formula (r = (W+ − W−)/(W+ + W−) or 1 − 2W−/(n(n+1)/2)), and computed on n before or after dropping the differences equal to 0.
 
-> Chặn: Đối chứng tầm thường tầng (a) và GA là ngẫu nhiên, nên một lần chạy duy nhất cho một con số may rủi; kết luận 'CUT-HIDE hơn RR' có thể lật khi đổi hạt giống. Không chốt trước thì không biện minh được vì sao lấy đúng hạt giống 2026, và chạy thêm sau khi thấy kết quả là chọn lọc báo cáo.
+> Blocks: The trivial tier (a) controls and GA are randomized, so a single run gives a lucky number; the conclusion 'CUT-HIDE beats RR' can flip when the seed changes. Without locking it beforehand, one cannot justify why exactly seed 2026 was taken, and running more after seeing the results is selective reporting.
 
-### A11. Lưới σ, ℓ_max, khoảng cách và |𝒮| cho từng bộ
+### A11. The grid of σ, ℓ_max, gaps and |S| for each dataset
 
-Nguồn nêu: `code-todo`, `design-experiment`, `paper`, `protocol`
+Raised by: `code-todo`, `design-experiment`, `paper`, `protocol`
 
-**Sigma nao de dem tac dung phu cua SC4**
+**Which sigma counts the side effects of SC4**
 
-Chot mot cau cho SC4: sigma dinh nghia F_sigma(D) de dem Lost/Ghost/SupDist duoc giu CO DINH cho ca bon muc r in {1,2,3,5} (va bang dung sigma cua dong HIDE-DB tuong ung cua bo du lieu do, lay tu protocol.yaml dong_1), hay doi theo tung r (vi du sigma = r x |D| de "cung muc rieng tu danh nghia")? Chon co dinh thi cot Lost so sanh duoc theo chieu ngang giua cac dong r va voi dong HIDE-DB - dung muc dich cua SC4 - nhung phai khai rang khi r nho, so lan che tang manh trong khi mau so F_sigma(D) khong doi. Chon theo tung r thi moi dong doi mau so, cot Lost mat y nghia so sanh ngang va SC4 khong con tra loi duoc RQ5. Co che da san (truong frequentThreshold cua HideProblem va constructor bay tham so); chi thieu mot cau chinh sach + gia tri sigma cho tung bo. Nguoi viet quyet; can truoc khi cai va chay SC4.
+Lock one sentence for SC4: is the sigma that defines F_sigma(D) for counting Lost/Ghost/SupDist kept FIXED for all four levels r in {1,2,3,5} (and equal to exactly the sigma of the corresponding HIDE-DB row of that dataset, taken from protocol.yaml row_1), or does it change with each r (for example sigma = r x |D| for "the same nominal privacy level")? Choosing fixed makes the Lost column comparable horizontally across the r rows and with the HIDE-DB row - exactly the purpose of SC4 - but it must be declared that when r is small, the number of masks rises sharply while the denominator F_sigma(D) does not change. Choosing per r changes the denominator in every row, the Lost column loses its meaning as a horizontal comparison and SC4 can no longer answer RQ5. The mechanism already exists (the frequentThreshold field of HideProblem and the seven-parameter constructor); only one policy sentence + the sigma value for each dataset are missing. The author decides; needed before implementing and running SC4.
 
-**Giá trị ell_max và epsilon chưa ấn định**
+**The values of ell_max and epsilon are not yet set**
 
-Chỉ còn một lựa chọn hẹp: giữ ℓ_max = 3 và ε = 0,5 cho MỌI bộ (khai một lần trong bảng giao thức, đúng như mười cấu hình SC2 đã chạy), hay đặt giá trị riêng theo từng bộ? Nếu giữ đồng nhất thì điền cùng một cặp vào cả tám dòng theo_bo của protocol.yaml dòng 1 và dòng 2 rồi coi như xong. Nếu đặt riêng thì phải nêu căn cứ đo được và chạy lại SC2 cho mỗi cặp mới, vì ℓ_max đổi thì F_σ(D) đổi và ε đổi thì B_ε đổi, kéo theo toàn bộ trọng số w(i) và mọi độ đo Lost/SupDist không so được giữa hai lần chạy. Riêng σ thì bắt buộc phải khai theo từng bộ vì dải đã chạy khác nhau (bms1 100 và 300; sign 100 và 200; fifa 3000; msnbc 1000, 2000, 5000).
+Only a narrow choice remains: keep ℓ_max = 3 and ε = 0.5 for EVERY dataset (declared once in the protocol table, exactly as in the ten SC2 configurations already run), or set separate values per dataset? If kept uniform, fill the same pair into all eight per_dataset rows of protocol.yaml row 1 and row 2 and consider it done. If set separately, a measured basis must be given and SC2 rerun for each new pair, because when ℓ_max changes F_σ(D) changes and when ε changes B_ε changes, carrying along all the weights w(i), and no Lost/SupDist measure is comparable between the two runs. σ alone must be declared per dataset, because the ranges already run differ (bms1 100 and 300; sign 100 and 200; fifa 3000; msnbc 1000, 2000, 5000).
 
-**Giá trị σ, ℓ_max, khoảng cách, |𝒮| cho từng bộ**
+**The values of σ, ℓ_max, gap and |𝒮| for each dataset**
 
-Điền dòng 1 của protocol.yaml cho từng bộ sẽ chạy SC3 (tối thiểu dna và msnbc là nhóm chính; sign, bms1, fifa là đối chứng suy biến): mỗi bộ chạy ở dải σ nào (chọn mấy giá trị, neo vào các σ đã đo ở SC2 — dna 1000, msnbc 1000/2000/5000, fifa 3000, sign 100/200, bms1 100/300 — hay quét dày hơn?), ℓ_max giữ 3 cho mọi bộ hay khác, [g⁻,g⁺] giữ [0,3] cho mọi bộ hay dùng thêm [0,1] cho bộ cần β cao (giai_doan_1 §2 khuyến nghị [0,3] làm cấu hình chính, [0,1] nếu muốn β cao), và |𝒮| chạy đủ {1,5,10,20} hay rút gọn. Kèm theo, sửa mặc định Sc3MainComparison để sensitiveSets = 20 cho khớp §11.5 hoặc khai rõ trong bài là dùng ít hơn.
+Fill row 1 of protocol.yaml for each dataset that will run SC3 (at least dna and msnbc as the main group; sign, bms1, fifa as degenerate controls): which σ range each dataset runs at (how many values to choose, anchored at the σ already measured in SC2 — dna 1000, msnbc 1000/2000/5000, fifa 3000, sign 100/200, bms1 100/300 — or a denser sweep?), whether ℓ_max stays 3 for every dataset or differs, whether [g⁻,g⁺] stays [0,3] for every dataset or [0,1] is also used for datasets that need a high β (giai_doan_1 §2 recommends [0,3] as the main configuration, [0,1] if a high β is wanted), and whether |𝒮| runs the full {1,5,10,20} or a reduced set. Along with this, change the default of Sc3MainComparison so that sensitiveSets = 20 to match §11.5, or state clearly in the paper that fewer are used.
 
-**Sigma cho tung bo du lieu (dong 1)**
+**Sigma for each dataset (row 1)**
 
-Với từng bộ THỰC SỰ có trong kho (dna_mt745584, msnbc, fifa, sign, bms1, leviathan, bible), chốt dãy ít nhất 3 giá trị σ tuyệt đối (đơn vị: số lần xuất hiện không chồng lấp) làm trục hoành cho SC3-SC8, ghi kèm tỉ lệ σ/Σ_P sup_NO tương ứng; đồng thời quyết bỏ hay giữ ba hàng kosarak, trucks, tong_hop trong bảng giao thức. Người viết chốt, căn cứ bảng SC2 đã có ở results-invariant, và phải chốt TRƯỚC lần chạy SC3 lấy số vào bài (preregistration quy tắc 2.3.10).
+For each dataset ACTUALLY present in the repository (dna_mt745584, msnbc, fifa, sign, bms1, leviathan, bible), lock a sequence of at least 3 absolute σ values (unit: number of non-overlapping occurrences) as the horizontal axis for SC3-SC8, recorded with the corresponding ratio σ/Σ_P sup_NO; at the same time decide whether to drop or keep the three rows kosarak, trucks, synthetic in the protocol table. The author locks it, based on the SC2 table already in results-invariant, and must lock it BEFORE the SC3 run whose numbers go into the paper (preregistration rule 2.3.10).
 
-> Chặn: Chan SC4. Neu doi sigma giua cac dong thi cot Lost khong so sanh duoc theo chieu ngang voi dong HIDE-DB o "cung muc rieng tu danh nghia" - ma do chinh la muc dich cua SC4.
+> Blocks: Blocks SC4. If sigma changes between rows, the Lost column is not comparable horizontally with the HIDE-DB row at "the same nominal privacy level" - and that is precisely the purpose of SC4.
 
-### A12. Ngưỡng ε của B_ε cho từng bộ
+### A12. The ε threshold of B_ε for each dataset
 
-Nguồn nêu: `design-gap`, `design-gate`, `design-theory`, `protocol`
+Raised by: `design-gap`, `design-gate`, `design-theory`, `protocol`
 
-**Bước 3 với mẫu lặp mục: tập ứng viên chưa định nghĩa**
+**Step 3 with repeated-item patterns: the candidate set is not defined**
 
-Chốt định nghĩa tập ứng viên và phép kiểm của bước 3 khi μ(Q) ≥ 2, chọn một: (i) giữ quy tắc rẻ mà mã đang dùng — 'vị trí mang ít nhất một nút thiết yếu theo L5' — và khai rõ trong bài rằng đây là XẤP XỈ dưới của tập vị trí thiết yếu, chi phí một luồng cực đại cho mỗi Q ∈ B_ε; (ii) làm đúng §9.2: chạy một luồng cực đại trên NT − V_i cho từng vị trí ứng viên (giới hạn ở vị trí mang nút), chi phí |vị trí mang nút| × chi phí luồng cho mỗi Q, và sửa NettreeFlow/NettreeCutIndex cho khớp; (iii) lọc B_ε xuống μ(Q) = 1 trong FrequentPatterns.nearThreshold, khi đó L5 cho tập chính xác bằng một luồng cực đại và câu độ phức tạp gọn lại. Đơn vị của chi phí cần phát biểu: số lần chạy luồng cực đại trên |B_ε|. Người viết quyết (chọn giữa xấp xỉ rẻ và phép kiểm đầy đủ). GẤP: trước SC3, vì quyết định này đổi w(i) ở bước 4, do đó đổi mọi số Lost của SC3, và cũng đổi số thời gian chỉ mục ở SC6.
+Lock the definition of the candidate set and the check of step 3 when μ(Q) ≥ 2, choosing one: (i) keep the cheap rule the code uses now — 'a position carrying at least one vital node by L5' — and state clearly in the paper that this is a lower APPROXIMATION of the set of vital positions, at a cost of one maximum flow for each Q ∈ B_ε; (ii) do exactly §9.2: run one maximum flow on NT − V_i for each candidate position (limited to positions that carry nodes), at a cost of |positions carrying nodes| × the cost of one flow for each Q, and change NettreeFlow/NettreeCutIndex to match; (iii) filter B_ε down to μ(Q) = 1 in FrequentPatterns.nearThreshold, in which case L5 gives the exact set with one maximum flow and the complexity sentence becomes simpler. The unit of the cost to be stated: the number of maximum-flow runs over |B_ε|. The author decides (choosing between the cheap approximation and the full check). URGENT: before SC3, because this decision changes w(i) in step 4, hence changes every Lost number of SC3, and also changes the index time numbers in SC6.
 
-**Ngưỡng ε của B_ε chưa có giá trị cho từng bộ**
+**The ε threshold of B_ε has no value for each dataset yet**
 
-Chốt ε (số thực không thứ nguyên, định nghĩa B_ε = {Q : σ ≤ sup_NO(Q,D) < (1+ε)σ}) và điền dòng 2 protocol.yaml: giữ MỘT giá trị chung ε = 0,5 cho cả tám bộ (đúng mặc định mã) kèm một câu căn cứ, hay đặt ε riêng từng bộ? Nếu đặt riêng thì tiêu chí nào quyết: chặn trên kích thước |B_ε| (số mẫu) để giữ chi phí bước 3 trong ngân sách, hay độ phủ mẫu gần biên (tỉ lệ F_σ nằm trong dải)? Người viết quyết, nhưng phải chạy trước một lượt quét |B_ε| theo ε ∈ {0,1; 0,25; 0,5; 1,0} trên từng bộ để có số. GẤP: trước SC3, vì w(i) ở bước 4 và mọi số Lost của SC3 phụ thuộc ε, và §11.5 đòi in cảnh báo |B_ε| trước khi chạy tập lớn.
+Lock ε (a dimensionless real number, defining B_ε = {Q : σ ≤ sup_NO(Q,D) < (1+ε)σ}) and fill row 2 of protocol.yaml: keep ONE common value ε = 0.5 for all eight datasets (exactly the code default) with a one-sentence basis, or set ε separately per dataset? If set separately, which criterion decides: an upper bound on the size |B_ε| (number of patterns) to keep the cost of step 3 within budget, or the coverage of near-threshold patterns (the share of F_σ inside the band)? The author decides, but a sweep of |B_ε| over ε ∈ {0.1, 0.25, 0.5, 1.0} must first be run on each dataset to have numbers. URGENT: before SC3, because w(i) in step 4 and every Lost number of SC3 depend on ε, and §11.5 requires printing a |B_ε| warning before running a large set.
 
-**Ngưỡng ε xác định 'mẫu gần biên' B_ε**
+**The ε threshold that defines the 'near-threshold patterns' B_ε**
 
-Chọn giữa hai hình thức chốt cho dòng 2 bảng giao thức: (a) giữ một giá trị ε duy nhất cho mọi bộ — xác nhận ε = 0,5 đang là mặc định trong mã (Sc3MainComparison.java dòng 71) và xoá bảy ô theo_bo trong protocol.yaml, hay (b) đặt ε riêng cho từng bộ (msnbc, dna_mt745584, leviathan, bible, fifa, sign, bms1) theo |B_ε| đo được. Đơn vị: số thực không thứ nguyên, kèm căn cứ là kích thước |B_ε| và chi phí bước 3 quan sát ở SC2/SC6. Người viết quyết, ghi vào config/protocol.yaml trước khi chạy SC3 lấy số vào bài.
+Choose between two forms of locking row 2 of the protocol table: (a) keep a single ε value for every dataset — confirm that ε = 0.5 is the current default in the code (Sc3MainComparison.java line 71) and delete the seven per_dataset cells in protocol.yaml, or (b) set ε separately for each dataset (msnbc, dna_mt745584, leviathan, bible, fifa, sign, bms1) according to the measured |B_ε|. Unit: a dimensionless real number, with as its basis the size |B_ε| and the cost of step 3 observed in SC2/SC6. The author decides, and records it in config/protocol.yaml before running the SC3 whose numbers go into the paper.
 
-**Giá trị ngưỡng epsilon của B_epsilon**
+**The value of the epsilon threshold of B_epsilon**
 
-Quyết đúng một điều: giữ ε = 0,5 đồng nhất cho mọi bộ (giá trị mặc định đang chạy trong Sc3MainComparison và đã ghi ở protocol.yaml) hay đặt ε riêng cho từng bộ; rồi điền dòng 2 của config/protocol.yaml cho cả tám bộ. Không phải quyết lại quy tắc cắt |B_ε| (§9.2 đã chốt: giới hạn theo ε, và tắt bước 3 không đổi HF). Người viết quyết; cần trước SC3 để mọi số đưa vào bài đều có ε khai kèm.
+Decide exactly one thing: keep ε = 0.5 uniform for every dataset (the default value running in Sc3MainComparison and already recorded in protocol.yaml) or set ε separately for each dataset; then fill row 2 of config/protocol.yaml for all eight datasets. The cutting rule for |B_ε| does not need to be decided again (§9.2 has locked it: limited by ε, and turning off step 3 does not change HF). The author decides; needed before SC3 so that every number put into the paper has its ε declared with it.
 
-**Nguong epsilon cua B_eps tung bo (dong 2)**
+**Epsilon threshold of B_eps per dataset (row 2)**
 
-Chọn giữa hai phương án: (a) khai ε = 0,5 đồng nhất cho mọi bộ, kèm một câu căn cứ dựa trên |B_ε| đo được; hay (b) đặt ε riêng theo bộ khi |B_ε| nổ ra (dna và msnbc là hai bộ có nguy cơ), và nếu quét thì quét mấy mức, ví dụ {0,1; 0,25; 0,5}. Người viết chốt TRƯỚC SC3, vì ε đổi thì trọng số w(i) đổi, kéo theo Lost và SupDist đổi, phải chạy lại toàn bộ SC3.
+Choose between two options: (a) declare ε = 0.5 uniform for every dataset, with a one-sentence basis resting on the measured |B_ε|; or (b) set ε per dataset when |B_ε| blows up (dna and msnbc are the two datasets at risk), and if sweeping, sweep how many levels, for example {0.1, 0.25, 0.5}. The author locks it BEFORE SC3, because when ε changes the weights w(i) change, carrying Lost and SupDist with them, and all of SC3 must be rerun.
 
-> Chặn: Không ước lượng được kích thước và bộ nhớ của chỉ mục (tuyên bố cốt lõi của đóng góp 2); không chạy được bước 3 và bước 4 của CUT-HIDE; SC6 không đo được bộ nhớ đỉnh; tệp code/config/preregistration.md chưa chốt được.
+> Blocks: The size and memory of the index cannot be estimated (the core claim of contribution 2); step 3 and step 4 of CUT-HIDE cannot run; SC6 cannot measure peak memory; the file code/config/preregistration.md cannot be locked yet.
 
-### A13. Các phân vị sup_NO để lấy mẫu tập nhạy cảm
+### A13. The sup_NO percentiles that draw the sensitive sets
 
-Nguồn nêu: `design-experiment`
+Raised by: `design-experiment`
 
-**Các phân vị sup_NO để lấy mẫu tập nhạy cảm**
+**The sup_NO percentiles for sampling sensitive sets**
 
-Chốt đúng ba con số rồi sửa Sc3MainComparison.sampleSensitiveSets cho khớp: (1) dùng mấy phân vị của sup_NO và là phân vị nào — ba mức thấp/giữa/cao (25/50/75) hay rổ đều theo số lượng như Sc2DataRegime đang làm; (2) mỗi phân vị lấy bao nhiêu tập nhạy cảm để tổng đạt 20 tập mỗi ô như §11.5 đòi (ví dụ 3 phân vị × 7 tập, hay 4 × 5); (3) ràng độ dài mẫu đúng 2–4 (hiện mã chỉ ràng ≥ 2, và với ℓ_max = 3 thì thực tế chỉ ra 2–3 — nên quyết luôn ℓ_max = 4 hay sửa §11.5 thành 2–3). Phải chốt trước SC3 vì đơn vị lặp của H2 chính là (bộ, σ, tập nhạy cảm); ghi vào protocol.yaml dòng 1 và preregistration.
+Lock exactly three numbers, then change Sc3MainComparison.sampleSensitiveSets to match: (1) how many percentiles of sup_NO to use and which ones — three levels low/middle/high (25/50/75) or equal-count buckets as Sc2DataRegime does now; (2) how many sensitive sets to take per percentile so that the total reaches 20 sets per cell as §11.5 requires (for example 3 percentiles × 7 sets, or 4 × 5); (3) constrain the pattern length to exactly 2–4 (the code currently only constrains ≥ 2, and with ℓ_max = 3 it actually yields only 2–3 — so decide at the same time on ℓ_max = 4 or change §11.5 to 2–3). Must be locked before SC3 because the unit of replication of H2 is exactly (dataset, σ, sensitive set); record it in protocol.yaml row 1 and in the preregistration.
 
-> Chặn: Hai lần chạy SC3 có thể lấy hai tập nhạy cảm khác nhau mà vẫn đúng mô tả trong bài; đơn vị lặp của H2 chính là (bộ, σ, tập nhạy cảm).
+> Blocks: Two SC3 runs could draw two different sensitive sets and still both match the description in the paper; the unit of replication of H2 is exactly (dataset, σ, sensitive set).
 
-### A14. Phạm vi μ(P): giữ hẹp ở μ=1 hay mở sang μ≥2
+### A14. The scope of μ(P): keep it narrow at μ=1, or open it to μ≥2
 
-Nguồn nêu: `design-theory`, `phase1-findings`, `runbook`
+Raised by: `design-theory`, `phase1-findings`, `runbook`
 
-**Trọng số nút khi một mẫu có μ(P) ≥ 2**
+**Node weight when a pattern has μ(P) ≥ 2**
 
-Chot PHAM VI mu(P) cho bang chinh, chon mot trong ba phuong an da liet ke o giai_doan_1_tom_tat.md muc 3: (1) giu pham vi o mu(P) = 1, khai trong phan han che rang do la lop mau lap it hon tren MSNBC (0,218 so voi 0,434) nhung lap NHIEU hon tren DNA (0,806 so voi 0,773); (2) mo sang mu(P) >= 2, dung can P3 va IlpExact tren thuc the nho de do khoang cach toi toi uu, chap nhan khong co ket qua chinh xac cho lop do; (3) da lam roi -- bo sung DNA. Bang chung moi tu khao_sat_bo_du_lieu.md muc 3(c) lam phuong an 1 troi han, nen day la xac nhan chu khong phai can nhac lai tu dau. Kem theo, neu chon (2) thi phai them mot dong vao protocol.yaml quyet_dinh_cai_dat ghi cach gan trong so khi mu(P) >= 2 (hien chi nam trong RUNBOOK, chua vao bang giao thuc). AI QUYET: nguoi viet. GAP: truoc SC3, vi pham vi mu(P) quyet dinh mau nao duoc lay vao tap nhay cam.
+Lock the SCOPE of mu(P) for the main table, choosing one of the three options listed in giai_doan_1_tom_tat.md section 3: (1) keep the scope at mu(P) = 1, declaring in the limitations section that it is the class of patterns that repeat less on MSNBC (0.218 against 0.434) but repeat MORE on DNA (0.806 against 0.773); (2) open to mu(P) >= 2, using bound P3 and IlpExact on small instances to measure the gap to the optimum, accepting that there is no exact result for that class; (3) already done -- add DNA. New evidence from khao_sat_bo_du_lieu.md section 3(c) makes option 1 clearly better, so this is a confirmation and not a reconsideration from scratch. Along with this, if (2) is chosen, a row must be added to protocol.yaml implementation_decisions recording how weights are assigned when mu(P) >= 2 (currently only in RUNBOOK, not yet in the protocol table). WHO DECIDES: the author. URGENT: before SC3, because the scope of mu(P) decides which patterns are drawn into the sensitive set.
 
-**Trần cho tỉ lệ |R|*/Σ|S| và xử lý mẫu cực đoan**
+**A ceiling for the ratio |R|*/Σ|S| and the handling of extreme patterns**
 
-Quyết có đặt trần cho |R|*/Σ|S| hay không, và nếu có thì bằng bao nhiêu. Bối cảnh đã hẹp lại: hai mẫu 0,206 và 0,184 mà điểm này lo là mẫu lặp mục nên đã bị mã loại khỏi SC3; đỉnh thật sự trong lớp μ(P)=1 là 0,102 (dna [3,4], σ=1000, [0,3]). Ba lựa chọn: (i) không đặt trần, chỉ in tỉ lệ theo đúng §8.4 và báo cáo mẫu nặng nhất riêng — hợp lệ vì bản thiết kế không đòi trần; (ii) đặt trần tuyệt đối trên mask_share (ví dụ loại mọi thực thể có |R|*/Σ|S| vượt một ngưỡng) và ghi luật loại trừ vào preregistration TRƯỚC khi chạy SC3; (iii) không loại nhưng đổi cách tổng hợp sang trung vị thay vì trung bình để một thực thể nặng không chi phối. Nếu chọn (ii) phải chốt trước SC3 để không bị coi là chọn dữ liệu sau khi thấy kết quả. Người viết quyết.
+Decide whether to set a ceiling on |R|*/Σ|S|, and if so how high. The context has narrowed: the two patterns 0.206 and 0.184 that this point worried about are repeated-item patterns and so have been excluded from SC3 by the code; the real peak in the μ(P)=1 class is 0.102 (dna [3,4], σ=1000, [0,3]). Three choices: (i) set no ceiling, only print the ratio exactly as in §8.4 and report the heaviest pattern separately — valid because the research design does not require a ceiling; (ii) set an absolute ceiling on mask_share (for example exclude every instance whose |R|*/Σ|S| exceeds a threshold) and write the exclusion rule into the preregistration BEFORE running SC3; (iii) exclude nothing but change the aggregation to the median instead of the mean, so that one heavy instance does not dominate. If (ii) is chosen it must be locked before SC3, so as not to be regarded as selecting data after seeing the results. The author decides.
 
-**Cách in |R|* và β khi tập nhạy cảm có nhiều mẫu**
+**How to print |R|* and β when a sensitive set holds several patterns**
 
-Chốt quy tắc in |R|* và tỉ số |R|/|R|* cho ô |𝒮| ∈ {5,10,20}, chọn một trong ba: (a) khai rõ trong preregistration.md rằng RQ3 và H3 chỉ định nghĩa cho |𝒮| = 1 với μ = 1, và bảng SC3 để trống ô đó đúng như mã đang làm; (b) dùng cận dưới gộp = MAX qua các mẫu của |R|*_P (hợp lệ vì mỗi lần che hạ sup_NO của mỗi mẫu nhiều nhất 1 theo L1; lưu ý TỔNG thì KHÔNG phải cận dưới hợp lệ vì một lần che có thể phục vụ nhiều mẫu), rồi sửa boundFromP1; (c) in theo TỪNG mẫu, một dòng mỗi mẫu, và định nghĩa lại đơn vị lặp của H3 cho khớp. Đơn vị: số lần che. Người viết quyết vì đây là định nghĩa đại lượng của giả thuyết, không suy ra được từ dữ liệu. GẤP: trước SC3, vì rơi vào quy tắc 2.4.7 chốt trước khi chạy.
+Lock the rule for printing |R|* and the ratio |R|/|R|* for the cells |𝒮| ∈ {5,10,20}, choosing one of three: (a) state clearly in preregistration.md that RQ3 and H3 are defined only for |𝒮| = 1 with μ = 1, and the SC3 table leaves that cell empty, exactly as the code does now; (b) use the pooled lower bound = MAX over the patterns of |R|*_P (valid because each mask lowers the sup_NO of each pattern by at most 1 by L1; note that the SUM is NOT a valid lower bound, because one mask can serve several patterns), then change boundFromP1; (c) print PER pattern, one row per pattern, and redefine the unit of replication of H3 to match. Unit: number of masks. The author decides, because this is the definition of the quantity of a hypothesis and cannot be derived from the data. URGENT: before SC3, because it falls under rule 2.4.7, locked before running.
 
-> Chặn: Chưa biết được phép tuyên bố CUT-HIDE chính xác tới đâu trên dữ liệu thật (§5 ghi "Chính xác khi μ(P)=1"); chưa viết được câu khai trong bản thảo cho trường hợp μ(P) ≥ 2, vốn là trường hợp phổ biến ở MSNBC/FIFA.
+> Blocks: It is not yet known how far CUT-HIDE may be claimed to be exact on real data (§5 says "Exact when μ(P)=1"); the statement in the manuscript for the case μ(P) ≥ 2, which is the common case in MSNBC/FIFA, cannot be written yet.
 
-### A15. Nhiều mẫu nhạy cảm dưới ngưỡng CSDL: LP làm tròn hay GA lai
+### A15. Several sensitive patterns under a database threshold: LP rounding or hybrid GA
 
-Nguồn nêu: `code-todo`, `design-gap`, `design-theory`, `paper`
+Raised by: `code-todo`, `design-gap`, `design-theory`, `paper`
 
-**CUT-HIDE nhieu mau duoi nguong CSDL: LP hay GA lai**
+**CUT-HIDE with several patterns under the database threshold: LP or hybrid GA**
 
-Cho nhanh CUT-HIDE nhieu mau + nguong CSDL (CutHide.runMultiPattern khi isDatabaseMode), phai chot hai thu roi rac: (1) dinh nghia duong cong chi phi chung c_S(k) khi cac mau nhay cam chia nhau mot vi tri - k dem theo don vi nao (tong muc giam sup_NO cong don tren moi mau nhay cam trong chuoi S, hay vector muc giam tung mau), vi P7 chi dinh nghia duoc khi chi phi la ham mot bien; (2) thuat toan: (a) lam tron nghiem noi long tuyen tinh, cho he so xap xi l_max nhung can them bo giai LP vao build Java von dang tu chua (IlpExact co y nhanh-can khong dung solver ngoai), hay (b) GA lai khoi tao tu cac lat cat, khong co bao dam nhung dung lai ha tang da co. Don vi danh gia: ti so |R|/|R|* va thoi gian chay. Nguoi viet quyet, co the dua vao so do san: probe/oldprob.py cho khe nguyen OPT/LP trung binh 1,001, tuc phuong an (a) gan nhu luon toi uu tren thuc the nho. Phai chot TRUOC SC3 vi protocol.yaml dong_1 dat sensitive_size = [1, 5, 10, 20]: ba trong bon cau hinh roi vao nhanh nay va hien nem UnsupportedOperationException.
+For the CUT-HIDE branch with several patterns + database threshold (CutHide.runMultiPattern when isDatabaseMode), two discrete things must be locked: (1) the definition of the joint cost curve c_S(k) when the sensitive patterns share a position - in what unit k counts (the total drop of sup_NO summed over every sensitive pattern in the sequence S, or a vector of per-pattern drops), because P7 is defined only when the cost is a function of one variable; (2) the algorithm: (a) rounding the linear relaxation, which gives the approximation factor l_max but needs an LP solver added to the Java build, which is currently self-contained (IlpExact is deliberately branch-and-bound and uses no external solver), or (b) a hybrid GA initialised from the cuts, with no guarantee but reusing the existing infrastructure. Unit of evaluation: the ratio |R|/|R|* and the running time. The author decides, and can rely on numbers already available: probe/oldprob.py gives a mean OPT/LP integrality gap of 1.001, i.e. option (a) is nearly always optimal on small instances. Must be locked BEFORE SC3 because protocol.yaml row_1 sets sensitive_size = [1, 5, 10, 20]: three of the four configurations fall into this branch and currently throw UnsupportedOperationException.
 
-**Nhiều mẫu nhạy cảm ở ngưỡng CSDL: chọn cơ chế nào**
+**Several sensitive patterns at the database threshold: which mechanism to choose**
 
-Chọn ĐÚNG MỘT cơ chế phân bổ số lần che giữa các chuỗi khi |𝒮| > 1 dưới ngưỡng CSDL, rồi viết đặc tả thủ tục con và sửa §7 cho khớp: (A) mở rộng tham lam theo tỉ số của §9.2 bước 7 ra TOÀN cơ sở dữ liệu (bỏ vòng lặp theo từng chuỗi) và chỉ giữ ILP làm thước đo khoảng cách tới tối ưu trên thực thể nhỏ — rẻ nhất, nhưng phải bỏ lời hứa 'bảo đảm hệ số l_max' ở §7 dòng 224; (B) nới lỏng tuyến tính + làm tròn, phải phát biểu và chứng minh hệ số l_max, cài trong baseline/IlpExact.java; (C) GA lai khởi tạo từ lát cắt, phải khai cỡ quần thể, số thế hệ, tỉ lệ lai/đột biến và hạt giống (dòng 3 protocol.yaml đang null), cài trong baseline/GaHybrid.java; (D) tổng quát hoá quy hoạch động P7 sang đường cong chi phí gộp nhiều mẫu. Người viết quyết; nếu chọn (B) hoặc (C) thì phải có thêm một chứng minh hoặc một bộ tham số, nếu chọn (A) thì phải sửa danh sách đóng góp. GẤP: chặn nhánh |𝒮| ∈ {5,10,20} của SC3, cột Metaheuristic ở bảng §11.4 và baseline tầng (c).
+Choose EXACTLY ONE mechanism for allocating the number of masks between sequences when |𝒮| > 1 under the database threshold, then write the specification of the subprocedure and change §7 to match: (A) extend the ratio greedy of §9.2 step 7 to the WHOLE database (drop the per-sequence loop) and keep ILP only as the gauge of the gap to the optimum on small instances — cheapest, but the promise 'guaranteed factor l_max' in §7 line 224 must be dropped; (B) linear relaxation + rounding, which must state and prove the factor l_max, implemented in baseline/IlpExact.java; (C) hybrid GA initialised from cuts, which must declare the population size, the number of generations, the crossover/mutation rates and the seed (row 3 of protocol.yaml is null), implemented in baseline/GaHybrid.java; (D) generalise the dynamic programming of P7 to a cost curve pooling several patterns. The author decides; if (B) or (C) is chosen, an extra proof or a parameter set is needed, if (A) is chosen the list of contributions must be changed. URGENT: blocks the |𝒮| ∈ {5,10,20} branch of SC3, the Metaheuristic column of the §11.4 table and the tier (c) baseline.
 
-**Ho metaheuristic va tham so cho GA thuan va GA lai**
+**Metaheuristic family and parameters for plain GA and hybrid GA**
 
-Chi con hai o phai chot, khong phai toan bo thiet ke GA. (1) Doi chung tang (c): lay EMO cua [R12] (toi uu dien tu, cung nhom tac gia, phai doc lai de cai dung) hay GA thong thuong khoi tao ngau nhien - hai lua chon nay tra loi cung mot cau hoi "phuong phap khac ho dat duoc gi", nhung EMO gay rui ro trung dong gop va dong 30 con doi doi chieu lai voi cach de cuong NCS dung NSGA-II, trong khi dong 29 da cam Pareto/NSGA-II. (2) Bon con so + hat giong: kich thuoc quan the, so the he, ti le lai ghep, ti le dot bien, va gia tri cho protocol.yaml dong_3 giai_thuat_di_truyen (hien null). Don vi: so ca the, so the he, xac suat trong [0,1], so nguyen seed. Nguoi viet quyet; phai chot truoc khi chay SC3 voi methods co "ga", vi ham thich nghi HF/Lost/|R| va so lan danh gia quyet dinh ca thoi gian chay lan ket luan "phan dong gop cua viec khoi tao tu lat cat".
+Only two cells remain to be locked, not the whole GA design. (1) The tier (c) control: take EMO of [R12] (electromagnetism-like optimisation, same group of authors, must be read again to implement correctly) or an ordinary GA with random initialisation - these two choices answer the same question "what does a method of another family achieve", but EMO carries the risk of overlapping the contribution, and row 30 still awaits a cross-check against the way the PhD proposal uses NSGA-II, while row 29 has already forbidden Pareto/NSGA-II. (2) Four numbers + seed: population size, number of generations, crossover rate, mutation rate, and the value for protocol.yaml row_3 genetic_algorithm (currently null). Units: number of individuals, number of generations, probability in [0,1], integer seed. The author decides; must be locked before running SC3 with methods containing "ga", because the fitness function HF/Lost/|R| and the number of evaluations decide both the running time and the conclusion "the share of the contribution due to initialising from cuts".
 
-**Trường hợp nhiều mẫu: làm tròn LP hay GA lai**
+**The several-pattern case: LP rounding or hybrid GA**
 
-Chọn MỘT trong ba cho nhánh nhiều mẫu nhạy cảm dưới ngưỡng cơ sở dữ liệu, và chọn trước khi chạy SC3 với |𝒮|>1: (a) làm tròn nới lỏng tuyến tính — bài được tuyên bố tỉ số xấp xỉ ℓ_max (với ℓ_max=3 là hệ số 3), phải cài quan hệ nới lỏng trong IlpExact và chứng minh bảo đảm; (b) GA lai khởi tạo từ lát cắt — không có tỉ số, bài phải trình bày nó như lớp tìm kiếm cho phần NP-khó kèm so sánh bắt buộc với GA thuần để tách phần đóng góp của khởi tạo, và phải khai quần thể, số thế hệ, tỉ lệ lai ghép, đột biến vào dòng 3 bảng giao thức; (c) tham lam theo tỉ số như §9.2 bước 7 đã đặc tả và mã đã cài cho HIDE-SEQ, mở rộng sang phân bổ liên chuỗi — rẻ nhất nhưng hạ câu "chỉ dùng lớp tìm kiếm xấp xỉ" ở tóm tắt xuống mức heuristic thuần. Chọn xong phải sửa đồng thời baibao.tex:801-803, doc §7 mục 3 và doc §9.2 bước 7 cho khớp nhau.
+Choose ONE of three for the branch with several sensitive patterns under the database threshold, and choose before running SC3 with |𝒮|>1: (a) rounding the linear relaxation — the paper may claim the approximation ratio ℓ_max (with ℓ_max=3 that is a factor 3), the relaxation must be implemented in IlpExact and the guarantee proved; (b) hybrid GA initialised from cuts — no ratio, the paper must present it as a search layer for the NP-hard part, with a mandatory comparison against plain GA to separate the contribution of the initialisation, and must declare population, number of generations, crossover and mutation rates in row 3 of the protocol table; (c) ratio greedy as §9.2 step 7 has specified and the code has implemented for HIDE-SEQ, extended to allocation across sequences — cheapest, but it lowers the sentence "only uses an approximate search layer" in the abstract to the level of a pure heuristic. Once chosen, baibao.tex:801-803, doc §7 item 3 and doc §9.2 step 7 must all be changed together to agree.
 
-**Lời giải cho trường hợp nhiều mẫu: LP làm tròn hay GA lai**
+**The solution for the several-pattern case: LP rounding or hybrid GA**
 
-Chọn một lời giải cho nhánh nhiều mẫu dưới ngưỡng CSDL (chỗ CutHide.java dòng 143 đang ném lỗi): (a) làm tròn nới lỏng tuyến tính — nếu chọn thì phải viết thêm một mệnh đề vào §8.1 chứng minh hệ số xấp xỉ ℓ_max, nếu không thì phải bỏ cụm 'có bảo đảm hệ số ℓ_max' khỏi đóng góp 3; (b) GA lai khởi tạo từ lát cắt — phải cài GaHybrid và khai tham số quần thể, thế hệ, lai, đột biến vào dòng 3 bảng giao thức; (c) mở rộng tham lam theo tỉ số của bước 7 sang ngưỡng CSDL bằng cách gộp đường cong chi phí, chấp nhận không có bảo đảm. Đơn vị: một lựa chọn + (nếu (a)) một mệnh đề có chứng minh. Người viết quyết, trước khi chạy SC3 với |𝒮| > 1 và trước khi chốt câu đóng góp 3.
+Choose one solution for the several-pattern branch under the database threshold (where CutHide.java line 143 currently throws an error): (a) rounding the linear relaxation — if chosen, a proposition must be added to §8.1 proving the approximation factor ℓ_max, otherwise the phrase 'with a guaranteed factor ℓ_max' must be removed from contribution 3; (b) hybrid GA initialised from cuts — GaHybrid must be implemented and the parameters population, generations, crossover, mutation declared in row 3 of the protocol table; (c) extend the ratio greedy of step 7 to the database threshold by pooling the cost curves, accepting that there is no guarantee. Unit: one choice + (if (a)) one proposition with a proof. The author decides, before running SC3 with |𝒮| > 1 and before locking the sentence of contribution 3.
 
-> Chặn: Không cài được bước 7 của CUT-HIDE; không chạy được nhánh nhiều mẫu của SC3; baseline tầng (c) ở §11.3 giả định tồn tại 'GA lai' để đo phần đóng góp của việc khởi tạo; câu khẳng định 'có bảo đảm hệ số ℓ_max' trong danh sách đóng góp hiện chưa có chứng minh trong §8.1.
+> Blocks: Step 7 of CUT-HIDE cannot be implemented; the several-pattern branch of SC3 cannot run; the tier (c) baseline in §11.3 assumes that a 'hybrid GA' exists to measure the contribution of the initialisation; the claim 'with a guaranteed factor ℓ_max' in the list of contributions has as yet no proof in §8.1.
 
-### A16. "Thực thể nhỏ" là gì, và SC3 lấy biến thể ILP nào làm mốc
+### A16. What a "small instance" is, and which ILP variant SC3 takes as its reference
 
-Nguồn nêu: `code-todo`, `design-experiment`
+Raised by: `code-todo`, `design-experiment`
 
-**SC3 dung bien the ILP nao lam moc toi uu**
+**Which ILP variant SC3 uses as the optimum reference**
 
-Chi con mot o: khi |S| > 1 (noi P1 khong cho |R|*), cot doi chieu toi uu cua bang SC3 lay tu "ilp" (exact-minR, chi cuc tieu |R|) hay "ilp-lost" (exact-minR-minLost, them muc tieu Lost)? §2 da phat bieu muc tieu tu dien nen ve dinh nghia phai la exact-minR-minLost; nhung chon no thi phai chap nhan gia: IlpExact liet ke moi nghiem co nho nhat, chan boi MAX_OPTIMAL_SETS = 20.000 va thuc the bi gioi han MAX_CANDIDATES = 64, MAX_MASKS = 12, nen phai khai ro co thuc the toi da chay duoc va cach xu ly khi vuot han (bo dong hay danh dau OT). Neu chon exact-minR cho re thi bang chi tra loi duoc "can bao nhieu lan che", khong tra loi duoc "tiet kiem duoc bao nhieu Lost", va cau RQ2 ("o cung |R|, CUT-HIDE co mat it mau hon khong") mat moc tren. Cung phai chot luon: them "ilp" hay "ilp-lost" vao methodList mac dinh cua Sc3 dong 75 (hien ca hai deu ngoai mac dinh), de bang khong am tham thieu cot. Nguoi viet quyet; truoc SC3.
+Only one cell remains: when |S| > 1 (where P1 gives no |R|*), is the optimum reference column of the SC3 table taken from "ilp" (exact-minR, minimises |R| only) or from "ilp-lost" (exact-minR-minLost, adds the Lost objective)? §2 has stated a lexicographic objective, so by definition it must be exact-minR-minLost; but choosing it means accepting the price: IlpExact enumerates every minimum-size solution, bounded by MAX_OPTIMAL_SETS = 20,000, and instances are limited by MAX_CANDIDATES = 64, MAX_MASKS = 12, so the maximum instance size that can run must be stated clearly, along with how exceeding the limit is handled (drop the row or mark OT). If the cheaper exact-minR is chosen, the table can only answer "how many masks are needed", not "how much Lost is saved", and the RQ2 question ("at the same |R|, does CUT-HIDE lose fewer patterns") loses its upper reference. Also lock at the same time: add "ilp" or "ilp-lost" to the default methodList of Sc3 line 75 (currently both are outside the default), so that the table does not silently miss a column. The author decides; before SC3.
 
-**Định nghĩa "thực thể nhỏ" cho bộ giải chính xác**
+**Definition of "small instance" for the exact solver**
 
-Quyết cách DỰNG thực thể nhỏ, vì hai chặn có sẵn trong mã (≤ 64 vị trí ứng viên trên toàn CSDL, ≤ 12 lần che) khiến không thực thể thật nào lọt qua: lấy mẫu con bao nhiêu chuỗi từ mỗi bộ (|D| = ?), cắt độ dài chuỗi tới bao nhiêu, |𝒮| bằng mấy, σ nào, và lấy bao nhiêu thực thể như vậy cho mỗi bộ để tỉ lệ khoảng cách tới tối ưu có ý nghĩa (ví dụ 30 thực thể/bộ, dùng chung đơn vị lặp (bộ, σ, tập nhạy cảm) của §11.6)? Đồng thời quyết dùng bản 'exact-minR' hay 'exact-minR-minLost' (IlpExact.withSideEffectObjective) — Javadoc của lớp đòi kịch bản phải khai rõ đã dùng bản nào. Ghi vào protocol.yaml và preregistration trước SC3, vì khoảng cách tới tối ưu là bằng chứng của RQ2.
+Decide how to BUILD small instances, because the two caps already in the code (≤ 64 candidate positions over the whole database, ≤ 12 masks) let no real instance through: how many sequences to subsample from each dataset (|D| = ?), what length to cut sequences to, what |𝒮|, which σ, and how many such instances to take per dataset so that the ratio of the gap to the optimum is meaningful (for example 30 instances/dataset, sharing the unit of replication (dataset, σ, sensitive set) of §11.6)? At the same time decide whether to use the 'exact-minR' or the 'exact-minR-minLost' version (IlpExact.withSideEffectObjective) — the class Javadoc requires the scenario to state clearly which version was used. Record it in protocol.yaml and the preregistration before SC3, because the gap to the optimum is the evidence for RQ2.
 
-> Chặn: Ti so |R|/|R|* va cau tra loi cho RQ3 phu thuoc vao moc nao duoc chon; neu khong chot thi bang SC3 khong co cot so sanh voi loi giai chinh xac, tuc mat tang (c) trong bang so sanh chinh.
+> Blocks: The ratio |R|/|R|* and the answer to RQ3 depend on which reference is chosen; if it is not locked, the SC3 table has no column comparing with the exact solution, i.e. tier (c) is lost from the main comparison table.
 
-### A17. Gắn phiên bản mã vào tệp kết quả (đang là unversioned)
+### A17. Stamping the code version into the result files (now unversioned)
 
-Nguồn nêu: `phebinh`  (có điểm do lượt phê bình bổ sung)
+Raised by: `phebinh`  (includes items added by the critical pass)
 
-**Gắn phiên bản mã vào tệp kết quả (đang là unversioned)**
+**Stamping the code version into the result files (now unversioned)**
 
-Chốt cách gắn phiên bản mã vào mỗi lần chạy lấy số vào bài, và số phận số liệu đã có: (a) đặt HIDENOSP_REVISION = git rev-parse HEAD trong một script bọc ngoài (hoặc cho RunId tự gọi git) và bổ sung điều kiện cây làm việc sạch, ghi thêm hậu tố -dirty khi bẩn; (b) chấp nhận nhãn unversioned và bỏ cột phiên bản mã khỏi yêu cầu 2.6.8. Kèm theo: 16 tệp SC2 của giai đoạn 1 đang mang nhãn dev_unversioned — giữ nguyên và khai trong bài rằng chúng gắn với commit nào bằng ngày giờ, hay chạy lại một lượt SC2 sau khi có cơ chế đóng dấu và sau khi protocol.yaml dòng 1 được chốt.
+Lock how the code version is attached to each run whose numbers go into the paper, and the fate of the numbers already obtained: (a) set HIDENOSP_REVISION = git rev-parse HEAD in a wrapper script (or let RunId call git itself) and add the condition of a clean working tree, adding a -dirty suffix when it is dirty; (b) accept the label unversioned and drop the code-version column from requirement 2.6.8. Along with this: the 16 SC2 files of phase 1 carry the label dev_unversioned — keep them as they are and state in the paper which commit they belong to by date and time, or rerun one pass of SC2 after the stamping mechanism exists and after protocol.yaml row 1 is locked.
 
-> Chặn: Bảng đặc trưng dữ liệu của bài (ρ_rep, β) lấy từ các tệp SC2 hiện có; không có phiên bản mã thì không ai, kể cả người viết, dựng lại được đúng số khi mã đã đổi bốn commit trong một ngày. Chính tệp chốt trước đòi 'git log làm bằng chứng thời điểm', nhưng kết quả lại không trỏ ngược về commit nào.
+> Blocks: The paper's table of data characteristics (ρ_rep, β) is taken from the existing SC2 files; without a code version nobody, the author included, can rebuild exactly the same numbers when the code changed four commits in one day. The preregistration file itself requires 'git log as evidence of the time', yet the results do not point back to any commit.
 
-### A23. Nội dung tệp preregistration và việc chuyển go/no-go sang chính thức
+### A23. The content of the preregistration file, and making the go/no-go official
 
-Nguồn nêu: `code-todo`, `design-gap`, `design-gate`, `design-theory`, `runbook`
+Raised by: `code-todo`, `design-gap`, `design-gate`, `design-theory`, `runbook`
 
-**Cai dat tham chieu NETGAP cho phep kiem SC1**
+**Reference NETGAP implementation for the SC1 check**
 
-Chon mot trong ba, va he qua khac han nhau: (a) lay cai dat NETGAP cua [R1] tu ma nguon cua tac gia hoac mot thu vien cong khai - phai them mot o "nguon va phien ban thu vien NETGAP" vao protocol.yaml (hien dong_5 khong co o do, nen TODO dang tro toi mot o khong ton tai) va chap nhan phu thuoc ngoai trong build Maven von dang tu chua; (b) tu cai lai NETGAP trong kho nay - khi do phai ha cach phat bieu trong bai tu "doi chieu voi cai dat goc" xuong "doi chieu voi mot cai dat doc lap cua thuat toan NETGAP theo mo ta trong [R1]", vi cung mot nguoi cai ca hai thi sai sot ve HIEU noi dinh nghia se trung nhau va phep kiem khong bat duoc; (c) bo nua phep kiem nay va sua dong 396 cua thiet ke, dua hoan toan vao doi chieu voi vet can (BruteForce) von da chay. Nguoi viet quyet. GAP: phai chot truoc SC3 vi preregistration.md muc 4 dat "SC1 phai xanh (0 ca lech) truoc moi kich ban khac", va moi so lieu SC3 deu dua tren sup_NO.
+Choose one of three, and the consequences are quite different: (a) take the NETGAP implementation of [R1] from the authors' source code or from a public library - a cell "source and version of the NETGAP library" must be added to protocol.yaml (row_5 currently has no such cell, so the TODO points at a cell that does not exist) and an external dependency accepted in the Maven build, which is currently self-contained; (b) reimplement NETGAP in this repository - then the wording in the paper must be lowered from "checked against the original implementation" to "checked against an independent implementation of the NETGAP algorithm as described in [R1]", because when one person implements both, errors in UNDERSTANDING the definition will coincide and the check cannot catch them; (c) drop this half of the check and change line 396 of the design, relying entirely on the comparison with brute force (BruteForce), which has already run. The author decides. URGENT: must be locked before SC3 because preregistration.md section 4 sets "SC1 must be green (0 mismatches) before any other scenario", and every SC3 number rests on sup_NO.
 
-**Bộ nhớ đỉnh của chỉ mục: đo heap hay RSS**
+**Peak memory of the index: measure the heap or the RSS**
 
-Chốt đại lượng 'bộ nhớ đỉnh' của SC6 và điền dong_6_do_bo_nho: (i) chỉ báo cáo heap đỉnh lấy mẫu trong tiến trình (MemoryProbe, chu kỳ 50 ms) và SỬA §11.7 dòng 6 để bỏ đòi hỏi RSS, ghi rõ trong chú thích bảng là heap chứ không phải RSS; hoặc (ii) giữ RSS tối đa của tiến trình, khi đó phải chốt ba thứ: ai viết script bọc ngoài (Get-Process trên Windows, /proc/self/status trên Linux), chu kỳ lấy mẫu bao nhiêu ms, và in một cột hay hai cột (heap và RSS). Đơn vị: byte (hoặc MiB) đỉnh trên một lần chạy. Người viết quyết. Mức gấp: trước khi nộp — SC6 chạy sau cùng theo preregistration.md mục 4 và exp/Sc6Scalability còn chưa cài — nhưng phải xong trước lần chạy SC6 lấy số, vì đây là cột so chỉ mục cắt Nettree với HHA, DBSH, SBSH.
+Lock the quantity 'peak memory' of SC6 and fill row_6_memory_measurement: (i) report only the peak heap sampled inside the process (MemoryProbe, period 50 ms) and CHANGE §11.7 row 6 to drop the RSS requirement, stating clearly in the table note that it is the heap and not the RSS; or (ii) keep the maximum RSS of the process, in which case three things must be locked: who writes the wrapper script (Get-Process on Windows, /proc/self/status on Linux), what the sampling period is in ms, and whether to print one column or two (heap and RSS). Unit: peak bytes (or MiB) per run. The author decides. Urgency: before submission — SC6 runs last according to preregistration.md section 4 and exp/Sc6Scalability is not implemented yet — but it must be done before the SC6 run whose numbers are used, because this is the column that compares the Nettree cut index with HHA, DBSH, SBSH.
 
-**Máy đo thời gian đã khai là máy nào**
+**Which machine is the declared timing machine**
 
-Chon MOT may vat ly lam may do da khai va dien du sau o cua protocol.yaml dong_5 (jdk -- da co san '17.0.19 OpenJDK 64-Bit Server VM' o dau moi tep ket qua; co_xms; co_xmx -- cac lan chay hien dung -Xmx4g, heap_max_bytes 6442450944; he_dieu_hanh; cpu; ram; ten_may_do), cong hai o lien quan dang null: dong_7 gioi_han_moi_lan_chay_giay va dong_9 so_lan_lam_nong. Kem theo phai quyet: PC-THAI (may phat trien hien tai) co duoc khai luon lam may do khong, hay dung mot may khac -- neu dung may khac thi moi so thoi gian phai chay lai tren do. AI QUYET: nguoi viet. GAP: truoc SC6, khong gap bang [0]/[1] vi SC6 chay sau cung theo preregistration.md muc 4 va ban than SC6 hien con nem UnsupportedOperationException.
+Choose ONE physical machine as the declared measuring machine and fill all six cells of protocol.yaml row_5 (jdk -- already present as '17.0.19 OpenJDK 64-Bit Server VM' at the head of every result file; xms_flag; xmx_flag -- the current runs use -Xmx4g, heap_max_bytes 6442450944; operating_system; cpu; ram; machine_name), plus two related cells that are null: row_7 limit_per_run_seconds and row_9 warmup_runs. Along with this it must be decided: may PC-THAI (the current development machine) also be declared the measuring machine, or is another machine used -- if another machine is used, every timing number must be rerun there. WHO DECIDES: the author. URGENT: before SC6, not as urgent as [0]/[1], because SC6 runs last according to preregistration.md section 4 and SC6 itself currently still throws UnsupportedOperationException.
 
-**Ngưỡng chấp nhận cho tỉ lệ chứng nhận UB = LB của quét λ**
+**Acceptance threshold for the certified share UB = LB of the λ sweep**
 
-Quyết cách phát biểu đóng góp 3 sao cho không va vào P6(e): chọn giữa (a) bỏ cụm khẳng định chung 'có chứng nhận' và thay bằng phát biểu định lượng có điều kiện kiểu 'quét λ trả về cặp cận LB/UB, và chứng nhận tối ưu ở phần lớn cặp (S,k) đo được — dò tìm cho 14.862/14.867', hay (b) giữ cụm 'có chứng nhận' nhưng kèm một ngưỡng diễn giải chốt trước trong config/preregistration.md (đơn vị: tỉ lệ cặp (S,k) có ⌈LB⌉ = UB, ví dụ ≥ 0,95) cùng câu nói trước sẽ làm gì nếu SC7 rơi xuống dưới ngưỡng. Người viết quyết; nếu chọn (b) thì phải điền vào preregistration.md trước khi chạy SC7 lấy số vào bài.
+Decide how to state contribution 3 so that it does not collide with P6(e): choose between (a) dropping the general claim 'certified' and replacing it with a conditional quantitative statement such as 'the λ sweep returns a pair of bounds LB/UB, and certifies optimality on most of the measured (S,k) pairs — probe: 14,862/14,867', or (b) keeping the phrase 'certified' but with an interpretation threshold locked in advance in config/preregistration.md (unit: the share of (S,k) pairs with ⌈LB⌉ = UB, for example ≥ 0.95), together with a sentence saying in advance what will be done if SC7 falls below the threshold. The author decides; if (b) is chosen it must be filled into preregistration.md before running the SC7 whose numbers go into the paper.
 
-**Chọn người thứ hai đọc kiểm chứng minh**
+**Choosing a second reader to check the proofs**
 
-Chọn đích danh một người đọc kiểm (trong nhóm cộng tác [R6]/[R12] hay ngoài nhóm), giao đúng danh sách chứng minh của §8.1 gồm L0, L1, P1, P2, Hệ quả P1c, L5, P3, L4a, L4b, P6(a)–(e), P7, P5; ấn định đọc TRƯỚC khi đóng băng §5–§7; và chốt nơi ghi kết quả đọc kiểm (đề nghị một tệp riêng ngoài kho, ví dụ doc/doc_kiem_chung_minh.md, không đưa vào bản thảo). Người viết quyết. Cần trước khi nộp, vì §13 mục 1.2.1 không tick được nếu thiếu.
+Name one checking reader (within the collaborating group [R6]/[R12] or outside it), hand over exactly the list of proofs of §8.1, consisting of L0, L1, P1, P2, Corollary P1c, L5, P3, L4a, L4b, P6(a)–(e), P7, P5; schedule the reading BEFORE §5–§7 are frozen; and lock where the result of the check is recorded (a separate file outside the repository is suggested, for example doc/doc_kiem_chung_minh.md, not put into the manuscript). The author decides. Needed before submission, because §13 item 1.2.1 cannot be ticked without it.
 
-**Chuyển go/no-go từ kết luận tạm sang chính thức**
+**Moving go/no-go from a provisional conclusion to an official one**
 
-Chốt hai thứ và ghi thẳng vào §12a: (i) tiêu chí go chính thức — giữ nguyên tiêu chí v0.1 (còn HIDE-SEQ + P1–P2 + CUT-HIDE là của mình) hay thêm điều kiện 'SC8 phải thắng HHA/DBSH/SBSH ít nhất về Lost'; (ii) ngày hết hạn chờ toàn văn [R11], sau ngày đó tự động kích hoạt mức đọc rút gọn (§12a mục 3) và ghi 'go' mà không chờ nữa. Người viết quyết. Gấp trước SC3 vì §13 mục 1.1.7 (chốt danh sách đóng góp) treo vào nó.
+Lock two things and write them directly into §12a: (i) the official go criterion — keep the v0.1 criterion unchanged (HIDE-SEQ + P1–P2 + CUT-HIDE are still ours) or add the condition 'SC8 must beat HHA/DBSH/SBSH at least on Lost'; (ii) the deadline for waiting for the full text of [R11], after which the reduced reading level (§12a item 3) is triggered automatically and 'go' is recorded without waiting any longer. The author decides. Urgent before SC3, because §13 item 1.1.7 (locking the list of contributions) hangs on it.
 
-> Chặn: SC1 hien mat mot nua phep kiem ma thiet ke nghien cuu (dong 396) doi "NETGAP, luong cuc dai va vet can cho cung sup_NO; so ca lech = 0". Khong co nua nay thi khong co bang chung cai dat sup_NO khop voi dinh nghia goc, ma moi so lieu SC3 deu dua tren sup_NO.
+> Blocks: SC1 currently lacks half of the check that the research design (line 396) requires: "NETGAP, maximum flow and brute force give the same sup_NO; number of mismatches = 0". Without this half there is no evidence that the sup_NO implementation matches the original definition, and every SC3 number rests on sup_NO.
 
-### A24. Baseline tầng (a) khi tập nhạy cảm có nhiều hơn một mẫu
+### A24. Tier (a) baselines when a sensitive set holds more than one pattern
 
-Nguồn nêu: `code-todo`
+Raised by: `code-todo`
 
-**Baseline tang (a) khi tap nhay cam co nhieu hon mot mau**
+**Tier (a) baseline when the sensitive set has more than one pattern**
 
-Phai chot hinh dang cua bang SC3 khi |S| > 1, chon mot trong ba: (a) mo rong RandomMasking sang nhieu mau - re nhat ve khai niem (chon chuoi theo tong sup_NO tren moi mau nhay cam, chon vi tri ngau nhien tren mot lan xuat hien nhay cam bat ky), nhung do la mot thuat toan MOI do ta dat ra, khong con la "thiet ke hai chieu cua [R20]" va phai khai nhu vay; (b) chap nhan doi chung tang (a) chi ton tai o |S| = 1, tuc bang SC3 tach lam hai phan co bo phuong phap khac nhau, va phai noi ro trong chu thich bang rang cot HH/HR/RH/RR va occurrence-count trong o |S| > 1 khong phai bi bo quen; (c) thay hoan toan tang (a) bang HHA khi |S| > 1 - nhung khi do mat doi chung tam thuong, ma no la thu chung minh "bai toan khong tu giai". Nguoi viet quyet. GAP: phai chot truoc SC3 o cac co tap nhay cam lon, vi Sc3 co y khong am tham bo baseline (dong 45-46) nen cau hinh |S| in {5, 10, 20} cua protocol.yaml dong_1 se nem UnsupportedOperationException giua chung thay vi in bang.
+The shape of the SC3 table when |S| > 1 must be locked, choosing one of three: (a) extend RandomMasking to several patterns - the cheapest conceptually (choose sequences by the total sup_NO over every sensitive pattern, choose a random position on any sensitive occurrence), but that is a NEW algorithm that we set up, no longer "the two-way design of [R20]", and it must be declared as such; (b) accept that the tier (a) control exists only at |S| = 1, i.e. the SC3 table splits into two parts with different method sets, and the table note must say clearly that the columns HH/HR/RH/RR and occurrence-count in the |S| > 1 cell were not left out by oversight; (c) replace tier (a) entirely by HHA when |S| > 1 - but then the trivial control is lost, and it is the thing that shows "the problem does not solve itself". The author decides. URGENT: must be locked before SC3 at the large sensitive-set sizes, because Sc3 deliberately does not silently drop a baseline (lines 45-46), so the configuration |S| in {5, 10, 20} of protocol.yaml row_1 will throw UnsupportedOperationException midway instead of printing the table.
 
-> Chặn: SC3 co chu y la khong bao gio am tham bo mot baseline, nen cau hinh |S| > 1 se nem ngoai le thay vi in bang. Phai chot truoc khi chay SC3 o cac co tap nhay cam lon.
+> Blocks: SC3 deliberately never silently drops a baseline, so the configuration |S| > 1 will throw an exception instead of printing the table. Must be locked before running SC3 at the large sensitive-set sizes.
 
-### A25. Đối chiếu SBSH với Thuật toán 2 và 3 của [R3]
+### A25. Checking SBSH against Algorithms 2 and 3 of [R3]
 
-Nguồn nêu: `code-todo`, `design-theory`
+Raised by: `code-todo`, `design-theory`
 
-**Doi chieu SBSH voi Thuat toan 2 va 3 cua [R3]**
+**Checking SBSH against Algorithms 2 and 3 of [R3]**
 
-Ba cau hoi su kien phai lay tu Thuat toan 2 va 3 cua [R3], khong suy ra duoc tu tep nao trong kho: (1) nhan xam bao phu vi tri nao - chi vi tri khong mang nut nhay cam nao, hay ca vi tri mang nut nhung khong nam tren lat cat; (2) ban kinh r cua Replace dem theo CUNG cua Nettree hay theo VI TRI trong chuoi (lech nhau lam bien the "r nho nhat" va "r lon nhat" cua SC7 khong con dung nghia, vi Sbsh hien dien giai r la so CAP Nettree: Javadoc constructor ghi "in Nettree levels away from the red node"); (3) C-PA va C-SA khac Replace thuong o cho nao. Sau khi doc xong moi den mot quyet dinh thuc su: giu cach cai hien tai (cat moi duong qua nut do bang cach lay tron mot cap Nettree, chon cap re nhat trong ban kinh) va khai ro trong bai la "bien the cua chung toi", hay thay bang dung thu tuc cua tac gia. Nguoi doc tai lieu goc quyet phan su kien, nguoi viet quyet phan giu hay thay. Phai xong truoc SC3 vi SBSH nam trong bang so sanh chinh, va truoc SC7 (quet ban kinh) va SC8.
+Three factual questions must be taken from Algorithms 2 and 3 of [R3]; they cannot be derived from any file in the repository: (1) which positions the grey label covers - only positions that carry no sensitive node, or also positions that carry nodes but do not lie on the cut; (2) whether the radius r of Replace counts ARCS of the Nettree or POSITIONS in the sequence (a mismatch makes the "smallest r" and "largest r" variants of SC7 lose their correct meaning, because Sbsh currently interprets r as a number of Nettree LEVELS: the constructor Javadoc says "in Nettree levels away from the red node"); (3) where C-PA and C-SA differ from ordinary Replace. Only after reading does a real decision come: keep the current implementation (cut every path through the red node by taking a whole Nettree level, choosing the cheapest level within the radius) and state clearly in the paper that it is "our variant", or replace it with exactly the authors' procedure. The reader of the original source decides the factual part, the author decides the keep-or-replace part. Must be done before SC3 because SBSH is in the main comparison table, and before SC7 (radius sweep) and SC8.
 
-**Thuật toán luồng cực đại và số λ cho ca có trọng số**
+**The maximum-flow algorithm and the number of λ values for the weighted case**
 
-Chốt câu độ phức tạp của bước 5 cho khớp mã, chọn một: (i) giữ Dinic và công bố chặn tổng quát của Dinic O(|V|²·|A|) cho mỗi lần tính lát cắt có trọng số, bỏ trích [R31] ở chỗ này; hoặc (ii) giữ tuyên bố O(|V|·|A|) [R31] thì phải thay Dinic bằng một cài đặt đạt chặn đó cho ca có trọng số. Đồng thời viết chặn số λ đã có sẵn trong mã: nhiều nhất (số trọng số phân biệt ≤ |V| + 1) + 60 lần đánh giá cho mỗi khoảng tinh chỉnh, tức O(|V|) lần luồng cực đại. Người viết quyết (đây là quyết định về điều được công bố, không suy ra từ dữ liệu). Mức gấp: trước khi nộp, không chặn SC3; nhưng phải xong trước khi diễn giải số thời gian SC6 so với HHA/DBSH/SBSH.
+Lock the complexity sentence of step 5 to match the code, choosing one: (i) keep Dinic and publish Dinic's general bound O(|V|²·|A|) for each computation of a weighted cut, dropping the citation of [R31] at this point; or (ii) keep the claim O(|V|·|A|) [R31], in which case Dinic must be replaced by an implementation that reaches that bound for the weighted case. At the same time write down the bound on the number of λ values that is already in the code: at most (number of distinct weights ≤ |V| + 1) + 60 evaluations for each refinement interval, i.e. O(|V|) maximum flows. The author decides (this is a decision about what is published, not something derived from data). Urgency: before submission, does not block SC3; but it must be done before interpreting the SC6 timing numbers against HHA/DBSH/SBSH.
 
-> Chặn: Moi so lieu SBSH trong SC3, SC7 (quet ban kinh nho nhat va lon nhat) va SC8 deu khong dung duoc cho ban thao cho toi khi doi chieu xong - chinh Javadoc dat dieu kien do.
+> Blocks: No SBSH number in SC3, SC7 (sweep of the smallest and the largest radius) and SC8 can be used for the manuscript until the check is done - the Javadoc itself sets that condition.
 
 ---
 
-## B. Chặn lúc nộp — không chặn chạy
+## B. Blocks submission — does not block the runs
 
-### B1. Máy đo, cờ JVM, số lần làm nóng, giới hạn thời gian
+### B1. Measuring machine, JVM flags, number of warm-up runs, time limit
 
-Nguồn nêu: `code-todo`, `design-gate`, `preregistration`, `protocol`
+Raised by: `code-todo`, `design-gate`, `preregistration`, `protocol`
 
-**Khai máy đo dùng cho SC6**
+**Declaring the measuring machine used for SC6**
 
-Chỉ hai ô thật sự cần người quyết: (a) ten_may_do — đặt một nhãn cố định cho máy sẽ gánh TOÀN BỘ số đo thời gian và bộ nhớ (RUNBOOK dùng PC-THAI làm máy phát triển; nếu chính nó là máy đo thì đặt nhãn riêng khác 'dev', ví dụ 'pc-thai-do', vì ResultSink.java:93 chặn đúng chữ 'dev'); (b) co_xms và co_xmx — chốt một cặp cố định dùng cho mọi lần chạy SC6 (các lần chạy hiện có không nhất quán: heap_max_bytes 6.442.450.944 ở tệp SC2 nhưng 2.051.014.656 ở tệp SC3 probe, tức đã chạy với -Xmx khác nhau). Bốn ô còn lại không cần quyết: jdk và cỡ heap chép từ header tệp kết quả, he_dieu_hanh/cpu/ram là ghi chép sự kiện về máy đã chọn. Không gấp: SC6 chạy sau cùng theo §4 và hiện chưa cài (Sc6Scalability.run ném UnsupportedOperationException), nên việc này không chặn SC3.
+Only two fields really need a person to decide: (a) machine_name — set a fixed label for the machine that will carry ALL the time and memory measurements (RUNBOOK uses PC-THAI as the development machine; if that same machine is the measuring machine, give it a separate label other than 'dev', for example 'pc-thai-do', because ResultSink.java:93 rejects exactly the word 'dev'); (b) xms_flag and xmx_flag — lock one fixed pair used for every SC6 run (the existing runs are inconsistent: heap_max_bytes 6,442,450,944 in the SC2 file but 2,051,014,656 in the SC3 probe file, i.e. they ran with different -Xmx). The remaining four fields need no decision: jdk and the heap size are copied from the header of the result file, operating_system/cpu/ram are factual records about the chosen machine. Not urgent: SC6 runs last according to §4 and is not implemented yet (Sc6Scalability.run throws UnsupportedOperationException), so this does not block SC3.
 
-**So lan lam nong truoc khi do thoi gian**
+**Number of warm-up runs before timing**
 
-Dien mot so vao protocol.yaml dong_9 so_lan_lam_nong TRUOC khi chay SC6, va chot luon quy tac: mot con so duy nhat cho moi kich ban va moi kich co (vi du 3, du de JIT bien dich cac vong nong cua Dinic va PathCounts), hay so lan lam nong thay doi theo do dai mot lan chay (vi du bo qua cac lan chay trong 2 giay dau, tuong tu bang 11.6 da phan tang theo thoi gian)? Neu chon phuong an hai thi Timing.measure phai doi chu ky: hien no nhan warmups la mot so nguyen co dinh va chi do thoi gian mot lan tham do SAU khi lam nong xong, nen chua bieu dien duoc quy tac theo thoi gian. Nguoi viet quyet; gia tri phai ghi vao protocol.yaml va commit truoc lan chay SC6 dau tien, vi chon sau khi thay so do vi pham quy tac chot truoc.
+Fill one number into protocol.yaml row_9 warmup_runs BEFORE running SC6, and lock the rule at the same time: a single number for every scenario and every size (for example 3, enough for the JIT to compile the hot loops of Dinic and PathCounts), or a number of warm-up runs that varies with the length of one run (for example discarding the runs in the first 2 seconds, similar to table 11.6, which is already stratified by time)? If option two is chosen then Timing.measure must change its signature: at present it takes warmups as a fixed integer and only times one probe run AFTER the warm-up is done, so it cannot yet express a time-based rule. The author decides; the value must be written into protocol.yaml and committed before the first SC6 run, because choosing after seeing the measurements breaks the lock-in-advance rule.
 
-**Chọn và khai báo máy đo cho SC3 đến SC7**
+**Choosing and declaring the measuring machine for SC3 to SC7**
 
-Chốt và điền dòng 5, 6, 7, 9 của config/protocol.yaml: tên máy đo cùng CPU, RAM, hệ điều hành; phiên bản JDK và cặp cờ -Xms/-Xmx cụ thể; giới hạn giây cho mỗi lần chạy (sinh mã OT); số lần làm nóng. Kèm một quyết định riêng: bảng bộ nhớ in 'heap đã dùng' (MemoryProbe hiện có, chu kỳ 50 ms) hay 'RSS đỉnh' như §11.7 dòng 6 đòi — nếu chọn RSS thì phải viết script bọc ngoài trước. Người viết quyết; cần trước SC6, không chặn SC3 đến SC5, SC7, SC8.
+Lock and fill rows 5, 6, 7, 9 of config/protocol.yaml: the name of the measuring machine together with CPU, RAM, operating system; the JDK version and the specific pair of -Xms/-Xmx flags; the limit in seconds for each run (which produces code OT); the number of warm-up runs. Plus a separate decision: does the memory table print 'heap used' (the existing MemoryProbe, 50 ms period) or 'peak RSS' as §11.7 line 6 demands — if RSS is chosen then a wrapper script must be written first. The author decides; needed before SC6, does not block SC3 to SC5, SC7, SC8.
 
-**May do chuan va moi truong chay (dong 5)**
+**Reference measuring machine and run environment (row 5)**
 
-Chỉ đích danh MỘT máy làm máy đo (có thể chính PC-THAI nếu chấp nhận cấu hình đó, hoặc một máy khác), đặt tên truyền vào --machine, rồi chép JDK/hệ điều hành/CPU/RAM vào dòng 5. Người viết quyết trước khi chạy SC6; SC3-SC5, SC7, SC8 vẫn chạy được trên máy bất kỳ vì số của chúng bất biến theo máy, nên lịch Tuần 8-11 không thật sự bị chặn.
+Name exactly ONE machine as the measuring machine (possibly PC-THAI itself if that configuration is acceptable, or another machine), give it a name passed to --machine, then copy JDK/operating system/CPU/RAM into row 5. The author decides before running SC6; SC3-SC5, SC7, SC8 can still run on any machine because their numbers are machine-invariant, so the schedule of weeks 8-11 is not really blocked.
 
-**Co JVM -Xms va -Xmx**
+**JVM flags -Xms and -Xmx**
 
-Chốt một cặp cờ cố định dùng cho MỌI thuật toán và mọi baseline ở SC6 và SC8, ví dụ -Xms = -Xmx = 8g (đặt Xms bằng Xmx để loại nhiễu do heap nở dần), kèm căn cứ theo RAM của máy đo và theo thực thể lớn nhất định chạy. Người viết chốt cùng lúc với điểm máy đo, trước khi chạy SC6; đổi cờ sau là phải đo lại toàn bộ bảng thời gian và bộ nhớ.
+Lock one fixed pair of flags used for EVERY algorithm and every baseline in SC6 and SC8, for example -Xms = -Xmx = 8g (setting Xms equal to Xmx removes the noise of a heap that grows gradually), with a justification based on the RAM of the measuring machine and on the largest instance to be run. The author locks it together with the measuring-machine point, before running SC6; changing the flags later means measuring the whole time and memory tables again.
 
-**So lan lam nong truoc khi do (dong 9)**
+**Number of warm-up runs before measuring (row 9)**
 
-Chốt số lần chạy làm nóng bị bỏ (ví dụ 3 hoặc 5) bằng cách đo chứ không bằng cảm tính: chạy thử một thực thể đại diện trên máy đo, xem tới lần lặp thứ mấy thời gian ổn định dưới một ngưỡng biến thiên đã khai (ví dụ dao động < 5%), lấy con số đó ghi vào dòng 9 TRƯỚC lần chạy SC6 đầu tiên; mọi số thời gian đo trước khi chốt phải bỏ.
+Lock the number of discarded warm-up runs (for example 3 or 5) by measurement, not by feel: trial-run a representative instance on the measuring machine, see from which iteration the time stabilises below a declared variation threshold (for example fluctuation < 5%), and write that number into row 9 BEFORE the first SC6 run; every time measured before the lock must be discarded.
 
-**Gioi han thoi gian moi lan chay (dong 7)**
+**Time limit per run (row 7)**
 
-Chốt MỘT ngưỡng cắt duy nhất tính bằng giây cho mỗi lần chạy (ví dụ 1800 s), áp chung cho CUT-HIDE, mọi baseline và bộ giải chính xác; kèm cách cắt (ngắt luồng từ trong hay giết tiến trình từ script bọc ngoài) và cách ghi ô OT vào bảng. Người viết chốt trước SC3, vì ô ILP của SC3 chưa có bất kỳ cận nào.
+Lock ONE single cut-off threshold in seconds per run (for example 1800 s), applied alike to CUT-HIDE, every baseline and the exact solver; together with the cut-off mechanism (interrupting the thread from inside, or killing the process from an outer wrapper script) and the way the OT cell is recorded in the table. The author locks it before SC3, because the ILP cell of SC3 has no bound at all yet.
 
-> Chặn: SC6 không ghi được số thời gian và bộ nhớ vào bài: nhãn mặc định `dev` bị `hidenosp.io.ResultSink` từ chối, và ô tương ứng trong config/protocol.yaml (`ten_may_do`, cùng `jdk`, `co_xms`, `co_xmx`, `he_dieu_hanh`, `cpu`, `ram`) vẫn là null.
+> Blocks: SC6 cannot write time and memory numbers into the paper: the default label `dev` is rejected by `hidenosp.io.ResultSink`, and the corresponding fields in config/protocol.yaml (`machine_name`, together with `jdk`, `xms_flag`, `xmx_flag`, `operating_system`, `cpu`, `ram`) are still null.
 
-### B3. σ báo cáo theo tỉ lệ hay tuyệt đối
+### B3. σ reported as a share or as an absolute number
 
-Nguồn nêu: `design-experiment`, `protocol`
+Raised by: `design-experiment`, `protocol`
 
-**σ giữ tỉ lệ hay giữ tuyệt đối**
+**σ: keep it as a share or keep it absolute**
 
-Khi SC6 đổi |D| (và độ dài chuỗi), σ giữ nguyên số tuyệt đối hay giữ nguyên tỉ lệ σ/Σ_P sup_NO? Lưu ý chi phí không đối xứng: giữ tuyệt đối là phương án KHÔNG phải viết thêm mã (FrequentPatterns.mine đã nhận σ tuyệt đối), còn giữ tỉ lệ đòi thêm một bước quy đổi và một cảnh báo (doc dòng 451 đã hứa 'Bộ chạy in cảnh báo quy đổi σ'). Người viết quyết, ghi vào protocol.yaml dong_1.ghi_chu (thay câu 'SC6 quyết định' bằng quyết định thật) trước khi cài exp/Sc6Scalability, và bài phải in σ ở cả hai dạng cho từng bộ dù chọn quy ước nào.
+When SC6 changes |D| (and the sequence length), does σ keep the same absolute number or the same share σ/Σ_P sup_NO? Note the asymmetric cost: keeping it absolute is the option that needs NO extra code (FrequentPatterns.mine already takes an absolute σ), whereas keeping the share needs an extra conversion step and a warning (doc line 451 has already promised 'The runner prints a σ conversion warning'). The author decides and writes it into protocol.yaml row_1 note (replacing the sentence 'SC6 decides' with the real decision) before implementing exp/Sc6Scalability, and the paper must print σ in both forms for each dataset whichever convention is chosen.
 
-**Bao cao sigma theo ti le hay tuyet doi**
+**Report sigma as a share or absolute**
 
-Ở SC6, khi |D| và độ dài chuỗi thay đổi, giữ cố định σ tuyệt đối (dễ đặt cạnh ngưỡng ψ của [R3]) hay giữ cố định tỉ lệ σ/Σ_P sup_NO (giữ mật độ mẫu không đổi khi dữ liệu to ra)? Chọn đúng một, khai một câu trong bài, và mọi bảng SC2-SC8 in dạng còn lại trong ngoặc. Người viết chốt trước khi chạy SC6.
+In SC6, as |D| and the sequence length change, keep the absolute σ fixed (easy to put next to the ψ threshold of [R3]) or keep the share σ/Σ_P sup_NO fixed (keeping the pattern density constant as the data grow)? Choose exactly one, state it in one sentence in the paper, and every table SC2-SC8 prints the other form in parentheses. The author locks it before running SC6.
 
-> Chặn: Khong thong nhat duoc truc sigma giua cac bang SC2-SC8; neu doi cach khai sau khi da chay thi phai ve lai toan bo duong danh doi.
+> Blocks: The sigma axis cannot be made consistent across tables SC2-SC8; if the convention is changed after the runs, all the trade-off curves must be redrawn.
 
-### B4. Tham số và quy mô sinh dữ liệu tổng hợp
+### B4. Parameters and scale of the synthetic data
 
-Nguồn nêu: `protocol`
+Raised by: `protocol`
 
-**Quy mo du lieu tong hop (dong 4)**
+**Scale of the synthetic data (row 4)**
 
-Chốt lưới sinh cho bộ tổng hợp: kích thước bảng chữ cái (ví dụ 4 như DNA hay 17 như MSNBC), số chuỗi N và độ dài chuỗi ở cấu hình cơ sở, cộng dải quét cho SC6 (ví dụ N ∈ {10^3, 10^4, 10^5} × độ dài ∈ {50, 100, 200}). Đơn vị: số nguyên. Người viết chốt trước khi chạy SC6; không chặn SC3.
+Lock the generation grid of the synthetic dataset: alphabet size (for example 4 like DNA or 17 like MSNBC), number of sequences N and sequence length in the base configuration, plus the sweep range for SC6 (for example N ∈ {10^3, 10^4, 10^5} × length ∈ {50, 100, 200}). Unit: integer. The author locks it before running SC6; does not block SC3.
 
-> Chặn: Khong sinh duoc bo tong_hop, nen dong 1 va dong 2 cho tong_hop khong dien duoc; SC6 (mo rong theo |D| va do dai chuoi) khong co dai quet.
+> Blocks: The synthetic dataset cannot be generated, so row 1 and row 2 for synthetic cannot be filled; SC6 (scaling with |D| and sequence length) has no sweep range.
 
-### B6. Nguồn bộ TRUCKS, và số phận SC8 nếu không có
+### B6. The source of TRUCKS, and what becomes of SC8 without it
 
-Nguồn nêu: `code-todo`, `design-experiment`
+Raised by: `code-todo`, `design-experiment`
 
-**Nguong psi va don vi bao cao cua cac bai goc cho SC8**
+**The psi threshold and the reporting units of the original papers for SC8**
 
-Hai thu phai lay tu chinh [R3] roi chep vao protocol.yaml (hien khong co dong nao chua duoc chung): (1) gia tri psi cho tung bo trong ba bo MSN, BMS-WebView-1, TRUCKS - va phai khai psi la nguong TUYET DOI (so giao dich/chuoi) hay TI LE tren |D|, vi [R3] dem theo so chuoi chu khong theo sup_NO, dung sai don vi thi bang so sanh vo nghia; (2) cong thuc chinh xac cua hai don vi ho bao cao - "side-effects (%)" lay mau so la gi (|F_psi(D)| ban dau, hay |F_psi(D) \ S+|) va "distance (%)" do tren cai gi (so su kien bi xoa chia tong so su kien, hay khoang cach chuoi), de con ghi cong thuc doi chieu canh Lost/DistR cua §2. Nguoi doc tai lieu goc [R3] quyet; khong the suy ra tu du lieu hay tu ma. GAP: chan SC8, kich ban duy nhat cho phep dat so cua bai canh so da cong bo (thiet ke dong 402); lay psi sai thi bang mat gia tri ma khong bao loi.
+Two things must be taken from [R3] itself and then copied into protocol.yaml (no row contains them at present): (1) the psi value for each of the three datasets MSN, BMS-WebView-1, TRUCKS - and it must be stated whether psi is an ABSOLUTE threshold (number of transactions/sequences) or a SHARE of |D|, because [R3] counts by number of sequences, not by sup_NO, and with the wrong unit the comparison table is meaningless; (2) the exact formulas of the two units they report - what the denominator of "side-effects (%)" is (the original |F_psi(D)|, or |F_psi(D) \ S+|) and what "distance (%)" is measured on (number of deleted events divided by the total number of events, or a sequence distance), so that a reconciling formula can still be written next to Lost/DistR of §2. The one who reads the original document [R3] decides; it cannot be inferred from the data or from the code. URGENT: blocks SC8, the only scenario that allows the numbers of the paper to be put next to published numbers (design line 402); taking the wrong psi makes the table worthless without reporting any error.
 
-**Vai và nguồn của bộ TRUCKS cho SC8**
+**Role and source of the TRUCKS dataset for SC8**
 
-Chọn một trong ba: (a) tiếp tục xin trucks (tác giả [R20]/[R3] hoặc kho quỹ đạo gốc) và nếu được thì SC8 giữ nguyên ba bộ; (b) bỏ TRUCKS, chạy SC8 trên hai bộ MSNBC và BMS1 và viết một câu khai rõ trong bài rằng bộ thứ ba không lấy được nên số của [R20]/[R2] trên TRUCKS không đặt cạnh được; (c) thay bằng một bộ quỹ đạo rời rạc hoá công khai khác (không phải BIKE, vì BIKE đã bị loại theo đặc trưng đo được). Người viết quyết; nếu chọn (b) thì phải sửa cả doc §11.1 dòng 402 (mô tả SC8 đang hứa ba bộ) và §11.2 dòng 417.
+Choose one of three: (a) keep asking for trucks (from the authors of [R20]/[R3] or from the original trajectory repository) and, if it is obtained, SC8 keeps the three datasets; (b) drop TRUCKS, run SC8 on the two datasets MSNBC and BMS1 and write one sentence in the paper stating clearly that the third dataset could not be obtained, so the numbers of [R20]/[R2] on TRUCKS cannot be placed alongside; (c) replace it with another public discretised trajectory dataset (not BIKE, because BIKE was already excluded on its measured characteristics). The author decides; if (b) is chosen then doc §11.1 line 402 (the description of SC8, which currently promises three datasets) and §11.2 line 417 must also be revised.
 
-> Chặn: Chan SC8 - day la kich ban duy nhat cho phep dat so lieu cua bai nay canh so lieu da cong bo (thiet ke nghien cuu dong 402). Khong co psi thi khong chay duoc, va lay psi sai thi bang so sanh mat gia tri.
+> Blocks: Blocks SC8 - this is the only scenario that allows the data of this paper to be put next to published data (research design line 402). Without psi it cannot run, and taking the wrong psi makes the comparison table worthless.
 
-### B8. [R11] Zhao 2025: còn chặn Cổng 1 không, có đếm theo sup_NO không
+### B8. [R11] Zhao 2025: does it still block Gate 1, does it count by sup_NO
 
-Nguồn nêu: `design-gap`, `design-gate`
+Raised by: `design-gap`, `design-gate`
 
-**Phạm vi rà và cách phát biểu khoảng trống G1, G5**
+**Scope of the review and how to state research gaps G1, G5**
 
-Chỉ còn một nửa mở: có mở rộng đợt rà cho dòng episode (Laxman [R19] và họ hàng) hay chấp nhận phạm vi hiện tại? Cụ thể là chọn giữa (a) nâng [R19] từ SDL lên MUC và rà thêm ít nhất hai nguồn có cấu trúc (ACM DL, DBLP theo tác giả 2007–2026) rồi ghi nhật ký truy vấn vào §4, hay (b) giữ nguyên một lượt tìm kiếm từ khoá và viết G5 kèm đúng một câu khai phạm vi cùng ngày rà. Nửa còn lại của câu hỏi gốc — viết phủ định tuyệt đối hay theo cơ chế kèm phạm vi — coi như đã quyết theo cách thứ hai (§4 dòng 117, tiêu đề G1 dòng 75, cột 'Mức đọc' của §4), chỉ cần áp thêm cho nhánh có toàn văn [R11]. Người viết quyết.
+Only half remains open: extend the review to the episode line (Laxman [R19] and its relatives) or accept the current scope? Concretely, choose between (a) raising [R19] from SDL to MUC and reviewing at least two more structured sources (ACM DL, DBLP by author 2007–2026), then logging the queries in §4, or (b) keeping the single keyword search and writing G5 with exactly one sentence stating the scope together with the review date. The other half of the original question — write an absolute negation, or a mechanism-based statement with its scope — is considered decided in favour of the second way (§4 line 117, heading G1 line 75, the 'Reading level' column of §4), and only needs to be applied also to the branch with the full text of [R11]. The author decides.
 
-**Điều kiện gắn với đóng góp 1 và 2, và phương án khi vỡ**
+**The conditions attached to contributions 1 and 2, and the fallback when they fail**
 
-Chọn MỘT điều kiện và MỘT phương án, rồi sửa cả ba chỗ cho khớp. (1) Điều kiện làm mất đóng góp 1: một vế ('[R11] đếm theo sup_NO', §7) hay hội hai vế ('đếm sup_NO VÀ giảm một phần', §12a dòng 539)? (2) Khi điều kiện vỡ thì chọn phương án nào trong ba phương án đang cùng tồn tại: (a) chuyển sang HIDE-SEQ đơn thuần, (b) bỏ hướng, (c) giữ bài với hai lớp còn lại (chỉ mục cắt Nettree + CUT-HIDE) và đánh giá chủ yếu trên bài toán cũ ở SC8 như §12a dòng 537 gợi ý? Người viết quyết; kết quả phải viết lại vào §7 dòng 207–208, §12 dòng 507 và §12a dòng 539.
+Choose ONE condition and ONE option, then revise all three places to match. (1) The condition under which contribution 1 is lost: one clause ('[R11] counts by sup_NO', §7) or the conjunction of two clauses ('counts sup_NO AND reduces partially', §12a line 539)? (2) When the condition fails, which of the three options that currently coexist is chosen: (a) switch to plain HIDE-SEQ, (b) drop the direction, (c) keep the paper with the two remaining layers (Nettree cut index + CUT-HIDE) and evaluate mainly on the old problem in SC8 as §12a line 537 suggests? The author decides; the result must be written back into §7 lines 207–208, §12 line 507 and §12a line 539.
 
-**Zhao 2025 [R11] có đếm theo sup_NO không**
+**Does Zhao 2025 [R11] count by sup_NO**
 
-Thuật toán thứ ba của [R11] (Zhao, Chen, Zhang, CCPE 2025, doi 10.1002/cpe.70187) đo 'mất mẫu phổ biến' bằng cách đếm nào: (i) độ hỗ trợ không chồng lấp kiểu NOSEP [R1], (ii) đếm mọi lần khớp có chồng lấp, hay (iii) chỉ có mặt/không có mặt? Chỉ cần một câu trả lời ba lựa chọn này để điền bốn ô (?) ở cột [R11] của bảng delta §6 và chuyển G1 từ 'tạm' sang chính thức. Phải lấy từ toàn văn bài gốc (mua, mượn qua CESTI/thư viện trường, hoặc xin bản tác giả) — không suy ra được từ bất kỳ tệp nào trong dự án.
+By which count does the third algorithm of [R11] (Zhao, Chen, Zhang, CCPE 2025, doi 10.1002/cpe.70187) measure 'frequent-pattern loss': (i) non-overlapping support of the NOSEP kind [R1], (ii) counting every match, overlapping ones included, or (iii) presence/absence only? A single answer among these three choices is all that is needed to fill the four (?) cells in the [R11] column of the delta table of §6 and to move G1 from 'provisional' to official. It must be taken from the full text of the original paper (buy it, borrow it through CESTI/the university library, or ask for the author's copy) — it cannot be inferred from any file in the project.
 
-**Có tuyên bố Cổng 1 đã qua khi mức đọc chưa đạt không**
+**Whether to declare Gate 1 passed while the reading level falls short**
 
-Quyết một lần: có kích hoạt phương án mức đọc rút gọn (§12a mục 3) để ghi 1.1.12 là 'ĐẠT có ràng buộc' và sửa dòng 7 + dòng 571 cho nhất quán với dòng 546 hay không. Nếu có, đồng thời lập danh sách chín mục §13 còn lại (1.1.1, 1.1.8, 1.1.9, 1.1.10, 1.1.13, 1.1.14, 1.2.1, 1.2.3, 1.2.7) với người làm và hạn cho từng mục, vì chúng mới là phần còn lại của Cổng 1. Người viết quyết. Cần trước khi viết tuyên bố khoảng trống vào bản thảo, không chặn SC3.
+Decide once: whether to activate the reduced-reading-level option (§12a item 3) so as to record 1.1.12 as 'PASSED with constraints' and revise line 7 + line 571 to be consistent with line 546. If yes, also draw up the list of the nine remaining §13 items (1.1.1, 1.1.8, 1.1.9, 1.1.10, 1.1.13, 1.1.14, 1.2.1, 1.2.3, 1.2.7) with an owner and a deadline for each, because they are what actually remains of Gate 1. The author decides. Needed before the gap claim is written into the manuscript, does not block SC3.
 
-**[R11] còn là điểm chặn Cổng 1 hay không**
+**Is [R11] still a blocker of Gate 1**
 
-Đặt một hạn cứng (ngày cụ thể, tính từ hôm nay) để chuyển sang bước 3 của §12a: sau hạn đó, tick 1.1.12 với mức đọc 'tóm tắt + trang 1' cho [R11] kèm ba ràng buộc (a)(b)(c), và sửa câu ở §0 dòng 7 cùng ô §13 dòng 571 từ 'CHƯA ĐẠT / chặn duy nhất' thành 'đạt có điều kiện, theo §12a bước 3'. Đơn vị quyết định: một ngày tháng + hai câu sửa trong tệp thiết kế. Người viết quyết; không tệp nào trong dự án chốt hộ được.
+Set a hard deadline (a specific date, counted from today) for moving to step 3 of §12a: after that deadline, tick 1.1.12 with reading level 'abstract + page 1' for [R11] with the three constraints (a)(b)(c), and revise the sentence in §0 line 7 and the §13 cell at line 571 from 'NOT PASSED / sole blocker' to 'passed conditionally, per §12a step 3'. Unit of the decision: one date + two revised sentences in the design file. The author decides; no file in the project can lock it on the author's behalf.
 
-**Mốc thời gian tuyệt đối của lịch 15 tuần**
+**Absolute milestones of the 15-week schedule**
 
-Đặt ba mốc tuyệt đối và đánh số lại lịch cho khớp thực tế: (i) ngày T0 bắt đầu đếm 15 tuần; (ii) ngày hết hạn chờ toàn văn [R11], tức mốc tự động kích hoạt §12a mục 3 (trùng phần (ii) của điểm [1]); (iii) tên một hội nghị cụ thể cùng hạn nộp của nó (trùng phần còn lại của điểm [3]). Kèm việc sắp lại §12b vì tuần 4–7 đã xong trước tuần 1–3. Người viết quyết.
+Set three absolute milestones and renumber the schedule to match reality: (i) the date T0 from which the 15 weeks are counted; (ii) the date on which waiting for the full text of [R11] expires, i.e. the milestone that automatically activates §12a item 3 (the same as part (ii) of point [1]); (iii) the name of a specific conference together with its submission deadline (the same as the remaining part of point [3]). Plus reordering §12b, because weeks 4–7 were finished before weeks 1–3. The author decides.
 
-> Chặn: G1 và G5 còn xếp loại 'tạm'; bốn ô '(?)' ở cột [R11] của bảng delta §6 (cách đếm, cấu trúc, mẫu ma, độ khó); câu delta so với [R11]; đóng góp 1 và 2 ở §7 còn ghi điều kiện; mục 1.1.12 của Cổng 1 ghi CHƯA ĐẠT; baseline tầng (b) từ [R11] ở §11.3 ghi 'chốt sau khi có toàn văn'.
+> Blocks: G1 and G5 are still classed 'provisional'; the four '(?)' cells in the [R11] column of the delta table of §6 (counting, structure, ghost patterns, hardness); the delta sentence against [R11]; contributions 1 and 2 in §7 still carry a condition; item 1.1.12 of Gate 1 reads NOT PASSED; the tier (b) baseline from [R11] in §11.3 reads 'lock after the full text is available'.
 
-### B9. Trạng thái các khoảng trống G1, G2, G5 và phạm vi rà
+### B9. The state of the research gaps G1, G2, G5 and the scope of the review
 
-Nguồn nêu: `design-gap`
+Raised by: `design-gap`
 
-**Xếp loại khoảng trống G2 không thuộc phân loại đã khai**
+**The class of research gap G2 is not in the declared classification**
 
-G2 nhận nhãn nào trong hệ phân loại hai giá trị mà chính §3 dòng 73 khai: 'mạnh' hay 'yếu'? (Gợi ý kiểm: tiêu chí 'yếu' là công trình gần nhất đã chạm tới ý đó và bài này chỉ hình thức hoá — mà [R20] đã cảnh báo mẫu giả cho phép THAY và [R2] đã chứng minh tính đơn điệu cho mô hình quỹ đạo, nên G2 khớp mô tả 'yếu' hơn.) Nếu muốn giữ ba loại thì phải thêm một câu định nghĩa 'trung bình' kèm tiêu chí vào §3 dòng 73 và sửa §13 dòng 562. Đơn vị: một từ + (nếu giữ ba loại) một câu định nghĩa. Người viết quyết.
+Which label does G2 receive in the two-valued classification that §3 line 73 itself declares: 'strong' or 'weak'? (A hint for checking: the 'weak' criterion is that the closest work has already touched the idea and this paper only formalises it — and [R20] has already warned about the spurious patterns that REPLACEMENT allows, and [R2] has already proved monotonicity for the trajectory model, so G2 fits the 'weak' description better.) If three classes are to be kept then a sentence defining 'medium', with its criterion, must be added to §3 line 73 and §13 line 562 revised. Unit: one word + (if three classes are kept) one defining sentence. The author decides.
 
-> Chặn: §13 mục 1.1.2 đang ghi là đã xếp mạnh/yếu xong, nhưng thực tế G2 chưa được xếp; câu tuyên bố khoảng trống G2 trong bản thảo không viết được theo đúng khung phân loại.
+> Blocks: §13 item 1.1.2 currently reads that the strong/weak classification is done, but in fact G2 has not been classified; the sentence claiming gap G2 in the manuscript cannot be written within the proper classification framework.
 
-### B10. Mức đọc bắt buộc cho [R22] trước khi tuyên bố G5
+### B10. The reading level required for [R22] before G5 is claimed
 
-Nguồn nêu: `design-gap`
+Raised by: `design-gap`
 
-**Mức đọc bắt buộc cho [R22] trước khi tuyên bố G5**
+**The reading level required for [R22] before G5 is claimed**
 
-Chọn một trong ba: (a) nâng [R22] (Loukides, Gwadera, SDM 2015, doi 10.1137/1.9781611974010.87) lên toàn văn rồi mới tuyên bố G5, và sửa cột 'Mức cần' ở bảng §5 dòng 135 từ MUC thành TV; (b) giữ mức MUC nhưng bỏ chữ 'gần nhất' cho [R22] ở §3 dòng 94, tức phát biểu G5 mà không viện [R22] làm mốc gần nhất; (c) nới luật §5 dòng 123 thành 'gần nhất phải đạt ít nhất MUC' và khai rõ hệ quả. Đơn vị: một lựa chọn + sửa nhất quán §3 dòng 94, §5 dòng 123 và 135, §13 dòng 573. Người viết quyết; nếu chọn (a) thì kèm công việc đọc toàn văn.
+Choose one of three: (a) raise [R22] (Loukides, Gwadera, SDM 2015, doi 10.1137/1.9781611974010.87) to full text before claiming G5, and change the 'Required level' column in the table of §5 line 135 from MUC to TV; (b) keep level MUC but drop the word 'closest' for [R22] in §3 line 94, i.e. state G5 without citing [R22] as the closest reference point; (c) relax the rule of §5 line 123 to 'the closest must reach at least MUC' and state the consequence clearly. Unit: one choice + a consistent revision of §3 line 94, §5 lines 123 and 135, §13 line 573. The author decides; if (a) is chosen, the work of reading the full text comes with it.
 
-> Chặn: Không tuyên bố được G5; ô 'Làm sạch một chuỗi sự kiện [R22]' ở ma trận §4 chỉ đứng ở mức TT; mục 1.1.14 của Cổng 1 còn ghi [R22] trong việc còn lại.
+> Blocks: G5 cannot be claimed; the cell 'Sanitising an event sequence [R22]' in the matrix of §4 stands only at level TT; item 1.1.14 of Gate 1 still lists [R22] among the remaining work.
 
-### B13. Nơi nộp, mẫu định dạng, chỗ đặt mã giả và chứng minh dài
+### B13. Venue, format template, and where the pseudocode and the long proofs go
 
-Nguồn nêu: `design-gate`, `paper`, `phebinh`  (có điểm do lượt phê bình bổ sung)
+Raised by: `design-gate`, `paper`, `phebinh`  (includes items added by the critical pass)
 
-**Chỗ đặt mã giả chi tiết và chứng minh dài**
+**Where the detailed pseudocode and the long proofs go**
 
-Hai câu hỏi, câu sau độc lập với câu trước. (1) Sáu thủ tục BuildIndex, VitalNodes, WeightedCut, LambdaSweep, Allocate, MultiPattern: in mã giả đầy đủ trong bài, hay chỉ giữ khung Thuật toán 1 cộng một đoạn đặc tả văn xuôi cho mỗi thủ tục (mức tối thiểu mà §9.2 đòi) rồi đẩy mã giả xuống phụ lục? Trả lời được sau khi có giới hạn trang thật từ điểm [10]. (2) Có công bố kho code/ kèm bài không, và phụ lục trực tuyến đặt ở đâu — kho mã công khai, bản lưu có DOI kiểu Zenodo, hay trang cá nhân? Lưu ý dữ liệu thô không vào git, nên bản công bố phải kèm datasets/provenance.tsv và tools/fetch_datasets.py để người khác dựng lại đúng tệp; và nếu điểm [10] cho ra phản biện kín hai chiều thì đường dẫn phải là bản ẩn danh.
+Two questions, the second independent of the first. (1) The six procedures BuildIndex, VitalNodes, WeightedCut, LambdaSweep, Allocate, MultiPattern: print the full pseudocode in the paper, or keep only the skeleton of Algorithm 1 plus a prose specification for each procedure (the minimum that §9.2 requires) and move the pseudocode to an appendix? This can be answered once the real page limit from point [10] is known. (2) Is the code/ repository published with the paper, and where does the online appendix go — a public code repository, a DOI archive such as Zenodo, or a personal page? Note that raw data do not go into git, so the published version must include datasets/provenance.tsv and tools/fetch_datasets.py so that others can rebuild exactly the right files; and if point [10] turns out to mean double-blind review then the link must be the anonymised version.
 
-**Nơi nộp và mẫu định dạng chưa chọn**
+**Venue and format template not yet chosen**
 
-Chọn tên nơi nộp và ngày nộp cụ thể. Ba thứ suy ra ngay sau đó, không thứ nào quyết được trước: (1) giới hạn trang thật của mẫu hai cột, thay cho ước lượng 8–10 trang — hiện nội dung 13 trang một cột ≈ 7,5 trang hai cột nên biết thật mới biết còn bao nhiêu chỗ cho bảng SC1–SC8 và hình; (2) có phản biện kín hai chiều hay không — nếu có thì gỡ tên tác giả, đơn vị, email khỏi trang đầu và ẩn danh cả đường dẫn kho mã ở điểm [11]; (3) hạn hoàn tất bản dịch tiếng Anh, tính lùi từ hạn nộp, hiện chỉ có mốc tương đối "tuần 12-15" ở §12b. Ràng buộc duy nhất đã chốt: khác nơi nộp dự kiến của ba bài trong đề cương NCS.
+Choose the name of the venue and a specific submission date. Three things follow immediately, none of which can be decided before: (1) the real page limit of the two-column template, replacing the estimate of 8–10 pages — the content is currently 13 single-column pages ≈ 7.5 two-column pages, so only the real limit shows how much room is left for the tables SC1–SC8 and the figures; (2) whether the review is double-blind — if it is, remove the author names, affiliations and emails from the first page and also anonymise the link to the code repository in point [11]; (3) the deadline for completing the English translation, counted back from the submission deadline; at present there is only the relative milestone "weeks 12-15" in §12b. The only constraint already locked: a venue different from the intended venues of the three papers in the NCS (doctoral) proposal.
 
-**Phương án nếu nhóm [R6], [R7] đang làm cùng bài toán**
+**The plan if the group of [R6], [R7] is working on the same problem**
 
-Hai bước: (i) gửi câu hỏi cho nhóm tác giả [R6], [R7] — việc này chưa làm và là cái đang chặn mục 1.1.10; (ii) chốt sẵn một trong ba phương án nếu họ trả lời là đang có bản thảo cùng bài toán: thu hẹp phạm vi về chỉ mục cắt Nettree + CUT-HIDE trên bài toán cũ (SC8), cộng tác và ghi đồng tác giả, hay giữ nguyên phạm vi nhưng đổi nơi nộp sang vũng phản biện khác. Người viết quyết (thư do chính người viết gửi). Không gấp bằng các mục chặn SC3.
+Two steps: (i) send a question to the author group of [R6], [R7] — this has not been done yet and it is what currently blocks item 1.1.10; (ii) lock in advance one of three options in case they answer that they have a manuscript on the same problem: narrow the scope to only the Nettree cut index + CUT-HIDE on the old problem (SC8), collaborate and list them as co-authors, or keep the scope but move to a venue with a different reviewer pool. The author decides (the letter is sent by the author personally). Not as urgent as the items that block SC3.
 
-**Điều khoản dùng lại dữ liệu và tuyên bố nguồn dữ liệu**
+**Terms for reusing the data, and the statement of data sources**
 
-Quyết hai thứ: (a) kiểm và ghi điều kiện dùng lại của từng bộ vào provenance.tsv (thêm một cột): dữ liệu SPMF là bản sao lưu trữ lại chứ không phải nguồn gốc — MSNBC gốc ở UCI, BMS-WebView-1 gốc từ KDD Cup 2000, MT745584 là bản ghi GenBank, BIBLE và LEVIATHAN là văn bản đã rời rạc hoá; bài phải trích nguồn GỐC hay trích SPMF, và có được phân phối lại tệp kèm phụ lục không (hiện .gitignore chặn dữ liệu thô, nên mặc định là không); (b) bài có mục tuyên bố dữ liệu và đạo đức hay không — đây là bài bảo toàn riêng tư chạy trên vết nhấp chuột người dùng và trên trình tự gen, nhiều nơi nộp nay đòi một câu về nguồn và về việc dữ liệu đã ẩn danh sẵn.
+Decide two things: (a) check and record the reuse conditions of each dataset in provenance.tsv (add a column): the SPMF data are archived copies, not the original sources — MSNBC originally from UCI, BMS-WebView-1 originally from KDD Cup 2000, MT745584 is a GenBank record, BIBLE and LEVIATHAN are discretised texts; must the paper cite the ORIGINAL source or cite SPMF, and may the files be redistributed with the appendix (at present .gitignore blocks raw data, so by default no); (b) whether the paper has a data and ethics statement section — this is a privacy-preserving paper running on users' click traces and on gene sequences, and many venues now require a sentence about the source and about whether the data were already anonymised.
 
-> Chặn: Không tệp nào trong dự án nhắc tới giấy phép hay điều khoản của bộ dữ liệu. Nếu tới lúc nộp mới phát hiện một bộ không cho dùng lại hoặc phải trích nguồn gốc, bảng kết quả đã chạy xong mới phải sửa chú nguồn, và mục tuyên bố dữ liệu phải viết gấp.
+> Blocks: No file in the project mentions a licence or terms of the datasets. If it is only discovered at submission time that a dataset may not be reused or that the original source must be cited, the results tables, already finished, will need their source notes revised, and the data statement section will have to be written in a hurry.
 
-### B15. Giấy phép mã nguồn của kho khi công bố
+### B15. The source-code licence of the repository at publication
 
-Nguồn nêu: `phebinh`  (có điểm do lượt phê bình bổ sung)
+Raised by: `phebinh`  (includes items added by the critical pass)
 
-**Giấy phép mã nguồn và cách trích dẫn kho đã công khai**
+**Source-code licence and how to cite the public repository**
 
-Quyết bốn thứ về việc công bố mã: (a) giấy phép nào cho kho (MIT, Apache-2.0, BSD-3, hay không giấy phép — không giấy phép nghĩa là người khác KHÔNG được quyền dùng lại, trái với mục đích tái lập); (b) thêm CITATION.cff và một DOI lưu trữ (Zenodo) hay chỉ để đường dẫn GitHub sống, vốn có thể đổi; (c) kho hiện đã công khai dưới tài khoản mang đúng tên tác giả liên hệ và lịch sử commit gắn ngày — quyết xem có đặt riêng một bản ẩn danh cho vòng phản biện kín hay chấp nhận không nộp nơi phản biện kín; (d) có đăng bản tiền công bố (arXiv) hay không, và nếu có thì trước hay sau khi nộp, vì việc đó tương tác với (c).
+Decide four things about publishing the code: (a) which licence for the repository (MIT, Apache-2.0, BSD-3, or no licence — no licence means others do NOT have the right to reuse it, contrary to the purpose of reproducibility); (b) add CITATION.cff and an archival DOI (Zenodo), or only leave the live GitHub link, which may change; (c) the repository is already public under an account bearing the exact name of the corresponding author, with a dated commit history — decide whether to set up a separate anonymised copy for the double-blind review round or to accept not submitting to a double-blind venue; (d) whether to post a preprint (arXiv), and if so before or after submission, because this interacts with (c).
 
-> Chặn: Không tệp nào trong dự án nhắc tới giấy phép, bản quyền hay tiền công bố. Kho đã ở trên mạng: đến lúc nộp thì quyết định 'ẩn danh đường dẫn' không gỡ lại được việc mã đã gắn tên tác giả, nên phải quyết trước khi chọn nơi nộp chứ không phải sau.
+> Blocks: No file in the project mentions a licence, copyright or a preprint. The repository is already online: at submission time, a decision to 'anonymise the link' cannot undo the fact that the code is already tied to the author's name, so it must be decided before the venue is chosen, not after.
 
-### B17. Đường ống sinh bảng và hình từ CSV vào bản thảo
+### B17. The pipeline from the CSV files to the tables and figures of the manuscript
 
-Nguồn nêu: `phebinh`  (có điểm do lượt phê bình bổ sung)
+Raised by: `phebinh`  (includes items added by the critical pass)
 
-**Đường ống sinh bảng và hình từ CSV vào bản thảo**
+**The pipeline that generates tables and figures from CSV into the manuscript**
 
-Chốt đường đi của một con số từ tệp CSV tới bảng trong baibao.tex: (a) viết script sinh tệp .tex (bảng booktabs) và hình, đặt ở code/tools/ hay ở paper/tools/ (§11.8 nói paper/tools/ 'chưa có'), viết bằng gì (Python + matplotlib, hay pgfplots đọc thẳng CSV), và bản thảo \input tệp sinh ra hay chép tay; (b) chấp nhận chép tay và khai rõ rủi ro lệch số. Quyết cùng lúc: labels.tsv có hai cột nhãn Việt và Anh, vậy script sinh bảng cho bản thảo tiếng Việt hiện tại lấy cột nào, và đổi cột bằng cờ nào khi dịch sang tiếng Anh.
+Lock the path of a number from a CSV file to a table in baibao.tex: (a) write a script that generates .tex files (booktabs tables) and figures, placed in code/tools/ or in paper/tools/ (§11.8 says paper/tools/ 'does not exist yet'), written in what (Python + matplotlib, or pgfplots reading the CSV directly), and does the manuscript \input the generated file or copy it by hand; (b) accept copying by hand and state the risk of mismatched numbers clearly. Decide at the same time: labels.tsv has two label columns, Vietnamese and English, so which column does the table script take for the current Vietnamese manuscript, and by which flag is the column switched when translating into English.
 
-> Chặn: Chưa có công cụ nào biến kết quả thành bảng trong bài. Chép tay 8 kịch bản nhân nhiều bộ dữ liệu là chỗ sinh lỗi im lặng đúng loại mà ResultSink được dựng ra để chặn, và làm hỏng lời hứa 'một lần đổi tên không để sót chỗ nào' của labels.tsv.
+> Blocks: There is no tool yet that turns results into tables in the paper. Copying 8 scenarios times many datasets by hand is where silent errors arise, of exactly the kind that ResultSink was built to prevent, and it breaks the promise of labels.tsv that 'one rename leaves no place behind'.
 
-### B19. SC8 thiếu trong lịch, và thứ tự bỏ bớt khi thiếu thời gian
+### B19. SC8 missing from the schedule, and what to drop first when time runs short
 
-Nguồn nêu: `phebinh`  (có điểm do lượt phê bình bổ sung)
+Raised by: `phebinh`  (includes items added by the critical pass)
 
-**SC8 không có trong lịch, và thứ tự bỏ bớt khi thiếu thời gian**
+**SC8 is not in the schedule, and the order of dropping when time runs short**
 
-Chốt hai thứ về thứ tự công việc: (a) SC8 nằm ở tuần nào — lịch §12b liệt kê SC3–SC7 và bỏ sót SC8, trong khi §12a lại đặt SC8 làm phương án để bài vẫn đứng nếu phần bài toán mới đổ; nếu SC8 là chân dự phòng thì nó phải chạy SỚM chứ không phải cuối, vì nó cũng là kịch bản phụ thuộc nhiều nhất vào việc mở lại toàn văn [R3] để lấy ψ; (b) thứ tự bỏ bớt khi hết thời gian: xếp hạng SC4, SC5, SC6, SC7, SC8 theo mức cần thiết cho bài, và khai trước kịch bản nào bỏ được mà vẫn nộp (ví dụ SC5 và SC7 chuyển sang phụ lục trực tuyến), để lúc cập rập không phải bỏ theo cảm tính.
+Lock two things about the order of work: (a) which week SC8 is in — the schedule of §12b lists SC3–SC7 and omits SC8, while §12a makes SC8 the option that keeps the paper standing if the new-problem part collapses; if SC8 is the fallback leg then it must run EARLY, not last, because it is also the scenario that depends most on reopening the full text of [R3] to get ψ; (b) the order of dropping when time runs out: rank SC4, SC5, SC6, SC7, SC8 by how necessary they are to the paper, and state in advance which scenarios can be dropped while still submitting (for example SC5 and SC7 moved to the online appendix), so that under pressure nothing is dropped by feel.
 
-> Chặn: Lịch hiện thiếu hẳn một kịch bản, mà đúng kịch bản đó là phương án dự phòng cho toàn bài. Không có thứ tự ưu tiên thì tới tuần 12 mới biết phải bỏ cái gì, và lúc đó bỏ cái nào cũng là quyết định sau khi đã thấy kết quả.
+> Blocks: The schedule lacks a scenario entirely, and that very scenario is the fallback for the whole paper. Without a priority order, only in week 12 will it be known what must be dropped, and at that point whatever is dropped is a decision taken after seeing the results.
 
-### B20. Trần quy mô cài đặt và cách khai khi đếm bão hoà
+### B20. The size limits of the implementation, and how to declare a saturated count
 
-Nguồn nêu: `phebinh`  (có điểm do lượt phê bình bổ sung)
+Raised by: `phebinh`  (includes items added by the critical pass)
 
-**Trần quy mô của cài đặt và cách khai khi bão hoà**
+**The size limit of the implementation and how to declare saturation**
 
-Quyết trước khi chạy SC6 lấy số: (a) có viết lại Dinic.dfs thành vòng lặp không, hay chấp nhận và khai một trần quy mô (độ dài chuỗi tối đa và g⁺ tối đa) mà trên đó không chạy — nếu chọn khai trần thì trần đó chính là giới hạn của tuyên bố khả năng mở rộng, phải nêu trong bài chứ không để tràn ngăn xếp thành ô trống; (b) khi PathCounts bão hoà thì bảng SC6 và trọng số w(i) khai thế nào: in kèm cờ isExact và loại thực thể bão hoà khỏi cột kích thước chỉ mục, hay chuyển sang đếm theo log, hay khai rằng w(i) chỉ là khoá xếp hạng chứ không phải số đếm — lưu ý w(i) bão hoà làm lát cắt có trọng số mất tính chính xác mà P6(b) hứa.
+Decide before running SC6 for numbers: (a) whether to rewrite Dinic.dfs as a loop, or to accept and declare a size limit (maximum sequence length and maximum g⁺) above which nothing is run — if declaring a limit is chosen then that limit is exactly the bound of the scalability claim, and it must be stated in the paper rather than letting a stack overflow turn into an empty cell; (b) when PathCounts saturates, how the SC6 table and the weights w(i) are declared: print the isExact flag alongside and exclude saturated instances from the index-size column, or switch to counting on a log scale, or state that w(i) is only a ranking key and not a count — note that a saturated w(i) makes the weighted cut lose the exactness that P6(b) promises.
 
-> Chặn: SC6 là cột so chỉ mục cắt Nettree với HHA, DBSH, SBSH, tức bằng chứng cho đóng góp thứ hai. Nếu bão hoà hoặc tràn ngăn xếp xảy ra đúng ở các thực thể lớn nhất thì phần thú vị nhất của bảng lại là phần không in được, và tính chính xác của lát cắt có trọng số bị đặt câu hỏi mà bài chưa có câu trả lời chuẩn bị sẵn.
+> Blocks: SC6 is the column that compares the Nettree cut index with HHA, DBSH, SBSH, i.e. the evidence for the second contribution. If saturation or stack overflow happens exactly on the largest instances, then the most interesting part of the table is the part that cannot be printed, and the exactness of the weighted cut is called into question with no answer prepared in the paper.
 
-### B22. SC7 hàng 4: thế nào là một "lát cắt bất kỳ"
+### B22. SC7 row 4: what "any cut" means
 
-Nguồn nêu: `code-todo`
+Raised by: `code-todo`
 
-**SC7 hang 4: the nao la mot "lat cat bat ky"**
+**SC7 row 4: what is "any cut"**
 
-Phai dinh nghia bang ma "lat cat nho nhat bat ky" nghia la gi, va chung minh no KHAC hang 1. Ba lua chon cu the: (a) lay lat cat phia nguon do ResidualScc tra ve khong tinh trong so (lat cat "tu nhien" cua Dinic) - nhung voi Weighting.UNIFORM thi hang 1 cung ra dung lat cat do, nen hang 4 se trung hang 1 va SC7 mat mot hang; (b) chon ngau nhien mot lat cat nho nhat trong so cac lat cat nho nhat, khi do phai khai them hat giong va so lan lap de lay trung binh, va phai noi ro lay ngau nhien tren khong gian nao (moi lat cat nho nhat co xac suat bang nhau la viec kho, thuong chi lam duoc "pha hoa ngau nhien khi duyet"); (c) bo hang 4 va sua dong 403 cua thiet ke con ba hang. Neu chon (a) hoac (b) thi CutHideConfig phai them mot truong thu nam, vi du CutSelection {WEIGHT_MINIMAL, SOURCE_SIDE, RANDOM_TIE_BREAK} - record hien tai khong bieu dien duoc. Nguoi viet quyet; can truoc khi cai SC7, khong chan SC3.
+It must be defined in code what "any minimum cut" means, and shown to be DIFFERENT from row 1. Three concrete choices: (a) take the source-side cut returned by ResidualScc without weights (the "natural" cut of Dinic) - but with Weighting.UNIFORM row 1 also yields exactly that cut, so row 4 would coincide with row 1 and SC7 would lose a row; (b) pick a random minimum cut among the minimum cuts, in which case the seed and the number of repetitions for averaging must also be declared, and it must be stated over which space the random choice is made (giving every minimum cut equal probability is hard; usually only "random tie-breaking during traversal" is feasible); (c) drop row 4 and revise line 403 of the design to three rows. If (a) or (b) is chosen then CutHideConfig must get a fifth field, for example CutSelection {WEIGHT_MINIMAL, SOURCE_SIDE, RANDOM_TIE_BREAK} - the current record cannot express it. The author decides; needed before implementing SC7, does not block SC3.
 
-> Chặn: Chan mot trong bon hang cua SC7. TODO tu khang dinh CutHideConfig lo duoc hang thu tu, nhung record khong co truong tuong ung, nen khong ro y dinh la gi.
+> Blocks: Blocks one of the four rows of SC7. The TODO itself claims that CutHideConfig takes care of row four, but the record has no corresponding field, so the intent is unclear.
 
 ---
 

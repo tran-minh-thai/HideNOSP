@@ -1,18 +1,18 @@
 # HideNOSP
 
-Ẩn mẫu tuần tự nhạy cảm theo **độ hỗ trợ không chồng lấp** (`sup_NO`) có **ràng buộc khoảng cách**.
+Hiding sensitive sequential patterns under **non-overlapping support** (`sup_NO`) with **gap constraints**.
 
-Kho này cài đặt **chỉ mục cắt Nettree** và thuật toán **CUT-HIDE**, cùng các baseline và các
-kịch bản thực nghiệm SC1–SC8 của bản thiết kế nghiên cứu.
+This repository implements the **Nettree cut index** and the **CUT-HIDE** algorithm, together with the
+baselines and the experimental scenarios SC1–SC8 of the research design.
 
-- Vận hành chi tiết: [`RUNBOOK.md`](RUNBOOK.md)
-- Bảng giao thức 9 dòng: [`config/protocol.yaml`](config/protocol.yaml)
-- Ngưỡng chốt trước khi chạy so sánh chính: [`config/preregistration.md`](config/preregistration.md)
+- Detailed operation: [`RUNBOOK.md`](RUNBOOK.md)
+- Protocol table, 9 rows: [`config/protocol.yaml`](config/protocol.yaml)
+- Thresholds locked before the main comparison is run: [`config/preregistration.md`](config/preregistration.md)
 
-Bản thiết kế nghiên cứu (`doc/`), bản thảo (`paper/`) và quy trình chạy trên máy đo (`run.txt`)
-nằm **ngoài** kho này, ở cùng thư mục dự án một cấp trên.
+The research design (`doc/`), the manuscript (`paper/`) and the run procedure for the measuring
+machine (`run.txt`) are **outside** this repository, in the project directory one level up.
 
-## Chạy thử
+## Trying it out
 
 ```bash
 mvn -o test
@@ -22,53 +22,60 @@ mvn -o test
 java -cp target/classes hidenosp.exp.Runner SC1 --trials=1200
 ```
 
-SC1 là phép kiểm cài đặt: trên mỗi thực thể ngẫu nhiên nó đối chiếu luồng cực đại với vét cạn,
-kiểm số lần che tối thiểu, kiểm đặc trưng nút thiết yếu, và đối chiếu cập nhật gia tăng với
-dựng lại. Kết quả chấp nhận được duy nhất là 0 ca lệch.
+SC1 is the implementation check: on each random instance it compares the maximum flow with
+exhaustive search, checks the minimum number of masks, checks the characterisation of vital nodes,
+and compares the incremental update with a rebuild. The only acceptable result is 0 mismatches.
 
 ```bash
 java -cp target/classes hidenosp.exp.Runner
 ```
 
-in danh sách kịch bản cùng tuỳ chọn của từng cái.
+prints the list of scenarios together with the options of each.
 
-## Yêu cầu
+## Requirements
 
-JDK 25 (bản LTS, Eclipse Temurin), Maven 3.9 trở lên. Không phụ thuộc thư viện ngoài ngoài JUnit 5 (chỉ cho test).
+JDK 25 (the LTS release, Eclipse Temurin), Maven 3.9 or later. No external library dependency other than JUnit 5 (tests only).
 
-## Bố cục
+## Layout
 
 ```
 pom.xml                 Maven, Java 25
 src/main/java/hidenosp/
-  core/                 chuỗi sự kiện, mẫu, ràng buộc khoảng cách, Nettree, sup_NO
-  core/flow/            Dinic sức chứa nút, lát cắt nhỏ nhất, nút thiết yếu, che gia tăng
-  index/                chỉ mục cắt Nettree, đếm tiến và lùi
-  hide/                 CUT-HIDE, đường cong chi phí, quét lambda, phân bổ giữa các chuỗi
-  baseline/             đối chứng ngẫu nhiên HH/HR/RH/RR, heuristic đếm lần xuất hiện, HHA, DBSH, SBSH, ILP, GA
-  metrics/              HF, Lost, Ghost, DistR, SupDist, khai phá F_sigma, chế độ dữ liệu
-  io/                   đọc bộ dữ liệu, sinh dữ liệu tổng hợp, ghi kết quả, dấu định danh lần chạy
-  exp/                  SC1–SC8 và bộ chạy
-src/test/java/          các ví dụ chạy tay của bản thiết kế, đóng thành test
-config/                 bảng giao thức, tệp chốt trước
-datasets/               nguồn gốc bộ dữ liệu; dữ liệu thô không vào git
-tools/                  chạy có gắn phiên bản, lấy dữ liệu, phân tích chốt trước, các script kiểm
-nettree_checks.py, probe/  các script dò tìm bằng Python
-results-invariant/      số đo không phụ thuộc máy
-results/                số đo thời gian và bộ nhớ, chỉ từ máy đo đã khai
-results-probe/          số đo dò tìm, không đưa vào bài
-COMMIT_MAP.tsv          mã commit cũ → mới của lần viết lại lịch sử ngày 26/09/2026
+  core/                 event sequences, patterns, gap constraints, Nettree, sup_NO
+  core/flow/            Dinic with node capacities, minimum cut, vital nodes, incremental masking
+  index/                Nettree cut index, forward and backward counting
+  hide/                 CUT-HIDE, cost curve, lambda sweep, allocation across sequences
+  baseline/             random controls HH/HR/RH/RR, occurrence-counting heuristic, HHA, DBSH, SBSH, ILP, GA
+  metrics/              HF, Lost, Ghost, DistR, SupDist, F_sigma mining, data regime
+  io/                   dataset reading, synthetic data generation, result writing, run identifier stamp
+  exp/                  SC1–SC8 and the runner
+src/test/java/          the hand-worked examples of the research design, turned into tests
+config/                 protocol table, preregistration file
+datasets/               dataset provenance; raw data does not go into git
+tools/                  versioned runs, data fetching, preregistered analysis, check scripts
+nettree_checks.py, probe/  Python probe scripts
+results-invariant/      machine-independent measurements
+results/                time and memory measurements, only from the declared measuring machine
+results-probe/          probe measurements, not used in the paper
+COMMIT_MAP.tsv          old → new commit ids of the history rewrite of 2026-09-26
 ```
 
-Ba thư mục kết quả có luật riêng và `hidenosp.io.ResultSink` cưỡng chế ngay lúc mở tệp: tệp bất
-biến không được mang cột thời gian hay bộ nhớ, và chỉ máy đo đã khai mới được ghi số thời gian.
-`tools/check_results.py` kiểm lại các luật đó trên tệp có thật trên đĩa.
+The three results directories have their own rules, and `hidenosp.io.ResultSink` enforces them as
+soon as a file is opened: an invariant file may not carry a time or memory column, and only the
+declared measuring machine may write time figures. `tools/check_results.py` re-checks those rules on
+the files actually on disk.
 
-Lịch sử kho được viết lại ngày 26/09/2026 để sửa lời khai nguồn gốc trong hai tài liệu ở `config/`,
-một script ở `tools/` và hai thông điệp commit; mã, dữ liệu và kết quả không đổi. Tệp kết quả ghi mã
-commit lúc chạy: với commit đã được viết lại, tra mã mới trong [`COMMIT_MAP.tsv`](COMMIT_MAP.tsv).
+The history of the repository was rewritten on 2026-09-26 to correct the provenance statements in two
+documents in `config/`, one script in `tools/` and two commit messages; code, data and results are
+unchanged. Result files record the commit id at run time: for a commit that has been rewritten, look
+up the new id in [`COMMIT_MAP.tsv`](COMMIT_MAP.tsv).
 
-## Trạng thái
+## Status
 
-Nguồn đúng duy nhất cho trạng thái cài đặt là mục 5 của [`RUNBOOK.md`](RUNBOOK.md); tệp này không
-chép lại để hai nơi không lệch nhau. Tìm nhanh phần chưa cài: `grep -rn "TODO(code)" src/`.
+The single source of truth for the implementation status is section 5 of [`RUNBOOK.md`](RUNBOOK.md);
+this file does not copy it, so that the two places do not drift apart. Quick search for the parts not
+yet implemented: `grep -rn "TODO(code)" src/`.
+
+> **Language.** This file is the English translation of the Vietnamese original as of commit `ea39da4`
+> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
+> decimal commas are written as decimal points.

@@ -1,25 +1,30 @@
-# RUNBOOK — kho mã HideNOSP
+# RUNBOOK — HideNOSP code repository
 
-Kho này cài đặt **chỉ mục cắt Nettree** và thuật toán **CUT-HIDE** của
-`doc/THIET_KE_NGHIEN_CUU_AN_MAU_LAP.md`, cùng các baseline và các kịch bản SC1–SC8.
-Mọi tên mục dạng §n dưới đây trỏ tới tệp thiết kế đó.
+> **Language.** This file is the English translation of the Vietnamese original as of commit `ea39da4`
+> (2026-11-02), which stays in the git history. Section numbers, values, dates, file names and decisions
+> are unchanged; decimal commas are written as decimal points.
 
-**Tệp thiết kế nằm NGOÀI kho git.** Kho chỉ gồm `code/` (§11.8); `doc/` và `paper/` ở cùng
-thư mục dự án `HideNOSP Project/`, một cấp trên kho này. Bản sao đã clone sẽ không có chúng.
+This repository implements the **Nettree cut index** and the **CUT-HIDE** algorithm of
+`doc/THIET_KE_NGHIEN_CUU_AN_MAU_LAP.md`, together with the baselines and the scenarios SC1–SC8.
+Every section name of the form §n below points to that design file.
 
-Ngôn ngữ: mã nguồn và chú thích bằng tiếng Anh (bản thảo nộp bằng tiếng Anh, và các script dò
-tìm Python sẵn có cũng chú thích tiếng Anh); tài liệu vận hành như tệp này bằng tiếng Việt.
+**The design file lies OUTSIDE the git repository.** The repository consists only of `code/` (§11.8);
+`doc/` and `paper/` are in the same project directory `HideNOSP Project/`, one level above this
+repository. A cloned copy will not have them.
+
+Language: source code, comments and documents, this file included, in English (the manuscript is submitted in
+English, and the existing Python probe scripts are also commented in English).
 
 ---
 
-## 1. Yêu cầu và cách dịch
+## 1. Requirements and how to compile
 
-- JDK 25 (bản LTS, Eclipse Temurin). Mọi máy dùng cùng JDK 25; `tools/run.py` từ chối chạy lấy
-  số vào bài trên phiên bản Java khác. Đổi từ JDK 17 ngày 25/09/2026. Số bất biến của giai đoạn 1
-  (JDK 17, Windows) đã được chạy lại bằng JDK 26 trên macOS ở cùng commit `3e1811f` (trước lần
-  viết lại lịch sử là `2f63b56`, xem `COMMIT_MAP.tsv`): 4 cấu hình SC2, 58 dòng, trùng khít sau khi
-  chuẩn hoá ký tự xuống dòng và dấu phân cách đường dẫn.
-- Maven 3.9 trở lên. Kho `~/.m2` đã có sẵn junit 5.10.2 nên dịch được ở chế độ offline.
+- JDK 25 (the LTS release, Eclipse Temurin). Every machine uses the same JDK 25; `tools/run.py` refuses
+  to run for numbers that go into the paper on any other Java version. Changed from JDK 17 on 2026-09-25.
+  The machine-invariant numbers of phase 1 (JDK 17, Windows) were rerun with JDK 26 on macOS at the same
+  commit `3e1811f` (before the history rewrite it was `2f63b56`, see `COMMIT_MAP.tsv`): 4 SC2
+  configurations, 58 lines, identical after normalising line endings and path separators.
+- Maven 3.9 or later. The `~/.m2` repository already contains junit 5.10.2, so it compiles in offline mode.
 
 ```bash
 mvn -o -q compile
@@ -29,31 +34,32 @@ mvn -o -q compile
 mvn -o test
 ```
 
-`mvn test` chạy `WorkedExamplesTest`, gồm bốn ví dụ chạy tay của bài (§8.1, §8.2, G3). Nếu một
-trong bốn ví dụ hỏng thì **bài** hỏng chứ không chỉ mã: các con số đó được in trong bản thảo.
+`mvn test` runs `WorkedExamplesTest`, which contains the four hand-worked examples of the paper (§8.1,
+§8.2, G3). If one of the four examples fails, then the **paper** is broken, not only the code: those
+numbers are printed in the manuscript.
 
 ---
 
-## 2. Chạy một kịch bản
+## 2. Running a scenario
 
 ```bash
 java -cp target/classes hidenosp.exp.Runner
 ```
 
-lệnh trên in danh sách kịch bản và tuỳ chọn của từng cái.
+the command above prints the list of scenarios and the options of each one.
 
-**Lấy số vào bài thì gọi qua `tools/run.py`, không gọi thẳng `Runner`:**
+**For numbers that go into the paper, call through `tools/run.py`, not `Runner` directly:**
 
 ```bash
 python tools/run.py SC1 --trials=1500 --seed=2026
 ```
 
-Script bọc này dịch lại, kiểm cây làm việc sạch, rồi đặt `HIDENOSP_REVISION` bằng sha commit
-trước khi gọi `Runner`. Gọi thẳng `Runner` thì tệp kết quả mang dấu `unversioned` và không truy
-ngược được về commit nào sinh ra nó, tức vi phạm quy tắc 2.6.8 và điều đã chốt ở
-`config/protocol.yaml`. Gọi thẳng chỉ dùng khi chạy thử cho vui.
+This wrapper script recompiles, checks that the working tree is clean, then sets `HIDENOSP_REVISION` to
+the commit sha before calling `Runner`. If `Runner` is called directly, the result file carries the stamp
+`unversioned` and cannot be traced back to the commit that produced it, which violates rule 2.6.8 and what
+is locked in `config/protocol.yaml`. Call it directly only for informal trial runs.
 
-Ví dụ gọi thẳng để xem nhanh:
+Example of a direct call for a quick look:
 
 ```bash
 java -cp target/classes hidenosp.exp.Runner SC1 --trials=1200 --seed=7
@@ -67,34 +73,34 @@ java -cp target/classes hidenosp.exp.Runner SC2 --sigma=20 --gmax=2 --patterns=1
 java -cp target/classes hidenosp.exp.Runner SC3 --sigma=15 --gmax=2 --setsPerStratum=1 --probe
 ```
 
-Tuỳ chọn dùng chung cho mọi kịch bản:
+Options shared by every scenario:
 
-| Tuỳ chọn | Mặc định | Ý nghĩa |
+| Option | Default | Meaning |
 |---|---|---|
-| `--seed` | 2026 | Hạt giống, vào dòng 3 bảng giao thức và vào dấu định danh lần chạy |
-| `--machine` | `dev` | Tên máy đo đã khai. Lần chạy gắn `dev` **không được** ghi số đo thời gian |
-| `--root` | `.` | Thư mục chứa ba thư mục kết quả |
-| `--probe` | tắt | Đẩy tệp bất biến sang `results-probe/` thay vì `results-invariant/` |
+| `--seed` | 2026 | Seed; goes into row 3 of the protocol table and into the run identifier |
+| `--machine` | `dev` | Name of the declared measuring machine. A run tagged `dev` **may not** record timing measurements |
+| `--root` | `.` | Directory that contains the three result directories |
+| `--probe` | off | Sends the invariant file to `results-probe/` instead of `results-invariant/` |
 
-Riêng `tools/run.py` nhận thêm ba tuỳ chọn của chính nó, không chuyển tiếp cho `Runner`:
+`tools/run.py` alone accepts three further options of its own, which are not forwarded to `Runner`:
 
-| Tuỳ chọn | Mặc định | Ý nghĩa |
+| Option | Default | Meaning |
 |---|---|---|
-| `--jvm=<cờ>` | `-Xmx4g` | Cờ cho JVM; lặp lại được |
-| `--allow-dirty` | tắt | Cho chạy khi cây làm việc còn sửa đổi chưa commit |
-| `--no-build` | tắt | Bỏ qua bước dịch lại |
+| `--jvm=<flag>` | `-Xmx4g` | Flag for the JVM; can be repeated |
+| `--allow-dirty` | off | Allows running while the working tree still has uncommitted changes |
+| `--no-build` | off | Skips the recompile step |
 
-Cây làm việc còn sửa đổi chưa commit thì script **từ chối chạy**, trừ khi lần chạy đó có `--probe`
-(số dò tìm, được phép) hoặc bạn khai rõ `--allow-dirty`. Cả hai trường hợp đều đóng dấu hậu tố
-`-dirty`, để một tệp kết quả không bao giờ nhận nhầm một sha sạch.
+If the working tree still has uncommitted changes, the script **refuses to run**, unless that run has
+`--probe` (exploratory numbers, allowed) or you declare `--allow-dirty` explicitly. Both cases stamp the
+suffix `-dirty`, so that a result file never wrongly carries a clean sha.
 
-Khi chưa có bộ dữ liệu thật, SC2 và SC3 chạy trên một cơ sở dữ liệu tổng hợp nhỏ có sẵn trong mã.
-**Mọi lần chạy như vậy phải kèm `--probe`**: đó là số đo dò tìm, không phải kết quả (§8.2).
+While no real dataset is available, SC2 and SC3 run on a small synthetic database built into the code.
+**Every such run must have `--probe`**: those are exploratory measurements, not results (§8.2).
 
-### Script dò tìm Python
+### Python probe scripts
 
-`nettree_checks.py` và `probe/*.py` in ra màn hình. §8.2 đòi các con số đó nằm ở `results-probe/`,
-nên phải hứng đầu ra vào đó thay vì chỉ đọc trên màn hình:
+`nettree_checks.py` and `probe/*.py` print to the screen. §8.2 requires those numbers to be in
+`results-probe/`, so the output must be captured there instead of only being read on the screen:
 
 ```bash
 python nettree_checks.py > results-probe/nettree_checks_$(date -u +%Y%m%d-%H%M%S).txt 2>&1
@@ -104,22 +110,22 @@ python nettree_checks.py > results-probe/nettree_checks_$(date -u +%Y%m%d-%H%M%S
 cd probe && python oldprob.py > ../results-probe/oldprob_$(date -u +%Y%m%d-%H%M%S).txt 2>&1
 ```
 
-`probe/*.py` nạp `nettree_checks` qua `sys.path.insert(0, '..')`, nên phải chạy từ trong `probe/`.
-`probe/sideeffect.py` cần `numpy`. Lô chạy lại gần nhất mất khoảng ba phút cho `nettree_checks.py`
-và vài giây cho bốn script còn lại; kết quả và bảng đối chiếu với §8.2 nằm ở `results-probe/`.
+`probe/*.py` load `nettree_checks` through `sys.path.insert(0, '..')`, so they must be run from inside `probe/`.
+`probe/sideeffect.py` needs `numpy`. The most recent rerun batch took about three minutes for `nettree_checks.py`
+and a few seconds for the four remaining scripts; the results and the comparison table against §8.2 are in `results-probe/`.
 
-Không dùng `>>` để ghi thêm vào tệp nằm trên ổ Google Drive: ổ ảo trả kích thước tệp cũ nên lần
-ghi thêm đè vào giữa tệp. Ghi ra đĩa cục bộ rồi chép sang, hoặc chỉ dùng `>`.
+Do not use `>>` to append to a file located on the Google Drive disk: the virtual disk reports the old file size,
+so the append overwrites the middle of the file. Write to a local disk and then copy over, or use only `>`.
 
 ---
 
-## 3. Chạy thực nghiệm giai đoạn 1
+## 3. Running the phase 1 experiments
 
-Theo §12b, giai đoạn 1 là **cài đặt, SC1–SC2, chốt `config/preregistration.md`**. Nó phải xong
-trước SC3, vì SC2 quyết định bộ dữ liệu nào vào nhóm chính và bộ nào vào nhóm đối chứng suy
-biến, mà quyết định đó không được sửa sau khi đã nhìn kết quả so sánh [2.3.10].
+Per §12b, phase 1 is **implementation, SC1–SC2, locking `config/preregistration.md`**. It must be finished
+before SC3, because SC2 decides which datasets go into the main group and which into the degenerate control
+group, and that decision may not be changed after the comparison results have been seen [2.3.10].
 
-### Bước 0. Lấy dữ liệu
+### Step 0. Get the data
 
 ```bash
 python tools/fetch_datasets.py
@@ -129,39 +135,39 @@ python tools/fetch_datasets.py
 python tools/build_datasets.py
 ```
 
-Lệnh thứ hai dựng các tệp SPMF từ dữ liệu thô dưới `datasets/raw/` (ba nhật ký tiến trình của 4TU,
-14 CSDL của HAUP-Hider và hai tệp protein của NTP-Miner, `protein_sdb1` và `protein_sdb4`); quy tắc
-gán vai cho từng trường nằm ở đầu `tools/build_datasets.py`. Sáu tệp protein thô lồng nhau, nên chỉ
-hai tệp lớn nhất được dựng; mỗi lần dựng in độ trùng của chúng với cả sáu tệp.
+The second command builds the SPMF files from the raw data under `datasets/raw/` (three process event logs
+from 4TU, 14 databases of HAUP-Hider and two protein files of NTP-Miner, `protein_sdb1` and `protein_sdb4`);
+the rule that assigns a role to each field is at the top of `tools/build_datasets.py`. The six raw protein
+files are nested, so only the two largest are built; each build prints their overlap with all six files.
 
-**Chọn σ cho một bộ mới** bằng quy tắc của `config/protocol.yaml` (|F_σ| trong [50, 700] ở mọi
-khoảng cách, và F_σ là tập con thực sự của không gian mẫu), áp bằng chương trình chứ không đọc bằng
-mắt:
+**Choose σ for a new dataset** with the rule of `config/protocol.yaml` (|F_σ| in [50, 700] at every
+gap, and F_σ is a proper subset of the pattern space), applied by program rather than read by
+eye:
 
 ```bash
 python tools/run.py --probe SIGMA --dataset=datasets/protein_sdb4.txt --format=SPMF --sigma=300,400,500,600,700,800,900,1000,1200 --gmin=0 --gmax=1,3 --maxPatternLength=4
 ```
 
-Dòng cuối in các σ thoả quy tắc ở mọi khoảng cách đã quét; tệp `SIGMA_*.csv` ghi từng cấu hình.
-`python tools/data_regime_tables.py sigma <tệp hoặc thư mục>` in bảng markdown từ các tệp đó, và
-`python tools/data_regime_tables.py groups <tệp hoặc thư mục>` in bảng nhóm từ các tệp SC2 toàn kho
-(chỉ để báo cáo; bảng chốt vẫn do `preregistered_analysis.py --write-groups` ghi).
+The last line prints the σ values that satisfy the rule at every gap scanned; the file `SIGMA_*.csv` records each configuration.
+`python tools/data_regime_tables.py sigma <file or directory>` prints a markdown table from those files, and
+`python tools/data_regime_tables.py groups <file or directory>` prints the group table from the whole-pool SC2 files
+(for reporting only; the locked table is still written by `preregistered_analysis.py --write-groups`).
 
-Tải MSNBC, SIGN, FIFA và BMS-WebView-1 từ kho công khai của SPMF vào `datasets/`, tính SHA-256
-và ghi `datasets/provenance.tsv`. Chạy lại là không tải lại nếu tổng kiểm còn khớp. Muốn một bộ
-riêng thì truyền tên: `python tools/fetch_datasets.py msnbc`.
+Downloads MSNBC, SIGN, FIFA and BMS-WebView-1 from the public SPMF repository into `datasets/`, computes SHA-256
+and writes `datasets/provenance.tsv`. Rerunning does not download again if the checksum still matches. To get one
+dataset only, pass its name: `python tools/fetch_datasets.py msnbc`.
 
-### Bước 1. SC1 phải xanh trước đã
+### Step 1. SC1 must be green first
 
 ```bash
 python tools/run.py SC1 --trials=1500 --seed=2026
 ```
 
-Kết quả chấp nhận được duy nhất là **0 ca lệch**. SC1 đối chiếu luồng cực đại với vét cạn, kiểm
-P1, kiểm đặc trưng nút thiết yếu L5, đối chiếu cập nhật gia tăng với dựng lại, và kiểm P5.
-Chưa xanh thì mọi con số sau đó vô nghĩa.
+The only acceptable result is **0 mismatches**. SC1 compares maximum flow against exhaustive search, checks
+P1, checks the L5 characterisation of vital nodes, compares incremental update against rebuilding, and checks P5.
+Until it is green, every number after it is meaningless.
 
-### Bước 2. SC2 trên từng bộ và từng σ
+### Step 2. SC2 on each dataset and each σ
 
 ```bash
 python tools/run.py SC2 --dataset=datasets/msnbc.txt --format=SPMF --sigma=2000 --gmin=0 --gmax=3 --maxPatternLength=4 --patterns=12
@@ -179,42 +185,42 @@ python tools/run.py SC2 --dataset=datasets/bms1.txt --format=SPMF --sigma=100 --
 python tools/run.py SC2 --dataset=datasets/fifa.txt --format=SPMF --sigma=3000 --gmin=0 --gmax=3 --maxPatternLength=4 --patterns=10
 ```
 
-Quét thêm σ và độ rộng khoảng cách để thấy ρ_rep và β đổi theo cấu hình chứ không phải theo bộ:
-đổi `--sigma` và `--gmax`. Thời gian tham khảo trên máy phát triển: SIGN vài giây, BMS1 vài giây,
-MSNBC khoảng 13 giây, FIFA khoảng hai phút (|Σ| = 2990 làm ứng viên mức 2 đông).
+Scan further σ values and gap widths to see that ρ_rep and β change with the configuration, not with the dataset:
+change `--sigma` and `--gmax`. Reference times on the development machine: SIGN a few seconds, BMS1 a few seconds,
+MSNBC about 13 seconds, FIFA about two minutes (|Σ| = 2990 makes the level-2 candidates numerous).
 
-**Không** kèm `--probe` ở bước này: đây là kết quả thật, bất biến theo máy, thuộc về
-`results-invariant/`. Cờ `--probe` chỉ dành cho chạy thử trên dữ liệu tổng hợp có sẵn trong mã.
+Do **not** add `--probe` at this step: this is a real result, machine-invariant, and belongs in
+`results-invariant/`. The `--probe` flag is only for trial runs on the synthetic data built into the code.
 
-### Bước 3. Đọc bảng SC2 rồi mới chốt preregistration
+### Step 3. Read the SC2 table before locking the preregistration
 
-Với mỗi bộ, xem hai cột:
+For each dataset, look at two columns:
 
-- **ρ_rep gần 0** nghĩa là sup_NO suy biến thành độ hỗ trợ theo chuỗi. Bộ đó là **đối chứng suy
-  biến**, không được đứng trong nhóm chứng minh đóng góp [2.2.4].
-- **β gần 0** nghĩa là ràng buộc khoảng cách không có hiệu lực trên cấu hình đó.
+- **ρ_rep near 0** means that sup_NO degenerates into sequence-based support. That dataset is a **degenerate
+  control**, and may not stand in the group that demonstrates the contribution [2.2.4].
+- **β near 0** means that the gap constraint has no effect on that configuration.
 
-Điền ngưỡng phân nhóm và δ_L vào `config/preregistration.md`, commit tệp đó (lịch sử git là bằng
-chứng thời điểm), rồi mới sang SC3.
+Fill the grouping thresholds and δ_L into `config/preregistration.md`, commit that file (the git history is the
+evidence of the date), and only then move on to SC3.
 
-**Từ 25/09/2026 (preregistration mục 10):** nhóm tính trên **toàn bộ mẫu không lặp mục** dài 2–4 của
-F_σ, tức kho mà SC3 rút tập nhạy cảm. Chạy SC2 với `--profile=pool` cho mọi cấu hình của
-`protocol.yaml`; tệp SC2 lấy mẫu con không còn dùng để xếp nhóm. Sau lượt SC2 chính thức trên máy
-đo, sinh bảng nhóm một lần rồi rà và commit (commit là chốt):
+**From 2026-09-25 (preregistration section 10):** groups are computed over **all patterns without repeated items** of length 2–4 of
+F_σ, i.e. the pool from which SC3 draws the sensitive sets. Run SC2 with `--profile=pool` for every configuration of
+`protocol.yaml`; an SC2 file of a subsample is no longer used for grouping. After the official SC2 run on the measuring
+machine, generate the group table once, then review it and commit it (the commit is the lock):
 
 ```bash
 python tools/preregistered_analysis.py --sc2 results-invariant --write-groups
 ```
 
-`tools/preregistered_analysis.py` (trước ngày 26/09/2026 tên là `tools/thong_ke.py`) so từng cấu hình
-với `config/configuration_groups.tsv`, và chỉ kiểm H2 trên nhóm chính.
+`tools/preregistered_analysis.py` (before 2026-09-26 named `tools/thong_ke.py`) compares each configuration
+with `config/configuration_groups.tsv`, and tests H2 only on the main group.
 
-**Đã làm, ngày 12/09/2026.** `config/preregistration.md` và `config/protocol.yaml` đã chốt mọi
-tham số chặn SC3; căn cứ từng con số ở `config/de_xuat_gia_tri_nhom_A.md`. Ba việc kỹ thuật phải
-xong trước lần chạy SC3 lấy số vào bài: gắn `HIDENOSP_REVISION`, nâng `--maxPatternLength` lên 4,
-và kiểm B_ε không rỗng.
+**Done, on 2026-09-12.** `config/preregistration.md` and `config/protocol.yaml` have locked every
+parameter that blocks SC3; the rationale for each number is in `config/de_xuat_gia_tri_nhom_A.md`. Three technical tasks must be
+done before the SC3 run whose numbers go into the paper: attach `HIDENOSP_REVISION`, raise `--maxPatternLength` to 4,
+and check that B_ε is non-empty.
 
-### Bước 4. Kiểm luật thư mục kết quả
+### Step 4. Check the results-directory rule
 
 ```bash
 python tools/check_results.py
@@ -222,271 +228,272 @@ python tools/check_results.py
 
 ---
 
-## 4. Ba thư mục kết quả và luật của chúng (§11.8)
+## 4. The three result directories and their rules (§11.8)
 
-| Thư mục | Chứa gì | Ai được ghi |
+| Directory | Contents | Who may write |
 |---|---|---|
-| `results-invariant/` | Lost, Ghost, \|R\|, HF, kích thước Nettree | Máy nào cũng được; **cấm** cột thời gian hay bộ nhớ |
-| `results/` | Thời gian treo tường, thời gian CPU, bộ nhớ đỉnh | Chỉ máy đo đã khai (`--machine=<tên>`), và phải có cột thời gian |
-| `results-probe/` | Dò tìm trên máy phát triển, dữ liệu thay thế | Máy nào cũng được; cấm cột thời gian |
+| `results-invariant/` | Lost, Ghost, \|R\|, HF, Nettree size | Any machine; timing or memory columns **forbidden** |
+| `results/` | Wall-clock time, CPU time, peak memory | Only the declared measuring machine (`--machine=<name>`), and timing columns are required |
+| `results-probe/` | Probes on the development machine, substitute data | Any machine; timing columns forbidden |
 
-`hidenosp.io.ResultSink` cưỡng chế ba luật này và ném lỗi ngay khi mở tệp, không đợi tới lúc
-đọc bảng. Lý do đặt kiểm tra máy móc ở đây: sai sót kiểu "số thời gian đo trên laptop rồi in
-vào bảng như thể đo trên máy đã khai" là loại sai im lặng và đắt nhất.
+`hidenosp.io.ResultSink` enforces these three rules and throws an error as soon as the file is opened, without
+waiting until the table is read. The reason for putting a mechanical check here: an error of the kind "timing
+numbers measured on a laptop and then printed in the table as if measured on the declared machine" is the most
+silent and the most costly kind of error.
 
-Mỗi tệp mang dấu định danh lần chạy (§2.6.8) trong tên và trong phần chú thích đầu tệp:
-thời điểm UTC, máy, phiên bản mã (biến môi trường `HIDENOSP_REVISION`), hạt giống, phiên bản JDK,
-cỡ heap tối đa.
+Each file carries the run identifier (§2.6.8) in its name and in the comment header of the file:
+UTC time, machine, code version (environment variable `HIDENOSP_REVISION`), seed, JDK version,
+maximum heap size.
 
-**Tệp `.partial`.** Kết quả được ghi vào `<tên>.csv.partial` và chỉ đổi sang tên cuối khi kịch bản chạy
-hết (`CsvWriter.complete()`). Một lượt bị ngắt giữa chừng — hết bộ nhớ, bị dừng, máy khởi động lại để cập
-nhật — để lại tệp `.partial`: không công cụ đọc nào nhận nó, và `tools/check_results.py` báo lỗi. Xoá tệp
-đó và chạy lại đúng lệnh; không commit. Trước khi có cơ chế này, các lượt SC2 hết bộ nhớ trên MSNBC đã để
-lại tệp mang tên cuối nhưng thiếu các hàng cuối (884/885, 1.448/1.450 hàng) — đúng các mẫu hỗ trợ cao nhất.
+**`.partial` files.** Results are written to `<name>.csv.partial` and renamed to the final name only when the scenario runs
+to the end (`CsvWriter.complete()`). A run interrupted midway — out of memory, stopped, machine restarted for an
+update — leaves a `.partial` file: no reading tool accepts it, and `tools/check_results.py` reports an error. Delete that file
+and rerun exactly the same command; do not commit. Before this mechanism existed, the SC2 runs that ran out of memory on MSNBC
+left files carrying the final name but missing the last rows (884/885, 1,448/1,450 rows) — exactly the highest-support patterns.
 
 ---
 
-## 5. Trạng thái cài đặt
+## 5. Implementation status
 
-### Đã cài và đã kiểm
+### Implemented and checked
 
-| Thành phần | Lớp | Ghi chú |
+| Component | Class | Note |
 |---|---|---|
-| Nettree, bảng vị trí dùng chung | `core.Nettree` | §2, §9.1 |
-| Luồng cực đại sức chứa nút (Dinic) | `core.flow.Dinic`, `core.flow.NettreeFlow` | L0 |
-| Lát cắt nhỏ nhất | `NettreeFlow.minCut` | P1, P2 |
-| Nút thiết yếu: một luồng + một lần SCC | `NettreeFlow.vitalNodes`, `core.flow.ResidualScc` | L5 |
-| Cập nhật gia tăng sau mỗi lần che | `NettreeFlow.maskPosition` | §9.1; SC1 đối chiếu với dựng lại |
-| Lát cắt nhỏ nhất có trọng số | `NettreeFlow.minWeightMinCut` | P6(b), chính xác |
-| Quét λ có chặn dưới và chứng nhận | `hide.LambdaSweep` | P6(d) |
-| Đường cong chi phí `c_S(k)` | `hide.CostCurve` | §9.2 bước 5 |
-| Phân bổ giữa các chuỗi | `hide.Allocation` | P7, quy hoạch động và cả bản tham lam để so ở SC7 |
-| Đếm tiến và lùi | `index.PathCounts` | §9.1; thay quy hoạch động theo vị trí của [R20] |
-| Chỉ mục gộp nhiều mẫu | `index.NettreeCutIndex` | §9.1 |
-| CUT-HIDE, một mẫu | `hide.CutHide` | Chính xác khi μ(P)=1; bước 1–6, 8 |
-| CUT-HIDE, nhiều mẫu, HIDE-SEQ | `hide.CutHide` | Tham lam theo tỉ số, bước 7 |
-| CUT-HIDE, nhiều mẫu, HIDE-DB | `hide.CutHide.runMultiPatternDatabase` | Tham lam theo tỉ số trên toàn CSDL; **không** có bảo đảm hệ số khi σ > 1 |
-| Nguyên–đối ngẫu, hệ số ℓ_max và chặn dưới cho từng thực thể | `hide.PrimalDualCover` | Chỉ khi σ = 1 (xem mục 7 khoản 7 và 9) |
-| Độ đo HF, Lost, Ghost, DistR, SupDist | `metrics.Metrics` | §2 |
-| `F_σ(D)`, `B_ε`, `𝒮⁺` | `metrics.FrequentPatterns` | §9.2 bước 3 |
+| Nettree, shared position table | `core.Nettree` | §2, §9.1 |
+| Maximum flow with node capacities (Dinic) | `core.flow.Dinic`, `core.flow.NettreeFlow` | L0 |
+| Minimum cut | `NettreeFlow.minCut` | P1, P2 |
+| Vital nodes: one flow + one SCC pass | `NettreeFlow.vitalNodes`, `core.flow.ResidualScc` | L5 |
+| Incremental update after each mask | `NettreeFlow.maskPosition` | §9.1; SC1 compares it against rebuilding |
+| Minimum-weight minimum cut | `NettreeFlow.minWeightMinCut` | P6(b), exact |
+| λ sweep with lower bound and certificate | `hide.LambdaSweep` | P6(d) |
+| Cost curve `c_S(k)` | `hide.CostCurve` | §9.2 step 5 |
+| Allocation across sequences | `hide.Allocation` | P7, dynamic programming and also the greedy version for comparison in SC7 |
+| Forward and backward counting | `index.PathCounts` | §9.1; replaces the position-based dynamic programming of [R20] |
+| Combined index over several patterns | `index.NettreeCutIndex` | §9.1 |
+| CUT-HIDE, one pattern | `hide.CutHide` | Exact when μ(P)=1; steps 1–6, 8 |
+| CUT-HIDE, several patterns, HIDE-SEQ | `hide.CutHide` | Ratio greedy, step 7 |
+| CUT-HIDE, several patterns, HIDE-DB | `hide.CutHide.runMultiPatternDatabase` | Ratio greedy over the whole database; **no** factor guarantee when σ > 1 |
+| Primal–dual, factor ℓ_max and a lower bound for each instance | `hide.PrimalDualCover` | Only when σ = 1 (see section 7 items 7 and 9) |
+| Metrics HF, Lost, Ghost, DistR, SupDist | `metrics.Metrics` | §2 |
+| `F_σ(D)`, `B_ε`, `𝒮⁺` | `metrics.FrequentPatterns` | §9.2 step 3 |
 | ρ_rep, β, \|R\|\* | `metrics.DataProfile` | §8.4 |
-| Baseline tầng (a) | `baseline.RandomMasking` (HH/HR/RH/RR), `baseline.OccurrenceCountHeuristic` | §11.3; chạy được với \|𝒮\| bất kỳ |
-| Kiểm B_ε rỗng báo lỗi | `hide.CutHide.requireNonEmptyBand` | Chốt ở `protocol.yaml` dòng 2 |
-| Baseline tầng (b): HHA | `baseline.Hha` | [R20], [R2] Thuật toán 1; tái tạo đúng Ví dụ 2 của [R20] và Hình 1(d), 4(b) của [R3] (`HhaPaperExampleTest`); hai cách tính δ cho SC6. Đối chiếu: `config/doi_chieu_hha_r20.md` |
-| Baseline tầng (b): DBSH | `baseline.Dbsh` | [R3], Thuật toán 4 kèm 1 và 3; tái tạo đúng Hình 1(e), Hình 4(b), Ví dụ 1 (`DbshPaperExampleTest`). Dùng chung Cost (`SymbolCover`) và Exclude (`Exclude`) với SBSH |
-| Baseline tầng (b): SBSH | `baseline.Sbsh` | [R3], Thuật toán 5 kèm 1–3 và mục 4.3; tái tạo đúng Hình 1(f), Hình 4(b) và Ví dụ 3 của bài (`SbshPaperExampleTest`). Chỗ bài để ngỏ: `config/doi_chieu_sbsh_r3.md` mục 6 |
-| Baseline tầng (c): bộ giải chính xác | `baseline.IlpExact` | Nhánh-cận, thực thể nhỏ; tuỳ chọn cực tiểu mẫu mất |
-| Tải bộ dữ liệu kèm tổng kiểm | `tools/fetch_datasets.py` | §11.2; chỉ kiểm, không ghi đè bản ghi; kiểm MD5 do nguồn công bố |
-| Dựng tệp SPMF từ dữ liệu thô (nhật ký XES, CSDL của HAUP-Hider, protein) | `tools/build_datasets.py` | Quy tắc gán vai ghi trong tệp; bản dựng phải khớp bản ghi |
-| Quy tắc chọn σ, áp bằng chương trình | `exp.SigmaScan` (mã kịch bản `SIGMA`) | Không phải kịch bản của bài; tệp bất biến theo máy |
-| Lời giải chính xác một mẫu, mọi μ, khi g⁻ = 0 | `hide.FrontierDp` | Định lý P8 của bản thiết kế: quy hoạch động theo nút tới được muộn nhất; hai thứ tự mục tiêu (`Objective`); kiểm với tìm kiếm trên mọi tập con (`FrontierDpTest`) |
-| Phân bổ chính xác giữa các chuỗi | `hide.Allocation.solveExact`, `leastMasks` | Theo từ điển (số lần che, trọng số) hoặc ngược lại; bộ nhớ O(K) cho giá trị, một `short` mỗi (chuỗi có hỗ trợ, tổng) cho truy vết |
-| CUT-HIDE một mẫu, mọi μ | `hide.CutHide` với `CutHideConfig.Curves` | `FRONTIER_DP` (mặc định), `FRONTIER_DP_WEIGHT_FIRST`, `LAMBDA_SWEEP` (đối chứng); khóa phương pháp SC3: `cut-hide`, `cut-hide-weight`, `cut-hide-sweep` |
-| Phương pháp đang kiểm của H2 và H2-R (bản chốt trước, mục 12) | `hide.AdaptiveCutHide` + `hide.MaskLocalSearch` | Khóa SC3 `cut-hide-rw-ls`: trọng số thích nghi sáu vòng (vòng 0 là `cut-hide`) rồi tìm kiếm cục bộ theo Bổ đề L9 (50 lượt, 30 chuỗi nhận). Nhiều mẫu nhạy cảm: tham lam của `cut-hide`. Khóa `cut-hide-rw`: chỉ trọng số thích nghi (biến thể loại trừ). Mỗi lượt SC3 chính thức phải có cả `cut-hide-rw-ls`, `cut-hide-rw` và `cut-hide` trong `--methods` |
-| Kho mẫu lặp mục | `exp.SensitiveSampling.repeatedPool`; SC2 `--profile=repeated`; SC3 `--patternKind=repeated` | \|R\|* chính xác cho mẫu lặp mục khi g⁻ = 0 (`metrics.DataProfile`) |
-| Mặt Pareto lồi chính xác giữa \|R\| và trọng số | `hide.CutHide.paretoFront`, `FrontierDp.Order`; SC3 `--pareto=true` ghi `SC3PARETO_<dấu>.csv` | Mệnh đề P10 của bản thiết kế; `tools/pareto_table.py` ghép với tệp SC3 cùng lượt, đếm tỉ lệ tập mà mặt trội hơn từng phương pháp, kiểm đỉnh đầu là hàng `cut-hide` |
-| Đánh giá nhiều lời giải của cùng một bài toán | `metrics.Metrics.Context.session` | Nhớ hỗ trợ của mỗi (chuỗi, tập vị trí che) đã gặp; hàng giống hệt `evaluateMasking` (`MetricsSessionTest`) |
-| Bảng markdown từ hiện vật (quy tắc σ, nhóm) | `tools/data_regime_tables.py` | Để tài liệu tổng hợp nhúng bảng sinh ra, không chép tay |
-| Kiểm mã chỉ viết tiếng Anh: chữ có dấu, từ không dấu, số hiệu mục và định lý, cả tên tệp | `tools/check_english.py` | Mã thoát 1 khi có vi phạm; tự kiểm bằng tiêm lỗi: `tools/check_english_test.py`; danh sách từ đo lại bằng `--measure` |
-| Lấy mẫu tập nhạy cảm theo năm tầng phân vị, không lặp | `exp.SensitiveSampling` | `preregistration.md` mục 9 |
-| SC1, SC2, SC3 | `exp.Sc1…`, `exp.Sc2…`, `exp.Sc3…` | Chạy được |
+| Tier (a) baselines | `baseline.RandomMasking` (HH/HR/RH/RR), `baseline.OccurrenceCountHeuristic` | §11.3; runs with any \|𝒮\| |
+| Empty-B_ε check reports an error | `hide.CutHide.requireNonEmptyBand` | Locked in `protocol.yaml` row 2 |
+| Tier (b) baseline: HHA | `baseline.Hha` | [R20], [R2] Algorithm 1; reproduces exactly Example 2 of [R20] and Figures 1(d), 4(b) of [R3] (`HhaPaperExampleTest`); two ways of computing δ for SC6. Cross-check: `config/doi_chieu_hha_r20.md` |
+| Tier (b) baseline: DBSH | `baseline.Dbsh` | [R3], Algorithm 4 together with 1 and 3; reproduces exactly Figure 1(e), Figure 4(b), Example 1 (`DbshPaperExampleTest`). Shares Cost (`SymbolCover`) and Exclude (`Exclude`) with SBSH |
+| Tier (b) baseline: SBSH | `baseline.Sbsh` | [R3], Algorithm 5 together with 1–3 and section 4.3; reproduces exactly Figure 1(f), Figure 4(b) and Example 3 of the paper (`SbshPaperExampleTest`). Points the paper leaves open: `config/doi_chieu_sbsh_r3.md` section 6 |
+| Tier (c) baseline: exact solver | `baseline.IlpExact` | Branch and bound, small instances; option to minimise lost patterns |
+| Downloading datasets with checksums | `tools/fetch_datasets.py` | §11.2; only checks, does not overwrite the record; checks the MD5 published by the source |
+| Building SPMF files from raw data (XES logs, HAUP-Hider databases, protein) | `tools/build_datasets.py` | Role-assignment rule written in the file; the build must match the record |
+| σ selection rule, applied by program | `exp.SigmaScan` (scenario code `SIGMA`) | Not a scenario of the paper; machine-invariant file |
+| Exact one-pattern solution, every μ, when g⁻ = 0 | `hide.FrontierDp` | Theorem P8 of the design: dynamic programming over the latest reachable node; two objective orders (`Objective`); checked against search over all subsets (`FrontierDpTest`) |
+| Exact allocation across sequences | `hide.Allocation.solveExact`, `leastMasks` | Lexicographic in (number of masks, weight) or the reverse; O(K) memory for the values, one `short` per (sequence with support, total) for backtracking |
+| CUT-HIDE one pattern, every μ | `hide.CutHide` with `CutHideConfig.Curves` | `FRONTIER_DP` (default), `FRONTIER_DP_WEIGHT_FIRST`, `LAMBDA_SWEEP` (control); SC3 method keys: `cut-hide`, `cut-hide-weight`, `cut-hide-sweep` |
+| Method under test of H2 and H2-R (the preregistration, section 12) | `hide.AdaptiveCutHide` + `hide.MaskLocalSearch` | SC3 key `cut-hide-rw-ls`: adaptive weights over six rounds (round 0 is `cut-hide`), then local search per Lemma L9 (50 passes, 30 receiving sequences). Several sensitive patterns: the greedy of `cut-hide`. Key `cut-hide-rw`: adaptive weights only (ablation variant). Every official SC3 run must have `cut-hide-rw-ls`, `cut-hide-rw` and `cut-hide` in `--methods` |
+| Pool of patterns with repeated items | `exp.SensitiveSampling.repeatedPool`; SC2 `--profile=repeated`; SC3 `--patternKind=repeated` | Exact \|R\|* for patterns with repeated items when g⁻ = 0 (`metrics.DataProfile`) |
+| Exact convex Pareto front between \|R\| and weight | `hide.CutHide.paretoFront`, `FrontierDp.Order`; SC3 `--pareto=true` writes `SC3PARETO_<stamp>.csv` | Proposition P10 of the design; `tools/pareto_table.py` joins it with the SC3 file of the same run, counts the share of sets where the front dominates each method, checks that the first vertex is the `cut-hide` row |
+| Evaluating many solutions of the same problem | `metrics.Metrics.Context.session` | Remembers the support of each (sequence, set of masked positions) already seen; rows identical to `evaluateMasking` (`MetricsSessionTest`) |
+| Markdown tables from artifacts (σ rule, groups) | `tools/data_regime_tables.py` | So that summary documents embed generated tables, not tables copied by hand |
+| Check that code is written only in English: letters with diacritics, words without diacritics, section and theorem numbers, file names as well | `tools/check_english.py` | Exit code 1 when there is a violation; self-check by fault injection: `tools/check_english_test.py`; word list remeasured with `--measure` |
+| Sampling of sensitive sets by five percentile strata, without repetition | `exp.SensitiveSampling` | `preregistration.md` section 9 |
+| SC1, SC2, SC3 | `exp.Sc1…`, `exp.Sc2…`, `exp.Sc3…` | Runnable |
 
-### Chưa cài (khung có sẵn, đặc tả nằm trong Javadoc của từng lớp)
+### Not implemented (skeleton present, specification in the Javadoc of each class)
 
-| Việc | Nơi | Chặn kịch bản nào |
+| Task | Where | Blocks which scenario |
 |---|---|---|
-| Giải thuật di truyền, bản thuần và bản lai khởi tạo từ lát cắt | `baseline.GaHybrid` | SC3 (tầng c) |
-| SC4, SC5, SC6, SC7, SC8 | `exp.Sc4…` đến `exp.Sc8…` | chính nó |
-| Đối chiếu với NETGAP của [R1] | `exp.Sc1ImplementationCheck` | SC1 (phần còn thiếu) |
-| Đo bộ nhớ thường trú của tiến trình | `util.MemoryProbe` | SC6 |
+| Genetic algorithm, plain version and hybrid version initialised from the cut | `baseline.GaHybrid` | SC3 (tier c) |
+| SC4, SC5, SC6, SC7, SC8 | `exp.Sc4…` to `exp.Sc8…` | itself |
+| Cross-check against NETGAP of [R1] | `exp.Sc1ImplementationCheck` | SC1 (the missing part) |
+| Measuring the resident memory of the process | `util.MemoryProbe` | SC6 |
 
-Tìm nhanh: `grep -rn "TODO(code)" src/`.
-
----
-
-## 6. Bảng giao thức 9 dòng
-
-`config/protocol.yaml` là bản điền. Quy tắc 2.6.2 đòi điền **ngay ở bản nháp đầu**, không đợi
-tới lúc nộp. Những ô mã sinh ra được (phiên bản JDK, cỡ heap, hạt giống) đã được in sẵn vào
-đầu mỗi tệp kết quả, chép từ đó sang.
-
-`config/preregistration.md` chốt ngưỡng hiệu ứng δ_L và phép kiểm **trước** khi chạy SC3
-(quy tắc 2.4.7). **Đã chốt ngày 12/09/2026**; sửa bất kỳ con số nào từ đây phải là một commit
-riêng có ghi lý do.
-
-`config/quyet_dinh_can_chot.md` liệt kê **mọi** điểm còn phải quyết định của dự án, gộp theo chủ
-đề, tách nhóm chặn SC3 và nhóm chặn lúc nộp. Sinh từ một đợt rà mười nguồn rồi thẩm định lại từng
-điểm; `tools/merge_decisions.py` gộp kết quả thành tài liệu đó (trước ngày 26/09/2026 tên là
-`tools/gop_quyet_dinh.py`; từ ngày đó chủ đề, từ khoá và tài liệu nó sinh ra viết bằng tiếng Anh).
-
-`config/de_xuat_gia_tri_nhom_A.md` đề xuất **giá trị cụ thể** cho từng điểm chặn SC3, mỗi giá trị
-kèm căn cứ đo được, cái giá phải trả, và cách bác bỏ. Đây là bản để duyệt, chưa phải bản chốt:
-chốt là ghi số vào hai tệp trên rồi commit.
+Quick search: `grep -rn "TODO(code)" src/`.
 
 ---
 
-## 7. Những quyết định cài đặt phải khai trong bài
+## 6. The 9-row protocol table
 
-Đây là các chỗ mã phải chọn một cách làm mà tệp thiết kế chưa chốt. Mỗi dòng cần một câu trong
-bản thảo hoặc trong bảng giao thức.
+`config/protocol.yaml` is the filled-in version. Rule 2.6.2 requires filling it in **already in the first draft**, without waiting
+until submission. The cells that the code can generate (JDK version, heap size, seed) are already printed at the
+top of every result file; copy them from there.
 
-1. **Thang trọng số.** `w(i)` là số thực, còn luồng cực đại cần sức chứa nguyên. `CostCurve.SCALE`
-   = 10⁶ là đơn vị dấu phẩy tĩnh. Hai lần chạy khác thang thì không so được với nhau.
-2. **𝒮⁺.** Thiết kế viết "𝒮 cùng mọi mẫu cha" mà không chốt quan hệ cha. Mã đọc là quan hệ
-   **chuỗi con** trên dãy mục (`FrequentPatterns.isSubsequence`), theo quy ước của [R3].
-3. **Tỉa theo tiền tố khi khai phá `F_σ`.** Hợp lệ vì `sup_NO(P·a, D) ≤ sup_NO(P, D)`: tiền tố của
-   một họ lần xuất hiện đôi một không chồng lấp vẫn đôi một không chồng lấp. SC1 đối chiếu bản
-   tỉa với bản vét cạn trên thực thể nhỏ.
-4. **Ngữ nghĩa ⊥.** `EventSequence.MASK = -1`, không khớp mục nào, đúng như §2.
-5. **Tuyến tính hoá tập mục.** Tệp SPMF có tập mục nhiều phần tử nằm ngoài mô hình dữ liệu của
-   bài (§8.3). `DatasetReader` sắp theo mã mục tăng dần và trả về tỉ lệ vị trí bị ảnh hưởng;
-   quy tắc 2.2.10 đòi khai tỉ lệ này cạnh bộ dữ liệu.
-8. **Va chạm ký hiệu: δ đang mang hai nghĩa.** Quy tắc 3.2.4 đòi mỗi ký hiệu định nghĩa đúng một
-   lần, nhưng hiện δ dùng cho hai đại lượng không liên quan:
+`config/preregistration.md` locks the effect threshold δ_L and the test **before** SC3 runs
+(rule 2.4.7). **Locked on 2026-09-12**; changing any number from here on must be a separate
+commit stating the reason.
 
-   - **δ(i)** của [R20]: số lần khớp đi qua vị trí i, tức `|M_T| − |M_T che i|`, đếm **mọi** lần
-     nhúng kể cả chồng lấp. Ở mã là `PathCounts.throughPosition`; `Hha.Delta` chọn cách tính.
-   - **δ_L**: ngưỡng hiệu ứng thực tiễn của H2, chốt ở `preregistration.md` = 0,02.
+`config/quyet_dinh_can_chot.md` lists **every** point the project still has to decide, grouped by
+theme, separating the group that blocks SC3 from the group that blocks submission. Produced from a review of ten sources, then each
+point was checked again; `tools/merge_decisions.py` merges the results into that document (before 2026-09-26 named
+`tools/gop_quyet_dinh.py`; from that date the themes, the keywords and the document it generates are written in English).
 
-   Nên giữ δ(i) cho [R20] vì phải giữ nguyên ký hiệu khi trích của họ, và đổi δ_L sang chữ khác
-   trong bản thảo.
+`config/de_xuat_gia_tri_nhom_A.md` proposes **concrete values** for each point that blocks SC3, each value
+with a measured rationale, the price to pay, and how to refute it. This is a version for approval, not yet the locked version:
+locking means writing the numbers into the two files above and committing.
 
-   Kèm theo, một chỗ dễ đọc nhầm cần một câu trong bài: **δ(i) không phải mức giảm sup_NO.** Ví dụ
-   chạy tay của G3 cho thấy vị trí có δ lớn nhất lại không làm giảm sup_NO chút nào. δ đếm mọi lần
-   khớp; cái bài cần là nút thiết yếu của L5. Khác nhau ở chỗ đó chính là RQ3.
+---
 
-   Và trong làm tròn quy hoạch tuyến tính, hệ số xấp xỉ là **cỡ ràng buộc lớn nhất** (m ≤ ℓ_max),
-   **không phải** bậc của biến (chính là δ). Lấy nhầm δ làm hệ số sẽ cho một bảo đảm sai, vì δ
-   không bị chặn còn m thì có.
+## 7. Implementation decisions that must be declared in the paper
 
-7. **Phạm vi của bảo đảm hệ số ℓ_max.** §7 của bản thiết kế liệt kê trong đóng góp: "với nhiều
-   mẫu (NP-khó) dùng làm tròn quy hoạch tuyến tính **có bảo đảm hệ số ℓ_max**". Bảo đảm đó chỉ
-   đứng khi **ẩn hết**, tức σ = 1 với HIDE-DB hoặc r = 1 với HIDE-SEQ. Lý do:
+These are the places where the code had to choose one way of doing things that the design file has not yet locked. Each line
+needs one sentence in the manuscript or in the protocol table.
 
-   - Khi σ = 1, điều kiện là "không lần xuất hiện nào sống sót". Mỗi lần xuất hiện L cho một ràng
-     buộc phủ `Σ_{i ∈ L} x_i ≥ 1` với đúng m ≤ ℓ_max biến. Làm tròn mọi `x_i ≥ 1/ℓ_max` lên 1 cho
-     lời giải khả thi với chi phí ≤ ℓ_max lần nghiệm quy hoạch tuyến tính, tức ≤ ℓ_max lần tối ưu.
-     Đây là làm tròn phủ chuẩn với cỡ ràng buộc bị chặn.
-   - Khi σ > 1, điều kiện là "không **họ σ lần xuất hiện đôi một không chồng lấp** nào sống sót".
-     Ràng buộc tương ứng có tới σ·m biến, nên cùng phép làm tròn chỉ cho hệ số **σ·m**, không phải
-     ℓ_max. Số ràng buộc cũng bùng nổ nên còn phải sinh ràng buộc trễ.
+1. **Weight scale.** `w(i)` is a real number, whereas maximum flow needs integer capacities. `CostCurve.SCALE`
+   = 10⁶ is the fixed-point unit. Two runs with different scales cannot be compared with each other.
+2. **𝒮⁺.** The design writes "𝒮 together with all parent patterns" without locking the parent relation. The code reads it as the
+   **subsequence** relation on item sequences (`FrequentPatterns.isSubsequence`), following the convention of [R3].
+3. **Prefix pruning when mining `F_σ`.** Valid because `sup_NO(P·a, D) ≤ sup_NO(P, D)`: the prefixes of
+   a family of pairwise non-overlapping occurrences are still pairwise non-overlapping. SC1 compares the pruned
+   version against the exhaustive version on small instances.
+4. **Semantics of ⊥.** `EventSequence.MASK = -1`, which matches no item, exactly as in §2.
+5. **Linearising itemsets.** SPMF files with multi-element itemsets lie outside the data model of the
+   paper (§8.3). `DatasetReader` sorts by increasing item code and returns the share of affected positions;
+   rule 2.2.10 requires stating this share next to the dataset.
+8. **Symbol clash: δ currently carries two meanings.** Rule 3.2.4 requires each symbol to be defined exactly
+   once, but δ is currently used for two unrelated quantities:
 
-   Vậy câu trong §7 cần một mệnh đề giới hạn phạm vi trước khi vào bài. Cái đang cài cho σ > 1 là
-   **tham lam theo tỉ số** của bước 7 §9.2, không có bảo đảm hệ số, và SC3 đo khoảng cách của nó
-   tới bộ giải chính xác trên thực thể nhỏ.
+   - **δ(i)** of [R20]: the number of matches that pass through position i, i.e. `|M_T| − |M_T masked at i|`, counting **every**
+     embedding including overlapping ones. In the code it is `PathCounts.throughPosition`; `Hha.Delta` chooses the computation.
+   - **δ_L**: the practical-effect threshold of H2, locked in `preregistration.md` = 0.02.
 
-6. **Trọng số nút khi μ(P) ≥ 2.** Một vị trí mang nhiều nút; mã gán trọng số vị trí cho mọi nút
-   của vị trí đó. P1 và P2 vốn không áp dụng trong trường hợp này, nên đây là lựa chọn cài đặt
-   chứ không phải hệ quả của mệnh đề nào.
+   It is better to keep δ(i) for [R20], because their notation must be kept when quoting them, and to change δ_L to another letter
+   in the manuscript.
 
-9. **Nguyên–đối ngẫu thay cho làm tròn quy hoạch tuyến tính.** §7 gọi đóng góp này là "làm tròn
-   quy hoạch tuyến tính". Cái đã cài (`PrimalDualCover`) là phương pháp **nguyên–đối ngẫu**, đạt
-   cùng hệ số ℓ_max qua cùng một quy hoạch tuyến tính nhưng là **kỹ thuật khác**, nên câu trong
-   bài phải sửa theo. Ba lý do:
+   Along with this, a point that is easy to misread needs one sentence in the paper: **δ(i) is not the drop in sup_NO.** The
+   hand-worked example of G3 shows that the position with the largest δ does not lower sup_NO at all. δ counts every
+   match; what the paper needs is the vital nodes of L5. That difference is exactly RQ3.
 
-   - không cần bộ giải, giữ đúng lời hứa "không phụ thuộc ngoài, dựng ngoại tuyến" ở
+   And in linear-programming rounding, the approximation factor is the **largest constraint size** (m ≤ ℓ_max),
+   **not** the degree of a variable (which is δ). Taking δ as the factor by mistake would give a false guarantee, because δ
+   is unbounded whereas m is bounded.
+
+7. **Scope of the ℓ_max factor guarantee.** §7 of the design lists among the contributions: "for several
+   patterns (NP-hard) use linear-programming rounding **with an ℓ_max factor guarantee**". That guarantee only
+   holds when **hiding completely**, i.e. σ = 1 with HIDE-DB or r = 1 with HIDE-SEQ. The reason:
+
+   - When σ = 1, the condition is "no occurrence survives". Each occurrence L gives a cover
+     constraint `Σ_{i ∈ L} x_i ≥ 1` with exactly m ≤ ℓ_max variables. Rounding every `x_i ≥ 1/ℓ_max` up to 1 gives
+     a feasible solution with cost ≤ ℓ_max times the linear-programming solution, i.e. ≤ ℓ_max times the optimum.
+     This is the standard covering rounding with bounded constraint size.
+   - When σ > 1, the condition is "no **family of σ pairwise non-overlapping occurrences** survives".
+     The corresponding constraint has up to σ·m variables, so the same rounding only gives the factor **σ·m**, not
+     ℓ_max. The number of constraints also explodes, so lazy constraint generation would also be needed.
+
+   So the sentence in §7 needs a clause limiting its scope before it goes into the paper. What is implemented for σ > 1 is
+   the **ratio greedy** of step 7 of §9.2, with no factor guarantee, and SC3 measures its distance
+   to the exact solver on small instances.
+
+6. **Node weights when μ(P) ≥ 2.** A position carries several nodes; the code assigns the position weight to every node
+   of that position. P1 and P2 do not apply in this case anyway, so this is an implementation choice
+   and not a consequence of any proposition.
+
+9. **Primal–dual instead of linear-programming rounding.** §7 calls this contribution "linear-programming
+   rounding". What is implemented (`PrimalDualCover`) is the **primal–dual** method, which reaches
+   the same factor ℓ_max through the same linear program but is a **different technique**, so the sentence in
+   the paper must be corrected accordingly. Three reasons:
+
+   - it needs no solver, keeping exactly the promise "no external dependency, built offline" in
      `config/protocol.yaml`;
-   - số lần xuất hiện tăng theo hàm mũ (chính vì thế `PathCounts` phải bão hòa) nên không bao giờ
-     viết ra hết ràng buộc được. Nguyên–đối ngẫu mỗi lượt chỉ cần **một** ràng buộc bị vi phạm,
-     tìm bằng đường đi ngắn nhất trên Nettree với khe hở làm trọng số nút;
-   - nó sinh một đối ngẫu khả thi, nên **mỗi thực thể tự mang chặn dưới của nó**. Bài báo cáo được
-     tỉ số đạt thực tế chứ không chỉ trường hợp xấu nhất, cùng tinh thần với cặp chặn có chứng chỉ
-     của quét λ.
+   - the number of occurrences grows exponentially (which is exactly why `PathCounts` has to saturate), so the constraints can
+     never all be written out. Primal–dual needs only **one** violated constraint per iteration,
+     found by a shortest path on the Nettree with the slacks as node weights;
+   - it produces a feasible dual, so **each instance carries its own lower bound**. The paper can report
+     the ratio actually achieved and not only the worst case, in the same spirit as the certified bound pair
+     of the λ sweep.
 
-   **Bước xóa ngược là bắt buộc, không phải tô điểm.** Với chi phí đơn vị, ràng buộc rẻ nhất luôn
-   là ràng buộc chưa vị trí nào căng, nên cả m vị trí của nó căng cùng một lượt: mỗi lượt mua một
-   đơn vị đối ngẫu và tiêu m. Đo trên ba cơ sở dữ liệu ngẫu nhiên, tỉ số ra đúng 2,000 — bằng
-   trường hợp xấu nhất — ở **cả ba**. Thêm bước xóa ngược (bỏ vị trí thừa, chọn sau bỏ trước) thì
-   cả ba xuống **1,000**, tức chi phí bằng đúng chặn dưới nên lời giải là **tối ưu**, chứ không
-   chỉ trong hệ số. Xóa vị trí chỉ làm giảm chi phí và không đụng tới đối ngẫu nên bảo đảm còn
-   nguyên, và tập thu được là **tối tiểu**: bỏ bất kỳ vị trí nào cũng lộ lại một lần xuất hiện
-   (`PrimalDualCoverTest.theMaskSetIsMinimal` ghim điều này).
+   **The reverse-deletion step is mandatory, not decoration.** With unit costs, the cheapest constraint always
+   is a constraint none of whose positions is tight yet, so all m of its positions become tight in the same iteration: each iteration buys one
+   unit of dual and spends m. Measured on three random databases, the ratio came out at exactly 2.000 — equal to the
+   worst case — on **all three**. Adding the reverse-deletion step (remove redundant positions, the last chosen removed first) brings
+   all three down to **1.000**, i.e. the cost equals the lower bound exactly, so the solution is **optimal**, and not
+   merely within the factor. Deleting positions only lowers the cost and does not touch the dual, so the guarantee stays
+   intact, and the resulting set is **minimal**: removing any position exposes an occurrence again
+   (`PrimalDualCoverTest.theMaskSetIsMinimal` pins this).
 
-   **Chặn dưới là của thực thể, không phải của riêng phương pháp.** Đối ngẫu khả thi cận dưới
-   nghiệm quy hoạch tuyến tính, mà nghiệm đó cận dưới tối ưu nguyên, tức |R|* của **chính thực
-   thể**. Vậy cột `lower_bound` chặn dưới cho **mọi** phương pháp chạy trên hàng đó, không riêng
-   nguyên–đối ngẫu. Đây là cái được thật sự: bộ giải chính xác chỉ chạy nổi trên thực thể nhỏ
-   (64 ứng viên, 12 lần che), còn chặn dưới này chạy trên thực thể cỡ nào cũng được, nên SC3 báo
-   cáo được khoảng cách tới tối ưu của từng đường cơ sở trên toàn bộ dữ liệu. Chỉ đúng khi σ = 1.
+   **The lower bound belongs to the instance, not to the method alone.** A feasible dual lower-bounds
+   the linear-programming solution, and that solution lower-bounds the integer optimum, i.e. |R|* of **the instance
+   itself**. So the `lower_bound` column is a lower bound for **every** method run on that row, not only
+   primal–dual. This is the real gain: the exact solver only runs on small instances
+   (64 candidates, 12 masks), whereas this lower bound runs on instances of any size, so SC3 can report
+   the distance to the optimum of each baseline on the whole data. Valid only when σ = 1.
 
-   **Đo thử: nó không thắng về |R|.** Trên CSDL tổng hợp của SC3, một mẫu nhạy cảm thì mọi phương
-   pháp trừ RR đều chạm đúng tối ưu — vì P1c cho |R|* = sup_NO và tham lam nào cũng tới đó, nên
-   σ = 1 với một mẫu **không phân biệt được gì**. Với ba mẫu nhạy cảm, năm tập:
+   **Trial measurement: it does not win on |R|.** On the synthetic database of SC3, with one sensitive pattern every
+   method except RR reaches exactly the optimum — because P1c gives |R|* = sup_NO and every greedy reaches it, so
+   σ = 1 with one pattern **distinguishes nothing**. With three sensitive patterns, five sets:
 
-   | tập | chặn dưới | nguyên–đối ngẫu | tỉ số | tốt nhất của đối thủ | tỉ số |
+   | set | lower bound | primal–dual | ratio | best of the competitors | ratio |
    |----:|----------:|----------------:|------:|---------------------:|------:|
-   | 0 | 103 | 109 | 1,058 | 107 | 1,039 |
-   | 1 |  56 |  63 | 1,125 |  61 | 1,089 |
-   | 2 | 110 | 112 | 1,018 | 113 | 1,027 |
-   | 3 | 128 | 131 | 1,023 | 134 | 1,047 |
-   | 4 |  81 |  93 | 1,148 |  87 | 1,074 |
+   | 0 | 103 | 109 | 1.058 | 107 | 1.039 |
+   | 1 |  56 |  63 | 1.125 |  61 | 1.089 |
+   | 2 | 110 | 112 | 1.018 | 113 | 1.027 |
+   | 3 | 128 | 131 | 1.023 | 134 | 1.047 |
+   | 4 |  81 |  93 | 1.148 |  87 | 1.074 |
 
-   Thắng 2 trên 5. Vậy đóng góp của nó **không phải** là |R| nhỏ hơn, mà là (a) bảo đảm chứng minh
-   được, và (b) cái chứng chỉ cho phép nói "mọi phương pháp ở hàng này cách tối ưu không quá 1,02
-   đến 1,15 lần" — chặt hơn hẳn trường hợp xấu nhất ℓ_max. Bài phải trình bày đúng như thế, đừng
-   dựng nó thành phương pháp tốt nhất rồi để bảng phản lại.
+   It wins 2 out of 5. So its contribution is **not** a smaller |R|, but (a) a provable
+   guarantee, and (b) the certificate that allows saying "every method on this row is no more than 1.02
+   to 1.15 times the optimum" — much tighter than the ℓ_max worst case. The paper must present it exactly that way; do not
+   set it up as the best method and then let the table contradict it.
 
-   Hệ quả cho SC3: phải báo cáo **cả** hệ số chứng minh được (ℓ_max, trường hợp xấu nhất) **lẫn**
-   tỉ số đo được, và nói rõ hai cái đó khác nhau.
+   Consequence for SC3: report **both** the provable factor (ℓ_max, worst case) **and** the
+   measured ratio, and say clearly that the two differ.
 
-10. **Chi phí đơn vị, chưa có biến thể có trọng số.** `PrimalDualCover` cực tiểu |R|, tức mục tiêu
-    (1) của §2. Lập luận không hề nhìn vào chi phí ngoài việc so khe hở, nên mọi chi phí không âm
-    đều giữ được hệ số; nhưng biến thể có trọng số cần nối B_ε theo đúng cách `CutHide` làm, chưa
-    làm thì không nên bày ra một công tắc không có tác dụng gì.
-11. **Cách tính p của Wilcoxon kiểu Pratt.** Bản chốt định Pratt và hạng trung bình, nhưng
-    **không** định tính p bằng phân bố chính xác hay xấp xỉ chuẩn. Đây là một lựa chọn cài đặt
-    phải khai, vì ba cách cho ba số khác nhau.
+10. **Unit cost, no weighted variant yet.** `PrimalDualCover` minimises |R|, i.e. objective
+    (1) of §2. The argument does not look at the cost at all except to compare slacks, so every non-negative cost
+    keeps the factor; but the weighted variant needs to connect B_ε exactly the way `CutHide` does, and until that is done
+    one should not expose a switch that has no effect at all.
+11. **How p of the Pratt-style Wilcoxon is computed.** The lock specifies Pratt and average ranks, but
+    does **not** specify whether p is computed with the exact distribution or the normal approximation. This is an implementation choice
+    that must be declared, because the three ways give three different numbers.
 
-    Trong `scipy` 1.18, `method="exact"` dưới Pratt trả về giá trị **sai**: nó dùng phân bố dấu
-    hạng chuẩn trên cả n quan sát, không kể rằng hạng của các hiệu bằng 0 không được phép nhận
-    dấu. Trên một ví dụ 12 quan sát có 4 số 0, liệt kê tay toàn bộ 2⁸ khả năng cho
-    p = 29/256 = 0,113281; `method="auto"` cho đúng số đó, `"exact"` cho 0,211914 và `"approx"`
-    cho 0,099370.
+    In `scipy` 1.18, `method="exact"` under Pratt returns a **wrong** value: it uses the standard signed-rank
+    distribution over all n observations, without taking into account that the ranks of differences equal to 0 may not take a
+    sign. On an example of 12 observations with 4 zeros, enumerating all 2⁸ outcomes by hand gives
+    p = 29/256 = 0.113281; `method="auto"` gives exactly that number, `"exact"` gives 0.211914 and `"approx"`
+    gives 0.099370.
 
-    Vậy `tools/preregistered_analysis.py` chốt `method="auto"`, và `tools/preregistered_analysis_test.py`
-    ghim nó bằng phép
-    liệt kê tay chứ không bằng việc tin vào scipy. Bài phải khai "p tính bằng phân bố chính xác
-    có điều kiện của Pratt khi cỡ mẫu cho phép".
+    So `tools/preregistered_analysis.py` locks `method="auto"`, and `tools/preregistered_analysis_test.py`
+    pins it by
+    hand enumeration rather than by trusting scipy. The paper must state "p computed with Pratt's exact conditional
+    distribution when the sample size allows".
 
-12. **Ba khoảng trống trong bản chốt, phát hiện khi cài `preregistered_analysis.py`.** Không tự vá, chỉ ghi ra:
+12. **Three gaps in the lock, found while implementing `preregistered_analysis.py`.** Not patched on our own, only recorded:
 
-    - **|R| của CUT-HIDE lớn hơn baseline.** Mục 5 định nghĩa hai chế độ báo cáo: cùng |R| thì
-      kiểm định, baseline dùng **nhiều hơn** thì báo cáo riêng. Trường hợp CUT-HIDE dùng nhiều
-      hơn **không** được định nghĩa. Bỏ im là thiên vị có lợi cho ta, nên script đếm riêng thùng
-      đó và in cảnh báo; bản chốt cần một dòng cho ca này.
-    - **Mã OT và OOM chưa có chỗ ghi.** Mục 5 bảo loại thực thể mang mã OT hoặc OOM, nhưng SC3
-      không có cột nào để ghi. Script đọc cột `status` nếu có; chưa có thì phải thêm trước khi
-      chạy thật, không thì quy tắc loại trừ đó không thi hành được.
-    - **Hạt giống của phương pháp tách khỏi hạt giống lấy mẫu.** Mục 5 đòi 10 hạt giống
-      2026–2035 lấy trung vị. Trước đây SC3 dùng **một** hạt cho cả việc lấy mẫu tập nhạy cảm
-      lẫn việc chạy phương pháp, nên đổi hạt là đổi luôn tập nhạy cảm và mười lần chạy không
-      ghép cặp được với nhau. Đã tách thành `--seed` và `--methodSeed`, thêm `--repeats`.
+    - **|R| of CUT-HIDE larger than that of the baseline.** Section 5 defines two reporting modes: with the same |R|, test;
+      if the baseline uses **more**, report separately. The case where CUT-HIDE uses more is **not** defined. Silently
+      dropping it would be a bias in our favour, so the script counts that bin separately and prints a warning; the lock
+      needs a line for this case.
+    - **Codes OT and OOM have no place to be recorded.** Section 5 says to exclude instances carrying code OT or OOM, but SC3
+      has no column in which to record them. The script reads the `status` column if it exists; if not, it must be added before
+      the real run, otherwise that exclusion rule cannot be enforced.
+    - **The method seed separated from the sampling seed.** Section 5 requires 10 seeds
+      2026–2035, taking the median. Previously SC3 used **one** seed both for sampling the sensitive set
+      and for running the method, so changing the seed also changed the sensitive set, and the ten runs could not
+      be paired with each other. Now split into `--seed` and `--methodSeed`, with `--repeats` added.
 
 ---
 
-## 8. Bản đồ từ §9.2 sang mã
+## 8. Map from §9.2 to the code
 
-| Bước §9.2 | Lớp, phương thức |
+| Step of §9.2 | Class, method |
 |---|---|
-| 1. Dựng NT(P,S) | `Nettree.build`, `NettreeCutIndex.add` |
-| 2. Luồng cực đại F_S | `NettreeFlow` (dựng xong là có) |
-| 3. Tập vị trí thiết yếu của `B_ε` | `NettreeFlow.vitalPositions`, `FrequentPatterns.nearThreshold` |
-| 4. Trọng số vị trí `w(i)` | `NettreeCutIndex.positionWeights`, `FrequentPatterns.weightFactors` |
-| 5. Đường cong `c_S(k)` | `CostCurve.build`, `LambdaSweep.run` |
-| 6. Phân bổ giữa các chuỗi | `Allocation.solve` (và `Allocation.greedy` để so ở SC7) |
-| 7. Nhiều mẫu nhạy cảm | `CutHide.runMultiPattern` |
-| 8. Kiểm hậu điều kiện | `CutHide.verify` |
+| 1. Build NT(P,S) | `Nettree.build`, `NettreeCutIndex.add` |
+| 2. Maximum flow F_S | `NettreeFlow` (available once built) |
+| 3. Set of vital positions of `B_ε` | `NettreeFlow.vitalPositions`, `FrequentPatterns.nearThreshold` |
+| 4. Position weights `w(i)` | `NettreeCutIndex.positionWeights`, `FrequentPatterns.weightFactors` |
+| 5. Curve `c_S(k)` | `CostCurve.build`, `LambdaSweep.run` |
+| 6. Allocation across sequences | `Allocation.solve` (and `Allocation.greedy` for comparison in SC7) |
+| 7. Several sensitive patterns | `CutHide.runMultiPattern` |
+| 8. Postcondition check | `CutHide.verify` |
 
 ---
 
-## 9. Giới hạn kỹ thuật đã biết
+## 9. Known technical limits
 
-- `Dinic.dfs` đệ quy. Với chuỗi rất dài và khoảng cách rộng, ngăn xếp có thể tràn; cần chuyển
-  sang vòng lặp trước khi chạy SC6 ở quy mô lớn.
-- `PathCounts` bão hoà ở `Long.MAX_VALUE / 4`. Giá trị bão hoà vẫn dùng làm khoá so sánh được
-  (đó là tất cả những gì heuristic của [R20] cần) nhưng **không được in ra như số đếm chính xác**;
-  `PathCounts.isExact()` cho biết đã bão hoà hay chưa.
-- Một kịch bản quét **phải** dựng một `Metrics.Context` cho mỗi cấu hình (bộ, σ, khoảng cách,
-  ℓ_max) và dùng lại nó, thay vì gọi `Metrics.evaluate` tĩnh. Hàm tĩnh khai phá lại `F_σ(D)` mỗi
-  lần gọi; đo được trên MSNBC là 74,7 giây một lượt so với 1,83 giây khi có bộ đệm, tức chênh 41
-  lần. `Metrics.evaluate` chỉ dành cho một lần đánh giá lẻ hoặc cho test.
+- `Dinic.dfs` is recursive. With very long sequences and wide gaps, the stack may overflow; it must be converted
+  to a loop before running SC6 at large scale.
+- `PathCounts` saturates at `Long.MAX_VALUE / 4`. A saturated value can still be used as a comparison key
+  (that is all the heuristic of [R20] needs) but **must not be printed as an exact count**;
+  `PathCounts.isExact()` tells whether it has saturated.
+- A scanning scenario **must** build one `Metrics.Context` per configuration (dataset, σ, gap,
+  ℓ_max) and reuse it, instead of calling the static `Metrics.evaluate`. The static function re-mines `F_σ(D)` on every
+  call; measured on MSNBC, that is 74.7 seconds per pass against 1.83 seconds with the cache, a 41-fold
+  difference. `Metrics.evaluate` is only for a single one-off evaluation or for tests.

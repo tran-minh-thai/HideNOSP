@@ -3,7 +3,8 @@
 Every file git lists -- tracked, or untracked and not ignored -- falls in exactly one class:
 
   code           checked: the extensions in CODE_SUFFIXES and the names in CODE_NAMES
-  documentation  *.md, in any language: not checked
+  documentation  *.md: the diacritic rule only (below), so that a document may still cite section
+                 numbers and name files whose names are Vietnamese
   run output     the output trees of tools/run.py (OUTPUT_DIRS): not checked, they record runs
 
 A file of no class is an error, so that a new kind of file cannot pass unseen.
@@ -256,10 +257,11 @@ def read_text(root, path):
         return None, "not UTF-8 (byte %d)" % error.start
 
 
-def check_file(root, path):
+def check_file(root, path, rules=None):
     """(violations, number of lines or None when the file is missing)."""
-    word_rule = path not in SELF
-    rules = [diacritic_violations, numbering_violations] + ([word_violations] if word_rule else [])
+    if rules is None:
+        word_rule = path not in SELF
+        rules = [diacritic_violations, numbering_violations] + ([word_violations] if word_rule else [])
     violations = [(0, kind, what, "(the path)") for rule in rules for kind, what in rule(path)]
     text, problem = read_text(root, path)
     if problem == "missing":
@@ -286,7 +288,7 @@ def check(root, show_list):
             print("%-14s %s" % (classify(path) or "NO CLASS", path))
         print()
 
-    violations, missing, lines = {}, [], 0
+    violations, missing, lines, doc_lines = {}, [], 0, 0
     for path in classes["code"]:
         found, count = check_file(root, path)
         if count is None:
@@ -295,13 +297,25 @@ def check(root, show_list):
             lines += count
         if found:
             violations[path] = found
+    docs_missing = []
+    for path in classes["documentation"]:
+        found, count = check_file(root, path, [diacritic_violations])
+        if count is None:
+            docs_missing.append(path)
+        else:
+            doc_lines += count
+        if found:
+            violations[path] = found
+    missing += docs_missing
 
-    checked = len(classes["code"]) - len(missing)
+    checked = len(classes["code"]) - (len(missing) - len(docs_missing))
     # The directory name only: a machine path does not belong in a report that may be kept.
     print("Checked %d code files (%d lines) in repository %s"
           % (checked, lines, os.path.basename(os.path.abspath(root))))
-    print("Not checked: %d documentation files (*.md), %d run-output files (%s)"
-          % (len(classes["documentation"]), len(classes["run output"]), ", ".join(OUTPUT_DIRS)))
+    print("Checked %d documentation files (*.md, %d lines) for diacritics only"
+          % (len(classes["documentation"]) - len(docs_missing), doc_lines))
+    print("Not checked: %d run-output files (%s)"
+          % (len(classes["run output"]), ", ".join(OUTPUT_DIRS)))
     exempt = [p for p in SELF if p in classes["code"]]
     if exempt:
         print("Word rule not applied to: %s (they hold the word lists and the test samples)"

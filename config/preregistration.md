@@ -3,7 +3,9 @@
 > **Language.** This file is the English translation of the Vietnamese original as of commit `c16f727`
 > (2026-11-01), which stays in the git history. Section numbers, values, dates, file names and decisions are
 > unchanged; decimal commas are written as decimal points. Each section keeps the date on which the original
-> was committed.
+> was committed. The three documents cited just below were renamed on 2026-11-02; they are cited by their new
+> names (formerly `config/de_xuat_gia_tri_nhom_A.md`, `results-invariant/giai_doan_1_tom_tat.md` and
+> `results-invariant/khao_sat_bo_du_lieu.md`). No value, rule or decision changed.
 
 Rule 2.4.7: the practical-effect threshold and the tests must be locked **before** SC3 runs.
 This file is that lock.
@@ -12,8 +14,8 @@ This file is that lock.
 here on, changing any number below must be a separate commit stating the reason, and a change made
 after seeing SC3 results must be declared in the paper.
 
-Rationale for each value: `config/de_xuat_gia_tri_nhom_A.md`. Data behind it:
-`results-invariant/giai_doan_1_tom_tat.md` and `results-invariant/khao_sat_bo_du_lieu.md`, both
+Rationale for each value: `config/group_a_proposed_values.md`. Data behind it:
+`results-invariant/phase1_summary.md` and `results-invariant/dataset_survey.md`, both
 from SC1 and SC2, run independently of SC3.
 
 **Provenance.** The values below were drafted by the proposer and approved by the author. The

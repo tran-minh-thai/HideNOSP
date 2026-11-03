@@ -1,0 +1,38 @@
+# cell SC3 sepsis [0,1] sigma=300 repeated S=1 pareto
+# machine ADMIN-PC
+# exit 0 after 18 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 358ae3e85274
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3 main comparison on HIDE-DB: Lost, Ghost, SupDist, |R| and HF against the baselines
+# run 20261103-040206-610_ADMIN-PC_358ae3e85274_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 34359738368
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, repeated-item pool 25 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 5 -> 4, p30: 5 -> 4, p50: 5 -> 4, p70: 5 -> 4, p90: 5 -> 4
+set 0  Pareto front: 4 vertices, |R| from 6 to 14
+set 1  Pareto front: 7 vertices, |R| from 12 to 26
+set 2  Pareto front: 8 vertices, |R| from 22 to 38
+set 3  Pareto front: 4 vertices, |R| from 4 to 7
+set 4  Pareto front: 38 vertices, |R| from 51 to 97
+set 5  Pareto front: 37 vertices, |R| from 40 to 85
+set 6  Pareto front: 15 vertices, |R| from 21 to 36
+set 7  Pareto front: 14 vertices, |R| from 25 to 53
+set 8  Pareto front: 70 vertices, |R| from 173 to 259
+set 9  Pareto front: 56 vertices, |R| from 58 to 150
+set 10  Pareto front: 61 vertices, |R| from 136 to 213
+set 11  Pareto front: 17 vertices, |R| from 73 to 97
+set 12  Pareto front: 86 vertices, |R| from 168 to 268
+set 13  Pareto front: 92 vertices, |R| from 195 to 308
+set 14  Pareto front: 50 vertices, |R| from 310 to 399
+set 15  Pareto front: 70 vertices, |R| from 228 to 323
+set 16  Pareto front: 14 vertices, |R| from 478 to 543
+set 17  Pareto front: 108 vertices, |R| from 386 to 529
+set 18  Pareto front: 115 vertices, |R| from 409 to 573
+set 19  Pareto front: 28 vertices, |R| from 383 to 455
+done in 15.1 s

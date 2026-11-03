@@ -1,0 +1,26 @@
+# run 20261103-032451-012_ADMIN-PC_e36094e7f39e_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 34359738368
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3PARETO
+# options {machine=ADMIN-PC, dataset=datasets/bpi2012.txt, format=SPMF, sigma=4000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=true, timeLimit=1800, methods=none}
+# sensitive sets: size 1, repeated-item pool 11 candidates, 11 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 2 -> 2, p30: 2 -> 2, p50: 2 -> 2, p70: 2 -> 2, p90: 3 -> 3
+dataset,shape,gap,sigma,sensitive_set,stratum,vertex,vertices,mask_count,weight,min_masks,mask_ratio,hf,lost,lost_rel,ghost,sup_dist,frequent_before,nonsensitive_before,frequent_after
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 15, 21, 21]]",p10,0,2,587,599808,587,1.000000,0.000000,1,0.015152,0,0.005196,67,66,65
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 15, 21, 21]]",p10,1,2,939,0,587,1.599659,0.000000,1,0.015152,0,0.009521,67,66,65
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 21, 21]]",p10,0,1,587,0,587,1.000000,0.000000,0,0.000000,0,0.003484,67,65,66
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[20, 20, 20, 20]]",p30,0,1,672,0,672,1.000000,0.000000,0,0.000000,0,0.007234,67,66,66
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[20, 20, 20]]",p30,0,1,1577,0,1577,1.000000,0.000000,0,0.000000,0,0.008990,67,65,66
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[21, 21, 21, 21]]",p50,0,1,1733,0,1733,1.000000,0.000000,0,0.000000,0,0.016957,67,66,66
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 19, 19, 19]]",p50,0,1,1760,0,1760,1.000000,0.000000,0,0.000000,0,0.017187,67,66,66
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[20, 20]]",p70,0,1,3246,0,3246,1.000000,0.000000,0,0.000000,0,0.007241,67,64,66
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 19, 19]]",p70,0,1,3307,0,3307,1.000000,0.000000,0,0.000000,0,0.018672,67,65,66
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[21, 21, 21]]",p90,0,1,3817,0,3817,1.000000,0.000000,0,0.000000,0,0.022121,67,65,66
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 19]]",p90,0,1,6288,0,6288,1.000000,0.000000,0,0.000000,0,0.014362,67,64,66
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[21, 21]]",p90,0,2,7595,8547,7595,1.000000,0.000000,0,0.000000,0,0.018017,67,62,66
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[21, 21]]",p90,1,2,7596,0,7595,1.000132,0.000000,0,0.000000,0,0.018017,67,62,66

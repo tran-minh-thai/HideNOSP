@@ -1,0 +1,33 @@
+# run 20261103-004712-638_ADMIN-PC_3fa2d2b574fe_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3LB
+# options {machine=ADMIN-PC, dataset=datasets/protein_sdb4.txt, format=SPMF, sigma=900, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=distinct}
+# sensitive sets: size 1, pool 178 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 35 -> 4, p30: 36 -> 4, p50: 35 -> 4, p70: 36 -> 4, p90: 36 -> 4
+dataset,shape,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,patterns,components,singleton_components,lower_bound,bound_is_optimum,single_optima,component_of,optima_exact,conflict_bound,conflict_edges
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[4, 12]]",p10,1,1,1,1,true,1,0,true,1,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[12, 3]]",p10,1,1,1,113,true,113,0,true,113,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[16, 8]]",p10,1,1,1,145,true,145,0,true,145,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[11, 8]]",p10,1,1,1,115,true,115,0,true,115,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[17, 12]]",p30,1,1,1,207,true,207,0,true,207,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[3, 15]]",p30,1,1,1,199,true,199,0,true,199,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[7, 15]]",p30,1,1,1,214,true,214,0,true,214,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[16, 3]]",p30,1,1,1,259,true,259,0,true,259,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[8, 15]]",p50,1,1,1,301,true,301,0,true,301,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[0, 7]]",p50,1,1,1,462,true,462,0,true,462,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[4, 0]]",p50,1,1,1,473,true,473,0,true,473,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[5, 12]]",p50,1,1,1,398,true,398,0,true,398,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[17, 3]]",p70,1,1,1,551,true,551,0,true,551,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[4, 5]]",p70,1,1,1,493,true,493,0,true,493,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[7, 0]]",p70,1,1,1,618,true,618,0,true,618,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[7, 2]]",p70,1,1,1,579,true,579,0,true,579,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[8, 5]]",p90,1,1,1,806,true,806,0,true,806,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[17, 2]]",p90,1,1,1,900,true,900,0,true,900,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[0, 2]]",p90,1,1,1,1057,true,1057,0,true,1057,0
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,3]",900,distinct,1,"[[0, 17]]",p90,1,1,1,1054,true,1054,0,true,1054,0

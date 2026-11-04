@@ -1,0 +1,38 @@
+# cell SC3 sepsis [0,3] sigma=300 repeated S=1 pareto
+# machine ADMIN-PC
+# exit 0 after 69 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = afec451e792b
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3 main comparison on HIDE-DB: Lost, Ghost, SupDist, |R| and HF against the baselines
+# run 20261104-094819-932_ADMIN-PC_afec451e792b_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 34359738368
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, repeated-item pool 140 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 28 -> 4, p30: 28 -> 4, p50: 28 -> 4, p70: 28 -> 4, p90: 28 -> 4
+set 0  Pareto front: 3 vertices, |R| from 1 to 3
+set 1  Pareto front: 26 vertices, |R| from 31 to 61
+set 2  Pareto front: 12 vertices, |R| from 10 to 22
+set 3  Pareto front: 4 vertices, |R| from 2 to 5
+set 4  Pareto front: 33 vertices, |R| from 89 to 134
+set 5  Pareto front: 45 vertices, |R| from 72 to 144
+set 6  Pareto front: 65 vertices, |R| from 80 to 158
+set 7  Pareto front: 55 vertices, |R| from 79 to 149
+set 8  Pareto front: 47 vertices, |R| from 32 to 121
+set 9  Pareto front: 53 vertices, |R| from 113 to 177
+set 10  Pareto front: 45 vertices, |R| from 94 to 149
+set 11  Pareto front: 56 vertices, |R| from 97 to 156
+set 12  Pareto front: 100 vertices, |R| from 232 to 345
+set 13  Pareto front: 59 vertices, |R| from 150 to 255
+set 14  Pareto front: 158 vertices, |R| from 215 to 441
+set 15  Pareto front: 88 vertices, |R| from 110 to 226
+set 16  Pareto front: 140 vertices, |R| from 310 to 478
+set 17  Pareto front: 119 vertices, |R| from 187 to 365
+set 18  Pareto front: 136 vertices, |R| from 238 to 447
+set 19  Pareto front: 155 vertices, |R| from 483 to 680
+done in 63.7 s

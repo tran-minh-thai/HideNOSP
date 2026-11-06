@@ -1,0 +1,75 @@
+# run 20261106-174735-098_ADMIN-PC_40416ff5868f_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind TIMED
+# scenario SC6
+# options {machine=ADMIN-PC, dataset=datasets/dna_mt745584.txt, format=SPMF, sigma=2500, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=distinct, timeLimit=1800, warmups=1}
+# sensitive sets: size 1, pool 23 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 4 -> 4, p30: 5 -> 4, p50: 4 -> 4, p70: 5 -> 4, p90: 5 -> 4
+# sets: the first set drawn in each stratum (5 of 20)
+dataset,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,method_key,method,reads_frequent,mask_count,lost,wall_ms_mean,wall_ms_sd,cpu_ms_mean,repetitions,warmups,note,status
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,,,mine-frequent,F_sigma(D) with l_max = 4: 67 patterns,false,,,1043.952,62.912,1039.063,10,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 4, 2]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,30,0,394.513,23.962,390.625,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 4, 2]]",p10,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,30,0,1047.393,10.933,1040.625,10,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 4, 2]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,30,0,1058.359,22.503,1046.875,10,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 4, 2]]",p10,hha,HHA,false,30,1,17.025,2.287,16.667,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 4, 2]]",p10,dbsh,DBSH,false,33,0,12.229,0.545,12.500,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 4, 2]]",p10,sbsh-r1,SBSH-r1,true,33,1,279.783,4.234,276.042,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 4, 2]]",p10,sbsh-rmax,SBSH-r3,true,36,0,277.892,1.066,275.000,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 4, 2]]",p10,occurrence,occurrence-count-heuristic,false,30,1,4.901,0.326,5.208,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 4, 2]]",p10,hha-stop,HHA-stop,false,30,1,18.898,0.288,18.750,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 4, 2]]",p10,index-build,NettreeCutIndex,false,,,5.024,0.145,5.208,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 4, 2]]",p10,index-incremental,maskPosition after each mask,false,30,,0.316,0.005,1.042,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 4, 2]]",p10,index-rebuild,rebuild after each mask,false,30,,0.327,0.036,0.000,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 3, 4]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,172,0,375.398,6.707,373.958,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 3, 4]]",p30,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,172,0,1135.299,9.875,1118.750,10,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 3, 4]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,172,0,1152.784,19.367,1142.188,10,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 3, 4]]",p30,hha,HHA,false,177,4,14.219,0.436,14.583,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 3, 4]]",p30,dbsh,DBSH,false,190,4,10.669,0.479,11.458,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 3, 4]]",p30,sbsh-r1,SBSH-r1,true,218,2,285.788,3.698,282.292,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 3, 4]]",p30,sbsh-rmax,SBSH-r3,true,218,2,285.333,4.971,281.250,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 3, 4]]",p30,occurrence,occurrence-count-heuristic,false,172,3,5.311,0.503,4.167,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 3, 4]]",p30,hha-stop,HHA-stop,false,172,4,18.692,0.418,18.750,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 3, 4]]",p30,index-build,NettreeCutIndex,false,,,4.742,0.203,4.167,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 3, 4]]",p30,index-incremental,maskPosition after each mask,false,172,,1.332,0.068,2.083,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[1, 3, 4]]",p30,index-rebuild,rebuild after each mask,false,172,,1.667,0.033,1.042,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1, 2]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,175,1,381.576,6.319,379.167,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1, 2]]",p50,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,175,0,1184.735,15.123,1167.188,10,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1, 2]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,175,0,1193.041,12.827,1176.563,10,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1, 2]]",p50,hha,HHA,false,178,4,15.722,0.583,14.583,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1, 2]]",p50,dbsh,DBSH,false,203,5,11.312,0.394,11.458,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1, 2]]",p50,sbsh-r1,SBSH-r1,true,222,5,288.481,4.598,286.458,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1, 2]]",p50,sbsh-rmax,SBSH-r3,true,222,5,288.286,5.556,285.417,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1, 2]]",p50,occurrence,occurrence-count-heuristic,false,175,4,5.562,0.158,6.250,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1, 2]]",p50,hha-stop,HHA-stop,false,176,4,19.411,0.571,18.750,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1, 2]]",p50,index-build,NettreeCutIndex,false,,,5.132,0.148,5.208,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1, 2]]",p50,index-incremental,maskPosition after each mask,false,175,,1.515,0.120,1.042,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1, 2]]",p50,index-rebuild,rebuild after each mask,false,175,,1.922,0.341,2.083,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[3, 1]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,1060,3,340.955,6.133,340.625,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[3, 1]]",p70,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,1060,2,1341.671,15.822,1329.688,10,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[3, 1]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,1060,2,1352.496,13.863,1335.938,10,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[3, 1]]",p70,hha,HHA,false,1068,9,10.883,0.158,11.458,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[3, 1]]",p70,dbsh,DBSH,false,1173,9,8.544,0.305,9.375,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[3, 1]]",p70,sbsh-r1,SBSH-r1,true,1197,5,291.442,7.325,289.583,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[3, 1]]",p70,sbsh-rmax,SBSH-r2,true,1197,5,287.729,5.206,284.375,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[3, 1]]",p70,occurrence,occurrence-count-heuristic,false,1066,8,5.377,0.405,4.167,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[3, 1]]",p70,hha-stop,HHA-stop,false,1065,9,13.936,1.114,12.500,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[3, 1]]",p70,index-build,NettreeCutIndex,false,,,3.228,0.156,3.125,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[3, 1]]",p70,index-incremental,maskPosition after each mask,false,1060,,3.227,0.048,3.125,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[3, 1]]",p70,index-rebuild,rebuild after each mask,false,1060,,6.597,0.232,6.250,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,2679,20,281.246,4.605,280.208,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1]]",p90,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,2679,18,1389.482,71.449,1373.438,10,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,2679,18,1366.338,10.197,1346.875,10,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1]]",p90,hha,HHA,false,2704,20,16.932,0.433,16.667,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1]]",p90,dbsh,DBSH,false,3118,20,14.438,1.777,13.542,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1]]",p90,sbsh-r1,SBSH-r1,true,3296,20,289.010,4.303,283.333,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1]]",p90,sbsh-rmax,SBSH-r2,true,3296,20,291.534,5.740,290.625,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1]]",p90,occurrence,occurrence-count-heuristic,false,2705,20,10.341,0.150,10.417,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1]]",p90,hha-stop,HHA-stop,false,2696,20,21.417,1.020,20.833,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1]]",p90,index-build,NettreeCutIndex,false,,,4.016,0.314,4.167,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1]]",p90,index-incremental,maskPosition after each mask,false,2679,,5.194,0.178,5.208,15,1,,
+datasets/dna_mt745584.txt,"[0,3]",2500,distinct,1,"[[4, 1]]",p90,index-rebuild,rebuild after each mask,false,2679,,18.895,0.321,18.750,15,1,,

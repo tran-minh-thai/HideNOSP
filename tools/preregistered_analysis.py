@@ -881,6 +881,7 @@ def main(argv=None):
     raw_rows = []
     skipped = []
     secondary = []
+    fronts = []
     for path in sc3_files:
         comments, rows = read_csv(path)
         header = next((c for c in comments if c.startswith("# run ")), "# run ?")
@@ -892,7 +893,14 @@ def main(argv=None):
             write("  %-58s %d rows  SECONDARY (section 17), not read here"
                   % (os.path.basename(path), len(rows)))
             continue
-        missing = [c for c in REQUIRED_COLUMNS if not rows or c not in rows[0]]
+        # The Pareto-front batch runs with --methods=none: its SC3 file holds no method row by design
+        # (the front itself is in the SC3PARETO file of the same run, read by tools/pareto_table.py).
+        if re.search(r"[{ ]methods=none[,}]", options):
+            fronts.append(os.path.basename(path))
+            write("  %-58s %d rows  PARETO-FRONT BATCH (no method row), not read here"
+                  % (os.path.basename(path), len(rows)))
+            continue
+        missing =[c for c in REQUIRED_COLUMNS if not rows or c not in rows[0]]
         if missing:
             skipped.append((os.path.basename(path), missing))
             write("  %-58s %d rows  SKIPPED (missing %s)"
@@ -905,6 +913,10 @@ def main(argv=None):
         write("")
         write("  %d files of the refinement batch (section 17) are left to the secondary analysis."
               % len(secondary))
+    if fronts:
+        write("")
+        write("  %d files of the Pareto-front batch hold no method row; the fronts are read by "
+              "tools/pareto_table.py." % len(fronts))
     if skipped:
         write("")
         write("  %d files skipped because an old version of the code wrote them. If they hold"

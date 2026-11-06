@@ -1,9 +1,11 @@
 """Split the distance between CUT-HIDE and the lower bound into a part of the bound and a part of the method.
 
-    python tools/reduced_optimum_table.py [DIR ...] [--out FILE]
+    python tools/reduced_optimum_table.py [DIR ...] [--machine=NAME] [--out FILE]
 
-Reads every SC3OPT_*.csv under the given directories (default: results-invariant/ of the repository)
-and prints, per scope, size of the sensitive set and requested number of sequences per instance:
+Reads the SC3OPT_*.csv files of one machine under the given directories (default: results-invariant/
+of the repository); --machine names the machine of the run stamp, and may be left out only when the
+files come from one machine. It prints, per scope, size of the sensitive set and requested number of
+sequences per instance:
 
   - how many instances were solved, and why the others were skipped (the denominators);
   - medians of greedy / bound, refined / bound, optimum / bound, refined / optimum, where the bound is
@@ -23,6 +25,8 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+from lower_bound_table import one_machine
+
 REPO = Path(__file__).resolve().parent.parent
 
 
@@ -37,12 +41,16 @@ def median(values):
 
 def main(argv):
     out_path = None
+    machine = ""
     directories = []
     i = 0
     while i < len(argv):
         if argv[i] == "--out" and i + 1 < len(argv):
             out_path = argv[i + 1]
             i += 2
+        elif argv[i].startswith("--machine="):
+            machine = argv[i].split("=", 1)[1]
+            i += 1
         else:
             directories.append(Path(argv[i]))
             i += 1
@@ -53,6 +61,10 @@ def main(argv):
     for d in directories:
         files += sorted(glob.glob(str(d / "**" / "SC3OPT_*.csv"), recursive=True))
         partial += sorted(glob.glob(str(d / "**" / "SC3OPT_*.csv.partial"), recursive=True))
+    files, machine, refusal = one_machine(files, machine, "--machine", "SC3OPT")
+    if refusal:
+        print(refusal, file=sys.stderr)
+        return 1
     # A run that stopped early leaves its rows in a .partial file (CsvWriter); count it, never read it.
     problems = ["incomplete run: %s" % Path(p).name for p in partial]
     groups = defaultdict(list)
@@ -68,7 +80,7 @@ def main(argv):
                 problems.append("order broken on %s %s: %d %d %d %d" % (r["dataset"], r["sensitive_set"], b, o, f, gr))
             groups[g].append(r)
 
-    lines = ["SC3OPT files: %d" % len(files)]
+    lines = ["SC3OPT files: %d, machine %s" % (len(files), machine)]
     for g in sorted(set(groups) | set(skipped)):
         rows = groups[g]
         lines.append("")

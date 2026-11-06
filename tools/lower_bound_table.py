@@ -1,11 +1,19 @@
 """Join the SC3LB bounds to the official SC3 rows and report how far each method is from the bound.
 
-    python tools/lower_bound_table.py [--out FILE]
+    python tools/lower_bound_table.py [--machine=NAME] [--bound-machine=NAME] [--dir=DIR] [--out FILE]
 
-Reads every SC3LB_*.csv and every SC3_*.csv of the measuring machine in results-invariant/, joins
-them on (dataset, gap, sigma, scope, |S|, sensitive set), and prints per scope and size of the
-sensitive set. The bound used is the conflict bound (patterns whose occurrence positions never
-meet), which is at least the component bound (patterns with no shared item); both are reported.
+Reads the SC3LB_*.csv files and the SC3_*.csv files of one machine in DIR (default: results-invariant/
+of the repository), joins them on (dataset, gap, sigma, scope, |S|, sensitive set), and prints per
+scope and size of the sensitive set. The bound used is the conflict bound (patterns whose occurrence
+positions never meet), which is at least the component bound (patterns with no shared item); both
+are reported.
+
+The machine is the one named in the run stamp of each file header. --machine picks the SC3 files and
+--bound-machine the SC3LB files; each may be left out only when the files of its kind come from one
+machine, so that two machines never enter one table. SC3 files are taken from the method batches and
+the refinement batch of the main group (the cells of tools/sc3_commands.py). The Pareto-front batch
+(--methods=none) and the degenerate-group batch are left out and counted: SC3LB is run on the main
+group only. An SC3 file that matches no planned cell stops the run.
 
   - the shape of the sets: components of the shared-item graph, how many sets have one pattern per
     component (there the bound is the optimum), and how often the conflict bound is the larger;
@@ -29,6 +37,8 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+import sc3_commands
+
 REPO = Path(__file__).resolve().parent.parent
 OURS = "cut-hide-rw-ls"
 REFINED = "cut-hide-refine"   # preregistration section 17: secondary, its own batch of SC3 files
@@ -41,28 +51,100 @@ def rows_of(path):
     return list(csv.DictReader(lines))
 
 
-def options_of(path):
-    with io.open(path, encoding="utf-8", newline="") as handle:
-        for line in handle:
-            if line.startswith("# options"):
-                return dict(re.findall(r"(\w+)=([^,}]+)", line))
-    raise ValueError("%s has no options line" % Path(path).as_posix())
-
-
 def dataset_name(path_text):
     return Path(path_text.replace("\\", "/")).stem
 
 
+def machine_of(path):
+    """The machine field of the run stamp in the header of a result file, or "?" without a stamp."""
+    with io.open(path, encoding="utf-8-sig", newline="") as handle:
+        for line in handle:
+            if not line.startswith("#"):
+                break
+            match = re.match(r"^# run \d{8}-\d{6}(?:-\d{3})?_([^_]+)_", line)
+            if match:
+                return match.group(1)
+    return "?"
+
+
+def one_machine(paths, wanted, flag, what):
+    """The files of one machine: the machine named by flag, or the only machine present.
+    Returns (files, machine, None), or (None, None, the reason for refusing)."""
+    by_machine = defaultdict(list)
+    for p in paths:
+        by_machine[machine_of(p)].append(p)
+    found = ", ".join("%s (%d files)" % (m, len(v)) for m, v in sorted(by_machine.items())) or "none"
+    if wanted:
+        if wanted not in by_machine:
+            return None, None, "no %s file of machine %s; machines found: %s" % (what, wanted, found)
+        return by_machine[wanted], wanted, None
+    if len(by_machine) > 1:
+        return None, None, "the %s files come from %d machines: %s. Name one with %s=NAME." % (
+            what, len(by_machine), found, flag)
+    if not by_machine:
+        return [], "none", None
+    machine, files = next(iter(by_machine.items()))
+    return files, machine, None
+
+
+def header_options(path):
+    """The options of a result file, read with the parser of tools/sc3_commands.py (a list value
+    such as methods=a,b,c stays whole)."""
+    with io.open(path, encoding="utf-8", newline="") as handle:
+        for line in handle:
+            if not line.startswith("#"):
+                break
+            if line.startswith("# options "):
+                return sc3_commands.parse_options(line.rstrip("\r\n"))
+    raise ValueError("%s has no options line" % Path(path).as_posix())
+
+
+def planned_cells():
+    """The planned SC3 cells by batch, from the locked group tables."""
+    return {
+        "methods": [c for s in sc3_commands.SIZES for c in sc3_commands.planned(REPO, s)],
+        "refine": [c for s in sc3_commands.SIZES if s > 1 for c in sc3_commands.planned(REPO, s, refine=True)],
+        "degenerate": sc3_commands.planned(REPO, 1, group="degenerate"),
+    }
+
+
 def main(argv):
     out_path = None
-    if argv[:1] == ["--out"] and len(argv) == 2:
-        out_path = argv[1]
-    elif argv:
-        print("usage: python tools/lower_bound_table.py [--out FILE]", file=sys.stderr)
-        return 1
     directory = REPO / "results-invariant"
+    machine = bound_machine = ""
+    i = 0
+    while i < len(argv):
+        a = argv[i]
+        if a == "--out" and i + 1 < len(argv):
+            out_path = argv[i + 1]
+            i += 2
+            continue
+        if a.startswith("--machine="):
+            machine = a.split("=", 1)[1]
+        elif a.startswith("--bound-machine="):
+            bound_machine = a.split("=", 1)[1]
+        elif a.startswith("--dir="):
+            directory = Path(a.split("=", 1)[1])
+        else:
+            print("usage: python tools/lower_bound_table.py [--machine=NAME] [--bound-machine=NAME] "
+                  "[--dir=DIR] [--out FILE]", file=sys.stderr)
+            return 1
+        i += 1
+    if not directory.is_dir():
+        print("no directory %s" % directory.as_posix(), file=sys.stderr)
+        return 1
+    bound_files, bound_machine, refusal = one_machine(
+        sorted(glob.glob(str(directory / "SC3LB_*.csv"))), bound_machine, "--bound-machine", "SC3LB")
+    if refusal:
+        print(refusal, file=sys.stderr)
+        return 1
+    sc3_files, machine, refusal = one_machine(
+        sorted(glob.glob(str(directory / "SC3_*.csv"))), machine, "--machine", "SC3")
+    if refusal:
+        print(refusal, file=sys.stderr)
+        return 1
     bounds = {}
-    for path in sorted(glob.glob(str(directory / "SC3LB_*.csv"))):
+    for path in bound_files:
         for r in rows_of(path):
             if "conflict_bound" not in r:
                 print("%s has no conflict_bound column (an older SC3LB)" % Path(path).name, file=sys.stderr)
@@ -72,21 +154,35 @@ def main(argv):
                 print("duplicate bound row for %s" % (key,), file=sys.stderr)
                 return 1
             bounds[key] = r
+    problems = []
+    cells = planned_cells()
+    taken = defaultdict(int)
     results = defaultdict(dict)
-    for path in sorted(glob.glob(str(directory / "SC3_*DESKTOP-L8A6EPO*.csv"))):
-        o = options_of(path)
+    for path in sc3_files:
+        o = header_options(path)
         if o.get("methods") == "none":
+            taken["front"] += 1
+            continue
+        batch = next((b for b, cs in cells.items() if any(sc3_commands.matches(c, o) for c in cs)), None)
+        if batch is None:
+            problems.append("SC3 file matches no planned cell: %s" % Path(path).name)
+            continue
+        taken[batch] += 1
+        if batch == "degenerate":
             continue
         for r in rows_of(path):
             key = (dataset_name(r["dataset"]), r["gap"], r["sigma"], o["patternKind"], o["sensitiveSize"], r["sensitive_set"])
             results[key][r["method_key"]] = r   # two |S| = 1 cells have two identical files
 
-    problems = []
     lines = []
 
     def write(text=""):
         lines.append(text)
 
+    write("SC3 files of %s: %d method-batch, %d refinement-batch; left out: %d degenerate-group (SC3LB covers the "
+          "main group only), %d Pareto-front. SC3LB files of %s: %d."
+          % (machine, taken["methods"], taken["refine"], taken["degenerate"], taken["front"], bound_machine,
+             len(bound_files)))
     missing_results = [k for k in bounds if k not in results]
     missing_bounds = [k for k in results if k not in bounds]
     write("Bound rows: %d; SC3 sets: %d; joined: %d; bound without SC3: %d; SC3 without bound: %d"

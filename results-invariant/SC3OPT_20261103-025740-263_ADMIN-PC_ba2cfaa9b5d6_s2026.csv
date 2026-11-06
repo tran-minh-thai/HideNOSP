@@ -1,0 +1,19 @@
+# run 20261103-025740-263_ADMIN-PC_ba2cfaa9b5d6_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3OPT
+# options {machine=ADMIN-PC, dataset=datasets/msnbc.txt, format=SPMF, sigma=2000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=20, patternKind=distinct, sequencesPerInstance=8,16}
+# sensitive sets: size 20, pool 98 candidates, 3 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 19 -> 0, p30: 20 -> 1, p50: 19 -> 0, p70: 20 -> 1, p90: 20 -> 1
+dataset,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,instance,sequences,candidates_max,threshold,binding_patterns,needs,components,component_bound,conflict_bound,optimum,greedy,refined,weights,windows,requested_sequences,status
+datasets/msnbc.txt,"[0,1]",2000,distinct,20,"[[13, 14], [2, 8], [7, 1, 4], [1, 6, 2], [2, 12, 1], [1, 17], [1, 2, 7], [1, 2, 14], [1, 6, 7], [2, 1, 4], [12, 1, 2], [9, 4], [1, 2, 6], [12, 14], [1, 4, 2], [2, 7, 4], [15, 1], [2, 1, 12], [2, 11], [8, 2]]",p30,0,8,14,1,11,3;0;1;1;1;1;1;0;2;0;0;2;0;0;0;1;1;0;1;0,1,3,12,12,12,12,side-effect,2,8,
+datasets/msnbc.txt,"[0,1]",2000,distinct,20,"[[13, 14], [2, 8], [7, 1, 4], [1, 6, 2], [2, 12, 1], [1, 17], [1, 2, 7], [1, 2, 14], [1, 6, 7], [2, 1, 4], [12, 1, 2], [9, 4], [1, 2, 6], [12, 14], [1, 4, 2], [2, 7, 4], [15, 1], [2, 1, 12], [2, 11], [8, 2]]",p30,0,16,14,2,13,3;2;1;1;2;3;1;0;1;1;0;1;0;0;0;0;1;2;0;2,1,3,15,15,16,16,side-effect,2,16,
+datasets/msnbc.txt,"[0,1]",2000,distinct,20,"[[9, 7], [3, 2], [5, 1], [2, 3], [10, 2], [1, 5], [7, 2], [2, 14], [9, 1], [2, 10], [1, 7, 4], [12, 2], [2, 7], [2, 12], [2, 6], [6, 2], [10, 1], [4, 2], [2, 4], [3, 1]]",p70,0,8,14,2,12,0;2;0;1;2;0;2;0;0;3;0;1;2;0;2;5;1;0;3;1,1,5,10,11,12,12,side-effect,2,8,
+datasets/msnbc.txt,"[0,1]",2000,distinct,20,"[[9, 7], [3, 2], [5, 1], [2, 3], [10, 2], [1, 5], [7, 2], [2, 14], [9, 1], [2, 10], [1, 7, 4], [12, 2], [2, 7], [2, 12], [2, 6], [6, 2], [10, 1], [4, 2], [2, 4], [3, 1]]",p70,0,16,14,4,9,0;2;0;1;0;0;3;0;0;1;0;0;3;0;1;5;0;0;4;4,1,5,12,12,13,13,side-effect,6,16,
+datasets/msnbc.txt,"[0,1]",2000,distinct,20,"[[1, 10], [11, 1], [7, 6], [1, 3], [1, 11], [6, 7], [6, 1], [1, 6], [4, 1], [14, 1], [1, 14], [4, 7], [12, 1], [7, 1], [1, 4], [1, 12], [1, 7], [7, 4], [2, 1], [1, 2]]",p90,0,8,14,3,10,0;4;0;0;4;2;0;0;0;3;2;2;1;0;1;1;0;3;0;0,1,4,12,12,14,14,side-effect,1,8,
+datasets/msnbc.txt,"[0,1]",2000,distinct,20,"[[1, 10], [11, 1], [7, 6], [1, 3], [1, 11], [6, 7], [6, 1], [1, 6], [4, 1], [14, 1], [1, 14], [4, 7], [12, 1], [7, 1], [1, 4], [1, 12], [1, 7], [7, 4], [2, 1], [1, 2]]",p90,0,16,14,7,8,0;2;0;1;1;0;0;0;0;1;0;0;4;0;2;5;0;0;0;5,1,5,8,11,12,12,side-effect,3,16,

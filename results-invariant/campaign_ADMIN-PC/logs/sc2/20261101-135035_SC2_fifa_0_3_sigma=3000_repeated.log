@@ -1,0 +1,23 @@
+# cell SC2 fifa [0,3] sigma=3000 repeated
+# machine ADMIN-PC
+# exit 0 after 108 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 47fd7ea786fb
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC2 data regime: rho_rep, beta and the bound of P1 per dataset and per sigma
+# run 20261101-135038-012_ADMIN-PC_47fd7ea786fb_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+dataset datasets\fifa.txt, |D| = 20450, total length 741092, alphabet 2990, linearised share 0.0
+|F_sigma(D)| = 79 at sigma = 3000, gap [0,3], l_max = 4
+[17, 17, 17, 17]   sup_NO  4741  sup_seq   213  rho_rep 0.955  beta 0.048  min masks   956 (0.0013 of D)
+[17, 17, 17]       sup_NO  4999  sup_seq   256  rho_rep 0.949  beta 0.055  min masks  1289 (0.0017 of D)
+[17, 17]           sup_NO  5457  sup_seq   415  rho_rep 0.924  beta 0.068  min masks  1915 (0.0026 of D)
+pool of 3 repeated-item candidates: median rho_rep 0.949, median beta 0.055
+done in 105.2 s

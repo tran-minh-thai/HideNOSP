@@ -1,0 +1,38 @@
+# cell SC3 msnbc [0,10] sigma=2000 repeated S=1 pareto
+# machine ADMIN-PC
+# exit 0 after 12777 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = d700792cc660
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3 main comparison on HIDE-DB: Lost, Ghost, SupDist, |R| and HF against the baselines
+# run 20261105-000045-363_ADMIN-PC_d700792cc660_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 34359738368
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, repeated-item pool 591 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 118 -> 4, p30: 118 -> 4, p50: 118 -> 4, p70: 118 -> 4, p90: 119 -> 4
+set 0  Pareto front: 48 vertices, |R| from 73 to 128
+set 1  Pareto front: 29 vertices, |R| from 63 to 111
+set 2  Pareto front: 3 vertices, |R| from 2 to 4
+set 3  Pareto front: 16 vertices, |R| from 22 to 37
+set 4  Pareto front: 212 vertices, |R| from 625 to 1441
+set 5  Pareto front: 154 vertices, |R| from 315 to 941
+set 6  Pareto front: 330 vertices, |R| from 710 to 1424
+set 7  Pareto front: 246 vertices, |R| from 393 to 1002
+set 8  Pareto front: 337 vertices, |R| from 1177 to 1987
+set 9  Pareto front: 95 vertices, |R| from 711 to 836
+set 10  Pareto front: 482 vertices, |R| from 786 to 1857
+set 11  Pareto front: 378 vertices, |R| from 938 to 1925
+set 12  Pareto front: 118 vertices, |R| from 3082 to 3330
+set 13  Pareto front: 523 vertices, |R| from 1896 to 2777
+set 14  Pareto front: 525 vertices, |R| from 2865 to 3936
+set 15  Pareto front: 1157 vertices, |R| from 3582 to 5916
+set 16  Pareto front: 2446 vertices, |R| from 9357 to 13565
+set 17  Pareto front: 469 vertices, |R| from 6294 to 6981
+set 18  Pareto front: 465 vertices, |R| from 4314 to 5374
+set 19  Pareto front: 2341 vertices, |R| from 5981 to 10480
+done in 12773.5 s

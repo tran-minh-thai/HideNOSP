@@ -1,0 +1,13 @@
+# run 20261104-013039-613_ADMIN-PC_77a1a855b477_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 34359738368
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/bpi2013.txt, format=SPMF, sigma=500, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=true, timeLimit=1800, methods=none}
+# sensitive sets: size 1, repeated-item pool 112 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 22 -> 4, p30: 22 -> 4, p50: 23 -> 4, p70: 22 -> 4, p90: 23 -> 4
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,status

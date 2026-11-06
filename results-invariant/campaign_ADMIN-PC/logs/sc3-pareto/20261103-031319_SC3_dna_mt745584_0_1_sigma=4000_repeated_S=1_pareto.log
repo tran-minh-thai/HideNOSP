@@ -1,0 +1,21 @@
+# cell SC3 dna_mt745584 [0,1] sigma=4000 repeated S=1 pareto
+# machine ADMIN-PC
+# exit 0 after 4 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = f6a9c66db752
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3 main comparison on HIDE-DB: Lost, Ghost, SupDist, |R| and HF against the baselines
+# run 20261103-031322-238_ADMIN-PC_f6a9c66db752_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 34359738368
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, repeated-item pool 2 candidates, 2 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 0 -> 0, p50: 1 -> 1, p70: 0 -> 0, p90: 1 -> 1
+WARNING: the pool gives 2 distinct sets, not 20; the cell runs with these and the result file header says so. No set is repeated to make up the number.
+set 0  Pareto front: 1 vertices, |R| from 314 to 314
+set 1  Pareto front: 1 vertices, |R| from 557 to 557
+done in 1.0 s

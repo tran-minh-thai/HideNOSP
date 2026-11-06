@@ -1,0 +1,20 @@
+# run 20261103-031739-289_ADMIN-PC_e6e0f6d5bc93_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 34359738368
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3PARETO
+# options {machine=ADMIN-PC, dataset=datasets/bible.txt, format=SPMF, sigma=2000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=true, timeLimit=1800, methods=none}
+# sensitive sets: size 1, repeated-item pool 4 candidates, 4 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+dataset,shape,gap,sigma,sensitive_set,stratum,vertex,vertices,mask_count,weight,min_masks,mask_ratio,hf,lost,lost_rel,ghost,sup_dist,frequent_before,nonsensitive_before,frequent_after
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 31, 10]]",p30,0,1,4,0,4,1.000000,0.000000,0,0.000000,0,0.000022,78,77,77
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[356, 356]]",p50,0,1,844,0,844,1.000000,0.000000,0,0.000000,0,0.001584,78,77,77
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[46, 10, 46]]",p70,0,3,964,20857,964,1.000000,0.000000,0,0.000000,0,0.006918,78,77,77
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[46, 10, 46]]",p70,1,3,965,16528,964,1.001037,0.000000,0,0.000000,0,0.006922,78,77,77
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[46, 10, 46]]",p70,2,3,969,0,964,1.005187,0.000000,0,0.000000,0,0.006939,78,77,77
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 46, 10]]",p90,0,2,5395,206892,5395,1.000000,0.000000,1,0.012987,0,0.028572,78,77,76
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 46, 10]]",p90,1,2,5407,0,5395,1.002224,0.000000,1,0.012987,0,0.028600,78,77,76

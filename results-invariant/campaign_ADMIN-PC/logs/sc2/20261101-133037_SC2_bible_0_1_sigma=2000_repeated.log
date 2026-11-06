@@ -1,0 +1,24 @@
+# cell SC2 bible [0,1] sigma=2000 repeated
+# machine ADMIN-PC
+# exit 0 after 308 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 70bd0d213182
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC2 data regime: rho_rep, beta and the bound of P1 per dataset and per sigma
+# run 20261101-133039-715_ADMIN-PC_70bd0d213182_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+dataset datasets\bible.txt, |D| = 36369, total length 787066, alphabet 13905, linearised share 0.0
+|F_sigma(D)| = 78 at sigma = 2000, gap [0,1], l_max = 4
+[10, 31, 10]       sup_NO  2007  sup_seq  1530  rho_rep 0.238  beta 0.812  min masks     4 (0.0000 of D)
+[356, 356]         sup_NO  2843  sup_seq  2841  rho_rep 0.001  beta 0.460  min masks   844 (0.0011 of D)
+[46, 10, 46]       sup_NO  3310  sup_seq  2540  rho_rep 0.233  beta 0.717  min masks   964 (0.0012 of D)
+[10, 46, 10]       sup_NO  7974  sup_seq  6109  rho_rep 0.234  beta 0.527  min masks  5395 (0.0069 of D)
+pool of 4 repeated-item candidates: median rho_rep 0.233, median beta 0.622
+done in 305.9 s

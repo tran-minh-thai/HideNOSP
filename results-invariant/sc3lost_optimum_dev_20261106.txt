@@ -1,0 +1,133 @@
+# SC3LOST with the empty-band selector of CUT-HIDE (preregistration section 19.2, correction of 2026-11-06)
+# Run: the 54 cells of campaign batch sc3lost (tools/campaign.py batch_cells), on the development machine, label dev,
+#   one call per cell: python tools/run.py --jvm=-Xmx8g --no-build SC3LOST --machine=dev <cell options>
+#   classes built beforehand with javac --release 25 into target/classes from commit 2f092961d292 (mvn -o lacks a
+#   compiler plugin on this machine); every result file carries revision 2f092961d292, clean tree; JDK Temurin 25.0.4.1+1.
+# Counts are machine-invariant (no time or memory column); compared row by row with the ADMIN-PC run of generation 2
+#   (branch campaign-admin-pc-g2 at a5d06ec, revision f6e9ea6fd5f8 and the following SC3LOST files), made before the selector.
+# Tools: tools/compare_sc3lost_selector.py sha256 35d06de641ac; tools/lost_optimum_table.py sha256 59ea0c9131a1; repository at 2f092961d292 when written.
+
+## Per-cell exit status (wall-clock time dropped: this tree holds no timing)
+cells 54
+1/54 exit 0 SC3LOST dna_mt745584 [0,1] sigma=4000 repeated
+2/54 exit 0 SC3LOST dna_mt745584 [0,1] sigma=2500 repeated
+3/54 exit 0 SC3LOST fifa [0,1] sigma=3000 repeated
+4/54 exit 0 SC3LOST fifa [0,3] sigma=3000 repeated
+5/54 exit 0 SC3LOST dna_mt745584 [0,3] sigma=4000 distinct
+6/54 exit 0 SC3LOST bible [0,1] sigma=2000 repeated
+7/54 exit 0 SC3LOST leviathan [0,1] sigma=500 repeated
+8/54 exit 0 SC3LOST protein_sdb1 [0,1] sigma=800 repeated
+9/54 exit 0 SC3LOST protein_sdb4 [0,1] sigma=900 repeated
+10/54 exit 0 SC3LOST dna_mt745584 [0,3] sigma=4000 repeated
+11/54 exit 0 SC3LOST dna_mt745584 [0,1] sigma=2500 distinct
+12/54 exit 0 SC3LOST bpi2012 [0,1] sigma=4000 repeated
+13/54 exit 0 SC3LOST protein_sdb1 [0,1] sigma=400 repeated
+14/54 exit 0 SC3LOST protein_sdb4 [0,1] sigma=500 repeated
+15/54 exit 0 SC3LOST leviathan [0,3] sigma=500 repeated
+16/54 exit 0 SC3LOST protein_sdb4 [0,3] sigma=900 repeated
+17/54 exit 0 SC3LOST bpi2012 [0,3] sigma=4000 repeated
+18/54 exit 0 SC3LOST protein_sdb1 [0,3] sigma=800 repeated
+19/54 exit 0 SC3LOST dna_mt745584 [0,10] sigma=4000 distinct
+20/54 exit 0 SC3LOST bible [0,3] sigma=2000 repeated
+21/54 exit 0 SC3LOST dna_mt745584 [0,3] sigma=2500 distinct
+22/54 exit 0 SC3LOST sepsis [0,1] sigma=300 repeated
+23/54 exit 0 SC3LOST msnbc [0,1] sigma=5000 distinct
+24/54 exit 0 SC3LOST protein_sdb1 [0,1] sigma=800 distinct
+25/54 exit 0 SC3LOST msnbc [0,3] sigma=5000 distinct
+26/54 exit 0 SC3LOST protein_sdb4 [0,1] sigma=900 distinct
+27/54 exit 0 SC3LOST dna_mt745584 [0,3] sigma=2500 repeated
+28/54 exit 0 SC3LOST dna_mt745584 [0,10] sigma=4000 repeated
+29/54 exit 0 SC3LOST dna_mt745584 [0,10] sigma=2500 distinct
+30/54 exit 0 SC3LOST msnbc [0,10] sigma=5000 distinct
+31/54 exit 0 SC3LOST bpi2013 [0,1] sigma=1000 repeated
+32/54 exit 0 SC3LOST msnbc [0,1] sigma=5000 repeated
+33/54 exit 0 SC3LOST protein_sdb4 [0,3] sigma=500 repeated
+34/54 exit 0 SC3LOST msnbc [0,1] sigma=2000 distinct
+35/54 exit 0 SC3LOST protein_sdb1 [0,3] sigma=400 repeated
+36/54 exit 0 SC3LOST bpi2013 [0,3] sigma=1000 repeated
+37/54 exit 0 SC3LOST bpi2013 [0,1] sigma=500 repeated
+38/54 exit 0 SC3LOST msnbc [0,3] sigma=5000 repeated
+39/54 exit 0 SC3LOST sepsis [0,3] sigma=300 repeated
+40/54 exit 0 SC3LOST msnbc [0,10] sigma=5000 repeated
+41/54 exit 0 SC3LOST protein_sdb1 [0,3] sigma=800 distinct
+42/54 exit 0 SC3LOST protein_sdb4 [0,1] sigma=500 distinct
+43/54 exit 0 SC3LOST protein_sdb4 [0,3] sigma=900 distinct
+44/54 exit 0 SC3LOST protein_sdb1 [0,1] sigma=400 distinct
+45/54 exit 0 SC3LOST msnbc [0,1] sigma=2000 repeated
+46/54 exit 0 SC3LOST bpi2013 [0,3] sigma=500 repeated
+47/54 exit 0 SC3LOST dna_mt745584 [0,10] sigma=2500 repeated
+48/54 exit 0 SC3LOST msnbc [0,3] sigma=2000 repeated
+49/54 exit 0 SC3LOST protein_sdb4 [0,3] sigma=500 distinct
+50/54 exit 0 SC3LOST protein_sdb1 [0,3] sigma=400 distinct
+51/54 exit 0 SC3LOST msnbc [0,1] sigma=1000 repeated
+52/54 exit 0 SC3LOST msnbc [0,10] sigma=2000 repeated
+53/54 exit 0 SC3LOST msnbc [0,3] sigma=1000 repeated
+54/54 exit 0 SC3LOST msnbc [0,10] sigma=1000 repeated
+
+[exited with code 0]
+
+## python tools/compare_sc3lost_selector.py <ADMIN-PC SC3LOST files> ADMIN-PC results-invariant dev  (exit 0)
+cells                                              54
+rows                                               20223
+identical rows                                     20127
+refused rows                                       96
+refused rows now |R|* and Lost = OPT, named uniform 96
+PROBLEMS 0
+
+## python tools/lost_optimum_table.py --machine=dev  (exit 0)
+SC3LOST files of dev: 54
+checks covered: 19872 method rows, 16341 of them at |R|*, 6624 CUT-HIDE rows
+
+== reported only, distinct scope: 240 instances solved; skipped none
+   method              n  |R|=|R|*  Lost=OPT  sum exc  med exc   med pos  |R|>|R|* opt no worse
+   cut-hide-rw-ls    240  240/240   231/240        10      0.0     0.000         0      0/0    
+   cut-hide-rw       240  240/240   218/240        33      0.0     0.000         0      0/0    
+   cut-hide          240  240/240   209/240        47      0.0     0.000         0      0/0    
+   hha               240  235/240    56/235       917      2.0     0.429         5      5/5    
+   dbsh              240  231/240    61/231       852      2.0     0.375         9      9/9    
+   sbsh-r1           240  228/240   101/228       590      1.0     0.149        12     11/12   
+   sbsh-rmax         240  228/240   101/228       590      1.0     0.149        12     11/12   
+   occurrence        240  240/240    54/240       920      2.0     0.400         0      0/0    
+   hha-stop          240  240/240    57/240       932      2.0     0.437         0      0/0    
+   empty B_eps, CUT-HIDE with uniform weights: none
+
+== reported only, repeated scope: 150 instances solved; skipped none
+   method              n  |R|=|R|*  Lost=OPT  sum exc  med exc   med pos  |R|>|R|* opt no worse
+   cut-hide-rw-ls    150  150/150   145/150        11      0.0     0.000         0      0/0    
+   cut-hide-rw       150  150/150   136/150        29      0.0     0.000         0      0/0    
+   cut-hide          150  150/150   128/150        38      0.0     0.000         0      0/0    
+   hha               150   96/150    17/96        513      2.0     0.365        54     54/54   
+   dbsh              150   96/150    15/96        674      3.0     0.437        54     53/54   
+   sbsh-r1           150   92/150    20/92        510      2.0     0.250        58     57/58   
+   sbsh-rmax         150   92/150    20/92        510      2.0     0.250        58     57/58   
+   occurrence        150  117/150    28/117       612      2.0     0.365        33     33/33   
+   hha-stop          150   97/150    18/97        513      2.0     0.364        53     53/53   
+   empty B_eps, CUT-HIDE with uniform weights: none
+
+== tested datasets, distinct scope: 629 instances solved; skipped {'exact method refused': 67}
+   method              n  |R|=|R|*  Lost=OPT  sum exc  med exc   med pos  |R|>|R|* opt no worse
+   cut-hide-rw-ls    629  629/629   595/629        57      0.0     0.000         0      0/0    
+   cut-hide-rw       629  629/629   534/629       165      0.0     0.000         0      0/0    
+   cut-hide          629  629/629   505/629       207      0.0     0.000         0      0/0    
+   hha               629  528/629   115/528      2408      2.0     0.441       101    101/101  
+   dbsh              629  494/629    99/494      2351      2.0     0.400       135    135/135  
+   sbsh-r1           629  569/629   166/569      1986      1.0     0.286        60     60/60   
+   sbsh-rmax         629  569/629   166/569      1984      1.0     0.286        60     60/60   
+   occurrence        629  621/629   139/621      2397      2.0     0.400         8      8/8    
+   hha-stop          629  629/629   135/629      2796      2.0     0.455         0      0/0    
+   empty B_eps, CUT-HIDE with uniform weights: none
+
+== tested datasets, repeated scope: 1189 instances solved; skipped {'exact method refused': 284}
+   method              n  |R|=|R|*  Lost=OPT  sum exc  med exc   med pos  |R|>|R|* opt no worse
+   cut-hide-rw-ls   1189 1189/1189 1061/1189      208      0.0     0.000         0      0/0    
+   cut-hide-rw      1189 1189/1189  926/1189      620      0.0     0.000         0      0/0    
+   cut-hide         1189 1189/1189  851/1189      936      0.0     0.000         0      0/0    
+   hha              1189  673/1189  107/673      7295      5.0     0.464       516    473/516  
+   dbsh             1189  611/1189  104/611      6895      5.0     0.480       578    535/578  
+   sbsh-r1          1189  672/1189  146/672      5311      3.0     0.333       517    467/517  
+   sbsh-rmax        1189  670/1189  146/670      5247      3.0     0.333       519    469/519  
+   occurrence       1189  923/1189  218/923      7616      3.0     0.400       266    247/266  
+   hha-stop         1189  766/1189  133/766      7912      5.0     0.463       423    375/423  
+   empty B_eps, CUT-HIDE with uniform weights: cut-hide 32 (Lost = OPT 32); cut-hide-rw 32 (Lost = OPT 32); cut-hide-rw-ls 32 (Lost = OPT 32)
+
+No problem: every method hides, no |R| below |R|*, every CUT-HIDE key at |R|*, no Lost below the optimum at |R|*.

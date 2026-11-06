@@ -23,6 +23,9 @@ Generation 2 (preregistration section 19), run with --generation=2:
 
     sc3-stop        SC3 --methods=occurrence,hha-stop on the cells of sc3-s1 .. s20 (19.1)
     sc3lost         SC3LOST, exact Lost optimum on windows of real sequences, cells of sc3-s1 (19.2)
+
+Generation 3, run with --generation=3:
+
     sc6             SC6 running time, cells of sc3-s1 and sc3-s10, one set per stratum (19.3)
 
 A cell is done when results-invariant/ holds a complete file of its scenario whose run stamp names
@@ -76,7 +79,7 @@ BATCHES = ("sc1", "sc2", "sc3-s1", "sc3-s5", "sc3-s10", "sc3-s20", "sc3-degenera
            "sc3lb", "sc3opt", "sc3-pareto", "sc3-stop", "sc3lost", "sc6")
 # The generation a batch belongs to (preregistration section 19 opened the second).
 GENERATION = {b: "1" for b in BATCHES}
-GENERATION.update({"sc3-stop": "2", "sc3lost": "2", "sc6": "2"})
+GENERATION.update({"sc3-stop": "2", "sc3lost": "2", "sc6": "3"})
 # What a later generation must share with the one before: only the measured code may differ.
 CARRIED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor")
 LOCKED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor", "source_tree", "pom")

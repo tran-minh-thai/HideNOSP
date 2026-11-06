@@ -10,6 +10,7 @@ import hidenosp.index.NettreeCutIndex;
 import hidenosp.io.CsvWriter;
 import hidenosp.io.DatasetReader;
 import hidenosp.io.ResultSink;
+import hidenosp.metrics.FrequentPatterns;
 import hidenosp.metrics.Metrics;
 import hidenosp.util.Cli;
 import hidenosp.util.Deadline;
@@ -23,7 +24,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -33,11 +33,13 @@ import java.util.function.Supplier;
  * <p>For one SC3 cell, the sets of SC3 are drawn again and the first set drawn in each stratum is kept.
  * Each method is built by the factory of SC3 and timed by {@link Timing#measure}: one warm-up run, one
  * run that sets the number of repetitions (both discarded), then the repetitions of protocol row 8.
- * What is inside the clock is what the method needs from the database: a method that reads F_sigma(D)
- * (the three CUT-HIDE keys and the two SBSH keys) mines it inside its own clock, together with the
- * evaluator the adaptive weight reads; the other methods receive no F_sigma(D) at all, so a method
- * misclassified here fails loudly instead of being timed without the work it needs. Reading the file,
- * drawing the set and evaluating the output are outside every clock.
+ * F_sigma(D) is a preprocessing of the database shared by every hiding request on it (preregistration
+ * section 20.1, which amends 19.3): it is timed once per cell on its own row {@code mine-frequent}, mined
+ * once outside the clocks and handed to every method, and each timed call builds a fresh evaluator on it,
+ * so no cache carries over between repetitions. The column {@code reads_frequent} says which methods need
+ * it (the three CUT-HIDE keys and the two SBSH keys); the tables print their time beside the mining time,
+ * never added into one number. Reading the file, drawing the set and evaluating the output are outside
+ * every clock.
  *
  * <p>The output of the last timed run is evaluated once, outside the clock, and its |R| and Lost are
  * written beside the times: they must equal the SC3 row of the same set and method, which ties the
@@ -108,12 +110,21 @@ public final class Sc6Scalability implements Scenario {
         }
 
         String[] header = {"dataset", "gap", "sigma", "pattern_kind", "sensitive_size", "sensitive_set", "stratum",
-            "method_key", "method", "reads_frequent", "mined_per_call", "mask_count", "lost", "wall_ms_mean", "wall_ms_sd",
+            "method_key", "method", "reads_frequent", "mask_count", "lost", "wall_ms_mean", "wall_ms_sd",
             "cpu_ms_mean", "repetitions", "warmups", "note", "status"};
         String[] provenance = {"options " + options.all(), sampling.describe(),
             "sets: the first set drawn in each stratum (" + firstOfStratum.size() + " of "
                     + sampling.draws().size() + ")"};
+        Map<Pattern, Long> frequent = full.frequent();
         try (CsvWriter writer = sink.open(ResultSink.Kind.TIMED, id(), header, provenance)) {
+            String[] cell = {dataset, gap.toString(), Integer.toString(sigma), patternKind,
+                Integer.toString(sensitiveSize), "", ""};
+            Timing.Measurement mining = Timing.measure(
+                    () -> FrequentPatterns.mine(database, gap, maxPatternLength, sigma).size(), warmups);
+            writer.writeRow(row(cell, "mine-frequent", "F_sigma(D) with l_max = " + maxPatternLength + ": "
+                    + frequent.size() + " patterns", false, "", "", mining, ""));
+            System.out.printf("mining F_sigma(D): %d patterns, %10.1f ms +- %.1f (%d repetitions)%n", frequent.size(),
+                    mining.wallMillisMean(), mining.wallMillisStdDev(), mining.repetitions());
             for (SensitiveSampling.Draw draw : firstOfStratum.values()) {
                 List<Pattern> sensitive = draw.patterns();
                 HideProblem problem = new HideProblem(database, sensitive, gap, HideProblem.Mode.HIDE_DB, sigma,
@@ -125,16 +136,9 @@ public final class Sc6Scalability implements Scenario {
                     String key = raw.trim().toLowerCase(Locale.ROOT);
                     boolean reads = READS_FREQUENT.contains(key);
                     AtomicReference<Sanitization> last = new AtomicReference<>();
-                    AtomicInteger calls = new AtomicInteger();
-                    AtomicInteger mined = new AtomicInteger();
                     Supplier<Sanitization> work = () -> Deadline.within(timeLimit, () -> {
-                        calls.incrementAndGet();
-                        Map<Pattern, Long> frequent = null;
-                        Metrics.Context context = null;
-                        if (reads) {
-                            context = mine(database, gap, maxPatternLength, sigma, mined);
-                            frequent = context.frequent();
-                        }
+                        Metrics.Context context = Metrics.Context.withFrequent(database, gap, maxPatternLength, sigma,
+                                frequent);
                         Sanitization s = Sc3MainComparison.create(key, problem, frequent, sigma, epsilon, seed,
                                 context).run(problem);
                         last.set(s);
@@ -144,13 +148,13 @@ public final class Sc6Scalability implements Scenario {
                     try {
                         m = Timing.measure(work, warmups);
                     } catch (Deadline.Exceeded e) {
-                        writer.writeRow(row(base, key, "", reads, "", "", "", null, "OT"));
+                        writer.writeRow(row(base, key, "", reads, "", "", null, "OT"));
                         continue;
                     } catch (OutOfMemoryError e) {
-                        writer.writeRow(row(base, key, "", reads, "", "", "", null, "OOM"));
+                        writer.writeRow(row(base, key, "", reads, "", "", null, "OOM"));
                         continue;
                     } catch (RuntimeException e) {
-                        writer.writeRow(row(base, key, "", reads, "", "", "", null,
+                        writer.writeRow(row(base, key, "", reads, "", "", null,
                                 "method failed: " + String.valueOf(e.getMessage()).replace(',', ';')));
                         continue;
                     }
@@ -159,8 +163,7 @@ public final class Sc6Scalability implements Scenario {
                     if (key.equals("cut-hide")) {
                         cutHide = s;
                     }
-                    String perCall = String.format(Locale.ROOT, "%.3f", (double) mined.get() / Math.max(1, calls.get()));
-                    writer.writeRow(row(base, key, s.method(), reads, perCall, Integer.toString(measured.maskCount()),
+                    writer.writeRow(row(base, key, s.method(), reads, Integer.toString(measured.maskCount()),
                             Integer.toString(measured.lost()), m, measured.hidingFailure() > 0 ? "does not hide" : ""));
                     System.out.printf("%s %-16s %10.1f ms +- %.1f (%d repetitions)%n", base[6], key,
                             m.wallMillisMean(), m.wallMillisStdDev(), m.repetitions());
@@ -184,7 +187,7 @@ public final class Sc6Scalability implements Scenario {
             }
             return built;
         }, warmups);
-        writer.writeRow(row(base, "index-build", "NettreeCutIndex", false, "", "", "", build, ""));
+        writer.writeRow(row(base, "index-build", "NettreeCutIndex", false, "", "", build, ""));
         Timing.Measurement incremental = Timing.measure(() -> {
             long left = 0;
             for (Map.Entry<Integer, Set<Integer>> e : masks.entrySet()) {
@@ -196,7 +199,7 @@ public final class Sc6Scalability implements Scenario {
             }
             return left;
         }, warmups);
-        writer.writeRow(row(base, "index-incremental", "maskPosition after each mask", false, "",
+        writer.writeRow(row(base, "index-incremental", "maskPosition after each mask", false,
                 Integer.toString(solution.maskCount()), "", incremental, ""));
         Timing.Measurement rebuild = Timing.measure(() -> {
             long left = 0;
@@ -212,19 +215,8 @@ public final class Sc6Scalability implements Scenario {
             }
             return left;
         }, warmups);
-        writer.writeRow(row(base, "index-rebuild", "rebuild after each mask", false, "",
+        writer.writeRow(row(base, "index-rebuild", "rebuild after each mask", false,
                 Integer.toString(solution.maskCount()), "", rebuild, ""));
-    }
-
-    /**
-     * Mines F_sigma(D) and counts the call, so the row can show how many timed calls contained the
-     * mining: 1 per call for a method that reads it, 0 for the others.
-     */
-    private static Metrics.Context mine(SequenceDatabase database, GapConstraint gap, int maxPatternLength,
-                                        int sigma, AtomicInteger mined) {
-        Metrics.Context context = Metrics.Context.of(database, gap, maxPatternLength, sigma);
-        mined.incrementAndGet();
-        return context;
     }
 
     private static NettreeCutIndex index(EventSequence sequence, List<Pattern> sensitive, GapConstraint gap) {
@@ -235,23 +227,22 @@ public final class Sc6Scalability implements Scenario {
         return index;
     }
 
-    private static String[] row(String[] base, String key, String method, boolean reads, String minedPerCall,
-                                String masks, String lost, Timing.Measurement m, String status) {
-        String[] out = Arrays.copyOf(base, base.length + 13);
+    private static String[] row(String[] base, String key, String method, boolean reads, String masks, String lost,
+                                Timing.Measurement m, String status) {
+        String[] out = Arrays.copyOf(base, base.length + 12);
         int k = base.length;
         out[k] = key;
         out[k + 1] = method;
         out[k + 2] = Boolean.toString(reads);
-        out[k + 3] = minedPerCall;
-        out[k + 4] = masks;
-        out[k + 5] = lost;
-        out[k + 6] = m == null ? "" : String.format(Locale.ROOT, "%.3f", m.wallMillisMean());
-        out[k + 7] = m == null ? "" : String.format(Locale.ROOT, "%.3f", m.wallMillisStdDev());
-        out[k + 8] = m == null || m.cpuMillisMean() < 0 ? "" : String.format(Locale.ROOT, "%.3f", m.cpuMillisMean());
-        out[k + 9] = m == null ? "" : Integer.toString(m.repetitions());
-        out[k + 10] = m == null ? "" : Integer.toString(m.warmups());
-        out[k + 11] = m == null ? "" : m.note();
-        out[k + 12] = status;
+        out[k + 3] = masks;
+        out[k + 4] = lost;
+        out[k + 5] = m == null ? "" : String.format(Locale.ROOT, "%.3f", m.wallMillisMean());
+        out[k + 6] = m == null ? "" : String.format(Locale.ROOT, "%.3f", m.wallMillisStdDev());
+        out[k + 7] = m == null || m.cpuMillisMean() < 0 ? "" : String.format(Locale.ROOT, "%.3f", m.cpuMillisMean());
+        out[k + 8] = m == null ? "" : Integer.toString(m.repetitions());
+        out[k + 9] = m == null ? "" : Integer.toString(m.warmups());
+        out[k + 10] = m == null ? "" : m.note();
+        out[k + 11] = status;
         return out;
     }
 }

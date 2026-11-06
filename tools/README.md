@@ -20,7 +20,8 @@ Supporting tools, not part of the algorithm.
 | `reduced_optimum_table.py` | SC3OPT: bound, optimum, refinement and greedy on small instances, for one machine (`--machine`) |
 | `pareto_table.py` | The exact Pareto fronts, each paired with the method-batch file of its cell and machine (`--machine`) |
 | `lost_optimum_table.py` | SC3LOST (preregistration section 19.2): each method against the exact Lost optimum on small instances, with implementation checks |
-| `timing_table.py` | Reduced SC6 (preregistration section 19.3): running time per method and index cost; checks what each clock contains and that every timed run equals its SC3 row |
+| `cert_table.py` | SC3CERT (preregistration section 20.2): certified lower bound on the optimum Lost, on the full data (joined with SC3) and on the small instances (joined with SC3LOST), with implementation checks |
+| `timing_table.py` | Reduced SC6 (preregistration sections 19.3 and 20.1): running time per method, mining time of F_sigma(D) on its own line, and index cost; checks one mining row per cell and that every timed run equals its SC3 row |
 
 `check_results.py` checks the same rule that `hidenosp.io.ResultSink` enforces when it opens a file,
 but on disk: a file moved or edited by hand, or produced by an old version of the code, is still

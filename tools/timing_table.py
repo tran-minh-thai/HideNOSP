@@ -1,15 +1,17 @@
-"""Summarise the reduced SC6 (preregistration section 19.3): running time of every method, cost of the index.
+"""Summarise the reduced SC6 (preregistration sections 19.3 and 20.1): running time of every method, cost of
+the index, and the time of mining F_sigma(D), printed beside the methods and never added to them.
 
     python tools/timing_table.py [--machine=NAME] [--dir=DIR] [--out FILE]
 
 Reads the SC6_*.csv files of one machine in DIR/results (default: the repository) and prints, per scope
 and size of the sensitive set, the median over the timed sets of each method's mean wall-clock time, with
-the number of sets, and for the index the median build time and the median ratio of rebuilding after each
-mask to the incremental update.
+the number of sets; the median over the cells of the time of mining F_sigma(D) (the preprocessing that the
+methods reading it share, timed once per cell on the row mine-frequent); and for the index the median build
+time and the median ratio of rebuilding after each mask to the incremental update.
 
 Checks that stop the run with exit status 1, each with the number of rows it covered:
   - a row with a status (OT, OOM, method failed, does not hide) is printed and counted, not hidden;
-  - mined_per_call is 1 for a method that reads F_sigma(D) and 0 for the others (what the clock contains);
+  - each file holds exactly one mine-frequent row, before every method row (section 20.1);
   - |R| and Lost of a timed run equal the SC3 row of the same set and method on the same machine
     (results-invariant/SC3_*.csv): the timed code is the code of the comparison tables.
 """
@@ -76,23 +78,29 @@ def main(argv):
     covered = defaultdict(int)
     times = defaultdict(lambda: defaultdict(list))
     index = defaultdict(lambda: defaultdict(list))
+    mining = defaultdict(list)
     for path in files:
-        for r in rows_of(path):
+        rows = rows_of(path)
+        mine_rows = [k for k, r in enumerate(rows) if r["method_key"] == "mine-frequent"]
+        covered["files checked for one mining row"] += 1
+        if len(mine_rows) != 1 or mine_rows[0] != 0:
+            problems.append("%s: %d mine-frequent rows at positions %s, expected one, first"
+                            % (Path(path).name, len(mine_rows), mine_rows))
+        for r in rows:
             group = (r["pattern_kind"], int(r["sensitive_size"]))
             key = r["method_key"]
             where = "%s %s %s %s %s" % (dataset_name(r["dataset"]), r["gap"], r["sigma"], r["sensitive_set"], key)
             if r["status"]:
                 problems.append("%s: %s" % (where, r["status"]))
                 continue
+            if key == "mine-frequent":
+                mining[group].append(float(r["wall_ms_mean"]))
+                continue
             if key.startswith("index-"):
                 index[group][(dataset_name(r["dataset"]), r["gap"], r["sigma"], r["sensitive_set"])].append(
                     (key, float(r["wall_ms_mean"])))
                 continue
             covered["timed rows"] += 1
-            expected = "1.000" if key in READS else "0.000"
-            if r["mined_per_call"] != expected:
-                problems.append("%s: F_sigma(D) mined %s times per call, expected %s" % (where, r["mined_per_call"],
-                                                                                      expected))
             same = sc3.get((dataset_name(r["dataset"]), r["gap"], r["sigma"], r["sensitive_set"], key))
             if same is None:
                 problems.append("%s: no SC3 row of %s for this set" % (where, machine))
@@ -103,16 +111,22 @@ def main(argv):
                                                                                same["mask_count"], same["lost"]))
             times[group][key].append(float(r["wall_ms_mean"]))
 
-    lines = ["SC6 files of %s: %d; timed rows %d, joined with an SC3 row %d"
-             % (machine, len(files), covered["timed rows"], covered["joined with SC3"])]
-    for group in sorted(set(times) | set(index)):
+    lines = ["SC6 files of %s: %d (one mining row checked in %d); timed rows %d, joined with an SC3 row %d"
+             % (machine, len(files), covered["files checked for one mining row"], covered["timed rows"],
+                covered["joined with SC3"]),
+             "Methods marked * read F_sigma(D); its mining time is the separate line, not part of their times."]
+    for group in sorted(set(times) | set(index) | set(mining)):
         lines.append("")
         lines.append("== %s scope, |S| = %d" % group)
         lines.append("   %-15s %5s %16s" % ("method", "sets", "median wall ms"))
         for m in METHODS:
             values = times[group].get(m)
             if values:
-                lines.append("   %-15s %5d %16.1f" % (m, len(values), statistics.median(values)))
+                lines.append("   %-15s %5d %16.1f" % (m + ("*" if m in READS else ""), len(values),
+                                                     statistics.median(values)))
+        if mining[group]:
+            lines.append("   %-15s %5d %16.1f   (cells, not sets)" % ("mine F_sigma", len(mining[group]),
+                                                                       statistics.median(mining[group])))
         build, ratio = [], []
         for parts in index[group].values():
             d = dict(parts)
@@ -129,7 +143,7 @@ def main(argv):
         lines.append("PROBLEMS (%d):" % len(problems))
         lines += ["  " + p for p in problems[:30]]
     else:
-        lines.append("No problem: every timed run finished, the clocks contain what section 19.3 says, and every "
+        lines.append("No problem: every timed run finished, F_sigma(D) is timed once per cell, and every "
                      "timed run equals its SC3 row.")
     text = "\n".join(lines) + "\n"
     if out_path:

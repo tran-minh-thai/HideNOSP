@@ -107,6 +107,15 @@ public final class Metrics {
                     FrequentPatterns.mine(database, gap, maxLength, sigma));
         }
 
+        /**
+         * A context on an F_sigma(D) mined elsewhere, with empty caches. SC6 hands every timed call a fresh
+         * one, so the mining is timed once on its own row and no cache carries over between repetitions.
+         */
+        public static Context withFrequent(SequenceDatabase database, GapConstraint gap, int maxLength,
+                                           long sigma, Map<Pattern, Long> frequent) {
+            return new Context(database, gap, sigma, maxLength, frequent);
+        }
+
         /** Builds the context a problem implies. */
         public static Context of(HideProblem problem) {
             return of(problem.database(), problem.gap(), problem.maxPatternLength(),

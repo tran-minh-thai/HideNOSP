@@ -28,8 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The reduced SC6 (preregistration section 19.3): the timed code is the code of SC3, which the |R| and
- * Lost of every timed run must show, row by row; the clock of a method that reads F_sigma(D) contains the
- * mining; and a development run may not write times.
+ * Lost of every timed run must show, row by row; F_sigma(D) is timed once per cell on its own row
+ * (section 20.1) and its pattern count is that of SC3's mining; and a development run may not write times.
  */
 class Sc6ScalabilityTest {
 
@@ -64,6 +64,7 @@ class Sc6ScalabilityTest {
         }
         int compared = 0;
         int indexRows = 0;
+        int miningRows = 0;
         List<String> sets = new ArrayList<>();
         for (Map<String, String> r : timed) {
             assertEquals("", r.get("status"), r.toString());
@@ -72,12 +73,23 @@ class Sc6ScalabilityTest {
                 indexRows++;
                 continue;
             }
+            if (key.equals("mine-frequent")) {
+                miningRows++;
+                assertEquals(0, compared + indexRows, "the mining row comes before every method row");
+                int patterns = hidenosp.metrics.FrequentPatterns.mine(
+                        hidenosp.io.DatasetReader.read(data, hidenosp.io.DatasetReader.Format.PLAIN).database(),
+                        hidenosp.core.GapConstraint.of(0, 2), 3, 25).size();
+                assertTrue(r.get("method").endsWith(": " + patterns + " patterns"), "pattern count of F_sigma(D): " + r);
+                assertTrue(patterns > 0, "nothing mined");
+                assertTrue(Integer.parseInt(r.get("repetitions")) >= 3, "repetitions of row 8: " + r);
+                assertTrue(Double.parseDouble(r.get("wall_ms_mean")) > 0, "a mining time was measured: " + r);
+                assertEquals("", r.get("mask_count") + r.get("lost"), "no |R| or Lost on the mining row: " + r);
+                continue;
+            }
             if (!sets.contains(r.get("sensitive_set"))) {
                 sets.add(r.get("sensitive_set"));
             }
             assertEquals(Boolean.toString(READS.contains(key)), r.get("reads_frequent"), "clock of " + key);
-            assertEquals(READS.contains(key) ? "1.000" : "0.000", r.get("mined_per_call"),
-                    "F_sigma(D) mined inside every timed call of a method that reads it, never otherwise: " + r);
             assertTrue(Integer.parseInt(r.get("repetitions")) >= 3, "repetitions of row 8: " + r);
             assertEquals("1", r.get("warmups"), "warm-up of row 9");
             assertTrue(Double.parseDouble(r.get("wall_ms_mean")) > 0, "a time was measured: " + r);
@@ -90,6 +102,7 @@ class Sc6ScalabilityTest {
         System.out.printf("SC6: %d timed runs compared with SC3 over %d sets, %d index rows%n", compared, sets.size(),
                 indexRows);
         assertEquals(9 * sets.size(), compared, "nine methods per kept set");
+        assertEquals(1, miningRows, "F_sigma(D) timed once per cell");
         List<String> firstOfStratum = new ArrayList<>();
         List<String> strata = new ArrayList<>();
         for (Map<String, String> r : sc3) {

@@ -21,12 +21,10 @@ config/ through tools/sc3_commands.py, never from a hand-written list.
 
 Generation 2 (preregistration section 19), run with --generation=2:
 
-    sc3-stop        SC3 --methods=occurrence,hha-stop on the cells of sc3-s1 .. s20 (19.1)
     sc3lost         SC3LOST, exact Lost optimum on windows of real sequences, cells of sc3-s1 (19.2)
-
-Generation 3, run with --generation=3:
-
-    sc6             SC6 running time, cells of sc3-s1 and sc3-s10, one set per stratum (19.3)
+    sc3-stop        SC3 --methods=occurrence,hha-stop on the cells of sc3-s1 .. s20 (19.1)
+    sc3cert         SC3CERT, certified lower bound on the optimum Lost, cells of sc3-s1 (20.2)
+    sc6             SC6 running time, cells of sc3-s1 and sc3-s10, one set per stratum (19.3, 20.1)
 
 A cell is done when results-invariant/ holds a complete file of its scenario whose run stamp names
 THIS machine and whose options line names the cell (SC1 writes no options line: scenario, machine and
@@ -76,10 +74,10 @@ HEAP = "-Xmx8g"
 PARETO_HEAP = "-Xmx32g"          # preregistration section 18; the method batches keep -Xmx8g
 OPT_SIZES = "8,16"
 BATCHES = ("sc1", "sc2", "sc3-s1", "sc3-s5", "sc3-s10", "sc3-s20", "sc3-degenerate", "sc3-refine",
-           "sc3lb", "sc3opt", "sc3-pareto", "sc3-stop", "sc3lost", "sc6")
+           "sc3lb", "sc3opt", "sc3-pareto", "sc3-stop", "sc3lost", "sc3cert", "sc6")
 # The generation a batch belongs to (preregistration section 19 opened the second).
 GENERATION = {b: "1" for b in BATCHES}
-GENERATION.update({"sc3-stop": "2", "sc3lost": "2", "sc6": "3"})
+GENERATION.update({"sc3-stop": "2", "sc3lost": "2", "sc3cert": "2", "sc6": "2"})
 # What a later generation must share with the one before: only the measured code may differ.
 CARRIED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor")
 LOCKED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor", "source_tree", "pom")
@@ -134,6 +132,8 @@ def batch_cells(root, batch):
                 for c in sc3.planned(root, size, stop=True)]
     if batch == "sc3lost":
         return [cell("SC3LOST", {k: c[k] for k in CELL_KEYS if k != "sensitiveSize"}) for c in sc3.planned(root, 1)]
+    if batch == "sc3cert":
+        return [cell("SC3CERT", {k: c[k] for k in CELL_KEYS if k != "sensitiveSize"}) for c in sc3.planned(root, 1)]
     if batch == "sc6":
         return [cell("SC6", {k: c[k] for k in CELL_KEYS}, extra=[("timeLimit", "1800"), ("warmups", "1")])
                 for size in (1, 10) for c in sc3.planned(root, size)]
@@ -562,7 +562,8 @@ def self_test():
 
     # 1. The plan of the real repository: the number of cells of each batch.
     expected = {"sc1": 1, "sc2": 81, "sc3-s1": 54, "sc3-s5": 34, "sc3-s10": 27, "sc3-s20": 21, "sc3-degenerate": 17,
-                "sc3-refine": 82, "sc3lb": 136, "sc3opt": 82, "sc3-pareto": 54, "sc3-stop": 136, "sc3lost": 54, "sc6": 81}
+                "sc3-refine": 82, "sc3lb": 136, "sc3opt": 82, "sc3-pareto": 54, "sc3-stop": 136, "sc3lost": 54, "sc3cert": 54,
+                "sc6": 81}
     for b in BATCHES:
         n = len(batch_cells(REPO, b))
         check("plan of %s has %d cells" % (b, expected[b]), n == expected[b], str(n))

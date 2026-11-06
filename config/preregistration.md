@@ -857,6 +857,12 @@ only in exploratory counts of the design document; `hha-stop` had never run; no 
 bound on the optimum Lost of proposition P12 of the design (the paper states it as a contribution). Both run in a
 third generation of the campaign (same machine and JDK as generations 1 and 2; only the measured code differs).
 
+> **Correction (2026-11-06, before any lock of generation 2 existed).** Both run in the **second** generation, with
+> the batches of section 19, not in a third one: when this section was written no batch of generation 2 had run and
+> its lock did not exist, so one lock covers the code of sections 19 and 20 and the measuring machine needs one
+> paste. The campaign tool places `sc3lost`, `sc3-stop`, `sc3cert` and `sc6` in generation 2. Nothing else of this
+> section changes.
+
 ### 20.1 Amendment of 19.3: mining F_σ(D) is timed once per cell, on a row of its own
 
 **Why.** 19.3 put the mining of F_σ(D) inside the clock of every method that reads it, on every timed call. A

@@ -15,6 +15,12 @@ Supporting tools, not part of the algorithm.
 | `compare_invariant.py` | Compare machine-invariant result files exactly: one pair, or (`--machine=<host> [--ref=<branch>]`) every file of one machine against the committed file of the same cell made on another host |
 | `compare_invariant_test.py` | Builds files with one known property each and requires `compare_invariant.py` to report it (18 checks) |
 | `sc3_commands.py` | **Generates the missing SC3 commands** from the two locked group tables (main group), skipping cells that already have a result file; `--self-test` injects faults into the cell-matching rule |
+| `campaign.py` | Runs every batch of the paper on one measuring machine cell by cell, resumes after a stop, commits and pushes each cell; lock generations (`--generation=2` for the batches of preregistration section 19); `--self-test` |
+| `lower_bound_table.py` | Joins the SC3LB bounds to the SC3 rows of one machine (`--machine`, `--bound-machine`, `--dir`) and reports \|R\| against the bound per scope and size |
+| `reduced_optimum_table.py` | SC3OPT: bound, optimum, refinement and greedy on small instances, for one machine (`--machine`) |
+| `pareto_table.py` | The exact Pareto fronts, each paired with the method-batch file of its cell and machine (`--machine`) |
+| `lost_optimum_table.py` | SC3LOST (preregistration section 19.2): each method against the exact Lost optimum on small instances, with implementation checks |
+| `timing_table.py` | Reduced SC6 (preregistration section 19.3): running time per method and index cost; checks what each clock contains and that every timed run equals its SC3 row |
 
 `check_results.py` checks the same rule that `hidenosp.io.ResultSink` enforces when it opens a file,
 but on disk: a file moved or edited by hand, or produced by an old version of the code, is still

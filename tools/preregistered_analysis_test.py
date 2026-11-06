@@ -527,6 +527,37 @@ def test_refinement_batch_is_not_read():
     assert "distinct items 3, repeated items 4" in text, "another key is not the refinement batch"
 
 
+def test_stop_batch_enters_h4_only():
+    """Section 19.1: a file of the stop-at-threshold batch is read for H4 only. By hand: the main file
+    has 2 distinct-item and 4 repeated-item rows (ours and hha); a stop file with an hha-stop and an
+    occurrence row per set must leave those counts at 2 and 4, add two H4 sections, and give hha-stop the
+    pairs that hha has in H2 when its rows equal those of hha."""
+    import tempfile
+    import io as _io
+    directory = tempfile.mkdtemp()
+    main_rows = [("[[1, 2]]", OURS, 0.10), ("[[1, 2]]", "hha", 0.30),
+                 ("[[3, 3]]", OURS, 0.05), ("[[3, 3]]", "hha", 0.25),
+                 ("[[4, 5, 4]]", OURS, 0.05), ("[[4, 5, 4]]", "hha", 0.35)]
+    _write_sc3(os.path.join(directory, "SC3_a.csv"), main_rows)
+    stop_rows = [(s, "hha-stop", v) for s, k, v in main_rows if k == "hha"]
+    stop_rows += [(s, "occurrence", v) for s, k, v in main_rows if k == "hha"]
+    _write_sc3(os.path.join(directory, "SC3_b.csv"), stop_rows,
+               options="dataset=datasets/x.txt, sensitiveSize=1, methods=occurrence,hha-stop")
+    report = os.path.join(directory, "report.txt")
+    pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--out", report])
+    text = _io.open(report, encoding="utf-8").read()
+    assert "distinct items 2, repeated items 4" in text, text[:800]
+    assert "STOP-AT-THRESHOLD BATCH (section 19.1)" in text and "1 files of the stop-at-threshold batch" in text
+    assert text.count("Section 19.1, ") == 2, "one H4 section per scope"
+    h2 = text.split("Section 19.1, ")[0]
+    h4 = text.split("Section 19.1, ")[1]
+    pairs_hha = [l for l in h2.splitlines() if l.startswith("  hha ")]
+    pairs_stop = [l for l in h4.splitlines() if l.startswith("  hha-stop ")]
+    assert pairs_hha and pairs_stop, "both pair tables printed"
+    assert pairs_hha[0].split()[1:] == pairs_stop[-1].split()[1:], (pairs_hha, pairs_stop)
+    assert "H4a" in h4 and "the same number of masks" in h4, h4[:600]
+
+
 def test_one_machine_per_analysis():
     """Files of two machines are refused unless --machine names one; with it only that machine is read.
     By hand: machine A has the 6 rows of test_main_splits_two_scopes, machine B one more distinct row."""

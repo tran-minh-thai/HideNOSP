@@ -42,7 +42,8 @@ import sc3_commands
 REPO = Path(__file__).resolve().parent.parent
 OURS = "cut-hide-rw-ls"
 REFINED = "cut-hide-refine"   # preregistration section 17: secondary, its own batch of SC3 files
-METHODS = ("cut-hide-rw-ls", REFINED, "cut-hide-rw", "cut-hide", "hha", "dbsh", "sbsh-r1", "sbsh-rmax")
+METHODS = ("cut-hide-rw-ls", REFINED, "cut-hide-rw", "cut-hide", "hha", "dbsh", "sbsh-r1", "sbsh-rmax",
+           "occurrence", "hha-stop")   # the last two: preregistration section 19.1, their own batch
 
 
 def rows_of(path):
@@ -104,6 +105,7 @@ def planned_cells():
     return {
         "methods": [c for s in sc3_commands.SIZES for c in sc3_commands.planned(REPO, s)],
         "refine": [c for s in sc3_commands.SIZES if s > 1 for c in sc3_commands.planned(REPO, s, refine=True)],
+        "stop": [c for s in sc3_commands.SIZES for c in sc3_commands.planned(REPO, s, stop=True)],
         "degenerate": sc3_commands.planned(REPO, 1, group="degenerate"),
     }
 
@@ -179,10 +181,11 @@ def main(argv):
     def write(text=""):
         lines.append(text)
 
-    write("SC3 files of %s: %d method-batch, %d refinement-batch; left out: %d degenerate-group (SC3LB covers the "
-          "main group only), %d Pareto-front. SC3LB files of %s: %d."
-          % (machine, taken["methods"], taken["refine"], taken["degenerate"], taken["front"], bound_machine,
-             len(bound_files)))
+    write("SC3 files of %s: %d method-batch, %d refinement-batch%s; left out: %d degenerate-group (SC3LB covers "
+          "the main group only), %d Pareto-front. SC3LB files of %s: %d."
+          % (machine, taken["methods"], taken["refine"],
+             ", %d stop-at-threshold-batch" % taken["stop"] if taken["stop"] else "",
+             taken["degenerate"], taken["front"], bound_machine, len(bound_files)))
     missing_results = [k for k in bounds if k not in results]
     missing_bounds = [k for k in results if k not in bounds]
     write("Bound rows: %d; SC3 sets: %d; joined: %d; bound without SC3: %d; SC3 without bound: %d"

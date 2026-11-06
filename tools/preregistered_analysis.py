@@ -65,6 +65,9 @@ class LOCKED:
     # preregistration section 12: the method under test of H2 and H2-R; config/protocol.yaml
     # (method_H2R) must name the same key, and preregistered_analysis_test.py checks that it does.
     OUR_METHOD = "cut-hide-rw-ls"                            # our side of the difference
+    # section 19.1: the competitors that stop at the threshold, H4a and H4b; Holm over these two
+    STOP_FAMILY = ("occurrence", "hha-stop")
+    STOP_METHODS = "occurrence,hha-stop"                     # the methods option of their batch
 
     RHO_MAIN = 0.20            # section 3
     RHO_DEGENERATE = 0.05      # section 3
@@ -491,7 +494,8 @@ def exclusion_reason(ours, theirs):
 
 # ---------------------------------------------------------------- H2
 
-def run_h2(rows, write, groups=None, hypothesis="H2"):
+def run_h2(rows, write, groups=None, hypothesis="H2", locked=None, label="tier (b) baselines"):
+    locked = LOCKED.BASELINE_FAMILY if locked is None else locked
     write("")
     write("=" * 78)
     write("%s  median of Lost_rel(baseline) - Lost_rel(CUT-HIDE) greater than delta_L = %.2f"
@@ -536,8 +540,8 @@ def run_h2(rows, write, groups=None, hypothesis="H2"):
         write("  %s NOT TESTED: the exit code is 1." % hypothesis)
         return False
 
-    family = [b for b in LOCKED.BASELINE_FAMILY if present(rows, b)]
-    absent = [b for b in LOCKED.BASELINE_FAMILY if b not in family]
+    family = [b for b in locked if present(rows, b)]
+    absent = [b for b in locked if b not in family]
     if absent:
         write("")
         write("  Absent from the files: %s" % ", ".join(absent))
@@ -546,7 +550,8 @@ def run_h2(rows, write, groups=None, hypothesis="H2"):
         write("  preregistration BEFORE running, not after seeing that a file lacks them.")
     if not family:
         write("")
-        write("  No tier (b) baseline in the files. H2 cannot be tested.")
+        write("  No %s in the files. %s cannot be tested." % (label[:-1] if label.endswith("s") else label,
+                                                              hypothesis))
         write("  %s NOT TESTED: the exit code is 1." % hypothesis)
         return False
 
@@ -604,8 +609,8 @@ def run_h2(rows, write, groups=None, hypothesis="H2"):
     if len(results) >= 2:
         adjusted = holm(results)
         write("")
-        write("Holm over the family of %d tier (b) baselines, alpha = %.2f"
-              % (len(results), LOCKED.ALPHA))
+        write("Holm over the family of %d %s, alpha = %.2f"
+              % (len(results), label, LOCKED.ALPHA))
         write("  %-12s %12s %12s   %s" % ("baseline", "raw p", "Holm p", "verdict"))
         for name in sorted(adjusted, key=lambda k: results[k]):
             rejected = adjusted[name] < LOCKED.ALPHA
@@ -618,7 +623,7 @@ def run_h2(rows, write, groups=None, hypothesis="H2"):
     if absent:
         write("")
         write("NOT THE LOCKED TEST: the Holm family above has %d of its %d locked members, so the"
-              % (len(family), len(LOCKED.BASELINE_FAMILY)))
+              % (len(family), len(locked)))
         write("correction and the verdicts differ from those of section 2. The exit code is 1.")
         return False
     return True
@@ -630,7 +635,7 @@ def present(rows, key):
 
 # ---------------------------------------------------------------- pairs (|R|, Lost), section 5
 
-def run_dominance(rows, groups, write):
+def run_dominance(rows, groups, write, locked=None, label="tier (b) baseline"):
     """The report that section 5 asks for beside H2, DESCRIPTIVE: no test.
 
     Section 5 sends the instances where the baseline uses more masks to a report "as pairs (|R|,
@@ -641,8 +646,9 @@ def run_dominance(rows, groups, write):
     """
     write("")
     write("=" * 78)
-    write("Pairs (|R|, Lost) of section 5, DESCRIPTIVE: %s against each tier (b) baseline"
-          % LOCKED.OUR_METHOD)
+    locked = LOCKED.BASELINE_FAMILY if locked is None else locked
+    write("Pairs (|R|, Lost) of section 5, DESCRIPTIVE: %s against each %s"
+          % (LOCKED.OUR_METHOD, label))
     write("=" * 78)
     rows = [r for r in rows if r["dataset"] not in LOCKED.REPORT_ONLY]
     if groups is not None:
@@ -659,7 +665,7 @@ def run_dominance(rows, groups, write):
     write("  %-10s %9s | %-20s | %-20s | %9s %13s"
           % ("baseline", "instances", "same |R|: < = >", "baseline more: < = >", "ours more",
              "no worse both"))
-    for name in LOCKED.BASELINE_FAMILY:
+    for name in locked:
         if not present(rows, name):
             write("  %-10s absent from the files" % name)
             continue
@@ -679,6 +685,41 @@ def run_dominance(rows, groups, write):
         if bins["excluded"]:
             write("  %-10s %d excluded instances not counted (status or HF > 0)"
                   % ("", len(bins["excluded"])))
+
+
+# ---------------------------------------------------------------- H4a, section 19.1
+
+def run_h4a(rows, groups, write, hypothesis="H4a"):
+    """r_c = |R|(c) / |R|(CUT-HIDE) per instance for each competitor that stops at the threshold, on
+    the rows of H2 (main group, report-only datasets left out), judged on the median with the
+    thresholds of H3 (section 19.1)."""
+    write("")
+    write("=" * 78)
+    write("%s  |R|(competitor) / |R|(%s): median >= %.2f more masks, <= %.2f the same"
+          % (hypothesis, LOCKED.OUR_METHOD, LOCKED.R_ABOVE_1, LOCKED.R_NEAR_1))
+    write("=" * 78)
+    rows = [r for r in rows if r["dataset"] not in LOCKED.REPORT_ONLY]
+    if groups is not None:
+        rows = [r for r in rows
+                if (groups.get((r["dataset"], r["gap"], r["sigma"])) or {}).get("group") == "main"]
+    write("  %-12s %9s %9s %9s %9s   %s" % ("competitor", "instances", "median", "max", "fewer", "verdict"))
+    for name in LOCKED.STOP_FAMILY:
+        if not present(rows, name):
+            write("  %-12s absent from the files" % name)
+            continue
+        bins = pair_up(rows, name, "lost_rel")
+        entries = bins["tested"] + bins["baseline more"] + bins["ours more"]
+        ratios = [e[3]["mask_count"] / e[2]["mask_count"] for e in entries if e[2]["mask_count"] > 0]
+        if not ratios:
+            write("  %-12s no instance to compare" % name)
+            continue
+        med = float(np.median(ratios))
+        verdict = ("more masks" if med >= LOCKED.R_ABOVE_1
+                   else "the same number of masks" if med <= LOCKED.R_NEAR_1 else "no conclusion")
+        write("  %-12s %9d %9.4f %9.4f %9d   %s" % (name, len(ratios), med, max(ratios), len(bins["ours more"]),
+                                                  verdict))
+        if bins["excluded"]:
+            write("  %-12s %d excluded instances not counted (status or HF > 0)" % ("", len(bins["excluded"])))
 
 
 # ---------------------------------------------------------------- H3
@@ -763,7 +804,8 @@ def run_h3(rows, groups, write, descriptive=False):
 
 # ---------------------------------------------------------------- equivalence, section 4
 
-def run_equivalence(rows, write, groups=None):
+def run_equivalence(rows, write, groups=None, locked=None, label="tier (b) baseline"):
+    locked = LOCKED.BASELINE_FAMILY if locked is None else locked
     write("")
     write("=" * 78)
     write("Equivalence (section 4): Hodges-Lehmann with a %.0f%% confidence interval, against the"
@@ -779,12 +821,12 @@ def run_equivalence(rows, write, groups=None):
               % (", ".join(LOCKED.REPORT_ONLY), len(rows)))
     else:
         write("  PROBE: no group filter (--skip-groups): %d rows" % len(rows))
-    family = [b for b in LOCKED.BASELINE_FAMILY if present(rows, b)]
+    family = [b for b in locked if present(rows, b)]
     for quantity, margin in LOCKED.EQUIVALENCE_MARGIN.items():
         write("")
         write("-- %s, equivalence margin +/- %.2f" % (quantity, margin))
         if not family:
-            write("   no tier (b) baseline")
+            write("   no %s" % label)
             continue
         write("   %-12s %5s %10s %22s   %s" % ("baseline", "n", "HL", "CI", "verdict"))
         for name in family:
@@ -882,6 +924,8 @@ def main(argv=None):
     skipped = []
     secondary = []
     fronts = []
+    stop_files = []
+    stop_raw = []
     for path in sc3_files:
         comments, rows = read_csv(path)
         header = next((c for c in comments if c.startswith("# run ")), "# run ?")
@@ -891,6 +935,18 @@ def main(argv=None):
         if re.search(r"[{ ]methods=%s[,}]" % re.escape(SECONDARY_METHOD), options):
             secondary.append(os.path.basename(path))
             write("  %-58s %d rows  SECONDARY (section 17), not read here"
+                  % (os.path.basename(path), len(rows)))
+            continue
+        # Section 19.1: the batch of the competitors that stop at the threshold enters H4 only, never
+        # the rows or the counts of H2, H2-R and H3.
+        if re.search(r"[{ ]methods=%s[,}]" % re.escape(LOCKED.STOP_METHODS), options):
+            if [c for c in REQUIRED_COLUMNS if not rows or c not in rows[0]]:
+                skipped.append((os.path.basename(path), ["columns"]))
+                write("  %-58s %d rows  SKIPPED (missing columns)" % (os.path.basename(path), len(rows)))
+                continue
+            stop_files.append(os.path.basename(path))
+            stop_raw.extend(rows)
+            write("  %-58s %d rows  STOP-AT-THRESHOLD BATCH (section 19.1), read for H4 only"
                   % (os.path.basename(path), len(rows)))
             continue
         # The Pareto-front batch runs with --methods=none: its SC3 file holds no method row by design
@@ -917,6 +973,10 @@ def main(argv=None):
         write("")
         write("  %d files of the Pareto-front batch hold no method row; the fronts are read by "
               "tools/pareto_table.py." % len(fronts))
+    if stop_files:
+        write("")
+        write("  %d files of the stop-at-threshold batch (section 19.1) are read for H4 only."
+              % len(stop_files))
     if skipped:
         write("")
         write("  %d files skipped because an old version of the code wrote them. If they hold"
@@ -971,6 +1031,27 @@ def main(argv=None):
         run_h3(scope_rows, groups, write, descriptive=(scope == "repeated"))
         run_equivalence(scope_rows, write, None if args.skip_groups else groups)
         all_valid = all_valid and h2_valid and groups_valid
+
+    if stop_raw:
+        stop_rows = merge_reruns(stop_raw, write)
+        for scope, profile, h4b, h4a in (("distinct", "pool", "H4b", "H4a"), ("repeated", "repeated", "H4b-R", "H4a-R")):
+            scope_rows = [r for r in by_scope[scope] if r["method_key"] == LOCKED.OUR_METHOD]
+            scope_rows += [r for r in stop_rows if scope_of_set(r["sensitive_set"]) == scope]
+            groups = {}
+            if sc2_files and not args.skip_groups:
+                groups = group_configurations(sc2_files, profile=profile)
+            use_groups = None if args.skip_groups else groups
+            write("")
+            write("#" * 78)
+            write("Section 19.1, %s-item scope: competitors that stop at the threshold (%s, %s)"
+                  % (scope, h4a, h4b))
+            write("#" * 78)
+            run_h4a(scope_rows, use_groups, write, h4a)
+            h4_valid = run_h2(scope_rows, write, use_groups, h4b, LOCKED.STOP_FAMILY,
+                              "competitors that stop at the threshold")
+            run_dominance(scope_rows, use_groups, write, LOCKED.STOP_FAMILY, "competitor that stops at the threshold")
+            run_equivalence(scope_rows, write, use_groups, LOCKED.STOP_FAMILY, "competitor that stops at the threshold")
+            all_valid = all_valid and h4_valid
 
     write("")
     write("=" * 78)

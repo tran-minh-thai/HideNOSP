@@ -1,6 +1,14 @@
 """Summarise the exact Pareto fronts of SC3 --pareto (preregistration section 11, point 6).
 
-Every SC3PARETO_<stamp>.csv is paired with the SC3_<stamp>.csv of the same run. For every
+Every SC3PARETO_<stamp>.csv is paired with the SC3 file that holds the method rows of the same cell.
+The front batch runs with --methods=none, so the SC3_<stamp>.csv of its own run has no method row; its
+pair is then the method-batch file of the same cell and machine (the options of tools/sc3_commands.py
+that name a cell agree, apart from methods and pareto). A front written in one run with the methods
+(an older layout) is paired with the SC3 file of its own run. Several method files of one cell must
+hold the same rows. All fronts read come from one machine; --machine=NAME picks it when the files
+come from more than one.
+
+For every
 configuration it prints, over the sensitive sets: the number of vertices of the front, the range of
 |R| / |R|* along it, Lost_rel at its first vertex (the standard CUT-HIDE) and its least Lost_rel, and,
 for every other method in the SC3 file, the share of sets in which some vertex of the front
@@ -11,13 +19,16 @@ It is descriptive: the tests of the preregistration live in tools/preregistered_
 It also checks that the first vertex is the cut-hide row of the same set (same |R| and Lost): the
 two are computed by the same exact program, so a difference is an error, not a result.
 
-Run: python tools/pareto_table.py <directory or SC3PARETO file> [...]
+Run: python tools/pareto_table.py [--machine=NAME] <directory or SC3PARETO file> [...]
 """
 import csv
 import io
 import os
 import statistics
 import sys
+
+import sc3_commands
+from lower_bound_table import header_options, machine_of, one_machine
 
 
 def read(path):
@@ -28,8 +39,43 @@ def read(path):
     return comments, list(csv.DictReader(lines))
 
 
-def pair_files(paths):
-    """(front file, SC3 file) pairs; a front file without its SC3 file is an error."""
+def same_cell(front_options, options):
+    """Whether a method-batch file names the cell of a front file: every option that names a cell
+    agrees, apart from methods and pareto."""
+    cell = dict((k, front_options.get(k)) for k in sc3_commands.IDENTITY)
+    cell["dataset"] = (cell["dataset"] or "").replace("\\", "/")
+    cell["methods"] = sc3_commands.METHODS
+    cell["pareto"] = "false"
+    return sc3_commands.matches(cell, options)
+
+
+def method_file(front, machine):
+    """The SC3 file with the method rows of the cell of a front file, or (None, reason)."""
+    own = os.path.join(os.path.dirname(front), os.path.basename(front).replace("SC3PARETO_", "SC3_", 1))
+    if not os.path.isfile(own):
+        return None, "no SC3 file of the same run (%s)" % own
+    front_options = header_options(front)
+    if front_options.get("methods") != "none":
+        return own, None   # the older layout: methods and front in one run
+    directory = os.path.dirname(front)
+    candidates = []
+    for name in sorted(os.listdir(directory)):
+        path = os.path.join(directory, name)
+        if not (name.startswith("SC3_") and name.endswith(".csv")) or path == own:
+            continue
+        if machine_of(path) == machine and same_cell(front_options, header_options(path)):
+            candidates.append(path)
+    if not candidates:
+        return None, "no method-batch SC3 file of the same cell on %s" % machine
+    rows = [read(p)[1] for p in candidates]
+    if any(r != rows[0] for r in rows[1:]):
+        return None, "%d method-batch files of the same cell hold different rows: %s" % (
+            len(candidates), ", ".join(os.path.basename(p) for p in candidates))
+    return candidates[0], None
+
+
+def pair_files(paths, machine=""):
+    """(front file, method file) pairs of one machine, and the problems found while pairing."""
     fronts = []
     for path in paths:
         if os.path.isdir(path):
@@ -39,13 +85,17 @@ def pair_files(paths):
             fronts.append(path)
         else:
             raise SystemExit("no such file or directory: " + path)
-    pairs = []
+    fronts, machine, refusal = one_machine(fronts, machine, "--machine", "SC3PARETO")
+    if refusal:
+        raise SystemExit(refusal)
+    pairs, problems = [], []
     for f in fronts:
-        main = os.path.join(os.path.dirname(f), os.path.basename(f).replace("SC3PARETO_", "SC3_", 1))
-        if not os.path.isfile(main):
-            raise SystemExit("%s has no SC3 file of the same run (%s)" % (f, main))
-        pairs.append((f, main))
-    return pairs
+        main, reason = method_file(f, machine)
+        if main is None:
+            problems.append("%s: %s" % (f, reason))
+        else:
+            pairs.append((f, main))
+    return pairs, problems
 
 
 # The Holm family of preregistration section 2, the baselines the totals are counted over.
@@ -61,11 +111,17 @@ def first_gap(rows):
 
 
 def main(argv):
-    pairs = pair_files(argv)
-    if not pairs:
+    machine = ""
+    paths = []
+    for a in argv:
+        if a.startswith("--machine="):
+            machine = a.split("=", 1)[1]
+        else:
+            paths.append(a)
+    pairs, problems = pair_files(paths, machine)
+    if not pairs and not problems:
         print("no SC3PARETO file", file=sys.stderr)
         return 1
-    problems = []
     totals = {}   # kind of sensitive pattern -> [pairs, dominated, tied]
     exceptions = []   # every pair neither dominated nor tied, with the best vertex it could meet
     print("| dataset | gap | sigma | sets | median vertices | max vertices | median max |R|/|R|* "
@@ -147,7 +203,7 @@ def main(argv):
             dataset, first["gap"], first["sigma"], sets, statistics.median(vertices), max(vertices),
             ("%.3f" % statistics.median(max_ratio)) if max_ratio else "-",
             statistics.median(first_lost), statistics.median(least_lost), shares,
-            os.path.basename(front_path)))
+            "%s; %s" % (os.path.basename(front_path), os.path.basename(main_path))))
     print()
     for kind in sorted(totals):
         pairs_, dom, tie = totals[kind]

@@ -1,0 +1,392 @@
+# Output of tools/pareto_table.py (descriptive; preregistration section 11, point 6), run as
+#   python tools/pareto_table.py --machine=ADMIN-PC results-invariant > <this file>
+# Each front of the Pareto-front batch is paired with the method-batch SC3 file of the same cell (files column).
+# on the files of ADMIN-PC (i7-10750H, 64 GB, Windows 11, JDK 25.0.4.1+1), merged into main in 4cc375e from the
+# campaign branch campaign-admin-pc (last cell 6724791). Run from the repository root with the tree clean at 4cc375e.
+
+| dataset | gap | sigma | sets | median vertices | max vertices | median max |R|/|R|* | median Lost_rel, first vertex | median least Lost_rel | methods dominated by the front (share of sets) | files |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---|---|
+| dna_mt745584 | [0,1] | 4000 | 2 | 1.0 | 1 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/2 (+2 tied), cut-hide-rw-ls 0/2 (+2 tied), dbsh 2/2, hha 2/2, sbsh-r1 2/2, sbsh-rmax 2/2 | SC3PARETO_20261103-031322-238_ADMIN-PC_f6a9c66db752_s2026.csv; SC3_20261101-141934-108_ADMIN-PC_bb27cdbf162a_s2026.csv |
+| dna_mt745584 | [0,1] | 2500 | 3 | 19.0 | 34 | 1.164 | 0.0000 | 0.0000 | cut-hide-rw 0/3 (+3 tied), cut-hide-rw-ls 0/3 (+3 tied), dbsh 3/3, hha 3/3, sbsh-r1 3/3, sbsh-rmax 3/3 | SC3PARETO_20261103-031332-201_ADMIN-PC_86d77a5e8bcc_s2026.csv; SC3_20261101-141945-200_ADMIN-PC_39591cdcd968_s2026.csv |
+| fifa | [0,1] | 3000 | 3 | 1.0 | 1 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/3 (+3 tied), cut-hide-rw-ls 0/3 (+3 tied), dbsh 3/3, hha 3/3, sbsh-r1 3/3, sbsh-rmax 3/3 | SC3PARETO_20261103-031349-842_ADMIN-PC_a882ecf1f5a8_s2026.csv; SC3_20261101-141959-260_ADMIN-PC_14ed99494d8e_s2026.csv |
+| fifa | [0,3] | 3000 | 3 | 1.0 | 1 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/3 (+3 tied), cut-hide-rw-ls 0/3 (+3 tied), dbsh 3/3, hha 3/3, sbsh-r1 3/3, sbsh-rmax 3/3 | SC3PARETO_20261103-031525-686_ADMIN-PC_8a64c3421482_s2026.csv; SC3_20261101-142139-091_ADMIN-PC_3d0a9d37ef40_s2026.csv |
+| dna_mt745584 | [0,3] | 4000 | 4 | 2.0 | 5 | 1.021 | 0.0000 | 0.0000 | cut-hide-rw 0/4 (+4 tied), cut-hide-rw-ls 0/4 (+4 tied), dbsh 4/4, hha 4/4, sbsh-r1 4/4, sbsh-rmax 4/4 | SC3PARETO_20261103-031728-361_ADMIN-PC_1d65298582a5_s2026.csv; SC3_20261101-142415-570_ADMIN-PC_f426b23ef561_s2026.csv |
+| bible | [0,1] | 2000 | 4 | 1.5 | 3 | 1.001 | 0.0000 | 0.0000 | cut-hide-rw 0/4 (+3 tied), cut-hide-rw-ls 0/4 (+3 tied), dbsh 3/4 (+1 tied), hha 3/4 (+1 tied), sbsh-r1 3/4 (+1 tied), sbsh-rmax 3/4 (+1 tied) | SC3PARETO_20261103-031739-289_ADMIN-PC_e6e0f6d5bc93_s2026.csv; SC3_20261101-142430-072_ADMIN-PC_ac3248a3de48_s2026.csv |
+| leviathan | [0,1] | 500 | 4 | 1.0 | 1 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/4 (+4 tied), cut-hide-rw-ls 0/4 (+4 tied), dbsh 4/4, hha 4/4, sbsh-r1 4/4, sbsh-rmax 4/4 | SC3PARETO_20261103-032238-854_ADMIN-PC_04412c540e61_s2026.csv; SC3_20261101-143005-280_ADMIN-PC_3653c67ed1f8_s2026.csv |
+| protein_sdb1 | [0,1] | 800 | 4 | 9.0 | 19 | 1.084 | 0.0000 | 0.0000 | cut-hide-rw 0/4 (+4 tied), cut-hide-rw-ls 0/4 (+4 tied), dbsh 4/4, hha 4/4, sbsh-r1 4/4, sbsh-rmax 4/4 | SC3PARETO_20261103-032331-851_ADMIN-PC_a78c758479e4_s2026.csv; SC3_20261101-143106-552_ADMIN-PC_4419d8fd0b38_s2026.csv |
+| protein_sdb4 | [0,1] | 900 | 5 | 12.0 | 18 | 1.071 | 0.0000 | 0.0000 | cut-hide-rw 0/5 (+5 tied), cut-hide-rw-ls 0/5 (+5 tied), dbsh 5/5, hha 5/5, sbsh-r1 5/5, sbsh-rmax 5/5 | SC3PARETO_20261103-032345-554_ADMIN-PC_c37f79fb49fc_s2026.csv; SC3_20261101-143125-042_ADMIN-PC_8977889d1349_s2026.csv |
+| dna_mt745584 | [0,3] | 4000 | 6 | 10.0 | 66 | 1.252 | 0.0417 | 0.0417 | cut-hide-rw 0/6 (+6 tied), cut-hide-rw-ls 0/6 (+6 tied), dbsh 6/6, hha 6/6, sbsh-r1 6/6, sbsh-rmax 6/6 | SC3PARETO_20261103-032401-653_ADMIN-PC_b8c16563a6c8_s2026.csv; SC3_20261101-143147-725_ADMIN-PC_8d0a8600ae3b_s2026.csv |
+| dna_mt745584 | [0,1] | 2500 | 9 | 1.0 | 2 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/9 (+9 tied), cut-hide-rw-ls 0/9 (+9 tied), dbsh 9/9, hha 8/9 (+1 tied), sbsh-r1 9/9, sbsh-rmax 9/9 | SC3PARETO_20261103-032439-975_ADMIN-PC_f5cae2f61f42_s2026.csv; SC3_20261101-143211-039_ADMIN-PC_80500abd2417_s2026.csv |
+| bpi2012 | [0,1] | 4000 | 11 | 1.0 | 2 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/11 (+10 tied), cut-hide-rw-ls 0/11 (+10 tied), dbsh 11/11, hha 11/11, sbsh-r1 11/11, sbsh-rmax 11/11 | SC3PARETO_20261103-032451-012_ADMIN-PC_e36094e7f39e_s2026.csv; SC3_20261101-143228-570_ADMIN-PC_84c6e09b5f15_s2026.csv |
+| protein_sdb1 | [0,1] | 400 | 11 | 7.0 | 11 | 1.043 | 0.0000 | 0.0000 | cut-hide-rw 0/11 (+11 tied), cut-hide-rw-ls 0/11 (+11 tied), dbsh 11/11, hha 11/11, sbsh-r1 11/11, sbsh-rmax 11/11 | SC3PARETO_20261103-032523-639_ADMIN-PC_d2acedcb193f_s2026.csv; SC3_20261101-143420-854_ADMIN-PC_c440669d2264_s2026.csv |
+| protein_sdb4 | [0,1] | 500 | 11 | 8.0 | 13 | 1.027 | 0.0000 | 0.0000 | cut-hide-rw 0/11 (+11 tied), cut-hide-rw-ls 0/11 (+11 tied), dbsh 11/11, hha 11/11, sbsh-r1 11/11, sbsh-rmax 11/11 | SC3PARETO_20261103-032548-816_ADMIN-PC_e9cd9aa1d69f_s2026.csv; SC3_20261101-143525-312_ADMIN-PC_71b27fc294a6_s2026.csv |
+| leviathan | [0,3] | 500 | 13 | 9.0 | 51 | 1.066 | 0.0000 | 0.0000 | cut-hide-rw 0/13 (+13 tied), cut-hide-rw-ls 0/13 (+13 tied), dbsh 13/13, hha 13/13, sbsh-r1 13/13, sbsh-rmax 13/13 | SC3PARETO_20261103-032617-279_ADMIN-PC_787c85040bd6_s2026.csv; SC3_20261101-143640-076_ADMIN-PC_8df3952be3ef_s2026.csv |
+| protein_sdb4 | [0,3] | 900 | 13 | 28.0 | 61 | 1.086 | 0.0000 | 0.0000 | cut-hide-rw 0/13 (+13 tied), cut-hide-rw-ls 0/13 (+13 tied), dbsh 13/13, hha 13/13, sbsh-r1 13/13, sbsh-rmax 13/13 | SC3PARETO_20261103-032738-769_ADMIN-PC_be268046e99d_s2026.csv; SC3_20261101-143828-109_ADMIN-PC_5bca2b9b1d9c_s2026.csv |
+| bpi2012 | [0,3] | 4000 | 14 | 1.5 | 2 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/14 (+14 tied), cut-hide-rw-ls 0/14 (+11 tied), dbsh 14/14, hha 14/14, sbsh-r1 10/14 (+2 tied), sbsh-rmax 10/14 (+2 tied) | SC3PARETO_20261103-032822-241_ADMIN-PC_aafb12753ace_s2026.csv; SC3_20261101-144015-120_ADMIN-PC_e50a49669719_s2026.csv |
+| protein_sdb1 | [0,3] | 800 | 15 | 33.0 | 54 | 1.151 | 0.0000 | 0.0000 | cut-hide-rw 0/15 (+15 tied), cut-hide-rw-ls 0/15 (+15 tied), dbsh 15/15, hha 15/15, sbsh-r1 15/15, sbsh-rmax 15/15 | SC3PARETO_20261103-032929-930_ADMIN-PC_d657ef2512b2_s2026.csv; SC3_20261101-144424-746_ADMIN-PC_932a1b93292b_s2026.csv |
+| dna_mt745584 | [0,10] | 4000 | 19 | 179.0 | 438 | 1.771 | 0.0845 | 0.0694 | cut-hide-rw 0/19 (+14 tied), cut-hide-rw-ls 0/19 (+11 tied), dbsh 19/19, hha 19/19, sbsh-r1 18/19 (+1 tied), sbsh-rmax 18/19 (+1 tied) | SC3PARETO_20261103-033011-419_ADMIN-PC_f691ad0c398d_s2026.csv; SC3_20261101-144557-192_ADMIN-PC_38214e9502ba_s2026.csv |
+| bible | [0,3] | 2000 | 19 | 37.0 | 117 | 1.221 | 0.0000 | 0.0000 | cut-hide-rw 0/19 (+16 tied), cut-hide-rw-ls 0/19 (+16 tied), dbsh 18/19 (+1 tied), hha 18/19 (+1 tied), sbsh-r1 19/19, sbsh-rmax 19/19 | SC3PARETO_20261103-034159-796_ADMIN-PC_45bf8459257a_s2026.csv; SC3_20261101-144808-329_ADMIN-PC_546344e25625_s2026.csv |
+| dna_mt745584 | [0,3] | 2500 | 20 | 85.5 | 735 | 1.530 | 0.0000 | 0.0000 | cut-hide-rw 0/20 (+11 tied), cut-hide-rw-ls 0/20 (+11 tied), dbsh 20/20, hha 19/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261103-035508-263_ADMIN-PC_d6850e4966e7_s2026.csv; SC3_20261101-145828-577_ADMIN-PC_d3373d3d8fed_s2026.csv |
+| sepsis | [0,1] | 300 | 20 | 37.5 | 115 | 1.587 | 0.0285 | 0.0053 | cut-hide-rw 0/20 (+17 tied), cut-hide-rw-ls 0/20 (+17 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261103-040206-610_ADMIN-PC_358ae3e85274_s2026.csv; SC3_20261101-145955-696_ADMIN-PC_bb26a930be36_s2026.csv |
+| msnbc | [0,1] | 5000 | 20 | 1.0 | 1 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/20 (+17 tied), cut-hide-rw-ls 0/20 (+17 tied), dbsh 11/20 (+8 tied), hha 11/20 (+8 tied), sbsh-r1 9/20 (+10 tied), sbsh-rmax 9/20 (+10 tied) | SC3PARETO_20261103-040233-157_ADMIN-PC_498afadf95a5_s2026.csv; SC3_20261101-150024-836_ADMIN-PC_ffbd5c740270_s2026.csv |
+| protein_sdb1 | [0,1] | 800 | 20 | 1.0 | 1 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/20 (+20 tied), cut-hide-rw-ls 0/20 (+20 tied), dbsh 15/20 (+5 tied), hha 11/20 (+9 tied), sbsh-r1 14/20 (+6 tied), sbsh-rmax 14/20 (+6 tied) | SC3PARETO_20261103-040411-783_ADMIN-PC_44728796c63b_s2026.csv; SC3_20261101-150750-103_ADMIN-PC_359a51c22f70_s2026.csv |
+| msnbc | [0,3] | 5000 | 20 | 6.5 | 759 | 1.016 | 0.0000 | 0.0000 | cut-hide-rw 0/20 (+16 tied), cut-hide-rw-ls 0/20 (+16 tied), dbsh 15/20 (+5 tied), hha 16/20 (+4 tied), sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261103-040430-303_ADMIN-PC_063136f605aa_s2026.csv; SC3_20261101-150827-941_ADMIN-PC_d099126198c3_s2026.csv |
+| protein_sdb4 | [0,1] | 900 | 20 | 1.0 | 3 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/20 (+20 tied), cut-hide-rw-ls 0/20 (+20 tied), dbsh 17/20 (+3 tied), hha 13/20 (+7 tied), sbsh-r1 16/20 (+4 tied), sbsh-rmax 16/20 (+4 tied) | SC3PARETO_20261103-072353-079_ADMIN-PC_300ec7c68f23_s2026.csv; SC3_20261101-152000-897_ADMIN-PC_a5a3b8308310_s2026.csv |
+| dna_mt745584 | [0,3] | 2500 | 20 | 222.0 | 868 | 2.817 | 0.0227 | 0.0152 | cut-hide-rw 0/20 (+19 tied), cut-hide-rw-ls 0/20 (+19 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261103-072411-884_ADMIN-PC_3a8e3cbe419c_s2026.csv; SC3_20261101-152049-367_ADMIN-PC_a56147a46860_s2026.csv |
+| dna_mt745584 | [0,10] | 4000 | 20 | 301.0 | 930 | 2.607 | 0.1554 | 0.1282 | cut-hide-rw 0/20 (+18 tied), cut-hide-rw-ls 0/20 (+17 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261103-074031-185_ADMIN-PC_726e5c47e171_s2026.csv; SC3_20261101-152226-921_ADMIN-PC_d6ced14b21da_s2026.csv |
+| dna_mt745584 | [0,10] | 2500 | 20 | 645.5 | 1145 | 3.126 | 0.0433 | 0.0289 | cut-hide-rw 0/20 (+11 tied), cut-hide-rw-ls 0/20 (+9 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261103-100049-274_ADMIN-PC_90866b44a380_s2026.csv; SC3_20261101-152718-210_ADMIN-PC_f8d056f27eff_s2026.csv |
+| msnbc | [0,10] | 5000 | 20 | 34.0 | 2970 | 1.320 | 0.0043 | 0.0043 | cut-hide-rw 0/20 (+16 tied), cut-hide-rw-ls 0/20 (+15 tied), dbsh 19/20 (+1 tied), hha 19/20 (+1 tied), sbsh-r1 17/20 (+1 tied), sbsh-rmax 17/20 (+1 tied) | SC3PARETO_20261103-115131-173_ADMIN-PC_2bea9c533067_s2026.csv; SC3_20261101-153619-819_ADMIN-PC_3aceee26ba79_s2026.csv |
+| bpi2013 | [0,1] | 1000 | 20 | 25.0 | 210 | 1.204 | 0.0096 | 0.0000 | cut-hide-rw 0/20 (+14 tied), cut-hide-rw-ls 0/20 (+14 tied), dbsh 18/20 (+2 tied), hha 18/20 (+1 tied), sbsh-r1 18/20 (+2 tied), sbsh-rmax 18/20 (+2 tied) | SC3PARETO_20261103-192835-664_ADMIN-PC_2b6ecd2d35e7_s2026.csv; SC3_20261101-154943-968_ADMIN-PC_3ac369587a09_s2026.csv |
+| msnbc | [0,1] | 5000 | 20 | 40.5 | 1195 | 1.883 | 0.0095 | 0.0000 | cut-hide-rw 0/20 (+18 tied), cut-hide-rw-ls 0/20 (+18 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261103-193449-662_ADMIN-PC_aac5e77b0384_s2026.csv; SC3_20261101-155151-744_ADMIN-PC_242a14852c29_s2026.csv |
+| protein_sdb4 | [0,3] | 500 | 20 | 21.5 | 67 | 1.276 | 0.0021 | 0.0000 | cut-hide-rw 0/20 (+19 tied), cut-hide-rw-ls 0/20 (+18 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261104-011304-914_ADMIN-PC_2eccec9c0a52_s2026.csv; SC3_20261101-155911-839_ADMIN-PC_8da9a0eae197_s2026.csv |
+| msnbc | [0,1] | 2000 | 20 | 1.0 | 1 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/20 (+17 tied), cut-hide-rw-ls 0/20 (+17 tied), dbsh 14/20 (+6 tied), hha 13/20 (+7 tied), sbsh-r1 10/20 (+10 tied), sbsh-rmax 10/20 (+10 tied) | SC3PARETO_20261104-011426-606_ADMIN-PC_0d951697dd48_s2026.csv; SC3_20261101-160337-145_ADMIN-PC_156f415cff11_s2026.csv |
+| protein_sdb1 | [0,3] | 400 | 20 | 29.5 | 101 | 1.457 | 0.0019 | 0.0000 | cut-hide-rw 0/20 (+18 tied), cut-hide-rw-ls 0/20 (+17 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261104-011647-198_ADMIN-PC_a17ba28465e3_s2026.csv; SC3_20261101-161218-034_ADMIN-PC_fea35359869e_s2026.csv |
+| bpi2013 | [0,3] | 1000 | 20 | 62.5 | 417 | 1.450 | 0.0237 | 0.0079 | cut-hide-rw 0/20 (+12 tied), cut-hide-rw-ls 0/20 (+11 tied), dbsh 20/20, hha 20/20, sbsh-r1 19/20, sbsh-rmax 19/20 | SC3PARETO_20261104-011811-839_ADMIN-PC_01eb821e0597_s2026.csv; SC3_20261101-161628-060_ADMIN-PC_f2128fa68da9_s2026.csv |
+| bpi2013 | [0,1] | 500 | 20 | 6.5 | 217 | 1.136 | 0.0052 | 0.0026 | cut-hide-rw 0/20 (+10 tied), cut-hide-rw-ls 0/20 (+10 tied), dbsh 18/20 (+2 tied), hha 20/20, sbsh-r1 18/20 (+2 tied), sbsh-rmax 18/20 (+2 tied) | SC3PARETO_20261104-013039-613_ADMIN-PC_77a1a855b477_s2026.csv; SC3_20261101-162015-034_ADMIN-PC_d348615dea2b_s2026.csv |
+| msnbc | [0,3] | 5000 | 20 | 309.0 | 1586 | 1.517 | 0.0174 | 0.0029 | cut-hide-rw 0/20 (+18 tied), cut-hide-rw-ls 0/20 (+18 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261104-013328-003_ADMIN-PC_18fa3121805c_s2026.csv; SC3_20261101-162247-856_ADMIN-PC_688ce7eb202f_s2026.csv |
+| sepsis | [0,3] | 300 | 20 | 55.5 | 158 | 1.919 | 0.0066 | 0.0044 | cut-hide-rw 0/20 (+16 tied), cut-hide-rw-ls 0/20 (+15 tied), dbsh 19/20 (+1 tied), hha 19/20 (+1 tied), sbsh-r1 19/20 (+1 tied), sbsh-rmax 19/20 (+1 tied) | SC3PARETO_20261104-094819-932_ADMIN-PC_afec451e792b_s2026.csv; SC3_20261101-163408-453_ADMIN-PC_e49ed6cdb0a0_s2026.csv |
+| msnbc | [0,10] | 5000 | 20 | 280.0 | 720 | 1.466 | 0.0130 | 0.0086 | cut-hide-rw 0/20 (+12 tied), cut-hide-rw-ls 0/20 (+12 tied), dbsh 20/20, hha 20/20, sbsh-r1 19/20, sbsh-rmax 19/20 | SC3PARETO_20261104-094931-942_ADMIN-PC_5ea2c959fe5e_s2026.csv; SC3_20261101-163541-364_ADMIN-PC_2d6e89928200_s2026.csv |
+| protein_sdb1 | [0,3] | 800 | 20 | 4.5 | 49 | 1.067 | 0.0000 | 0.0000 | cut-hide-rw 0/20 (+20 tied), cut-hide-rw-ls 0/20 (+20 tied), dbsh 19/20 (+1 tied), hha 14/20 (+6 tied), sbsh-r1 18/20 (+2 tied), sbsh-rmax 18/20 (+2 tied) | SC3PARETO_20261104-163022-264_ADMIN-PC_0b7b461c9ea2_s2026.csv; SC3_20261101-165436-130_ADMIN-PC_65747c1b06e6_s2026.csv |
+| protein_sdb4 | [0,1] | 500 | 20 | 1.0 | 1 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/20 (+20 tied), cut-hide-rw-ls 0/20 (+20 tied), dbsh 18/20 (+2 tied), hha 15/20 (+5 tied), sbsh-r1 19/20 (+1 tied), sbsh-rmax 19/20 (+1 tied) | SC3PARETO_20261104-163100-687_ADMIN-PC_bd9b763a3567_s2026.csv; SC3_20261101-165636-383_ADMIN-PC_50df96d9d548_s2026.csv |
+| protein_sdb4 | [0,3] | 900 | 20 | 7.0 | 43 | 1.119 | 0.0000 | 0.0000 | cut-hide-rw 0/20 (+20 tied), cut-hide-rw-ls 0/20 (+20 tied), dbsh 19/20 (+1 tied), hha 15/20 (+5 tied), sbsh-r1 19/20 (+1 tied), sbsh-rmax 19/20 (+1 tied) | SC3PARETO_20261104-163133-629_ADMIN-PC_6a6c02ff177a_s2026.csv; SC3_20261101-165831-920_ADMIN-PC_4b897bb2be42_s2026.csv |
+| protein_sdb1 | [0,1] | 400 | 20 | 1.0 | 1 | 1.000 | 0.0000 | 0.0000 | cut-hide-rw 0/20 (+20 tied), cut-hide-rw-ls 0/20 (+20 tied), dbsh 17/20 (+3 tied), hha 11/20 (+9 tied), sbsh-r1 16/20 (+4 tied), sbsh-rmax 16/20 (+4 tied) | SC3PARETO_20261104-163218-094_ADMIN-PC_b9045e511898_s2026.csv; SC3_20261101-170106-517_ADMIN-PC_4e4bfd9e6539_s2026.csv |
+| msnbc | [0,1] | 2000 | 20 | 83.0 | 657 | 1.715 | 0.0065 | 0.0000 | cut-hide-rw 0/20 (+17 tied), cut-hide-rw-ls 0/20 (+17 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261104-163246-979_ADMIN-PC_fd0206181c90_s2026.csv; SC3_20261101-170241-591_ADMIN-PC_b112c0a51579_s2026.csv |
+| bpi2013 | [0,3] | 500 | 20 | 53.0 | 512 | 1.506 | 0.0123 | 0.0062 | cut-hide-rw 0/20 (+10 tied), cut-hide-rw-ls 0/20 (+10 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261104-170654-963_ADMIN-PC_22262ae1f425_s2026.csv; SC3_20261101-171151-617_ADMIN-PC_c10f798f1aac_s2026.csv |
+| dna_mt745584 | [0,10] | 2500 | 20 | 703.0 | 1333 | 3.698 | 0.0573 | 0.0310 | cut-hide-rw 0/20 (+19 tied), cut-hide-rw-ls 0/20 (+17 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261104-172622-137_ADMIN-PC_761111f302b5_s2026.csv; SC3_20261101-171603-038_ADMIN-PC_173d4d1bf70c_s2026.csv |
+| msnbc | [0,3] | 2000 | 20 | 209.0 | 1748 | 1.430 | 0.0045 | 0.0000 | cut-hide-rw 0/20 (+14 tied), cut-hide-rw-ls 0/20 (+14 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261104-214957-636_ADMIN-PC_5fbad4dfa3b0_s2026.csv; SC3_20261101-172642-663_ADMIN-PC_32fe4b26afe8_s2026.csv |
+| protein_sdb4 | [0,3] | 500 | 20 | 1.5 | 144 | 1.009 | 0.0000 | 0.0000 | cut-hide-rw 0/20 (+18 tied), cut-hide-rw-ls 0/20 (+17 tied), dbsh 18/20 (+2 tied), hha 16/20 (+4 tied), sbsh-r1 19/20 (+1 tied), sbsh-rmax 19/20 (+1 tied) | SC3PARETO_20261104-234741-560_ADMIN-PC_596743b69cdf_s2026.csv; SC3_20261101-174455-761_ADMIN-PC_939c9207ef15_s2026.csv |
+| protein_sdb1 | [0,3] | 400 | 20 | 7.5 | 128 | 1.079 | 0.0000 | 0.0000 | cut-hide-rw 0/20 (+15 tied), cut-hide-rw-ls 0/20 (+15 tied), dbsh 20/20, hha 15/20 (+5 tied), sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261104-234906-207_ADMIN-PC_a40343beef57_s2026.csv; SC3_20261101-175009-153_ADMIN-PC_a000dac18171_s2026.csv |
+| msnbc | [0,1] | 1000 | 20 | 60.5 | 312 | 1.196 | 0.0015 | 0.0000 | cut-hide-rw 0/20 (+19 tied), cut-hide-rw-ls 0/20 (+18 tied), dbsh 20/20, hha 19/20 (+1 tied), sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261104-235032-818_ADMIN-PC_33a41113a7c8_s2026.csv; SC3_20261101-175515-267_ADMIN-PC_530bb5ebde04_s2026.csv |
+| msnbc | [0,10] | 2000 | 20 | 333.5 | 2446 | 1.720 | 0.0022 | 0.0011 | cut-hide-rw 0/20 (+12 tied), cut-hide-rw-ls 0/20 (+11 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261105-000045-363_ADMIN-PC_d700792cc660_s2026.csv; SC3_20261101-181020-844_ADMIN-PC_621a1fde29d5_s2026.csv |
+| msnbc | [0,3] | 1000 | 20 | 158.0 | 4441 | 1.482 | 0.0022 | 0.0000 | cut-hide-rw 0/20 (+15 tied), cut-hide-rw-ls 0/20 (+15 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 20/20 | SC3PARETO_20261105-033349-811_ADMIN-PC_a384bb24055f_s2026.csv; SC3_20261101-184341-908_ADMIN-PC_ceb9ebf37eda_s2026.csv |
+| msnbc | [0,10] | 1000 | 20 | 307.0 | 1271 | 2.031 | 0.0028 | 0.0006 | cut-hide-rw 0/20 (+10 tied), cut-hide-rw-ls 0/20 (+9 tied), dbsh 20/20, hha 20/20, sbsh-r1 20/20, sbsh-rmax 19/20 | SC3PARETO_20261105-125018-993_ADMIN-PC_f5deb550ccae_s2026.csv; SC3_20261101-192253-325_ADMIN-PC_467788e8123c_s2026.csv |
+
+distinct-item sets: 1248 pairs of a Holm-family baseline and a set: 1049 dominated, 190 tied, 9 not dominated
+repeated-item sets: 2164 pairs of a Holm-family baseline and a set: 2126 dominated, 28 tied, 10 not dominated
+
+Pairs neither dominated nor tied (every method):
+- repeated bible [0,1] sigma 2000, cut-hide-rw-ls, set [[10, 46, 10]] (p90): |R| 5395, Lost_rel 0.0000; front |R| 5395..5407, best Lost_rel within |R| <= 5395: 0.0130
+- repeated bible [0,1] sigma 2000, cut-hide-rw, set [[10, 46, 10]] (p90): |R| 5395, Lost_rel 0.0000; front |R| 5395..5407, best Lost_rel within |R| <= 5395: 0.0130
+- repeated bpi2012 [0,1] sigma 4000, cut-hide-rw-ls, set [[12, 15, 21, 21]] (p10): |R| 587, Lost_rel 0.0000; front |R| 587..939, best Lost_rel within |R| <= 587: 0.0152
+- repeated bpi2012 [0,1] sigma 4000, cut-hide-rw, set [[12, 15, 21, 21]] (p10): |R| 587, Lost_rel 0.0000; front |R| 587..939, best Lost_rel within |R| <= 587: 0.0152
+- repeated bpi2012 [0,3] sigma 4000, cut-hide-rw-ls, set [[12, 15, 21, 21]] (p10): |R| 778, Lost_rel 0.0000; front |R| 778..1556, best Lost_rel within |R| <= 778: 0.0146
+- repeated bpi2012 [0,3] sigma 4000, sbsh-r1, set [[12, 15, 21, 21]] (p10): |R| 778, Lost_rel 0.0000; front |R| 778..1556, best Lost_rel within |R| <= 778: 0.0146
+- repeated bpi2012 [0,3] sigma 4000, sbsh-rmax, set [[12, 15, 21, 21]] (p10): |R| 778, Lost_rel 0.0000; front |R| 778..1556, best Lost_rel within |R| <= 778: 0.0146
+- repeated bpi2012 [0,3] sigma 4000, cut-hide-rw-ls, set [[14, 12, 21, 21]] (p30): |R| 778, Lost_rel 0.0000; front |R| 778..1556, best Lost_rel within |R| <= 778: 0.0073
+- repeated bpi2012 [0,3] sigma 4000, cut-hide-rw-ls, set [[14, 15, 21, 21]] (p30): |R| 778, Lost_rel 0.0000; front |R| 778..1556, best Lost_rel within |R| <= 778: 0.0073
+- repeated bpi2012 [0,3] sigma 4000, sbsh-r1, set [[14, 15, 21, 21]] (p30): |R| 778, Lost_rel 0.0000; front |R| 778..1556, best Lost_rel within |R| <= 778: 0.0073
+- repeated bpi2012 [0,3] sigma 4000, sbsh-rmax, set [[14, 15, 21, 21]] (p30): |R| 778, Lost_rel 0.0000; front |R| 778..1556, best Lost_rel within |R| <= 778: 0.0073
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw-ls, set [[3, 1, 4]] (p30): |R| 136, Lost_rel 0.0263; front |R| 136..208, best Lost_rel within |R| <= 136: 0.0526
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw-ls, set [[2, 1]] (p50): |R| 597, Lost_rel 0.0685; front |R| 597..1382, best Lost_rel within |R| <= 597: 0.0959
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw, set [[2, 1]] (p50): |R| 597, Lost_rel 0.0822; front |R| 597..1382, best Lost_rel within |R| <= 597: 0.0959
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw-ls, set [[1, 2]] (p70): |R| 685, Lost_rel 0.1250; front |R| 685..1449, best Lost_rel within |R| <= 685: 0.1389
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw, set [[1, 2]] (p70): |R| 685, Lost_rel 0.1250; front |R| 685..1449, best Lost_rel within |R| <= 685: 0.1389
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw-ls, set [[3, 1]] (p70): |R| 735, Lost_rel 0.1286; front |R| 735..1581, best Lost_rel within |R| <= 735: 0.1429
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw, set [[3, 1]] (p70): |R| 735, Lost_rel 0.1286; front |R| 735..1581, best Lost_rel within |R| <= 735: 0.1429
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw-ls, set [[1, 3]] (p70): |R| 778, Lost_rel 0.1029; front |R| 778..1626, best Lost_rel within |R| <= 778: 0.1176
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw-ls, set [[3, 4]] (p90): |R| 1089, Lost_rel 0.2273; front |R| 1089..2344, best Lost_rel within |R| <= 1089: 0.2424
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw, set [[3, 4]] (p90): |R| 1089, Lost_rel 0.2273; front |R| 1089..2344, best Lost_rel within |R| <= 1089: 0.2424
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw-ls, set [[1, 4]] (p90): |R| 2615, Lost_rel 0.4909; front |R| 2615..4632, best Lost_rel within |R| <= 2615: 0.5091
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw, set [[1, 4]] (p90): |R| 2615, Lost_rel 0.4909; front |R| 2615..4632, best Lost_rel within |R| <= 2615: 0.5091
+- distinct dna_mt745584 [0,10] sigma 4000, cut-hide-rw-ls, set [[4, 1]] (p90): |R| 2631, Lost_rel 0.4386; front |R| 2631..4595, best Lost_rel within |R| <= 2631: 0.4561
+- repeated bible [0,3] sigma 2000, cut-hide-rw-ls, set [[46, 10, 46]] (p90): |R| 2893, Lost_rel 0.0091; front |R| 2893..3532, best Lost_rel within |R| <= 2893: 0.0182
+- repeated bible [0,3] sigma 2000, cut-hide-rw, set [[46, 10, 46]] (p90): |R| 2893, Lost_rel 0.0091; front |R| 2893..3532, best Lost_rel within |R| <= 2893: 0.0182
+- repeated bible [0,3] sigma 2000, cut-hide-rw-ls, set [[10, 46, 10]] (p90): |R| 8105, Lost_rel 0.0093; front |R| 8105..8696, best Lost_rel within |R| <= 8105: 0.0278
+- repeated bible [0,3] sigma 2000, cut-hide-rw, set [[10, 46, 10]] (p90): |R| 8105, Lost_rel 0.0093; front |R| 8105..8696, best Lost_rel within |R| <= 8105: 0.0278
+- repeated bible [0,3] sigma 2000, cut-hide-rw-ls, set [[10, 10]] (p90): |R| 10538, Lost_rel 0.0200; front |R| 10538..11125, best Lost_rel within |R| <= 10538: 0.0300
+- repeated bible [0,3] sigma 2000, cut-hide-rw, set [[10, 10]] (p90): |R| 10538, Lost_rel 0.0200; front |R| 10538..11125, best Lost_rel within |R| <= 10538: 0.0300
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw-ls, set [[4, 1, 2]] (p50): |R| 175, Lost_rel 0.0000; front |R| 175..341, best Lost_rel within |R| <= 175: 0.0152
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw, set [[4, 1, 2]] (p50): |R| 175, Lost_rel 0.0000; front |R| 175..341, best Lost_rel within |R| <= 175: 0.0152
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw-ls, set [[3, 1]] (p70): |R| 1060, Lost_rel 0.0328; front |R| 1060..1365, best Lost_rel within |R| <= 1060: 0.0492
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw, set [[3, 1]] (p70): |R| 1060, Lost_rel 0.0328; front |R| 1060..1365, best Lost_rel within |R| <= 1060: 0.0492
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw-ls, set [[1, 2]] (p70): |R| 1165, Lost_rel 0.0984; front |R| 1165..1605, best Lost_rel within |R| <= 1165: 0.1311
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw, set [[1, 2]] (p70): |R| 1165, Lost_rel 0.0984; front |R| 1165..1605, best Lost_rel within |R| <= 1165: 0.1311
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw-ls, set [[2, 1]] (p70): |R| 1178, Lost_rel 0.0984; front |R| 1178..1589, best Lost_rel within |R| <= 1178: 0.1311
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw, set [[2, 1]] (p70): |R| 1178, Lost_rel 0.1148; front |R| 1178..1589, best Lost_rel within |R| <= 1178: 0.1311
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw-ls, set [[4, 2]] (p70): |R| 1120, Lost_rel 0.0492; front |R| 1120..1647, best Lost_rel within |R| <= 1120: 0.0820
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw, set [[4, 2]] (p70): |R| 1120, Lost_rel 0.0492; front |R| 1120..1647, best Lost_rel within |R| <= 1120: 0.0820
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw-ls, set [[4, 1]] (p90): |R| 2679, Lost_rel 0.4000; front |R| 2679..3883, best Lost_rel within |R| <= 2679: 0.4444
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw, set [[4, 1]] (p90): |R| 2679, Lost_rel 0.4000; front |R| 2679..3883, best Lost_rel within |R| <= 2679: 0.4444
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw-ls, set [[4, 3]] (p90): |R| 1568, Lost_rel 0.1311; front |R| 1568..2241, best Lost_rel within |R| <= 1568: 0.1639
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw, set [[4, 3]] (p90): |R| 1568, Lost_rel 0.1311; front |R| 1568..2241, best Lost_rel within |R| <= 1568: 0.1639
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw-ls, set [[1, 4]] (p90): |R| 2633, Lost_rel 0.3556; front |R| 2633..3820, best Lost_rel within |R| <= 2633: 0.4444
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw, set [[1, 4]] (p90): |R| 2633, Lost_rel 0.3556; front |R| 2633..3820, best Lost_rel within |R| <= 2633: 0.4444
+- distinct dna_mt745584 [0,3] sigma 2500, hha, set [[1, 4]] (p90): |R| 2651, Lost_rel 0.3778; front |R| 2633..3820, best Lost_rel within |R| <= 2651: 0.4000
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw-ls, set [[3, 4]] (p90): |R| 1543, Lost_rel 0.1148; front |R| 1543..2124, best Lost_rel within |R| <= 1543: 0.1639
+- distinct dna_mt745584 [0,3] sigma 2500, cut-hide-rw, set [[3, 4]] (p90): |R| 1543, Lost_rel 0.1148; front |R| 1543..2124, best Lost_rel within |R| <= 1543: 0.1639
+- repeated sepsis [0,1] sigma 300, cut-hide-rw-ls, set [[2, 9, 2, 9]] (p70): |R| 168, Lost_rel 0.0745; front |R| 168..268, best Lost_rel within |R| <= 168: 0.0851
+- repeated sepsis [0,1] sigma 300, cut-hide-rw, set [[2, 9, 2, 9]] (p70): |R| 168, Lost_rel 0.0745; front |R| 168..268, best Lost_rel within |R| <= 168: 0.0851
+- repeated sepsis [0,1] sigma 300, cut-hide-rw-ls, set [[9, 2, 9, 2]] (p70): |R| 195, Lost_rel 0.0957; front |R| 195..308, best Lost_rel within |R| <= 195: 0.1064
+- repeated sepsis [0,1] sigma 300, cut-hide-rw, set [[9, 2, 9, 2]] (p70): |R| 195, Lost_rel 0.0957; front |R| 195..308, best Lost_rel within |R| <= 195: 0.1064
+- repeated sepsis [0,1] sigma 300, cut-hide-rw-ls, set [[2, 9, 2]] (p90): |R| 386, Lost_rel 0.0909; front |R| 386..529, best Lost_rel within |R| <= 386: 0.1023
+- repeated sepsis [0,1] sigma 300, cut-hide-rw, set [[2, 9, 2]] (p90): |R| 386, Lost_rel 0.0909; front |R| 386..529, best Lost_rel within |R| <= 386: 0.1023
+- distinct msnbc [0,1] sigma 5000, cut-hide-rw-ls, set [[6, 7]] (p50): |R| 4330, Lost_rel 0.0000; front |R| 4330..4330, best Lost_rel within |R| <= 4330: 0.0095
+- distinct msnbc [0,1] sigma 5000, cut-hide-rw, set [[6, 7]] (p50): |R| 4330, Lost_rel 0.0000; front |R| 4330..4330, best Lost_rel within |R| <= 4330: 0.0095
+- distinct msnbc [0,1] sigma 5000, dbsh, set [[6, 7]] (p50): |R| 4330, Lost_rel 0.0000; front |R| 4330..4330, best Lost_rel within |R| <= 4330: 0.0095
+- distinct msnbc [0,1] sigma 5000, cut-hide-rw-ls, set [[4, 7]] (p70): |R| 7445, Lost_rel 0.0000; front |R| 7445..7445, best Lost_rel within |R| <= 7445: 0.0306
+- distinct msnbc [0,1] sigma 5000, cut-hide-rw, set [[4, 7]] (p70): |R| 7445, Lost_rel 0.0000; front |R| 7445..7445, best Lost_rel within |R| <= 7445: 0.0306
+- distinct msnbc [0,1] sigma 5000, hha, set [[4, 7]] (p70): |R| 7446, Lost_rel 0.0102; front |R| 7445..7445, best Lost_rel within |R| <= 7446: 0.0306
+- distinct msnbc [0,1] sigma 5000, sbsh-r1, set [[4, 7]] (p70): |R| 7445, Lost_rel 0.0204; front |R| 7445..7445, best Lost_rel within |R| <= 7445: 0.0306
+- distinct msnbc [0,1] sigma 5000, sbsh-rmax, set [[4, 7]] (p70): |R| 7445, Lost_rel 0.0204; front |R| 7445..7445, best Lost_rel within |R| <= 7445: 0.0306
+- distinct msnbc [0,1] sigma 5000, cut-hide-rw-ls, set [[1, 2]] (p90): |R| 23797, Lost_rel 0.0211; front |R| 23797..23797, best Lost_rel within |R| <= 23797: 0.0316
+- distinct msnbc [0,1] sigma 5000, cut-hide-rw, set [[1, 2]] (p90): |R| 23797, Lost_rel 0.0211; front |R| 23797..23797, best Lost_rel within |R| <= 23797: 0.0316
+- distinct msnbc [0,3] sigma 5000, cut-hide-rw-ls, set [[12, 1]] (p70): |R| 8605, Lost_rel 0.0060; front |R| 8605..10401, best Lost_rel within |R| <= 8605: 0.0120
+- distinct msnbc [0,3] sigma 5000, cut-hide-rw, set [[12, 1]] (p70): |R| 8605, Lost_rel 0.0060; front |R| 8605..10401, best Lost_rel within |R| <= 8605: 0.0120
+- distinct msnbc [0,3] sigma 5000, cut-hide-rw-ls, set [[2, 1]] (p90): |R| 22190, Lost_rel 0.0570; front |R| 22190..25654, best Lost_rel within |R| <= 22190: 0.0696
+- distinct msnbc [0,3] sigma 5000, cut-hide-rw, set [[2, 1]] (p90): |R| 22190, Lost_rel 0.0570; front |R| 22190..25654, best Lost_rel within |R| <= 22190: 0.0696
+- distinct msnbc [0,3] sigma 5000, cut-hide-rw-ls, set [[1, 2]] (p90): |R| 26832, Lost_rel 0.0701; front |R| 26832..30274, best Lost_rel within |R| <= 26832: 0.0828
+- distinct msnbc [0,3] sigma 5000, cut-hide-rw, set [[1, 2]] (p90): |R| 26832, Lost_rel 0.0701; front |R| 26832..30274, best Lost_rel within |R| <= 26832: 0.0828
+- distinct msnbc [0,3] sigma 5000, cut-hide-rw-ls, set [[1, 12]] (p90): |R| 10523, Lost_rel 0.0061; front |R| 10523..12229, best Lost_rel within |R| <= 10523: 0.0121
+- distinct msnbc [0,3] sigma 5000, cut-hide-rw, set [[1, 12]] (p90): |R| 10523, Lost_rel 0.0061; front |R| 10523..12229, best Lost_rel within |R| <= 10523: 0.0121
+- repeated dna_mt745584 [0,3] sigma 2500, cut-hide-rw-ls, set [[4, 4, 1]] (p90): |R| 1011, Lost_rel 0.2623; front |R| 1011..1994, best Lost_rel within |R| <= 1011: 0.2787
+- repeated dna_mt745584 [0,3] sigma 2500, cut-hide-rw, set [[4, 4, 1]] (p90): |R| 1011, Lost_rel 0.2623; front |R| 1011..1994, best Lost_rel within |R| <= 1011: 0.2787
+- repeated dna_mt745584 [0,10] sigma 4000, cut-hide-rw-ls, set [[3, 3, 4]] (p30): |R| 149, Lost_rel 0.0400; front |R| 149..568, best Lost_rel within |R| <= 149: 0.0533
+- repeated dna_mt745584 [0,10] sigma 4000, cut-hide-rw, set [[3, 3, 4]] (p30): |R| 149, Lost_rel 0.0400; front |R| 149..568, best Lost_rel within |R| <= 149: 0.0533
+- repeated dna_mt745584 [0,10] sigma 4000, cut-hide-rw-ls, set [[3, 4, 4]] (p50): |R| 488, Lost_rel 0.1918; front |R| 488..1390, best Lost_rel within |R| <= 488: 0.2055
+- repeated dna_mt745584 [0,10] sigma 4000, cut-hide-rw-ls, set [[4, 4, 1, 1]] (p70): |R| 978, Lost_rel 0.4342; front |R| 978..3048, best Lost_rel within |R| <= 978: 0.4474
+- repeated dna_mt745584 [0,10] sigma 4000, cut-hide-rw, set [[4, 4, 1, 1]] (p70): |R| 978, Lost_rel 0.4342; front |R| 978..3048, best Lost_rel within |R| <= 978: 0.4474
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[2, 3, 1, 4]] (p10): |R| 280, Lost_rel 0.0000; front |R| 280..882, best Lost_rel within |R| <= 280: 0.0031
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw, set [[2, 3, 1, 4]] (p10): |R| 280, Lost_rel 0.0000; front |R| 280..882, best Lost_rel within |R| <= 280: 0.0031
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[1, 2, 3, 4]] (p10): |R| 398, Lost_rel 0.0031; front |R| 398..1498, best Lost_rel within |R| <= 398: 0.0062
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[3, 4, 2, 1]] (p30): |R| 497, Lost_rel 0.0124; front |R| 497..1767, best Lost_rel within |R| <= 497: 0.0186
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw, set [[3, 4, 2, 1]] (p30): |R| 497, Lost_rel 0.0155; front |R| 497..1767, best Lost_rel within |R| <= 497: 0.0186
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[2, 4, 3, 1]] (p30): |R| 513, Lost_rel 0.0186; front |R| 513..1775, best Lost_rel within |R| <= 513: 0.0217
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw, set [[2, 4, 3, 1]] (p30): |R| 513, Lost_rel 0.0186; front |R| 513..1775, best Lost_rel within |R| <= 513: 0.0217
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[3, 1, 4, 2]] (p30): |R| 508, Lost_rel 0.0093; front |R| 508..1771, best Lost_rel within |R| <= 508: 0.0124
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw, set [[3, 1, 4, 2]] (p30): |R| 508, Lost_rel 0.0093; front |R| 508..1771, best Lost_rel within |R| <= 508: 0.0124
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[3, 1, 4]] (p70): |R| 1636, Lost_rel 0.1290; front |R| 1636..4415, best Lost_rel within |R| <= 1636: 0.1387
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw, set [[3, 1, 4]] (p70): |R| 1636, Lost_rel 0.1290; front |R| 1636..4415, best Lost_rel within |R| <= 1636: 0.1387
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[1, 3, 4]] (p70): |R| 1701, Lost_rel 0.1387; front |R| 1701..4436, best Lost_rel within |R| <= 1701: 0.1452
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw, set [[1, 3, 4]] (p70): |R| 1701, Lost_rel 0.1419; front |R| 1701..4436, best Lost_rel within |R| <= 1701: 0.1452
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[1, 2, 4]] (p70): |R| 1558, Lost_rel 0.1387; front |R| 1558..4349, best Lost_rel within |R| <= 1558: 0.1419
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[4, 2, 1]] (p70): |R| 1449, Lost_rel 0.1032; front |R| 1449..4220, best Lost_rel within |R| <= 1449: 0.1194
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw, set [[4, 2, 1]] (p70): |R| 1449, Lost_rel 0.1097; front |R| 1449..4220, best Lost_rel within |R| <= 1449: 0.1194
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[2, 1]] (p90): |R| 2097, Lost_rel 0.1847; front |R| 2097..4036, best Lost_rel within |R| <= 2097: 0.1928
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw, set [[2, 1]] (p90): |R| 2097, Lost_rel 0.1847; front |R| 2097..4036, best Lost_rel within |R| <= 2097: 0.1928
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[4, 2]] (p90): |R| 2153, Lost_rel 0.1943; front |R| 2153..4291, best Lost_rel within |R| <= 2153: 0.2024
+- distinct dna_mt745584 [0,10] sigma 2500, cut-hide-rw, set [[4, 2]] (p90): |R| 2153, Lost_rel 0.1943; front |R| 2153..4291, best Lost_rel within |R| <= 2153: 0.2024
+- distinct msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[2, 3]] (p50): |R| 2220, Lost_rel 0.0000; front |R| 2220..3361, best Lost_rel within |R| <= 2220: 0.0087
+- distinct msnbc [0,10] sigma 5000, cut-hide-rw, set [[2, 3]] (p50): |R| 2220, Lost_rel 0.0043; front |R| 2220..3361, best Lost_rel within |R| <= 2220: 0.0087
+- distinct msnbc [0,10] sigma 5000, sbsh-r1, set [[2, 3]] (p50): |R| 2316, Lost_rel 0.0000; front |R| 2220..3361, best Lost_rel within |R| <= 2316: 0.0087
+- distinct msnbc [0,10] sigma 5000, sbsh-rmax, set [[2, 3]] (p50): |R| 2316, Lost_rel 0.0000; front |R| 2220..3361, best Lost_rel within |R| <= 2316: 0.0087
+- distinct msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[2, 7]] (p70): |R| 4375, Lost_rel 0.0087; front |R| 4375..5688, best Lost_rel within |R| <= 4375: 0.0130
+- distinct msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[4, 2]] (p70): |R| 4801, Lost_rel 0.0087; front |R| 4801..6653, best Lost_rel within |R| <= 4801: 0.0130
+- distinct msnbc [0,10] sigma 5000, cut-hide-rw, set [[4, 2]] (p70): |R| 4801, Lost_rel 0.0087; front |R| 4801..6653, best Lost_rel within |R| <= 4801: 0.0130
+- distinct msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[2, 1]] (p90): |R| 23782, Lost_rel 0.1132; front |R| 23782..31853, best Lost_rel within |R| <= 23782: 0.1368
+- distinct msnbc [0,10] sigma 5000, cut-hide-rw, set [[2, 1]] (p90): |R| 23782, Lost_rel 0.1132; front |R| 23782..31853, best Lost_rel within |R| <= 23782: 0.1368
+- distinct msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[1, 6]] (p90): |R| 10340, Lost_rel 0.0404; front |R| 10340..13922, best Lost_rel within |R| <= 10340: 0.0493
+- distinct msnbc [0,10] sigma 5000, cut-hide-rw, set [[1, 6]] (p90): |R| 10340, Lost_rel 0.0404; front |R| 10340..13922, best Lost_rel within |R| <= 10340: 0.0493
+- distinct msnbc [0,10] sigma 5000, sbsh-r1, set [[1, 6]] (p90): |R| 10970, Lost_rel 0.0404; front |R| 10340..13922, best Lost_rel within |R| <= 10970: 0.0448
+- distinct msnbc [0,10] sigma 5000, sbsh-rmax, set [[1, 6]] (p90): |R| 10970, Lost_rel 0.0404; front |R| 10340..13922, best Lost_rel within |R| <= 10970: 0.0448
+- repeated bpi2013 [0,1] sigma 1000, hha, set [[11, 1, 11, 11]] (p30): |R| 723, Lost_rel 0.0000; front |R| 368..368, best Lost_rel within |R| <= 723: 0.0095
+- repeated bpi2013 [0,1] sigma 1000, cut-hide-rw-ls, set [[1, 1, 1, 5]] (p50): |R| 1000, Lost_rel 0.0190; front |R| 1000..1212, best Lost_rel within |R| <= 1000: 0.0286
+- repeated bpi2013 [0,1] sigma 1000, cut-hide-rw, set [[1, 1, 1, 5]] (p50): |R| 1000, Lost_rel 0.0190; front |R| 1000..1212, best Lost_rel within |R| <= 1000: 0.0286
+- repeated bpi2013 [0,1] sigma 1000, cut-hide-rw-ls, set [[1, 11, 0, 1]] (p50): |R| 832, Lost_rel 0.0095; front |R| 832..1301, best Lost_rel within |R| <= 832: 0.0190
+- repeated bpi2013 [0,1] sigma 1000, cut-hide-rw, set [[1, 11, 0, 1]] (p50): |R| 832, Lost_rel 0.0095; front |R| 832..1301, best Lost_rel within |R| <= 832: 0.0190
+- repeated bpi2013 [0,1] sigma 1000, cut-hide-rw-ls, set [[1, 11, 11, 1]] (p70): |R| 1785, Lost_rel 0.0571; front |R| 1785..2275, best Lost_rel within |R| <= 1785: 0.0667
+- repeated bpi2013 [0,1] sigma 1000, cut-hide-rw, set [[1, 11, 11, 1]] (p70): |R| 1785, Lost_rel 0.0571; front |R| 1785..2275, best Lost_rel within |R| <= 1785: 0.0667
+- repeated bpi2013 [0,1] sigma 1000, cut-hide-rw-ls, set [[1, 1, 1]] (p90): |R| 4974, Lost_rel 0.1087; front |R| 4974..5953, best Lost_rel within |R| <= 4974: 0.1196
+- repeated bpi2013 [0,1] sigma 1000, cut-hide-rw, set [[1, 1, 1]] (p90): |R| 4974, Lost_rel 0.1087; front |R| 4974..5953, best Lost_rel within |R| <= 4974: 0.1196
+- repeated bpi2013 [0,1] sigma 1000, cut-hide-rw-ls, set [[1, 1, 10]] (p90): |R| 3661, Lost_rel 0.0102; front |R| 3661..3682, best Lost_rel within |R| <= 3661: 0.0714
+- repeated bpi2013 [0,1] sigma 1000, cut-hide-rw, set [[1, 1, 10]] (p90): |R| 3661, Lost_rel 0.0102; front |R| 3661..3682, best Lost_rel within |R| <= 3661: 0.0714
+- repeated bpi2013 [0,1] sigma 1000, cut-hide-rw-ls, set [[1, 11, 1, 1]] (p90): |R| 2908, Lost_rel 0.0952; front |R| 2908..4255, best Lost_rel within |R| <= 2908: 0.1048
+- repeated bpi2013 [0,1] sigma 1000, cut-hide-rw, set [[1, 11, 1, 1]] (p90): |R| 2908, Lost_rel 0.0952; front |R| 2908..4255, best Lost_rel within |R| <= 2908: 0.1048
+- repeated msnbc [0,1] sigma 5000, cut-hide-rw-ls, set [[1, 1, 1]] (p90): |R| 15858, Lost_rel 0.1505; front |R| 15858..20681, best Lost_rel within |R| <= 15858: 0.1720
+- repeated msnbc [0,1] sigma 5000, cut-hide-rw, set [[1, 1, 1]] (p90): |R| 15858, Lost_rel 0.1505; front |R| 15858..20681, best Lost_rel within |R| <= 15858: 0.1720
+- repeated msnbc [0,1] sigma 5000, cut-hide-rw-ls, set [[1, 1, 2, 1]] (p90): |R| 3510, Lost_rel 0.0377; front |R| 3510..5540, best Lost_rel within |R| <= 3510: 0.0472
+- repeated msnbc [0,1] sigma 5000, cut-hide-rw, set [[1, 1, 2, 1]] (p90): |R| 3510, Lost_rel 0.0377; front |R| 3510..5540, best Lost_rel within |R| <= 3510: 0.0472
+- repeated protein_sdb4 [0,3] sigma 500, cut-hide-rw-ls, set [[3, 3, 9]] (p30): |R| 49, Lost_rel 0.0000; front |R| 49..58, best Lost_rel within |R| <= 49: 0.0021
+- repeated protein_sdb4 [0,3] sigma 500, cut-hide-rw-ls, set [[9, 9]] (p90): |R| 1699, Lost_rel 0.0334; front |R| 1699..1769, best Lost_rel within |R| <= 1699: 0.0379
+- repeated protein_sdb4 [0,3] sigma 500, cut-hide-rw, set [[9, 9]] (p90): |R| 1699, Lost_rel 0.0334; front |R| 1699..1769, best Lost_rel within |R| <= 1699: 0.0379
+- distinct msnbc [0,1] sigma 2000, cut-hide-rw-ls, set [[1, 4]] (p90): |R| 11326, Lost_rel 0.0035; front |R| 11326..11326, best Lost_rel within |R| <= 11326: 0.0069
+- distinct msnbc [0,1] sigma 2000, cut-hide-rw, set [[1, 4]] (p90): |R| 11326, Lost_rel 0.0035; front |R| 11326..11326, best Lost_rel within |R| <= 11326: 0.0069
+- distinct msnbc [0,1] sigma 2000, cut-hide-rw-ls, set [[7, 6]] (p90): |R| 5898, Lost_rel 0.0000; front |R| 5898..5898, best Lost_rel within |R| <= 5898: 0.0033
+- distinct msnbc [0,1] sigma 2000, cut-hide-rw, set [[7, 6]] (p90): |R| 5898, Lost_rel 0.0000; front |R| 5898..5898, best Lost_rel within |R| <= 5898: 0.0033
+- distinct msnbc [0,1] sigma 2000, cut-hide-rw-ls, set [[1, 14]] (p90): |R| 10223, Lost_rel 0.0034; front |R| 10223..10223, best Lost_rel within |R| <= 10223: 0.0102
+- distinct msnbc [0,1] sigma 2000, cut-hide-rw, set [[1, 14]] (p90): |R| 10223, Lost_rel 0.0034; front |R| 10223..10223, best Lost_rel within |R| <= 10223: 0.0102
+- repeated protein_sdb1 [0,3] sigma 400, cut-hide-rw-ls, set [[9, 5, 9]] (p90): |R| 276, Lost_rel 0.0019; front |R| 276..400, best Lost_rel within |R| <= 276: 0.0056
+- repeated protein_sdb1 [0,3] sigma 400, cut-hide-rw, set [[9, 5, 9]] (p90): |R| 276, Lost_rel 0.0019; front |R| 276..400, best Lost_rel within |R| <= 276: 0.0056
+- repeated protein_sdb1 [0,3] sigma 400, cut-hide-rw-ls, set [[15, 15]] (p90): |R| 608, Lost_rel 0.0000; front |R| 608..643, best Lost_rel within |R| <= 608: 0.0019
+- repeated protein_sdb1 [0,3] sigma 400, cut-hide-rw-ls, set [[9, 9]] (p90): |R| 1718, Lost_rel 0.0198; front |R| 1718..1781, best Lost_rel within |R| <= 1718: 0.0298
+- repeated protein_sdb1 [0,3] sigma 400, cut-hide-rw, set [[9, 9]] (p90): |R| 1718, Lost_rel 0.0218; front |R| 1718..1781, best Lost_rel within |R| <= 1718: 0.0298
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw-ls, set [[11, 11, 10, 8]] (p50): |R| 720, Lost_rel 0.0000; front |R| 720..720, best Lost_rel within |R| <= 720: 0.0053
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw, set [[11, 11, 10, 8]] (p50): |R| 720, Lost_rel 0.0000; front |R| 720..720, best Lost_rel within |R| <= 720: 0.0053
+- repeated bpi2013 [0,3] sigma 1000, sbsh-r1, set [[11, 11, 10, 8]] (p50): |R| 720, Lost_rel 0.0000; front |R| 720..720, best Lost_rel within |R| <= 720: 0.0053
+- repeated bpi2013 [0,3] sigma 1000, sbsh-rmax, set [[11, 11, 10, 8]] (p50): |R| 720, Lost_rel 0.0000; front |R| 720..720, best Lost_rel within |R| <= 720: 0.0053
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw-ls, set [[1, 1, 11, 0]] (p50): |R| 1200, Lost_rel 0.0211; front |R| 1200..1638, best Lost_rel within |R| <= 1200: 0.0263
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw, set [[1, 1, 11, 0]] (p50): |R| 1200, Lost_rel 0.0211; front |R| 1200..1638, best Lost_rel within |R| <= 1200: 0.0263
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw-ls, set [[11, 1, 1, 0]] (p50): |R| 856, Lost_rel 0.0211; front |R| 856..1214, best Lost_rel within |R| <= 856: 0.0263
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw, set [[11, 1, 1, 0]] (p50): |R| 856, Lost_rel 0.0211; front |R| 856..1214, best Lost_rel within |R| <= 856: 0.0263
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw-ls, set [[1, 1, 5, 1]] (p50): |R| 1273, Lost_rel 0.0737; front |R| 1273..2358, best Lost_rel within |R| <= 1273: 0.0789
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw, set [[1, 1, 5, 1]] (p50): |R| 1273, Lost_rel 0.0737; front |R| 1273..2358, best Lost_rel within |R| <= 1273: 0.0789
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw-ls, set [[1, 11, 1, 8]] (p70): |R| 2586, Lost_rel 0.0263; front |R| 2586..3932, best Lost_rel within |R| <= 2586: 0.0316
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw, set [[1, 11, 1, 8]] (p70): |R| 2586, Lost_rel 0.0263; front |R| 2586..3932, best Lost_rel within |R| <= 2586: 0.0316
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw-ls, set [[11, 1, 1, 10]] (p70): |R| 2276, Lost_rel 0.0211; front |R| 2276..2989, best Lost_rel within |R| <= 2276: 0.0474
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw, set [[11, 1, 1, 10]] (p70): |R| 2276, Lost_rel 0.0211; front |R| 2276..2989, best Lost_rel within |R| <= 2276: 0.0474
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw-ls, set [[11, 11, 1, 1]] (p90): |R| 2457, Lost_rel 0.0579; front |R| 2457..3022, best Lost_rel within |R| <= 2457: 0.0789
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw, set [[11, 11, 1, 1]] (p90): |R| 2457, Lost_rel 0.0579; front |R| 2457..3022, best Lost_rel within |R| <= 2457: 0.0789
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw-ls, set [[1, 1, 11]] (p90): |R| 7199, Lost_rel 0.0950; front |R| 7199..8070, best Lost_rel within |R| <= 7199: 0.1006
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw-ls, set [[11, 1, 11, 1]] (p90): |R| 4037, Lost_rel 0.1368; front |R| 4037..4914, best Lost_rel within |R| <= 4037: 0.1474
+- repeated bpi2013 [0,3] sigma 1000, cut-hide-rw, set [[11, 1, 11, 1]] (p90): |R| 4037, Lost_rel 0.1368; front |R| 4037..4914, best Lost_rel within |R| <= 4037: 0.1474
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw-ls, set [[1, 0, 1, 5]] (p50): |R| 540, Lost_rel 0.0052; front |R| 540..582, best Lost_rel within |R| <= 540: 0.0103
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw, set [[1, 0, 1, 5]] (p50): |R| 540, Lost_rel 0.0052; front |R| 540..582, best Lost_rel within |R| <= 540: 0.0103
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw-ls, set [[11, 0, 1, 1]] (p50): |R| 582, Lost_rel 0.0000; front |R| 582..585, best Lost_rel within |R| <= 582: 0.0052
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw, set [[11, 0, 1, 1]] (p50): |R| 582, Lost_rel 0.0000; front |R| 582..585, best Lost_rel within |R| <= 582: 0.0052
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw-ls, set [[11, 1, 1, 8]] (p50): |R| 822, Lost_rel 0.0052; front |R| 822..843, best Lost_rel within |R| <= 822: 0.0103
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw, set [[11, 1, 1, 8]] (p50): |R| 822, Lost_rel 0.0052; front |R| 822..843, best Lost_rel within |R| <= 822: 0.0103
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw-ls, set [[11, 1, 0, 1]] (p70): |R| 1867, Lost_rel 0.0464; front |R| 1867..1931, best Lost_rel within |R| <= 1867: 0.0722
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw, set [[11, 1, 0, 1]] (p70): |R| 1867, Lost_rel 0.0464; front |R| 1867..1931, best Lost_rel within |R| <= 1867: 0.0722
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw-ls, set [[11, 1, 1, 10]] (p70): |R| 1579, Lost_rel 0.0052; front |R| 1579..1605, best Lost_rel within |R| <= 1579: 0.0258
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw, set [[11, 1, 1, 10]] (p70): |R| 1579, Lost_rel 0.0052; front |R| 1579..1605, best Lost_rel within |R| <= 1579: 0.0258
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw-ls, set [[1, 11, 1, 0]] (p70): |R| 1647, Lost_rel 0.0206; front |R| 1647..1994, best Lost_rel within |R| <= 1647: 0.0258
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw, set [[1, 11, 1, 0]] (p70): |R| 1647, Lost_rel 0.0206; front |R| 1647..1994, best Lost_rel within |R| <= 1647: 0.0258
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw-ls, set [[1, 1, 1, 10]] (p90): |R| 2744, Lost_rel 0.0052; front |R| 2744..2751, best Lost_rel within |R| <= 2744: 0.0258
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw, set [[1, 1, 1, 10]] (p90): |R| 2744, Lost_rel 0.0052; front |R| 2744..2751, best Lost_rel within |R| <= 2744: 0.0258
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw-ls, set [[1, 11, 11]] (p90): |R| 2394, Lost_rel 0.0538; front |R| 2394..3086, best Lost_rel within |R| <= 2394: 0.0591
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw, set [[1, 11, 11]] (p90): |R| 2394, Lost_rel 0.0538; front |R| 2394..3086, best Lost_rel within |R| <= 2394: 0.0591
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw-ls, set [[11, 1, 1]] (p90): |R| 4742, Lost_rel 0.1278; front |R| 4742..5553, best Lost_rel within |R| <= 4742: 0.1444
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw, set [[11, 1, 1]] (p90): |R| 4742, Lost_rel 0.1278; front |R| 4742..5553, best Lost_rel within |R| <= 4742: 0.1444
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw-ls, set [[1, 0, 1]] (p90): |R| 2241, Lost_rel 0.0652; front |R| 2241..2466, best Lost_rel within |R| <= 2241: 0.0761
+- repeated bpi2013 [0,1] sigma 500, cut-hide-rw, set [[1, 0, 1]] (p90): |R| 2241, Lost_rel 0.0652; front |R| 2241..2466, best Lost_rel within |R| <= 2241: 0.0761
+- repeated msnbc [0,3] sigma 5000, cut-hide-rw-ls, set [[7, 1, 1]] (p70): |R| 3021, Lost_rel 0.0294; front |R| 3021..4474, best Lost_rel within |R| <= 3021: 0.0353
+- repeated msnbc [0,3] sigma 5000, cut-hide-rw, set [[7, 1, 1]] (p70): |R| 3021, Lost_rel 0.0294; front |R| 3021..4474, best Lost_rel within |R| <= 3021: 0.0353
+- repeated msnbc [0,3] sigma 5000, cut-hide-rw-ls, set [[1, 1, 1, 1]] (p90): |R| 20399, Lost_rel 0.1908; front |R| 20399..24157, best Lost_rel within |R| <= 20399: 0.1965
+- repeated msnbc [0,3] sigma 5000, cut-hide-rw, set [[1, 1, 1, 1]] (p90): |R| 20399, Lost_rel 0.1908; front |R| 20399..24157, best Lost_rel within |R| <= 20399: 0.1965
+- repeated sepsis [0,3] sigma 300, cut-hide-rw-ls, set [[2, 6, 9, 2]] (p30): |R| 80, Lost_rel 0.0022; front |R| 80..158, best Lost_rel within |R| <= 80: 0.0088
+- repeated sepsis [0,3] sigma 300, cut-hide-rw, set [[2, 6, 9, 2]] (p30): |R| 80, Lost_rel 0.0022; front |R| 80..158, best Lost_rel within |R| <= 80: 0.0088
+- repeated sepsis [0,3] sigma 300, cut-hide-rw-ls, set [[6, 2, 2]] (p50): |R| 97, Lost_rel 0.0045; front |R| 97..156, best Lost_rel within |R| <= 97: 0.0067
+- repeated sepsis [0,3] sigma 300, cut-hide-rw, set [[6, 2, 2]] (p50): |R| 97, Lost_rel 0.0045; front |R| 97..156, best Lost_rel within |R| <= 97: 0.0067
+- repeated sepsis [0,3] sigma 300, cut-hide-rw-ls, set [[1, 2, 2]] (p70): |R| 232, Lost_rel 0.0112; front |R| 232..345, best Lost_rel within |R| <= 232: 0.0157
+- repeated sepsis [0,3] sigma 300, cut-hide-rw-ls, set [[2, 8, 9, 9]] (p70): |R| 110, Lost_rel 0.0374; front |R| 110..226, best Lost_rel within |R| <= 110: 0.0396
+- repeated sepsis [0,3] sigma 300, cut-hide-rw, set [[2, 8, 9, 9]] (p70): |R| 110, Lost_rel 0.0374; front |R| 110..226, best Lost_rel within |R| <= 110: 0.0396
+- repeated sepsis [0,3] sigma 300, cut-hide-rw-ls, set [[9, 2, 2, 9]] (p90): |R| 483, Lost_rel 0.0639; front |R| 483..680, best Lost_rel within |R| <= 483: 0.0705
+- repeated sepsis [0,3] sigma 300, cut-hide-rw, set [[9, 2, 2, 9]] (p90): |R| 483, Lost_rel 0.0639; front |R| 483..680, best Lost_rel within |R| <= 483: 0.0705
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[2, 2, 4]] (p30): |R| 670, Lost_rel 0.0043; front |R| 670..808, best Lost_rel within |R| <= 670: 0.0129
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw, set [[2, 2, 4]] (p30): |R| 670, Lost_rel 0.0086; front |R| 670..808, best Lost_rel within |R| <= 670: 0.0129
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[2, 1, 1, 2]] (p70): |R| 3821, Lost_rel 0.0086; front |R| 3821..3950, best Lost_rel within |R| <= 3821: 0.0129
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw, set [[2, 1, 1, 2]] (p70): |R| 3821, Lost_rel 0.0086; front |R| 3821..3950, best Lost_rel within |R| <= 3821: 0.0129
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[4, 4, 7]] (p70): |R| 3294, Lost_rel 0.0176; front |R| 3294..4000, best Lost_rel within |R| <= 3294: 0.0264
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw, set [[4, 4, 7]] (p70): |R| 3294, Lost_rel 0.0176; front |R| 3294..4000, best Lost_rel within |R| <= 3294: 0.0264
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[2, 2, 1, 1]] (p70): |R| 4373, Lost_rel 0.0172; front |R| 4373..4687, best Lost_rel within |R| <= 4373: 0.0259
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw, set [[2, 2, 1, 1]] (p70): |R| 4373, Lost_rel 0.0172; front |R| 4373..4687, best Lost_rel within |R| <= 4373: 0.0259
+- repeated msnbc [0,10] sigma 5000, sbsh-r1, set [[2, 2, 1, 1]] (p70): |R| 4996, Lost_rel 0.0172; front |R| 4373..4687, best Lost_rel within |R| <= 4996: 0.0216
+- repeated msnbc [0,10] sigma 5000, sbsh-rmax, set [[2, 2, 1, 1]] (p70): |R| 5169, Lost_rel 0.0129; front |R| 4373..4687, best Lost_rel within |R| <= 5169: 0.0216
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[2, 2, 1]] (p90): |R| 9728, Lost_rel 0.0396; front |R| 9728..11964, best Lost_rel within |R| <= 9728: 0.0529
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw, set [[2, 2, 1]] (p90): |R| 9728, Lost_rel 0.0396; front |R| 9728..11964, best Lost_rel within |R| <= 9728: 0.0529
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[6, 6]] (p90): |R| 11207, Lost_rel 0.0223; front |R| 11207..11681, best Lost_rel within |R| <= 11207: 0.0268
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw, set [[6, 6]] (p90): |R| 11207, Lost_rel 0.0223; front |R| 11207..11681, best Lost_rel within |R| <= 11207: 0.0268
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[1, 1, 1, 1]] (p90): |R| 36929, Lost_rel 0.1853; front |R| 36929..38125, best Lost_rel within |R| <= 36929: 0.2069
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw, set [[1, 1, 1, 1]] (p90): |R| 36929, Lost_rel 0.1897; front |R| 36929..38125, best Lost_rel within |R| <= 36929: 0.2069
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw-ls, set [[4, 7, 4]] (p90): |R| 7205, Lost_rel 0.0529; front |R| 7205..7963, best Lost_rel within |R| <= 7205: 0.0617
+- repeated msnbc [0,10] sigma 5000, cut-hide-rw, set [[4, 7, 4]] (p90): |R| 7205, Lost_rel 0.0529; front |R| 7205..7963, best Lost_rel within |R| <= 7205: 0.0617
+- repeated msnbc [0,1] sigma 2000, cut-hide-rw-ls, set [[1, 4, 1]] (p90): |R| 4914, Lost_rel 0.0132; front |R| 4914..5579, best Lost_rel within |R| <= 4914: 0.0166
+- repeated msnbc [0,1] sigma 2000, cut-hide-rw, set [[1, 4, 1]] (p90): |R| 4914, Lost_rel 0.0132; front |R| 4914..5579, best Lost_rel within |R| <= 4914: 0.0166
+- repeated msnbc [0,1] sigma 2000, cut-hide-rw-ls, set [[7, 4, 4]] (p90): |R| 3961, Lost_rel 0.0297; front |R| 3961..4687, best Lost_rel within |R| <= 3961: 0.0363
+- repeated msnbc [0,1] sigma 2000, cut-hide-rw, set [[7, 4, 4]] (p90): |R| 3961, Lost_rel 0.0297; front |R| 3961..4687, best Lost_rel within |R| <= 3961: 0.0363
+- repeated msnbc [0,1] sigma 2000, cut-hide-rw-ls, set [[1, 2, 1, 1]] (p90): |R| 6499, Lost_rel 0.0195; front |R| 6499..8072, best Lost_rel within |R| <= 6499: 0.0227
+- repeated msnbc [0,1] sigma 2000, cut-hide-rw, set [[1, 2, 1, 1]] (p90): |R| 6499, Lost_rel 0.0195; front |R| 6499..8072, best Lost_rel within |R| <= 6499: 0.0227
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw-ls, set [[11, 1, 1, 2]] (p30): |R| 323, Lost_rel 0.0000; front |R| 323..478, best Lost_rel within |R| <= 323: 0.0062
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw, set [[11, 1, 1, 2]] (p30): |R| 323, Lost_rel 0.0031; front |R| 323..478, best Lost_rel within |R| <= 323: 0.0062
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw-ls, set [[0, 1, 1, 11]] (p50): |R| 392, Lost_rel 0.0062; front |R| 392..633, best Lost_rel within |R| <= 392: 0.0123
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw, set [[0, 1, 1, 11]] (p50): |R| 392, Lost_rel 0.0093; front |R| 392..633, best Lost_rel within |R| <= 392: 0.0123
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw-ls, set [[11, 0, 11, 1]] (p50): |R| 336, Lost_rel 0.0247; front |R| 336..770, best Lost_rel within |R| <= 336: 0.0278
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw, set [[11, 0, 11, 1]] (p50): |R| 336, Lost_rel 0.0247; front |R| 336..770, best Lost_rel within |R| <= 336: 0.0278
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw-ls, set [[0, 1, 1, 0]] (p50): |R| 244, Lost_rel 0.0432; front |R| 244..571, best Lost_rel within |R| <= 244: 0.0463
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw, set [[0, 1, 1, 0]] (p50): |R| 244, Lost_rel 0.0432; front |R| 244..571, best Lost_rel within |R| <= 244: 0.0463
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw-ls, set [[11, 1, 1, 5]] (p70): |R| 1707, Lost_rel 0.0247; front |R| 1707..2399, best Lost_rel within |R| <= 1707: 0.0278
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw, set [[11, 1, 1, 5]] (p70): |R| 1707, Lost_rel 0.0247; front |R| 1707..2399, best Lost_rel within |R| <= 1707: 0.0278
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw-ls, set [[1, 1, 0, 10]] (p70): |R| 796, Lost_rel 0.0062; front |R| 796..1192, best Lost_rel within |R| <= 796: 0.0123
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw, set [[1, 1, 0, 10]] (p70): |R| 796, Lost_rel 0.0062; front |R| 796..1192, best Lost_rel within |R| <= 796: 0.0123
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw-ls, set [[1, 11, 1, 1]] (p90): |R| 5550, Lost_rel 0.0988; front |R| 5550..6856, best Lost_rel within |R| <= 5550: 0.1111
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw, set [[1, 11, 1, 1]] (p90): |R| 5550, Lost_rel 0.0988; front |R| 5550..6856, best Lost_rel within |R| <= 5550: 0.1111
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw-ls, set [[1, 1, 1, 1]] (p90): |R| 5223, Lost_rel 0.0710; front |R| 5223..6122, best Lost_rel within |R| <= 5223: 0.0802
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw, set [[1, 1, 1, 1]] (p90): |R| 5223, Lost_rel 0.0741; front |R| 5223..6122, best Lost_rel within |R| <= 5223: 0.0802
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw-ls, set [[1, 1, 0, 1]] (p90): |R| 2290, Lost_rel 0.0586; front |R| 2290..3534, best Lost_rel within |R| <= 2290: 0.0710
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw, set [[1, 1, 0, 1]] (p90): |R| 2290, Lost_rel 0.0617; front |R| 2290..3534, best Lost_rel within |R| <= 2290: 0.0710
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw-ls, set [[1, 1, 1, 0]] (p90): |R| 1972, Lost_rel 0.0370; front |R| 1972..2872, best Lost_rel within |R| <= 1972: 0.0432
+- repeated bpi2013 [0,3] sigma 500, cut-hide-rw, set [[1, 1, 1, 0]] (p90): |R| 1972, Lost_rel 0.0401; front |R| 1972..2872, best Lost_rel within |R| <= 1972: 0.0432
+- repeated dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[3, 3, 2, 4]] (p10): |R| 130, Lost_rel 0.0526; front |R| 130..984, best Lost_rel within |R| <= 130: 0.0557
+- repeated dna_mt745584 [0,10] sigma 2500, cut-hide-rw, set [[3, 3, 2, 4]] (p10): |R| 130, Lost_rel 0.0526; front |R| 130..984, best Lost_rel within |R| <= 130: 0.0557
+- repeated dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[4, 3, 4, 2]] (p30): |R| 489, Lost_rel 0.0310; front |R| 489..1828, best Lost_rel within |R| <= 489: 0.0341
+- repeated dna_mt745584 [0,10] sigma 2500, cut-hide-rw-ls, set [[2, 2, 4]] (p70): |R| 778, Lost_rel 0.2187; front |R| 778..3089, best Lost_rel within |R| <= 778: 0.2219
+- repeated msnbc [0,3] sigma 2000, cut-hide-rw-ls, set [[3, 1, 1]] (p70): |R| 3269, Lost_rel 0.0109; front |R| 3269..4632, best Lost_rel within |R| <= 3269: 0.0145
+- repeated msnbc [0,3] sigma 2000, cut-hide-rw, set [[3, 1, 1]] (p70): |R| 3269, Lost_rel 0.0109; front |R| 3269..4632, best Lost_rel within |R| <= 3269: 0.0145
+- repeated msnbc [0,3] sigma 2000, cut-hide-rw-ls, set [[7, 7, 1, 1]] (p70): |R| 1430, Lost_rel 0.0072; front |R| 1430..1743, best Lost_rel within |R| <= 1430: 0.0108
+- repeated msnbc [0,3] sigma 2000, cut-hide-rw, set [[7, 7, 1, 1]] (p70): |R| 1430, Lost_rel 0.0072; front |R| 1430..1743, best Lost_rel within |R| <= 1430: 0.0108
+- repeated msnbc [0,3] sigma 2000, cut-hide-rw-ls, set [[2, 1, 1, 1]] (p90): |R| 8228, Lost_rel 0.0396; front |R| 8228..10483, best Lost_rel within |R| <= 8228: 0.0432
+- repeated msnbc [0,3] sigma 2000, cut-hide-rw, set [[2, 1, 1, 1]] (p90): |R| 8228, Lost_rel 0.0396; front |R| 8228..10483, best Lost_rel within |R| <= 8228: 0.0432
+- repeated msnbc [0,3] sigma 2000, cut-hide-rw-ls, set [[1, 1, 7, 1]] (p90): |R| 4746, Lost_rel 0.0198; front |R| 4746..5960, best Lost_rel within |R| <= 4746: 0.0216
+- repeated msnbc [0,3] sigma 2000, cut-hide-rw, set [[1, 1, 7, 1]] (p90): |R| 4746, Lost_rel 0.0198; front |R| 4746..5960, best Lost_rel within |R| <= 4746: 0.0216
+- repeated msnbc [0,3] sigma 2000, cut-hide-rw-ls, set [[1, 7, 7]] (p90): |R| 5251, Lost_rel 0.0219; front |R| 5251..6450, best Lost_rel within |R| <= 5251: 0.0238
+- repeated msnbc [0,3] sigma 2000, cut-hide-rw, set [[1, 7, 7]] (p90): |R| 5251, Lost_rel 0.0219; front |R| 5251..6450, best Lost_rel within |R| <= 5251: 0.0238
+- repeated msnbc [0,3] sigma 2000, cut-hide-rw-ls, set [[2, 2, 1]] (p90): |R| 8362, Lost_rel 0.0436; front |R| 8362..10779, best Lost_rel within |R| <= 8362: 0.0527
+- repeated msnbc [0,3] sigma 2000, cut-hide-rw, set [[2, 2, 1]] (p90): |R| 8362, Lost_rel 0.0473; front |R| 8362..10779, best Lost_rel within |R| <= 8362: 0.0527
+- distinct protein_sdb4 [0,3] sigma 500, cut-hide-rw-ls, set [[7, 2]] (p90): |R| 979, Lost_rel 0.0000; front |R| 979..979, best Lost_rel within |R| <= 979: 0.0021
+- distinct protein_sdb4 [0,3] sigma 500, cut-hide-rw-ls, set [[9, 0]] (p90): |R| 1878, Lost_rel 0.0580; front |R| 1878..2036, best Lost_rel within |R| <= 1878: 0.0804
+- distinct protein_sdb4 [0,3] sigma 500, cut-hide-rw, set [[9, 0]] (p90): |R| 1878, Lost_rel 0.0580; front |R| 1878..2036, best Lost_rel within |R| <= 1878: 0.0804
+- distinct protein_sdb4 [0,3] sigma 500, cut-hide-rw-ls, set [[3, 2]] (p90): |R| 903, Lost_rel 0.0000; front |R| 903..967, best Lost_rel within |R| <= 903: 0.0021
+- distinct protein_sdb4 [0,3] sigma 500, cut-hide-rw, set [[3, 2]] (p90): |R| 903, Lost_rel 0.0000; front |R| 903..967, best Lost_rel within |R| <= 903: 0.0021
+- distinct protein_sdb1 [0,3] sigma 400, cut-hide-rw-ls, set [[0, 9, 5]] (p50): |R| 284, Lost_rel 0.0000; front |R| 284..369, best Lost_rel within |R| <= 284: 0.0019
+- distinct protein_sdb1 [0,3] sigma 400, cut-hide-rw, set [[0, 9, 5]] (p50): |R| 284, Lost_rel 0.0000; front |R| 284..369, best Lost_rel within |R| <= 284: 0.0019
+- distinct protein_sdb1 [0,3] sigma 400, cut-hide-rw-ls, set [[0, 13]] (p70): |R| 463, Lost_rel 0.0000; front |R| 463..469, best Lost_rel within |R| <= 463: 0.0019
+- distinct protein_sdb1 [0,3] sigma 400, cut-hide-rw, set [[0, 13]] (p70): |R| 463, Lost_rel 0.0000; front |R| 463..469, best Lost_rel within |R| <= 463: 0.0019
+- distinct protein_sdb1 [0,3] sigma 400, cut-hide-rw-ls, set [[3, 5]] (p90): |R| 724, Lost_rel 0.0000; front |R| 724..780, best Lost_rel within |R| <= 724: 0.0019
+- distinct protein_sdb1 [0,3] sigma 400, cut-hide-rw, set [[3, 5]] (p90): |R| 724, Lost_rel 0.0000; front |R| 724..780, best Lost_rel within |R| <= 724: 0.0019
+- distinct protein_sdb1 [0,3] sigma 400, cut-hide-rw-ls, set [[9, 5]] (p90): |R| 1775, Lost_rel 0.0417; front |R| 1775..1919, best Lost_rel within |R| <= 1775: 0.0575
+- distinct protein_sdb1 [0,3] sigma 400, cut-hide-rw, set [[9, 5]] (p90): |R| 1775, Lost_rel 0.0437; front |R| 1775..1919, best Lost_rel within |R| <= 1775: 0.0575
+- distinct protein_sdb1 [0,3] sigma 400, cut-hide-rw-ls, set [[9, 16]] (p90): |R| 996, Lost_rel 0.0114; front |R| 996..1083, best Lost_rel within |R| <= 996: 0.0189
+- distinct protein_sdb1 [0,3] sigma 400, cut-hide-rw, set [[9, 16]] (p90): |R| 996, Lost_rel 0.0114; front |R| 996..1083, best Lost_rel within |R| <= 996: 0.0189
+- repeated msnbc [0,1] sigma 1000, cut-hide-rw-ls, set [[1, 7, 4, 1]] (p50): |R| 958, Lost_rel 0.0075; front |R| 958..1160, best Lost_rel within |R| <= 958: 0.0091
+- repeated msnbc [0,1] sigma 1000, cut-hide-rw-ls, set [[1, 7, 7, 1]] (p70): |R| 1642, Lost_rel 0.0015; front |R| 1642..1867, best Lost_rel within |R| <= 1642: 0.0075
+- repeated msnbc [0,1] sigma 1000, cut-hide-rw, set [[1, 7, 7, 1]] (p70): |R| 1642, Lost_rel 0.0015; front |R| 1642..1867, best Lost_rel within |R| <= 1642: 0.0075
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw-ls, set [[2, 1, 1, 6]] (p50): |R| 786, Lost_rel 0.0011; front |R| 786..1857, best Lost_rel within |R| <= 786: 0.0022
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw, set [[2, 1, 1, 6]] (p50): |R| 786, Lost_rel 0.0011; front |R| 786..1857, best Lost_rel within |R| <= 786: 0.0022
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw-ls, set [[8, 8]] (p70): |R| 3082, Lost_rel 0.0067; front |R| 3082..3330, best Lost_rel within |R| <= 3082: 0.0078
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw, set [[8, 8]] (p70): |R| 3082, Lost_rel 0.0067; front |R| 3082..3330, best Lost_rel within |R| <= 3082: 0.0078
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw-ls, set [[2, 10, 2]] (p70): |R| 1896, Lost_rel 0.0190; front |R| 1896..2777, best Lost_rel within |R| <= 1896: 0.0212
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw, set [[2, 10, 2]] (p70): |R| 1896, Lost_rel 0.0201; front |R| 1896..2777, best Lost_rel within |R| <= 1896: 0.0212
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw-ls, set [[7, 7, 1, 1]] (p70): |R| 2865, Lost_rel 0.0056; front |R| 2865..3936, best Lost_rel within |R| <= 2865: 0.0078
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw-ls, set [[4, 1, 1, 1]] (p70): |R| 3582, Lost_rel 0.0122; front |R| 3582..5916, best Lost_rel within |R| <= 3582: 0.0156
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw, set [[4, 1, 1, 1]] (p70): |R| 3582, Lost_rel 0.0122; front |R| 3582..5916, best Lost_rel within |R| <= 3582: 0.0156
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw-ls, set [[1, 1, 2, 2]] (p90): |R| 9357, Lost_rel 0.0678; front |R| 9357..13565, best Lost_rel within |R| <= 9357: 0.0733
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw, set [[1, 1, 2, 2]] (p90): |R| 9357, Lost_rel 0.0678; front |R| 9357..13565, best Lost_rel within |R| <= 9357: 0.0733
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw-ls, set [[4, 4, 7]] (p90): |R| 6294, Lost_rel 0.0190; front |R| 6294..6981, best Lost_rel within |R| <= 6294: 0.0224
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw, set [[4, 4, 7]] (p90): |R| 6294, Lost_rel 0.0213; front |R| 6294..6981, best Lost_rel within |R| <= 6294: 0.0224
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw-ls, set [[1, 12, 1, 12]] (p90): |R| 4314, Lost_rel 0.0133; front |R| 4314..5374, best Lost_rel within |R| <= 4314: 0.0189
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw, set [[1, 12, 1, 12]] (p90): |R| 4314, Lost_rel 0.0133; front |R| 4314..5374, best Lost_rel within |R| <= 4314: 0.0189
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw-ls, set [[1, 4, 1, 1]] (p90): |R| 5981, Lost_rel 0.0411; front |R| 5981..10480, best Lost_rel within |R| <= 5981: 0.0456
+- repeated msnbc [0,10] sigma 2000, cut-hide-rw, set [[1, 4, 1, 1]] (p90): |R| 5981, Lost_rel 0.0422; front |R| 5981..10480, best Lost_rel within |R| <= 5981: 0.0456
+- repeated msnbc [0,3] sigma 1000, cut-hide-rw-ls, set [[1, 4, 2, 1]] (p70): |R| 1750, Lost_rel 0.0045; front |R| 1750..2635, best Lost_rel within |R| <= 1750: 0.0067
+- repeated msnbc [0,3] sigma 1000, cut-hide-rw, set [[1, 4, 2, 1]] (p70): |R| 1750, Lost_rel 0.0045; front |R| 1750..2635, best Lost_rel within |R| <= 1750: 0.0067
+- repeated msnbc [0,3] sigma 1000, cut-hide-rw-ls, set [[1, 1, 4, 1]] (p90): |R| 6140, Lost_rel 0.0240; front |R| 6140..8413, best Lost_rel within |R| <= 6140: 0.0255
+- repeated msnbc [0,3] sigma 1000, cut-hide-rw, set [[1, 1, 4, 1]] (p90): |R| 6140, Lost_rel 0.0247; front |R| 6140..8413, best Lost_rel within |R| <= 6140: 0.0255
+- repeated msnbc [0,3] sigma 1000, cut-hide-rw-ls, set [[1, 1, 4]] (p90): |R| 8887, Lost_rel 0.0306; front |R| 8887..11563, best Lost_rel within |R| <= 8887: 0.0344
+- repeated msnbc [0,3] sigma 1000, cut-hide-rw, set [[1, 1, 4]] (p90): |R| 8887, Lost_rel 0.0306; front |R| 8887..11563, best Lost_rel within |R| <= 8887: 0.0344
+- repeated msnbc [0,3] sigma 1000, cut-hide-rw-ls, set [[1, 1, 2, 2]] (p90): |R| 6748, Lost_rel 0.0255; front |R| 6748..8777, best Lost_rel within |R| <= 6748: 0.0315
+- repeated msnbc [0,3] sigma 1000, cut-hide-rw, set [[1, 1, 2, 2]] (p90): |R| 6748, Lost_rel 0.0255; front |R| 6748..8777, best Lost_rel within |R| <= 6748: 0.0315
+- repeated msnbc [0,3] sigma 1000, cut-hide-rw-ls, set [[1, 2, 1]] (p90): |R| 21062, Lost_rel 0.1375; front |R| 21062..26345, best Lost_rel within |R| <= 21062: 0.1467
+- repeated msnbc [0,3] sigma 1000, cut-hide-rw, set [[1, 2, 1]] (p90): |R| 21062, Lost_rel 0.1382; front |R| 21062..26345, best Lost_rel within |R| <= 21062: 0.1467
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw-ls, set [[6, 1, 7, 1]] (p50): |R| 857, Lost_rel 0.0026; front |R| 857..1861, best Lost_rel within |R| <= 857: 0.0030
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw, set [[6, 1, 7, 1]] (p50): |R| 857, Lost_rel 0.0026; front |R| 857..1861, best Lost_rel within |R| <= 857: 0.0030
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw-ls, set [[9, 2, 2]] (p50): |R| 506, Lost_rel 0.0021; front |R| 506..704, best Lost_rel within |R| <= 506: 0.0026
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw, set [[9, 2, 2]] (p50): |R| 506, Lost_rel 0.0021; front |R| 506..704, best Lost_rel within |R| <= 506: 0.0026
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw-ls, set [[2, 15, 2, 15]] (p50): |R| 387, Lost_rel 0.0072; front |R| 387..908, best Lost_rel within |R| <= 387: 0.0077
+- repeated msnbc [0,10] sigma 1000, sbsh-rmax, set [[4, 4, 7, 1]] (p50): |R| 893, Lost_rel 0.0004; front |R| 807..1355, best Lost_rel within |R| <= 893: 0.0009
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw-ls, set [[2, 1, 7, 1]] (p70): |R| 2057, Lost_rel 0.0089; front |R| 2057..4184, best Lost_rel within |R| <= 2057: 0.0119
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw, set [[2, 1, 7, 1]] (p70): |R| 2057, Lost_rel 0.0102; front |R| 2057..4184, best Lost_rel within |R| <= 2057: 0.0119
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw-ls, set [[1, 1, 3, 2]] (p70): |R| 1679, Lost_rel 0.0094; front |R| 1679..3404, best Lost_rel within |R| <= 1679: 0.0106
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw, set [[1, 1, 3, 2]] (p70): |R| 1679, Lost_rel 0.0098; front |R| 1679..3404, best Lost_rel within |R| <= 1679: 0.0106
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw-ls, set [[11, 2, 1, 1]] (p70): |R| 1858, Lost_rel 0.0089; front |R| 1858..4067, best Lost_rel within |R| <= 1858: 0.0111
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw, set [[11, 2, 1, 1]] (p70): |R| 1858, Lost_rel 0.0094; front |R| 1858..4067, best Lost_rel within |R| <= 1858: 0.0111
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw-ls, set [[1, 4, 1, 7]] (p70): |R| 1751, Lost_rel 0.0038; front |R| 1751..3255, best Lost_rel within |R| <= 1751: 0.0051
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw, set [[1, 4, 1, 7]] (p70): |R| 1751, Lost_rel 0.0038; front |R| 1751..3255, best Lost_rel within |R| <= 1751: 0.0051
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw-ls, set [[1, 4, 7, 4]] (p90): |R| 3585, Lost_rel 0.0102; front |R| 3585..5738, best Lost_rel within |R| <= 3585: 0.0128
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw, set [[1, 4, 7, 4]] (p90): |R| 3585, Lost_rel 0.0102; front |R| 3585..5738, best Lost_rel within |R| <= 3585: 0.0128
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw-ls, set [[1, 1, 1]] (p90): |R| 58686, Lost_rel 0.1630; front |R| 58686..60154, best Lost_rel within |R| <= 58686: 0.1726
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw, set [[1, 1, 1]] (p90): |R| 58686, Lost_rel 0.1639; front |R| 58686..60154, best Lost_rel within |R| <= 58686: 0.1726
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw-ls, set [[1, 1, 2, 14]] (p90): |R| 2212, Lost_rel 0.0149; front |R| 2212..4366, best Lost_rel within |R| <= 2212: 0.0179
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw, set [[1, 1, 2, 14]] (p90): |R| 2212, Lost_rel 0.0153; front |R| 2212..4366, best Lost_rel within |R| <= 2212: 0.0179
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw-ls, set [[1, 12, 12, 1]] (p90): |R| 4265, Lost_rel 0.0132; front |R| 4265..6114, best Lost_rel within |R| <= 4265: 0.0153
+- repeated msnbc [0,10] sigma 1000, cut-hide-rw, set [[1, 12, 12, 1]] (p90): |R| 4265, Lost_rel 0.0136; front |R| 4265..6114, best Lost_rel within |R| <= 4265: 0.0153
+
+54 configurations; the first vertex is the cut-hide row in every set

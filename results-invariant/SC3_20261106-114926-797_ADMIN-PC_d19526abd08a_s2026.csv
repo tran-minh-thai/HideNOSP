@@ -1,0 +1,53 @@
+# run 20261106-114926-797_ADMIN-PC_d19526abd08a_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/sepsis.txt, format=SPMF, sigma=300, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=occurrence,hha-stop}
+# sensitive sets: size 1, repeated-item pool 25 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 5 -> 4, p30: 5 -> 4, p50: 5 -> 4, p70: 5 -> 4, p90: 5 -> 4
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,status
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9, 2]]",p10,occurrence,occurrence-count-heuristic,,0.000000,1,0.010638,0,0.001052,0.003085,16,6,2.666667,0,0,0,,95,94,93,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9, 2]]",p10,hha-stop,HHA-stop,,0.000000,1,0.010638,0,0.001052,0.003848,16,6,2.666667,0,0,0,,95,94,93,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 9]]",p10,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.001315,0.004728,20,12,1.666667,0,0,0,,95,94,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 9]]",p10,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.001512,0.004761,23,12,1.916667,0,0,0,,95,94,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 9, 2, 9]]",p10,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.002169,0.005559,33,22,1.500000,0,0,0,,95,94,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 9, 2, 9]]",p10,hha-stop,HHA-stop,,0.000000,2,0.021277,0,0.002235,0.005874,34,22,1.545455,0,0,0,,95,94,92,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 9]]",p10,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.000657,0.001907,10,4,2.500000,0,0,0,,95,94,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 9]]",p10,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.000657,0.002040,10,4,2.500000,0,0,0,,95,94,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 2]]",p30,occurrence,occurrence-count-heuristic,,0.000000,6,0.063830,0,0.006244,0.027554,95,51,1.862745,0,0,0,,95,94,88,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 2]]",p30,hha-stop,HHA-stop,,0.000000,7,0.074468,0,0.007559,0.031310,115,51,2.254902,0,0,0,,95,94,87,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 2]]",p30,occurrence,occurrence-count-heuristic,,0.000000,3,0.031915,0,0.005061,0.019519,77,40,1.925000,0,0,0,,95,94,91,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 2]]",p30,hha-stop,HHA-stop,,0.000000,5,0.053191,0,0.006244,0.023838,95,40,2.375000,0,0,0,,95,94,89,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 2, 9, 2]]",p30,occurrence,occurrence-count-heuristic,,0.000000,1,0.010638,0,0.002301,0.006090,35,21,1.666667,0,0,0,,95,94,93,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 2, 9, 2]]",p30,hha-stop,HHA-stop,,0.000000,1,0.010638,0,0.002366,0.006189,36,21,1.714286,0,0,0,,95,94,93,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 2, 2]]",p30,occurrence,occurrence-count-heuristic,,0.000000,2,0.021277,0,0.002695,0.011452,41,25,1.640000,0,0,0,,95,94,92,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 2, 2]]",p30,hha-stop,HHA-stop,,0.000000,2,0.021277,0,0.003286,0.011851,50,25,2.000000,0,0,0,,95,94,92,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 2]]",p50,occurrence,occurrence-count-heuristic,,0.000000,8,0.085106,0,0.015446,0.057876,235,173,1.358382,0,0,0,,95,94,86,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 2]]",p50,hha-stop,HHA-stop,,0.000000,7,0.074468,0,0.016235,0.058092,247,173,1.427746,0,0,0,,95,94,87,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 9]]",p50,occurrence,occurrence-count-heuristic,,0.000000,4,0.042553,0,0.006836,0.030068,104,58,1.793103,0,0,0,,95,94,90,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 9]]",p50,hha-stop,HHA-stop,,0.000000,5,0.053191,0,0.007690,0.033592,117,58,2.017241,0,0,0,,95,94,89,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 2, 9]]",p50,occurrence,occurrence-count-heuristic,,0.000000,8,0.085106,0,0.013409,0.049477,204,136,1.500000,0,0,0,,95,94,86,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 2, 9]]",p50,hha-stop,HHA-stop,,0.000000,8,0.085106,0,0.014263,0.050476,217,136,1.595588,0,0,0,,95,94,86,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9]]",p50,occurrence,occurrence-count-heuristic,,0.000000,1,0.011111,0,0.008085,0.019990,123,73,1.684932,0,0,0,,95,90,93,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9]]",p50,hha-stop,HHA-stop,,0.000000,4,0.044444,0,0.009728,0.032724,148,73,2.027397,0,0,0,,95,90,90,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 9]]",p70,occurrence,occurrence-count-heuristic,,0.000000,10,0.106383,0,0.015775,0.067873,240,168,1.428571,0,0,0,,95,94,84,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 9]]",p70,hha-stop,HHA-stop,,0.000000,12,0.127660,0,0.017090,0.071091,260,168,1.547619,0,0,0,,95,94,82,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 2]]",p70,occurrence,occurrence-count-heuristic,,0.000000,11,0.117021,0,0.018798,0.080537,286,195,1.466667,0,0,0,,95,94,83,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 2]]",p70,hha-stop,HHA-stop,,0.000000,11,0.117021,0,0.019916,0.082824,303,195,1.553846,0,0,0,,95,94,83,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9]]",p70,occurrence,occurrence-count-heuristic,,0.000000,7,0.078652,0,0.023728,0.071834,361,310,1.164516,0,0,0,,95,89,87,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9]]",p70,hha-stop,HHA-stop,,0.000000,11,0.123596,0,0.024320,0.073171,370,310,1.193548,0,0,0,,95,89,83,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9]]",p70,occurrence,occurrence-count-heuristic,,0.000000,10,0.111111,0,0.018996,0.056156,289,228,1.267544,0,0,0,,95,90,84,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9]]",p70,hha-stop,HHA-stop,,0.000000,10,0.111111,0,0.019784,0.057396,301,228,1.320175,0,0,0,,95,90,84,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9]]",p90,occurrence,occurrence-count-heuristic,,0.000000,3,0.037975,0,0.037071,0.050862,564,478,1.179916,0,0,0,,95,79,91,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9]]",p90,hha-stop,HHA-stop,,0.000000,3,0.037975,0,0.037728,0.056321,574,478,1.200837,0,0,0,,95,79,91,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2]]",p90,occurrence,occurrence-count-heuristic,,0.000000,11,0.125000,0,0.031484,0.098620,479,386,1.240933,0,0,0,,95,88,83,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2]]",p90,hha-stop,HHA-stop,,0.000000,12,0.136364,0,0.032470,0.101642,494,386,1.279793,0,0,0,,95,88,82,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9]]",p90,occurrence,occurrence-count-heuristic,,0.000000,9,0.102273,0,0.033062,0.101846,503,409,1.229829,0,0,0,,95,88,85,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9]]",p90,hha-stop,HHA-stop,,0.000000,10,0.113636,0,0.033850,0.104287,515,409,1.259169,0,0,0,,95,88,84,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2]]",p90,occurrence,occurrence-count-heuristic,,0.000000,5,0.062500,0,0.030630,0.049215,466,383,1.216710,0,0,0,,95,80,89,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2]]",p90,hha-stop,HHA-stop,,0.000000,5,0.062500,0,0.031747,0.053007,483,383,1.261097,0,0,0,,95,80,89,

@@ -161,7 +161,9 @@ row_6_memory_measurement:
   note: >
     Design doc section 11.7 asks for the peak RSS of the process. The JVM does not report RSS, so
     it takes a wrapper script, which does not exist yet (TODO in util.MemoryProbe). A table that
-    prints memory must say whether it prints heap or RSS. NOT LOCKED YET, blocks SC6.
+    prints memory must say whether it prints heap or RSS. NOT LOCKED. The reduced SC6 of
+    preregistration section 19.3 reports no memory: heap sampling every 50 ms cannot catch the peak
+    of a run shorter than a second.
 
 row_7_time_limit:
   limit_per_run_seconds: 1800   # wall clock, one method on one sensitive set (preregistration
@@ -196,8 +198,11 @@ row_8_repetitions_and_aggregation:
     row 3.
 
 row_9_warmup_procedure:
-  warmup_runs: null
-  note: "NOT LOCKED YET, blocks SC6. util.Timing.measure takes the number of warm-up runs."
+  warmup_runs: 1
+  note: >
+    Locked by preregistration section 19.3 for the reduced SC6: one warm-up run per method and
+    instance, then one run that sets the number of repetitions of row 8 (also discarded), then the
+    repetitions (util.Timing.measure).
 
 # Beyond the 9 rows: the implementation decisions that must be declared (section 7 of RUNBOOK.md).
 implementation_decisions:

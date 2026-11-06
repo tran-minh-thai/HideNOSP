@@ -737,3 +737,114 @@ the machine and rerunning is a decision about the environment, not a choice by n
 sections 1–17 is unchanged.
 
 **Unchanged:** all of sections 1–17.
+
+---
+
+## 19. Addendum of 2026-11-06 — competitors that stop at the threshold, the exact Lost optimum on small instances, and running time (AFTER every official result of sections 14–18 had been seen)
+
+**Decision of the author** (2026-11-06): three additions, each run on the measuring machine of section 18 with the
+locked environment (the JDK of row 5, `-Xmx8g`, 1,800 seconds per method and set, the sampling of section 9).
+
+**Why.** (a) The tier (b) baselines sanitize every sequence they select until **no matching is left** (HHA,
+Algorithm 1 of [R20]; DBSH and SBSH of [R3] likewise work sequence by sequence), while HIDE-DB only asks the
+non-overlapping support to fall below σ. The regime "the baseline uses more masks", which holds on most instances of
+H2 and H2-R, may therefore come from the stricter problem these baselines solve rather than from how well they solve
+it. Competitors that stop as soon as the threshold is met answer that question. (b) H2 compares Lost only at equal
+\|R\|, so it cannot say how far any method is from the Lost optimum; on small instances the optimum can be computed
+exactly. (c) No running time has been measured.
+
+**What does not change.** H2, H2-R and H3, their tests and their reported results stand as the only results of
+sections 2–18. No sentence of the paper presents H4 (below) as a correction or a rescue of H2.
+
+### 19.1 H4 — competitors that stop at the threshold
+
+**Methods** (SC3 keys).
+
+- `occurrence`: tier (a) of section 2 — mask the position lying on the most occurrences of the sensitive patterns
+  that still need a drop, take the sequences in their natural order, and stop when every sensitive support is below
+  σ (`hidenosp.baseline.OccurrenceCountHeuristic`, unchanged).
+- `hha-stop`: HHA with one change, the stopping rule. The sequences carrying a sensitive pattern are taken in the
+  order of HHA (ascending size of the matching set, ties to the lower index), and in each sequence the position on
+  the most matchings of the patterns that still need a drop is masked (the local rule of HHA, ties to the leftmost),
+  until every sensitive pattern has a database support below σ; then the method stops. Under HIDE-SEQ HHA already
+  stops at r, so `hha-stop` equals `hha` there. The name describes the behaviour; it is not a published variant.
+
+**Cells.** The 136 main-group cells of section 14 (\|𝒮\| = 1, 5, 10, 20; both scopes), one SC3 batch
+`--methods=occurrence,hha-stop`, every other parameter as in section 14. The rows of `cut-hide-rw-ls` are those of
+the official method batch, paired by sensitive set (machine-invariant rows, as in section 17).
+
+**H4a (masks).** For each competitor c and each scope, r_c = \|R\|(c) / \|R\|(`cut-hide-rw-ls`) per instance, over
+the main-group instances without `protein_sdb1`; verdict on the median with the thresholds of H3: ≥ 1.10 "more
+masks", ≤ 1.05 "the same number of masks", in between no conclusion. Reported with it: the number of instances where
+c uses fewer masks than `cut-hide-rw-ls`.
+
+**H4b (Lost at equal masks).** The procedure of H2 (sections 2, 4 and 5: one-sided Wilcoxon signed-rank with Pratt's
+treatment of zeros on the difference of Lost_rel, δ_L = 0.02, α = 0.05, rank-biserial, the exclusion rules, the
+equivalence margins, the table of pairs (\|R\|, Lost)), with the family {`occurrence`, `hha-stop`} and Holm over
+these two, separately in the main scope (H4b) and in the repeated-item scope (H4b-R).
+
+### 19.2 SC3LOST — the exact Lost optimum on small instances (descriptive)
+
+**Instances.** For each sensitive set of SC3 with \|𝒮\| = 1 in a main-group cell of either scope (the same pool,
+strata and seed as section 9, so rows join SC3 rows on the set; `protein_sdb1` is reported only), an instance
+keeps the pattern P and the gap and takes ten windows of W = 15 consecutive events of real sequences, from the
+sequences of the dataset in a seeded random order: five windows that contain an occurrence of P (the window starts
+at a seeded random offset among the offsets whose window contains one) and five windows from sequences in which P
+does not occur. A sequence shorter than W is taken whole. For each requested drop r ∈ {2, 3, 4}, the threshold of
+the instance is σ_I = sup_NO(P, I) − r + 1; when σ_I < 2 the instance is skipped and counted. F_{σ_I}(I) is mined
+with l_max = 4.
+
+**Optimum.** `exact-minR-minLost` (`hidenosp.baseline.IlpExact` with the side-effect objective): every hiding set of
+the least size \|R\|* is enumerated and the least Lost among them, OPT_Lost, is taken, together with the greatest
+Lost among them. An instance with more than 64 candidate positions, more than 12 masks or at least 20,000 minimum
+hiding sets is refused by the class and counted by reason.
+
+**Methods.** `cut-hide`, `cut-hide-rw`, `cut-hide-rw-ls`, `hha`, `dbsh`, `sbsh-r1`, `sbsh-rmax`, `occurrence`,
+`hha-stop`.
+
+**Reported, per scope and method.** The number of instances (and the skipped ones by reason); the share with
+\|R\| = \|R\|*; among those, the share with Lost = OPT_Lost, the sum and the median of Lost − OPT_Lost, and the
+position of Lost in the range from OPT_Lost to the greatest Lost of a minimum hiding set; for a method with
+\|R\| > \|R\|*, the count and whether the lexicographic optimum is no worse in both \|R\| and Lost.
+**Implementation checks** (stop the analysis when broken): every method hides; \|R\| ≥ \|R\|* for every method;
+\|R\| = \|R\|* for the three CUT-HIDE keys; OPT_Lost ≤ Lost for every method with \|R\| = \|R\|*.
+
+### 19.3 SC6, reduced — running time
+
+**Cells.** The main-group cells of section 14 with \|𝒮\| ∈ {1, 10}, both scopes; in each cell the first set drawn
+in each stratum (at most five sets). The subset is fixed by this rule, not by any measured time.
+
+**Methods.** The nine of 19.2.
+
+**What is inside the clock** (one row per method, as the protocol requires):
+
+| method | timed | not timed |
+|---|---|---|
+| `cut-hide`, `cut-hide-rw`, `cut-hide-rw-ls` | mining F_σ(D) with l_max = 4, the near-threshold band and the weights, the evaluator the adaptive weight reads, the method | reading the file, drawing the set, evaluating the output |
+| `hha`, `hha-stop`, `dbsh`, `sbsh-r1`, `sbsh-rmax`, `occurrence` | everything the method computes from the database | the same |
+
+**Measurement.** `hidenosp.util.Timing.measure`: one warm-up run (protocol row 9, locked here to 1), one run that
+sets the number of repetitions (discarded), then the repetitions of protocol row 8; wall-clock time by
+`System.nanoTime` (mean and standard deviation) is the reported quantity; the processor time of the thread is
+recorded beside it and read only where a run lasts well above the 15.625 ms step of the Windows thread clock. A
+single run above 1,800 seconds is `OT`.
+
+**Index cost.** For each instance: the time to build `NettreeCutIndex` for the sensitive pattern, and the time to
+apply the masks of the `cut-hide` solution one by one with the incremental update against rebuilding the index after
+each mask, under the same repetition rule.
+
+**Memory is not reported** (protocol row 6 stays unlocked): heap sampling every 50 ms cannot catch the peak of a run
+shorter than a second, and the resident set needs a wrapper that does not exist.
+
+The rows are machine-dependent and go to `results/`, from the measuring machine only.
+
+### 19.4 Provenance
+
+When writing this section, the proposer had seen every official result of sections 14–18 on ADMIN-PC (H2, H2-R,
+both halves of H3, the table of pairs, the lower bounds, SC3OPT, the refinement, the Pareto fronts) and the
+exploratory small-instance runs of 2026-09-26 (`results-probe/lost_small_exact_probe_20260926.txt`, CUT-HIDE stages
+against an exhaustive optimum on 480 windows; the harness of those runs is not in the repository and cannot be
+traced back, and the construction of 19.2 is written anew without claiming to reproduce it). `occurrence` had run
+only in exploratory counts of the design document; `hha-stop` had never run; no running time had been measured.
+
+**Unchanged:** all of sections 1–18.

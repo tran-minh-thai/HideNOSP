@@ -1,0 +1,39 @@
+# run 20261106-113914-412_ADMIN-PC_e07a3cb144ce_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/leviathan.txt, format=SPMF, sigma=500, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=occurrence,hha-stop}
+# sensitive sets: size 1, repeated-item pool 13 candidates, 13 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 2 -> 2, p30: 3 -> 3, p50: 2 -> 2, p70: 3 -> 3, p90: 3 -> 3
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,status
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[8, 14, 8]]",p10,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.000020,0.000087,4,2,2.000000,0,0,0,,108,107,107,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[8, 14, 8]]",p10,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.000020,0.000087,4,2,2.000000,0,0,0,,108,107,107,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[8, 18, 8, 18]]",p10,occurrence,occurrence-count-heuristic,,0.000000,1,0.009346,0,0.000127,0.001015,25,14,1.785714,0,0,0,,108,107,106,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[8, 18, 8, 18]]",p10,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.000142,0.001040,28,14,2.000000,0,0,0,,108,107,107,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[8, 8, 8]]",p30,occurrence,occurrence-count-heuristic,,0.000000,1,0.009346,0,0.000309,0.001994,61,29,2.103448,0,0,0,,108,107,106,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[8, 8, 8]]",p30,hha-stop,HHA-stop,,0.000000,1,0.009346,0,0.000441,0.002805,87,29,3.000000,0,0,0,,108,107,106,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[18, 8, 8]]",p30,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.000487,0.003313,96,63,1.523810,0,0,0,,108,107,107,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[18, 8, 8]]",p30,hha-stop,HHA-stop,,0.000000,1,0.009346,0,0.000517,0.003295,102,63,1.619048,0,0,0,,108,107,106,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[71, 71]]",p30,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.000573,0.001164,113,61,1.852459,0,0,0,,108,107,107,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[71, 71]]",p30,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.000613,0.001263,121,61,1.983607,0,0,0,,108,107,107,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[8, 8, 18]]",p50,occurrence,occurrence-count-heuristic,,0.000000,2,0.018868,0,0.001120,0.006815,221,190,1.163158,0,0,0,,108,106,105,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[8, 8, 18]]",p50,hha-stop,HHA-stop,,0.000000,2,0.018868,0,0.001161,0.006852,229,190,1.205263,0,0,0,,108,106,105,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[18, 18]]",p50,occurrence,occurrence-count-heuristic,,0.000000,1,0.009524,0,0.002256,0.008774,445,371,1.199461,0,0,0,,108,105,106,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[18, 18]]",p50,hha-stop,HHA-stop,,0.000000,1,0.009524,0,0.002520,0.010247,497,371,1.339623,0,0,0,,108,105,106,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[18, 8, 18]]",p70,occurrence,occurrence-count-heuristic,,0.000000,2,0.018868,0,0.002297,0.013746,453,406,1.115764,0,0,0,,108,106,105,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[18, 8, 18]]",p70,hha-stop,HHA-stop,,0.000000,2,0.018868,0,0.002525,0.014687,498,406,1.226601,0,0,0,,108,106,105,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[1, 1, 1, 1]]",p70,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.002900,0.012574,572,456,1.254386,0,0,0,,108,107,107,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[1, 1, 1, 1]]",p70,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.002875,0.012537,567,456,1.243421,0,0,0,,108,107,107,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[8, 18, 8]]",p70,occurrence,occurrence-count-heuristic,,0.000000,7,0.066038,0,0.006388,0.041789,1260,1223,1.030253,0,0,0,,108,106,100,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[8, 18, 8]]",p70,hha-stop,HHA-stop,,0.000000,7,0.066038,0,0.006616,0.040805,1305,1223,1.067048,0,0,0,,108,106,100,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[8, 8]]",p90,occurrence,occurrence-count-heuristic,,0.000000,1,0.009901,0,0.008629,0.030356,1702,1607,1.059116,0,0,0,,108,101,106,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[8, 8]]",p90,hha-stop,HHA-stop,,0.000000,1,0.009901,0,0.008994,0.031888,1774,1607,1.103920,0,0,0,,108,101,106,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[1, 1, 1]]",p90,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.009141,0.023726,1803,1646,1.095383,0,0,0,,108,106,107,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[1, 1, 1]]",p90,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.009516,0.024428,1877,1646,1.140340,0,0,0,,108,106,107,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[1, 1]]",p90,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.015711,0.020085,3099,3060,1.012745,0,0,0,,108,105,107,
+datasets/leviathan.txt,"N=5834,len=197251","[0,3]",500,"[[1, 1]]",p90,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.016111,0.020597,3178,3060,1.038562,0,0,0,,108,105,107,

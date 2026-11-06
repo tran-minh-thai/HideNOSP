@@ -15,6 +15,9 @@ Usage:
     python tools/sc3_commands.py --pareto        the Pareto-front batch (|S| = 1, no method)
     python tools/sc3_commands.py --group=degenerate   the degenerate-group cells (the second half of
                                                       H3 is stated on them; preregistration section 16)
+    python tools/sc3_commands.py --stop --size=5      the stop-at-threshold batch: occurrence and
+                                                      hha-stop on the main-group cells, every size
+                                                      (preregistration section 19.1)
     python tools/sc3_commands.py --refine --size=5    the refinement batch: the one method
                                                       cut-hide-refine on the |S| > 1 cells, a secondary
                                                       analysis outside H2 (preregistration section 17)
@@ -48,6 +51,7 @@ REPO = Path(__file__).resolve().parent.parent
 
 METHODS = "cut-hide-rw-ls,cut-hide-rw,cut-hide,hha,dbsh,sbsh-r1,sbsh-rmax"
 REFINE = "cut-hide-refine"   # preregistration section 17: secondary, |S| > 1 only
+STOP = "occurrence,hha-stop"   # preregistration section 19.1: competitors that stop at the threshold
 TIME_LIMIT = "1800"
 HEAP = "-Xmx8g"
 MACHINE = "DESKTOP-L8A6EPO"
@@ -113,14 +117,18 @@ def absent(root, size, group="main"):
 def batch_of(options):
     """The batch a result file belongs to, read from its methods option."""
     methods = options.get("methods")
-    return "front" if methods == "none" else ("refine" if methods == REFINE else "methods")
+    if methods == "none":
+        return "front"
+    return {REFINE: "refine", STOP: "stop"}.get(methods, "methods")
 
 
-def planned(root, size, front=False, group="main", refine=False):
+def planned(root, size, front=False, group="main", refine=False, stop=False):
     if front and size != 1:
         raise ValueError("the Pareto front exists for |S| = 1 only")
     if refine and (front or size == 1):
         raise ValueError("the refinement batch exists for |S| > 1 only (one pattern is cut-hide unchanged)")
+    if stop and (front or refine):
+        raise ValueError("the stop-at-threshold batch is a batch of its own")
     cells = []
     for name, kind in TABLES:
         for cell in read_table(root / name, kind, group):
@@ -132,7 +140,7 @@ def planned(root, size, front=False, group="main", refine=False):
                 "sensitiveSize": str(size),
                 "pareto": "true" if front else "false",
                 "timeLimit": TIME_LIMIT,
-                "methods": "none" if front else (REFINE if refine else METHODS),
+                "methods": "none" if front else (REFINE if refine else (STOP if stop else METHODS)),
             })
             cells.append(cell)
     cells.sort(key=lambda c: (c["pool"], c["patternKind"], c["dataset"], c["gmax"], int(c["sigma"])))
@@ -198,8 +206,8 @@ def command(cell):
     return " ".join('"%s"' % a if "," in a else a for a in args)
 
 
-def plan(root, size, front=False, group="main", refine=False):
-    cells = planned(root, size, front, group, refine)
+def plan(root, size, front=False, group="main", refine=False, stop=False):
+    cells = planned(root, size, front, group, refine, stop)
     files = existing(root)
     todo, done = [], []
     used = set()
@@ -212,8 +220,8 @@ def plan(root, size, front=False, group="main", refine=False):
             todo.append(cell)
     # A file of another size, of the other batch or of another group belongs to another plan; a
     # file is stray only when it matches no cell of any group at this size and batch.
-    others = [c for g in GROUPS if g != group for c in planned(root, size, front, g, refine)]
-    batch = "front" if front else ("refine" if refine else "methods")
+    others = [c for g in GROUPS if g != group for c in planned(root, size, front, g, refine, stop)]
+    batch = "front" if front else ("refine" if refine else ("stop" if stop else "methods"))
     stray = [name for name, options in files
              if name not in used and options.get("sensitiveSize") == str(size)
              and batch_of(options) == batch
@@ -227,7 +235,7 @@ def describe(cell):
 
 
 def main(argv):
-    size, front, group, refine = 1, False, "main", False
+    size, front, group, refine, stop = 1, False, "main", False, False
     for arg in argv:
         if arg == "--self-test":
             return self_test()
@@ -236,6 +244,9 @@ def main(argv):
             continue
         if arg == "--refine":
             refine = True
+            continue
+        if arg == "--stop":
+            stop = True
             continue
         if arg.startswith("--group="):
             group = arg.split("=", 1)[1]
@@ -247,17 +258,17 @@ def main(argv):
         if match and int(match.group(1)) in SIZES:
             size = int(match.group(1))
         else:
-            print("unknown argument %s; use --size=1|5|10|20, --pareto, --refine, --group=main|degenerate"
+            print("unknown argument %s; use --size=1|5|10|20, --pareto, --refine, --stop, --group=main|degenerate"
                   " or --self-test" % arg, file=sys.stderr)
             return 1
     try:
-        cells, todo, done, stray = plan(REPO, size, front, group, refine)
+        cells, todo, done, stray = plan(REPO, size, front, group, refine, stop)
     except (OSError, ValueError, KeyError) as error:
         print("cannot build the plan: %s" % error, file=sys.stderr)
         return 1
     kinds = {k: sum(1 for c in cells if c["patternKind"] == k) for _, k in TABLES}
     print("# SC3 %s |S|=%d, %s group: %d cells (%d pool scope, %d repeated-item scope), %d done, %d to run"
-          % ("Pareto front" if front else ("refinement" if refine else "methods"), size, group, len(cells), kinds["distinct"], kinds["repeated"], len(done), len(todo)))
+          % ("Pareto front" if front else ("refinement" if refine else ("stop-at-threshold" if stop else "methods")), size, group, len(cells), kinds["distinct"], kinds["repeated"], len(done), len(todo)))
     print("# repository root: %s" % REPO.name)
     for cell in absent(REPO, size, group):
         print("# no set of size %d: %s, largest stratum %d" % (size, describe(cell), max(strata(cell["pool"]))))
@@ -418,6 +429,26 @@ def self_test():
               len(done12) == 1 and "SC3_o.csv" not in stray12, "%d done, stray %s" % (len(done12), stray12))
         (root / "results-invariant" / "SC3_n.csv").unlink()
         (root / "results-invariant" / "SC3_o.csv").unlink()
+
+        stopped = planned(root, 1, stop=True)
+        check("the stop batch runs occurrence and hha-stop, every size",
+              all(c["methods"] == STOP for c in stopped) and '"--methods=occurrence,hha-stop"' in command(stopped[0])
+              and len(planned(root, 2, stop=True)) == len(planned(root, 2)), command(stopped[0]))
+        write("SC3_p.csv", planned(root, 1)[0])
+        _, todo13, done13, stray13 = plan(root, 1, stop=True)
+        check("a methods file does not mark the stop cell done", not done13 and len(todo13) == len(stopped),
+              "%d done" % len(done13))
+        check("a methods file is not stray in the stop plan", "SC3_p.csv" not in stray13, str(stray13))
+        write("SC3_q.csv", stopped[0])
+        _, _, done14, stray14 = plan(root, 1, stop=True)
+        _, _, done15, stray15 = plan(root, 1)
+        check("a stop file marks its stop cell done", any("SC3_q.csv" in names for _, names in done14),
+              str(done14))
+        check("a stop file is neither done nor stray in the methods plan",
+              not any("SC3_q.csv" in names for _, names in done15) and "SC3_q.csv" not in stray15,
+              "stray %s" % stray15)
+        (root / "results-invariant" / "SC3_p.csv").unlink()
+        (root / "results-invariant" / "SC3_q.csv").unlink()
 
         write("SC3_h.csv", cells[1], change={"dataset": "datasets\\" + Path(cells[1]["dataset"]).name})
         _, todo3, done3, _ = plan(root, 1)

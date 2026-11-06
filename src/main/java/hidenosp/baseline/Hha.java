@@ -10,6 +10,7 @@ import hidenosp.hide.Sanitization;
 import hidenosp.index.NettreeCutIndex;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -56,6 +57,15 @@ import java.util.List;
  * of Theorem 2 does (with masking rather than deletion, which the gap constraint requires).
  * {@code PATH_COUNTS} reads every delta at once from the forward and backward counts of the index.
  * SC6 times the two against each other.
+ *
+ * <p><b>The stop-at-threshold variant</b> ({@link #stopAtThreshold()}, SC3 key {@code hha-stop},
+ * preregistration section 19.1) changes one thing, the stopping rule under a database threshold: the
+ * sequences carrying a sensitive pattern are taken in the order above (ascending matching set, ties
+ * to the lower index), and in each the position on the most matchings of the patterns that still
+ * need a drop is masked, until every sensitive pattern is below sigma; then it stops. It never keeps
+ * a sequence intact by the budget rule and never sanitises past the threshold. Under HIDE-SEQ HHA
+ * already stops at r, so the variant equals HHA there. The name describes the behaviour; it is not a
+ * published algorithm.
  */
 public final class Hha implements HidingMethod {
 
@@ -69,6 +79,7 @@ public final class Hha implements HidingMethod {
 
     private final Delta delta;
     private final SupportCount support;
+    private final boolean stopAtThreshold;
 
     /** The configuration used in the comparison tables. */
     public Hha() {
@@ -80,13 +91,24 @@ public final class Hha implements HidingMethod {
     }
 
     public Hha(Delta delta, SupportCount support) {
+        this(delta, support, false);
+    }
+
+    private Hha(Delta delta, SupportCount support, boolean stopAtThreshold) {
         this.delta = delta;
         this.support = support;
+        this.stopAtThreshold = stopAtThreshold;
+    }
+
+    /** HHA's order and position rule, stopping as soon as every sensitive support is below sigma. */
+    public static Hha stopAtThreshold() {
+        return new Hha(Delta.PATH_COUNTS, SupportCount.NON_OVERLAPPING, true);
     }
 
     @Override
     public String name() {
-        return "HHA" + (support == SupportCount.SEQUENCE_COUNT ? "-original" : "")
+        return "HHA" + (stopAtThreshold ? "-stop" : "")
+                + (support == SupportCount.SEQUENCE_COUNT ? "-original" : "")
                 + (delta == Delta.ORIGINAL_DP ? "-dp" : "");
     }
 
@@ -124,6 +146,24 @@ public final class Hha implements HidingMethod {
         }
 
         List<Integer> toSanitise = new ArrayList<>(carrying);
+        if (problem.isDatabaseMode() && stopAtThreshold) {
+            toSanitise.sort(Comparator.<Integer>comparingLong(s -> matchingSet[s])
+                    .thenComparing(Comparator.<Integer>naturalOrder()));
+            Sanitization result = new Sanitization(database).method(name());
+            long[] needed = new long[sensitive.size()];
+            for (int p = 0; p < sensitive.size(); p++) {
+                needed[p] = Math.max(0, SupportNO.of(sensitive.get(p), database, problem.gap())
+                        - problem.threshold() + 1);
+            }
+            for (int s : toSanitise) {
+                if (!anyNeeded(needed)) {
+                    break;
+                }
+                sanitiseUntilThreshold(problem, s, needed, result);
+            }
+            Exclude.verify(problem, result, support, name());
+            return result;
+        }
         if (problem.isDatabaseMode()) {
             toSanitise.sort(Comparator.<Integer>comparingLong(s -> matchingSet[s])
                     .thenComparing(Comparator.<Integer>naturalOrder()));
@@ -160,6 +200,49 @@ public final class Hha implements HidingMethod {
         }
     }
 
+    /**
+     * The local rule of HHA restricted to the patterns that still need a drop, stopping in the middle
+     * of the sequence as soon as none does. {@code needed[p]} falls by the drop of sup_NO of pattern p.
+     */
+    private void sanitiseUntilThreshold(HideProblem problem, int s, long[] needed, Sanitization result) {
+        EventSequence sequence = problem.database().get(s);
+        NettreeCutIndex index = index(problem, s);
+        while (true) {
+            boolean[] active = new boolean[index.patternCount()];
+            boolean any = false;
+            for (int p = 0; p < index.patternCount(); p++) {
+                active[p] = needed[p] > 0 && index.supNO(p) > 0;
+                any |= active[p];
+            }
+            if (!any) {
+                return;
+            }
+            int target = bestPosition(problem, sequence, index, active);
+            if (target < 0) {
+                throw new IllegalStateException("a pattern still needs a drop in this sequence but "
+                        + "no position lies on one of its matchings");
+            }
+            long[] before = new long[index.patternCount()];
+            for (int p = 0; p < index.patternCount(); p++) {
+                before[p] = index.supNO(p);
+            }
+            index.maskPosition(target);
+            result.mask(s, target);
+            for (int p = 0; p < index.patternCount(); p++) {
+                needed[p] -= before[p] - index.supNO(p);
+            }
+        }
+    }
+
+    private static boolean anyNeeded(long[] needed) {
+        for (long n : needed) {
+            if (n > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static boolean anyAtLimit(NettreeCutIndex index, int limit) {
         for (int id = 0; id < index.patternCount(); id++) {
             if (index.supNO(id) >= limit) {
@@ -171,6 +254,14 @@ public final class Hha implements HidingMethod {
 
     /** The position on the most matchings of all sensitive patterns; ties go to the leftmost. */
     private int bestPosition(HideProblem problem, EventSequence sequence, NettreeCutIndex index) {
+        boolean[] all = new boolean[index.patternCount()];
+        Arrays.fill(all, true);
+        return bestPosition(problem, sequence, index, all);
+    }
+
+    /** The same, counting the matchings of the active patterns only. */
+    private int bestPosition(HideProblem problem, EventSequence sequence, NettreeCutIndex index,
+                             boolean[] active) {
         long best = 0;
         int target = -1;
         for (int i = 0; i < sequence.length(); i++) {
@@ -179,6 +270,9 @@ public final class Hha implements HidingMethod {
             }
             long through = 0;
             for (int p = 0; p < index.patternCount(); p++) {
+                if (!active[p]) {
+                    continue;
+                }
                 long here = delta == Delta.PATH_COUNTS
                         ? index.occurrencesThrough(p, i)
                         : originalDelta(problem, sequence, index, p, i);

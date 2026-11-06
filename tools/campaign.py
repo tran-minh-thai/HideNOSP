@@ -1,8 +1,8 @@
 """Run every experiment of the paper on one measuring machine, cell by cell, and resume after a stop.
 
-    python tools/campaign.py plan  --machine=NAME [--batch=B]
-    python tools/campaign.py lock  --machine=NAME
-    python tools/campaign.py run   --machine=NAME --batch=B [--branch=campaign-NAME]
+    python tools/campaign.py plan  --machine=NAME [--generation=G] [--batch=B]
+    python tools/campaign.py lock  --machine=NAME [--generation=G]
+    python tools/campaign.py run   --machine=NAME [--generation=G] --batch=B [--branch=campaign-NAME]
                                    [--report-ps1=PATH --status-project=HideNOSP] [--retry-failed]
     python tools/campaign.py --self-test
 
@@ -19,6 +19,10 @@ config/ through tools/sc3_commands.py, never from a hand-written list.
     sc3opt          SC3OPT exact optimum of instances of 8 and 16 sequences, |S| = 5, 10, 20
     sc3-pareto      SC3 --methods=none --pareto=true, |S| = 1 (heap -Xmx32g)
 
+Generation 2 (preregistration section 19), run with --generation=2:
+
+    sc3-stop        SC3 --methods=occurrence,hha-stop on the cells of sc3-s1 .. s20 (19.1)
+
 A cell is done when results-invariant/ holds a complete file of its scenario whose run stamp names
 THIS machine and whose options line names the cell (SC1 writes no options line: scenario, machine and
 seed). Files of other machines never count, so a new machine reruns everything. A cell whose run
@@ -34,6 +38,12 @@ the campaign branch. A failed push only warns; the commit leaves with the next p
 lock writes results-invariant/campaign_<machine>/ENV_LOCK.json: the machine, the JDK (runtime version
 and vendor) and the tree hashes of src/ and pom.xml. run refuses when any of them differs from the
 lock, so one campaign never mixes two JDKs or two versions of the measured code.
+
+A later generation runs batches that need code written after the first lock. It has its own folder
+results-invariant/campaign_<machine>_g<G>/ (lock, ledger, logs), and its lock is written only when the
+machine, the host name and the JDK (runtime version and vendor) equal those of the generation before:
+only the measured code may differ. Every batch belongs to exactly one generation, and run refuses a
+batch under another generation, so old cells are never rerun with new code by mistake.
 
 Exit status: 0 when the batch ran (failed cells are reported, not fatal), 1 on a refused lock or a
 bad argument, 2 when the self-test fails.
@@ -61,7 +71,12 @@ HEAP = "-Xmx8g"
 PARETO_HEAP = "-Xmx32g"          # preregistration section 18; the method batches keep -Xmx8g
 OPT_SIZES = "8,16"
 BATCHES = ("sc1", "sc2", "sc3-s1", "sc3-s5", "sc3-s10", "sc3-s20", "sc3-degenerate", "sc3-refine",
-           "sc3lb", "sc3opt", "sc3-pareto")
+           "sc3lb", "sc3opt", "sc3-pareto", "sc3-stop")
+# The generation a batch belongs to (preregistration section 19 opened the second).
+GENERATION = {b: "1" for b in BATCHES}
+GENERATION.update({"sc3-stop": "2"})
+# What a later generation must share with the one before: only the measured code may differ.
+CARRIED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor")
 LOCKED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor", "source_tree", "pom")
 LEDGER_COLUMNS = ("time_utc", "batch", "cell", "exit", "outcome", "result_files", "log", "path_replacements")
 SC2_TABLES = (("config/configuration_groups.tsv", "pool"),
@@ -109,6 +124,9 @@ def batch_cells(root, batch):
     if batch == "sc3opt":
         return [cell("SC3OPT", {k: c[k] for k in CELL_KEYS}, extra=[("sequencesPerInstance", OPT_SIZES)])
                 for size in (5, 10, 20) for c in sc3.planned(root, size)]
+    if batch == "sc3-stop":
+        return [cell("SC3", {k: c[k] for k in sc3.IDENTITY}) for size in (1, 5, 10, 20)
+                for c in sc3.planned(root, size, stop=True)]
     if batch == "sc3-pareto":
         return [cell("SC3", {k: c[k] for k in sc3.IDENTITY}, heap=PARETO_HEAP) for c in sc3.planned(root, 1, front=True)]
     raise ValueError("unknown batch %s; batches: %s" % (batch, ", ".join(BATCHES)))
@@ -123,7 +141,7 @@ def label(c):
         if key in o:
             value = o[key]
             if key == "methods":
-                value = {"none": "pareto", sc3.REFINE: "refine"}.get(value, "methods")
+                value = {"none": "pareto", sc3.REFINE: "refine", sc3.STOP: "stop"}.get(value, "methods")
             parts.append(name + value)
     return " ".join(parts)
 
@@ -181,20 +199,25 @@ def is_done(c, files):
     return None
 
 
-def ledger_path(root, machine):
-    return root / "results-invariant" / ("campaign_" + machine) / "cells.tsv"
+def campaign_dir(root, machine, generation="1"):
+    """results-invariant/campaign_<machine> for the first generation, campaign_<machine>_g<G> after."""
+    return root / "results-invariant" / ("campaign_" + machine + ("" if generation == "1" else "_g" + generation))
 
 
-def read_ledger(root, machine):
-    path = ledger_path(root, machine)
+def ledger_path(root, machine, generation="1"):
+    return campaign_dir(root, machine, generation) / "cells.tsv"
+
+
+def read_ledger(root, machine, generation="1"):
+    path = ledger_path(root, machine, generation)
     if not path.is_file():
         return []
     with io.open(path, encoding="utf-8", newline="") as handle:
         return list(csv.DictReader(handle, delimiter="\t"))
 
 
-def failed_cells(root, machine):
-    rows = read_ledger(root, machine)
+def failed_cells(root, machine, generation="1"):
+    rows = read_ledger(root, machine, generation)
     last = {}
     for r in rows:
         last[(r["batch"], r["cell"])] = r["outcome"]
@@ -203,7 +226,7 @@ def failed_cells(root, machine):
 
 def status(root, machine, batch):
     files = result_files(root, machine)
-    failed = failed_cells(root, machine)
+    failed = failed_cells(root, machine, GENERATION[batch])
     cells = batch_cells(root, batch)
     done = [c for c in cells if is_done(c, files)]
     gave_up = [c for c in cells if not is_done(c, files) and (batch, label(c)) in failed]
@@ -269,17 +292,33 @@ def environment(root, machine):
     }
 
 
-def lock_path(root, machine):
-    return root / "results-invariant" / ("campaign_" + machine) / "ENV_LOCK.json"
+def lock_path(root, machine, generation="1"):
+    return campaign_dir(root, machine, generation) / "ENV_LOCK.json"
 
 
 def lock_differences(lock, now):
     return ["%s: locked %r, now %r" % (k, lock.get(k), now.get(k)) for k in LOCKED_KEYS if lock.get(k) != now.get(k)]
 
 
-def do_lock(root, machine, env=None):
+def do_lock(root, machine, env=None, generation="1"):
     env = env or environment(root, machine)
-    path = lock_path(root, machine)
+    path = lock_path(root, machine, generation)
+    if generation != "1" and not path.is_file():
+        previous = lock_path(root, machine, str(int(generation) - 1))
+        if not previous.is_file():
+            print("REFUSED: generation %s needs the lock of generation %d first: %s"
+                  % (generation, int(generation) - 1, previous.relative_to(root).as_posix()))
+            return 1
+        before = json.loads(previous.read_text(encoding="utf-8"))
+        moved = ["%s: generation %d has %r, now %r" % (k, int(generation) - 1, before.get(k), env.get(k))
+                 for k in CARRIED_KEYS if before.get(k) != env.get(k)]
+        if moved:
+            print("REFUSED: a new generation may change the measured code only:")
+            for d in moved:
+                print("  " + d)
+            return 1
+        env = dict(env, previous_lock=previous.relative_to(root).as_posix(),
+                   previous_source_tree=before.get("source_tree", "unknown"))
     if path.is_file():
         lock = json.loads(path.read_text(encoding="utf-8"))
         diff = lock_differences(lock, env)
@@ -373,8 +412,8 @@ def report(ps1, project, message):
         print("WARNING: status line not sent (%s): %s" % (e, text), flush=True)
 
 
-def append_ledger(root, machine, row):
-    path = ledger_path(root, machine)
+def append_ledger(root, machine, row, generation="1"):
+    path = ledger_path(root, machine, generation)
     path.parent.mkdir(parents=True, exist_ok=True)
     new = not path.is_file()
     with io.open(path, "a", encoding="utf-8", newline="") as handle:
@@ -386,10 +425,12 @@ def append_ledger(root, machine, row):
 
 def do_run(root, machine, batch, branch=None, ps1=None, project="HideNOSP", retry_failed=False,
            runner=real_runner, env=None):
-    path = lock_path(root, machine)
+    generation = GENERATION[batch]
+    path = lock_path(root, machine, generation)
     if not path.is_file():
-        print("REFUSED: no environment lock at %s; run 'python tools/campaign.py lock --machine=%s' first"
-              % (path.relative_to(root).as_posix(), machine))
+        print("REFUSED: no environment lock at %s; run 'python tools/campaign.py lock --machine=%s%s' first"
+              % (path.relative_to(root).as_posix(), machine,
+                 "" if generation == "1" else " --generation=" + generation))
         return 1
     diff = lock_differences(json.loads(path.read_text(encoding="utf-8")), env or environment(root, machine))
     if diff:
@@ -425,7 +466,7 @@ def do_run(root, machine, batch, branch=None, ps1=None, project="HideNOSP", retr
         outcome = "done" if code == 0 and complete else "failed"
         ran += 1
         failed += outcome == "failed"
-        logdir = root / "results-invariant" / ("campaign_" + machine) / "logs" / batch
+        logdir = campaign_dir(root, machine, generation) / "logs" / batch
         logdir.mkdir(parents=True, exist_ok=True)
         log = logdir / ("%s_%s.log" % (start.strftime("%Y%m%d-%H%M%S"), re.sub(r"[^A-Za-z0-9.=-]+", "_", name)))
         text, replaced = sanitize(console, root)
@@ -435,8 +476,9 @@ def do_run(root, machine, batch, branch=None, ps1=None, project="HideNOSP", retr
         append_ledger(root, machine, {"time_utc": start.strftime("%Y-%m-%dT%H:%M:%SZ"), "batch": batch, "cell": name,
                                       "exit": str(code), "outcome": outcome,
                                       "result_files": " ".join(p.name for p in new),
-                                      "log": log.relative_to(root).as_posix(), "path_replacements": str(replaced)})
-        git = git_commit_push(root, new + [log, ledger_path(root, machine)],
+                                      "log": log.relative_to(root).as_posix(), "path_replacements": str(replaced)},
+                      generation)
+        git = git_commit_push(root, new + [log, ledger_path(root, machine, generation)],
                               "Results %s on %s: %s (%s)" % (batch, machine, name, outcome), branch)
         report(ps1, project, "%s %d/%d %s: exit %d, %s, %.0f s, %s" % (batch, index, len(todo), name, code, outcome,
                                                                        seconds, git))
@@ -475,13 +517,22 @@ def main(argv):
         print("REFUSED: --machine=%s but this machine is %s (COMPUTERNAME / host name). The label must be the"
               " machine that runs." % (machine, hostname()))
         return 1
+    generation = args.get("generation", "1")
+    if generation not in set(GENERATION.values()):
+        print("--generation is one of: %s" % ", ".join(sorted(set(GENERATION.values()))))
+        return 1
+    own = [b for b in BATCHES if GENERATION[b] == generation]
     if action == "plan":
-        return do_plan(REPO, machine, [args["batch"]] if "batch" in args else BATCHES)
+        return do_plan(REPO, machine, [args["batch"]] if "batch" in args else own)
     if action == "lock":
-        return do_lock(REPO, machine)
+        return do_lock(REPO, machine, generation=generation)
     batch = args.get("batch")
     if batch not in BATCHES:
         print("--batch is one of: %s" % ", ".join(BATCHES))
+        return 1
+    if GENERATION[batch] != generation:
+        print("REFUSED: batch %s belongs to generation %s; this command names generation %s"
+              % (batch, GENERATION[batch], generation))
         return 1
     return do_run(REPO, machine, batch, branch=args.get("branch"), ps1=args.get("report-ps1"),
                   project=args.get("status-project", "HideNOSP"), retry_failed="retry-failed" in args)
@@ -501,7 +552,7 @@ def self_test():
 
     # 1. The plan of the real repository: the number of cells of each batch.
     expected = {"sc1": 1, "sc2": 81, "sc3-s1": 54, "sc3-s5": 34, "sc3-s10": 27, "sc3-s20": 21, "sc3-degenerate": 17,
-                "sc3-refine": 82, "sc3lb": 136, "sc3opt": 82, "sc3-pareto": 54}
+                "sc3-refine": 82, "sc3lb": 136, "sc3opt": 82, "sc3-pareto": 54, "sc3-stop": 136}
     for b in BATCHES:
         n = len(batch_cells(REPO, b))
         check("plan of %s has %d cells" % (b, expected[b]), n == expected[b], str(n))
@@ -606,6 +657,39 @@ def self_test():
         check("a failed push does not stop the batch", sum(1 for r in rows if r["batch"] == "sc3-s1") == 54 and bad.returncode == 0,
               str(sum(1 for r in rows if r["batch"] == "sc3-s1")))
         check("sanitize replaces the home folder", sanitize("x %s y" % Path.home(), root) == ("x <home> y", 1))
+
+        # 3. A second generation: its own lock, carried from the first, and its own batches only.
+        subprocess.run(["git", "-C", str(root), "remote", "set-url", "origin", str(remote)], check=True)
+        (root / "src" / "B.java").write_text("class B {}\n", encoding="utf-8")
+        new_code = dict(env, source_tree="changed")
+        before = len(calls)
+        check("a first-generation batch is refused under new code",
+              do_run(root, "XPS", "sc1", runner=fake, env=new_code) == 1 and len(calls) == before)
+        check("a second-generation batch needs the second lock",
+              do_run(root, "XPS", "sc3-stop", runner=fake, env=new_code) == 1 and len(calls) == before)
+        check("the second lock refuses another JDK",
+              do_lock(root, "XPS", env=dict(new_code, java_runtime_version="25.0.5+8"), generation="2") == 1
+              and not lock_path(root, "XPS", "2").is_file())
+        check("the second lock refuses another host name",
+              do_lock(root, "XPS", env=dict(new_code, hostname="OTHER"), generation="2") == 1)
+        check("the third lock needs the second", do_lock(root, "XPS", env=new_code, generation="3") == 1)
+        check("the second lock is written when only the code differs",
+              do_lock(root, "XPS", env=new_code, generation="2") == 0 and lock_path(root, "XPS", "2").is_file())
+        second = json.loads(lock_path(root, "XPS", "2").read_text(encoding="utf-8"))
+        check("the second lock names the first", second.get("previous_source_tree") == env["source_tree"]
+              and second.get("previous_lock", "").endswith("campaign_XPS/ENV_LOCK.json"), str(second))
+        stop_cells = batch_cells(root, "sc3-stop")
+        do_run(root, "XPS", "sc3-stop", branch="campaign-xps", runner=lambda r, m, c: (fake(r, m, c)
+               if len(calls) - before < 3 else (calls.append("stop"), (9, ""))[1]), env=new_code)
+        check("a second-generation batch writes its own ledger",
+              len(read_ledger(root, "XPS", "2")) == len(stop_cells) and len(read_ledger(root, "XPS")) == len(rows),
+              "%d and %d rows" % (len(read_ledger(root, "XPS", "2")), len(read_ledger(root, "XPS"))))
+        check("its logs go to its own folder",
+              len(list((root / "results-invariant" / "campaign_XPS_g2" / "logs").rglob("*.log"))) == len(stop_cells))
+        _, done_stop, _ = status(root, "XPS", "sc3-stop")
+        _, done_s1, _ = status(root, "XPS", "sc3-s1")
+        check("a stop file marks its stop cell only", len(done_stop) == 3 and len(done_s1) == 2,
+              "%d stop, %d methods" % (len(done_stop), len(done_s1)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     print("%d checks, %d failed" % (checks, len(failures)))

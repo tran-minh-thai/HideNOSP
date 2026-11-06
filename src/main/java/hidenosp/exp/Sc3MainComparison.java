@@ -377,6 +377,10 @@ public final class Sc3MainComparison implements Scenario {
                         RandomMasking.PositionChoice.RANDOM, seed);
             case "hha":
                 return new Hha();
+            case "hha-stop":
+                // Preregistration section 19.1: HHA's order and position rule, stopping as soon as
+                // every sensitive support is below sigma.
+                return Hha.stopAtThreshold();
             case "dbsh":
                 return new Dbsh();
             case "sbsh":

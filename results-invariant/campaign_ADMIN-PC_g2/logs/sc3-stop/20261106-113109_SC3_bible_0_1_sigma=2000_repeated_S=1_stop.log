@@ -1,0 +1,27 @@
+# cell SC3 bible [0,1] sigma=2000 repeated S=1 stop
+# machine ADMIN-PC
+# exit 0 after 303 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = b6178877c92d
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3 main comparison on HIDE-DB: Lost, Ghost, SupDist, |R| and HF against the baselines
+# run 20261106-113111-685_ADMIN-PC_b6178877c92d_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, repeated-item pool 4 candidates, 4 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+WARNING: the pool gives 4 distinct sets, not 20; the cell runs with these and the result file header says so. No set is repeated to make up the number.
+set 0  occurrence-count-heuristic         |R|    8  lost    0 (0.0000)  supDist 0.0000  0.1 s
+set 0  HHA-stop                           |R|    8  lost    0 (0.0000)  supDist 0.0000  0.2 s
+set 1  occurrence-count-heuristic         |R|  844  lost    0 (0.0000)  supDist 0.0016  0.0 s
+set 1  HHA-stop                           |R|  844  lost    0 (0.0000)  supDist 0.0016  0.1 s
+set 2  occurrence-count-heuristic         |R| 1191  lost    0 (0.0000)  supDist 0.0071  0.0 s
+set 2  HHA-stop                           |R| 1311  lost    0 (0.0000)  supDist 0.0078  0.1 s
+set 3  occurrence-count-heuristic         |R| 5467  lost    4 (0.0519)  supDist 0.0321  0.1 s
+set 3  HHA-stop                           |R| 5746  lost    4 (0.0519)  supDist 0.0324  0.1 s
+done in 301.1 s

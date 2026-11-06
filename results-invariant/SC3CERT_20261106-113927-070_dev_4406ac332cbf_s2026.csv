@@ -1,0 +1,53 @@
+# run 20261106-113927-070_dev_4406ac332cbf_s2026
+# host unknown-host
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Apple M5
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3CERT
+# options {machine=dev, dataset=datasets/protein_sdb4.txt, format=SPMF, sigma=900, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, patternKind=repeated, parts=small}
+# sensitive sets: size 1, repeated-item pool 13 candidates, 13 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 2 -> 2, p30: 3 -> 3, p50: 2 -> 2, p70: 3 -> 3, p90: 3 -> 3
+# reference method cut-hide-rw-ls
+dataset,gap,sigma,pattern_kind,sensitive_set,stratum,instance,drop,instance_sigma,mask_count,lost,bound,examined,certified,status
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[11, 11]]",p10,small,2,4,2,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[11, 11]]",p10,small,3,3,3,3,0,3,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[11, 11]]",p10,small,4,2,4,12,0,12,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[7, 7]]",p10,small,2,6,1,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[7, 7]]",p10,small,3,5,2,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[7, 7]]",p10,small,4,4,3,2,0,2,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[4, 4]]",p30,small,2,4,2,2,0,2,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[4, 4]]",p30,small,3,3,3,1,0,1,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[4, 4]]",p30,small,4,2,4,16,0,16,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[16, 16]]",p30,small,2,6,1,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[16, 16]]",p30,small,3,5,2,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[16, 16]]",p30,small,4,4,3,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[0, 0, 0]]",p30,small,2,5,2,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[0, 0, 0]]",p30,small,3,4,3,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[0, 0, 0]]",p30,small,4,3,4,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[15, 15]]",p50,small,2,6,1,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[15, 15]]",p50,small,3,5,2,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[15, 15]]",p50,small,4,4,2,1,0,1,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[8, 8]]",p50,small,2,7,1,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[8, 8]]",p50,small,3,6,2,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[8, 8]]",p50,small,4,5,2,1,0,1,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[3, 3]]",p70,small,2,4,2,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[3, 3]]",p70,small,3,3,3,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[3, 3]]",p70,small,4,2,4,18,0,18,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[17, 17]]",p70,small,2,4,2,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[17, 17]]",p70,small,3,3,3,1,0,1,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[17, 17]]",p70,small,4,2,4,14,0,14,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[2, 2]]",p70,small,2,7,1,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[2, 2]]",p70,small,3,6,2,1,1,1,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[2, 2]]",p70,small,4,5,3,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[5, 5]]",p90,small,2,5,2,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[5, 5]]",p90,small,3,4,3,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[5, 5]]",p90,small,4,3,4,3,0,3,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[9, 9]]",p90,small,2,6,2,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[9, 9]]",p90,small,3,5,2,3,0,3,false,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[9, 9]]",p90,small,4,4,3,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[0, 0]]",p90,small,2,6,1,1,1,1,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[0, 0]]",p90,small,3,5,2,0,0,0,true,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,"[[0, 0]]",p90,small,4,4,3,0,0,0,true,

@@ -1,0 +1,53 @@
+# run 20261106-113841-627_dev_4406ac332cbf_s2026
+# host unknown-host
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Apple M5
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3CERT
+# options {machine=dev, dataset=datasets/leviathan.txt, format=SPMF, sigma=500, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, patternKind=repeated, parts=small}
+# sensitive sets: size 1, repeated-item pool 13 candidates, 13 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 2 -> 2, p30: 3 -> 3, p50: 2 -> 2, p70: 3 -> 3, p90: 3 -> 3
+# reference method cut-hide-rw-ls
+dataset,gap,sigma,pattern_kind,sensitive_set,stratum,instance,drop,instance_sigma,mask_count,lost,bound,examined,certified,status
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 14, 8]]",p10,small,2,4,2,1,0,1,false,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 14, 8]]",p10,small,3,3,3,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 14, 8]]",p10,small,4,2,4,6,0,6,false,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 18, 8, 18]]",p10,small,2,4,2,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 18, 8, 18]]",p10,small,3,3,3,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 18, 8, 18]]",p10,small,4,2,4,5,0,5,false,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 8, 8]]",p30,small,2,7,1,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 8, 8]]",p30,small,3,6,2,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 8, 8]]",p30,small,4,5,2,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[18, 8, 8]]",p30,small,2,5,1,1,0,1,false,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[18, 8, 8]]",p30,small,3,4,2,3,0,3,false,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[18, 8, 8]]",p30,small,4,3,3,1,0,1,false,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[71, 71]]",p30,small,2,4,2,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[71, 71]]",p30,small,3,3,3,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[71, 71]]",p30,small,4,2,4,1,0,1,false,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 8, 18]]",p50,small,2,4,2,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 8, 18]]",p50,small,3,3,3,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 8, 18]]",p50,small,4,2,4,1,0,1,false,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[18, 18]]",p50,small,2,6,1,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[18, 18]]",p50,small,3,5,2,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[18, 18]]",p50,small,4,4,2,1,1,1,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[18, 8, 18]]",p70,small,2,4,2,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[18, 8, 18]]",p70,small,3,3,3,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[18, 8, 18]]",p70,small,4,2,4,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[1, 1, 1, 1]]",p70,small,2,29,2,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[1, 1, 1, 1]]",p70,small,3,28,3,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[1, 1, 1, 1]]",p70,small,4,27,4,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 18, 8]]",p70,small,2,4,2,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 18, 8]]",p70,small,3,3,3,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 18, 8]]",p70,small,4,2,4,5,0,5,false,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 8]]",p90,small,2,4,2,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 8]]",p90,small,3,3,3,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[8, 8]]",p90,small,4,2,4,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[1, 1, 1]]",p90,small,2,4,2,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[1, 1, 1]]",p90,small,3,3,3,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[1, 1, 1]]",p90,small,4,2,4,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[1, 1]]",p90,small,2,15,2,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[1, 1]]",p90,small,3,14,3,0,0,0,true,
+datasets/leviathan.txt,"[0,3]",500,repeated,"[[1, 1]]",p90,small,4,13,4,0,0,0,true,

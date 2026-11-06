@@ -1,0 +1,102 @@
+# SC3CERT small instances with the empty-band selector of CUT-HIDE (preregistration section 19.2, correction of 2026-11-06 for SC3CERT)
+# Run: the 54 cells of campaign batch sc3cert (tools/campaign.py batch_cells), small part only, on the development machine, label dev,
+#   one call per cell: python tools/run.py --jvm=-Xmx8g --no-build SC3CERT --machine=dev <cell options> --parts=small
+#   classes built beforehand with javac --release 25 into target/classes from commit 4406ac332cbf (mvn -o lacks a compiler plugin
+#   on this machine); every result file carries revision 4406ac332cbf, clean tree; JDK Temurin 25.0.4.1+1.
+# Counts are machine-invariant (no time or memory column). Old rows: the 54 SC3CERT and 54 SC3LOST files of ADMIN-PC (generation 2,
+#   made before the selector) on branch campaign-admin-pc-g2 at b829cb0935b0.
+# Table: full-data rows from those ADMIN-PC SC3CERT files, joined with the ADMIN-PC SC3 files of results-invariant; small rows from
+#   this rerun, joined with the SC3LOST rerun of dev (sc3lost_optimum_dev_20261106.txt). Regenerate after the campaign branch is merged.
+# Tools: tools/compare_sc3cert_selector.py sha256 585841570f4b; tools/cert_table.py sha256 7bb758ae5d60.
+
+## Per-cell exit status (wall-clock time dropped: this tree holds no timing)
+cells 54
+1/54 exit 0 SC3CERT dna_mt745584 [0,1] sigma=4000 repeated
+2/54 exit 0 SC3CERT dna_mt745584 [0,1] sigma=2500 repeated
+3/54 exit 0 SC3CERT fifa [0,1] sigma=3000 repeated
+4/54 exit 0 SC3CERT fifa [0,3] sigma=3000 repeated
+5/54 exit 0 SC3CERT dna_mt745584 [0,3] sigma=4000 distinct
+6/54 exit 0 SC3CERT bible [0,1] sigma=2000 repeated
+7/54 exit 0 SC3CERT leviathan [0,1] sigma=500 repeated
+8/54 exit 0 SC3CERT protein_sdb1 [0,1] sigma=800 repeated
+9/54 exit 0 SC3CERT protein_sdb4 [0,1] sigma=900 repeated
+10/54 exit 0 SC3CERT dna_mt745584 [0,3] sigma=4000 repeated
+11/54 exit 0 SC3CERT dna_mt745584 [0,1] sigma=2500 distinct
+12/54 exit 0 SC3CERT bpi2012 [0,1] sigma=4000 repeated
+13/54 exit 0 SC3CERT protein_sdb1 [0,1] sigma=400 repeated
+14/54 exit 0 SC3CERT protein_sdb4 [0,1] sigma=500 repeated
+15/54 exit 0 SC3CERT leviathan [0,3] sigma=500 repeated
+16/54 exit 0 SC3CERT protein_sdb4 [0,3] sigma=900 repeated
+17/54 exit 0 SC3CERT bpi2012 [0,3] sigma=4000 repeated
+18/54 exit 0 SC3CERT protein_sdb1 [0,3] sigma=800 repeated
+19/54 exit 0 SC3CERT dna_mt745584 [0,10] sigma=4000 distinct
+20/54 exit 0 SC3CERT bible [0,3] sigma=2000 repeated
+21/54 exit 0 SC3CERT dna_mt745584 [0,3] sigma=2500 distinct
+22/54 exit 0 SC3CERT sepsis [0,1] sigma=300 repeated
+23/54 exit 0 SC3CERT msnbc [0,1] sigma=5000 distinct
+24/54 exit 0 SC3CERT protein_sdb1 [0,1] sigma=800 distinct
+25/54 exit 0 SC3CERT msnbc [0,3] sigma=5000 distinct
+26/54 exit 0 SC3CERT protein_sdb4 [0,1] sigma=900 distinct
+27/54 exit 0 SC3CERT dna_mt745584 [0,3] sigma=2500 repeated
+28/54 exit 0 SC3CERT dna_mt745584 [0,10] sigma=4000 repeated
+29/54 exit 0 SC3CERT dna_mt745584 [0,10] sigma=2500 distinct
+30/54 exit 0 SC3CERT msnbc [0,10] sigma=5000 distinct
+31/54 exit 0 SC3CERT bpi2013 [0,1] sigma=1000 repeated
+32/54 exit 0 SC3CERT msnbc [0,1] sigma=5000 repeated
+33/54 exit 0 SC3CERT protein_sdb4 [0,3] sigma=500 repeated
+34/54 exit 0 SC3CERT msnbc [0,1] sigma=2000 distinct
+35/54 exit 0 SC3CERT protein_sdb1 [0,3] sigma=400 repeated
+36/54 exit 0 SC3CERT bpi2013 [0,3] sigma=1000 repeated
+37/54 exit 0 SC3CERT bpi2013 [0,1] sigma=500 repeated
+38/54 exit 0 SC3CERT msnbc [0,3] sigma=5000 repeated
+39/54 exit 0 SC3CERT sepsis [0,3] sigma=300 repeated
+40/54 exit 0 SC3CERT msnbc [0,10] sigma=5000 repeated
+41/54 exit 0 SC3CERT protein_sdb1 [0,3] sigma=800 distinct
+42/54 exit 0 SC3CERT protein_sdb4 [0,1] sigma=500 distinct
+43/54 exit 0 SC3CERT protein_sdb4 [0,3] sigma=900 distinct
+44/54 exit 0 SC3CERT protein_sdb1 [0,1] sigma=400 distinct
+45/54 exit 0 SC3CERT msnbc [0,1] sigma=2000 repeated
+46/54 exit 0 SC3CERT bpi2013 [0,3] sigma=500 repeated
+47/54 exit 0 SC3CERT dna_mt745584 [0,10] sigma=2500 repeated
+48/54 exit 0 SC3CERT msnbc [0,3] sigma=2000 repeated
+49/54 exit 0 SC3CERT protein_sdb4 [0,3] sigma=500 distinct
+50/54 exit 0 SC3CERT protein_sdb1 [0,3] sigma=400 distinct
+51/54 exit 0 SC3CERT msnbc [0,1] sigma=1000 repeated
+52/54 exit 0 SC3CERT msnbc [0,10] sigma=2000 repeated
+53/54 exit 0 SC3CERT msnbc [0,3] sigma=1000 repeated
+54/54 exit 0 SC3CERT msnbc [0,10] sigma=1000 repeated
+
+## Comparison with ADMIN-PC, small rows (python tools/compare_sc3cert_selector.py <ADMIN-PC files> ADMIN-PC results-invariant dev)
+SC3LOST instances refused before the selector                               32
+cells                                                                       54
+small rows                                                                  2559
+identical rows                                                              2527
+refused rows                                                                32
+refused rows now Lost = B = 0, certified, on a refused SC3LOST instance     32
+PROBLEMS 0
+
+## Table (python tools/cert_table.py --machine=ADMIN-PC --small-machine=dev --dir=<the files named above>)
+SC3CERT files of ADMIN-PC: 54; small instances from the 54 SC3CERT files of dev (2559 small rows of ADMIN-PC skipped), joined with the SC3LOST files of dev
+checks covered: 3411 rows with a bound, 852 full-data rows joined with SC3, 2208 small rows joined with SC3LOST
+
+== reported only, distinct scope
+   full data: 80 sets; certified optimal (Lost = B) 78/80; B > 0 0/80; median Lost - B 0.0; not evaluated none
+   small instances: 240 joined; B = OPT_Lost 138/240; median OPT_Lost - B 0.0; skipped none
+   of them with OPT_Lost > 0 (where B <= OPT_Lost can fail): 103; B = OPT_Lost 1/103; B > 0 2/103
+
+== reported only, repeated scope
+   full data: 50 sets; certified optimal (Lost = B) 38/50; B > 0 5/50; median Lost - B 0.0; not evaluated none
+   small instances: 150 joined; B = OPT_Lost 92/150; median OPT_Lost - B 0.0; skipped none
+   of them with OPT_Lost > 0 (where B <= OPT_Lost can fail): 61; B = OPT_Lost 3/61; B > 0 7/61
+
+== tested datasets, distinct scope
+   full data: 232 sets; certified optimal (Lost = B) 165/232; B > 0 0/232; median Lost - B 0.0; not evaluated none
+   small instances: 629 joined; B = OPT_Lost 338/629; median OPT_Lost - B 0.0; skipped {'SC3LOST: exact method refused': 67}
+   of them with OPT_Lost > 0 (where B <= OPT_Lost can fail): 291; B = OPT_Lost 0/291; B > 0 13/291
+
+== tested datasets, repeated scope
+   full data: 490 sets; certified optimal (Lost = B) 202/490; B > 0 151/490; median Lost - B 1.0; not evaluated {'OT': 1}
+   small instances: 1189 joined; B = OPT_Lost 505/1189; median OPT_Lost - B 1.0; skipped {'SC3LOST: exact method refused': 284}
+   of them with OPT_Lost > 0 (where B <= OPT_Lost can fail): 704; B = OPT_Lost 20/704; B > 0 78/704
+
+No problem: B <= Lost on every row, B <= OPT_Lost on every small instance, every rerun equals its SC3 or SC3LOST row.

@@ -1,0 +1,56 @@
+# run 20261106-113945-553_dev_4406ac332cbf_s2026
+# host unknown-host
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Apple M5
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3CERT
+# options {machine=dev, dataset=datasets/bpi2012.txt, format=SPMF, sigma=4000, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, patternKind=repeated, parts=small}
+# sensitive sets: size 1, repeated-item pool 14 candidates, 14 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 2 -> 2, p30: 3 -> 3, p50: 3 -> 3, p70: 3 -> 3, p90: 3 -> 3
+# reference method cut-hide-rw-ls
+dataset,gap,sigma,pattern_kind,sensitive_set,stratum,instance,drop,instance_sigma,mask_count,lost,bound,examined,certified,status
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[12, 15, 21, 21]]",p10,small,2,4,2,13,0,13,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[12, 15, 21, 21]]",p10,small,3,3,3,12,0,12,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[12, 15, 21, 21]]",p10,small,4,2,4,52,0,52,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[12, 21, 21]]",p10,small,2,5,2,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[12, 21, 21]]",p10,small,3,4,3,3,0,3,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[12, 21, 21]]",p10,small,4,3,4,26,0,26,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[14, 12, 21, 21]]",p30,small,2,4,2,2,0,2,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[14, 12, 21, 21]]",p30,small,3,3,3,4,0,4,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[14, 12, 21, 21]]",p30,small,4,2,4,14,0,14,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[14, 15, 21, 21]]",p30,small,2,4,2,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[14, 15, 21, 21]]",p30,small,3,3,3,8,0,8,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[14, 15, 21, 21]]",p30,small,4,2,4,25,0,25,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[15, 21, 21]]",p30,small,2,5,2,7,0,7,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[15, 21, 21]]",p30,small,3,4,3,6,0,6,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[15, 21, 21]]",p30,small,4,3,4,41,3,41,false,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[20, 20, 20, 20]]",p50,small,2,7,2,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[20, 20, 20, 20]]",p50,small,3,6,3,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[20, 20, 20, 20]]",p50,small,4,5,4,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[20, 20, 20]]",p50,small,2,19,2,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[20, 20, 20]]",p50,small,3,18,3,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[20, 20, 20]]",p50,small,4,17,4,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[19, 19, 19, 19]]",p50,small,2,24,2,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[19, 19, 19, 19]]",p50,small,3,23,3,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[19, 19, 19, 19]]",p50,small,4,22,4,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[21, 21, 21, 21]]",p70,small,2,21,2,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[21, 21, 21, 21]]",p70,small,3,20,3,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[21, 21, 21, 21]]",p70,small,4,19,3,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[20, 20]]",p70,small,2,28,2,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[20, 20]]",p70,small,3,27,2,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[20, 20]]",p70,small,4,26,3,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[19, 19, 19]]",p70,small,2,23,2,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[19, 19, 19]]",p70,small,3,22,3,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[19, 19, 19]]",p70,small,4,21,3,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[21, 21, 21]]",p90,small,2,13,2,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[21, 21, 21]]",p90,small,3,12,3,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[21, 21, 21]]",p90,small,4,11,3,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[19, 19]]",p90,small,2,26,2,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[19, 19]]",p90,small,3,25,3,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[19, 19]]",p90,small,4,24,4,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[21, 21]]",p90,small,2,11,2,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[21, 21]]",p90,small,3,10,3,0,0,0,true,
+datasets/bpi2012.txt,"[0,3]",4000,repeated,"[[21, 21]]",p90,small,4,9,4,0,0,0,true,

@@ -1,0 +1,74 @@
+# run 20261106-115153-195_dev_4406ac332cbf_s2026
+# host unknown-host
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Apple M5
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC3CERT
+# options {machine=dev, dataset=datasets/msnbc.txt, format=SPMF, sigma=1000, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, patternKind=repeated, parts=small}
+# sensitive sets: size 1, repeated-item pool 885 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 177 -> 4, p30: 177 -> 4, p50: 177 -> 4, p70: 177 -> 4, p90: 177 -> 4
+# reference method cut-hide-rw-ls
+dataset,gap,sigma,pattern_kind,sensitive_set,stratum,instance,drop,instance_sigma,mask_count,lost,bound,examined,certified,status
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[2, 2, 1, 7]]",p10,small,2,4,2,2,0,2,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[2, 2, 1, 7]]",p10,small,3,3,3,12,0,12,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[2, 2, 1, 7]]",p10,small,4,2,4,30,0,30,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[4, 1, 7, 7]]",p10,small,2,4,2,4,0,4,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[4, 1, 7, 7]]",p10,small,3,3,3,3,0,3,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[4, 1, 7, 7]]",p10,small,4,2,4,11,0,11,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[9, 9, 2]]",p10,small,2,4,2,1,0,1,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[9, 9, 2]]",p10,small,3,3,3,6,0,6,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[9, 9, 2]]",p10,small,4,2,4,16,0,16,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[4, 1, 14, 1]]",p10,small,2,4,2,2,0,2,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[4, 1, 14, 1]]",p10,small,3,3,3,2,0,2,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[4, 1, 14, 1]]",p10,small,4,2,4,7,0,7,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[10, 2, 1, 2]]",p30,small,2,4,2,3,0,3,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[10, 2, 1, 2]]",p30,small,3,3,3,4,0,4,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[10, 2, 1, 2]]",p30,small,4,2,4,15,0,15,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[7, 1, 1, 6]]",p30,small,2,5,2,0,0,0,true,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[7, 1, 1, 6]]",p30,small,3,4,3,4,0,4,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[7, 1, 1, 6]]",p30,small,4,3,4,5,0,5,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[10, 10, 6]]",p30,small,2,4,2,3,0,3,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[10, 10, 6]]",p30,small,3,3,3,10,0,10,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[10, 10, 6]]",p30,small,4,2,4,39,0,39,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[2, 4, 4, 1]]",p30,small,2,5,2,1,0,1,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[2, 4, 4, 1]]",p30,small,3,4,3,4,0,4,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[2, 4, 4, 1]]",p30,small,4,3,4,12,0,12,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 2, 10, 2]]",p50,small,2,4,2,1,0,1,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 2, 10, 2]]",p50,small,3,3,3,8,0,8,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 2, 10, 2]]",p50,small,4,2,4,30,0,30,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 8, 8]]",p50,small,2,14,2,0,0,0,true,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 8, 8]]",p50,small,3,13,2,3,2,3,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 8, 8]]",p50,small,4,12,3,6,4,6,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[2, 10, 10]]",p50,small,2,4,2,0,0,0,true,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[2, 10, 10]]",p50,small,3,3,3,2,0,2,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[2, 10, 10]]",p50,small,4,2,4,25,0,25,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[6, 6, 10]]",p50,small,2,6,1,0,0,0,true,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[6, 6, 10]]",p50,small,3,5,2,2,0,2,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[6, 6, 10]]",p50,small,4,4,3,4,0,4,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[14, 14, 1, 1]]",p70,small,2,8,2,0,0,0,true,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[14, 14, 1, 1]]",p70,small,3,7,2,0,0,0,true,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[14, 14, 1, 1]]",p70,small,4,6,3,2,0,2,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 4, 2, 1]]",p70,small,2,4,2,2,0,2,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 4, 2, 1]]",p70,small,3,3,3,1,0,1,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 4, 2, 1]]",p70,small,4,2,4,19,0,19,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 4, 1, 7]]",p70,small,2,4,2,7,0,7,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 4, 1, 7]]",p70,small,3,3,3,11,0,11,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 4, 1, 7]]",p70,small,4,2,4,50,0,50,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[11, 1, 1, 2]]",p70,small,2,4,2,2,0,2,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[11, 1, 1, 2]]",p70,small,3,3,3,4,0,4,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[11, 1, 1, 2]]",p70,small,4,2,4,30,0,30,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 1, 4, 1]]",p90,small,2,6,1,1,0,1,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 1, 4, 1]]",p90,small,3,5,2,2,1,2,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 1, 4, 1]]",p90,small,4,4,3,3,0,3,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 1, 4]]",p90,small,2,6,1,0,0,0,true,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 1, 4]]",p90,small,3,5,2,0,0,0,true,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 1, 4]]",p90,small,4,4,3,2,0,2,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 1, 2, 2]]",p90,small,2,6,1,4,3,4,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 1, 2, 2]]",p90,small,3,5,2,6,5,6,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 1, 2, 2]]",p90,small,4,4,3,10,3,10,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 2, 1]]",p90,small,2,11,1,0,0,0,true,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 2, 1]]",p90,small,3,10,2,2,0,2,false,
+datasets/msnbc.txt,"[0,3]",1000,repeated,"[[1, 2, 1]]",p90,small,4,9,3,2,0,2,false,

@@ -1,6 +1,11 @@
 """Summarise SC3CERT (preregistration section 20.2): the certified lower bound B on the optimum Lost.
 
-    python tools/cert_table.py [--machine=NAME] [--dir=DIR] [--out FILE]
+    python tools/cert_table.py [--machine=NAME] [--small-machine=NAME] [--dir=DIR] [--out FILE]
+
+With --small-machine, the full-data rows come from the SC3CERT files of --machine and the small-instance rows
+from those of --small-machine (a rerun with --parts=small, joined with the SC3LOST files of that machine); the
+small rows of --machine are then skipped and counted. Used when the small instances were rerun with the
+empty-band selector of CUT-HIDE (preregistration section 19.2, correction of 2026-11-06).
 
 Reads the SC3CERT_*.csv files of one machine in DIR (default: results-invariant/ of the repository), with the
 SC3_*.csv and SC3LOST_*.csv files of the same machine, and prints per scope, with protein_sdb1 reported apart
@@ -17,7 +22,9 @@ Implementation checks that stop the run with exit status 1, each with the number
   - a full-data row has an SC3 row of cut-hide-rw-ls for the same set, with the same |R| and Lost;
   - a small row with a bound has an SC3LOST row of cut-hide-rw-ls for the same set and drop, with the same
     instance threshold and Lost, and B <= OPT_Lost;
-  - a row whose status starts with "check failed".
+  - a row whose status starts with "check failed";
+  - with --small-machine, a full-data row in a file of that machine;
+  - a set (full data) or an instance (small) that appears in more than one row.
 """
 import csv
 import glob
@@ -59,6 +66,7 @@ def main(argv):
     out_path = None
     directory = REPO / "results-invariant"
     machine = ""
+    small_machine = ""
     i = 0
     while i < len(argv):
         a = argv[i]
@@ -68,10 +76,13 @@ def main(argv):
             continue
         if a.startswith("--machine="):
             machine = a.split("=", 1)[1]
+        elif a.startswith("--small-machine="):
+            small_machine = a.split("=", 1)[1]
         elif a.startswith("--dir="):
             directory = Path(a.split("=", 1)[1])
         else:
-            print("usage: python tools/cert_table.py [--machine=NAME] [--dir=DIR] [--out FILE]", file=sys.stderr)
+            print("usage: python tools/cert_table.py [--machine=NAME] [--small-machine=NAME] [--dir=DIR] [--out FILE]",
+                  file=sys.stderr)
             return 1
         i += 1
     files, machine, refusal = one_machine(sorted(glob.glob(str(directory / "SC3CERT_*.csv"))), machine,
@@ -82,6 +93,15 @@ def main(argv):
     if not files:
         print("no SC3CERT file in %s" % directory.as_posix(), file=sys.stderr)
         return 1
+    small_files = []
+    if small_machine:
+        if not machine or machine == small_machine:
+            print("--small-machine needs --machine naming another machine", file=sys.stderr)
+            return 1
+        small_files = same_machine(directory, "SC3CERT_*.csv", small_machine)
+        if not small_files:
+            print("no SC3CERT file of machine %s in %s" % (small_machine, directory.as_posix()), file=sys.stderr)
+            return 1
 
     sc3 = {}
     for path in same_machine(directory, "SC3_*.csv", machine):
@@ -89,7 +109,7 @@ def main(argv):
             if r["method_key"] == METHOD:
                 sc3[(dataset_name(r["dataset"]), r["gap"], r["sigma"], r["sensitive_set"])] = r
     lost_rows = {}
-    for path in same_machine(directory, "SC3LOST_*.csv", machine):
+    for path in same_machine(directory, "SC3LOST_*.csv", small_machine or machine):
         for r in rows_of(path):
             if r["method_key"] in (METHOD, ""):
                 # A row without a method key is an instance SC3LOST skipped (its status says why).
@@ -100,11 +120,24 @@ def main(argv):
     full = defaultdict(list)       # (part, scope) -> [(lost, bound)]
     small = defaultdict(list)      # (part, scope) -> [(opt, bound)]
     status = defaultdict(Counter)  # (part, scope, instance) -> reason -> count
-    for path in files:
+    seen = set()
+    sources = [(path, False) for path in files] + [(path, True) for path in small_files]
+    for path, from_small in sources:
         for r in rows_of(path):
+            if small_machine and not from_small and r["instance"] == "small":
+                checked["small rows of %s skipped" % machine] += 1
+                continue
+            if from_small and r["instance"] != "small":
+                problems.append("%s: a %s row in a file of %s" % (Path(path).name, r["instance"], small_machine))
+                continue
             name = dataset_name(r["dataset"])
             group = ("reported only" if name in REPORT_ONLY else "tested datasets", r["pattern_kind"])
             where = "%s %s %s %s %s %s" % (name, r["gap"], r["sigma"], r["sensitive_set"], r["instance"], r["drop"])
+            key = (name, r["gap"], r["sigma"], r["pattern_kind"], r["sensitive_set"], r["instance"], r["drop"])
+            if key in seen:
+                problems.append("%s: appears in more than one row" % where)
+                continue
+            seen.add(key)
             if r["status"].startswith("check failed"):
                 problems.append("%s: %s" % (where, r["status"]))
                 continue
@@ -128,7 +161,7 @@ def main(argv):
                 continue
             exact = lost_rows.get((name, r["gap"], r["sigma"], r["sensitive_set"], r["drop"]))
             if exact is None:
-                problems.append("%s: no SC3LOST row of %s for %s" % (where, METHOD, machine))
+                problems.append("%s: no SC3LOST row of %s for %s" % (where, METHOD, small_machine or machine))
                 continue
             if not exact["method_key"] or not exact["opt_lost"]:
                 reason = exact["status"].split(":")[0] if exact["status"] else "no exact optimum"
@@ -143,7 +176,11 @@ def main(argv):
                 problems.append("%s: bound %d above the exact optimum %d" % (where, bound, opt))
             small[group].append((opt, bound))
 
-    lines = ["SC3CERT files of %s: %d" % (machine, len(files)),
+    lines = ["SC3CERT files of %s: %d" % (machine, len(files))
+             + ("; small instances from the %d SC3CERT files of %s (%d small rows of %s skipped), joined with "
+                "the SC3LOST files of %s" % (len(small_files), small_machine,
+                                             checked["small rows of %s skipped" % machine], machine, small_machine)
+                if small_machine else ""),
              "checks covered: %d rows with a bound, %d full-data rows joined with SC3, %d small rows joined with "
              "SC3LOST" % (checked["rows with a bound"], checked["full rows joined with SC3"],
                           checked["small rows joined with SC3LOST"])]

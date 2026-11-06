@@ -827,6 +827,15 @@ position of Lost in the range from OPT_Lost to the greatest Lost of a minimum hi
 > A band nobody supplied is still refused. Prediction written before the rerun: on the 32 instances every CUT-HIDE
 > key reaches \|R\|* with Lost = OPT_Lost = 0, and every other row of the 54 cells is unchanged. The 54 cells are
 > rerun with the selector; the counts are machine-invariant, and the rerun is compared row by row with ADMIN-PC.
+>
+> **Same correction for the small instances of SC3CERT (section 20.2), written before that rerun.** The 53 SC3CERT
+> files of ADMIN-PC available when this was written hold 3,332 rows: 833 full-data rows, none refused, and 2,499
+> small-instance rows, 29 of them refused because B_eps was empty (10 files). The full-data rows stay as measured.
+> The small part of the 54 cells is rerun with the selector and `--parts=small`, which writes the small rows alone
+> with the same sets and instances. Prediction: every refused row now carries \|R\|, Lost and B with no status, its
+> instance is one of the 32 instances above, Lost = B = OPT_Lost = 0 there (so the row is certified), and every
+> other small row equals the ADMIN-PC row column by column. The table takes the full-data rows from ADMIN-PC and
+> the small rows from the rerun, joined with the SC3LOST rerun.
 
 ### 19.3 SC6, reduced — running time
 

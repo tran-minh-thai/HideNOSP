@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,6 +39,10 @@ import java.util.Set;
  * <p>On the small instances of SC3LOST: the instances are rebuilt with the same seeds and the same
  * construction ({@link Sc3LostOptimum#cut}), and B is written per set and drop, to be joined with the
  * SC3LOST rows, where the exact optimum is. B must not exceed it.
+ *
+ * <p>{@code --parts} (default {@code full,small}) names the parts to run; {@code --parts=small} rebuilds the
+ * small instances alone, with the same sets and the same instances as a run of both parts, since the sets are
+ * drawn from the full data in either case and the instance seed does not depend on the full-data row.
  */
 public final class Sc3CertifiedBound implements Scenario {
 
@@ -57,7 +62,7 @@ public final class Sc3CertifiedBound implements Scenario {
     public String[] options() {
         return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "maxPatternLength", "epsilon",
                 "setsPerStratum", "seed", "patternKind", "window", "carrying", "without", "drops", "instanceSeed",
-                "timeLimit"};
+                "timeLimit", "parts"};
     }
 
     @Override
@@ -83,6 +88,14 @@ public final class Sc3CertifiedBound implements Scenario {
                 .map(String::trim).mapToInt(Integer::parseInt).toArray();
         long instanceSeed = options.getLong("instanceSeed", 20261106L);
         double timeLimit = options.getDouble("timeLimit", 1800);
+        Set<String> parts = new LinkedHashSet<>();
+        for (String part : options.get("parts", "full,small").split(",")) {
+            String trimmed = part.trim();
+            if (!trimmed.equals("full") && !trimmed.equals("small")) {
+                throw new IllegalArgumentException("--parts lists full and/or small, got " + trimmed);
+            }
+            parts.add(trimmed);
+        }
         DatasetReader.Format format = DatasetReader.Format
                 .valueOf(options.get("format", "PLAIN").toUpperCase(Locale.ROOT));
         SequenceDatabase database = DatasetReader.read(Paths.get(dataset), format).database();
@@ -102,7 +115,12 @@ public final class Sc3CertifiedBound implements Scenario {
                     "p" + draws.get(d).percentile()};
                 HideProblem problem = new HideProblem(database, List.of(pattern), gap, HideProblem.Mode.HIDE_DB, sigma,
                         epsilon, maxPatternLength);
-                writer.writeRow(certify(base, "full", "", sigma, problem, full, epsilon, seed, timeLimit, d));
+                if (parts.contains("full")) {
+                    writer.writeRow(certify(base, "full", "", sigma, problem, full, epsilon, seed, timeLimit, d));
+                }
+                if (!parts.contains("small")) {
+                    continue;
+                }
 
                 Random random = new Random(instanceSeed + 1_000_003L * d);
                 List<EventSequence> windows = new ArrayList<>();

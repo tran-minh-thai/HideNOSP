@@ -23,6 +23,7 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -35,6 +36,36 @@ class Sc3CertifiedBoundTest {
     @Test
     @DisplayName("Joins SC3 and SC3LOST; bound <= optimum <= Lost on every joined row")
     void checks() throws IOException {
+        Path data = gadget();
+        List<String> common = List.of("--dataset=" + data, "--format=PLAIN", "--sigma=20", "--gmin=0", "--gmax=2",
+                "--maxPatternLength=3", "--setsPerStratum=2", "--seed=2026", "--patternKind=distinct");
+        checks(data, common);
+    }
+
+    @Test
+    @DisplayName("--parts=small writes the small rows of a run of both parts, unchanged, and no full-data row")
+    void smallPartAlone() throws IOException {
+        Path data = gadget();
+        List<String> args = List.of("--dataset=" + data, "--format=PLAIN", "--sigma=20", "--gmin=0", "--gmax=2",
+                "--maxPatternLength=3", "--setsPerStratum=2", "--seed=2026", "--patternKind=distinct",
+                "--drops=2,3", "--window=12");
+        List<Map<String, String>> both = run(new Sc3CertifiedBound(), args);
+        List<String> smallArgs = new ArrayList<>(args);
+        smallArgs.add("--parts=small");
+        List<Map<String, String>> alone = run(new Sc3CertifiedBound(), smallArgs);
+        List<Map<String, String>> expected = both.stream().filter(r -> r.get("instance").equals("small")).toList();
+        assertTrue(both.stream().anyMatch(r -> r.get("instance").equals("full")), "the default run has full rows");
+        assertTrue(expected.stream().filter(r -> r.get("status").isEmpty()).count() >= 5,
+                "small rows with a bound compared: " + expected.size());
+        assertEquals(expected, alone, "the small rows, column by column");
+        List<String> badArgs = new ArrayList<>(args);
+        badArgs.add("--parts=small,tiny");
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+                () -> run(new Sc3CertifiedBound(), badArgs));
+        assertTrue(thrown.getMessage().contains("tiny"), thrown.getMessage());
+    }
+
+    private static Path gadget() throws IOException {
         Path data = Files.createTempFile("sc3cert", ".txt");
         Random random = new Random(3);
         StringBuilder text = new StringBuilder();
@@ -55,8 +86,10 @@ class Sc3CertifiedBoundTest {
             text.append(line).append('\n');
         }
         Files.writeString(data, text, StandardCharsets.UTF_8);
-        List<String> common = List.of("--dataset=" + data, "--format=PLAIN", "--sigma=20", "--gmin=0", "--gmax=2",
-                "--maxPatternLength=3", "--setsPerStratum=2", "--seed=2026", "--patternKind=distinct");
+        return data;
+    }
+
+    private static void checks(Path data, List<String> common) throws IOException {
         List<String> small = List.of("--drops=2,3", "--window=12");
         List<String> certArgs = new ArrayList<>(common);
         certArgs.addAll(small);

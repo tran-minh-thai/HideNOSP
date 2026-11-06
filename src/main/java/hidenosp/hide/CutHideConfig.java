@@ -54,6 +54,11 @@ public record CutHideConfig(Weighting weighting, boolean refineLambda, Allocatio
                 Curves.FRONTIER_DP, false);
     }
 
+    /** This configuration with the other weighting, everything else unchanged. */
+    public CutHideConfig withWeighting(Weighting other) {
+        return new CutHideConfig(other, refineLambda, allocation, verifyPostcondition, curves, refineSeveral);
+    }
+
     /** This configuration with the curves computed the other way, for SC7 and the ablations. */
     public CutHideConfig withCurves(Curves other) {
         return new CutHideConfig(weighting, refineLambda, allocation, verifyPostcondition, other,

@@ -98,6 +98,11 @@ row_2_epsilon_of_B_eps:
     running. epsilon = 1.00 pulls 24-54% of F_sigma into the band, the weight
     1/(sup - sigma + 1) is then almost uniform, and "patterns near the threshold" loses its
     meaning. epsilon = 0.50 gives |B_eps| from 6 to 248, never empty on any configuration measured.
+  correction_2026_11_06: >
+    The band can be empty on the small instances of SC3LOST (32 of 2,208 instances solved exactly). When the
+    band has been COMPUTED and is empty, CutHide.forBand selects the uniform-weight configuration, which is
+    exact there (every vital-node weight would be zero), and names it in the method column. A band nobody
+    supplied is still an error. Preregistration section 19.2, correction of 2026-11-06.
 
 row_3_seeds:
   sensitive_set_sampling: 2026

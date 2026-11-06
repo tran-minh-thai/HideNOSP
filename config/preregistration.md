@@ -809,6 +809,25 @@ position of Lost in the range from OPT_Lost to the greatest Lost of a minimum hi
 **Implementation checks** (stop the analysis when broken): every method hides; \|R\| ≥ \|R\|* for every method;
 \|R\| = \|R\|* for the three CUT-HIDE keys; OPT_Lost ≤ Lost for every method with \|R\| = \|R\|*.
 
+> **Correction of 2026-11-06, AFTER the 54 SC3LOST cells of ADMIN-PC (generation 2) had been seen.** The check
+> "every method hides" stopped the analysis on 32 instances (96 rows), all of the repeated scope of the tested
+> datasets, in 11 cells: the three CUT-HIDE keys refused to run because B_eps was empty (no frequent pattern
+> outside the closure of P within epsilon of the instance threshold). The refusal is the guard of protocol row 2,
+> written so that a band nobody supplied cannot turn CUT-HIDE silently into its uniform-weight variant. On all 32
+> instances every minimum hiding set has Lost = 0 (OPT_Lost = greatest Lost = 0, measured). The competitors ran
+> there; they reach \|R\|* on 7 to 21 of the 32.
+>
+> **Decision of the author: a selector, not an exclusion.** When the band has been computed and is empty, CUT-HIDE
+> runs the uniform-weight configuration (`CutHide.forBand`; the adaptive keys start their iteration 0 from it).
+> This is exact, not a substitute: with an empty band every vital-node weight is zero
+> (`NettreeCutIndex.positionWeights` sums the factors of band patterns only), so the weighted configuration would
+> compute the same masks; a test compares the two on 20 seeded instances. The method column of such a row names
+> the uniform weighting (`CutHide[UNIFORM, ...]`, or "B_eps empty, iteration 0 with uniform weights" for the
+> adaptive keys), so the selection is never silent, and `tools/lost_optimum_table.py` counts these rows per key.
+> A band nobody supplied is still refused. Prediction written before the rerun: on the 32 instances every CUT-HIDE
+> key reaches \|R\|* with Lost = OPT_Lost = 0, and every other row of the 54 cells is unchanged. The 54 cells are
+> rerun with the selector; the counts are machine-invariant, and the rerun is compared row by row with ADMIN-PC.
+
 ### 19.3 SC6, reduced — running time
 
 **Cells.** The main-group cells of section 14 with \|𝒮\| ∈ {1, 10}, both scopes; in each cell the first set drawn

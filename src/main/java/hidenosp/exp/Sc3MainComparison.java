@@ -289,7 +289,7 @@ public final class Sc3MainComparison implements Scenario {
                         FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
                 List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
                 double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
-                return new CutHide(CutHideConfig.standard()).withNearThreshold(band, factor);
+                return CutHide.forBand(CutHideConfig.standard(), band, factor);
             }
             case "cut-hide-refine": {
                 // A probe of proposition P15, not in the H2 set: with several patterns, the greedy of
@@ -302,7 +302,7 @@ public final class Sc3MainComparison implements Scenario {
                         FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
                 List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
                 double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
-                return new CutHide(CutHideConfig.standard().withRefineSeveral()).withNearThreshold(band, factor);
+                return CutHide.forBand(CutHideConfig.standard().withRefineSeveral(), band, factor);
             }
             case "cut-hide-sweep": {
                 // CUT-HIDE without theorem P8: the lambda-sweep curves, and for a repeated-item
@@ -311,8 +311,8 @@ public final class Sc3MainComparison implements Scenario {
                         FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
                 List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
                 double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
-                return new CutHide(CutHideConfig.standard().withCurves(CutHideConfig.Curves.LAMBDA_SWEEP))
-                        .withNearThreshold(band, factor);
+                return CutHide.forBand(CutHideConfig.standard().withCurves(CutHideConfig.Curves.LAMBDA_SWEEP),
+                        band, factor);
             }
             case "cut-hide-weight": {
                 // Theorem P8 with the surrogate weight first and the masks second: the other end
@@ -321,9 +321,8 @@ public final class Sc3MainComparison implements Scenario {
                         FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
                 List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
                 double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
-                return new CutHide(CutHideConfig.standard()
-                        .withCurves(CutHideConfig.Curves.FRONTIER_DP_WEIGHT_FIRST))
-                        .withNearThreshold(band, factor);
+                return CutHide.forBand(CutHideConfig.standard()
+                        .withCurves(CutHideConfig.Curves.FRONTIER_DP_WEIGHT_FIRST), band, factor);
             }
             case "cut-hide-rw": {
                 // CUT-HIDE with the adaptive side-effect weight: iteration 0 is cut-hide, later

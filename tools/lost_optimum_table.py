@@ -10,7 +10,10 @@ exactly, with protein_sdb1 reported apart (section 11, point 5):
   - the share of instances with |R| = |R|*; among them the share with Lost = OPT_Lost, the sum and the
     median of Lost - OPT_Lost, and the median position of Lost in the range from OPT_Lost to the greatest
     Lost of a minimum hiding set (0 = optimum, 1 = worst; instances where the range is empty count 0);
-  - for |R| > |R|*: the count, and how often the lexicographic optimum is no worse in both |R| and Lost.
+  - for |R| > |R|*: the count, and how often the lexicographic optimum is no worse in both |R| and Lost;
+  - per CUT-HIDE key, the instances where B_eps was empty and CUT-HIDE ran with uniform weights (the
+    selector of CutHide.forBand, preregistration section 19.2, correction of 2026-11-06), and how many
+    of them reached Lost = OPT_Lost. The method column of such a row says so.
 
 Implementation checks that stop the run with exit status 1: a method row with a status (does not hide,
 method failed, check failed); |R| < |R|*; a CUT-HIDE key with |R| != |R|*; Lost < OPT_Lost at |R|*; the
@@ -74,6 +77,7 @@ def main(argv):
     skipped = defaultdict(Counter)
     groups = defaultdict(lambda: defaultdict(list))   # (part, scope) -> method -> rows
     instances = defaultdict(set)
+    empty_band = defaultdict(Counter)                  # (part, scope) -> key -> rows, and key + " opt"
     for path in files:
         for r in rows_of(path):
             name = dataset_name(r["dataset"])
@@ -104,6 +108,9 @@ def main(argv):
             if worst < opt:
                 problems.append("%s: greatest Lost %d below the least %d" % (key, worst, opt))
             groups[(part, scope)][r["method_key"]].append((masks, least, lost, opt, worst))
+            if r["method_key"] in CUT_HIDE and ("UNIFORM" in r["method"] or "B_eps empty" in r["method"]):
+                empty_band[(part, scope)][r["method_key"]] += 1
+                empty_band[(part, scope)][r["method_key"] + " opt"] += int(masks == least and lost == opt)
 
     lines = ["SC3LOST files of %s: %d" % (machine, len(files)),
              "checks covered: %d method rows, %d of them at |R|*, %d CUT-HIDE rows"
@@ -130,6 +137,10 @@ def main(argv):
                             ("%.1f" % statistics.median(excess)) if excess else "-",
                             ("%.3f" % statistics.median(position)) if position else "-",
                             len(above), no_worse, len(above)))
+        e = empty_band[(part, scope)]
+        lines.append("   empty B_eps, CUT-HIDE with uniform weights: %s"
+                     % ("; ".join("%s %d (Lost = OPT %d)" % (k, e[k], e[k + " opt"]) for k in CUT_HIDE if e[k])
+                        or "none"))
     lines.append("")
     if problems:
         lines.append("PROBLEMS (%d):" % len(problems))

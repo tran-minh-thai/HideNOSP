@@ -297,12 +297,7 @@ public final class Sc3ReducedOptimum implements Scenario {
     }
 
     private static CutHide method(List<Pattern> band, Map<Pattern, Long> frequent, long threshold, boolean refine) {
-        CutHideConfig config = band.isEmpty() ? CutHideConfig.uniformWeights() : CutHideConfig.standard();
-        if (refine) {
-            config = config.withRefineSeveral();
-        }
-        CutHide method = new CutHide(config);
-        return band.isEmpty() ? method
-                : method.withNearThreshold(band, FrequentPatterns.weightFactors(band, frequent, threshold));
+        CutHideConfig config = refine ? CutHideConfig.standard().withRefineSeveral() : CutHideConfig.standard();
+        return CutHide.forBand(config, band, FrequentPatterns.weightFactors(band, frequent, threshold));
     }
 }

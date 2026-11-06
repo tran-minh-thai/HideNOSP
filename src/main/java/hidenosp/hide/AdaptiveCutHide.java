@@ -113,7 +113,8 @@ public final class AdaptiveCutHide implements HidingMethod {
 
     @Override
     public String name() {
-        return "CUT-HIDE adaptive weight (" + iterations + " iterations)"
+        return "CUT-HIDE adaptive weight (" + iterations + " iterations"
+                + (band.isEmpty() ? "; B_eps empty, iteration 0 with uniform weights" : "") + ")"
                 + (searchPasses > 0 ? " + local search (" + searchPasses + " passes, "
                 + searchReceivers + " receivers)" : "");
     }
@@ -146,8 +147,7 @@ public final class AdaptiveCutHide implements HidingMethod {
         lostPerIteration = new int[iterations];
         searchResult = null;
 
-        Sanitization best = new CutHide(CutHideConfig.standard())
-                .withNearThreshold(band, bandFactor).run(problem);
+        Sanitization best = CutHide.forBand(CutHideConfig.standard(), band, bandFactor).run(problem);
         Map<Pattern, Long> drop = oracle.drops(best);
         int bestLost = lost(drop);
         lostPerIteration[0] = bestLost;

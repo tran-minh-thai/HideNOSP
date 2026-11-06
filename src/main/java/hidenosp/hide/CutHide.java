@@ -75,6 +75,22 @@ public final class CutHide implements HidingMethod {
     }
 
     /**
+     * CUT-HIDE for a computed B_eps: the selector for an empty band. With no pattern in B_eps every
+     * vital-node weight is zero ({@link hidenosp.index.NettreeCutIndex#positionWeights} sums the
+     * factors of the band patterns only), so the weighted configuration would compute exactly what
+     * the uniform-weight configuration computes. {@link #run} refuses that case because it cannot
+     * tell an empty band from a band nobody supplied; here the band is known to have been computed,
+     * so an empty band returns the uniform-weight configuration, whose name in the method column
+     * says so, and a non-empty band returns the given configuration with the band.
+     */
+    public static CutHide forBand(CutHideConfig config, List<Pattern> band, double[] factor) {
+        if (band.isEmpty()) {
+            return new CutHide(config.withWeighting(CutHideConfig.Weighting.UNIFORM));
+        }
+        return new CutHide(config).withNearThreshold(band, factor);
+    }
+
+    /**
      * Sets the position weight of every position of every sequence directly, in place of the
      * weights of step 4: for tests against an exhaustive search, and for studies of the weights.
      */

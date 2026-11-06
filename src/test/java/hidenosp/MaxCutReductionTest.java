@@ -131,7 +131,7 @@ class MaxCutReductionTest {
      * of minimum-mask hiding sets met, {@code leastLost} the least Lost over all of them.
      */
     private record Check(boolean constant, int hidingSets, int constantPart, int leastLost,
-                         int leastLostVertexOnly) {
+                         int leastLostVertexOnly, int leastLostWithExtra) {
     }
 
     private static Check check(int vertices, List<int[]> edges, int sigma, GapConstraint gap,
@@ -156,6 +156,7 @@ class MaxCutReductionTest {
         boolean constant = true;
         int leastLost = Integer.MAX_VALUE;
         int leastVertexOnly = Integer.MAX_VALUE;
+        int leastWithExtra = Integer.MAX_VALUE;
         int hidingSets = 0;
         for (List<Integer> chosen : subsets(candidates.size(), vertices)) {
             Map<Integer, List<Integer>> masks = new HashMap<>();
@@ -179,6 +180,7 @@ class MaxCutReductionTest {
                 vertexOnly &= s < vertices;
             }
             if (!vertexOnly) {
+                leastWithExtra = Math.min(leastWithExtra, lost);
                 continue;
             }
             leastVertexOnly = Math.min(leastVertexOnly, lost);
@@ -195,7 +197,7 @@ class MaxCutReductionTest {
             }
         }
         return new Check(constant, hidingSets, constantPart == null ? -1 : constantPart, leastLost,
-                leastVertexOnly);
+                leastVertexOnly, leastWithExtra);
     }
 
     /** Every subset of {0..n-1} with k elements, as sorted lists. */
@@ -239,6 +241,7 @@ class MaxCutReductionTest {
         int instances = 0;
         int hidingSets = 0;
         int notBipartite = 0;
+        int extraChecked = 0;
         int[] perSigma = new int[4];
         for (int trial = 0; instances < 60; trial++) {
             int sigma = 1 + trial % 3;
@@ -252,7 +255,7 @@ class MaxCutReductionTest {
             // after b from a, so graphs of degree 3 fit.
             GapConstraint gap = boundedGap ? GapConstraint.of(0, 3)
                     : GapConstraint.of(0, GapConstraint.UNBOUNDED_MAX);
-            int maxLength = sigma > 1 ? 2 : 2 + edges.size() <= 6 ? 4 : 3;
+            int maxLength = sigma > 1 ? 2 + (trial / 3) % 2 : 2 + edges.size() <= 6 ? 4 : 3;
             String where = vertices + " vertices, edges " + describe(edges) + ", sigma " + sigma
                     + ", gap " + gap + ", l_max " + maxLength;
 
@@ -277,6 +280,13 @@ class MaxCutReductionTest {
             if (sigma > 1 || maxLength == 2) {
                 assertEquals(0, c.constantPart(), where);
             }
+            if (sigma > 1) {
+                // The strict reduction behind the hardness of approximation (design P16): a set that
+                // touches an extra sequence loses more than every edge, so it is worse than any colouring.
+                assertTrue(c.leastLostWithExtra() >= edges.size() + 1,
+                        "a set touching an extra sequence loses " + c.leastLostWithExtra() + ", " + where);
+                extraChecked++;
+            }
             int binomial = 1;
             for (int k = 0; k < vertices; k++) {
                 binomial = binomial * (vertices + sigma - 1 - k) / (k + 1);
@@ -290,8 +300,10 @@ class MaxCutReductionTest {
             instances++;
         }
         System.out.printf("Max-Cut reduction: %d graphs (sigma 1: %d, 2: %d, 3: %d), %d minimum-mask "
-                + "hiding sets checked, %d graphs not bipartite%n", instances, perSigma[1], perSigma[2],
-                perSigma[3], hidingSets, notBipartite);
+                + "hiding sets checked, %d graphs not bipartite, %d graphs where a set touching an extra "
+                + "sequence was checked to lose more than every edge%n", instances, perSigma[1], perSigma[2],
+                perSigma[3], hidingSets, notBipartite, extraChecked);
+        assertTrue(extraChecked >= 30, "too few graphs with extra sequences: " + extraChecked);
         assertTrue(notBipartite >= 15, "graphs where the least Lost is not the constant: " + notBipartite);
     }
 

@@ -102,7 +102,7 @@ public final class Sc3CertifiedBound implements Scenario {
                     "p" + draws.get(d).percentile()};
                 HideProblem problem = new HideProblem(database, List.of(pattern), gap, HideProblem.Mode.HIDE_DB, sigma,
                         epsilon, maxPatternLength);
-                writer.writeRow(certify(base, "full", "", sigma, problem, full, epsilon, seed, timeLimit));
+                writer.writeRow(certify(base, "full", "", sigma, problem, full, epsilon, seed, timeLimit, d));
 
                 Random random = new Random(instanceSeed + 1_000_003L * d);
                 List<EventSequence> windows = new ArrayList<>();
@@ -121,16 +121,25 @@ public final class Sc3CertifiedBound implements Scenario {
                             (int) instanceSigma, epsilon, maxPatternLength);
                     Metrics.Context context = Metrics.Context.of(instance, gap, maxPatternLength, instanceSigma);
                     writer.writeRow(certify(base, "small", Integer.toString(r), (int) instanceSigma, small, context,
-                            epsilon, seed, timeLimit));
+                            epsilon, seed, timeLimit, d));
                 }
             }
             writer.complete();
         }
     }
 
-    /** Runs the reference method and the bound on one problem; one row. */
+    /** Runs the reference method and the bound on one problem; one row, and one progress line on the console. */
     private static String[] certify(String[] base, String kind, String drop, int sigma, HideProblem problem,
-                                    Metrics.Context context, double epsilon, long seed, double timeLimit) {
+                                    Metrics.Context context, double epsilon, long seed, double timeLimit, int set) {
+        String[] out = certifyRow(base, kind, drop, sigma, problem, context, epsilon, seed, timeLimit);
+        int k = base.length;
+        System.out.printf("set %d  %-5s %-2s |R| %5s  lost %5s  bound %5s  examined %5s  %s%n", set, kind, drop,
+                out[k + 3], out[k + 4], out[k + 5], out[k + 6], out[k + 8].isEmpty() ? "" : out[k + 8]);
+        return out;
+    }
+
+    private static String[] certifyRow(String[] base, String kind, String drop, int sigma, HideProblem problem,
+                                       Metrics.Context context, double epsilon, long seed, double timeLimit) {
         Map<Pattern, Long> frequent = context.frequent();
         Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
         Map<Pattern, Long> watched = new LinkedHashMap<>();
@@ -142,10 +151,14 @@ public final class Sc3CertifiedBound implements Scenario {
         Sanitization reference;
         LostLowerBound.Result bound;
         try {
+            long start = System.nanoTime();
             Sanitization solved = Deadline.within(timeLimit, () -> Sc3MainComparison.create(METHOD, problem, frequent,
                     sigma, epsilon, seed, context).run(problem));
             reference = solved;
+            long middle = System.nanoTime();
             bound = Deadline.within(timeLimit, () -> LostLowerBound.of(problem, watched, sigma, solved));
+            System.out.printf("        %s %s: reference %.1f s, bound %.1f s%n", kind, drop,
+                    (middle - start) / 1e9, (System.nanoTime() - middle) / 1e9);
         } catch (Deadline.Exceeded e) {
             return row(base, kind, drop, Integer.toString(sigma), "", "", "", "", "", "OT");
         } catch (OutOfMemoryError e) {

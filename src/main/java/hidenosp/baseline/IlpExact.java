@@ -65,8 +65,40 @@ public final class IlpExact implements HidingMethod {
         return frequentBefore == null ? "exact-minR" : "exact-minR-minLost";
     }
 
+    /**
+     * The exact answer with what surrounds it: |R|*, the number of minimum hiding sets, the least and
+     * the greatest Lost among them, and a set reaching the least. Needs the side-effect objective.
+     */
+    public record Exact(int minMasks, int optimalSets, int bestLost, int worstLost, Sanitization best) {
+    }
+
+    /** Every minimum hiding set, and the least and greatest Lost among them (SC3LOST). */
+    public Exact solveExactly(HideProblem problem) {
+        if (frequentBefore == null) {
+            throw new IllegalStateException("solveExactly needs the side-effect objective (withSideEffectObjective)");
+        }
+        List<List<int[]>> found = minimumSets(problem);
+        List<int[]> best = found.get(0);
+        int bestLost = Integer.MAX_VALUE;
+        int worstLost = Integer.MIN_VALUE;
+        for (List<int[]> candidate : found) {
+            int lost = lostOf(problem, candidate);
+            if (lost < bestLost) {
+                bestLost = lost;
+                best = candidate;
+            }
+            worstLost = Math.max(worstLost, lost);
+        }
+        return new Exact(best.size(), found.size(), bestLost, worstLost, build(problem, best));
+    }
+
     @Override
     public Sanitization run(HideProblem problem) {
+        return build(problem, choose(problem, minimumSets(problem)));
+    }
+
+    /** Every hiding set of the least size, refusing an instance where that list is not complete. */
+    private List<List<int[]>> minimumSets(HideProblem problem) {
         List<int[]> candidates = candidates(problem);
         if (candidates.size() > MAX_CANDIDATES) {
             throw new IllegalArgumentException("the exact method takes at most " + MAX_CANDIDATES
@@ -87,7 +119,7 @@ public final class IlpExact implements HidingMethod {
                             + "patterns among them cannot be certified and exact-minR-minLost refuses "
                             + "this instance; shrink it");
                 }
-                return build(problem, choose(problem, found));
+                return found;
             }
         }
         throw new IllegalStateException("no solution with at most " + MAX_MASKS
@@ -181,22 +213,28 @@ public final class IlpExact implements HidingMethod {
         List<int[]> best = found.get(0);
         int bestLost = Integer.MAX_VALUE;
         for (List<int[]> candidate : found) {
-            SequenceDatabase after = apply(problem.database(), candidate);
-            int lost = 0;
-            for (Map.Entry<Pattern, Long> e : frequentBefore.entrySet()) {
-                if (closure.contains(e.getKey())) {
-                    continue;
-                }
-                if (SupportNO.of(e.getKey(), after, problem.gap()) < sigma) {
-                    lost++;
-                }
-            }
+            int lost = lostOf(problem, candidate);
             if (lost < bestLost) {
                 bestLost = lost;
                 best = candidate;
             }
         }
         return best;
+    }
+
+    /** The non-sensitive frequent patterns outside the closure that fall below sigma under these masks. */
+    private int lostOf(HideProblem problem, List<int[]> masks) {
+        SequenceDatabase after = apply(problem.database(), masks);
+        int lost = 0;
+        for (Map.Entry<Pattern, Long> e : frequentBefore.entrySet()) {
+            if (closure.contains(e.getKey())) {
+                continue;
+            }
+            if (SupportNO.of(e.getKey(), after, problem.gap()) < sigma) {
+                lost++;
+            }
+        }
+        return lost;
     }
 
     private SequenceDatabase apply(SequenceDatabase database, List<int[]> masks) {

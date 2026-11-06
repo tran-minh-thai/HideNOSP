@@ -277,7 +277,11 @@ public final class Sc3MainComparison implements Scenario {
         return profile.isExact() ? profile.minMasks() : 0;
     }
 
-    private HidingMethod create(String name, HideProblem problem, Map<Pattern, Long> frequent,
+    /**
+     * The method a key names, configured exactly as SC3 runs it. Shared with SC3LOST and SC6, so the
+     * small instances and the timing see the same methods as the main comparison.
+     */
+    static HidingMethod create(String name, HideProblem problem, Map<Pattern, Long> frequent,
                                 int sigma, double epsilon, long seed, Metrics.Context context) {
         switch (name.toLowerCase(Locale.ROOT)) {
             case "cut-hide": {
@@ -411,7 +415,7 @@ public final class Sc3MainComparison implements Scenario {
      * and a pattern above sigma at the start can sit exactly at sigma once earlier sequences have
      * been sanitised.
      */
-    private Map<Pattern, Long> nonSensitiveFrequent(HideProblem problem, Map<Pattern, Long> frequent) {
+    private static Map<Pattern, Long> nonSensitiveFrequent(HideProblem problem, Map<Pattern, Long> frequent) {
         Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
         Map<Pattern, Long> out = new LinkedHashMap<>();
         for (Map.Entry<Pattern, Long> e : frequent.entrySet()) {

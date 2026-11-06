@@ -74,6 +74,7 @@ public final class Runner {
                 new Sc3MainComparison(),
                 new Sc3LowerBound(),
                 new Sc3ReducedOptimum(),
+                new Sc3LostOptimum(),
                 new Sc4PerSequenceLimit(),
                 new Sc5DeletionGhosts(),
                 new Sc6Scalability(),

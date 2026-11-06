@@ -848,3 +848,56 @@ traced back, and the construction of 19.2 is written anew without claiming to re
 only in exploratory counts of the design document; `hha-stop` had never run; no running time had been measured.
 
 **Unchanged:** all of sections 1–18.
+
+---
+
+## 20. Addendum of 2026-11-06 — amendment of 19.3 before any time was measured, and the certified Lost bound
+
+**Decision of the author** (2026-11-06): (a) amend the clock of 19.3; (b) implement and measure the certified lower
+bound on the optimum Lost of proposition P12 of the design (the paper states it as a contribution). Both run in a
+third generation of the campaign (same machine and JDK as generations 1 and 2; only the measured code differs).
+
+### 20.1 Amendment of 19.3: mining F_σ(D) is timed once per cell, on a row of its own
+
+**Why.** 19.3 put the mining of F_σ(D) inside the clock of every method that reads it, on every timed call. A
+feasibility run on the development machine (no time recorded, only where the time goes: three samples of the
+stack, all inside `FrequentPatterns.mine`) showed that this repeats the most expensive step at least 125 times per
+cell (five methods, five sets, at least five calls each), against once per cell in SC3; on the heaviest cells this
+is hundreds of machine hours. F_σ(D) depends on the database, the gap, σ and l_max only, not on the sensitive set:
+it is a preprocessing of the database that every hiding request on it shares.
+
+**New rule.** Per cell, one row `mine-frequent` times the mining of F_σ(D) (same `Timing.measure`, one warm-up,
+protocol row 8). Every method row then times the method only: F_σ(D) is mined once outside the clocks and handed to
+every method (to the five that read it, and to the four that ignore it); each timed call builds a fresh evaluator on
+it, so no cache carries over between repetitions. The tables print the method time and, beside the five methods that
+read F_σ(D) (the three CUT-HIDE keys and the two SBSH keys), the mining time of the cell; the two are never added into
+one number presented as measured. Everything else of 19.3 is unchanged.
+
+### 20.2 The certified lower bound on the optimum Lost (P12)
+
+**Definition** (design P12, one sensitive pattern P, HIDE-DB, g⁻ = 0). For a reference minimum hiding set R₀ and each
+non-sensitive frequent pattern Q outside the closure that is lost under R₀: in every sequence S carrying P, take one
+minimum cut C_S of the Nettree of Q in S (the source side of the residual graph of `NettreeFlow`), weigh each position
+by the number of nodes of C_S on it, and compute LB_Q, the least total weight of a minimum hiding set, with the exact
+program of theorem P8 (`CutHide` with these explicit weights). With m_Q = sup_NO(Q, D) − σ + 1, Q is lost in every
+minimum hiding set when LB_Q ≥ m_Q. The bound is B = the number of such Q. A pattern not lost under R₀ cannot be lost
+in every minimum set, so B does not depend on the choice of R₀ beyond the patterns it examines; B ≤ OPT_Lost holds for
+every R₀. R₀ is the solution of `cut-hide-rw-ls`.
+
+**Where it is measured** (scenario SC3CERT, one run per main-group cell with |𝒮| = 1, both scopes; 54 cells):
+- on the full data, for every SC3 set: Lost of `cut-hide-rw-ls` (which must equal the official SC3 row), B, the number
+  of patterns examined, and whether Lost = B (the solution is then **certified optimal**);
+- on the small instances of 19.2 (rebuilt with the same seeds, joined with the SC3LOST rows on set and drop): B against
+  OPT_Lost.
+
+**Reported, descriptive.** Per scope: the share of full-data sets certified optimal, the median of Lost − B; on the
+small instances the share with B = OPT_Lost and the median of OPT_Lost − B. **Implementation checks** (stop the
+analysis): B ≤ OPT_Lost on every small instance; B ≤ Lost on every set; the Lost of the rerun equals the SC3 row.
+
+**Provenance.** When writing this section, the proposer had seen every official result of sections 14–18, the
+exploratory runs of 19.2 (implementation checks and skip reasons only) and the exploratory runs of P12 of 2026-09-26
+(`results-probe/lost_lower_bound_probe_20260926.txt`: on 160 full-data sets the bound certified few sets with Lost > 0;
+on small instances it counted about half of the patterns lost in every minimum set). No official number of the bound
+or of any running time exists.
+
+**Unchanged:** all of sections 1–19 apart from the clock of 19.3, amended in 20.1.

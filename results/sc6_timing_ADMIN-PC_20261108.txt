@@ -1,0 +1,68 @@
+# Reduced SC6 (preregistration sections 19.3 and 20.1): output of
+#   python3 tools/timing_table.py --machine=ADMIN-PC --out <this file>
+# on the 81 SC6 files of results/ measured on ADMIN-PC (Intel Core i7-10750H, 12 logical processors, 64 GB, Windows 11 10.0.26300, JDK Eclipse Adoptium 25.0.4.1+1-LTS),
+# from the campaign branch campaign-admin-pc-g2 (generation 2, code locked at 1bb9179, last cell 1528bb0), merged into main in 5448bf9.
+# Run from the repository root with the tree clean at 5448bf9; tools/timing_table.py sha256 3c74a1539e87.
+# Times are wall-clock medians per sensitive set as measured; methods marked * receive F_sigma(D) and are timed without
+# mining it; the mining of F_sigma(D) is timed once per cell on its own line (preregistration section 20.1).
+
+SC6 files of ADMIN-PC: 81 (one mining row checked in 81); timed rows 3528, joined with an SC3 row 3528
+Methods marked * read F_sigma(D); its mining time is the separate line, not part of their times.
+
+== distinct scope, |S| = 1
+   method           sets   median wall ms
+   cut-hide-rw-ls*    84           1938.7
+   cut-hide-rw*       84           1904.8
+   cut-hide*          84            453.0
+   hha                84             13.3
+   hha-stop           84             16.6
+   dbsh               84             11.5
+   sbsh-r1*           84            457.5
+   sbsh-rmax*         84            456.2
+   occurrence         84              5.8
+   mine F_sigma       17           8694.9   (cells, not sets)
+   index: build median 4.4 ms over 84 sets; rebuild / incremental median 1.53 over 84 sets
+
+== distinct scope, |S| = 10
+   method           sets   median wall ms
+   cut-hide-rw-ls*    45           1666.6
+   cut-hide-rw*       45           1651.2
+   cut-hide*          45           1668.2
+   hha                45            199.9
+   hha-stop           45            176.5
+   dbsh               45             89.8
+   sbsh-r1*           45           1509.9
+   sbsh-rmax*         45           1508.2
+   occurrence         45             95.6
+   mine F_sigma        9          10477.4   (cells, not sets)
+   index: build median 35.7 ms over 45 sets; rebuild / incremental median 2.98 over 45 sets
+
+== repeated scope, |S| = 1
+   method           sets   median wall ms
+   cut-hide-rw-ls*   173           2477.6
+   cut-hide-rw*      173           2525.2
+   cut-hide*         173           1021.0
+   hha               173             23.0
+   hha-stop          173             28.8
+   dbsh              173             19.6
+   sbsh-r1*          173            409.8
+   sbsh-rmax*        173            399.4
+   occurrence        173             10.4
+   mine F_sigma       37          10152.7   (cells, not sets)
+   index: build median 11.9 ms over 173 sets; rebuild / incremental median 1.15 over 173 sets
+
+== repeated scope, |S| = 10
+   method           sets   median wall ms
+   cut-hide-rw-ls*    90           4990.0
+   cut-hide-rw*       90           5005.7
+   cut-hide*          90           5003.8
+   hha                90            556.1
+   hha-stop           90            618.7
+   dbsh               90            296.5
+   sbsh-r1*           90           2051.9
+   sbsh-rmax*         90           2049.8
+   occurrence         90            230.1
+   mine F_sigma       18          10697.6   (cells, not sets)
+   index: build median 282.5 ms over 90 sets; rebuild / incremental median 1.45 over 90 sets
+
+No problem: every timed run finished, F_sigma(D) is timed once per cell, and every timed run equals its SC3 row.

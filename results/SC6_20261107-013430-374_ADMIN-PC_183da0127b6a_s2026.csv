@@ -1,0 +1,75 @@
+# run 20261107-013430-374_ADMIN-PC_183da0127b6a_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind TIMED
+# scenario SC6
+# options {machine=ADMIN-PC, dataset=datasets/msnbc.txt, format=SPMF, sigma=1000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, timeLimit=1800, warmups=1}
+# sensitive sets: size 1, repeated-item pool 422 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 84 -> 4, p30: 84 -> 4, p50: 85 -> 4, p70: 84 -> 4, p90: 85 -> 4
+# sets: the first set drawn in each stratum (5 of 20)
+dataset,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,method_key,method,reads_frequent,mask_count,lost,wall_ms_mean,wall_ms_sd,cpu_ms_mean,repetitions,warmups,note,status
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,,,mine-frequent,F_sigma(D) with l_max = 4: 664 patterns,false,,,13711.034,42.982,13618.750,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 10, 1, 10]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,91,1,11455.705,23.659,11275.000,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 10, 1, 10]]",p10,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,91,1,12739.820,40.203,12578.125,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 10, 1, 10]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,91,1,12770.849,22.199,12625.000,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 10, 1, 10]]",p10,hha,HHA,false,182,0,41.047,4.518,39.583,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 10, 1, 10]]",p10,dbsh,DBSH,false,182,1,44.648,4.231,41.667,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 10, 1, 10]]",p10,sbsh-r1,SBSH-r1,true,182,1,297.683,5.102,291.667,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 10, 1, 10]]",p10,sbsh-rmax,SBSH-r4,true,182,1,294.071,2.864,290.625,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 10, 1, 10]]",p10,occurrence,occurrence-count-heuristic,false,144,1,19.169,0.825,18.750,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 10, 1, 10]]",p10,hha-stop,HHA-stop,false,182,0,57.130,2.369,57.292,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 10, 1, 10]]",p10,index-build,NettreeCutIndex,false,,,51.868,0.880,52.083,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 10, 1, 10]]",p10,index-incremental,maskPosition after each mask,false,91,,0.609,0.474,1.042,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 10, 1, 10]]",p10,index-rebuild,rebuild after each mask,false,91,,0.498,0.019,0.000,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 1, 15]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,193,1,11454.973,23.249,11353.125,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 1, 15]]",p30,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,193,1,13060.459,31.883,12825.000,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 1, 15]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,193,1,13099.239,27.399,12946.875,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 1, 15]]",p30,hha,HHA,false,247,2,21.299,0.982,20.833,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 1, 15]]",p30,dbsh,DBSH,false,247,2,20.926,0.499,20.833,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 1, 15]]",p30,sbsh-r1,SBSH-r1,true,247,2,460.382,8.304,453.125,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 1, 15]]",p30,sbsh-rmax,SBSH-r3,true,247,1,455.480,3.994,451.042,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 1, 15]]",p30,occurrence,occurrence-count-heuristic,false,236,3,8.822,0.219,9.375,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 1, 15]]",p30,hha-stop,HHA-stop,false,247,2,28.785,1.194,29.167,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 1, 15]]",p30,index-build,NettreeCutIndex,false,,,51.897,0.723,51.042,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 1, 15]]",p30,index-incremental,maskPosition after each mask,false,193,,0.674,0.022,1.042,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 1, 15]]",p30,index-rebuild,rebuild after each mask,false,193,,0.592,0.019,1.042,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 17, 1]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,630,0,11348.946,33.646,11218.750,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 17, 1]]",p50,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,630,0,13727.532,32.256,13481.250,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 17, 1]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,630,0,13756.458,23.901,13571.875,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 17, 1]]",p50,hha,HHA,false,747,3,21.045,0.655,20.833,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 17, 1]]",p50,dbsh,DBSH,false,747,2,20.338,4.742,18.750,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 17, 1]]",p50,sbsh-r1,SBSH-r1,true,747,2,566.563,15.601,557.292,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 17, 1]]",p50,sbsh-rmax,SBSH-r3,true,747,2,562.908,12.780,553.125,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 17, 1]]",p50,occurrence,occurrence-count-heuristic,false,694,3,9.148,0.127,8.333,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 17, 1]]",p50,hha-stop,HHA-stop,false,747,3,28.536,1.103,28.125,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 17, 1]]",p50,index-build,NettreeCutIndex,false,,,44.597,0.621,43.750,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 17, 1]]",p50,index-incremental,maskPosition after each mask,false,630,,1.928,0.046,2.083,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[1, 17, 1]]",p50,index-rebuild,rebuild after each mask,false,630,,1.593,0.019,1.042,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[7, 4, 7, 7]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,1261,1,11672.076,108.321,11481.250,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[7, 4, 7, 7]]",p70,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,1261,1,14623.387,11.668,14346.875,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[7, 4, 7, 7]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,1261,1,14657.510,111.326,14278.125,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[7, 4, 7, 7]]",p70,hha,HHA,false,1892,8,55.814,3.086,54.167,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[7, 4, 7, 7]]",p70,dbsh,DBSH,false,3164,11,59.966,7.629,55.208,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[7, 4, 7, 7]]",p70,sbsh-r1,SBSH-r1,true,3161,8,660.727,21.904,642.708,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[7, 4, 7, 7]]",p70,sbsh-rmax,SBSH-r4,true,3161,8,649.745,8.538,622.917,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[7, 4, 7, 7]]",p70,occurrence,occurrence-count-heuristic,false,1702,7,27.661,0.679,27.083,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[7, 4, 7, 7]]",p70,hha-stop,HHA-stop,false,1891,8,76.257,2.922,76.042,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[7, 4, 7, 7]]",p70,index-build,NettreeCutIndex,false,,,45.840,1.581,45.833,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[7, 4, 7, 7]]",p70,index-incremental,maskPosition after each mask,false,1261,,4.774,0.147,4.167,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[7, 4, 7, 7]]",p70,index-rebuild,rebuild after each mask,false,1261,,8.173,0.064,8.333,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[6, 7, 6]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,3068,14,11591.589,36.576,11490.625,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[6, 7, 6]]",p90,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,3068,14,16636.118,96.699,16203.125,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[6, 7, 6]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,3068,14,16679.806,74.579,16225.000,5,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[6, 7, 6]]",p90,hha,HHA,false,3524,16,48.672,6.488,45.833,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[6, 7, 6]]",p90,dbsh,DBSH,false,4961,22,46.240,7.882,43.750,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[6, 7, 6]]",p90,sbsh-r1,SBSH-r1,true,4959,18,854.855,24.126,836.458,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[6, 7, 6]]",p90,sbsh-rmax,SBSH-r3,true,4959,18,847.498,11.677,840.625,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[6, 7, 6]]",p90,occurrence,occurrence-count-heuristic,false,3379,18,24.026,0.412,23.958,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[6, 7, 6]]",p90,hha-stop,HHA-stop,false,3524,16,61.917,0.714,60.417,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[6, 7, 6]]",p90,index-build,NettreeCutIndex,false,,,37.333,0.775,37.500,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[6, 7, 6]]",p90,index-incremental,maskPosition after each mask,false,3068,,7.583,0.264,7.292,15,1,,
+datasets/msnbc.txt,"[0,1]",1000,repeated,1,"[[6, 7, 6]]",p90,index-rebuild,rebuild after each mask,false,3068,,7.292,0.222,7.292,15,1,,

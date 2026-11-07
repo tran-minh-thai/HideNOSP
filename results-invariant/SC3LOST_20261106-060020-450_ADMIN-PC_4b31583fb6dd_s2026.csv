@@ -1,0 +1,121 @@
+# run 20261106-060020-450_ADMIN-PC_4b31583fb6dd_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3LOST
+# options {machine=ADMIN-PC, dataset=datasets/bible.txt, format=SPMF, sigma=2000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, patternKind=repeated}
+# sensitive sets: size 1, repeated-item pool 4 candidates, 4 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+dataset,gap,sigma,pattern_kind,sensitive_set,stratum,drop,instance_sigma,sequences,carrying_windows,frequent_patterns,min_masks,optimal_sets,opt_lost,worst_lost,method_key,method,mask_count,lost,status
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,2,5,10,5,8,1,1,0,0,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",1,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,2,5,10,5,8,1,1,0,0,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),1,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,2,5,10,5,8,1,1,0,0,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",1,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,2,5,10,5,8,1,1,0,0,hha,HHA,2,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,2,5,10,5,8,1,1,0,0,dbsh,DBSH,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,2,5,10,5,8,1,1,0,0,sbsh-r1,SBSH-r1,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,2,5,10,5,8,1,1,0,0,sbsh-rmax,SBSH-r3,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,2,5,10,5,8,1,1,0,0,occurrence,occurrence-count-heuristic,2,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,2,5,10,5,8,1,1,0,0,hha-stop,HHA-stop,2,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,3,4,10,5,10,2,12,0,2,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,3,4,10,5,10,2,12,0,2,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,3,4,10,5,10,2,12,0,2,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,3,4,10,5,10,2,12,0,2,hha,HHA,3,3,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,3,4,10,5,10,2,12,0,2,dbsh,DBSH,3,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,3,4,10,5,10,2,12,0,2,sbsh-r1,SBSH-r1,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,3,4,10,5,10,2,12,0,2,sbsh-rmax,SBSH-r3,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,3,4,10,5,10,2,12,0,2,occurrence,occurrence-count-heuristic,3,3,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,3,4,10,5,10,2,12,0,2,hha-stop,HHA-stop,3,3,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,4,3,10,5,12,3,54,0,3,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,4,3,10,5,12,3,54,0,3,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,4,3,10,5,12,3,54,0,3,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,4,3,10,5,12,3,54,0,3,hha,HHA,4,4,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,4,3,10,5,12,3,54,0,3,dbsh,DBSH,5,4,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,4,3,10,5,12,3,54,0,3,sbsh-r1,SBSH-r1,4,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,4,3,10,5,12,3,54,0,3,sbsh-rmax,SBSH-r3,4,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,4,3,10,5,12,3,54,0,3,occurrence,occurrence-count-heuristic,4,3,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 31, 10]]",p30,4,3,10,5,12,3,54,0,3,hha-stop,HHA-stop,4,4,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,2,4,10,5,8,2,40,0,0,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,2,4,10,5,8,2,40,0,0,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,2,4,10,5,8,2,40,0,0,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,2,4,10,5,8,2,40,0,0,hha,HHA,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,2,4,10,5,8,2,40,0,0,dbsh,DBSH,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,2,4,10,5,8,2,40,0,0,sbsh-r1,SBSH-r1,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,2,4,10,5,8,2,40,0,0,sbsh-rmax,SBSH-r2,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,2,4,10,5,8,2,40,0,0,occurrence,occurrence-count-heuristic,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,2,4,10,5,8,2,40,0,0,hha-stop,HHA-stop,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,3,3,10,5,14,3,80,0,0,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,3,3,10,5,14,3,80,0,0,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,3,3,10,5,14,3,80,0,0,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,3,3,10,5,14,3,80,0,0,hha,HHA,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,3,3,10,5,14,3,80,0,0,dbsh,DBSH,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,3,3,10,5,14,3,80,0,0,sbsh-r1,SBSH-r1,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,3,3,10,5,14,3,80,0,0,sbsh-rmax,SBSH-r2,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,3,3,10,5,14,3,80,0,0,occurrence,occurrence-count-heuristic,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,3,3,10,5,14,3,80,0,0,hha-stop,HHA-stop,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,4,2,10,5,28,4,80,0,0,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,4,2,10,5,28,4,80,0,0,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,4,2,10,5,28,4,80,0,0,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,4,2,10,5,28,4,80,0,0,hha,HHA,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,4,2,10,5,28,4,80,0,0,dbsh,DBSH,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,4,2,10,5,28,4,80,0,0,sbsh-r1,SBSH-r1,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,4,2,10,5,28,4,80,0,0,sbsh-rmax,SBSH-r2,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,4,2,10,5,28,4,80,0,0,occurrence,occurrence-count-heuristic,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[356, 356]]",p50,4,2,10,5,28,4,80,0,0,hha-stop,HHA-stop,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,2,6,10,5,7,1,2,0,0,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,,method failed: B_eps is empty for this configuration (HIDE_DB[|D|=10; |S|=1; threshold=6; gap=[0;1]; eps=0.5]; epsilon = 0.5); so the vital-node weights would all be zero and this run would silently be the uniform-weight variant. Raise epsilon; lower sigma; or select the uniform variant on purpose.
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,2,6,10,5,7,1,2,0,0,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,,method failed: B_eps is empty for this configuration (HIDE_DB[|D|=10; |S|=1; threshold=6; gap=[0;1]; eps=0.5]; epsilon = 0.5); so the vital-node weights would all be zero and this run would silently be the uniform-weight variant. Raise epsilon; lower sigma; or select the uniform variant on purpose.
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,2,6,10,5,7,1,2,0,0,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,,method failed: B_eps is empty for this configuration (HIDE_DB[|D|=10; |S|=1; threshold=6; gap=[0;1]; eps=0.5]; epsilon = 0.5); so the vital-node weights would all be zero and this run would silently be the uniform-weight variant. Raise epsilon; lower sigma; or select the uniform variant on purpose.
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,2,6,10,5,7,1,2,0,0,hha,HHA,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,2,6,10,5,7,1,2,0,0,dbsh,DBSH,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,2,6,10,5,7,1,2,0,0,sbsh-r1,SBSH-r1,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,2,6,10,5,7,1,2,0,0,sbsh-rmax,SBSH-r3,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,2,6,10,5,7,1,2,0,0,occurrence,occurrence-count-heuristic,1,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,2,6,10,5,7,1,2,0,0,hha-stop,HHA-stop,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,3,5,10,5,8,2,27,0,0,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,,method failed: B_eps is empty for this configuration (HIDE_DB[|D|=10; |S|=1; threshold=5; gap=[0;1]; eps=0.5]; epsilon = 0.5); so the vital-node weights would all be zero and this run would silently be the uniform-weight variant. Raise epsilon; lower sigma; or select the uniform variant on purpose.
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,3,5,10,5,8,2,27,0,0,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,,method failed: B_eps is empty for this configuration (HIDE_DB[|D|=10; |S|=1; threshold=5; gap=[0;1]; eps=0.5]; epsilon = 0.5); so the vital-node weights would all be zero and this run would silently be the uniform-weight variant. Raise epsilon; lower sigma; or select the uniform variant on purpose.
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,3,5,10,5,8,2,27,0,0,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,,method failed: B_eps is empty for this configuration (HIDE_DB[|D|=10; |S|=1; threshold=5; gap=[0;1]; eps=0.5]; epsilon = 0.5); so the vital-node weights would all be zero and this run would silently be the uniform-weight variant. Raise epsilon; lower sigma; or select the uniform variant on purpose.
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,3,5,10,5,8,2,27,0,0,hha,HHA,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,3,5,10,5,8,2,27,0,0,dbsh,DBSH,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,3,5,10,5,8,2,27,0,0,sbsh-r1,SBSH-r1,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,3,5,10,5,8,2,27,0,0,sbsh-rmax,SBSH-r3,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,3,5,10,5,8,2,27,0,0,occurrence,occurrence-count-heuristic,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,3,5,10,5,8,2,27,0,0,hha-stop,HHA-stop,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,4,4,10,5,9,2,1,0,0,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,,method failed: B_eps is empty for this configuration (HIDE_DB[|D|=10; |S|=1; threshold=4; gap=[0;1]; eps=0.5]; epsilon = 0.5); so the vital-node weights would all be zero and this run would silently be the uniform-weight variant. Raise epsilon; lower sigma; or select the uniform variant on purpose.
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,4,4,10,5,9,2,1,0,0,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,,method failed: B_eps is empty for this configuration (HIDE_DB[|D|=10; |S|=1; threshold=4; gap=[0;1]; eps=0.5]; epsilon = 0.5); so the vital-node weights would all be zero and this run would silently be the uniform-weight variant. Raise epsilon; lower sigma; or select the uniform variant on purpose.
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,4,4,10,5,9,2,1,0,0,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,,method failed: B_eps is empty for this configuration (HIDE_DB[|D|=10; |S|=1; threshold=4; gap=[0;1]; eps=0.5]; epsilon = 0.5); so the vital-node weights would all be zero and this run would silently be the uniform-weight variant. Raise epsilon; lower sigma; or select the uniform variant on purpose.
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,4,4,10,5,9,2,1,0,0,hha,HHA,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,4,4,10,5,9,2,1,0,0,dbsh,DBSH,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,4,4,10,5,9,2,1,0,0,sbsh-r1,SBSH-r1,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,4,4,10,5,9,2,1,0,0,sbsh-rmax,SBSH-r3,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,4,4,10,5,9,2,1,0,0,occurrence,occurrence-count-heuristic,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[46, 10, 46]]",p70,4,4,10,5,9,2,1,0,0,hha-stop,HHA-stop,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,2,6,10,5,5,1,2,0,0,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",1,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,2,6,10,5,5,1,2,0,0,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),1,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,2,6,10,5,5,1,2,0,0,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",1,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,2,6,10,5,5,1,2,0,0,hha,HHA,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,2,6,10,5,5,1,2,0,0,dbsh,DBSH,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,2,6,10,5,5,1,2,0,0,sbsh-r1,SBSH-r1,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,2,6,10,5,5,1,2,0,0,sbsh-rmax,SBSH-r3,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,2,6,10,5,5,1,2,0,0,occurrence,occurrence-count-heuristic,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,2,6,10,5,5,1,2,0,0,hha-stop,HHA-stop,2,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,3,5,10,5,5,2,27,0,0,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,,method failed: B_eps is empty for this configuration (HIDE_DB[|D|=10; |S|=1; threshold=5; gap=[0;1]; eps=0.5]; epsilon = 0.5); so the vital-node weights would all be zero and this run would silently be the uniform-weight variant. Raise epsilon; lower sigma; or select the uniform variant on purpose.
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,3,5,10,5,5,2,27,0,0,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,,method failed: B_eps is empty for this configuration (HIDE_DB[|D|=10; |S|=1; threshold=5; gap=[0;1]; eps=0.5]; epsilon = 0.5); so the vital-node weights would all be zero and this run would silently be the uniform-weight variant. Raise epsilon; lower sigma; or select the uniform variant on purpose.
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,3,5,10,5,5,2,27,0,0,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,,method failed: B_eps is empty for this configuration (HIDE_DB[|D|=10; |S|=1; threshold=5; gap=[0;1]; eps=0.5]; epsilon = 0.5); so the vital-node weights would all be zero and this run would silently be the uniform-weight variant. Raise epsilon; lower sigma; or select the uniform variant on purpose.
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,3,5,10,5,5,2,27,0,0,hha,HHA,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,3,5,10,5,5,2,27,0,0,dbsh,DBSH,4,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,3,5,10,5,5,2,27,0,0,sbsh-r1,SBSH-r1,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,3,5,10,5,5,2,27,0,0,sbsh-rmax,SBSH-r3,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,3,5,10,5,5,2,27,0,0,occurrence,occurrence-count-heuristic,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,3,5,10,5,5,2,27,0,0,hha-stop,HHA-stop,3,0,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,4,4,10,5,7,2,1,1,1,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",2,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,4,4,10,5,7,2,1,1,1,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),2,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,4,4,10,5,7,2,1,1,1,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",2,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,4,4,10,5,7,2,1,1,1,hha,HHA,4,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,4,4,10,5,7,2,1,1,1,dbsh,DBSH,4,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,4,4,10,5,7,2,1,1,1,sbsh-r1,SBSH-r1,4,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,4,4,10,5,7,2,1,1,1,sbsh-rmax,SBSH-r3,4,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,4,4,10,5,7,2,1,1,1,occurrence,occurrence-count-heuristic,3,1,
+datasets/bible.txt,"[0,1]",2000,repeated,"[[10, 46, 10]]",p90,4,4,10,5,7,2,1,1,1,hha-stop,HHA-stop,4,1,

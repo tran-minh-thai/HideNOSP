@@ -1,0 +1,75 @@
+# run 20261107-115409-047_ADMIN-PC_597d0f1c3d15_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind TIMED
+# scenario SC6
+# options {machine=ADMIN-PC, dataset=datasets/protein_sdb1.txt, format=SPMF, sigma=800, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=10, patternKind=distinct, timeLimit=1800, warmups=1}
+# sensitive sets: size 10, pool 157 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 31 -> 4, p30: 31 -> 4, p50: 32 -> 4, p70: 31 -> 4, p90: 32 -> 4
+# sets: the first set drawn in each stratum (5 of 20)
+dataset,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,method_key,method,reads_frequent,mask_count,lost,wall_ms_mean,wall_ms_sd,cpu_ms_mean,repetitions,warmups,note,status
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,,,mine-frequent,F_sigma(D) with l_max = 4: 192 patterns,false,,,10100.332,18.773,10003.125,5,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[14, 2], [16, 12], [11, 7], [12, 15], [8, 16], [5, 14], [0, 13], [14, 5], [4, 8], [9, 13]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,277,0,800.630,12.236,789.583,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[14, 2], [16, 12], [11, 7], [12, 15], [8, 16], [5, 14], [0, 13], [14, 5], [4, 8], [9, 13]]",p10,cut-hide-rw,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,277,0,795.417,8.276,785.417,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[14, 2], [16, 12], [11, 7], [12, 15], [8, 16], [5, 14], [0, 13], [14, 5], [4, 8], [9, 13]]",p10,cut-hide-rw-ls,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,277,0,796.771,8.953,788.542,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[14, 2], [16, 12], [11, 7], [12, 15], [8, 16], [5, 14], [0, 13], [14, 5], [4, 8], [9, 13]]",p10,hha,HHA,false,3914,25,125.336,2.276,122.917,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[14, 2], [16, 12], [11, 7], [12, 15], [8, 16], [5, 14], [0, 13], [14, 5], [4, 8], [9, 13]]",p10,dbsh,DBSH,false,589,0,58.197,4.784,57.292,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[14, 2], [16, 12], [11, 7], [12, 15], [8, 16], [5, 14], [0, 13], [14, 5], [4, 8], [9, 13]]",p10,sbsh-r1,SBSH-r1,true,590,0,480.695,5.799,470.833,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[14, 2], [16, 12], [11, 7], [12, 15], [8, 16], [5, 14], [0, 13], [14, 5], [4, 8], [9, 13]]",p10,sbsh-rmax,SBSH-r2,true,590,0,479.226,6.168,476.042,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[14, 2], [16, 12], [11, 7], [12, 15], [8, 16], [5, 14], [0, 13], [14, 5], [4, 8], [9, 13]]",p10,occurrence,occurrence-count-heuristic,false,404,0,30.575,1.437,30.208,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[14, 2], [16, 12], [11, 7], [12, 15], [8, 16], [5, 14], [0, 13], [14, 5], [4, 8], [9, 13]]",p10,hha-stop,HHA-stop,false,413,0,109.593,6.011,108.333,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[14, 2], [16, 12], [11, 7], [12, 15], [8, 16], [5, 14], [0, 13], [14, 5], [4, 8], [9, 13]]",p10,index-build,NettreeCutIndex,false,,,27.885,0.505,27.083,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[14, 2], [16, 12], [11, 7], [12, 15], [8, 16], [5, 14], [0, 13], [14, 5], [4, 8], [9, 13]]",p10,index-incremental,maskPosition after each mask,false,277,,13.205,0.276,13.542,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[14, 2], [16, 12], [11, 7], [12, 15], [8, 16], [5, 14], [0, 13], [14, 5], [4, 8], [9, 13]]",p10,index-rebuild,rebuild after each mask,false,277,,22.601,0.494,21.875,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[7, 3], [19, 5], [16, 4], [17, 12], [15, 3], [14, 0], [0, 14], [11, 17], [2, 16], [17, 11]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,935,0,877.068,8.277,864.583,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[7, 3], [19, 5], [16, 4], [17, 12], [15, 3], [14, 0], [0, 14], [11, 17], [2, 16], [17, 11]]",p30,cut-hide-rw,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,935,0,876.476,10.495,865.625,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[7, 3], [19, 5], [16, 4], [17, 12], [15, 3], [14, 0], [0, 14], [11, 17], [2, 16], [17, 11]]",p30,cut-hide-rw-ls,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,935,0,876.913,11.439,868.750,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[7, 3], [19, 5], [16, 4], [17, 12], [15, 3], [14, 0], [0, 14], [11, 17], [2, 16], [17, 11]]",p30,hha,HHA,false,4797,32,135.520,1.916,133.333,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[7, 3], [19, 5], [16, 4], [17, 12], [15, 3], [14, 0], [0, 14], [11, 17], [2, 16], [17, 11]]",p30,dbsh,DBSH,false,2300,18,63.046,2.278,62.500,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[7, 3], [19, 5], [16, 4], [17, 12], [15, 3], [14, 0], [0, 14], [11, 17], [2, 16], [17, 11]]",p30,sbsh-r1,SBSH-r1,true,2048,13,515.883,4.233,510.417,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[7, 3], [19, 5], [16, 4], [17, 12], [15, 3], [14, 0], [0, 14], [11, 17], [2, 16], [17, 11]]",p30,sbsh-rmax,SBSH-r2,true,2048,13,512.864,7.968,505.208,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[7, 3], [19, 5], [16, 4], [17, 12], [15, 3], [14, 0], [0, 14], [11, 17], [2, 16], [17, 11]]",p30,occurrence,occurrence-count-heuristic,false,1425,11,46.564,0.906,45.833,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[7, 3], [19, 5], [16, 4], [17, 12], [15, 3], [14, 0], [0, 14], [11, 17], [2, 16], [17, 11]]",p30,hha-stop,HHA-stop,false,1439,12,118.804,1.559,117.708,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[7, 3], [19, 5], [16, 4], [17, 12], [15, 3], [14, 0], [0, 14], [11, 17], [2, 16], [17, 11]]",p30,index-build,NettreeCutIndex,false,,,29.941,1.353,30.208,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[7, 3], [19, 5], [16, 4], [17, 12], [15, 3], [14, 0], [0, 14], [11, 17], [2, 16], [17, 11]]",p30,index-incremental,maskPosition after each mask,false,935,,25.196,0.667,25.000,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[7, 3], [19, 5], [16, 4], [17, 12], [15, 3], [14, 0], [0, 14], [11, 17], [2, 16], [17, 11]]",p30,index-rebuild,rebuild after each mask,false,935,,74.984,1.051,75.000,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[2, 3], [2, 4], [9, 14], [14, 9], [2, 11], [2, 7], [3, 17], [17, 8], [15, 2], [3, 5]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,1398,2,930.167,9.551,922.917,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[2, 3], [2, 4], [9, 14], [14, 9], [2, 11], [2, 7], [3, 17], [17, 8], [15, 2], [3, 5]]",p50,cut-hide-rw,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,1398,2,928.898,9.544,910.417,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[2, 3], [2, 4], [9, 14], [14, 9], [2, 11], [2, 7], [3, 17], [17, 8], [15, 2], [3, 5]]",p50,cut-hide-rw-ls,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,1398,2,933.967,7.912,923.958,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[2, 3], [2, 4], [9, 14], [14, 9], [2, 11], [2, 7], [3, 17], [17, 8], [15, 2], [3, 5]]",p50,hha,HHA,false,5106,26,147.379,3.350,145.833,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[2, 3], [2, 4], [9, 14], [14, 9], [2, 11], [2, 7], [3, 17], [17, 8], [15, 2], [3, 5]]",p50,dbsh,DBSH,false,2854,15,66.218,1.199,65.625,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[2, 3], [2, 4], [9, 14], [14, 9], [2, 11], [2, 7], [3, 17], [17, 8], [15, 2], [3, 5]]",p50,sbsh-r1,SBSH-r1,true,2785,13,519.072,6.439,511.458,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[2, 3], [2, 4], [9, 14], [14, 9], [2, 11], [2, 7], [3, 17], [17, 8], [15, 2], [3, 5]]",p50,sbsh-rmax,SBSH-r2,true,2785,13,517.693,6.878,511.458,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[2, 3], [2, 4], [9, 14], [14, 9], [2, 11], [2, 7], [3, 17], [17, 8], [15, 2], [3, 5]]",p50,occurrence,occurrence-count-heuristic,false,2156,11,58.628,0.827,58.333,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[2, 3], [2, 4], [9, 14], [14, 9], [2, 11], [2, 7], [3, 17], [17, 8], [15, 2], [3, 5]]",p50,hha-stop,HHA-stop,false,2186,10,130.050,3.490,129.167,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[2, 3], [2, 4], [9, 14], [14, 9], [2, 11], [2, 7], [3, 17], [17, 8], [15, 2], [3, 5]]",p50,index-build,NettreeCutIndex,false,,,29.524,0.717,30.208,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[2, 3], [2, 4], [9, 14], [14, 9], [2, 11], [2, 7], [3, 17], [17, 8], [15, 2], [3, 5]]",p50,index-incremental,maskPosition after each mask,false,1398,,29.749,0.481,30.208,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[2, 3], [2, 4], [9, 14], [14, 9], [2, 11], [2, 7], [3, 17], [17, 8], [15, 2], [3, 5]]",p50,index-rebuild,rebuild after each mask,false,1398,,107.476,0.789,106.250,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[3, 8], [2, 8], [16, 0], [2, 17], [5, 4], [9, 4], [8, 5], [17, 2], [8, 0], [0, 15]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,2807,3,1148.220,15.030,1143.750,10,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[3, 8], [2, 8], [16, 0], [2, 17], [5, 4], [9, 4], [8, 5], [17, 2], [8, 0], [0, 15]]",p70,cut-hide-rw,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,2807,3,1146.979,11.802,1134.375,10,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[3, 8], [2, 8], [16, 0], [2, 17], [5, 4], [9, 4], [8, 5], [17, 2], [8, 0], [0, 15]]",p70,cut-hide-rw-ls,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,2807,3,1143.504,7.520,1129.688,10,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[3, 8], [2, 8], [16, 0], [2, 17], [5, 4], [9, 4], [8, 5], [17, 2], [8, 0], [0, 15]]",p70,hha,HHA,false,6953,41,176.624,3.568,172.917,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[3, 8], [2, 8], [16, 0], [2, 17], [5, 4], [9, 4], [8, 5], [17, 2], [8, 0], [0, 15]]",p70,dbsh,DBSH,false,5223,30,77.928,1.028,78.125,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[3, 8], [2, 8], [16, 0], [2, 17], [5, 4], [9, 4], [8, 5], [17, 2], [8, 0], [0, 15]]",p70,sbsh-r1,SBSH-r1,true,5240,21,588.140,5.755,583.333,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[3, 8], [2, 8], [16, 0], [2, 17], [5, 4], [9, 4], [8, 5], [17, 2], [8, 0], [0, 15]]",p70,sbsh-rmax,SBSH-r2,true,5240,21,588.606,6.799,581.250,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[3, 8], [2, 8], [16, 0], [2, 17], [5, 4], [9, 4], [8, 5], [17, 2], [8, 0], [0, 15]]",p70,occurrence,occurrence-count-heuristic,false,3969,21,91.396,1.407,90.625,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[3, 8], [2, 8], [16, 0], [2, 17], [5, 4], [9, 4], [8, 5], [17, 2], [8, 0], [0, 15]]",p70,hha-stop,HHA-stop,false,3999,20,151.971,2.579,152.083,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[3, 8], [2, 8], [16, 0], [2, 17], [5, 4], [9, 4], [8, 5], [17, 2], [8, 0], [0, 15]]",p70,index-build,NettreeCutIndex,false,,,30.972,0.512,30.208,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[3, 8], [2, 8], [16, 0], [2, 17], [5, 4], [9, 4], [8, 5], [17, 2], [8, 0], [0, 15]]",p70,index-incremental,maskPosition after each mask,false,2807,,33.613,0.713,33.333,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[3, 8], [2, 8], [16, 0], [2, 17], [5, 4], [9, 4], [8, 5], [17, 2], [8, 0], [0, 15]]",p70,index-rebuild,rebuild after each mask,false,2807,,222.308,5.205,219.792,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[15, 0], [9, 8], [5, 16], [0, 2], [2, 5], [5, 2], [17, 9], [5, 0], [5, 9], [0, 9]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,4033,3,1345.214,13.312,1328.125,10,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[15, 0], [9, 8], [5, 16], [0, 2], [2, 5], [5, 2], [17, 9], [5, 0], [5, 9], [0, 9]]",p90,cut-hide-rw,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,4033,3,1342.361,12.188,1331.250,10,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[15, 0], [9, 8], [5, 16], [0, 2], [2, 5], [5, 2], [17, 9], [5, 0], [5, 9], [0, 9]]",p90,cut-hide-rw-ls,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,4033,3,1335.778,10.414,1321.875,10,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[15, 0], [9, 8], [5, 16], [0, 2], [2, 5], [5, 2], [17, 9], [5, 0], [5, 9], [0, 9]]",p90,hha,HHA,false,8363,37,211.796,4.270,207.292,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[15, 0], [9, 8], [5, 16], [0, 2], [2, 5], [5, 2], [17, 9], [5, 0], [5, 9], [0, 9]]",p90,dbsh,DBSH,false,8655,33,97.977,1.085,96.875,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[15, 0], [9, 8], [5, 16], [0, 2], [2, 5], [5, 2], [17, 9], [5, 0], [5, 9], [0, 9]]",p90,sbsh-r1,SBSH-r1,true,8115,30,600.852,6.045,593.750,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[15, 0], [9, 8], [5, 16], [0, 2], [2, 5], [5, 2], [17, 9], [5, 0], [5, 9], [0, 9]]",p90,sbsh-rmax,SBSH-r2,true,8115,30,605.076,8.248,597.917,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[15, 0], [9, 8], [5, 16], [0, 2], [2, 5], [5, 2], [17, 9], [5, 0], [5, 9], [0, 9]]",p90,occurrence,occurrence-count-heuristic,false,6088,20,136.922,3.263,134.375,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[15, 0], [9, 8], [5, 16], [0, 2], [2, 5], [5, 2], [17, 9], [5, 0], [5, 9], [0, 9]]",p90,hha-stop,HHA-stop,false,6087,22,186.204,1.209,184.375,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[15, 0], [9, 8], [5, 16], [0, 2], [2, 5], [5, 2], [17, 9], [5, 0], [5, 9], [0, 9]]",p90,index-build,NettreeCutIndex,false,,,34.874,1.845,33.333,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[15, 0], [9, 8], [5, 16], [0, 2], [2, 5], [5, 2], [17, 9], [5, 0], [5, 9], [0, 9]]",p90,index-incremental,maskPosition after each mask,false,4033,,39.822,0.731,38.542,15,1,,
+datasets/protein_sdb1.txt,"[0,3]",800,distinct,10,"[[15, 0], [9, 8], [5, 16], [0, 2], [2, 5], [5, 2], [17, 9], [5, 0], [5, 9], [0, 9]]",p90,index-rebuild,rebuild after each mask,false,4033,,336.212,8.440,333.333,15,1,,

@@ -1,0 +1,58 @@
+# cell SC3 msnbc [0,1] sigma=2000 repeated S=1 stop
+# machine ADMIN-PC
+# exit 0 after 37 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 90e6e544a67d
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3 main comparison on HIDE-DB: Lost, Ghost, SupDist, |R| and HF against the baselines
+# run 20261106-120149-292_ADMIN-PC_90e6e544a67d_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, repeated-item pool 195 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 39 -> 4, p30: 39 -> 4, p50: 39 -> 4, p70: 39 -> 4, p90: 39 -> 4
+set 0  occurrence-count-heuristic         |R|  234  lost    0 (0.0000)  supDist 0.0026  0.1 s
+set 0  HHA-stop                           |R|  280  lost    0 (0.0000)  supDist 0.0029  0.1 s
+set 1  occurrence-count-heuristic         |R|   63  lost    1 (0.0032)  supDist 0.0008  0.0 s
+set 1  HHA-stop                           |R|  110  lost    1 (0.0032)  supDist 0.0009  0.1 s
+set 2  occurrence-count-heuristic         |R|  406  lost    1 (0.0032)  supDist 0.0038  0.0 s
+set 2  HHA-stop                           |R|  554  lost    1 (0.0032)  supDist 0.0047  0.1 s
+set 3  occurrence-count-heuristic         |R|  318  lost    2 (0.0065)  supDist 0.0024  0.0 s
+set 3  HHA-stop                           |R|  568  lost    3 (0.0097)  supDist 0.0035  0.1 s
+set 4  occurrence-count-heuristic         |R|  596  lost    1 (0.0032)  supDist 0.0046  0.0 s
+set 4  HHA-stop                           |R|  897  lost    1 (0.0032)  supDist 0.0050  0.1 s
+set 5  occurrence-count-heuristic         |R|  601  lost    1 (0.0032)  supDist 0.0069  0.0 s
+set 5  HHA-stop                           |R|  766  lost    1 (0.0032)  supDist 0.0067  0.1 s
+set 6  occurrence-count-heuristic         |R| 1028  lost    4 (0.0130)  supDist 0.0129  0.0 s
+set 6  HHA-stop                           |R| 1294  lost    3 (0.0097)  supDist 0.0135  0.1 s
+set 7  occurrence-count-heuristic         |R| 1264  lost    2 (0.0065)  supDist 0.0049  0.0 s
+set 7  HHA-stop                           |R| 1438  lost    2 (0.0065)  supDist 0.0042  0.1 s
+set 8  occurrence-count-heuristic         |R| 1352  lost    4 (0.0130)  supDist 0.0159  0.0 s
+set 8  HHA-stop                           |R| 1607  lost    4 (0.0130)  supDist 0.0171  0.1 s
+set 9  occurrence-count-heuristic         |R| 1270  lost    4 (0.0130)  supDist 0.0141  0.0 s
+set 9  HHA-stop                           |R| 1691  lost    1 (0.0032)  supDist 0.0167  0.1 s
+set 10  occurrence-count-heuristic         |R| 1338  lost    5 (0.0162)  supDist 0.0154  0.0 s
+set 10  HHA-stop                           |R| 1763  lost    4 (0.0130)  supDist 0.0163  0.2 s
+set 11  occurrence-count-heuristic         |R| 1176  lost    3 (0.0098)  supDist 0.0064  0.0 s
+set 11  HHA-stop                           |R| 1462  lost    3 (0.0098)  supDist 0.0068  0.1 s
+set 12  occurrence-count-heuristic         |R| 2573  lost    6 (0.0195)  supDist 0.0307  0.0 s
+set 12  HHA-stop                           |R| 3080  lost    6 (0.0195)  supDist 0.0334  0.1 s
+set 13  occurrence-count-heuristic         |R| 1925  lost    6 (0.0195)  supDist 0.0165  0.0 s
+set 13  HHA-stop                           |R| 2423  lost    9 (0.0292)  supDist 0.0150  0.1 s
+set 14  occurrence-count-heuristic         |R| 2165  lost    6 (0.0195)  supDist 0.0240  0.0 s
+set 14  HHA-stop                           |R| 2467  lost    5 (0.0162)  supDist 0.0231  0.1 s
+set 15  occurrence-count-heuristic         |R| 1960  lost    6 (0.0195)  supDist 0.0244  0.0 s
+set 15  HHA-stop                           |R| 2394  lost    6 (0.0195)  supDist 0.0264  0.1 s
+set 16  occurrence-count-heuristic         |R| 5295  lost   10 (0.0331)  supDist 0.0444  0.0 s
+set 16  HHA-stop                           |R| 5660  lost   11 (0.0364)  supDist 0.0469  0.1 s
+set 17  occurrence-count-heuristic         |R| 4539  lost   13 (0.0429)  supDist 0.0385  0.0 s
+set 17  HHA-stop                           |R| 4882  lost    9 (0.0297)  supDist 0.0361  0.1 s
+set 18  occurrence-count-heuristic         |R| 5735  lost   18 (0.0596)  supDist 0.0443  0.0 s
+set 18  HHA-stop                           |R| 6060  lost   15 (0.0497)  supDist 0.0415  0.1 s
+set 19  occurrence-count-heuristic         |R| 7127  lost   24 (0.0779)  supDist 0.0850  0.1 s
+set 19  HHA-stop                           |R| 7576  lost   24 (0.0779)  supDist 0.0860  0.2 s
+done in 34.2 s

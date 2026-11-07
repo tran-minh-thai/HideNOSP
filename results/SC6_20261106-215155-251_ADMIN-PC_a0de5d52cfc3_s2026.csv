@@ -1,0 +1,75 @@
+# run 20261106-215155-251_ADMIN-PC_a0de5d52cfc3_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind TIMED
+# scenario SC6
+# options {machine=ADMIN-PC, dataset=datasets/bpi2013.txt, format=SPMF, sigma=500, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, timeLimit=1800, warmups=1}
+# sensitive sets: size 1, repeated-item pool 112 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 22 -> 4, p30: 22 -> 4, p50: 23 -> 4, p70: 22 -> 4, p90: 23 -> 4
+# sets: the first set drawn in each stratum (5 of 20)
+dataset,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,method_key,method,reads_frequent,mask_count,lost,wall_ms_mean,wall_ms_sd,cpu_ms_mean,repetitions,warmups,note,status
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,,,mine-frequent,F_sigma(D) with l_max = 4: 195 patterns,false,,,1842.384,13.258,1831.250,10,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 11, 1]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,75,1,781.822,13.596,759.375,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 11, 1]]",p10,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,75,1,1400.526,13.039,1387.500,10,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 11, 1]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,75,1,1406.839,17.200,1392.188,10,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 11, 1]]",p10,hha,HHA,false,109,2,15.524,1.220,15.625,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 11, 1]]",p10,dbsh,DBSH,false,109,1,14.149,0.835,12.500,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 11, 1]]",p10,sbsh-r1,SBSH-r1,true,109,1,247.287,5.851,243.750,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 11, 1]]",p10,sbsh-rmax,SBSH-r4,true,109,1,241.879,1.703,240.625,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 11, 1]]",p10,occurrence,occurrence-count-heuristic,false,102,2,6.530,0.478,6.250,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 11, 1]]",p10,hha-stop,HHA-stop,false,109,2,20.046,0.557,19.792,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 11, 1]]",p10,index-build,NettreeCutIndex,false,,,14.600,0.764,14.583,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 11, 1]]",p10,index-incremental,maskPosition after each mask,false,75,,0.467,0.020,1.042,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 11, 1]]",p10,index-rebuild,rebuild after each mask,false,75,,0.493,0.043,0.000,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 11, 5, 1]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,161,0,784.269,6.283,775.000,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 11, 5, 1]]",p30,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,161,0,1476.164,8.542,1467.188,10,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 11, 5, 1]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,161,0,1485.435,14.929,1478.125,10,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 11, 5, 1]]",p30,hha,HHA,false,178,1,16.892,0.415,16.667,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 11, 5, 1]]",p30,dbsh,DBSH,false,178,1,13.532,0.609,13.542,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 11, 5, 1]]",p30,sbsh-r1,SBSH-r1,true,178,0,261.363,4.341,255.208,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 11, 5, 1]]",p30,sbsh-rmax,SBSH-r4,true,178,0,261.584,6.917,260.417,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 11, 5, 1]]",p30,occurrence,occurrence-count-heuristic,false,173,0,7.757,0.064,8.333,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 11, 5, 1]]",p30,hha-stop,HHA-stop,false,178,1,24.334,0.442,23.958,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 11, 5, 1]]",p30,index-build,NettreeCutIndex,false,,,15.015,0.335,15.625,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 11, 5, 1]]",p30,index-incremental,maskPosition after each mask,false,161,,0.715,0.012,1.042,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 11, 5, 1]]",p30,index-rebuild,rebuild after each mask,false,161,,0.587,0.005,0.000,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 1, 5]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,540,2,864.628,32.300,859.375,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 1, 5]]",p50,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,540,1,2103.652,31.126,2078.125,10,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 1, 5]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,540,1,2063.716,41.295,2043.750,10,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 1, 5]]",p50,hha,HHA,false,584,5,14.691,0.193,14.583,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 1, 5]]",p50,dbsh,DBSH,false,585,11,12.150,0.244,12.500,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 1, 5]]",p50,sbsh-r1,SBSH-r1,true,586,10,420.718,13.232,417.708,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 1, 5]]",p50,sbsh-rmax,SBSH-r4,true,586,10,408.937,10.310,405.208,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 1, 5]]",p50,occurrence,occurrence-count-heuristic,false,546,6,6.774,0.335,7.292,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 1, 5]]",p50,hha-stop,HHA-stop,false,584,5,17.996,0.329,18.750,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 1, 5]]",p50,index-build,NettreeCutIndex,false,,,12.583,0.345,12.500,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 1, 5]]",p50,index-incremental,maskPosition after each mask,false,540,,2.282,0.011,2.083,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 0, 1, 5]]",p50,index-rebuild,rebuild after each mask,false,540,,2.342,0.088,2.083,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[11, 1, 0, 1]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,1867,14,837.432,20.477,830.208,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[11, 1, 0, 1]]",p70,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,1867,9,3449.357,119.114,3382.813,10,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[11, 1, 0, 1]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,1867,9,3357.810,46.082,3300.000,10,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[11, 1, 0, 1]]",p70,hha,HHA,false,1868,19,23.848,0.671,22.917,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[11, 1, 0, 1]]",p70,dbsh,DBSH,false,1896,39,19.373,1.381,18.750,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[11, 1, 0, 1]]",p70,sbsh-r1,SBSH-r1,true,1892,33,722.515,7.701,709.375,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[11, 1, 0, 1]]",p70,sbsh-rmax,SBSH-r4,true,1925,33,711.690,7.635,704.167,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[11, 1, 0, 1]]",p70,occurrence,occurrence-count-heuristic,false,1867,26,14.044,0.747,14.583,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[11, 1, 0, 1]]",p70,hha-stop,HHA-stop,false,1868,19,29.624,0.404,28.125,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[11, 1, 0, 1]]",p70,index-build,NettreeCutIndex,false,,,13.452,0.359,12.500,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[11, 1, 0, 1]]",p70,index-incremental,maskPosition after each mask,false,1867,,6.308,0.307,6.250,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[11, 1, 0, 1]]",p70,index-rebuild,rebuild after each mask,false,1867,,8.018,0.384,6.250,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 10]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,2744,5,892.000,12.775,860.417,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 10]]",p90,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,2744,1,4097.120,13.910,4018.750,10,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 10]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,2744,1,4120.234,26.521,4026.563,10,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 10]]",p90,hha,HHA,false,2775,16,48.984,1.320,48.958,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 10]]",p90,dbsh,DBSH,false,2775,26,36.444,0.638,36.458,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 10]]",p90,sbsh-r1,SBSH-r1,true,2775,17,815.105,12.166,794.792,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 10]]",p90,sbsh-rmax,SBSH-r4,true,2775,17,812.817,7.255,806.250,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 10]]",p90,occurrence,occurrence-count-heuristic,false,2750,16,25.512,0.511,25.000,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 10]]",p90,hha-stop,HHA-stop,false,2775,16,62.917,1.057,61.458,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 10]]",p90,index-build,NettreeCutIndex,false,,,17.036,0.338,16.667,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 10]]",p90,index-incremental,maskPosition after each mask,false,2744,,9.484,0.199,10.417,15,1,,
+datasets/bpi2013.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 10]]",p90,index-rebuild,rebuild after each mask,false,2744,,7.533,0.346,7.292,15,1,,

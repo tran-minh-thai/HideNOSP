@@ -1,0 +1,53 @@
+# run 20261106-115123-157_ADMIN-PC_8d6cbdd1b515_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/dna_mt745584.txt, format=SPMF, sigma=2500, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=occurrence,hha-stop}
+# sensitive sets: size 1, repeated-item pool 40 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 8 -> 4, p30: 8 -> 4, p50: 8 -> 4, p70: 8 -> 4, p90: 8 -> 4
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,status
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 1, 4, 1]]",p10,occurrence,occurrence-count-heuristic,,0.000000,4,0.060606,0,0.003048,0.010984,91,61,1.491803,0,0,0,,67,66,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 1, 4, 1]]",p10,hha-stop,HHA-stop,,0.000000,2,0.030303,0,0.003382,0.012030,101,61,1.655738,0,0,0,,67,66,64,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 1, 2]]",p10,occurrence,occurrence-count-heuristic,,0.000000,4,0.060606,0,0.005090,0.010900,152,79,1.924051,0,0,0,,67,66,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 1, 2]]",p10,hha-stop,HHA-stop,,0.000000,5,0.075758,0,0.004956,0.014329,148,79,1.873418,0,0,0,,67,66,61,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 4, 1, 4]]",p10,occurrence,occurrence-count-heuristic,,0.000000,4,0.060606,0,0.002914,0.010184,87,57,1.526316,0,0,0,,67,66,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 4, 1, 4]]",p10,hha-stop,HHA-stop,,0.000000,4,0.060606,0,0.002981,0.010724,89,57,1.561404,0,0,0,,67,66,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 1]]",p10,occurrence,occurrence-count-heuristic,,0.000000,2,0.030303,0,0.002143,0.003904,64,35,1.828571,0,0,0,,67,66,64,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 1]]",p10,hha-stop,HHA-stop,,0.000000,2,0.030303,0,0.002143,0.004032,64,35,1.828571,0,0,0,,67,66,64,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 1, 1, 4]]",p30,occurrence,occurrence-count-heuristic,,0.000000,5,0.075758,0,0.006363,0.020257,190,112,1.696429,0,0,0,,67,66,61,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 1, 1, 4]]",p30,hha-stop,HHA-stop,,0.000000,7,0.106061,0,0.006564,0.021641,196,112,1.750000,0,0,0,,67,66,59,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 4, 4, 1]]",p30,occurrence,occurrence-count-heuristic,,0.000000,6,0.090909,0,0.008339,0.026578,249,152,1.638158,0,0,0,,67,66,60,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 4, 4, 1]]",p30,hha-stop,HHA-stop,,0.000000,10,0.151515,0,0.008171,0.027812,244,152,1.605263,0,0,0,,67,66,56,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 1, 1, 4]]",p30,occurrence,occurrence-count-heuristic,,0.000000,5,0.075758,0,0.006932,0.015671,207,81,2.555556,0,0,0,,67,66,61,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 1, 1, 4]]",p30,hha-stop,HHA-stop,,0.000000,5,0.075758,0,0.006430,0.018944,192,81,2.370370,0,0,0,,67,66,61,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 1, 1]]",p30,occurrence,occurrence-count-heuristic,,0.000000,4,0.060606,0,0.006731,0.011686,201,108,1.861111,0,0,0,,67,66,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 1, 1]]",p30,hha-stop,HHA-stop,,0.000000,5,0.075758,0,0.006530,0.013295,195,108,1.805556,0,0,0,,67,66,61,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 4, 1, 1]]",p50,occurrence,occurrence-count-heuristic,,0.000000,8,0.121212,0,0.013228,0.038526,395,238,1.659664,0,0,0,,67,66,58,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 4, 1, 1]]",p50,hha-stop,HHA-stop,,0.000000,10,0.151515,0,0.013396,0.042629,400,238,1.680672,0,0,0,,67,66,56,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 2]]",p50,occurrence,occurrence-count-heuristic,,0.000000,3,0.045455,0,0.011889,0.011494,355,232,1.530172,0,0,0,,67,66,63,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 2]]",p50,hha-stop,HHA-stop,,0.000000,7,0.106061,0,0.012793,0.015196,382,232,1.646552,0,0,0,,67,66,59,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4, 4]]",p50,occurrence,occurrence-count-heuristic,,0.000000,6,0.090909,0,0.010382,0.018817,310,177,1.751412,0,0,0,,67,66,60,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4, 4]]",p50,hha-stop,HHA-stop,,0.000000,8,0.121212,0,0.010516,0.021325,314,177,1.774011,0,0,0,,67,66,58,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 4, 4, 1]]",p50,occurrence,occurrence-count-heuristic,,0.000000,5,0.075758,0,0.015338,0.037515,458,212,2.160377,0,0,0,,67,66,61,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 4, 4, 1]]",p50,hha-stop,HHA-stop,,0.000000,5,0.075758,0,0.014200,0.038432,424,212,2.000000,0,0,0,,67,66,61,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 1, 4]]",p70,occurrence,occurrence-count-heuristic,,0.000000,20,0.327869,0,0.029437,0.087622,879,551,1.595281,0,0,0,,67,61,46,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 1, 4]]",p70,hha-stop,HHA-stop,,0.000000,19,0.311475,0,0.029772,0.091254,889,551,1.613430,0,0,0,,67,61,47,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 4, 4]]",p70,occurrence,occurrence-count-heuristic,,0.000000,8,0.121212,0,0.019658,0.036283,587,336,1.747024,0,0,0,,67,66,58,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 4, 4]]",p70,hha-stop,HHA-stop,,0.000000,11,0.166667,0,0.019759,0.038214,590,336,1.755952,0,0,0,,67,66,55,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 3, 4]]",p70,occurrence,occurrence-count-heuristic,,0.000000,10,0.151515,0,0.015908,0.040484,475,282,1.684397,0,0,0,,67,66,56,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 3, 4]]",p70,hha-stop,HHA-stop,,0.000000,15,0.227273,0,0.016410,0.046809,490,282,1.737589,0,0,0,,67,66,51,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 3]]",p70,occurrence,occurrence-count-heuristic,,0.000000,6,0.090909,0,0.020429,0.017586,610,405,1.506173,0,0,0,,67,66,60,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 3]]",p70,hha-stop,HHA-stop,,0.000000,9,0.136364,0,0.022371,0.024361,668,405,1.649383,0,0,0,,67,66,57,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 1]]",p90,occurrence,occurrence-count-heuristic,,0.000000,16,0.355556,0,0.101105,0.116325,3019,2350,1.284681,0,0,0,,67,45,50,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 1]]",p90,hha-stop,HHA-stop,,0.000000,16,0.355556,0,0.101340,0.132861,3026,2350,1.287660,0,0,0,,67,45,50,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 1, 1]]",p90,occurrence,occurrence-count-heuristic,,0.000000,26,0.426230,0,0.039049,0.101695,1166,809,1.441286,0,0,0,,67,61,40,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 1, 1]]",p90,hha-stop,HHA-stop,,0.000000,26,0.426230,0,0.038078,0.108198,1137,809,1.405439,0,0,0,,67,61,40,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 4]]",p90,occurrence,occurrence-count-heuristic,,0.000000,16,0.355556,0,0.120060,0.134992,3585,2873,1.247825,0,0,0,,67,45,50,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 4]]",p90,hha-stop,HHA-stop,,0.000000,16,0.355556,0,0.120831,0.150942,3608,2873,1.255830,0,0,0,,67,45,50,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 4, 1]]",p90,occurrence,occurrence-count-heuristic,,0.000000,26,0.426230,0,0.046685,0.109346,1394,1011,1.378833,0,0,0,,67,61,40,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 4, 1]]",p90,hha-stop,HHA-stop,,0.000000,27,0.442623,0,0.044575,0.114386,1331,1011,1.316518,0,0,0,,67,61,39,

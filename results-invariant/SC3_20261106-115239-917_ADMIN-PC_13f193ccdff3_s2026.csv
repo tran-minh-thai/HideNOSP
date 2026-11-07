@@ -1,0 +1,53 @@
+# run 20261106-115239-917_ADMIN-PC_13f193ccdff3_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/msnbc.txt, format=SPMF, sigma=5000, gmin=0, gmax=10, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=distinct, pareto=false, timeLimit=1800, methods=occurrence,hha-stop}
+# sensitive sets: size 1, pool 63 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 12 -> 4, p30: 13 -> 4, p50: 12 -> 4, p70: 13 -> 4, p90: 13 -> 4
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,status
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[1, 7, 2]]",p10,occurrence,occurrence-count-heuristic,,0.000000,1,0.004310,0,0.000262,0.000932,111,110,1.009091,0,0,0,,233,232,231,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[1, 7, 2]]",p10,hha-stop,HHA-stop,,0.000000,1,0.004310,0,0.000260,0.000910,110,110,1.000000,0,0,0,,233,232,231,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[9, 1]]",p10,occurrence,occurrence-count-heuristic,,0.000000,1,0.004310,0,0.000359,0.000246,152,151,1.006623,0,0,0,,233,232,231,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[9, 1]]",p10,hha-stop,HHA-stop,,0.000000,1,0.004310,0,0.000356,0.000094,151,151,1.000000,0,0,0,,233,232,231,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[2, 12, 1]]",p10,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.000017,0.000038,7,7,1.000000,0,0,0,,233,232,232,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[2, 12, 1]]",p10,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.000017,0.000042,7,7,1.000000,0,0,0,,233,232,232,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[1, 2, 3]]",p10,occurrence,occurrence-count-heuristic,,0.000000,2,0.008621,0,0.000760,0.002204,322,317,1.015773,0,0,0,,233,232,230,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[1, 2, 3]]",p10,hha-stop,HHA-stop,,0.000000,1,0.004310,0,0.000748,0.002436,317,317,1.000000,0,0,0,,233,232,231,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[1, 6, 2]]",p30,occurrence,occurrence-count-heuristic,,0.000000,4,0.017241,0,0.001211,0.003688,513,511,1.003914,0,0,0,,233,232,228,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[1, 6, 2]]",p30,hha-stop,HHA-stop,,0.000000,3,0.012931,0,0.001206,0.003931,511,511,1.000000,0,0,0,,233,232,229,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[11, 2]]",p30,occurrence,occurrence-count-heuristic,,0.000000,3,0.012987,0,0.003516,0.003692,1490,1490,1.000000,0,0,0,,233,231,229,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[11, 2]]",p30,hha-stop,HHA-stop,,0.000000,2,0.008658,0,0.003516,0.003486,1490,1490,1.000000,0,0,0,,233,231,230,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[1, 5]]",p30,occurrence,occurrence-count-heuristic,,0.000000,2,0.008621,0,0.003533,0.004500,1497,1483,1.009440,0,0,0,,233,232,230,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[1, 5]]",p30,hha-stop,HHA-stop,,0.000000,6,0.025862,0,0.003499,0.009078,1483,1483,1.000000,0,0,0,,233,232,226,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[2, 1, 4]]",p30,occurrence,occurrence-count-heuristic,,0.000000,3,0.012987,0,0.001508,0.004953,639,639,1.000000,0,0,0,,233,231,229,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[2, 1, 4]]",p30,hha-stop,HHA-stop,,0.000000,3,0.012987,0,0.001508,0.004294,639,639,1.000000,0,0,0,,233,231,229,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[1, 2, 6]]",p50,occurrence,occurrence-count-heuristic,,0.000000,8,0.034483,0,0.003667,0.011590,1554,1540,1.009091,0,0,0,,233,232,224,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[1, 2, 6]]",p50,hha-stop,HHA-stop,,0.000000,8,0.034483,0,0.003634,0.011592,1540,1540,1.000000,0,0,0,,233,232,224,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[2, 3]]",p50,occurrence,occurrence-count-heuristic,,0.000000,4,0.017316,0,0.005262,0.009210,2230,2220,1.004505,0,0,0,,233,231,228,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[2, 3]]",p50,hha-stop,HHA-stop,,0.000000,9,0.038961,0,0.005239,0.011644,2220,2220,1.000000,0,0,0,,233,231,223,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[2, 10]]",p50,occurrence,occurrence-count-heuristic,,0.000000,5,0.021645,0,0.005265,0.008645,2231,2219,1.005408,0,0,0,,233,231,227,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[2, 10]]",p50,hha-stop,HHA-stop,,0.000000,9,0.038961,0,0.005236,0.011033,2219,2219,1.000000,0,0,0,,233,231,223,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[3, 2]]",p50,occurrence,occurrence-count-heuristic,,0.000000,3,0.012931,0,0.004472,0.004897,1895,1891,1.002115,0,0,0,,233,232,229,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[3, 2]]",p50,hha-stop,HHA-stop,,0.000000,3,0.012931,0,0.004462,0.004204,1891,1891,1.000000,0,0,0,,233,232,229,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[11, 1]]",p70,occurrence,occurrence-count-heuristic,,0.000000,5,0.022026,0,0.011140,0.007791,4721,4720,1.000212,0,0,0,,233,227,227,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[11, 1]]",p70,hha-stop,HHA-stop,,0.000000,5,0.022026,0,0.011138,0.007883,4720,4720,1.000000,0,0,0,,233,227,227,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[7, 6]]",p70,occurrence,occurrence-count-heuristic,,0.000000,11,0.048246,0,0.013335,0.019398,5651,5639,1.002128,0,0,0,,233,228,221,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[7, 6]]",p70,hha-stop,HHA-stop,,0.000000,9,0.039474,0,0.013314,0.019880,5642,5639,1.000532,0,0,0,,233,228,223,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[2, 7]]",p70,occurrence,occurrence-count-heuristic,,0.000000,12,0.051948,0,0.010350,0.021797,4386,4375,1.002514,0,0,0,,233,231,220,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[2, 7]]",p70,hha-stop,HHA-stop,,0.000000,14,0.060606,0,0.010324,0.020752,4375,4375,1.000000,0,0,0,,233,231,218,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[4, 2]]",p70,occurrence,occurrence-count-heuristic,,0.000000,16,0.069565,0,0.011374,0.021316,4820,4801,1.003958,0,0,0,,233,230,216,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[4, 2]]",p70,hha-stop,HHA-stop,,0.000000,13,0.056522,0,0.011329,0.019704,4801,4801,1.000000,0,0,0,,233,230,219,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[2, 1]]",p90,occurrence,occurrence-count-heuristic,,0.000000,31,0.146226,0,0.056242,0.103424,23834,23782,1.002187,0,0,0,,233,212,201,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[2, 1]]",p90,hha-stop,HHA-stop,,0.000000,31,0.146226,0,0.056204,0.100971,23818,23782,1.001514,0,0,0,,233,212,201,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[4, 7]]",p90,occurrence,occurrence-count-heuristic,,0.000000,19,0.087963,0,0.023293,0.039741,9871,9780,1.009305,0,0,0,,233,216,213,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[4, 7]]",p90,hha-stop,HHA-stop,,0.000000,17,0.078704,0,0.023102,0.038159,9790,9780,1.001022,0,0,0,,233,216,215,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[12, 1]]",p90,occurrence,occurrence-count-heuristic,,0.000000,9,0.040724,0,0.022266,0.025052,9436,9421,1.001592,0,0,0,,233,221,223,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[12, 1]]",p90,hha-stop,HHA-stop,,0.000000,9,0.040724,0,0.022245,0.023727,9427,9421,1.000637,0,0,0,,233,221,223,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[1, 6]]",p90,occurrence,occurrence-count-heuristic,,0.000000,20,0.089686,0,0.024579,0.043971,10416,10340,1.007350,0,0,0,,233,223,212,
+datasets/msnbc.txt,"N=31790,len=423776","[0,10]",5000,"[[1, 6]]",p90,hha-stop,HHA-stop,,0.000000,21,0.094170,0,0.024430,0.044000,10353,10340,1.001257,0,0,0,,233,223,211,

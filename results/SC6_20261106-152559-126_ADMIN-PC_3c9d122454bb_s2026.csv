@@ -1,0 +1,63 @@
+# run 20261106-152559-126_ADMIN-PC_3c9d122454bb_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind TIMED
+# scenario SC6
+# options {machine=ADMIN-PC, dataset=datasets/leviathan.txt, format=SPMF, sigma=500, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, timeLimit=1800, warmups=1}
+# sensitive sets: size 1, repeated-item pool 4 candidates, 4 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+# sets: the first set drawn in each stratum (4 of 4)
+dataset,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,method_key,method,reads_frequent,mask_count,lost,wall_ms_mean,wall_ms_sd,cpu_ms_mean,repetitions,warmups,note,status
+datasets/leviathan.txt,"[0,1]",500,repeated,1,,,mine-frequent,F_sigma(D) with l_max = 4: 73 patterns,false,,,45022.913,68.407,44915.625,5,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[8, 18, 8]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,561,0,174.478,7.692,172.917,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[8, 18, 8]]",p30,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,561,0,464.783,8.257,455.208,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[8, 18, 8]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,561,0,478.352,9.032,475.000,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[8, 18, 8]]",p30,hha,HHA,false,596,0,23.576,1.047,22.917,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[8, 18, 8]]",p30,dbsh,DBSH,false,596,0,26.243,0.895,27.083,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[8, 18, 8]]",p30,sbsh-r1,SBSH-r1,true,596,0,42.906,1.982,43.750,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[8, 18, 8]]",p30,sbsh-rmax,SBSH-r3,true,596,0,40.171,0.756,39.583,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[8, 18, 8]]",p30,occurrence,occurrence-count-heuristic,false,575,0,11.022,0.692,10.417,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[8, 18, 8]]",p30,hha-stop,HHA-stop,false,596,0,31.484,0.538,32.292,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[8, 18, 8]]",p30,index-build,NettreeCutIndex,false,,,12.091,0.466,11.458,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[8, 18, 8]]",p30,index-incremental,maskPosition after each mask,false,561,,2.060,0.181,2.083,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[8, 18, 8]]",p30,index-rebuild,rebuild after each mask,false,561,,1.924,0.037,2.083,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 1]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,292,0,238.900,17.692,238.542,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 1]]",p50,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,292,0,720.701,9.121,713.542,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 1]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,292,0,727.849,11.722,720.833,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 1]]",p50,hha,HHA,false,446,0,11.301,0.477,10.417,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 1]]",p50,dbsh,DBSH,false,782,0,9.588,0.209,10.417,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 1]]",p50,sbsh-r1,SBSH-r1,true,742,0,11.522,0.098,12.500,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 1]]",p50,sbsh-rmax,SBSH-r4,true,742,0,11.561,0.234,11.458,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 1]]",p50,occurrence,occurrence-count-heuristic,false,423,0,6.564,0.046,6.250,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 1]]",p50,hha-stop,HHA-stop,false,428,0,14.519,0.461,14.583,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 1]]",p50,index-build,NettreeCutIndex,false,,,9.200,0.386,9.375,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 1]]",p50,index-incremental,maskPosition after each mask,false,292,,1.541,0.014,2.083,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1, 1]]",p50,index-rebuild,rebuild after each mask,false,292,,6.776,0.329,6.250,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,1399,0,200.308,4.202,200.000,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1]]",p70,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,1399,0,641.484,7.688,633.333,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,1399,0,645.612,7.794,640.625,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1]]",p70,hha,HHA,false,1728,0,15.720,0.412,15.625,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1]]",p70,dbsh,DBSH,false,2028,0,16.551,0.560,16.667,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1]]",p70,sbsh-r1,SBSH-r1,true,2019,0,36.437,0.804,35.417,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1]]",p70,sbsh-rmax,SBSH-r3,true,2019,0,36.526,1.126,36.458,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1]]",p70,occurrence,occurrence-count-heuristic,false,1593,0,9.478,0.216,10.417,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1]]",p70,hha-stop,HHA-stop,false,1719,0,18.875,0.895,18.750,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1]]",p70,index-build,NettreeCutIndex,false,,,8.409,0.484,8.333,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1]]",p70,index-incremental,maskPosition after each mask,false,1399,,4.205,0.037,4.167,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1, 1]]",p70,index-rebuild,rebuild after each mask,false,1399,,12.144,0.483,11.458,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,2858,0,211.593,3.684,207.292,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1]]",p90,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,2858,0,709.185,7.412,703.125,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,2858,0,717.311,10.690,706.250,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1]]",p90,hha,HHA,false,3043,0,13.758,0.721,13.542,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1]]",p90,dbsh,DBSH,false,3334,0,14.577,0.360,14.583,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1]]",p90,sbsh-r1,SBSH-r1,true,3301,0,33.296,4.356,32.292,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1]]",p90,sbsh-rmax,SBSH-r2,true,3301,0,31.753,0.489,31.250,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1]]",p90,occurrence,occurrence-count-heuristic,false,2892,0,8.890,0.059,9.375,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1]]",p90,hha-stop,HHA-stop,false,3024,0,15.907,0.551,14.583,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1]]",p90,index-build,NettreeCutIndex,false,,,7.288,0.343,7.292,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1]]",p90,index-incremental,maskPosition after each mask,false,2858,,3.986,0.057,4.167,15,1,,
+datasets/leviathan.txt,"[0,1]",500,repeated,1,"[[1, 1]]",p90,index-rebuild,rebuild after each mask,false,2858,,12.812,0.395,12.500,15,1,,

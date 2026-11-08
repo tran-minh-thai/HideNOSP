@@ -1,0 +1,476 @@
+{
+ "_meta": {
+  "command": "python tools/paper_numbers.py ",
+  "commit": "ddd8e92713a67ce3e1d5713d69315c4e9e5d6540",
+  "tree": "clean",
+  "tool_sha256": "e6fb88a3a65a",
+  "python": "3.14.6",
+  "machine": "ADMIN-PC",
+  "small_machine": "dev"
+ },
+ "values": {
+  "platform.cpu": {
+   "value": "Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz",
+   "source": "results-invariant/campaign_ADMIN-PC_g2/ENV_LOCK.json"
+  },
+  "platform.heap_bytes.sc3": {
+   "value": [
+    8589934592,
+    34359738368
+   ],
+   "source": "heap_max_bytes of the SC3 files"
+  },
+  "platform.heap_bytes.sc6": {
+   "value": 8589934592,
+   "source": "heap_max_bytes of the SC6 files"
+  },
+  "platform.hostname": {
+   "value": "ADMIN-PC",
+   "source": "results-invariant/campaign_ADMIN-PC_g2/ENV_LOCK.json"
+  },
+  "platform.java_runtime_version": {
+   "value": "25.0.4.1+1-LTS",
+   "source": "results-invariant/campaign_ADMIN-PC_g2/ENV_LOCK.json"
+  },
+  "platform.java_vendor": {
+   "value": "Eclipse Adoptium",
+   "source": "results-invariant/campaign_ADMIN-PC_g2/ENV_LOCK.json"
+  },
+  "platform.logical_processors": {
+   "value": "12",
+   "source": "results-invariant/campaign_ADMIN-PC_g2/ENV_LOCK.json"
+  },
+  "platform.os": {
+   "value": "Windows-11-10.0.26300-SP0",
+   "source": "results-invariant/campaign_ADMIN-PC_g2/ENV_LOCK.json"
+  },
+  "platform.ram_bytes": {
+   "value": "68452814848",
+   "source": "results-invariant/campaign_ADMIN-PC_g2/ENV_LOCK.json"
+  },
+  "sc6.holm.ms.s1.max": {
+   "value": 28.8,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.holm.ms.s1.min": {
+   "value": 5.8,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.holm.ms.s10.max": {
+   "value": 618.7,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.holm.ms.s10.min": {
+   "value": 89.8,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.mine.ms.s1.max": {
+   "value": 10152.7,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.mine.ms.s1.min": {
+   "value": 8694.9,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.mine.ms.s10.max": {
+   "value": 10697.6,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.mine.ms.s10.min": {
+   "value": 10477.4,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.n_cells": {
+   "value": 81,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.n_timed": {
+   "value": 3528,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.ours.ms.s1.max": {
+   "value": 2477.6,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.ours.ms.s1.min": {
+   "value": 1938.7,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.ours.ms.s10.max": {
+   "value": 4990.0,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.ours.ms.s10.min": {
+   "value": 1666.6,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.repetitions.max": {
+   "value": 15,
+   "source": "SC6 files of ADMIN-PC"
+  },
+  "sc6.repetitions.min": {
+   "value": 3,
+   "source": "SC6 files of ADMIN-PC"
+  }
+ },
+ "tables": {
+  "timing": {
+   "columns": [
+    "scope",
+    "size",
+    "method"
+   ],
+   "rows": [
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "cut-hide-rw-ls",
+     "reads_frequent": true,
+     "n": 84,
+     "median_ms": 1938.7
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "cut-hide-rw",
+     "reads_frequent": true,
+     "n": 84,
+     "median_ms": 1904.8
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "cut-hide",
+     "reads_frequent": true,
+     "n": 84,
+     "median_ms": 453.0
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "hha",
+     "reads_frequent": false,
+     "n": 84,
+     "median_ms": 13.3
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "hha-stop",
+     "reads_frequent": false,
+     "n": 84,
+     "median_ms": 16.6
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "dbsh",
+     "reads_frequent": false,
+     "n": 84,
+     "median_ms": 11.5
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "sbsh-r1",
+     "reads_frequent": true,
+     "n": 84,
+     "median_ms": 457.5
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "sbsh-rmax",
+     "reads_frequent": true,
+     "n": 84,
+     "median_ms": 456.2
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "occurrence",
+     "reads_frequent": false,
+     "n": 84,
+     "median_ms": 5.8
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "mine F_sigma",
+     "reads_frequent": false,
+     "n": 17,
+     "median_ms": 8694.9
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "index",
+     "build_ms": 4.4,
+     "rebuild_over_incremental": 1.53
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "cut-hide-rw-ls",
+     "reads_frequent": true,
+     "n": 45,
+     "median_ms": 1666.6
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "cut-hide-rw",
+     "reads_frequent": true,
+     "n": 45,
+     "median_ms": 1651.2
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "cut-hide",
+     "reads_frequent": true,
+     "n": 45,
+     "median_ms": 1668.2
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "hha",
+     "reads_frequent": false,
+     "n": 45,
+     "median_ms": 199.9
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "hha-stop",
+     "reads_frequent": false,
+     "n": 45,
+     "median_ms": 176.5
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "dbsh",
+     "reads_frequent": false,
+     "n": 45,
+     "median_ms": 89.8
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "sbsh-r1",
+     "reads_frequent": true,
+     "n": 45,
+     "median_ms": 1509.9
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "sbsh-rmax",
+     "reads_frequent": true,
+     "n": 45,
+     "median_ms": 1508.2
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "occurrence",
+     "reads_frequent": false,
+     "n": 45,
+     "median_ms": 95.6
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "mine F_sigma",
+     "reads_frequent": false,
+     "n": 9,
+     "median_ms": 10477.4
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "index",
+     "build_ms": 35.7,
+     "rebuild_over_incremental": 2.98
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "cut-hide-rw-ls",
+     "reads_frequent": true,
+     "n": 173,
+     "median_ms": 2477.6
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "cut-hide-rw",
+     "reads_frequent": true,
+     "n": 173,
+     "median_ms": 2525.2
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "cut-hide",
+     "reads_frequent": true,
+     "n": 173,
+     "median_ms": 1021.0
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "hha",
+     "reads_frequent": false,
+     "n": 173,
+     "median_ms": 23.0
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "hha-stop",
+     "reads_frequent": false,
+     "n": 173,
+     "median_ms": 28.8
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "dbsh",
+     "reads_frequent": false,
+     "n": 173,
+     "median_ms": 19.6
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "sbsh-r1",
+     "reads_frequent": true,
+     "n": 173,
+     "median_ms": 409.8
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "sbsh-rmax",
+     "reads_frequent": true,
+     "n": 173,
+     "median_ms": 399.4
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "occurrence",
+     "reads_frequent": false,
+     "n": 173,
+     "median_ms": 10.4
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "mine F_sigma",
+     "reads_frequent": false,
+     "n": 37,
+     "median_ms": 10152.7
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "index",
+     "build_ms": 11.9,
+     "rebuild_over_incremental": 1.15
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "cut-hide-rw-ls",
+     "reads_frequent": true,
+     "n": 90,
+     "median_ms": 4990.0
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "cut-hide-rw",
+     "reads_frequent": true,
+     "n": 90,
+     "median_ms": 5005.7
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "cut-hide",
+     "reads_frequent": true,
+     "n": 90,
+     "median_ms": 5003.8
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "hha",
+     "reads_frequent": false,
+     "n": 90,
+     "median_ms": 556.1
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "hha-stop",
+     "reads_frequent": false,
+     "n": 90,
+     "median_ms": 618.7
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "dbsh",
+     "reads_frequent": false,
+     "n": 90,
+     "median_ms": 296.5
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "sbsh-r1",
+     "reads_frequent": true,
+     "n": 90,
+     "median_ms": 2051.9
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "sbsh-rmax",
+     "reads_frequent": true,
+     "n": 90,
+     "median_ms": 2049.8
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "occurrence",
+     "reads_frequent": false,
+     "n": 90,
+     "median_ms": 230.1
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "mine F_sigma",
+     "reads_frequent": false,
+     "n": 18,
+     "median_ms": 10697.6
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "index",
+     "build_ms": 282.5,
+     "rebuild_over_incremental": 1.45
+    }
+   ],
+   "source": "timing_table.py --machine=ADMIN-PC"
+  }
+ }
+}

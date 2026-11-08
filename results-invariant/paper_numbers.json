@@ -1,0 +1,2580 @@
+{
+ "_meta": {
+  "command": "python tools/paper_numbers.py ",
+  "commit": "ddd8e92713a67ce3e1d5713d69315c4e9e5d6540",
+  "tree": "clean",
+  "tool_sha256": "e6fb88a3a65a",
+  "python": "3.14.6",
+  "machine": "ADMIN-PC",
+  "small_machine": "dev"
+ },
+ "values": {
+  "cert.full.bpos.distinct": {
+   "value": 0,
+   "source": "cert_table.py --machine=ADMIN-PC --small-machine=dev"
+  },
+  "cert.full.bpos.repeated": {
+   "value": 151,
+   "source": "cert_table.py --machine=ADMIN-PC --small-machine=dev"
+  },
+  "cert.full.certified.distinct": {
+   "value": 165,
+   "source": "cert_table.py --machine=ADMIN-PC --small-machine=dev"
+  },
+  "cert.full.certified.repeated": {
+   "value": 202,
+   "source": "cert_table.py --machine=ADMIN-PC --small-machine=dev"
+  },
+  "cert.full.certified_pos.distinct": {
+   "value": 0,
+   "source": "SC3CERT files of ADMIN-PC, full rows of the tested datasets"
+  },
+  "cert.full.certified_pos.repeated": {
+   "value": 19,
+   "source": "SC3CERT files of ADMIN-PC, full rows of the tested datasets"
+  },
+  "cert.full.n.distinct": {
+   "value": 232,
+   "source": "cert_table.py --machine=ADMIN-PC --small-machine=dev"
+  },
+  "cert.full.n.repeated": {
+   "value": 490,
+   "source": "cert_table.py --machine=ADMIN-PC --small-machine=dev"
+  },
+  "cert.small.pos.hit.distinct": {
+   "value": 0,
+   "source": "cert_table.py --machine=ADMIN-PC --small-machine=dev"
+  },
+  "cert.small.pos.hit.repeated": {
+   "value": 20,
+   "source": "cert_table.py --machine=ADMIN-PC --small-machine=dev"
+  },
+  "cert.small.pos.n.distinct": {
+   "value": 291,
+   "source": "cert_table.py --machine=ADMIN-PC --small-machine=dev"
+  },
+  "cert.small.pos.n.repeated": {
+   "value": 704,
+   "source": "cert_table.py --machine=ADMIN-PC --small-machine=dev"
+  },
+  "exact.distinct.n": {
+   "value": 312,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "exact.repeated.n": {
+   "value": 541,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "excluded.H2": {
+   "value": [
+    0,
+    2368
+   ],
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "excluded.H2-R": {
+   "value": [
+    0,
+    5812
+   ],
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "excluded.H4b": {
+   "value": [
+    0,
+    1184
+   ],
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "excluded.H4b-R": {
+   "value": [
+    0,
+    2906
+   ],
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2.base_more.max": {
+   "value": 542,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2.base_more.min": {
+   "value": 486,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2.n": {
+   "value": 592,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2.nowb.max": {
+   "value": 592,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2.nowb.min": {
+   "value": 585,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2.same.max": {
+   "value": 106,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2.same.min": {
+   "value": 50,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.base_more.max": {
+   "value": 1430,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.base_more.min": {
+   "value": 1365,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.dbsh.median": {
+   "value": 0.0286,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.dbsh.p_holm": {
+   "value": 0.08286,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.dbsh.rb": {
+   "value": 0.407,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.hha.median": {
+   "value": 0.0361,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.hha.p_holm": {
+   "value": 0.005772,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.hha.rb": {
+   "value": 0.613,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.n": {
+   "value": 1453,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.nowb.max": {
+   "value": 1426,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.nowb.min": {
+   "value": 1372,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.ours_more.hha": {
+   "value": 57,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.ours_more.others": {
+   "value": 1,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.same.max": {
+   "value": 31,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h2r.same.min": {
+   "value": 22,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h3.degen.median.max": {
+   "value": 1.0,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h3.degen.median.min": {
+   "value": 1.0,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h3.degen.n": {
+   "value": 288,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h3.main.median.max": {
+   "value": 1.0339,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h3.main.median.min": {
+   "value": 1.0002,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h3.main.n": {
+   "value": 232,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h3r.main.median.max": {
+   "value": 1.5662,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h3r.main.median.min": {
+   "value": 1.2819,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h3r.main.n": {
+   "value": 491,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4.base_more.max": {
+   "value": 455,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4.base_more.min": {
+   "value": 424,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4.n": {
+   "value": 592,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4.nowb.max": {
+   "value": 591,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4.nowb.min": {
+   "value": 591,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4.same.max": {
+   "value": 168,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4.same.min": {
+   "value": 137,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4a.fewer.repeated.max": {
+   "value": 210,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4a.fewer.repeated.min": {
+   "value": 131,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4a.ratio.distinct.max": {
+   "value": 1.1319,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4a.ratio.distinct.min": {
+   "value": 1.1124,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4a.ratio.repeated.max": {
+   "value": 1.3113,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4a.ratio.repeated.min": {
+   "value": 1.198,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.base_more.max": {
+   "value": 1291,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.base_more.min": {
+   "value": 1209,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.median.max": {
+   "value": 0.0361,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.median.min": {
+   "value": 0.0346,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.n": {
+   "value": 1453,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.nowb.max": {
+   "value": 1287,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.nowb.min": {
+   "value": 1220,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.p_holm.max": {
+   "value": 0.002886,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.p_holm.min": {
+   "value": 0.002886,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.rb.max": {
+   "value": 0.613,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.rb.min": {
+   "value": 0.58,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.same.max": {
+   "value": 34,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h4r.same.min": {
+   "value": 31,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "lb.base.distinct.max": {
+   "value": 5.6338,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.base.distinct.min": {
+   "value": 1.8394,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.base.repeated.max": {
+   "value": 7.2503,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.base.repeated.min": {
+   "value": 2.7826,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.hha_fewer.ours": {
+   "value": 57,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.hha_fewer.refine": {
+   "value": 3,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.ours.distinct.max": {
+   "value": 1.58,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.ours.distinct.min": {
+   "value": 1.3003,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.ours.repeated.max": {
+   "value": 2.2729,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.ours.repeated.min": {
+   "value": 1.9074,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lostopt.base.atR.max.distinct": {
+   "value": 621,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.base.atR.max.repeated": {
+   "value": 923,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.base.atR.min.distinct": {
+   "value": 494,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.base.atR.min.repeated": {
+   "value": 611,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.base.opt.max.distinct": {
+   "value": 166,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.base.opt.max.repeated": {
+   "value": 218,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.base.opt.min.distinct": {
+   "value": 99,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.base.opt.min.repeated": {
+   "value": 104,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.chaw.opt.distinct": {
+   "value": 534,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.chaw.opt.repeated": {
+   "value": 926,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.chfw.opt.distinct": {
+   "value": 505,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.chfw.opt.repeated": {
+   "value": 851,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.emptyband.n": {
+   "value": 32,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.excess.base.min.distinct": {
+   "value": 1984,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.excess.base.min.repeated": {
+   "value": 5247,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.excess.ours.distinct": {
+   "value": 57,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.excess.ours.repeated": {
+   "value": 208,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.n.distinct": {
+   "value": 629,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.n.repeated": {
+   "value": 1189,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.optworse.repeated.max": {
+   "value": 50,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.optworse.repeated.min": {
+   "value": 19,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.ours.opt.distinct": {
+   "value": 595,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.ours.opt.repeated": {
+   "value": 1061,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.skipped.distinct": {
+   "value": 67,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "lostopt.skipped.repeated": {
+   "value": 284,
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "opt.bound_share.distinct.max": {
+   "value": 0.7901,
+   "source": "reduced_optimum_table.py --machine=ADMIN-PC"
+  },
+  "opt.bound_share.distinct.min": {
+   "value": 0.6085,
+   "source": "reduced_optimum_table.py --machine=ADMIN-PC"
+  },
+  "opt.bound_share.repeated.max": {
+   "value": 0.6239,
+   "source": "reduced_optimum_table.py --machine=ADMIN-PC"
+  },
+  "opt.bound_share.repeated.min": {
+   "value": 0.4085,
+   "source": "reduced_optimum_table.py --machine=ADMIN-PC"
+  },
+  "opt.refined_vs_opt.distinct.max": {
+   "value": 1.0667,
+   "source": "reduced_optimum_table.py --machine=ADMIN-PC"
+  },
+  "opt.refined_vs_opt.repeated.max": {
+   "value": 1.2,
+   "source": "reduced_optimum_table.py --machine=ADMIN-PC"
+  },
+  "pareto.distinct.dominated": {
+   "value": 1049,
+   "source": "pareto_table.py --machine=ADMIN-PC"
+  },
+  "pareto.distinct.neither": {
+   "value": 9,
+   "source": "pareto_table.py --machine=ADMIN-PC"
+  },
+  "pareto.distinct.pairs": {
+   "value": 1248,
+   "source": "pareto_table.py --machine=ADMIN-PC"
+  },
+  "pareto.distinct.tied": {
+   "value": 190,
+   "source": "pareto_table.py --machine=ADMIN-PC"
+  },
+  "pareto.n_config": {
+   "value": 54,
+   "source": "pareto_table.py --machine=ADMIN-PC"
+  },
+  "pareto.n_sets": {
+   "value": 853,
+   "source": "pareto_table.py --machine=ADMIN-PC"
+  },
+  "pareto.repeated.dominated": {
+   "value": 2126,
+   "source": "pareto_table.py --machine=ADMIN-PC"
+  },
+  "pareto.repeated.neither": {
+   "value": 10,
+   "source": "pareto_table.py --machine=ADMIN-PC"
+  },
+  "pareto.repeated.pairs": {
+   "value": 2164,
+   "source": "pareto_table.py --machine=ADMIN-PC"
+  },
+  "pareto.repeated.tied": {
+   "value": 28,
+   "source": "pareto_table.py --machine=ADMIN-PC"
+  },
+  "refine.lost_down": {
+   "value": 346,
+   "source": "SC3 files of ADMIN-PC (every batch)"
+  },
+  "refine.lost_median": {
+   "value": 0,
+   "source": "SC3 files of ADMIN-PC (every batch)"
+  },
+  "refine.lost_up": {
+   "value": 50,
+   "source": "SC3 files of ADMIN-PC (every batch)"
+  },
+  "refine.n": {
+   "value": 1579,
+   "source": "SC3 files of ADMIN-PC (every batch)"
+  },
+  "sc1.ghost.n": {
+   "value": 49,
+   "source": "SC1 file SC1_20261101-125714-517_ADMIN-PC_79f62488bee9_s2026.csv"
+  },
+  "sc1.ghost.of": {
+   "value": 5665,
+   "source": "SC1 file SC1_20261101-125714-517_ADMIN-PC_79f62488bee9_s2026.csv"
+  },
+  "sc1.n_checks": {
+   "value": 8,
+   "source": "SC1 file SC1_20261101-125714-517_ADMIN-PC_79f62488bee9_s2026.csv"
+  },
+  "sc1.n_instances": {
+   "value": 19328,
+   "source": "SC1 file SC1_20261101-125714-517_ADMIN-PC_79f62488bee9_s2026.csv"
+  },
+  "sc2.degenerate.distinct": {
+   "value": 16,
+   "source": "config/configuration_groups.tsv"
+  },
+  "sc2.degenerate.repeated": {
+   "value": 1,
+   "source": "config/configuration_groups_repeated.tsv"
+  },
+  "sc2.intermediate.distinct": {
+   "value": 9,
+   "source": "config/configuration_groups.tsv"
+  },
+  "sc2.intermediate.repeated": {
+   "value": 1,
+   "source": "config/configuration_groups_repeated.tsv"
+  },
+  "sc2.main.distinct": {
+   "value": 17,
+   "source": "config/configuration_groups.tsv"
+  },
+  "sc2.main.repeated": {
+   "value": 37,
+   "source": "config/configuration_groups_repeated.tsv"
+  },
+  "sc2.n_config.distinct": {
+   "value": 42,
+   "source": "config/configuration_groups.tsv"
+  },
+  "sc2.n_config.repeated": {
+   "value": 39,
+   "source": "config/configuration_groups_repeated.tsv"
+  },
+  "sc3.n_excluded": {
+   "value": 0,
+   "source": "SC3 files of ADMIN-PC (every batch)"
+  },
+  "sc3.n_rows": {
+   "value": 25623,
+   "source": "SC3 files of ADMIN-PC (every batch)"
+  },
+  "sc3.n_rows.analysis": {
+   "value": 19180,
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "sc3.status": {
+   "value": {
+    "": 25623
+   },
+   "source": "SC3 files of ADMIN-PC (every batch)"
+  }
+ },
+ "tables": {
+  "bound": {
+   "columns": [
+    "scope",
+    "size",
+    "method"
+   ],
+   "rows": [
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "cut-hide-rw-ls",
+     "sets": 312,
+     "at_bound": 312,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "cut-hide-rw",
+     "sets": 312,
+     "at_bound": 312,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "cut-hide",
+     "sets": 312,
+     "at_bound": 312,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "hha",
+     "sets": 312,
+     "at_bound": 157,
+     "median": 1.0,
+     "max": 1.125
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "dbsh",
+     "sets": 312,
+     "at_bound": 79,
+     "median": 1.0246,
+     "max": 1.5
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "sbsh-r1",
+     "sets": 312,
+     "at_bound": 63,
+     "median": 1.0314,
+     "max": 1.8408
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "sbsh-rmax",
+     "sets": 312,
+     "at_bound": 63,
+     "median": 1.0323,
+     "max": 2.2714
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "occurrence",
+     "sets": 312,
+     "at_bound": 209,
+     "median": 1.0,
+     "max": 1.0734
+    },
+    {
+     "scope": "distinct",
+     "size": 1,
+     "method": "hha-stop",
+     "sets": 312,
+     "at_bound": 245,
+     "median": 1.0,
+     "max": 1.0645
+    },
+    {
+     "scope": "distinct",
+     "size": 5,
+     "method": "cut-hide-rw-ls",
+     "sets": 257,
+     "at_bound": 31,
+     "median": 1.3003,
+     "max": 3.472
+    },
+    {
+     "scope": "distinct",
+     "size": 5,
+     "method": "cut-hide-refine",
+     "sets": 257,
+     "at_bound": 31,
+     "median": 1.2958,
+     "max": 3.472
+    },
+    {
+     "scope": "distinct",
+     "size": 5,
+     "method": "cut-hide-rw",
+     "sets": 257,
+     "at_bound": 31,
+     "median": 1.3003,
+     "max": 3.472
+    },
+    {
+     "scope": "distinct",
+     "size": 5,
+     "method": "cut-hide",
+     "sets": 257,
+     "at_bound": 31,
+     "median": 1.3003,
+     "max": 3.472
+    },
+    {
+     "scope": "distinct",
+     "size": 5,
+     "method": "hha",
+     "sets": 257,
+     "at_bound": 0,
+     "median": 3.5142,
+     "max": 47.1131
+    },
+    {
+     "scope": "distinct",
+     "size": 5,
+     "method": "dbsh",
+     "sets": 257,
+     "at_bound": 0,
+     "median": 1.9496,
+     "max": 4.621
+    },
+    {
+     "scope": "distinct",
+     "size": 5,
+     "method": "sbsh-r1",
+     "sets": 257,
+     "at_bound": 0,
+     "median": 1.8394,
+     "max": 4.137
+    },
+    {
+     "scope": "distinct",
+     "size": 5,
+     "method": "sbsh-rmax",
+     "sets": 257,
+     "at_bound": 0,
+     "median": 1.8394,
+     "max": 4.137
+    },
+    {
+     "scope": "distinct",
+     "size": 5,
+     "method": "occurrence",
+     "sets": 257,
+     "at_bound": 0,
+     "median": 1.6158,
+     "max": 3.5985
+    },
+    {
+     "scope": "distinct",
+     "size": 5,
+     "method": "hha-stop",
+     "sets": 257,
+     "at_bound": 0,
+     "median": 1.6584,
+     "max": 4.0615
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "cut-hide-rw-ls",
+     "sets": 180,
+     "at_bound": 2,
+     "median": 1.3583,
+     "max": 2.9443
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "cut-hide-refine",
+     "sets": 180,
+     "at_bound": 2,
+     "median": 1.3527,
+     "max": 2.9436
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "cut-hide-rw",
+     "sets": 180,
+     "at_bound": 2,
+     "median": 1.3583,
+     "max": 2.9443
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "cut-hide",
+     "sets": 180,
+     "at_bound": 2,
+     "median": 1.3583,
+     "max": 2.9443
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "hha",
+     "sets": 180,
+     "at_bound": 0,
+     "median": 3.8425,
+     "max": 50.2826
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "dbsh",
+     "sets": 180,
+     "at_bound": 0,
+     "median": 2.5419,
+     "max": 6.029
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "sbsh-r1",
+     "sets": 180,
+     "at_bound": 0,
+     "median": 2.36,
+     "max": 5.5538
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "sbsh-rmax",
+     "sets": 180,
+     "at_bound": 0,
+     "median": 2.36,
+     "max": 5.5846
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "occurrence",
+     "sets": 180,
+     "at_bound": 0,
+     "median": 1.9008,
+     "max": 3.7694
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "method": "hha-stop",
+     "sets": 180,
+     "at_bound": 0,
+     "median": 1.9469,
+     "max": 4.5977
+    },
+    {
+     "scope": "distinct",
+     "size": 20,
+     "method": "cut-hide-rw-ls",
+     "sets": 123,
+     "at_bound": 0,
+     "median": 1.58,
+     "max": 3.0197
+    },
+    {
+     "scope": "distinct",
+     "size": 20,
+     "method": "cut-hide-refine",
+     "sets": 123,
+     "at_bound": 0,
+     "median": 1.5796,
+     "max": 3.0175
+    },
+    {
+     "scope": "distinct",
+     "size": 20,
+     "method": "cut-hide-rw",
+     "sets": 123,
+     "at_bound": 0,
+     "median": 1.58,
+     "max": 3.0197
+    },
+    {
+     "scope": "distinct",
+     "size": 20,
+     "method": "cut-hide",
+     "sets": 123,
+     "at_bound": 0,
+     "median": 1.58,
+     "max": 3.0197
+    },
+    {
+     "scope": "distinct",
+     "size": 20,
+     "method": "hha",
+     "sets": 123,
+     "at_bound": 0,
+     "median": 5.6338,
+     "max": 40.7736
+    },
+    {
+     "scope": "distinct",
+     "size": 20,
+     "method": "dbsh",
+     "sets": 123,
+     "at_bound": 0,
+     "median": 3.869,
+     "max": 7.9906
+    },
+    {
+     "scope": "distinct",
+     "size": 20,
+     "method": "sbsh-r1",
+     "sets": 123,
+     "at_bound": 0,
+     "median": 3.4817,
+     "max": 6.8302
+    },
+    {
+     "scope": "distinct",
+     "size": 20,
+     "method": "sbsh-rmax",
+     "sets": 123,
+     "at_bound": 0,
+     "median": 3.4817,
+     "max": 6.8491
+    },
+    {
+     "scope": "distinct",
+     "size": 20,
+     "method": "occurrence",
+     "sets": 123,
+     "at_bound": 0,
+     "median": 2.4598,
+     "max": 4.1746
+    },
+    {
+     "scope": "distinct",
+     "size": 20,
+     "method": "hha-stop",
+     "sets": 123,
+     "at_bound": 0,
+     "median": 2.4835,
+     "max": 4.2096
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "cut-hide-rw-ls",
+     "sets": 541,
+     "at_bound": 541,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "cut-hide-rw",
+     "sets": 541,
+     "at_bound": 541,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "cut-hide",
+     "sets": 541,
+     "at_bound": 541,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "hha",
+     "sets": 541,
+     "at_bound": 31,
+     "median": 1.285,
+     "max": 3.8614
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "dbsh",
+     "sets": 541,
+     "at_bound": 29,
+     "median": 1.4932,
+     "max": 4.0455
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "sbsh-r1",
+     "sets": 541,
+     "at_bound": 23,
+     "median": 1.5274,
+     "max": 4.1977
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "sbsh-rmax",
+     "sets": 541,
+     "at_bound": 22,
+     "median": 1.5382,
+     "max": 4.8692
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "occurrence",
+     "sets": 541,
+     "at_bound": 33,
+     "median": 1.2278,
+     "max": 3.0
+    },
+    {
+     "scope": "repeated",
+     "size": 1,
+     "method": "hha-stop",
+     "sets": 541,
+     "at_bound": 31,
+     "median": 1.2819,
+     "max": 3.8614
+    },
+    {
+     "scope": "repeated",
+     "size": 5,
+     "method": "cut-hide-rw-ls",
+     "sets": 385,
+     "at_bound": 0,
+     "median": 1.9074,
+     "max": 7.9001
+    },
+    {
+     "scope": "repeated",
+     "size": 5,
+     "method": "cut-hide-refine",
+     "sets": 385,
+     "at_bound": 3,
+     "median": 1.8214,
+     "max": 7.7652
+    },
+    {
+     "scope": "repeated",
+     "size": 5,
+     "method": "cut-hide-rw",
+     "sets": 385,
+     "at_bound": 0,
+     "median": 1.9074,
+     "max": 7.9001
+    },
+    {
+     "scope": "repeated",
+     "size": 5,
+     "method": "cut-hide",
+     "sets": 385,
+     "at_bound": 0,
+     "median": 1.9074,
+     "max": 7.9001
+    },
+    {
+     "scope": "repeated",
+     "size": 5,
+     "method": "hha",
+     "sets": 385,
+     "at_bound": 0,
+     "median": 5.2168,
+     "max": 54.1851
+    },
+    {
+     "scope": "repeated",
+     "size": 5,
+     "method": "dbsh",
+     "sets": 385,
+     "at_bound": 0,
+     "median": 2.9201,
+     "max": 9.6056
+    },
+    {
+     "scope": "repeated",
+     "size": 5,
+     "method": "sbsh-r1",
+     "sets": 385,
+     "at_bound": 0,
+     "median": 2.7826,
+     "max": 9.6908
+    },
+    {
+     "scope": "repeated",
+     "size": 5,
+     "method": "sbsh-rmax",
+     "sets": 385,
+     "at_bound": 0,
+     "median": 2.8045,
+     "max": 9.6908
+    },
+    {
+     "scope": "repeated",
+     "size": 5,
+     "method": "occurrence",
+     "sets": 385,
+     "at_bound": 0,
+     "median": 2.2682,
+     "max": 6.3913
+    },
+    {
+     "scope": "repeated",
+     "size": 5,
+     "method": "hha-stop",
+     "sets": 385,
+     "at_bound": 0,
+     "median": 2.4586,
+     "max": 7.9794
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "cut-hide-rw-ls",
+     "sets": 357,
+     "at_bound": 0,
+     "median": 2.0036,
+     "max": 6.0315
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "cut-hide-refine",
+     "sets": 357,
+     "at_bound": 0,
+     "median": 1.9467,
+     "max": 5.6701
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "cut-hide-rw",
+     "sets": 357,
+     "at_bound": 0,
+     "median": 2.0036,
+     "max": 6.0315
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "cut-hide",
+     "sets": 357,
+     "at_bound": 0,
+     "median": 2.0036,
+     "max": 6.0315
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "hha",
+     "sets": 357,
+     "at_bound": 0,
+     "median": 6.1031,
+     "max": 68.325
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "dbsh",
+     "sets": 357,
+     "at_bound": 0,
+     "median": 3.7732,
+     "max": 11.2532
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "sbsh-r1",
+     "sets": 357,
+     "at_bound": 0,
+     "median": 3.436,
+     "max": 9.6292
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "sbsh-rmax",
+     "sets": 357,
+     "at_bound": 0,
+     "median": 3.4582,
+     "max": 9.6292
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "occurrence",
+     "sets": 357,
+     "at_bound": 0,
+     "median": 2.701,
+     "max": 8.1893
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "method": "hha-stop",
+     "sets": 357,
+     "at_bound": 0,
+     "median": 2.9444,
+     "max": 11.0512
+    },
+    {
+     "scope": "repeated",
+     "size": 20,
+     "method": "cut-hide-rw-ls",
+     "sets": 277,
+     "at_bound": 0,
+     "median": 2.2729,
+     "max": 5.7745
+    },
+    {
+     "scope": "repeated",
+     "size": 20,
+     "method": "cut-hide-refine",
+     "sets": 277,
+     "at_bound": 0,
+     "median": 2.1881,
+     "max": 5.7143
+    },
+    {
+     "scope": "repeated",
+     "size": 20,
+     "method": "cut-hide-rw",
+     "sets": 277,
+     "at_bound": 0,
+     "median": 2.2729,
+     "max": 5.7745
+    },
+    {
+     "scope": "repeated",
+     "size": 20,
+     "method": "cut-hide",
+     "sets": 277,
+     "at_bound": 0,
+     "median": 2.2729,
+     "max": 5.7745
+    },
+    {
+     "scope": "repeated",
+     "size": 20,
+     "method": "hha",
+     "sets": 277,
+     "at_bound": 0,
+     "median": 7.2503,
+     "max": 84.2341
+    },
+    {
+     "scope": "repeated",
+     "size": 20,
+     "method": "dbsh",
+     "sets": 277,
+     "at_bound": 0,
+     "median": 4.7888,
+     "max": 14.4389
+    },
+    {
+     "scope": "repeated",
+     "size": 20,
+     "method": "sbsh-r1",
+     "sets": 277,
+     "at_bound": 0,
+     "median": 4.2151,
+     "max": 10.864
+    },
+    {
+     "scope": "repeated",
+     "size": 20,
+     "method": "sbsh-rmax",
+     "sets": 277,
+     "at_bound": 0,
+     "median": 4.2254,
+     "max": 10.864
+    },
+    {
+     "scope": "repeated",
+     "size": 20,
+     "method": "occurrence",
+     "sets": 277,
+     "at_bound": 0,
+     "median": 3.18,
+     "max": 9.0189
+    },
+    {
+     "scope": "repeated",
+     "size": 20,
+     "method": "hha-stop",
+     "sets": 277,
+     "at_bound": 0,
+     "median": 3.6391,
+     "max": 12.2995
+    }
+   ],
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "datasets": {
+   "columns": [
+    "dataset"
+   ],
+   "rows": [
+    {
+     "dataset": "bible",
+     "sequences": 36369,
+     "mean_length": 21.641122934367182,
+     "items": 13905,
+     "gaps": [
+      "[0,1]",
+      "[0,3]"
+     ],
+     "sigmas": [
+      2000
+     ],
+     "distinct": {
+      "intermediate": 2
+     },
+     "repeated": {
+      "main": 2
+     },
+     "file_sha256": "dbcbeedd1bc9"
+    },
+    {
+     "dataset": "bms1",
+     "sequences": 59601,
+     "mean_length": 2.5106625727756247,
+     "items": 497,
+     "gaps": [
+      "[0,1]",
+      "[0,3]"
+     ],
+     "sigmas": [
+      100
+     ],
+     "distinct": {
+      "degenerate": 2
+     },
+     "repeated": {},
+     "file_sha256": "e797a4be0cd0"
+    },
+    {
+     "dataset": "bpi2012",
+     "sequences": 13087,
+     "mean_length": 12.57018415221212,
+     "items": 23,
+     "gaps": [
+      "[0,1]",
+      "[0,3]"
+     ],
+     "sigmas": [
+      2000,
+      4000
+     ],
+     "distinct": {
+      "degenerate": 4
+     },
+     "repeated": {
+      "intermediate": 1,
+      "main": 2,
+      "degenerate": 1
+     },
+     "file_sha256": "1349cd426ed2"
+    },
+    {
+     "dataset": "bpi2013",
+     "sequences": 7554,
+     "mean_length": 8.675271379401641,
+     "items": 13,
+     "gaps": [
+      "[0,1]",
+      "[0,3]"
+     ],
+     "sigmas": [
+      500,
+      1000
+     ],
+     "distinct": {
+      "degenerate": 4
+     },
+     "repeated": {
+      "main": 4
+     },
+     "file_sha256": "cebdf0a46131"
+    },
+    {
+     "dataset": "dna_mt745584",
+     "sequences": 498,
+     "mean_length": 59.95983935742972,
+     "items": 4,
+     "gaps": [
+      "[0,10]",
+      "[0,1]",
+      "[0,3]"
+     ],
+     "sigmas": [
+      2500,
+      4000
+     ],
+     "distinct": {
+      "main": 5
+     },
+     "repeated": {
+      "main": 6
+     },
+     "file_sha256": "bd1a43772525"
+    },
+    {
+     "dataset": "fifa",
+     "sequences": 20450,
+     "mean_length": 36.23921760391198,
+     "items": 2990,
+     "gaps": [
+      "[0,1]",
+      "[0,3]"
+     ],
+     "sigmas": [
+      3000
+     ],
+     "distinct": {
+      "degenerate": 2
+     },
+     "repeated": {
+      "main": 2
+     },
+     "file_sha256": "1abed450db4c"
+    },
+    {
+     "dataset": "leviathan",
+     "sequences": 5834,
+     "mean_length": 33.810593075077136,
+     "items": 9025,
+     "gaps": [
+      "[0,1]",
+      "[0,3]"
+     ],
+     "sigmas": [
+      500
+     ],
+     "distinct": {
+      "intermediate": 2
+     },
+     "repeated": {
+      "main": 2
+     },
+     "file_sha256": "af0ee47c574e"
+    },
+    {
+     "dataset": "msnbc",
+     "sequences": 31790,
+     "mean_length": 13.33048128342246,
+     "items": 17,
+     "gaps": [
+      "[0,10]",
+      "[0,1]",
+      "[0,3]"
+     ],
+     "sigmas": [
+      1000,
+      2000,
+      5000
+     ],
+     "distinct": {
+      "intermediate": 5,
+      "main": 4
+     },
+     "repeated": {
+      "main": 9
+     },
+     "file_sha256": "0f130a6b3bc1"
+    },
+    {
+     "dataset": "protein_sdb1",
+     "sequences": 507,
+     "mean_length": 181.2130177514793,
+     "items": 20,
+     "gaps": [
+      "[0,1]",
+      "[0,3]"
+     ],
+     "sigmas": [
+      400,
+      800
+     ],
+     "distinct": {
+      "main": 4
+     },
+     "repeated": {
+      "main": 4
+     },
+     "file_sha256": "c55692a93e54"
+    },
+    {
+     "dataset": "protein_sdb4",
+     "sequences": 590,
+     "mean_length": 185.464406779661,
+     "items": 20,
+     "gaps": [
+      "[0,1]",
+      "[0,3]"
+     ],
+     "sigmas": [
+      500,
+      900
+     ],
+     "distinct": {
+      "main": 4
+     },
+     "repeated": {
+      "main": 4
+     },
+     "file_sha256": "8a966fb0bc3e"
+    },
+    {
+     "dataset": "sepsis",
+     "sequences": 1050,
+     "mean_length": 14.48952380952381,
+     "items": 16,
+     "gaps": [
+      "[0,1]",
+      "[0,3]"
+     ],
+     "sigmas": [
+      300
+     ],
+     "distinct": {
+      "degenerate": 2
+     },
+     "repeated": {
+      "main": 2
+     },
+     "file_sha256": "389e45e14a4c"
+    },
+    {
+     "dataset": "sign",
+     "sequences": 730,
+     "mean_length": 51.9972602739726,
+     "items": 267,
+     "gaps": [
+      "[0,1]",
+      "[0,3]"
+     ],
+     "sigmas": [
+      200
+     ],
+     "distinct": {
+      "degenerate": 2
+     },
+     "repeated": {},
+     "file_sha256": "3c93441fd0fa"
+    }
+   ],
+   "source": "datasets/*.txt and the two locked group tables"
+  },
+  "h2": {
+   "columns": [
+    "test",
+    "scope",
+    "method"
+   ],
+   "rows": [
+    {
+     "scope": "distinct",
+     "method": "hha",
+     "instances": 592,
+     "same": 106,
+     "base_more": 486,
+     "ours_more": 0,
+     "median_diff": 0.0048,
+     "p_raw": 1.0,
+     "p_holm": 1.0,
+     "verdict": "not rejected",
+     "rank_biserial": -0.792,
+     "same_lt": 64,
+     "same_eq": 42,
+     "same_gt": 0,
+     "more_lt": 475,
+     "more_eq": 11,
+     "more_gt": 0,
+     "no_worse_both": 592,
+     "hl_lost": [
+      0.0073,
+      0.0049,
+      0.0095
+     ],
+     "eq_lost": "equivalent",
+     "hl_supdist": [
+      0.0009,
+      0.0005,
+      0.0013
+     ],
+     "eq_supdist": "equivalent",
+     "test": "H2"
+    },
+    {
+     "scope": "distinct",
+     "method": "dbsh",
+     "instances": 592,
+     "same": 65,
+     "base_more": 527,
+     "ours_more": 0,
+     "median_diff": 0.0032,
+     "p_raw": 1.0,
+     "p_holm": 1.0,
+     "verdict": "not rejected",
+     "rank_biserial": -0.938,
+     "same_lt": 36,
+     "same_eq": 29,
+     "same_gt": 0,
+     "more_lt": 473,
+     "more_eq": 50,
+     "more_gt": 4,
+     "no_worse_both": 588,
+     "hl_lost": [
+      0.0058,
+      0.0043,
+      0.0081
+     ],
+     "eq_lost": "equivalent",
+     "hl_supdist": [
+      -0.0,
+      -0.0003,
+      0.0001
+     ],
+     "eq_supdist": "equivalent",
+     "test": "H2"
+    },
+    {
+     "scope": "distinct",
+     "method": "sbsh-r1",
+     "instances": 592,
+     "same": 50,
+     "base_more": 542,
+     "ours_more": 0,
+     "median_diff": 0.0,
+     "p_raw": 1.0,
+     "p_holm": 1.0,
+     "verdict": "not rejected",
+     "rank_biserial": -0.878,
+     "same_lt": 22,
+     "same_eq": 28,
+     "same_gt": 0,
+     "more_lt": 413,
+     "more_eq": 123,
+     "more_gt": 6,
+     "no_worse_both": 586,
+     "hl_lost": [
+      0.0048,
+      0.0016,
+      0.0051
+     ],
+     "eq_lost": "equivalent",
+     "hl_supdist": [
+      -0.0005,
+      -0.0011,
+      -0.0001
+     ],
+     "eq_supdist": "equivalent",
+     "test": "H2"
+    },
+    {
+     "scope": "distinct",
+     "method": "sbsh-rmax",
+     "instances": 592,
+     "same": 50,
+     "base_more": 542,
+     "ours_more": 0,
+     "median_diff": 0.0,
+     "p_raw": 1.0,
+     "p_holm": 1.0,
+     "verdict": "not rejected",
+     "rank_biserial": -0.879,
+     "same_lt": 22,
+     "same_eq": 28,
+     "same_gt": 0,
+     "more_lt": 411,
+     "more_eq": 124,
+     "more_gt": 7,
+     "no_worse_both": 585,
+     "hl_lost": [
+      0.0048,
+      0.0016,
+      0.005
+     ],
+     "eq_lost": "equivalent",
+     "hl_supdist": [
+      -0.0005,
+      -0.0011,
+      -0.0001
+     ],
+     "eq_supdist": "equivalent",
+     "test": "H2"
+    },
+    {
+     "scope": "repeated",
+     "method": "hha",
+     "instances": 1453,
+     "same": 31,
+     "base_more": 1365,
+     "ours_more": 57,
+     "median_diff": 0.0361,
+     "p_raw": 0.001443,
+     "p_holm": 0.005772,
+     "verdict": "H0 rejected",
+     "rank_biserial": 0.613,
+     "same_lt": 27,
+     "same_eq": 4,
+     "same_gt": 0,
+     "more_lt": 1216,
+     "more_eq": 125,
+     "more_gt": 24,
+     "no_worse_both": 1372,
+     "hl_lost": [
+      0.0401,
+      0.026,
+      0.0628
+     ],
+     "eq_lost": "different beyond the margin",
+     "hl_supdist": [
+      0.0126,
+      0.0088,
+      0.0171
+     ],
+     "eq_supdist": "no conclusion",
+     "test": "H2-R"
+    },
+    {
+     "scope": "repeated",
+     "method": "dbsh",
+     "instances": 1453,
+     "same": 29,
+     "base_more": 1423,
+     "ours_more": 1,
+     "median_diff": 0.0286,
+     "p_raw": 0.02762,
+     "p_holm": 0.08286,
+     "verdict": "not rejected",
+     "rank_biserial": 0.407,
+     "same_lt": 22,
+     "same_eq": 7,
+     "same_gt": 0,
+     "more_lt": 1276,
+     "more_eq": 121,
+     "more_gt": 26,
+     "no_worse_both": 1426,
+     "hl_lost": [
+      0.0352,
+      0.0191,
+      0.0606
+     ],
+     "eq_lost": "no conclusion",
+     "hl_supdist": [
+      0.0083,
+      0.0034,
+      0.0145
+     ],
+     "eq_supdist": "no conclusion",
+     "test": "H2-R"
+    },
+    {
+     "scope": "repeated",
+     "method": "sbsh-r1",
+     "instances": 1453,
+     "same": 23,
+     "base_more": 1429,
+     "ours_more": 1,
+     "median_diff": 0.0044,
+     "p_raw": 0.9865,
+     "p_holm": 1.0,
+     "verdict": "not rejected",
+     "rank_biserial": -0.522,
+     "same_lt": 13,
+     "same_eq": 10,
+     "same_gt": 0,
+     "more_lt": 1186,
+     "more_eq": 173,
+     "more_gt": 70,
+     "no_worse_both": 1382,
+     "hl_lost": [
+      0.0077,
+      0.0022,
+      0.0185
+     ],
+     "eq_lost": "equivalent",
+     "hl_supdist": [
+      0.0021,
+      0.0002,
+      0.0037
+     ],
+     "eq_supdist": "equivalent",
+     "test": "H2-R"
+    },
+    {
+     "scope": "repeated",
+     "method": "sbsh-rmax",
+     "instances": 1453,
+     "same": 22,
+     "base_more": 1430,
+     "ours_more": 1,
+     "median_diff": 0.0044,
+     "p_raw": 0.9877,
+     "p_holm": 1.0,
+     "verdict": "not rejected",
+     "rank_biserial": -0.542,
+     "same_lt": 12,
+     "same_eq": 10,
+     "same_gt": 0,
+     "more_lt": 1173,
+     "more_eq": 179,
+     "more_gt": 78,
+     "no_worse_both": 1374,
+     "hl_lost": [
+      0.0073,
+      0.0022,
+      0.0176
+     ],
+     "eq_lost": "equivalent",
+     "hl_supdist": [
+      0.002,
+      -0.0,
+      0.0037
+     ],
+     "eq_supdist": "equivalent",
+     "test": "H2-R"
+    },
+    {
+     "scope": "distinct",
+     "method": "occurrence",
+     "instances": 592,
+     "same": 137,
+     "base_more": 455,
+     "ours_more": 0,
+     "median_diff": 0.0064,
+     "p_raw": 1.0,
+     "p_holm": 1.0,
+     "verdict": "not rejected",
+     "rank_biserial": -0.491,
+     "same_lt": 85,
+     "same_eq": 52,
+     "same_gt": 0,
+     "more_lt": 421,
+     "more_eq": 33,
+     "more_gt": 1,
+     "no_worse_both": 591,
+     "hl_lost": [
+      0.0096,
+      0.0071,
+      0.0132
+     ],
+     "eq_lost": "equivalent",
+     "hl_supdist": [
+      0.0013,
+      0.0008,
+      0.0017
+     ],
+     "eq_supdist": "equivalent",
+     "test": "H4b",
+     "ratio_median": 1.1124,
+     "ratio_max": 2.1169,
+     "rival_fewer": 0,
+     "ratio_verdict": "more masks"
+    },
+    {
+     "scope": "distinct",
+     "method": "hha-stop",
+     "instances": 592,
+     "same": 168,
+     "base_more": 424,
+     "ours_more": 0,
+     "median_diff": 0.0085,
+     "p_raw": 1.0,
+     "p_holm": 1.0,
+     "verdict": "not rejected",
+     "rank_biserial": -0.464,
+     "same_lt": 115,
+     "same_eq": 53,
+     "same_gt": 0,
+     "more_lt": 404,
+     "more_eq": 19,
+     "more_gt": 1,
+     "no_worse_both": 591,
+     "hl_lost": [
+      0.0107,
+      0.0081,
+      0.0145
+     ],
+     "eq_lost": "equivalent",
+     "hl_supdist": [
+      0.0015,
+      0.0011,
+      0.002
+     ],
+     "eq_supdist": "equivalent",
+     "test": "H4b",
+     "ratio_median": 1.1319,
+     "ratio_max": 2.5708,
+     "rival_fewer": 0,
+     "ratio_verdict": "more masks"
+    },
+    {
+     "scope": "repeated",
+     "method": "occurrence",
+     "instances": 1453,
+     "same": 34,
+     "base_more": 1209,
+     "ours_more": 210,
+     "median_diff": 0.0346,
+     "p_raw": 0.001587,
+     "p_holm": 0.002886,
+     "verdict": "H0 rejected",
+     "rank_biserial": 0.58,
+     "same_lt": 29,
+     "same_eq": 5,
+     "same_gt": 0,
+     "more_lt": 1036,
+     "more_eq": 150,
+     "more_gt": 23,
+     "no_worse_both": 1220,
+     "hl_lost": [
+      0.0423,
+      0.0278,
+      0.0619
+     ],
+     "eq_lost": "different beyond the margin",
+     "hl_supdist": [
+      0.0113,
+      0.0079,
+      0.0148
+     ],
+     "eq_supdist": "no conclusion",
+     "test": "H4b-R",
+     "ratio_median": 1.198,
+     "ratio_max": 3.0,
+     "rival_fewer": 210,
+     "ratio_verdict": "more masks"
+    },
+    {
+     "scope": "repeated",
+     "method": "hha-stop",
+     "instances": 1453,
+     "same": 31,
+     "base_more": 1291,
+     "ours_more": 131,
+     "median_diff": 0.0361,
+     "p_raw": 0.001443,
+     "p_holm": 0.002886,
+     "verdict": "H0 rejected",
+     "rank_biserial": 0.613,
+     "same_lt": 27,
+     "same_eq": 4,
+     "same_gt": 0,
+     "more_lt": 1110,
+     "more_eq": 146,
+     "more_gt": 35,
+     "no_worse_both": 1287,
+     "hl_lost": [
+      0.0401,
+      0.026,
+      0.0628
+     ],
+     "eq_lost": "different beyond the margin",
+     "hl_supdist": [
+      0.0126,
+      0.0088,
+      0.0171
+     ],
+     "eq_supdist": "no conclusion",
+     "test": "H4b-R",
+     "ratio_median": 1.3113,
+     "ratio_max": 3.8614,
+     "rival_fewer": 131,
+     "ratio_verdict": "more masks"
+    }
+   ],
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "h3": {
+   "columns": [
+    "scope",
+    "group",
+    "method"
+   ],
+   "rows": [
+    {
+     "scope": "distinct",
+     "group": "main",
+     "method": "cut-hide",
+     "n": 232,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "distinct",
+     "group": "main",
+     "method": "cut-hide-rw",
+     "n": 232,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "distinct",
+     "group": "main",
+     "method": "cut-hide-rw-ls",
+     "n": 232,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "distinct",
+     "group": "main",
+     "method": "dbsh",
+     "n": 232,
+     "median": 1.0222,
+     "max": 1.5
+    },
+    {
+     "scope": "distinct",
+     "group": "main",
+     "method": "hha",
+     "n": 232,
+     "median": 1.0002,
+     "max": 1.125
+    },
+    {
+     "scope": "distinct",
+     "group": "main",
+     "method": "sbsh-r1",
+     "n": 232,
+     "median": 1.0317,
+     "max": 1.8408
+    },
+    {
+     "scope": "distinct",
+     "group": "main",
+     "method": "sbsh-rmax",
+     "n": 232,
+     "median": 1.0339,
+     "max": 2.2714
+    },
+    {
+     "scope": "distinct",
+     "group": "degenerate",
+     "method": "cut-hide",
+     "n": 288,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "distinct",
+     "group": "degenerate",
+     "method": "cut-hide-rw",
+     "n": 288,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "distinct",
+     "group": "degenerate",
+     "method": "cut-hide-rw-ls",
+     "n": 288,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "distinct",
+     "group": "degenerate",
+     "method": "dbsh",
+     "n": 288,
+     "median": 1.0,
+     "max": 1.0485
+    },
+    {
+     "scope": "distinct",
+     "group": "degenerate",
+     "method": "hha",
+     "n": 288,
+     "median": 1.0,
+     "max": 1.0194
+    },
+    {
+     "scope": "distinct",
+     "group": "degenerate",
+     "method": "sbsh-r1",
+     "n": 288,
+     "median": 1.0,
+     "max": 1.683
+    },
+    {
+     "scope": "distinct",
+     "group": "degenerate",
+     "method": "sbsh-rmax",
+     "n": 288,
+     "median": 1.0,
+     "max": 1.683
+    },
+    {
+     "scope": "repeated",
+     "group": "main",
+     "method": "cut-hide",
+     "n": 491,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "repeated",
+     "group": "main",
+     "method": "cut-hide-rw",
+     "n": 491,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "repeated",
+     "group": "main",
+     "method": "cut-hide-rw-ls",
+     "n": 491,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "repeated",
+     "group": "main",
+     "method": "dbsh",
+     "n": 491,
+     "median": 1.5043,
+     "max": 4.0455
+    },
+    {
+     "scope": "repeated",
+     "group": "main",
+     "method": "hha",
+     "n": 491,
+     "median": 1.2819,
+     "max": 3.8614
+    },
+    {
+     "scope": "repeated",
+     "group": "main",
+     "method": "sbsh-r1",
+     "n": 491,
+     "median": 1.5448,
+     "max": 4.1977
+    },
+    {
+     "scope": "repeated",
+     "group": "main",
+     "method": "sbsh-rmax",
+     "n": 491,
+     "median": 1.5662,
+     "max": 4.8692
+    },
+    {
+     "scope": "repeated",
+     "group": "degenerate",
+     "method": "cut-hide",
+     "n": 20,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "repeated",
+     "group": "degenerate",
+     "method": "cut-hide-rw",
+     "n": 20,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "repeated",
+     "group": "degenerate",
+     "method": "cut-hide-rw-ls",
+     "n": 20,
+     "median": 1.0,
+     "max": 1.0
+    },
+    {
+     "scope": "repeated",
+     "group": "degenerate",
+     "method": "dbsh",
+     "n": 20,
+     "median": 1.0,
+     "max": 2.0
+    },
+    {
+     "scope": "repeated",
+     "group": "degenerate",
+     "method": "hha",
+     "n": 20,
+     "median": 1.0,
+     "max": 2.0
+    },
+    {
+     "scope": "repeated",
+     "group": "degenerate",
+     "method": "sbsh-r1",
+     "n": 20,
+     "median": 1.0011,
+     "max": 2.2857
+    },
+    {
+     "scope": "repeated",
+     "group": "degenerate",
+     "method": "sbsh-rmax",
+     "n": 20,
+     "median": 1.0331,
+     "max": 2.2857
+    }
+   ],
+   "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "lostopt": {
+   "columns": [
+    "scope",
+    "method"
+   ],
+   "rows": [
+    {
+     "scope": "distinct",
+     "method": "cut-hide-rw-ls",
+     "n": 629,
+     "at_R": 629,
+     "opt": 595,
+     "excess": 57,
+     "above": 0,
+     "opt_no_worse": 0
+    },
+    {
+     "scope": "distinct",
+     "method": "cut-hide-rw",
+     "n": 629,
+     "at_R": 629,
+     "opt": 534,
+     "excess": 165,
+     "above": 0,
+     "opt_no_worse": 0
+    },
+    {
+     "scope": "distinct",
+     "method": "cut-hide",
+     "n": 629,
+     "at_R": 629,
+     "opt": 505,
+     "excess": 207,
+     "above": 0,
+     "opt_no_worse": 0
+    },
+    {
+     "scope": "distinct",
+     "method": "hha",
+     "n": 629,
+     "at_R": 528,
+     "opt": 115,
+     "excess": 2408,
+     "above": 101,
+     "opt_no_worse": 101
+    },
+    {
+     "scope": "distinct",
+     "method": "dbsh",
+     "n": 629,
+     "at_R": 494,
+     "opt": 99,
+     "excess": 2351,
+     "above": 135,
+     "opt_no_worse": 135
+    },
+    {
+     "scope": "distinct",
+     "method": "sbsh-r1",
+     "n": 629,
+     "at_R": 569,
+     "opt": 166,
+     "excess": 1986,
+     "above": 60,
+     "opt_no_worse": 60
+    },
+    {
+     "scope": "distinct",
+     "method": "sbsh-rmax",
+     "n": 629,
+     "at_R": 569,
+     "opt": 166,
+     "excess": 1984,
+     "above": 60,
+     "opt_no_worse": 60
+    },
+    {
+     "scope": "distinct",
+     "method": "occurrence",
+     "n": 629,
+     "at_R": 621,
+     "opt": 139,
+     "excess": 2397,
+     "above": 8,
+     "opt_no_worse": 8
+    },
+    {
+     "scope": "distinct",
+     "method": "hha-stop",
+     "n": 629,
+     "at_R": 629,
+     "opt": 135,
+     "excess": 2796,
+     "above": 0,
+     "opt_no_worse": 0
+    },
+    {
+     "scope": "repeated",
+     "method": "cut-hide-rw-ls",
+     "n": 1189,
+     "at_R": 1189,
+     "opt": 1061,
+     "excess": 208,
+     "above": 0,
+     "opt_no_worse": 0
+    },
+    {
+     "scope": "repeated",
+     "method": "cut-hide-rw",
+     "n": 1189,
+     "at_R": 1189,
+     "opt": 926,
+     "excess": 620,
+     "above": 0,
+     "opt_no_worse": 0
+    },
+    {
+     "scope": "repeated",
+     "method": "cut-hide",
+     "n": 1189,
+     "at_R": 1189,
+     "opt": 851,
+     "excess": 936,
+     "above": 0,
+     "opt_no_worse": 0
+    },
+    {
+     "scope": "repeated",
+     "method": "hha",
+     "n": 1189,
+     "at_R": 673,
+     "opt": 107,
+     "excess": 7295,
+     "above": 516,
+     "opt_no_worse": 473
+    },
+    {
+     "scope": "repeated",
+     "method": "dbsh",
+     "n": 1189,
+     "at_R": 611,
+     "opt": 104,
+     "excess": 6895,
+     "above": 578,
+     "opt_no_worse": 535
+    },
+    {
+     "scope": "repeated",
+     "method": "sbsh-r1",
+     "n": 1189,
+     "at_R": 672,
+     "opt": 146,
+     "excess": 5311,
+     "above": 517,
+     "opt_no_worse": 467
+    },
+    {
+     "scope": "repeated",
+     "method": "sbsh-rmax",
+     "n": 1189,
+     "at_R": 670,
+     "opt": 146,
+     "excess": 5247,
+     "above": 519,
+     "opt_no_worse": 469
+    },
+    {
+     "scope": "repeated",
+     "method": "occurrence",
+     "n": 1189,
+     "at_R": 923,
+     "opt": 218,
+     "excess": 7616,
+     "above": 266,
+     "opt_no_worse": 247
+    },
+    {
+     "scope": "repeated",
+     "method": "hha-stop",
+     "n": 1189,
+     "at_R": 766,
+     "opt": 133,
+     "excess": 7912,
+     "above": 423,
+     "opt_no_worse": 375
+    }
+   ],
+   "source": "lost_optimum_table.py --machine=dev"
+  },
+  "optimum": {
+   "columns": [
+    "scope",
+    "size",
+    "sequences"
+   ],
+   "rows": [
+    {
+     "scope": "distinct",
+     "size": 5,
+     "sequences": 8,
+     "solved": 257,
+     "greedy_bound": 1.1538,
+     "refined_bound": 1.1333,
+     "opt_bound": 1.1111,
+     "greedy_opt": 1.0,
+     "refined_opt": 1.0,
+     "bound_share": 0.7901
+    },
+    {
+     "scope": "distinct",
+     "size": 5,
+     "sequences": 16,
+     "solved": 257,
+     "greedy_bound": 1.25,
+     "refined_bound": 1.2308,
+     "opt_bound": 1.1765,
+     "greedy_opt": 1.0294,
+     "refined_opt": 1.0,
+     "bound_share": 0.7607
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "sequences": 8,
+     "solved": 180,
+     "greedy_bound": 1.1667,
+     "refined_bound": 1.1538,
+     "opt_bound": 1.1292,
+     "greedy_opt": 1.0,
+     "refined_opt": 1.0,
+     "bound_share": 0.7592
+    },
+    {
+     "scope": "distinct",
+     "size": 10,
+     "sequences": 16,
+     "solved": 180,
+     "greedy_bound": 1.2344,
+     "refined_bound": 1.2222,
+     "opt_bound": 1.1667,
+     "greedy_opt": 1.0455,
+     "refined_opt": 1.0385,
+     "bound_share": 0.6902
+    },
+    {
+     "scope": "distinct",
+     "size": 20,
+     "sequences": 8,
+     "solved": 123,
+     "greedy_bound": 1.1667,
+     "refined_bound": 1.1667,
+     "opt_bound": 1.1111,
+     "greedy_opt": 1.0588,
+     "refined_opt": 1.0,
+     "bound_share": 0.6287
+    },
+    {
+     "scope": "distinct",
+     "size": 20,
+     "sequences": 16,
+     "solved": 123,
+     "greedy_bound": 1.2143,
+     "refined_bound": 1.1875,
+     "opt_bound": 1.125,
+     "greedy_opt": 1.0833,
+     "refined_opt": 1.0667,
+     "bound_share": 0.6085
+    },
+    {
+     "scope": "repeated",
+     "size": 5,
+     "sequences": 8,
+     "solved": 385,
+     "greedy_bound": 1.3333,
+     "refined_bound": 1.25,
+     "opt_bound": 1.1111,
+     "greedy_opt": 1.125,
+     "refined_opt": 1.0909,
+     "bound_share": 0.5812
+    },
+    {
+     "scope": "repeated",
+     "size": 5,
+     "sequences": 16,
+     "solved": 385,
+     "greedy_bound": 1.4375,
+     "refined_bound": 1.3333,
+     "opt_bound": 1.1538,
+     "greedy_opt": 1.2,
+     "refined_opt": 1.1176,
+     "bound_share": 0.5565
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "sequences": 8,
+     "solved": 357,
+     "greedy_bound": 1.375,
+     "refined_bound": 1.2727,
+     "opt_bound": 1.1429,
+     "greedy_opt": 1.1667,
+     "refined_opt": 1.0833,
+     "bound_share": 0.6239
+    },
+    {
+     "scope": "repeated",
+     "size": 10,
+     "sequences": 16,
+     "solved": 357,
+     "greedy_bound": 1.4706,
+     "refined_bound": 1.3684,
+     "opt_bound": 1.1765,
+     "greedy_opt": 1.2174,
+     "refined_opt": 1.1304,
+     "bound_share": 0.532
+    },
+    {
+     "scope": "repeated",
+     "size": 20,
+     "sequences": 8,
+     "solved": 277,
+     "greedy_bound": 1.4545,
+     "refined_bound": 1.3333,
+     "opt_bound": 1.1538,
+     "greedy_opt": 1.2222,
+     "refined_opt": 1.125,
+     "bound_share": 0.5105
+    },
+    {
+     "scope": "repeated",
+     "size": 20,
+     "sequences": 16,
+     "solved": 277,
+     "greedy_bound": 1.5,
+     "refined_bound": 1.4,
+     "opt_bound": 1.1176,
+     "greedy_opt": 1.2941,
+     "refined_opt": 1.2,
+     "bound_share": 0.4085
+    }
+   ],
+   "source": "reduced_optimum_table.py --machine=ADMIN-PC"
+  }
+ }
+}

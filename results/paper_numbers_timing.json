@@ -1,9 +1,9 @@
 {
  "_meta": {
-  "command": "python tools/paper_numbers.py ",
-  "commit": "1a173122e9fa8f188d31cd2291fef7acfc9b8565",
+  "command": "python tools/paper_numbers.py --machine=ADMIN-PC",
+  "commit": "466e3d5afc34101e1e8f0ac31bdad659d4c62646",
   "tree": "clean",
-  "tool_sha256": "232e994a6b23",
+  "tool_sha256": "96e24b91dec3",
   "python": "3.14.6",
   "machine": "ADMIN-PC",
   "small_machine": "dev"
@@ -13,11 +13,12 @@
    "value": "Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz",
    "source": "results-invariant/campaign_ADMIN-PC_g2/ENV_LOCK.json"
   },
+  "platform.heap_bytes.pareto": {
+   "value": 34359738368,
+   "source": "heap_max_bytes of the SC3PARETO files"
+  },
   "platform.heap_bytes.sc3": {
-   "value": [
-    8589934592,
-    34359738368
-   ],
+   "value": 8589934592,
    "source": "heap_max_bytes of the SC3 files"
   },
   "platform.heap_bytes.sc6": {
@@ -47,6 +48,10 @@
   "platform.ram_bytes": {
    "value": "68452814848",
    "source": "results-invariant/campaign_ADMIN-PC_g2/ENV_LOCK.json"
+  },
+  "sc6.cv.median": {
+   "value": 0.018380241240666284,
+   "source": "SC6 files of ADMIN-PC: wall_ms_sd / wall_ms_mean"
   },
   "sc6.holm.ms.s1.max": {
    "value": 28.8,

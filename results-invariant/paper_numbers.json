@@ -1,9 +1,9 @@
 {
  "_meta": {
-  "command": "python tools/paper_numbers.py ",
-  "commit": "1a173122e9fa8f188d31cd2291fef7acfc9b8565",
+  "command": "python tools/paper_numbers.py --machine=ADMIN-PC",
+  "commit": "466e3d5afc34101e1e8f0ac31bdad659d4c62646",
   "tree": "clean",
-  "tool_sha256": "232e994a6b23",
+  "tool_sha256": "96e24b91dec3",
   "python": "3.14.6",
   "machine": "ADMIN-PC",
   "small_machine": "dev"
@@ -321,6 +321,58 @@
    "value": 31,
    "source": "preregistered_analysis.py --machine=ADMIN-PC"
   },
+  "lb.at_bound.distinct.10.ours": {
+   "value": 2,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.at_bound.distinct.10.refine": {
+   "value": 2,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.at_bound.distinct.20.ours": {
+   "value": 0,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.at_bound.distinct.20.refine": {
+   "value": 0,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.at_bound.distinct.5.ours": {
+   "value": 31,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.at_bound.distinct.5.refine": {
+   "value": 31,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.at_bound.repeated.10.ours": {
+   "value": 0,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.at_bound.repeated.10.refine": {
+   "value": 0,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.at_bound.repeated.20.ours": {
+   "value": 0,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.at_bound.repeated.20.refine": {
+   "value": 0,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.at_bound.repeated.5.ours": {
+   "value": 0,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.at_bound.repeated.5.refine": {
+   "value": 3,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "lb.at_bound.rivals.total": {
+   "value": 0,
+   "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
   "lb.base.distinct.max": {
    "value": 5.6338,
    "source": "lower_bound_table.py --machine=ADMIN-PC"
@@ -360,6 +412,158 @@
   "lb.ours.repeated.min": {
    "value": 1.9074,
    "source": "lower_bound_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.1.ours.dist_r": {
+   "value": 0.0054,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.1.ours.lost_rel": {
+   "value": 0.0,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.1.ours.sup_dist": {
+   "value": 0.006,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.1.rivals.dist_r.max": {
+   "value": 0.0057,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.1.rivals.dist_r.min": {
+   "value": 0.0054,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.1.rivals.lost_rel.max": {
+   "value": 0.0161,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.1.rivals.lost_rel.min": {
+   "value": 0.0048,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.1.rivals.sup_dist.max": {
+   "value": 0.0089,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.1.rivals.sup_dist.min": {
+   "value": 0.0073,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.5_20.ours.dist_r": {
+   "value": 0.0197,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.5_20.ours.lost_rel": {
+   "value": 0.0071,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.5_20.ours.sup_dist": {
+   "value": 0.0269,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.5_20.rivals.dist_r.max": {
+   "value": 0.0553,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.5_20.rivals.dist_r.min": {
+   "value": 0.026,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.5_20.rivals.lost_rel.max": {
+   "value": 0.1424,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.5_20.rivals.lost_rel.min": {
+   "value": 0.0558,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.5_20.rivals.sup_dist.max": {
+   "value": 0.0971,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.distinct.5_20.rivals.sup_dist.min": {
+   "value": 0.0399,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.n.distinct": {
+   "value": 592,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.n.repeated": {
+   "value": 1453,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.1.ours.dist_r": {
+   "value": 0.0039,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.1.ours.lost_rel": {
+   "value": 0.0038,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.1.ours.sup_dist": {
+   "value": 0.0099,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.1.rivals.dist_r.max": {
+   "value": 0.0058,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.1.rivals.dist_r.min": {
+   "value": 0.0047,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.1.rivals.lost_rel.max": {
+   "value": 0.0208,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.1.rivals.lost_rel.min": {
+   "value": 0.0132,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.1.rivals.sup_dist.max": {
+   "value": 0.016,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.1.rivals.sup_dist.min": {
+   "value": 0.015,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.5_20.ours.dist_r": {
+   "value": 0.0258,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.5_20.ours.lost_rel": {
+   "value": 0.0691,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.5_20.ours.sup_dist": {
+   "value": 0.0731,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.5_20.rivals.dist_r.max": {
+   "value": 0.0737,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.5_20.rivals.dist_r.min": {
+   "value": 0.0309,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.5_20.rivals.lost_rel.max": {
+   "value": 0.2901,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.5_20.rivals.lost_rel.min": {
+   "value": 0.1413,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.5_20.rivals.sup_dist.max": {
+   "value": 0.2085,
+   "source": "levels_table.py --machine=ADMIN-PC"
+  },
+  "levels.repeated.5_20.rivals.sup_dist.min": {
+   "value": 0.0968,
+   "source": "levels_table.py --machine=ADMIN-PC"
   },
   "lostopt.base.atR.max.distinct": {
    "value": 621,
@@ -497,6 +701,14 @@
    "value": 0,
    "source": "preregistered_analysis.py --machine=ADMIN-PC"
   },
+  "params.l_max": {
+   "value": 4,
+   "source": "SC3 files of ADMIN-PC (every batch)"
+  },
+  "params.time_limit_s": {
+   "value": 1800,
+   "source": "SC3 files of ADMIN-PC (every batch)"
+  },
   "pareto.distinct.dominated": {
    "value": 1049,
    "source": "pareto_table.py --machine=ADMIN-PC"
@@ -600,6 +812,14 @@
   "sc2.n_config.repeated": {
    "value": 39,
    "source": "config/configuration_groups_repeated.tsv"
+  },
+  "sc3.ghost.max": {
+   "value": 0,
+   "source": "SC3 files of ADMIN-PC (every batch)"
+  },
+  "sc3.ghost.rows": {
+   "value": 25623,
+   "source": "SC3 files of ADMIN-PC (every batch)"
   },
   "sc3.n_excluded": {
    "value": 0,
@@ -2244,6 +2464,436 @@
     }
    ],
    "source": "preregistered_analysis.py --machine=ADMIN-PC"
+  },
+  "levels": {
+   "columns": [
+    "scope",
+    "size",
+    "method"
+   ],
+   "rows": [
+    {
+     "scope": "distinct",
+     "size": "1",
+     "method": "cut-hide-rw-ls",
+     "n": 232,
+     "lo": 0.0,
+     "q1": 0.0,
+     "median": 0.0,
+     "q3": 0.0068,
+     "hi": 0.0132,
+     "max": 0.4909,
+     "beyond": 49,
+     "dist_r": 0.0054,
+     "sup_dist": 0.006
+    },
+    {
+     "scope": "distinct",
+     "size": "1",
+     "method": "hha",
+     "n": 232,
+     "lo": 0.0,
+     "q1": 0.0033,
+     "median": 0.0161,
+     "q3": 0.0678,
+     "hi": 0.1644,
+     "max": 0.614,
+     "beyond": 30,
+     "dist_r": 0.0055,
+     "sup_dist": 0.0089
+    },
+    {
+     "scope": "distinct",
+     "size": "1",
+     "method": "dbsh",
+     "n": 232,
+     "lo": 0.0,
+     "q1": 0.0,
+     "median": 0.0143,
+     "q3": 0.0674,
+     "hi": 0.1667,
+     "max": 0.6727,
+     "beyond": 31,
+     "dist_r": 0.0055,
+     "sup_dist": 0.0073
+    },
+    {
+     "scope": "distinct",
+     "size": "1",
+     "method": "sbsh-r1",
+     "n": 232,
+     "lo": 0.0,
+     "q1": 0.0,
+     "median": 0.0053,
+     "q3": 0.0455,
+     "hi": 0.1053,
+     "max": 0.5965,
+     "beyond": 43,
+     "dist_r": 0.0056,
+     "sup_dist": 0.0073
+    },
+    {
+     "scope": "distinct",
+     "size": "1",
+     "method": "sbsh-rmax",
+     "n": 232,
+     "lo": 0.0,
+     "q1": 0.0,
+     "median": 0.0048,
+     "q3": 0.0455,
+     "hi": 0.1115,
+     "max": 0.5965,
+     "beyond": 43,
+     "dist_r": 0.0057,
+     "sup_dist": 0.0073
+    },
+    {
+     "scope": "distinct",
+     "size": "1",
+     "method": "occurrence",
+     "n": 232,
+     "lo": 0.0,
+     "q1": 0.0,
+     "median": 0.0161,
+     "q3": 0.0674,
+     "hi": 0.1667,
+     "max": 0.5789,
+     "beyond": 27,
+     "dist_r": 0.0054,
+     "sup_dist": 0.0085
+    },
+    {
+     "scope": "distinct",
+     "size": "1",
+     "method": "hha-stop",
+     "n": 232,
+     "lo": 0.0,
+     "q1": 0.0033,
+     "median": 0.0161,
+     "q3": 0.0678,
+     "hi": 0.1644,
+     "max": 0.614,
+     "beyond": 30,
+     "dist_r": 0.0055,
+     "sup_dist": 0.0089
+    },
+    {
+     "scope": "distinct",
+     "size": "5-20",
+     "method": "cut-hide-rw-ls",
+     "n": 360,
+     "lo": 0.0,
+     "q1": 0.0,
+     "median": 0.0071,
+     "q3": 0.0454,
+     "hi": 0.1129,
+     "max": 0.5379,
+     "beyond": 53,
+     "dist_r": 0.0197,
+     "sup_dist": 0.0269
+    },
+    {
+     "scope": "distinct",
+     "size": "5-20",
+     "method": "hha",
+     "n": 360,
+     "lo": 0.0099,
+     "q1": 0.0844,
+     "median": 0.1424,
+     "q3": 0.23,
+     "hi": 0.4355,
+     "max": 0.7308,
+     "beyond": 15,
+     "dist_r": 0.0553,
+     "sup_dist": 0.0971
+    },
+    {
+     "scope": "distinct",
+     "size": "5-20",
+     "method": "dbsh",
+     "n": 360,
+     "lo": 0.0,
+     "q1": 0.034,
+     "median": 0.0799,
+     "q3": 0.1532,
+     "hi": 0.3318,
+     "max": 0.6515,
+     "beyond": 18,
+     "dist_r": 0.0306,
+     "sup_dist": 0.047
+    },
+    {
+     "scope": "distinct",
+     "size": "5-20",
+     "method": "sbsh-r1",
+     "n": 360,
+     "lo": 0.0,
+     "q1": 0.0152,
+     "median": 0.0558,
+     "q3": 0.1308,
+     "hi": 0.2944,
+     "max": 0.6442,
+     "beyond": 20,
+     "dist_r": 0.029,
+     "sup_dist": 0.0437
+    },
+    {
+     "scope": "distinct",
+     "size": "5-20",
+     "method": "sbsh-rmax",
+     "n": 360,
+     "lo": 0.0,
+     "q1": 0.0152,
+     "median": 0.0558,
+     "q3": 0.1308,
+     "hi": 0.2944,
+     "max": 0.6442,
+     "beyond": 20,
+     "dist_r": 0.029,
+     "sup_dist": 0.0438
+    },
+    {
+     "scope": "distinct",
+     "size": "5-20",
+     "method": "occurrence",
+     "n": 360,
+     "lo": 0.0,
+     "q1": 0.0245,
+     "median": 0.0606,
+     "q3": 0.1411,
+     "hi": 0.3081,
+     "max": 0.6591,
+     "beyond": 19,
+     "dist_r": 0.026,
+     "sup_dist": 0.0399
+    },
+    {
+     "scope": "distinct",
+     "size": "5-20",
+     "method": "hha-stop",
+     "n": 360,
+     "lo": 0.0,
+     "q1": 0.0245,
+     "median": 0.0597,
+     "q3": 0.1348,
+     "hi": 0.2941,
+     "max": 0.6591,
+     "beyond": 20,
+     "dist_r": 0.0263,
+     "sup_dist": 0.0407
+    },
+    {
+     "scope": "repeated",
+     "size": "1",
+     "method": "cut-hide-rw-ls",
+     "n": 491,
+     "lo": 0.0,
+     "q1": 0.0,
+     "median": 0.0038,
+     "q3": 0.0217,
+     "hi": 0.0538,
+     "max": 0.4366,
+     "beyond": 63,
+     "dist_r": 0.0039,
+     "sup_dist": 0.0099
+    },
+    {
+     "scope": "repeated",
+     "size": "1",
+     "method": "hha",
+     "n": 491,
+     "lo": 0.0,
+     "q1": 0.0032,
+     "median": 0.0198,
+     "q3": 0.0745,
+     "hi": 0.1759,
+     "max": 0.5352,
+     "beyond": 48,
+     "dist_r": 0.0051,
+     "sup_dist": 0.016
+    },
+    {
+     "scope": "repeated",
+     "size": "1",
+     "method": "dbsh",
+     "n": 491,
+     "lo": 0.0,
+     "q1": 0.0036,
+     "median": 0.0208,
+     "q3": 0.0856,
+     "hi": 0.2068,
+     "max": 0.6516,
+     "beyond": 56,
+     "dist_r": 0.0056,
+     "sup_dist": 0.0153
+    },
+    {
+     "scope": "repeated",
+     "size": "1",
+     "method": "sbsh-r1",
+     "n": 491,
+     "lo": 0.0,
+     "q1": 0.0002,
+     "median": 0.015,
+     "q3": 0.0708,
+     "hi": 0.1752,
+     "max": 0.6761,
+     "beyond": 59,
+     "dist_r": 0.0058,
+     "sup_dist": 0.015
+    },
+    {
+     "scope": "repeated",
+     "size": "1",
+     "method": "sbsh-rmax",
+     "n": 491,
+     "lo": 0.0,
+     "q1": 0.0,
+     "median": 0.0132,
+     "q3": 0.0667,
+     "hi": 0.1632,
+     "max": 0.6761,
+     "beyond": 64,
+     "dist_r": 0.0058,
+     "sup_dist": 0.015
+    },
+    {
+     "scope": "repeated",
+     "size": "1",
+     "method": "occurrence",
+     "n": 491,
+     "lo": 0.0,
+     "q1": 0.0032,
+     "median": 0.019,
+     "q3": 0.0632,
+     "hi": 0.1515,
+     "max": 0.507,
+     "beyond": 49,
+     "dist_r": 0.0047,
+     "sup_dist": 0.0155
+    },
+    {
+     "scope": "repeated",
+     "size": "1",
+     "method": "hha-stop",
+     "n": 491,
+     "lo": 0.0,
+     "q1": 0.0032,
+     "median": 0.0198,
+     "q3": 0.0745,
+     "hi": 0.1759,
+     "max": 0.5211,
+     "beyond": 48,
+     "dist_r": 0.005,
+     "sup_dist": 0.016
+    },
+    {
+     "scope": "repeated",
+     "size": "5-20",
+     "method": "cut-hide-rw-ls",
+     "n": 962,
+     "lo": 0.0,
+     "q1": 0.0145,
+     "median": 0.0691,
+     "q3": 0.2063,
+     "hi": 0.4834,
+     "max": 0.9291,
+     "beyond": 41,
+     "dist_r": 0.0258,
+     "sup_dist": 0.0731
+    },
+    {
+     "scope": "repeated",
+     "size": "5-20",
+     "method": "hha",
+     "n": 962,
+     "lo": 0.0304,
+     "q1": 0.1738,
+     "median": 0.2901,
+     "q3": 0.4295,
+     "hi": 0.8089,
+     "max": 0.9685,
+     "beyond": 21,
+     "dist_r": 0.0737,
+     "sup_dist": 0.2085
+    },
+    {
+     "scope": "repeated",
+     "size": "5-20",
+     "method": "dbsh",
+     "n": 962,
+     "lo": 0.0,
+     "q1": 0.0675,
+     "median": 0.1924,
+     "q3": 0.4053,
+     "hi": 0.9062,
+     "max": 0.9685,
+     "beyond": 6,
+     "dist_r": 0.0462,
+     "sup_dist": 0.1137
+    },
+    {
+     "scope": "repeated",
+     "size": "5-20",
+     "method": "sbsh-r1",
+     "n": 962,
+     "lo": 0.0,
+     "q1": 0.0458,
+     "median": 0.1505,
+     "q3": 0.3468,
+     "hi": 0.7934,
+     "max": 0.9685,
+     "beyond": 14,
+     "dist_r": 0.0407,
+     "sup_dist": 0.0983
+    },
+    {
+     "scope": "repeated",
+     "size": "5-20",
+     "method": "sbsh-rmax",
+     "n": 962,
+     "lo": 0.0,
+     "q1": 0.0438,
+     "median": 0.1466,
+     "q3": 0.3458,
+     "hi": 0.7934,
+     "max": 0.9685,
+     "beyond": 14,
+     "dist_r": 0.0407,
+     "sup_dist": 0.0983
+    },
+    {
+     "scope": "repeated",
+     "size": "5-20",
+     "method": "occurrence",
+     "n": 962,
+     "lo": 0.0,
+     "q1": 0.0532,
+     "median": 0.1413,
+     "q3": 0.2894,
+     "hi": 0.6384,
+     "max": 0.9213,
+     "beyond": 22,
+     "dist_r": 0.0309,
+     "sup_dist": 0.0968
+    },
+    {
+     "scope": "repeated",
+     "size": "5-20",
+     "method": "hha-stop",
+     "n": 962,
+     "lo": 0.0,
+     "q1": 0.0543,
+     "median": 0.1431,
+     "q3": 0.303,
+     "hi": 0.6738,
+     "max": 0.9291,
+     "beyond": 20,
+     "dist_r": 0.0364,
+     "sup_dist": 0.1019
+    }
+   ],
+   "source": "levels_table.py --machine=ADMIN-PC"
   },
   "lostopt": {
    "columns": [

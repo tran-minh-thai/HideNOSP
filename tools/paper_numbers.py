@@ -312,6 +312,17 @@ def lower_bounds(nums, machine):
             o = next(r["median"] for r in several if r["size"] == size and r["method"] == OURS)
             if any(r["median"] <= o for r in several if r["size"] == size and r["method"] in BASELINES):
                 raise Missing("lower_bound_table %s |S|=%d: a baseline median is not above CUT-HIDE" % (scope, size))
+    # The figure of the bound ratios leaves the counts of sets at the bound to the text: CUT-HIDE and
+    # CUT-HIDE+REFINE by size, and no baseline or rival on any set.
+    for r in rows:
+        if r["size"] > 1 and r["method"] in (OURS, REFINE):
+            nums.put("lb.at_bound.%s.%d.%s" % (r["scope"], r["size"], "ours" if r["method"] == OURS else "refine"),
+                     r["at_bound"], src)
+    reached = [(r["scope"], r["size"], r["method"], r["at_bound"]) for r in rows
+               if r["size"] > 1 and r["method"] in BASELINES + RIVALS and r["at_bound"]]
+    if reached:
+        raise Missing("lower_bound_table: a baseline or rival reaches LB_U on some set %s; the text says none" % reached)
+    nums.put("lb.at_bound.rivals.total", 0, src)
     ours = [v for (s, z, w), v in fewer.items() if s == "repeated" and w == OURS]
     ref = [v for (s, z, w), v in fewer.items() if s == "repeated" and w == REFINE]
     if len(ours) != 3 or len(ref) != 3:
@@ -486,12 +497,20 @@ def certified(nums, machine, small_machine):
 def sc3_rows(nums, machine):
     total, status = 0, Counter()
     ours, refine = {}, {}
+    ghost_rows, params = 0, defaultdict(set)
     for path in files(INV, "SC3", machine):
         opts = options_of(path)
         kind = opts.get("patternKind", "")
+        for name in ("maxPatternLength", "timeLimit"):
+            params[name].add(opts.get(name))
         for r in rows_of(path):
             total += 1
             status[r.get("status", "")] += 1
+            if r.get("method_key"):
+                ghost_rows += 1
+                if float(r.get("ghost") or 0) != 0:
+                    raise Missing("SC3 row with Ghost > 0 (%s, %s): masking cannot create a frequent pattern"
+                                  % (Path(path).name, r["method_key"]))
             if r.get("method_key") and float(r.get("hf") or 0) != 0:
                 raise Missing("SC3 row with HF > 0 (%s, %s): the text says every method hides on every row"
                               % (Path(path).name, r["method_key"]))
@@ -502,6 +521,12 @@ def sc3_rows(nums, machine):
                 refine.setdefault(key, set()).add(int(r["lost"]))
     src = "SC3 files of %s (every batch)" % machine
     nums.put("sc3.n_rows", total, src)
+    nums.put("sc3.ghost.rows", ghost_rows, src)
+    nums.put("sc3.ghost.max", 0, src)
+    for name, key in (("maxPatternLength", "params.l_max"), ("timeLimit", "params.time_limit_s")):
+        if len(params[name]) != 1 or None in params[name]:
+            raise Missing("SC3 files of %s run with %s = %s; the text states one value" % (machine, name, sorted(map(str, params[name]))))
+        nums.put(key, int(params[name].pop()), src)
     nums.put("sc3.status", dict(status), src)
     nums.put("sc3.n_excluded", sum(v for k, v in status.items() if k), src)
     up = down = same = 0
@@ -521,6 +546,57 @@ def sc3_rows(nums, machine):
     nums.put("refine.lost_up", up, src)
     nums.put("refine.lost_down", down, src)
     nums.put("refine.lost_median", statistics.median(changes), src)
+
+
+# ---------------------------------------------------------------- levels at each method's own solution
+
+LEVEL_METHODS = (OURS,) + BASELINES + RIVALS
+
+
+def parse_levels(text, src):
+    rows = []
+    for scope, size, n, body in re.findall(r"^== (distinct|repeated) scope, \|S\| = (1|5-20): (\d+) instances\n   method[^\n]*\n((?:   .*\n)+)",
+                                           text, re.M):
+        for line in body.splitlines():
+            f = line.split()
+            if len(f) != 13 or f[2] != "|" or f[10] != "|":
+                raise Missing("levels_table: line not understood: %r" % line)
+            if int(f[1]) != int(n):
+                raise Missing("levels_table %s |S|=%s: %s has %s instances, the block %s" % (scope, size, f[0], f[1], n))
+            rows.append({"scope": scope, "size": size, "method": f[0], "n": int(f[1]),
+                         "lo": float(f[3]), "q1": float(f[4]), "median": float(f[5]), "q3": float(f[6]),
+                         "hi": float(f[7]), "max": float(f[8]), "beyond": int(f[9]),
+                         "dist_r": float(f[11]), "sup_dist": float(f[12])})
+    for scope in ("distinct", "repeated"):
+        for size in ("1", "5-20"):
+            have = sorted(r["method"] for r in rows if (r["scope"], r["size"]) == (scope, size))
+            if have != sorted(LEVEL_METHODS):
+                raise Missing("levels_table %s |S|=%s: methods %s, expected %s" % (scope, size, have, sorted(LEVEL_METHODS)))
+    return rows
+
+
+def levels(nums, machine):
+    text = run_tool(["levels_table.py", "--machine=%s" % machine], "levels_table")
+    src = "levels_table.py --machine=%s" % machine
+    rows = parse_levels(text, src)
+    nums.table("levels", ["scope", "size", "method"], rows, src)
+    for scope in ("distinct", "repeated"):
+        nums.put("levels.n.%s" % scope, sum(r["n"] for r in rows if r["scope"] == scope and r["method"] == OURS), src)
+        for size in ("1", "5-20"):
+            block = {r["method"]: r for r in rows if (r["scope"], r["size"]) == (scope, size)}
+            ours = block[OURS]
+            others = [block[m] for m in LEVEL_METHODS if m != OURS]
+            tag = "levels.%s.%s" % (scope, size.replace("-", "_"))
+            # The text states that CUT-HIDE has the lowest median Lost_rel and SupDist in every block,
+            # and with several sensitive patterns also the lowest median distortion rate.
+            measures = ("median", "sup_dist") + (("dist_r",) if size != "1" else ())
+            for field in measures:
+                if any(o[field] <= ours[field] for o in others):
+                    raise Missing("%s: a rival has a median %s not above CUT-HIDE; the text says lowest" % (tag, field))
+            for field, name in (("median", "lost_rel"), ("dist_r", "dist_r"), ("sup_dist", "sup_dist")):
+                nums.put("%s.ours.%s" % (tag, name), ours[field], src)
+                nums.put("%s.rivals.%s.min" % (tag, name), min(o[field] for o in others), src)
+                nums.put("%s.rivals.%s.max" % (tag, name), max(o[field] for o in others), src)
 
 
 # ---------------------------------------------------------------- SC1, SC2, datasets
@@ -647,13 +723,19 @@ def timing(nums, machine):
         if not b["mine F_sigma"]["median_ms"] > b[OURS]["median_ms"]:
             raise Missing("timing %s |S|=%d: mining is not longer than CUT-HIDE on one set" % (scope, size))
     reps = Counter()
+    cv = []
     for path in files(TIMED, "SC6", machine):
         for r in rows_of(path):
             reps[int(r["repetitions"])] += 1
+            if r.get("wall_ms_sd") and float(r["wall_ms_mean"]) > 0:
+                cv.append(float(r["wall_ms_sd"]) / float(r["wall_ms_mean"]))
             if r["warmups"] != "1":
                 raise Missing("SC6 row with %s warm-up runs" % r["warmups"])
     nums.put("sc6.repetitions.min", min(reps), "SC6 files of %s" % machine)
     nums.put("sc6.repetitions.max", max(reps), "SC6 files of %s" % machine)
+    if len(cv) != sum(reps.values()):
+        raise Missing("SC6: %d rows carry a standard deviation, %d rows in all" % (len(cv), sum(reps.values())))
+    nums.put("sc6.cv.median", statistics.median(cv), "SC6 files of %s: wall_ms_sd / wall_ms_mean" % machine)
 
 
 def platform(nums, machine):
@@ -673,7 +755,10 @@ def platform(nums, machine):
     if len(sc6) != 1:
         raise Missing("SC6 files run with %d heap sizes: %s" % (len(sc6), heaps))
     nums.put("platform.heap_bytes.sc6", sc6.pop(), "heap_max_bytes of the SC6 files")
-    nums.put("platform.heap_bytes.sc3", sorted({h for (s, h) in heaps if s == "SC3"}), "heap_max_bytes of the SC3 files")
+    sc3 = {h for (s, h) in heaps if s == "SC3"}
+    if len(sc3) != 1:
+        raise Missing("SC3 files run with %d heap sizes: %s; the text states one" % (len(sc3), heaps))
+    nums.put("platform.heap_bytes.sc3", sc3.pop(), "heap_max_bytes of the SC3 files")
 
 
 # ---------------------------------------------------------------- main
@@ -684,12 +769,17 @@ TIMING_PREFIXES = ("sc6.", "platform.")
 def build(machine, small_machine):
     nums = Numbers()
     for step in (lambda: sc1(nums, machine), lambda: sc2(nums), lambda: datasets_table(nums),
-                 lambda: sc3_rows(nums, machine), lambda: analysis(nums, machine), lambda: lower_bounds(nums, machine),
+                 lambda: sc3_rows(nums, machine), lambda: analysis(nums, machine), lambda: levels(nums, machine),
+                 lambda: lower_bounds(nums, machine),
                  lambda: reduced_optimum(nums, machine), lambda: pareto(nums, machine),
                  lambda: lost_optimum(nums, small_machine), lambda: certified(nums, machine, small_machine),
                  lambda: timing(nums, machine), lambda: platform(nums, machine)):
         step()
     # The same quantity read from two tools must agree.
+    for scope, key in (("distinct", "h2.n"), ("repeated", "h2r.n")):
+        if nums.values["levels.n.%s" % scope]["value"] != nums.values[key]["value"]:
+            raise Missing("levels_table %s: %d instances, the pairs table %d" % (
+                scope, nums.values["levels.n.%s" % scope]["value"], nums.values[key]["value"]))
     a, b = nums.values["sc3.n_excluded"]["value"], sum(v["value"][0] for k, v in nums.values.items()
                                                         if k.startswith("excluded."))
     if b != 0 and a == 0:
@@ -772,9 +862,21 @@ def self_test():
     expect_stop("Holm line missing", lambda: parse_family(good.replace("not rejected", "maybe"), ("hha",), "T", Numbers(), "d"))
     expect_stop("equivalence line missing",
                 lambda: parse_family(good.replace("-- sup_dist", "-- other"), ("hha",), "T", Numbers(), "d"))
+    head = "   method               n |       lo       q1   median       q3       hi      max beyond |   dist_r sup_dist\n"
+    line = "   %-16s %5d | 0.0000 0.0000 %.4f 0.0100 0.0200 0.3000 3 | %.4f %.4f\n"
+    lv = ""
+    for scope in ("distinct", "repeated"):
+        for size in ("1", "5-20"):
+            lv += "== %s scope, |S| = %s: 10 instances\n" % (scope, size) + head
+            lv += "".join(line % (m, 10, 0.001 if m == OURS else 0.01, 0.01, 0.01 if m == OURS else 0.02)
+                          for m in LEVEL_METHODS)
+    if len(parse_levels(lv, "t")) != 4 * len(LEVEL_METHODS):
+        failures.append("good levels text misread")
+    expect_stop("levels: a method missing", lambda: parse_levels(lv.replace("   hha-stop", "   other   ", 1), "t"))
+    expect_stop("levels: instance count of a row differs", lambda: parse_levels(lv.replace(" hha                 10 ", " hha                 11 ", 1), "t"))
     print("self-test: %d failures%s" % (len(failures), (": " + "; ".join(failures)) if failures else ""))
     print("checks: same key twice, absent pattern, repeated pattern, a good block, pairs/test mismatch, "
-          "missing Holm line, missing equivalence line")
+          "missing Holm line, missing equivalence line, levels text, levels method missing, levels count")
     return 1 if failures else 0
 
 

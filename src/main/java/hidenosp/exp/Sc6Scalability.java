@@ -54,7 +54,10 @@ import java.util.function.Supplier;
  */
 public final class Sc6Scalability implements Scenario {
 
-    /** The keys whose construction reads F_sigma(D), so mining it is part of their clock. */
+    /**
+     * The keys whose construction reads F_sigma(D). Mining it is not part of their clock: it is done once
+     * per cell outside every clock and timed on its own row (preregistration section 20.1).
+     */
     static final Set<String> READS_FREQUENT = Set.of("cut-hide", "cut-hide-rw", "cut-hide-rw-ls", "cut-hide-refine",
             "cut-hide-sweep", "cut-hide-weight", "sbsh", "sbsh-r1", "sbsh-rmax", "ilp-lost");
 

@@ -1,0 +1,20 @@
+# run 20261108-162742-517_ADMIN-PC_b86aafd77877_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/dna_mt745584.txt, format=SPMF, sigma=2500, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=5, patternKind=distinct, pareto=false, timeLimit=1800, methods=occurrence,hha-stop, closure=necessary}
+# sensitive sets: size 5, pool 23 candidates, 3 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 4 -> 0, p30: 5 -> 1, p50: 4 -> 0, p70: 5 -> 1, p90: 5 -> 1
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 4], [1, 2, 4], [2, 1, 4], [4, 3, 1], [1, 3, 4]]",p30,occurrence,occurrence-count-heuristic,,0.000000,7,0.112903,0,0.012291,0.026425,367,0,,0,0,0,,67,62,55,7,0.112903,0.026425,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 4], [1, 2, 4], [2, 1, 4], [4, 3, 1], [1, 3, 4]]",p30,hha-stop,HHA-stop,,0.000000,7,0.112903,0,0.012894,0.027770,385,0,,0,0,0,,67,62,55,7,0.112903,0.027770,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1], [4, 2], [1, 2], [1, 3], [2, 1]]",p70,occurrence,occurrence-count-heuristic,,0.000000,15,0.333333,0,0.105224,0.127749,3142,0,,0,0,0,,67,45,30,12,0.285714,0.121251,42,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1], [4, 2], [1, 2], [1, 3], [2, 1]]",p70,hha-stop,HHA-stop,,0.000000,20,0.444444,0,0.109411,0.153433,3267,0,,0,0,0,,67,45,25,17,0.404762,0.145784,42,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4], [3, 4], [4, 3], [1, 4], [4, 1]]",p90,occurrence,occurrence-count-heuristic,,0.000000,10,0.384615,0,0.154220,0.171461,4605,0,,0,0,0,,67,26,16,9,0.360000,0.165088,25,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4], [3, 4], [4, 3], [1, 4], [4, 1]]",p90,hha-stop,HHA-stop,,0.000000,10,0.384615,0,0.149364,0.164292,4460,0,,0,0,0,,67,26,16,9,0.360000,0.155671,25,

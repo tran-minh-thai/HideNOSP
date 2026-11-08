@@ -349,6 +349,20 @@ def reduced_optimum(nums, machine):
                      "greedy_opt": float(o[0]), "refined_opt": float(o[1]), "bound_share": float(share[1])})
     if len(rows) != 12:
         raise Missing("reduced_optimum_table: %d blocks, expected 12" % len(rows))
+    # The text states LB_U <= |R|*(S) <= |R|(refined) <= |R|(greedy) on every instance: read every SC3OPT row.
+    solved, holds = 0, 0
+    for path in files(INV, "SC3OPT", machine):
+        for r in rows_of(path):
+            if r.get("status") or r.get("optimum", "") == "":
+                continue
+            solved += 1
+            lb, opt, ref, gr = (int(r[k]) for k in ("conflict_bound", "optimum", "refined", "greedy"))
+            holds += lb <= opt <= ref <= gr
+    if solved != sum(r["solved"] for r in rows):
+        raise Missing("SC3OPT rows: %d solved, the table blocks %d" % (solved, sum(r["solved"] for r in rows)))
+    if holds != solved:
+        raise Missing("SC3OPT: the order LB_U <= OPT <= refined <= greedy fails on %d of %d instances" % (solved - holds, solved))
+    nums.put("opt.order.n", solved, "SC3OPT files of %s" % machine)
     nums.table("optimum", ["scope", "size", "sequences"], rows, src)
     for scope in ("distinct", "repeated"):
         rs = [r for r in rows if r["scope"] == scope]
@@ -498,6 +512,7 @@ def sc3_rows(nums, machine):
     total, status = 0, Counter()
     ours, refine = {}, {}
     ghost_rows, params = 0, defaultdict(set)
+    several = defaultdict(dict)
     for path in files(INV, "SC3", machine):
         opts = options_of(path)
         kind = opts.get("patternKind", "")
@@ -506,6 +521,9 @@ def sc3_rows(nums, machine):
         for r in rows_of(path):
             total += 1
             status[r.get("status", "")] += 1
+            if r.get("method_key") in ("cut-hide-rw-ls", "cut-hide-rw", "cut-hide") and r["sensitive_set"].count("[") > 2:
+                k = (dataset_name(r["dataset"]), r["gap"], r["sigma"], r["sensitive_set"])
+                several[k][r["method_key"]] = (r["mask_count"], r["lost"], r["lost_rel"], r["sup_dist"], r["dist_r"])
             if r.get("method_key"):
                 ghost_rows += 1
                 if float(r.get("ghost") or 0) != 0:
@@ -523,6 +541,13 @@ def sc3_rows(nums, machine):
     nums.put("sc3.n_rows", total, src)
     nums.put("sc3.ghost.rows", ghost_rows, src)
     nums.put("sc3.ghost.max", 0, src)
+    # The text says CUT-HIDE, CH-AW and CH-FW return the same solution on every set with |S| >= 2 (they run the
+    # same greedy). The rows hold measures, not positions: count the sets where all five measures agree.
+    complete = {k: v for k, v in several.items() if len(v) == 3}
+    differ = [k for k, v in complete.items() if len(set(v.values())) != 1]
+    if not complete or differ:
+        raise Missing("|S| >= 2: %d sets with the three CUT-HIDE keys, %d with different measures" % (len(complete), len(differ)))
+    nums.put("several.same.n", len(complete), src)
     for name, key in (("maxPatternLength", "params.l_max"), ("timeLimit", "params.time_limit_s")):
         if len(params[name]) != 1 or None in params[name]:
             raise Missing("SC3 files of %s run with %s = %s; the text states one value" % (machine, name, sorted(map(str, params[name]))))
@@ -709,6 +734,13 @@ def timing(nums, machine):
             vals = [r["median_ms"] for r in rows if r["size"] == size and pick(r)]
             nums.put("sc6.%s.ms.s%d.min" % (key, size), min(vals), src)
             nums.put("sc6.%s.ms.s%d.max" % (key, size), max(vals), src)
+    # The conclusion compares CUT-HIDE with HHA as a ratio of the two medians of each block.
+    ratios = []
+    for (scope, size) in sorted(blocks):
+        b = {r["method"]: r for r in rows if (r["scope"], r["size"]) == (scope, size)}
+        ratios.append(b[OURS]["median_ms"] / b["hha"]["median_ms"])
+    nums.put("sc6.ratio.ours_hha.min", min(ratios), src)
+    nums.put("sc6.ratio.ours_hha.max", max(ratios), src)
     index = [r for r in rows if r["method"] == "index"]
     if len(index) != 4:
         raise Missing("timing_table: %d index lines, expected 4" % len(index))

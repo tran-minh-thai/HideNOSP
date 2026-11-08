@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Compare the data rows of two machine-invariant result files, exactly.
 
 Used to check that a new machine or a new JDK reproduces a committed file: same code, same data,

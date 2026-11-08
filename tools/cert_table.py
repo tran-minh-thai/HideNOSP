@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Summarise SC3CERT (preregistration section 20.2): the certified lower bound B on the optimum Lost.
 
     python tools/cert_table.py [--machine=NAME] [--small-machine=NAME] [--dir=DIR] [--out FILE]
@@ -5,7 +6,7 @@
 With --small-machine, the full-data rows come from the SC3CERT files of --machine and the small-instance rows
 from those of --small-machine (a rerun with --parts=small, joined with the SC3LOST files of that machine); the
 small rows of --machine are then skipped and counted. Used when the small instances were rerun with the
-empty-band selector of CUT-HIDE (preregistration section 19.2, correction of 2026-11-06).
+empty-band selector of CUT-HIDE (preregistration section 19.2).
 
 Reads the SC3CERT_*.csv files of one machine in DIR (default: results-invariant/ of the repository), with the
 SC3_*.csv and SC3LOST_*.csv files of the same machine, and prints per scope, with protein_sdb1 reported apart

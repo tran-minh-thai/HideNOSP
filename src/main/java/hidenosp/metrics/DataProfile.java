@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 package hidenosp.metrics;
 
 import hidenosp.core.GapConstraint;

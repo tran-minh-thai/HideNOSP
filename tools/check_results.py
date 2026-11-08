@@ -1,4 +1,5 @@
-"""Check the result files against the rules of section 11.8 of the design doc.
+# SPDX-License-Identifier: MIT
+"""Check the result files against the rules of the three result directories.
 
 The Java sink enforces the same rules when a file is opened; this script re-checks them on what is
 actually on disk, so a file moved by hand, edited by hand, or produced by an older build cannot sit
@@ -98,7 +99,7 @@ def main():
     if problems:
         print("%d problem(s)" % len(problems))
         return 1
-    print("results directories are consistent with section 11.8")
+    print("results directories are consistent with their rules")
     return 0
 
 

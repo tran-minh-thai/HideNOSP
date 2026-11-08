@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Checks of the processor-model reader of tools/run.py.
 
 Run it on every machine that produces results, the measuring machine above all: the Windows branch

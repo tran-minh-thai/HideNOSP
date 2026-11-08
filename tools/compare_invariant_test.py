@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Checks of tools/compare_invariant.py: each check builds result files with one known property and
 requires the tool to report it.
 

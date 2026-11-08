@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Fail when a code file of the repository is not written in English.
 
 Every file git lists -- tracked, or untracked and not ignored -- falls in exactly one class:
@@ -36,7 +37,7 @@ two-letter syllable; the English words Theorem, Lemma and so on followed by a nu
 code always cite a published paper; an abbreviation such as "tk" standing for a Vietnamese name; a
 word spelt only with the letters a to f right next to a digit, as in cac2.
 
-The word lists were measured on 2026-09-26 against every file of the repository, and a word was
+The word lists were measured against every file of the repository, and a word was
 kept only when it matched nothing in the English text there; --measure counts them again.
 
 This file and tools/check_english_test.py hold the word lists and the test samples themselves, so
@@ -70,6 +71,7 @@ CODE_SUFFIXES = (".java", ".py", ".sh", ".bash", ".ps1", ".psm1", ".bat", ".cmd"
                  ".tsv", ".csv", ".txt", ".xml", ".json", ".toml", ".cfg", ".ini", ".properties")
 CODE_NAMES = (".gitignore", ".gitattributes")
 DOCUMENTATION_SUFFIXES = (".md",)
+DOCUMENTATION_NAMES = ("license",)       # compared with the lower-cased file name
 SELF = ("tools/check_english.py", "tools/check_english_test.py")
 
 # The marks that turn a Latin vowel into a Vietnamese letter: grave, acute, tilde, hook above, dot
@@ -223,7 +225,7 @@ def classify(path):
     if path.startswith(OUTPUT_DIRS):
         return "run output"
     name = path.rsplit("/", 1)[-1].lower()
-    if name.endswith(DOCUMENTATION_SUFFIXES):
+    if name.endswith(DOCUMENTATION_SUFFIXES) or name in DOCUMENTATION_NAMES:
         return "documentation"
     if name in CODE_NAMES or name.endswith(CODE_SUFFIXES):
         return "code"

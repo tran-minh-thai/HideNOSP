@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Download the public datasets of section 11.2 into datasets/ and record their provenance.
 
 Raw data never enters git (see .gitignore); what enters git is datasets/provenance.tsv, which

@@ -1,9 +1,10 @@
+# SPDX-License-Identifier: MIT
 """Compare the small-instance rows of SC3CERT across the empty-band selector of CUT-HIDE.
 
     python tools/compare_sc3cert_selector.py OLD_DIR OLD_MACHINE NEW_DIR NEW_MACHINE
 
 OLD is a run of both parts made before CutHide.forBand existed; NEW a run made with it and --parts=small
-(preregistration section 19.2, correction of 2026-11-06 for SC3CERT). OLD_DIR must also hold the SC3LOST files
+(preregistration section 19.2, applied to SC3CERT). OLD_DIR must also hold the SC3LOST files
 of OLD_MACHINE, made before the selector: they name the instances where CUT-HIDE refused because B_eps was
 empty. Cells are matched on the options line of the file header, without the machine and without parts.
 Expected, and checked exactly with no tolerance:

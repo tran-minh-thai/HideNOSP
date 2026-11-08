@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 package hidenosp.index;
 
 import hidenosp.core.EventSequence;

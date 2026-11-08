@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 package hidenosp.util;
 
 import java.lang.management.ManagementFactory;

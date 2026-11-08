@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Old problem, side effects. Support = number of sequences with gap [0,g]. One sensitive pattern,
 full removal from (sup - psi) sequences by marking. Compare Abul HH, flow (min marks), weighted flow."""
 import sys, random, itertools, time

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 package hidenosp.io;
 
 import java.nio.file.Path;

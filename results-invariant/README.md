@@ -1,17 +1,18 @@
 # results-invariant/
 
-> **Language.** This file is the English translation of the Vietnamese original as of commit `5ffe329`
-> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
-> decimal commas are written as decimal points.
+**Machine-invariant** measurements: Lost, Ghost, |R|, HF, SupDist, distortion rate, Nettree size. Any
+machine that runs them gives the same values, so `hidenosp.io.ResultSink` refuses a file here with a
+timing or memory column.
 
-**Machine-invariant** measurements: Lost, Ghost, |R|, HF, SupDist, DistR, Nettree size, share of (S,
-k) pairs certified optimal.
+File name: `<scenario>_<UTC time>_<machine>_<code version>_s<seed>.csv`; the header of each file repeats
+the run identifier, the options of the run, the JDK and the machine.
 
-Any machine that runs them gives the same result, so no measuring machine needs to be declared. In
-return, **timing columns and memory columns are forbidden** here; `hidenosp.io.ResultSink` refuses
-to open a file with such columns.
+- `campaign_<machine>*/`: the cell ledger, environment lock (`ENV_LOCK.json`) and console logs of each
+  campaign run by `tools/campaign.py`.
+- `paper_numbers.json`: every count, ratio and test result quoted in the paper, each with the tool and
+  output line it was read from, written by `tools/paper_numbers.py`.
+- `*_analysis_*.txt`, `sc3_*`: reports written by the table tools of `tools/` from the files of this
+  directory.
 
-File name: `SCn_<UTC time>_<machine>_<code version>_s<seed>.csv`, and the run identifier stamp is
-repeated in the comment header of the file (rule 2.6.8).
-
-Files here are tracked by git: they are the evidence for the tables in the paper.
+Result files written before 2026-09-26 record commit ids that `COMMIT_MAP.tsv` maps to the current
+history.

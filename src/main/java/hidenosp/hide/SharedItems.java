@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 package hidenosp.hide;
 
 import hidenosp.core.Pattern;

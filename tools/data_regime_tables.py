@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Print the data-regime tables of a set of result files as Markdown, so that a summary document
 embeds generated tables instead of numbers copied by hand.
 

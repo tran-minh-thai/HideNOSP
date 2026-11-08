@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Summarise the reduced SC6 (preregistration sections 19.3 and 20.1): running time of every method, cost of
 the index, and the time of mining F_sigma(D), printed beside the methods and never added to them.
 

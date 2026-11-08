@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Levels of the side effects at the solution each method returns, DESCRIPTIVE: no test.
 
     python tools/levels_table.py --machine=ADMIN-PC [--out FILE]

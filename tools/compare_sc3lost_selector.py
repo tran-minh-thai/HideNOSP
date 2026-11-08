@@ -1,9 +1,10 @@
+# SPDX-License-Identifier: MIT
 """Compare the SC3LOST rows of two runs, cell by cell, across the empty-band selector of CUT-HIDE.
 
     python tools/compare_sc3lost_selector.py OLD_DIR OLD_MACHINE NEW_DIR NEW_MACHINE
 
-OLD is a run made before CutHide.forBand existed, NEW a run made with it (preregistration section 19.2,
-correction of 2026-11-06). Cells are matched on the options line of the file header, without the machine.
+OLD is a run made before CutHide.forBand existed, NEW a run made with it (preregistration section 19.2).
+Cells are matched on the options line of the file header, without the machine.
 Expected, and checked exactly with no tolerance:
   - every row equal, column by column, except the rows where OLD has a CUT-HIDE key refused with
     "B_eps is empty";

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Split the distance between CUT-HIDE and the lower bound into a part of the bound and a part of the method.
 
     python tools/reduced_optimum_table.py [DIR ...] [--machine=NAME] [--out FILE]

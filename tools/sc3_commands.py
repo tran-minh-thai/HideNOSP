@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Print the SC3 commands that are still missing, from the two locked group tables.
 
 Why a generator and not a hand-written list. The cells of SC3 are the rows of one group (main by
@@ -104,7 +105,7 @@ def strata(pool):
 def absent(root, size, group="main"):
     """Main-group cells with no set of this size: no stratum holds that many patterns, so SC3
     would stop with "the cell does not exist". The pool column of the locked tables equals the pool
-    SC3 draws from (checked on the 54 official files of |S| = 1, 2026-10-04)."""
+    SC3 draws from."""
     out = []
     for name, kind in TABLES:
         for cell in read_table(root / name, kind, group):

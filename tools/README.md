@@ -5,12 +5,12 @@ Supporting tools, not part of the algorithm.
 | File | Purpose |
 |---|---|
 | `run.py` | **Runs a scenario stamped with the code version.** Use it for every run whose numbers go into the paper |
-| `fetch_datasets.py` | Downloads the public datasets, computes SHA-256, writes `datasets/provenance.tsv` |
-| `check_results.py` | Re-checks the results-directory rule of design section 11.8 on the files actually on disk |
-| `merge_decisions.py` | Merges review results into `config/open_decisions.md` (before 2026-09-26: `gop_quyet_dinh.py`) |
-| `preregistered_analysis.py` | **Analysis of H2 and H3** exactly as `config/preregistration.md` locks it (before 2026-09-26: `thong_ke.py`) |
+| `fetch_datasets.py` | Downloads the public datasets and verifies them against `datasets/provenance.tsv` |
+| `build_datasets.py` | Converts the event logs and the protein files to the SPMF input format |
+| `check_results.py` | Re-checks the rules of the three result directories on the files actually on disk |
+| `preregistered_analysis.py` | **Analysis of H2, H2-R, H3 and H4** exactly as `config/preregistration.md` locks them |
 | `preregistered_analysis_test.py` | Pins the statistics to hand-computed values. Run it before trusting any table |
-| `check_english.py` | Checks that every code file is written in English only, and that no documentation file holds a Vietnamese letter; exit code 1 on a violation |
+| `check_english.py` | Language check of the repository files; exit code 1 on a violation |
 | `check_english_test.py` | Injects each kind of violation into a temporary repository and requires `check_english.py` to catch it |
 | `compare_invariant.py` | Compare machine-invariant result files exactly: one pair, or (`--machine=<host> [--ref=<branch>]`) every file of one machine against the committed file of the same cell made on another host |
 | `compare_invariant_test.py` | Builds files with one known property each and requires `compare_invariant.py` to report it (18 checks) |
@@ -18,9 +18,9 @@ Supporting tools, not part of the algorithm.
 | `campaign.py` | Runs every batch of the paper on one measuring machine cell by cell, resumes after a stop, commits and pushes each cell; lock generations (`--generation=2` for the batches of preregistration section 19); `--self-test` |
 | `lower_bound_table.py` | Joins the SC3LB bounds to the SC3 rows of one machine (`--machine`, `--bound-machine`, `--dir`) and reports \|R\| against the bound per scope and size |
 | `reduced_optimum_table.py` | SC3OPT: bound, optimum, refinement and greedy on small instances, for one machine (`--machine`) |
-| `pareto_table.py` | The exact Pareto fronts, each paired with the method-batch file of its cell and machine (`--machine`) |
+| `pareto_table.py` | The exact Pareto fronts (descriptive batch, not reported in the paper), each paired with the method-batch file of its cell and machine (`--machine`) |
 | `lost_optimum_table.py` | SC3LOST (preregistration section 19.2): each method against the exact Lost optimum on small instances, with implementation checks |
-| `compare_sc3lost_selector.py` | SC3LOST rows of a run before and a run after the empty-band selector of CUT-HIDE (preregistration section 19.2, correction of 2026-11-06): every row equal except the refused CUT-HIDE rows, which must now reach the minimum mask count and the optimum Lost |
+| `compare_sc3lost_selector.py` | SC3LOST rows of a run before and a run after the empty-band selector of CUT-HIDE (preregistration section 19.2): every row equal except the refused CUT-HIDE rows, which must now reach the minimum mask count and the optimum Lost |
 | `cert_table.py` | SC3CERT (preregistration section 20.2): certified lower bound on the optimum Lost, on the full data (joined with SC3) and on the small instances (joined with SC3LOST), with implementation checks; `--small-machine=NAME` takes the small rows from a rerun with `--parts=small` |
 | `compare_sc3cert_selector.py` | small-instance rows of SC3CERT before and after the empty-band selector of CUT-HIDE (same correction): every row equal except the refused rows, which must now have Lost = B = 0 on an instance SC3LOST refused for the same reason |
 | `timing_table.py` | Reduced SC6 (preregistration sections 19.3 and 20.1): running time per method, mining time of F_sigma(D) on its own line, and index cost; checks one mining row per cell and that every timed run equals its SC3 row |
@@ -42,8 +42,7 @@ It exits with code 1 when there is a problem, so it can be used as a pre-commit 
 
 `RunId` reads the environment variable `HIDENOSP_REVISION` and stamps it into the result file name.
 Without it every file carries the stamp `unversioned` and cannot be traced back to the commit that
-produced it. Rule 2.6.8 requires a run identifier, and `config/protocol.yaml` locks this variable as
-**mandatory** for numbers that go into the paper.
+produced it, so every reported number comes from a run started through `run.py`.
 
 The script does three things in order: it recompiles (so that the `.class` files certainly match the
 source whose sha is being stamped), checks that the working tree is clean (a sha identifies the code
@@ -72,7 +71,7 @@ Exit code 0 does **not** mean that H2 is supported. It only means that the analy
 
 Run `python tools/preregistered_analysis_test.py` first. Its tests pin Pratt, rank-biserial, Holm
 and Hodges–Lehmann to hand-computed values, including an enumeration of all 2⁸ outcomes that
-catches the error of scipy's `method="exact"` under Pratt (see section 7 of `../RUNBOOK.md`).
+catches the error of scipy's `method="exact"` under Pratt.
 
 ## `check_english.py`
 
@@ -81,18 +80,6 @@ python tools/check_english.py
 python tools/check_english_test.py
 ```
 
-Every code file (comments, printed strings, names, file names) must be written in English. The tool
-reads the file list from git and puts each file into exactly one class (code, documentation `*.md`,
-run output); a file that fits no class is an error. Documentation outside the result trees is checked
-for Vietnamese letters only, so that it may still cite section numbers and name files whose names are
-Vietnamese. Three rules: Vietnamese letters with diacritics,
-Vietnamese words without diacritics (a list measured over the whole repository; `--measure` counts
-again), and section or theorem numbers of the paper. Known limits are listed at the top of the file.
-
-## Still missing
-
-- A script that builds the tables and figures of the manuscript from the CSV files. The label table
-  belongs to the manuscript side: `labels.tsv` left the code repository on 2026-09-26 (last version
-  in the git history, commit `5e5a5de`).
-- A wrapper that records the resident memory of the process for SC6 (design section 11.7, line 6);
-  on Windows from `Get-Process`, on Linux from `/proc/self/status`.
+Checks that every code file (comments, printed strings, names, file names) is written in English and
+carries no section or theorem number of the paper. The test injects each kind of violation into a
+temporary repository and requires the check to catch it.

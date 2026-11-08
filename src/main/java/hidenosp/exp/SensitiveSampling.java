@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 package hidenosp.exp;
 
 import hidenosp.core.Pattern;

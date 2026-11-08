@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Summarise SC3LOST: how far each method is from the exact Lost optimum on small instances.
 
     python tools/lost_optimum_table.py [--machine=NAME] [--dir=DIR] [--out FILE]
@@ -12,7 +13,7 @@ exactly, with protein_sdb1 reported apart (section 11, point 5):
     Lost of a minimum hiding set (0 = optimum, 1 = worst; instances where the range is empty count 0);
   - for |R| > |R|*: the count, and how often the lexicographic optimum is no worse in both |R| and Lost;
   - per CUT-HIDE key, the instances where B_eps was empty and CUT-HIDE ran with uniform weights (the
-    selector of CutHide.forBand, preregistration section 19.2, correction of 2026-11-06), and how many
+    selector of CutHide.forBand, preregistration section 19.2), and how many
     of them reached Lost = OPT_Lost. The method column of such a row says so.
 
 Implementation checks that stop the run with exit status 1: a method row with a status (does not hide,

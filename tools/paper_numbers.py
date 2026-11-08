@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Every number the manuscript quotes, read back from the result files, written as data.
 
     python tools/paper_numbers.py [--machine=ADMIN-PC] [--small-machine=dev] [--out-dir=DIR]

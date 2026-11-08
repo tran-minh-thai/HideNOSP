@@ -1,40 +1,24 @@
-# The 9-row protocol table (design doc section 11.7, rule 2.6.1).
-# Rule 2.6.2: fill it in at the first draft, not at submission time.
-#
-# State on 2026-09-12: the rows that BLOCK SC3 are locked together with
-# config/preregistration.md. The rows that only block submission (measuring machine, JVM flags,
-# memory measurement, time limit, warm-up) are still null; they do not block running SC3 to SC5
-# and SC7, because those scenarios give numbers that do not depend on the machine. SC6 is blocked.
-#
-# A null cell means NOT LOCKED YET, not "does not apply".
-# The grounds for every value: config/group_a_proposed_values.md
+# Protocol table: every value that affects a reported number.
+# The thresholds and tests of the hypotheses are in config/preregistration.md.
 
 row_1_thresholds_and_scope:
-  # The range of sigma, l_max, [g-, g+] and |S| for EVERY dataset.
   common_to_every_dataset:
-    l_max: 4                          # raised from 3; design doc section 11.5 draws sensitive
-                                      # patterns of length 2-4, and l_max = 3 left the patterns
-                                      # of length 4 outside F_sigma. Measured cost: cheap on all
-                                      # six datasets, fifa takes only 0.6 seconds more.
+    l_max: 4                          # longest pattern counted in F_sigma(D)
     sensitive_pattern_length: [2, 4]
-    sensitive_size: [1, 5, 10, 20]    # design doc section 11.5
-    sensitive_sets_per_cell: 20       # design doc section 11.5; an upper limit, see
-                                      # preregistration.md section 9
+    sensitive_size: [1, 5, 10, 20]
+    sensitive_sets_per_cell: 20       # upper limit; see preregistration.md section 9
     sampling_percentiles: [10, 30, 50, 70, 90]   # five sup_NO percentiles, 4 sets each -> 20
     sampling_method: >
       Five equal-rank strata of the candidates sorted by sup_NO, centred on these percentiles;
-      up to 4 distinct sets per stratum, never a repeated set (hidenosp.exp.SensitiveSampling,
-      preregistration.md section 9, added 2026-09-25 before any SC3 run for the paper).
+      up to 4 distinct sets per stratum, never a repeated set (hidenosp.exp.SensitiveSampling).
     common_gaps: ["[0,1]", "[0,3]"]
   per_dataset:
     dna_mt745584:
       sigma: [2500, 4000]
       gaps: ["[0,1]", "[0,3]", "[0,10]"]
       note: >
-        sigma must be 2500 or more. With |Sigma| = 4 and l_max = 3 the pattern space holds only
-        4 + 16 + 64 = 84 patterns, and at sigma = 1000 all 84 are frequent, i.e. F_sigma is the
-        WHOLE pattern space: Ghost can then never be nonzero and Lost loses its comparative
-        meaning. At sigma = 2500, |F_sigma| = 51 out of 84, a proper subset.
+        sigma is 2500 or more: with |Sigma| = 4 the pattern space is small, and at sigma = 1000 every
+        pattern is frequent, so F_sigma would be the whole space and Ghost could never be nonzero.
     msnbc:
       sigma: [1000, 2000, 5000]
       gaps: ["[0,1]", "[0,3]", "[0,10]"]
@@ -43,175 +27,105 @@ row_1_thresholds_and_scope:
     sign:      {sigma: [200], gaps: ["[0,1]", "[0,3]"]}
     bms1:      {sigma: [100], gaps: ["[0,1]", "[0,3]"]}
     fifa:      {sigma: [3000], gaps: ["[0,1]", "[0,3]"]}
-    # Added 2026-09-25 (event logs, tools/build_datasets.py). Sigma picked by sigma_rule:
-    # |F_sigma| within [50, 700] at both gaps. Group still to be fixed by the official SC2 run on
-    # the measuring machine, with the thresholds of preregistration.md section 3, before any SC3.
     bpi2013:   {sigma: [500, 1000], gaps: ["[0,1]", "[0,3]"]}
     bpi2012:   {sigma: [2000, 4000], gaps: ["[0,1]", "[0,3]"]}
     sepsis:    {sigma: [300], gaps: ["[0,1]", "[0,3]"]}
-    # Added 2026-09-25: protein files SDB4 and SDB1 of NTP-Miner (tools/build_datasets.py). The
-    # two share 64-75% of their sequences (exact match), so they are one source of data; which of
-    # them enters H2 is still open, to be fixed in config/preregistration.md before any SC3 run on
-    # protein. Sigma fixed before any SC2 run on them: the smallest and the largest sigma of the
-    # grid 300..1200 that meet the rule below at both gaps (scenario SIGMA; table 2 of
-    # results-probe/protein_groups_and_sigma_rule_probe_20260925.md).
     protein_sdb4: {sigma: [500, 900], gaps: ["[0,1]", "[0,3]"]}
     protein_sdb1: {sigma: [400, 800], gaps: ["[0,1]", "[0,3]"]}
-    synthetic: {sigma: null, gaps: null}
-  # Preregistration section 11 (2026-09-26): the repeated-item scope uses the same configurations
-  # (sigma, gaps) as above, minus SIGN and BMS1, which have no repeated-item pattern of length 2 to 4
-  # in F_sigma, plus dna sigma 4000 [0,1], which has two repeated-item candidates and no distinct one.
+  # The repeated-item scope uses the same configurations, minus SIGN and BMS1 (no repeated-item
+  # pattern of length 2 to 4 in F_sigma), plus dna sigma 4000 [0,1].
   repeated_item_scope:
     sc2: "--profile=repeated"                 # groups over the repeated-item pool
-    group_table: "config/configuration_groups_repeated.tsv"   # locked from the official SC2 runs
-    sc3: "--patternKind=repeated"             # sensitive sets drawn from that pool (section 9 rule)
-    method_H2R: "cut-hide-rw-ls"              # section 12 (was "cut-hide", section 11 point 4); the
-                                              # same method is tested in H2;
+    group_table: "config/configuration_groups_repeated.tsv"
+    sc3: "--patternKind=repeated"             # sensitive sets drawn from that pool
+    method_H2R: "cut-hide-rw-ls"              # method under test of H2 and H2-R;
                                               # tools/preregistered_analysis.py must agree
-    report_only: ["protein_sdb1"]             # section 11, point 5
-    pareto_front: "--pareto=true --methods=none with --sensitiveSize=1"   # section 11, point 6, descriptive;
-                                              # a batch of its own since section 14 (2026-10-02)
+    report_only: ["protein_sdb1"]             # reported, never in a test (shares most sequences
+                                              # with protein_sdb4)
   sigma_rule: >
-    Keep |F_sigma| within [50, 700] AND F_sigma must be a PROPER subset of the space of patterns
-    of length up to l_max. Every sigma above meets it.
-  # CORRECTION 2026-09-25. The last sentence above is false at l_max = 4. The rule applied by a
-  # program (scenario SIGMA, commit a548e53; results-probe/protein_groups_and_sigma_rule_probe_
-  # 20260925.md, table 2) puts six of the fifteen dna_mt745584 and msnbc configurations outside
-  # [50, 700]: dna [0,1] sigma 2500 and 4000, dna [0,3] sigma 4000 (too few patterns), msnbc [0,3]
-  # sigma 1000, msnbc [0,10] sigma 1000 and 2000 (too many). Every other sigma above meets the
-  # rule at every gap it is used with. The dna and msnbc values were fixed on 2026-09-12 by the
-  # preregistration and are kept; the rule binds the datasets added after that date. What the six
-  # cells change: the three dna cells have |F_sigma| of 6 to 16, so Lost_rel moves in coarse steps
-  # there and must be read with its denominator; the three msnbc cells only cost more time.
-  note: >
-    sigma is declared both as an absolute number and as a share of the total sup_NO (design doc
-    section 11.5). Whether the share or the absolute number is kept when comparing subsets is NOT
-    LOCKED YET; it blocks submission, not SC3.
+    Keep |F_sigma| within [50, 700] and F_sigma a proper subset of the space of patterns of length up
+    to l_max (scenario SIGMA applies it). Six dna_mt745584 and msnbc configurations lie outside
+    [50, 700]: dna [0,1] sigma 2500 and 4000 and dna [0,3] sigma 4000 (6 to 16 patterns, so Lost_rel
+    moves in coarse steps there), msnbc [0,3] sigma 1000 and msnbc [0,10] sigma 1000 and 2000.
 
 row_2_epsilon_of_B_eps:
-  value: 0.5                          # for EVERY dataset
-  required_check: "B_eps must not be empty; if it is, report an error, never carry on silently"
+  value: 0.5                          # every dataset
+  required_check: "B_eps must not be empty when it is supplied; an empty supplied band is an error"
   basis: >
-    |B_eps| measured on nine configurations. epsilon = 0.10 gives an EMPTY B_eps on dna [0,3]
-    sigma=1000; step 4 then gives every position the weight 0 and CUT-HIDE silently falls back to
-    the uniform-weight variant, i.e. the variant compared against in SC7 would be the very variant
-    running. epsilon = 1.00 pulls 24-54% of F_sigma into the band, the weight
-    1/(sup - sigma + 1) is then almost uniform, and "patterns near the threshold" loses its
-    meaning. epsilon = 0.50 gives |B_eps| from 6 to 248, never empty on any configuration measured.
-  correction_2026_11_06: >
-    The band can be empty on the small instances of SC3LOST (32 of 2,208 instances solved exactly). When the
-    band has been COMPUTED and is empty, CutHide.forBand selects the uniform-weight configuration, which is
-    exact there (every vital-node weight would be zero), and names it in the method column. A band nobody
-    supplied is still an error. Preregistration section 19.2, correction of 2026-11-06.
+    epsilon = 0.10 leaves B_eps empty on some configurations, so every vital-node weight would be 0;
+    epsilon = 1.00 puts 24-54% of F_sigma in the band and the weight 1/(sup - sigma + 1) becomes
+    almost uniform; epsilon = 0.50 gives |B_eps| from 6 to 248 on the configurations measured.
+  empty_computed_band: >
+    On small instances the computed band can be empty. CutHide.forBand then uses uniform weights, which
+    is exact there (every vital-node weight would be 0), and names that configuration in the method
+    column (preregistration section 19.2).
 
 row_3_seeds:
   sensitive_set_sampling: 2026
   synthetic_data_generation: 2026
   randomized_methods: [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035]
   randomized_methods_aggregation: "median of the 10 runs"
-  genetic_algorithm: "uses the same 10 seeds as above"
   note: >
-    HH, HR, RH, RR and GA run 10 times because these are quantities that do not depend on the
-    machine; the repetition table of design doc section 11.6 is for timing only. The variation
-    observed in RR is large (|R| = 31 and 151 on two sensitive sets of one configuration).
+    Every method reported in the paper is deterministic; the seeds above apply to the random
+    controls (HH, HR, RH, RR) and the genetic algorithm, which the paper does not report.
 
 row_4_synthetic_data_parameters:
   item_distribution: "uniform over the alphabet"
-  alphabet_size: null
-  sequence_count: null
-  sequence_length: null
-  target_rho_rep: null
-  target_beta: null
   note: >
-    NOT LOCKED YET; it blocks submission, not SC3. Report only the MEASURED rho_rep and beta
-    (SyntheticGenerator.measure), never the target values as if they had been reached.
+    The synthetic generator (io.SyntheticGenerator) is used by tests and probe runs only; no reported
+    number comes from synthetic data.
 
 row_5_run_environment:
-  jdk: "Eclipse Temurin 25 (LTS)"   # bytecode target 25 in pom.xml; tools/run.py refuses any
-                                    # other Java major version for runs that go into the paper.
-                                    # The exact update (25.0.x) is stamped into every result file.
-  xms_flag: null
-  xmx_flag: null
-  jdk_exact: "Eclipse Temurin 25.0.4.1+1"   # winget EclipseAdoptium.Temurin.25.JDK --version 25.0.4.101;
-                                    # the same build as the previous machine. tools/campaign.py locks the
-                                    # runtime version and vendor and refuses a run on any other.
-  operating_system: "Windows 11"    # measuring machine, separate from the development machine
-  # From 2026-11-01 (preregistration section 18) the measuring machine is a Dell XPS with 64 GB,
-  # declared by the author. Its host name, processor and memory are written by the machine itself
-  # into results-invariant/campaign_<host name>/ENV_LOCK.json at the first step of its campaign, and
-  # into the header of every result file; the three fields below are filled from that file.
+  jdk: "Eclipse Temurin 25.0.4.1+1"   # bytecode target 25 in pom.xml; tools/run.py refuses any
+                                      # other major version for runs whose numbers are reported
+  operating_system: "Windows 11"
   cpu: "Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz, 12 logical processors"
   ram: "68452814848 bytes"
-  machine_name: "ADMIN-PC"          # read from results-invariant/campaign_ADMIN-PC/ENV_LOCK.json (lock commit
-                                    # of 2026-11-01, on main since the merge 4cc375e): Windows-11-10.0.26300,
-                                    # JDK 25.0.4.1+1-LTS Eclipse Adoptium, source tree c9810c5 = commit c16f727.
-                                    # Its campaign ran all 589 cells, 0 failed (ledger campaign_ADMIN-PC/cells.tsv).
-  previous_machine:                 # every official SC1, SC2 and SC3 number up to 2026-10-12
+  machine_name: "ADMIN-PC"            # the measuring machine; see results-invariant/campaign_ADMIN-PC/ENV_LOCK.json
+  reproduction_machine:
     machine_name: "DESKTOP-L8A6EPO"
     cpu: "Intel(R) Core(TM) i7-6560U CPU @ 2.20GHz, 4 logical processors"
     ram: "16597393408 bytes"
     jdk: "25.0.4.1"
     role: >
-      Kept in the repository as the reproduction check of preregistration section 18: every count
-      column of a row that is not OT or OOM must equal the row of the new machine. Its rows do not
-      enter the tables of the paper.
-  # An earlier version of this row named an AMD Ryzen 9 9950X with 64 GB, a machine that never ran
-  # anything for this project; that entry was an assumption and is withdrawn.
-  note: "NOT LOCKED YET. Blocks SC6, not SC3 to SC5 and SC7."
+      Its result files are kept as a reproduction check: every count column of a row that is not OT or
+      OOM equals the row of the measuring machine. They do not enter the tables of the paper.
 
 row_6_memory_measurement:
-  method: "heap in use, sampled from inside the process (util.MemoryProbe)"
-  sampling_period_ms: 50
-  resident_memory: null
+  method: "heap in use, sampled from inside the process every 50 ms (util.MemoryProbe)"
   note: >
-    Design doc section 11.7 asks for the peak RSS of the process. The JVM does not report RSS, so
-    it takes a wrapper script, which does not exist yet (TODO in util.MemoryProbe). A table that
-    prints memory must say whether it prints heap or RSS. NOT LOCKED. The reduced SC6 of
-    preregistration section 19.3 reports no memory: heap sampling every 50 ms cannot catch the peak
-    of a run shorter than a second.
+    The paper reports no memory figure: sampling every 50 ms cannot catch the peak of runs shorter
+    than a second.
 
 row_7_time_limit:
-  limit_per_run_seconds: 1800   # wall clock, one method on one sensitive set (preregistration
-                                # section 14); SC3 --timeLimit=1800. Counted from the call of the
-                                # method to its sanitization; evaluating it and the Pareto front
-                                # are not counted.
+  limit_per_run_seconds: 1800   # wall clock, one method on one sensitive set (SC3 --timeLimit=1800),
+                                # from the call of the method to its sanitization
   mechanism: >
-    cooperative check (hidenosp.util.Deadline) when a Nettree is built, a position is masked, at
-    each phase of a max flow, each position of the exact program and each pass of the local search;
+    cooperative check (hidenosp.util.Deadline) when a Nettree is built, a position is masked, at each
+    phase of a max flow, each position of the exact program and each pass of the local search;
     tested by Sc3TimeLimitTest
   heap_for_sc3: "-Xmx8g"        # OOM depends on it, so it is part of the cell
-  heap_for_sc3_pareto_front: "-Xmx32g"   # preregistration section 18: the Pareto-front batch only
-                                # (--methods=none, descriptive); every method batch keeps -Xmx8g
-  timeout_code: "OT"     # rule 3.3.14
+  heap_for_sc3_pareto_front: "-Xmx32g"   # the descriptive Pareto-front batch (--methods=none)
+  timeout_code: "OT"
   out_of_memory_code: "OOM"
-  when_exceeded: >
-    drop the pair from Wilcoxon, count it and report it apart (preregistration section 5)
-  max_dropped_share: 0.10     # more than 10% of the instances dropped: no conclusion on H2
-  note: >
-    Locked on 2026-10-02 for SC3. Which rows are OT depends on the machine and OOM on the heap, so the
-    official SC3 runs carry --machine of row 5 and the count of OT and OOM rows is reported with them.
+  when_exceeded: "drop the pair from the Wilcoxon test, count it and report it apart"
+  max_dropped_share: 0.10       # more than 10% of the instances dropped: no conclusion on H2
 
 row_8_repetitions_and_aggregation:
   under_1_second: 15
   from_1_to_10_seconds: 10
   from_10_to_120_seconds: 5
   over_120_seconds: 3
-  aggregation: "mean ± standard deviation; wall-clock time and CPU time measured side by side"
-  note: >
-    util.Timing.repetitionsFor implements this table (design doc section 11.6). It applies to
-    TIMING only; the reruns of the randomized methods that measure invariant quantities are in
-    row 3.
+  aggregation: "mean and standard deviation; wall-clock time and CPU time measured side by side"
+  note: "util.Timing.repetitionsFor implements this table; it applies to timing only."
 
 row_9_warmup_procedure:
   warmup_runs: 1
   note: >
-    Locked by preregistration section 19.3 for the reduced SC6: one warm-up run per method and
-    instance, then one run that sets the number of repetitions of row 8 (also discarded), then the
-    repetitions (util.Timing.measure). Section 20.1 adds one timed row per cell, mine-frequent, with
-    the same procedure: the mining of F_sigma(D), which the methods then receive from outside their
-    clocks.
+    One warm-up run per method and instance, then one run that sets the number of repetitions of
+    row 8 (also discarded), then the repetitions (util.Timing.measure). SC6 times the mining of
+    F_sigma(D) once per cell as its own row; the methods receive F_sigma(D) from outside their clocks.
 
-# Beyond the 9 rows: the implementation decisions that must be declared (section 7 of RUNBOOK.md).
 implementation_decisions:
   mu_P_scope: 1
   weight_scale: 1000000        # CostCurve.SCALE
@@ -220,17 +134,12 @@ implementation_decisions:
   mask_semantics: "-1, matches no item"
   itemset_linearisation: >
     sorted by ascending item code; the share of positions affected is recorded next to the dataset
-  node_weight_when_mu_above_1: >
-    every node of a position is given the weight of that position; an implementation choice
+  node_weight_when_mu_above_1: "every node of a position is given the weight of that position"
   small_instances:
     max_candidate_positions: 64    # IlpExact.MAX_CANDIDATES
     max_masks: 12                  # IlpExact.MAX_MASKS
   SC3_optimum_reference: "exact-minR-minLost"
-  several_patterns_under_database_threshold: >
-    Linear-programming rounding is the main option (it guarantees a factor of l_max); the hybrid
-    GA is the fallback. If neither is ready in time, narrow the scope to |S| = 1 and say so, rather
-    than bring the GA in with parameters not locked yet.
+  several_sensitive_patterns: "greedy rule of CutHide, optionally followed by the refinement (cut-hide-refine)"
   code_version: >
-    HIDENOSP_REVISION = git rev-parse HEAD, set by a wrapper script before Runner is called.
-    MANDATORY for every run whose numbers go into the paper. The existing numbers, whose first line
-    says "unversioned", are kept as probe numbers.
+    HIDENOSP_REVISION = git rev-parse HEAD, set by tools/run.py before Runner is called; every result
+    file records it in its name and header.

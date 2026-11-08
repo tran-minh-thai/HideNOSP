@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Run every experiment of the paper on one measuring machine, cell by cell, and resume after a stop.
 
     python tools/campaign.py plan  --machine=NAME [--generation=G] [--batch=B]

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 import sys, random, time
 sys.path.insert(0, '..')
 from nettree_checks import maxflow

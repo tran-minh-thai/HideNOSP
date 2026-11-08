@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Self-test of check_english.py: every kind of violation it claims to catch is injected into a
 small throw-away repository, one at a time, and must be reported -- in the injected file only --
 while a set of English files that look Vietnamese to a naive list must stay clean.

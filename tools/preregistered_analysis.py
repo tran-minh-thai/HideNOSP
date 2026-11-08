@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Statistical analysis of H2 and H3, doing exactly what config/preregistration.md locked.
 
 This script does NOT choose the test, the threshold or the pairing. All of that was locked before
@@ -20,7 +21,7 @@ It does the following, in order:
 7. Equivalence (section 4): the Hodges-Lehmann estimate with its confidence interval, against the
    locked margins.
 
-Section 11 (2026-09-26): every SC3 row is put in one of two scopes by the items of its sensitive
+Preregistration section 11: every SC3 row is put in one of two scopes by the items of its sensitive
 patterns, distinct (the main scope, H2) or repeated (H2-R). Each scope is grouped from its own SC2
 profile (pool, repeated) and checked against its own locked table; H2-R repeats the steps above on
 the main group of the repeated scope and is never pooled with H2. Datasets in LOCKED.REPORT_ONLY
@@ -754,7 +755,7 @@ def run_h3(rows, groups, write, descriptive=False):
             continue
         # Keyed on method_key, the stable name given on the command line. The display name carries
         # parameters: SBSH-rmax calls itself SBSH-r2, -r3 or -r4 by the length of the pattern, so
-        # keying on it split one baseline into three rows (found on the official SC3 of 2026-10-04).
+        # keying on it would split one baseline into three rows.
         by_group[info["group"]][r["method_key"]].append(r["mask_ratio"])
 
     write("")

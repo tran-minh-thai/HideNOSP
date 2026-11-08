@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Run one scenario with the code revision stamped into the run identifier.
 
 Why this wrapper exists. RunId reads the environment variable HIDENOSP_REVISION and stamps it into
@@ -9,7 +10,7 @@ The wrapper does five things, in this order:
 
 1. Checks the Java version. The protocol fixes JDK 25 on every machine. Runs for the paper refuse
    any other major version; probe runs (--probe) only warn.
-2. Rebuilds (mvn -o -q compile). Skipping this could stamp the CURRENT source revision onto a run
+2. Rebuilds (mvn -q compile). Skipping this could stamp the CURRENT source revision onto a run
    of stale .class files, so the stamp would lie.
 3. Checks that the working tree is clean. A commit sha identifies the code that ran only when no
    uncommitted change is pending. A dirty tree is refused unless the run is a probe (--probe) or
@@ -215,7 +216,7 @@ def build():
     """Rebuild, so the .class files certainly match the source whose sha is being stamped."""
     mvn = "mvn.cmd" if os.name == "nt" else "mvn"
     try:
-        out = subprocess.run([mvn, "-o", "-q", "compile"], cwd=ROOT)
+        out = subprocess.run([mvn, "-q", "compile"], cwd=ROOT)
     except FileNotFoundError:
         print("ERROR: Maven not found. Add --no-build if the .class files are certainly current.",
               file=sys.stderr)

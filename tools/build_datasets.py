@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Build the SPMF files that the Java code reads, from the raw inputs under datasets/raw/.
 
 Each raw input becomes single-item event sequences by a fixed rule, written to

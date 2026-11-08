@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 package hidenosp.hide;
 
 import java.util.List;

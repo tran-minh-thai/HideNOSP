@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 package hidenosp.core;
 
 import hidenosp.util.Deadline;

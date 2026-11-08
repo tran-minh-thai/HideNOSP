@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Sensitivity analysis of H2, H2-R, H4b and H4b-R with the dataset as the statistical unit.
 
     python tools/dataset_sensitivity.py --machine=ADMIN-PC [--out FILE]

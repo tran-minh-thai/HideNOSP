@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 package hidenosp.hide;
 
 import hidenosp.baseline.HidingMethod;
@@ -505,10 +506,9 @@ public final class CutHide implements HidingMethod {
                         + "further, yet the database threshold is still exceeded: still needed "
                         + Arrays.toString(needed) + ", threshold " + problem.threshold());
             }
-            // The ledger subtracts the exact drop, not the vital marks. Counting one per vital
-            // position left the ledger above the true support on repeated-item patterns, so the
-            // greedy went on masking patterns already hidden and then stopped with nothing left to
-            // lower (the official SC3 of |S| = 5 stopped this way on repeated-item cells).
+            // The ledger subtracts the exact drop, not the vital marks: with repeated items one
+            // position can carry several nodes, and counting one per vital position would leave the
+            // ledger above the true support, so the greedy would mask patterns already hidden.
             int[] drop = pick.exactDrop();
             masked.computeIfAbsent(pick.sequence(), k -> new TreeSet<>()).add(pick.position());
             result.mask(pick.sequence(), pick.position());

@@ -1,18 +1,14 @@
 # results/
 
-> **Language.** This file is the English translation of the Vietnamese original as of commit `5ffe329`
-> (2026-11-02), which stays in the git history. Values, dates, file names and decisions are unchanged;
-> decimal commas are written as decimal points.
+**Machine-dependent** measurements: wall-clock time and CPU time.
 
-**Machine-dependent** measurements: wall-clock time, CPU time, peak memory.
+Only the measuring machine declared in `config/protocol.yaml` (row 5) writes here. Runs pass
+`--machine=<machine name>`; `hidenosp.io.ResultSink` refuses a run with the default label `dev`.
+A file here has at least one timing column; a file without one belongs in `results-invariant/`.
 
-Only the measuring machine declared in `config/protocol.yaml` (rows 5 to 7) writes here. Run
-with `--machine=<machine name>`; a run with the default label `dev` is refused by
-`hidenosp.io.ResultSink`.
+Repetitions follow row 8 of `config/protocol.yaml` (under 1 second: 15; 1 to 10 seconds: 10; 10 to 120
+seconds: 5; over 120 seconds: 3), after one discarded warm-up run. `hidenosp.util.Timing` implements
+the table and records the number of discarded runs.
 
-A file here must have at least one timing or memory column. If it has none, it belongs in
-`results-invariant/`.
-
-Number of repetitions according to the table of §11.6 (under 1 second: ≥ 15 repetitions; 1–10
-seconds: ≥ 10; 10–120 seconds: 5; over 120 seconds: 3 with a reason). `hidenosp.util.Timing`
-implements exactly this table and also records the number of discarded warm-up runs.
+`paper_numbers_timing.json` holds every running time and the platform description quoted in the paper,
+written by `tools/paper_numbers.py`.

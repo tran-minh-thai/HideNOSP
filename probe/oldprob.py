@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Old problem (Abul 2007 / GD&L 2011): support = number of sequences, full removal of the
 sensitive pattern(s) from selected sequences by marking. Probe: Abul's heuristics vs flow-based."""
 import sys, random, itertools

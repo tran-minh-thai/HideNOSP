@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 package hidenosp.core.flow;
 
 import hidenosp.util.Deadline;

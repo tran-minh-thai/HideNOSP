@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Summarise the exact Pareto fronts of SC3 --pareto (preregistration section 11, point 6).
 
 Every SC3PARETO_<stamp>.csv is paired with the SC3 file that holds the method rows of the same cell.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """GD&L 2011 setting (no gap constraint, deletion, sup = #sequences, hide below psi).
 One sensitive pattern. DBSH (Exclude by symbol-level Cost + Candidates) vs exact min cut (Corollary P1c)."""
 import sys, random

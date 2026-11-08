@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Print a descriptive Markdown table of SC3 files: one row per configuration and method.
 
 For every (dataset, gap, sigma, kind of sensitive pattern) and every method key it gives the number

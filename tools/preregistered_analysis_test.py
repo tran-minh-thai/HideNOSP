@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Pin the statistics of preregistered_analysis.py to values computed by hand.
 
 Why. A mistake here does not crash the program; it makes a number in the paper wrong, and nobody
@@ -592,8 +593,7 @@ def test_one_machine_per_analysis():
 
 def test_h2_not_tested_fails_the_run():
     """Without the method under test, without any tier (b) baseline, or with a Holm family smaller
-    than the locked four, H2 is not the locked test and the exit code must say so. An end-to-end
-    SC3 trial (2026-09-26) found the first case exiting with 0."""
+    than the locked four, H2 is not the locked test and the exit code must say so."""
     import tempfile
     import io as _io
     family = pa.LOCKED.BASELINE_FAMILY

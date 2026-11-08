@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Join the SC3LB bounds to the official SC3 rows and report how far each method is from the bound.
 
     python tools/lower_bound_table.py [--machine=NAME] [--bound-machine=NAME] [--dir=DIR] [--out FILE]

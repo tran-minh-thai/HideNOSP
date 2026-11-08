@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """Sanity checks (not proofs) for the Nettree cut propositions, version 2.
 Checks: L0 (sup_NO = max node-disjoint paths = min node cut), P1, P2 (optimal sets are
 subsets of minimum cuts), L5 (vital node <=> node in some minimum cut), greedy vital removal,

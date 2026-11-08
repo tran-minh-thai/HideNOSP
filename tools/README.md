@@ -24,6 +24,7 @@ Supporting tools, not part of the algorithm.
 | `cert_table.py` | SC3CERT (preregistration section 20.2): certified lower bound on the optimum Lost, on the full data (joined with SC3) and on the small instances (joined with SC3LOST), with implementation checks; `--small-machine=NAME` takes the small rows from a rerun with `--parts=small` |
 | `compare_sc3cert_selector.py` | small-instance rows of SC3CERT before and after the empty-band selector of CUT-HIDE (same correction): every row equal except the refused rows, which must now have Lost = B = 0 on an instance SC3LOST refused for the same reason |
 | `timing_table.py` | Reduced SC6 (preregistration sections 19.3 and 20.1): running time per method, mining time of F_sigma(D) on its own line, and index cost; checks one mining row per cell and that every timed run equals its SC3 row |
+| `paper_numbers.py` | Every number and table row the manuscript quotes, read back by running the table tools on the result files, plus the counts no tool prints; writes `results-invariant/paper_numbers.json` and `results/paper_numbers_timing.json`, each value with its source; exit 1 on any unread line or disagreement; `--self-test` |
 
 `check_results.py` checks the same rule that `hidenosp.io.ResultSink` enforces when it opens a file,
 but on disk: a file moved or edited by hand, or produced by an old version of the code, is still

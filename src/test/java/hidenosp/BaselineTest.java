@@ -75,7 +75,7 @@ class BaselineTest {
         long sigma = problem.frequentThreshold();
         var frequent = hidenosp.metrics.FrequentPatterns.mine(
                 problem.database(), problem.gap(), problem.maxPatternLength(), sigma);
-        var closure = hidenosp.metrics.FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+        var closure = problem.closureOf(frequent.keySet());
         for (double eps : new double[] {0.5, 1.0, 2.0, 5.0}) {
             var band = hidenosp.metrics.FrequentPatterns.nearThreshold(frequent, sigma, eps, closure);
             if (!band.isEmpty()) {
@@ -92,7 +92,7 @@ class BaselineTest {
         long sigma = problem.frequentThreshold();
         var frequent = hidenosp.metrics.FrequentPatterns.mine(
                 problem.database(), problem.gap(), problem.maxPatternLength(), sigma);
-        var closure = hidenosp.metrics.FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+        var closure = problem.closureOf(frequent.keySet());
         java.util.Map<Pattern, Long> nonSensitive = new java.util.LinkedHashMap<>();
         frequent.forEach((q, v) -> {
             if (!closure.contains(q)) {

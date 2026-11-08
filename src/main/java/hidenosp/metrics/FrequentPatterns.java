@@ -202,26 +202,76 @@ public final class FrequentPatterns {
     }
 
     /**
-     * S-plus: the sensitive patterns together with every frequent pattern that contains one of them
-     * as a subsequence. Hiding P necessarily hides its super-patterns, so they are excluded from
-     * Lost and SupDist.
-     *
-     * <p>The design doc writes S-plus without pinning the containment order down; this reads it as
-     * subsequence containment on the item sequence, which is the convention of [R3]. The choice is
-     * declared in the protocol table so a reader can reproduce the counts.
+     * Which frequent patterns hiding a sensitive pattern necessarily hides, so that Lost and SupDist
+     * leave them out.
+     */
+    public enum Closure {
+        /**
+         * Q contains P as a contiguous block when g+ is finite, and as a subsequence when g+ is
+         * unbounded. Under HIDE-DB, where the hiding threshold is the sigma of F_sigma(D), these are
+         * exactly the patterns that hiding P always hides: an occurrence of such a Q contains an
+         * occurrence of P under the same gap constraint, and non-overlapping occurrences of Q give
+         * non-overlapping occurrences of P, so sup_NO(Q) &le; sup_NO(P) &lt; sigma. When g+ is
+         * finite, a Q that holds P only with other items between them is not hidden in general:
+         * with D = {ab, accb}, sigma = 1 and [0,1], masking the a of ab leaves acb frequent.
+         */
+        NECESSARY,
+        /**
+         * Q contains P as a subsequence, whatever the gap constraint: the rule of every result
+         * file written before 2026-11-08. Kept to reproduce those files and to report their
+         * measures next to the corrected ones.
+         */
+        SUBSEQUENCE;
+
+        /** The value of a scenario option: "necessary" or "subsequence". */
+        public static Closure parse(String text) {
+            switch (text.trim().toLowerCase(java.util.Locale.ROOT)) {
+                case "necessary":
+                    return NECESSARY;
+                case "subsequence":
+                    return SUBSEQUENCE;
+                default:
+                    throw new IllegalArgumentException("closure must be necessary or subsequence, got " + text);
+            }
+        }
+
+        public String label() {
+            return name().toLowerCase(java.util.Locale.ROOT);
+        }
+    }
+
+    /**
+     * S-plus: the sensitive patterns together with every frequent pattern that hiding one of them
+     * hides as well, under {@code rule}.
      */
     public static java.util.Set<Pattern> closure(java.util.Collection<Pattern> sensitive,
-                                                 java.util.Collection<Pattern> frequent) {
+                                                 java.util.Collection<Pattern> frequent,
+                                                 GapConstraint gap, Closure rule) {
+        boolean anywhere = rule == Closure.SUBSEQUENCE || gap.isUnbounded();
         java.util.Set<Pattern> out = new java.util.LinkedHashSet<>(sensitive);
         for (Pattern q : frequent) {
             for (Pattern p : sensitive) {
-                if (isSubsequence(p, q)) {
+                if (anywhere ? isSubsequence(p, q) : containsBlock(p, q)) {
                     out.add(q);
                     break;
                 }
             }
         }
         return out;
+    }
+
+    /** True when {@code small} occurs in {@code large} as a run of consecutive items. */
+    public static boolean containsBlock(Pattern small, Pattern large) {
+        outer:
+        for (int i = 0; i + small.length() <= large.length(); i++) {
+            for (int j = 0; j < small.length(); j++) {
+                if (large.at(i + j) != small.at(j)) {
+                    continue outer;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     /** True when the items of {@code small} appear inside {@code large} in order. */

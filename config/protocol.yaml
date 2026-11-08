@@ -129,7 +129,11 @@ row_9_warmup_procedure:
 implementation_decisions:
   mu_P_scope: 1
   weight_scale: 1000000        # CostCurve.SCALE
-  S_plus_relation: "subsequence over the item sequence"
+  S_plus_relation: >
+    "necessary" from 2026-11-08 (preregistration section 21): the sensitive patterns and the frequent patterns
+    that contain one of them as a block of consecutive items when g+ is finite, as a subsequence when g+ is
+    unbounded; under HIDE-SEQ the sensitive patterns alone. Files written before 2026-11-08 used
+    "subsequence over the item sequence" for every gap; they carry no "# closure" header line.
   prefix_pruning_when_mining: true
   mask_semantics: "-1, matches no item"
   itemset_linearisation: >

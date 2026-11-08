@@ -65,7 +65,9 @@ python3 tools/campaign.py run  --machine=NAME --batch=sc1
 
 then the batches `sc2`, `sc3-s1`, `sc3-s5`, `sc3-s10`, `sc3-s20`, `sc3-degenerate`, `sc3-refine`, `sc3lb`,
 `sc3opt`, `sc3-pareto`, and, with `--generation=2` (after `lock --generation=2`), `sc3lost`, `sc3-stop`,
-`sc3cert` and `sc6`. A batch resumes where it stopped. `python3 tools/campaign.py plan` prints the cells
+`sc3cert` and `sc6`. With `--generation=3` (after `lock --generation=3`), the `g3-` batches rerun the invariant
+batches that read S-plus with its corrected definition (`config/preregistration.md`, section 21); the numbers of
+the paper come from them. A batch resumes where it stopped. `python3 tools/campaign.py plan` prints the cells
 of each batch; `tools/compare_invariant.py --machine=NAME` compares your invariant files with the
 committed ones cell by cell.
 

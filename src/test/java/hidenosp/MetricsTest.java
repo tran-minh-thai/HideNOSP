@@ -60,7 +60,7 @@ class MetricsTest {
         long sigma = problem.frequentThreshold();
         Map<Pattern, Long> before = FrequentPatterns.mine(problem.database(), problem.gap(),
                 problem.maxPatternLength(), sigma);
-        Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), before.keySet());
+        Set<Pattern> closure = problem.closureOf(before.keySet());
         int lost = 0;
         long supportBefore = 0;
         long supportAfter = 0;

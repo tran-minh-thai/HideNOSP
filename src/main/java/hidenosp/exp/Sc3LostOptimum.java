@@ -13,6 +13,7 @@ import hidenosp.hide.Sanitization;
 import hidenosp.io.CsvWriter;
 import hidenosp.io.DatasetReader;
 import hidenosp.io.ResultSink;
+import hidenosp.metrics.FrequentPatterns;
 import hidenosp.metrics.Metrics;
 import hidenosp.util.Cli;
 
@@ -64,11 +65,14 @@ public final class Sc3LostOptimum implements Scenario {
     public String[] options() {
         return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "maxPatternLength", "epsilon",
                 "setsPerStratum", "seed", "patternKind", "window", "carrying", "without", "drops",
-                "instanceSeed", "methods"};
+                "instanceSeed", "methods", "closure"};
     }
 
     @Override
     public void run(ResultSink sink, Cli options) {
+        // Which frequent patterns count as hidden with the sensitive ones (FrequentPatterns.Closure); written
+        // into the header even at the default, so a file without the line was written under the subsequence rule.
+        FrequentPatterns.Closure closureRule = FrequentPatterns.Closure.parse(options.get("closure", "necessary"));
         String dataset = options.get("dataset", "");
         if (dataset.isEmpty()) {
             throw new IllegalArgumentException("--dataset is required: the instances are cut from real sequences");
@@ -101,7 +105,7 @@ public final class Sc3LostOptimum implements Scenario {
         String[] header = {"dataset", "gap", "sigma", "pattern_kind", "sensitive_set", "stratum", "drop",
             "instance_sigma", "sequences", "carrying_windows", "frequent_patterns", "min_masks", "optimal_sets",
             "opt_lost", "worst_lost", "method_key", "method", "mask_count", "lost", "status"};
-        String[] provenance = {"options " + options.all(), sampling.describe()};
+        String[] provenance = {"options " + options.all(), sampling.describe(), "closure " + closureRule.label()};
         int instances = 0;
         int solved = 0;
         try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header, provenance)) {
@@ -131,7 +135,7 @@ public final class Sc3LostOptimum implements Scenario {
                         continue;
                     }
                     if (solve(writer, base, instance, pattern, gap, (int) instanceSigma, epsilon,
-                            maxPatternLength, seed, methods)) {
+                            maxPatternLength, seed, methods, closureRule)) {
                         solved++;
                     }
                 }
@@ -195,9 +199,9 @@ public final class Sc3LostOptimum implements Scenario {
     /** Solves one instance exactly and runs every method on it; returns whether the exact part succeeded. */
     private static boolean solve(CsvWriter writer, String[] base, SequenceDatabase instance, Pattern pattern,
                                  GapConstraint gap, int instanceSigma, double epsilon, int maxPatternLength,
-                                 long seed, String[] methods) {
+                                 long seed, String[] methods, FrequentPatterns.Closure closureRule) {
         HideProblem problem = new HideProblem(instance, List.of(pattern), gap, HideProblem.Mode.HIDE_DB,
-                instanceSigma, epsilon, maxPatternLength);
+                instanceSigma, epsilon, maxPatternLength).withClosure(closureRule);
         Metrics.Context context = Metrics.Context.of(instance, gap, maxPatternLength, instanceSigma);
         Map<Pattern, Long> frequent = context.frequent();
         String watched = Integer.toString(frequent.size());

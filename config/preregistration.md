@@ -926,3 +926,65 @@ on small instances it counted about half of the patterns lost in every minimum s
 or of any running time exists.
 
 **Unchanged:** all of sections 1–19 apart from the clock of 19.3, amended in 20.1.
+
+## 21. Addendum of 2026-11-08 — the closure S⁺ corrected, and the invariant batches rerun (added after the main comparison)
+
+**Decision of the author** (2026-11-08): correct the definition of 𝒮⁺, apply it to the methods as well as to the
+measures, and rerun every invariant batch that reads 𝒮⁺, on the measuring machine of generations 1 and 2, with the
+same JDK and the same heap (`-Xmx8g`). This section was written after every result of sections 14–20 had been seen.
+
+**What was wrong.** Sections 2 and 14–20 count Lost and SupDist on F_σ(D) \ 𝒮⁺, with 𝒮⁺ the sensitive patterns and
+every frequent pattern that contains one of them **as a subsequence** (protocol row `S_plus_relation` before
+2026-11-08). The stated reason, that hiding P hides its super-patterns, holds only for a super-pattern that contains P
+as a block of consecutive items when g⁺ is finite. Counterexample: D = {ab, accb}, σ = 1, gap [0,1]; masking the a of
+ab hides ab, and acb keeps its occurrence (0, 1, 3) in accb. Every gap of the paper is finite. The methods read 𝒮⁺ too:
+the near-threshold band B_ε of CUT-HIDE and its weights, the watched patterns of the adaptive weight and the local
+search, the side-effect counts of SBSH, the side-effect objective of the exact method and the certified bound.
+
+**Corrected rule** (`FrequentPatterns.Closure.NECESSARY`, carried by `HideProblem`). Under HIDE-DB with a hiding
+threshold no larger than the σ of F_σ(D), 𝒮⁺ is the sensitive patterns and every frequent pattern that contains one of
+them as a block (as a subsequence when g⁺ is unbounded): such a Q has sup_NO(Q) ≤ sup_NO(P) < σ under every hiding
+set. Under HIDE-SEQ, 𝒮⁺ is the sensitive patterns alone. The test `ClosureRuleTest` checks the counterexample by hand
+and the statement itself on 400 random databases (every pattern of the corrected 𝒮⁺ hidden by random hiding sets;
+some patterns of the earlier 𝒮⁺ left frequent), and catches each of five injected faults.
+
+**Generation 3 of the campaign** (`tools/campaign.py`, batches `g3-*`): the cells of `sc3-s1` … `sc3-s20`,
+`sc3-degenerate`, `sc3-refine`, `sc3-stop`, `sc3lost`, `sc3cert` and `sc3opt`, cell for cell, with the option
+`closure=necessary`. Every result file writes the line `# closure <rule>`; a file without it was written under the
+subsequence rule. Each SC3 row also carries `lost_subseq`, `lost_rel_subseq`, `sup_dist_subseq` and
+`nonsensitive_before_subseq`: the measures of the same solution under the earlier rule.
+
+**Also corrected:** the column `frequent_after` (frequent patterns left after the sanitization) counted the frequent
+super-patterns of 𝒮⁺ as kept; it now counts their real losses. No table reads it.
+
+**Not rerun:**
+- SC1, SC2 and SC3LB do not read 𝒮⁺. Their files stand.
+- The Pareto-front batch is no longer reported.
+- SC6 (running time). Its methods read 𝒮⁺ as an input, so its rows keep the earlier rule. Their check against SC3
+  (equal |R| and Lost) is made against the SC3 files of the earlier rule. The paper states that the timing was
+  measured with the earlier 𝒮⁺.
+
+**Checks before the lock of generation 3** (development machine, results not reported):
+- the current code with `closure=subsequence` reproduces every common column of 14 stored files: five SC3 method
+  cells (455 rows), one refinement cell (20), two stop-at-threshold cells (36), two SC3LOST files (162), two SC3CERT
+  files, and two SC3OPT files (38);
+- the three SC3CERT rows that differ are the small instances that generation 2 refused with an empty B_ε, now solved
+  by the selector of commit 2f09296 (section 19.2 correction);
+- with `closure=necessary`, every instance whose 𝒮⁺ is the same under both rules (175 of 175 rows of two cells)
+  reproduces its stored row;
+- the side-column denominators equal the stored denominators, and the new denominators equal the stored ones plus
+  the measured number of patterns that leave 𝒮⁺.
+
+**Provenance.** Before writing this section the proposer had measured, from the stored files and without masks,
+the following.
+- How many patterns leave 𝒮⁺ per instance.
+- Bounds on the effect for H2 and H2-R (not for H3 or H4). No rejection of H2 or H2-R can change. Two
+  equivalence verdicts of H2-R can change (DBSH, SBSH-r1).
+- That the instances where CUT-HIDE and a baseline of the Holm family use the same |R| all have |𝒮| = 1.
+
+These bounds assume the earlier solutions. The methods now read the corrected 𝒮⁺, so solutions can change, and no
+number of generation 3 exists.
+
+**Unchanged:** every hypothesis, threshold, test, margin, exclusion rule and group table of sections 1–20. The
+analysis reads the files of generation 3 for every invariant number; files of the two rules are never mixed in one
+table.

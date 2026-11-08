@@ -79,7 +79,7 @@ class LostLowerBoundTest {
                 continue;
             }
             Map<Pattern, Long> frequent = FrequentPatterns.mine(db, gap, 3, sigma);
-            Set<Pattern> closure = FrequentPatterns.closure(List.of(p), frequent.keySet());
+            Set<Pattern> closure = FrequentPatterns.closure(List.of(p), frequent.keySet(), gap, FrequentPatterns.Closure.NECESSARY);
             Map<Pattern, Long> watched = new LinkedHashMap<>();
             frequent.forEach((q, v) -> {
                 if (!closure.contains(q)) {

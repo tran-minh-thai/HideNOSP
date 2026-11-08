@@ -4,8 +4,11 @@ package hidenosp.hide;
 import hidenosp.core.GapConstraint;
 import hidenosp.core.Pattern;
 import hidenosp.core.SequenceDatabase;
+import hidenosp.metrics.FrequentPatterns;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * An instance of HIDE-DB or HIDE-SEQ.
@@ -32,6 +35,7 @@ public final class HideProblem {
     private final double epsilon;
     private final int maxPatternLength;
     private final long frequentThreshold;
+    private final FrequentPatterns.Closure closure;
 
     /**
      * @param threshold sigma for HIDE-DB, r for HIDE-SEQ
@@ -44,6 +48,18 @@ public final class HideProblem {
     public HideProblem(SequenceDatabase database, List<Pattern> sensitive, GapConstraint gap,
                        Mode mode, int threshold, double epsilon, int maxPatternLength,
                        long frequentThreshold) {
+        this(database, sensitive, gap, mode, threshold, epsilon, maxPatternLength, frequentThreshold,
+                FrequentPatterns.Closure.NECESSARY);
+    }
+
+    /**
+     * @param closure which frequent patterns count as hidden together with the sensitive ones and
+     *     are therefore left out of Lost and SupDist; see {@link #closureOf}
+     */
+    public HideProblem(SequenceDatabase database, List<Pattern> sensitive, GapConstraint gap,
+                       Mode mode, int threshold, double epsilon, int maxPatternLength,
+                       long frequentThreshold, FrequentPatterns.Closure closure) {
+        this.closure = closure;
         this.database = database;
         this.sensitive = List.copyOf(sensitive);
         this.gap = gap;
@@ -98,9 +114,52 @@ public final class HideProblem {
         return mode == Mode.HIDE_DB;
     }
 
+    public FrequentPatterns.Closure closure() {
+        return closure;
+    }
+
+    /** This problem with another closure rule; every other field is kept. */
+    public HideProblem withClosure(FrequentPatterns.Closure other) {
+        return new HideProblem(database, sensitive, gap, mode, threshold, epsilon, maxPatternLength,
+                frequentThreshold, other);
+    }
+
+    /** This problem with other sensitive patterns; every other field, the closure rule included, is kept. */
+    public HideProblem withSensitive(List<Pattern> other) {
+        return new HideProblem(database, other, gap, mode, threshold, epsilon, maxPatternLength,
+                frequentThreshold, closure);
+    }
+
+    /**
+     * S-plus of this problem among {@code frequent}: the sensitive patterns, and the frequent patterns
+     * that hiding them hides as well, which Lost and SupDist leave out and the methods do not try to
+     * protect.
+     *
+     * <p>Under {@link FrequentPatterns.Closure#NECESSARY} the super-patterns enter only when every
+     * solution hides them: under HIDE-DB with a hiding threshold no larger than the sigma of
+     * F_sigma(D), the patterns that contain a sensitive pattern as a block (as a subsequence when g+
+     * is unbounded). Under HIDE-SEQ the limit holds in each sequence, which does not bring the
+     * support of a super-pattern over the database below sigma, so S-plus is the sensitive patterns
+     * alone. {@link FrequentPatterns.Closure#SUBSEQUENCE} is the earlier rule, kept to reproduce
+     * the result files written with it.
+     */
+    public Set<Pattern> closureOf(Collection<Pattern> frequent) {
+        if (closure == FrequentPatterns.Closure.NECESSARY
+                && !(isDatabaseMode() && threshold <= frequentThreshold)) {
+            return new java.util.LinkedHashSet<>(sensitive);
+        }
+        return FrequentPatterns.closure(sensitive, frequent, gap, closure);
+    }
+
+    /** S-plus under the earlier rule, for the side columns that report measures as they were counted before. */
+    public Set<Pattern> subsequenceClosureOf(Collection<Pattern> frequent) {
+        return FrequentPatterns.closure(sensitive, frequent, gap, FrequentPatterns.Closure.SUBSEQUENCE);
+    }
+
     @Override
     public String toString() {
         return mode + "[|D|=" + database.size() + ", |S|=" + sensitive.size()
-                + ", threshold=" + threshold + ", gap=" + gap + ", eps=" + epsilon + "]";
+                + ", threshold=" + threshold + ", gap=" + gap + ", eps=" + epsilon
+                + ", closure=" + closure.label() + "]";
     }
 }

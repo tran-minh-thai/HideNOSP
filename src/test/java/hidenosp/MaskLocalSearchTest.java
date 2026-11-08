@@ -45,7 +45,7 @@ class MaskLocalSearchTest {
     private static Setup setup(HideProblem problem, Metrics.Context context, int sigma) {
         Map<Pattern, Long> frequent = context.frequent();
         Pattern p = problem.sensitive().get(0);
-        Set<Pattern> closure = FrequentPatterns.closure(List.of(p), frequent.keySet());
+        Set<Pattern> closure = problem.closureOf(frequent.keySet());
         List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, 0.5, closure);
         double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
         Map<Pattern, Long> watched = new LinkedHashMap<>();

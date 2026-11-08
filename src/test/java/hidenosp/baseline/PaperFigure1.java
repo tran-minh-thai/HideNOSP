@@ -88,7 +88,8 @@ final class PaperFigure1 {
     }
 
     static Map<Pattern, Long> nonSensitive(Map<Pattern, Long> frequent) {
-        Set<Pattern> closure = FrequentPatterns.closure(SENSITIVE, frequent.keySet());
+        Set<Pattern> closure = FrequentPatterns.closure(SENSITIVE, frequent.keySet(),
+                hidenosp.core.GapConstraint.unbounded(0), FrequentPatterns.Closure.NECESSARY);
         Map<Pattern, Long> out = new LinkedHashMap<>();
         frequent.forEach((p, v) -> {
             if (!closure.contains(p)) {

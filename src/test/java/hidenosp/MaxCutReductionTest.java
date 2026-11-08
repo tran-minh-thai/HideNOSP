@@ -139,7 +139,7 @@ class MaxCutReductionTest {
                                int maxLength, Fault fault) {
         SequenceDatabase db = build(vertices, edges, sigma, fault);
         Map<Pattern, Long> frequent = FrequentPatterns.enumerateWithoutPruning(db, gap, maxLength, sigma);
-        Set<Pattern> closure = FrequentPatterns.closure(List.of(P), frequent.keySet());
+        Set<Pattern> closure = FrequentPatterns.closure(List.of(P), frequent.keySet(), gap, FrequentPatterns.Closure.NECESSARY);
         // Candidate masks: a and b of every sequence that carries P. Masking anything else leaves
         // P untouched, and every occurrence needs its own mask, so a minimum hiding set is a set of
         // |V| candidates.

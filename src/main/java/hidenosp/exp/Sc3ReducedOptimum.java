@@ -67,11 +67,14 @@ public final class Sc3ReducedOptimum implements Scenario {
     public String[] options() {
         return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "maxPatternLength", "epsilon",
                 "setsPerStratum", "sensitiveSize", "seed", "patternKind", "sequencesPerInstance",
-                "maxCandidates", "instancesPerSet", "instanceSeed"};
+                "maxCandidates", "instancesPerSet", "instanceSeed", "closure"};
     }
 
     @Override
     public void run(ResultSink sink, Cli options) {
+        // Which frequent patterns count as hidden with the sensitive ones (FrequentPatterns.Closure); written
+        // into the header even at the default, so a file without the line was written under the subsequence rule.
+        FrequentPatterns.Closure closureRule = FrequentPatterns.Closure.parse(options.get("closure", "necessary"));
         String dataset = options.get("dataset", "");
         if (dataset.isEmpty()) {
             throw new IllegalArgumentException("--dataset is required: the instances are built from real sequences");
@@ -110,7 +113,7 @@ public final class Sc3ReducedOptimum implements Scenario {
             "stratum", "instance", "sequences", "candidates_max", "threshold", "binding_patterns", "needs",
             "components", "component_bound", "conflict_bound", "optimum", "greedy", "refined", "weights",
             "windows", "requested_sequences", "status"};
-        String[] provenance = {"options " + options.all(), sampling.describe()};
+        String[] provenance = {"options " + options.all(), sampling.describe(), "closure " + closureRule.label()};
         int written = 0;
         int solved = 0;
         long[] clock = new long[1];
@@ -132,7 +135,7 @@ public final class Sc3ReducedOptimum implements Scenario {
                         row[6] = "p" + draws.get(d).percentile();
                         row[7] = Integer.toString(r);
                         String status = solve(database, sensitive, gap, maxPatternLength, epsilon, keep,
-                                maxCandidates, random, row, clock);
+                                maxCandidates, random, row, clock, closureRule);
                         row[21] = Integer.toString(keep);
                         row[22] = status;
                         solved += status.isEmpty() ? 1 : 0;
@@ -153,7 +156,7 @@ public final class Sc3ReducedOptimum implements Scenario {
      */
     private static String solve(SequenceDatabase database, List<Pattern> sensitive, GapConstraint gap,
                                 int maxPatternLength, double epsilon, int keep, int maxCandidates,
-                                Random random, String[] row, long[] clock) {
+                                Random random, String[] row, long[] clock, FrequentPatterns.Closure closureRule) {
         List<Integer> order = new ArrayList<>();
         for (int s = 0; s < database.size(); s++) {
             order.add(s);
@@ -206,11 +209,11 @@ public final class Sc3ReducedOptimum implements Scenario {
         long low = Math.max(1, (smallest + 1) / 2);
         int threshold = (int) (low + random.nextInt((int) (smallest - low + 1)));
         HideProblem problem = new HideProblem(reduced, sensitive, gap, HideProblem.Mode.HIDE_DB, threshold,
-                epsilon, maxPatternLength);
+                epsilon, maxPatternLength).withClosure(closureRule);
         while (SequenceSplitExact.states(problem) > SequenceSplitExact.MAX_STATES && threshold < largest) {
             threshold++;
             problem = new HideProblem(reduced, sensitive, gap, HideProblem.Mode.HIDE_DB, threshold, epsilon,
-                    maxPatternLength);
+                    maxPatternLength).withClosure(closureRule);
         }
         row[10] = Integer.toString(threshold);
         StringJoiner needs = new StringJoiner(";");
@@ -238,7 +241,7 @@ public final class Sc3ReducedOptimum implements Scenario {
         clock[0] += System.nanoTime() - start;
 
         Map<Pattern, Long> frequent = Metrics.Context.of(reduced, gap, maxPatternLength, threshold).frequent();
-        Set<Pattern> closure = FrequentPatterns.closure(sensitive, frequent.keySet());
+        Set<Pattern> closure = problem.closureOf(frequent.keySet());
         List<Pattern> band = FrequentPatterns.nearThreshold(frequent, threshold, epsilon, closure);
         String weights = band.isEmpty() ? "uniform" : "side-effect";
         Sanitization greedy = method(band, frequent, threshold, false).run(problem);

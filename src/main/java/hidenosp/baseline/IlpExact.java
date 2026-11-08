@@ -256,7 +256,7 @@ public final class IlpExact implements HidingMethod {
 
     /** Convenience for a scenario that already mined F_sigma(D). */
     public static IlpExact withSideEffects(HideProblem problem, Map<Pattern, Long> frequent) {
-        Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+        Set<Pattern> closure = problem.closureOf(frequent.keySet());
         return new IlpExact().withSideEffectObjective(frequent, closure, problem.frequentThreshold());
     }
 }

@@ -78,11 +78,14 @@ public final class Sc6Scalability implements Scenario {
     @Override
     public String[] options() {
         return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "maxPatternLength", "epsilon",
-                "setsPerStratum", "sensitiveSize", "seed", "patternKind", "methods", "timeLimit", "warmups"};
+                "setsPerStratum", "sensitiveSize", "seed", "patternKind", "methods", "timeLimit", "warmups", "closure"};
     }
 
     @Override
     public void run(ResultSink sink, Cli options) {
+        // Which frequent patterns count as hidden with the sensitive ones (FrequentPatterns.Closure); written
+        // into the header even at the default, so a file without the line was written under the subsequence rule.
+        FrequentPatterns.Closure closureRule = FrequentPatterns.Closure.parse(options.get("closure", "necessary"));
         String dataset = options.get("dataset", "");
         if (dataset.isEmpty()) {
             throw new IllegalArgumentException("--dataset is required");
@@ -118,7 +121,7 @@ public final class Sc6Scalability implements Scenario {
             "cpu_ms_mean", "repetitions", "warmups", "note", "status"};
         String[] provenance = {"options " + options.all(), sampling.describe(),
             "sets: the first set drawn in each stratum (" + firstOfStratum.size() + " of "
-                    + sampling.draws().size() + ")"};
+                    + sampling.draws().size() + ")", "closure " + closureRule.label()};
         Map<Pattern, Long> frequent = full.frequent();
         try (CsvWriter writer = sink.open(ResultSink.Kind.TIMED, id(), header, provenance)) {
             String[] cell = {dataset, gap.toString(), Integer.toString(sigma), patternKind,
@@ -132,7 +135,7 @@ public final class Sc6Scalability implements Scenario {
             for (SensitiveSampling.Draw draw : firstOfStratum.values()) {
                 List<Pattern> sensitive = draw.patterns();
                 HideProblem problem = new HideProblem(database, sensitive, gap, HideProblem.Mode.HIDE_DB, sigma,
-                        epsilon, maxPatternLength);
+                        epsilon, maxPatternLength).withClosure(closureRule);
                 String[] base = {dataset, gap.toString(), Integer.toString(sigma), patternKind,
                     Integer.toString(sensitiveSize), sensitive.toString(), "p" + draw.percentile()};
                 Sanitization cutHide = null;

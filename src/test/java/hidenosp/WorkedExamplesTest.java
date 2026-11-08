@@ -234,7 +234,7 @@ class WorkedExamplesTest {
                 (int) sigma, 0.5, maxLength);
         Metrics.Context context = Metrics.Context.of(database, gap, maxLength, sigma);
         Map<Pattern, Long> frequent = context.frequent();
-        Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+        Set<Pattern> closure = problem.closureOf(frequent.keySet());
         List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, 0.5, closure);
         double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
         Map<Pattern, Long> watched = watched(frequent, closure);
@@ -334,7 +334,7 @@ class WorkedExamplesTest {
 
         Metrics.Context context = Metrics.Context.of(database, gap, maxLength, sigma);
         Map<Pattern, Long> frequent = context.frequent();
-        Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+        Set<Pattern> closure = problem.closureOf(frequent.keySet());
         List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, 0.5, closure);
         double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
 

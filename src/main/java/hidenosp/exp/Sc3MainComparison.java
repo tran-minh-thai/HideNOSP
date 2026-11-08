@@ -66,7 +66,7 @@ public final class Sc3MainComparison implements Scenario {
     public String[] options() {
         return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "maxPatternLength",
                 "epsilon", "setsPerStratum", "sensitiveSize", "seed", "methodSeed", "repeats",
-                "methods", "patternKind", "pareto", "timeLimit"};
+                "methods", "patternKind", "pareto", "timeLimit", "closure"};
     }
 
     @Override
@@ -137,9 +137,14 @@ public final class Sc3MainComparison implements Scenario {
                 "method", "method_seed",
                 "hf", "lost", "lost_rel", "ghost", "dist_r", "sup_dist", "mask_count", "min_masks",
                 "mask_ratio", "certified_pairs", "total_pairs", "lower_bound", "achieved_ratio",
-                "frequent_before", "nonsensitive_before", "frequent_after", "status"};
+                "frequent_before", "nonsensitive_before", "frequent_after",
+                "lost_subseq", "lost_rel_subseq", "sup_dist_subseq", "nonsensitive_before_subseq", "status"};
 
-        String[] provenance = {"options " + options.all(), sampling.describe()};
+        // Which frequent patterns count as hidden with the sensitive ones (FrequentPatterns.Closure). The
+        // line is written even at the default, so a file without it is one written before the rule existed,
+        // under the subsequence rule.
+        FrequentPatterns.Closure closureRule = FrequentPatterns.Closure.parse(options.get("closure", "necessary"));
+        String[] provenance = {"options " + options.all(), sampling.describe(), "closure " + closureRule.label()};
         if (pareto && (sensitiveSize != 1 || gap.gmin() != 0)) {
             throw new IllegalArgumentException("--pareto needs --sensitiveSize=1 and g- = 0, got "
                     + sensitiveSize + " and " + gap);
@@ -147,7 +152,7 @@ public final class Sc3MainComparison implements Scenario {
         String[] frontHeader = {"dataset", "shape", "gap", "sigma", "sensitive_set", "stratum",
                 "vertex", "vertices", "mask_count", "weight", "min_masks", "mask_ratio", "hf",
                 "lost", "lost_rel", "ghost", "sup_dist", "frequent_before", "nonsensitive_before",
-                "frequent_after"};
+                "frequent_after", "lost_subseq", "lost_rel_subseq", "sup_dist_subseq", "nonsensitive_before_subseq"};
         try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header, provenance);
              CsvWriter front = pareto
                      ? sink.open(ResultSink.Kind.INVARIANT, id() + "PARETO", frontHeader, provenance)
@@ -156,7 +161,7 @@ public final class Sc3MainComparison implements Scenario {
                 List<Pattern> sensitive = draws.get(index).patterns();
                 String stratum = "p" + draws.get(index).percentile();
                 HideProblem problem = new HideProblem(database, sensitive, gap,
-                        HideProblem.Mode.HIDE_DB, sigma, epsilon, maxPatternLength);
+                        HideProblem.Mode.HIDE_DB, sigma, epsilon, maxPatternLength).withClosure(closureRule);
                 long minMasks = boundFromP1(database, sensitive, gap, sigma);
                 if (front != null) {
                     CutHide cutHide = (CutHide) create("cut-hide", problem, frequent, sigma, epsilon,
@@ -177,7 +182,9 @@ public final class Sc3MainComparison implements Scenario {
                                 format(row.lostRelative()), Integer.toString(row.ghost()),
                                 format(row.supDist()), Integer.toString(row.frequentBefore()),
                                 Integer.toString(row.nonSensitiveBefore()),
-                                Integer.toString(row.frequentAfter()));
+                                Integer.toString(row.frequentAfter()), Integer.toString(row.lostSubsequence()),
+                                format(row.lostRelativeSubsequence()), format(row.supDistSubsequence()),
+                                Integer.toString(row.nonSensitiveBeforeSubsequence()));
                     }
                     System.out.printf("set %d  Pareto front: %d vertices, |R| from %d to %d%n",
                             index, vertices.size(), vertices.get(0).masks(),
@@ -217,7 +224,7 @@ public final class Sc3MainComparison implements Scenario {
                                     name.trim().toLowerCase(Locale.ROOT), method.name(),
                                     method.isRandomized() ? Long.toString(thisSeed) : "",
                                     "", "", "", "", "", "", "", Long.toString(minMasks),
-                                    "", "", "", "", "", "", "", "", status);
+                                    "", "", "", "", "", "", "", "", "", "", "", "", status);
                             System.out.printf("set %d  %-34s %s after %.1f s (limit %s s)%n", index,
                                     method.name(), status, (System.nanoTime() - started) / 1e9,
                                     timeLimit);
@@ -249,7 +256,10 @@ public final class Sc3MainComparison implements Scenario {
                                                 / sanitization.certifiedLowerBound()),
                                 Integer.toString(row.frequentBefore()),
                                 Integer.toString(row.nonSensitiveBefore()),
-                                Integer.toString(row.frequentAfter()), status);
+                                Integer.toString(row.frequentAfter()),
+                                Integer.toString(row.lostSubsequence()), format(row.lostRelativeSubsequence()),
+                                format(row.supDistSubsequence()), Integer.toString(row.nonSensitiveBeforeSubsequence()),
+                                status);
                         System.out.printf("set %d  %-34s |R| %4d  lost %4d (%.4f)  supDist %.4f  %.1f s%s%n",
                                 index, method.name(), row.maskCount(), row.lost(),
                                 row.lostRelative(), row.supDist(), seconds,
@@ -287,7 +297,7 @@ public final class Sc3MainComparison implements Scenario {
         switch (name.toLowerCase(Locale.ROOT)) {
             case "cut-hide": {
                 Set<Pattern> closure =
-                        FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+                        problem.closureOf(frequent.keySet());
                 List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
                 double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
                 return CutHide.forBand(CutHideConfig.standard(), band, factor);
@@ -300,7 +310,7 @@ public final class Sc3MainComparison implements Scenario {
                     return create("cut-hide", problem, frequent, sigma, epsilon, seed, context);
                 }
                 Set<Pattern> closure =
-                        FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+                        problem.closureOf(frequent.keySet());
                 List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
                 double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
                 return CutHide.forBand(CutHideConfig.standard().withRefineSeveral(), band, factor);
@@ -309,7 +319,7 @@ public final class Sc3MainComparison implements Scenario {
                 // CUT-HIDE without theorem P8: the lambda-sweep curves, and for a repeated-item
                 // pattern the masks of a cut (P3). The ablation that measures what P8 adds.
                 Set<Pattern> closure =
-                        FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+                        problem.closureOf(frequent.keySet());
                 List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
                 double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
                 return CutHide.forBand(CutHideConfig.standard().withCurves(CutHideConfig.Curves.LAMBDA_SWEEP),
@@ -319,7 +329,7 @@ public final class Sc3MainComparison implements Scenario {
                 // Theorem P8 with the surrogate weight first and the masks second: the other end
                 // of the trade-off between |R| and Lost on repeated-item patterns.
                 Set<Pattern> closure =
-                        FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+                        problem.closureOf(frequent.keySet());
                 List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
                 double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
                 return CutHide.forBand(CutHideConfig.standard()
@@ -337,7 +347,7 @@ public final class Sc3MainComparison implements Scenario {
                     return create("cut-hide", problem, frequent, sigma, epsilon, seed, context);
                 }
                 Set<Pattern> closure =
-                        FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+                        problem.closureOf(frequent.keySet());
                 List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
                 double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
                 Map<Pattern, Long> watched = new LinkedHashMap<>();
@@ -416,7 +426,7 @@ public final class Sc3MainComparison implements Scenario {
      * been sanitised.
      */
     private static Map<Pattern, Long> nonSensitiveFrequent(HideProblem problem, Map<Pattern, Long> frequent) {
-        Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+        Set<Pattern> closure = problem.closureOf(frequent.keySet());
         Map<Pattern, Long> out = new LinkedHashMap<>();
         for (Map.Entry<Pattern, Long> e : frequent.entrySet()) {
             if (!closure.contains(e.getKey())) {

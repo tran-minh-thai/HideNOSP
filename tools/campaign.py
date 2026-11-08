@@ -27,6 +27,13 @@ Generation 2 (preregistration section 19), run with --generation=2:
     sc3cert         SC3CERT, certified lower bound on the optimum Lost, cells of sc3-s1 (20.2)
     sc6             SC6 running time, cells of sc3-s1 and sc3-s10, one set per stratum (19.3, 20.1)
 
+Generation 3 (preregistration section 21), run with --generation=3: the invariant batches again with the
+corrected S-plus (option closure=necessary, FrequentPatterns.Closure), because the methods read S-plus as
+well as the measures. Each g3- batch is its batch of generation 1 or 2, cell for cell, with that option
+added, so a file of the earlier rule (no closure option) never counts as one of its cells:
+
+    g3-sc3-s1 .. g3-sc3-s20, g3-sc3-degenerate, g3-sc3-refine, g3-sc3-stop, g3-sc3lost, g3-sc3cert, g3-sc3opt
+
 A cell is done when results-invariant/ holds a complete file of its scenario whose run stamp names
 THIS machine and whose options line names the cell (SC1 writes no options line: scenario, machine and
 seed). Files of other machines never count, so a new machine reruns everything. A cell whose run
@@ -74,11 +81,17 @@ import sc3_commands as sc3  # noqa: E402
 HEAP = "-Xmx8g"
 PARETO_HEAP = "-Xmx32g"          # preregistration section 18; the method batches keep -Xmx8g
 OPT_SIZES = "8,16"
+# Generation 3: the batches whose methods or measures read S-plus, rerun with the corrected rule.
+CLOSURE_BATCHES = ("sc3-s1", "sc3-s5", "sc3-s10", "sc3-s20", "sc3-degenerate", "sc3-refine", "sc3-stop",
+                   "sc3lost", "sc3cert", "sc3opt")
+CLOSURE_OPTION = ("closure", "necessary")
 BATCHES = ("sc1", "sc2", "sc3-s1", "sc3-s5", "sc3-s10", "sc3-s20", "sc3-degenerate", "sc3-refine",
            "sc3lb", "sc3opt", "sc3-pareto", "sc3-stop", "sc3lost", "sc3cert", "sc6")
 # The generation a batch belongs to (preregistration section 19 opened the second).
 GENERATION = {b: "1" for b in BATCHES}
 GENERATION.update({"sc3-stop": "2", "sc3lost": "2", "sc3cert": "2", "sc6": "2"})
+BATCHES = BATCHES + tuple("g3-" + b for b in CLOSURE_BATCHES)
+GENERATION.update({"g3-" + b: "3" for b in CLOSURE_BATCHES})
 # What a later generation must share with the one before: only the measured code may differ.
 CARRIED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor")
 LOCKED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor", "source_tree", "pom")
@@ -110,6 +123,8 @@ def cell(scenario, options, heap=HEAP, extra=()):
 
 
 def batch_cells(root, batch):
+    if batch.startswith("g3-") and batch[3:] in CLOSURE_BATCHES:
+        return [dict(c, options=c["options"] + [CLOSURE_OPTION]) for c in batch_cells(root, batch[3:])]
     if batch == "sc1":
         return [cell("SC1", {"trials": "1500", "seed": "2026"})]
     if batch == "sc2":
@@ -148,7 +163,8 @@ def label(c):
     if c["scenario"] == "SC1":
         return "SC1 trials=%s" % o["trials"]
     parts = [c["scenario"], Path(o["dataset"]).stem, "[%s,%s]" % (o["gmin"], o["gmax"]), "sigma=%s" % o["sigma"]]
-    for key, name in (("profile", ""), ("patternKind", ""), ("sensitiveSize", "S="), ("methods", "")):
+    for key, name in (("profile", ""), ("patternKind", ""), ("sensitiveSize", "S="), ("methods", ""),
+                      ("closure", "closure=")):
         if key in o:
             value = o[key]
             if key == "methods":
@@ -565,6 +581,7 @@ def self_test():
     expected = {"sc1": 1, "sc2": 81, "sc3-s1": 54, "sc3-s5": 34, "sc3-s10": 27, "sc3-s20": 21, "sc3-degenerate": 17,
                 "sc3-refine": 82, "sc3lb": 136, "sc3opt": 82, "sc3-pareto": 54, "sc3-stop": 136, "sc3lost": 54, "sc3cert": 54,
                 "sc6": 81}
+    expected.update({"g3-" + b: expected[b] for b in CLOSURE_BATCHES})
     for b in BATCHES:
         n = len(batch_cells(REPO, b))
         check("plan of %s has %d cells" % (b, expected[b]), n == expected[b], str(n))
@@ -573,6 +590,19 @@ def self_test():
     labels = [label(c) for b in BATCHES for c in batch_cells(REPO, b)]
     check("cell labels are unique across the campaign", len(labels) == len(set(labels)),
           "%d labels, %d distinct" % (len(labels), len(set(labels))))
+    same = all(len(batch_cells(REPO, "g3-" + b)) == len(batch_cells(REPO, b)) and all(
+        g["scenario"] == c["scenario"] and g["heap"] == c["heap"] and g["options"] == c["options"] + [CLOSURE_OPTION]
+        for g, c in zip(batch_cells(REPO, "g3-" + b), batch_cells(REPO, b))) for b in CLOSURE_BATCHES)
+    check("every g3 batch is its base batch, cell for cell, plus closure=necessary", same)
+    check("the g3 batches belong to generation 3 and nothing else does",
+          {b for b in BATCHES if GENERATION[b] == "3"} == {"g3-" + b for b in CLOSURE_BATCHES})
+    base = batch_cells(REPO, "sc3-s1")[0]
+    g3 = batch_cells(REPO, "g3-sc3-s1")[0]
+    old_file = [(Path("old.csv"), "SC3", dict(base["options"]), "2026")]
+    new_file = [(Path("new.csv"), "SC3", dict(g3["options"]), "2026")]
+    other_rule = [(Path("sub.csv"), "SC3", dict(base["options"], closure="subsequence"), "2026")]
+    check("a file of the earlier rule does not count as a g3 cell, and the g3 file does",
+          is_done(g3, old_file) is None and is_done(g3, new_file) is not None and is_done(g3, other_rule) is None)
     official = [(p, s, o, seed) for p, s, o, seed in result_files(REPO, "DESKTOP-L8A6EPO") if s == "SC3"]
     covered = sum(1 for b in ("sc3-s1", "sc3-s5", "sc3-s10", "sc3-s20")
                   for c in batch_cells(REPO, b) if is_done(c, official))

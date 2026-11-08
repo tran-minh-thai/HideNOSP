@@ -49,7 +49,7 @@ class AdaptiveCutHideTest {
     private static Pair compare(HideProblem problem, Metrics.Context context, int sigma, double epsilon) {
         Map<Pattern, Long> frequent = context.frequent();
         Pattern p = problem.sensitive().get(0);
-        Set<Pattern> closure = FrequentPatterns.closure(List.of(p), frequent.keySet());
+        Set<Pattern> closure = problem.closureOf(frequent.keySet());
         List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
         double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
         Map<Pattern, Long> watched = new LinkedHashMap<>();
@@ -108,7 +108,7 @@ class AdaptiveCutHideTest {
             int sigma = (int) Math.max(2, support - 1 - random.nextInt(3));
             HideProblem problem = new HideProblem(db, List.of(p), gap, HideProblem.Mode.HIDE_DB, sigma, 0.5, 3);
             Metrics.Context context = Metrics.Context.of(db, gap, 3, sigma);
-            Set<Pattern> closure = FrequentPatterns.closure(List.of(p), context.frequent().keySet());
+            Set<Pattern> closure = problem.closureOf(context.frequent().keySet());
             if (FrequentPatterns.nearThreshold(context.frequent(), sigma, 0.5, closure).isEmpty()) {
                 continue;  // CUT-HIDE refuses an empty band, and so does iteration 0
             }
@@ -151,7 +151,7 @@ class AdaptiveCutHideTest {
             HideProblem problem = new HideProblem(db, List.of(MaxCutReductionTest.P), gap,
                     HideProblem.Mode.HIDE_DB, 1, 0.5, maxLength);
             Metrics.Context context = Metrics.Context.of(db, gap, maxLength, 1);
-            Set<Pattern> closure = FrequentPatterns.closure(List.of(MaxCutReductionTest.P), context.frequent().keySet());
+            Set<Pattern> closure = problem.closureOf(context.frequent().keySet());
             if (FrequentPatterns.nearThreshold(context.frequent(), 1, 0.5, closure).isEmpty()) {
                 continue;
             }

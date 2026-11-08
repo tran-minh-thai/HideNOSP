@@ -63,11 +63,14 @@ public final class Sc3CertifiedBound implements Scenario {
     public String[] options() {
         return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "maxPatternLength", "epsilon",
                 "setsPerStratum", "seed", "patternKind", "window", "carrying", "without", "drops", "instanceSeed",
-                "timeLimit", "parts"};
+                "timeLimit", "parts", "closure"};
     }
 
     @Override
     public void run(ResultSink sink, Cli options) {
+        // Which frequent patterns count as hidden with the sensitive ones (FrequentPatterns.Closure); written
+        // into the header even at the default, so a file without the line was written under the subsequence rule.
+        FrequentPatterns.Closure closureRule = FrequentPatterns.Closure.parse(options.get("closure", "necessary"));
         String dataset = options.get("dataset", "");
         if (dataset.isEmpty()) {
             throw new IllegalArgumentException("--dataset is required");
@@ -107,7 +110,8 @@ public final class Sc3CertifiedBound implements Scenario {
 
         String[] header = {"dataset", "gap", "sigma", "pattern_kind", "sensitive_set", "stratum", "instance", "drop",
             "instance_sigma", "mask_count", "lost", "bound", "examined", "certified", "status"};
-        String[] provenance = {"options " + options.all(), sampling.describe(), "reference method " + METHOD};
+        String[] provenance = {"options " + options.all(), sampling.describe(), "reference method " + METHOD,
+            "closure " + closureRule.label()};
         try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header, provenance)) {
             List<SensitiveSampling.Draw> draws = sampling.draws();
             for (int d = 0; d < draws.size(); d++) {
@@ -115,7 +119,7 @@ public final class Sc3CertifiedBound implements Scenario {
                 String[] base = {dataset, gap.toString(), Integer.toString(sigma), patternKind, List.of(pattern).toString(),
                     "p" + draws.get(d).percentile()};
                 HideProblem problem = new HideProblem(database, List.of(pattern), gap, HideProblem.Mode.HIDE_DB, sigma,
-                        epsilon, maxPatternLength);
+                        epsilon, maxPatternLength).withClosure(closureRule);
                 if (parts.contains("full")) {
                     writer.writeRow(certify(base, "full", "", sigma, problem, full, epsilon, seed, timeLimit, d));
                 }
@@ -137,7 +141,7 @@ public final class Sc3CertifiedBound implements Scenario {
                         continue;
                     }
                     HideProblem small = new HideProblem(instance, List.of(pattern), gap, HideProblem.Mode.HIDE_DB,
-                            (int) instanceSigma, epsilon, maxPatternLength);
+                            (int) instanceSigma, epsilon, maxPatternLength).withClosure(closureRule);
                     Metrics.Context context = Metrics.Context.of(instance, gap, maxPatternLength, instanceSigma);
                     writer.writeRow(certify(base, "small", Integer.toString(r), (int) instanceSigma, small, context,
                             epsilon, seed, timeLimit, d));
@@ -160,7 +164,7 @@ public final class Sc3CertifiedBound implements Scenario {
     private static String[] certifyRow(String[] base, String kind, String drop, int sigma, HideProblem problem,
                                        Metrics.Context context, double epsilon, long seed, double timeLimit) {
         Map<Pattern, Long> frequent = context.frequent();
-        Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+        Set<Pattern> closure = problem.closureOf(frequent.keySet());
         Map<Pattern, Long> watched = new LinkedHashMap<>();
         frequent.forEach((q, v) -> {
             if (!closure.contains(q)) {

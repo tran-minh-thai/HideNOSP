@@ -100,7 +100,7 @@ class ThreeSequenceExampleTest {
                 HideProblem.Mode.HIDE_DB, SIGMA, EPSILON, MAX_LENGTH);
         Metrics.Context context = Metrics.Context.of(database, gap, MAX_LENGTH, SIGMA);
         Map<Pattern, Long> frequent = context.frequent();
-        Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+        Set<Pattern> closure = problem.closureOf(frequent.keySet());
         List<Pattern> band = FrequentPatterns.nearThreshold(frequent, SIGMA, EPSILON, closure);
         double[] factor = FrequentPatterns.weightFactors(band, frequent, SIGMA);
         Map<Pattern, Long> watched = new LinkedHashMap<>();

@@ -89,7 +89,7 @@ class EmptyBandSelectorTest {
             SequenceDatabase db = database(seed);
             HideProblem problem = problem(db, 4);
             Map<Pattern, Long> frequent = Metrics.Context.of(db, GAP, MAX_LENGTH, 4).frequent();
-            Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+            Set<Pattern> closure = problem.closureOf(frequent.keySet());
             List<Pattern> band = FrequentPatterns.nearThreshold(frequent, 4, 0.5, closure);
             if (band.isEmpty()) {
                 continue;
@@ -111,7 +111,7 @@ class EmptyBandSelectorTest {
             SequenceDatabase db = database(seed);
             HideProblem problem = problem(db, 4);
             Map<Pattern, Long> frequent = Metrics.Context.of(db, GAP, MAX_LENGTH, 4).frequent();
-            Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+            Set<Pattern> closure = problem.closureOf(frequent.keySet());
             List<Pattern> band = FrequentPatterns.nearThreshold(frequent, 4, 0.5, closure);
             if (band.isEmpty()) {
                 continue;
@@ -142,7 +142,7 @@ class EmptyBandSelectorTest {
         SequenceDatabase db = database(5);
         HideProblem problem = problem(db, 4);
         Metrics.Context context = Metrics.Context.of(db, GAP, MAX_LENGTH, 4);
-        Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), context.frequent().keySet());
+        Set<Pattern> closure = problem.closureOf(context.frequent().keySet());
         Map<Pattern, Long> watched = new LinkedHashMap<>();
         for (Map.Entry<Pattern, Long> e : context.frequent().entrySet()) {
             if (!closure.contains(e.getKey())) {

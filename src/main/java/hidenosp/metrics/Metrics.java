@@ -58,7 +58,8 @@ public final class Metrics {
     /** One row of results. Every field is invariant across machines. */
     public record Row(double hidingFailure, int lost, int ghost, double distR, double supDist,
                       int maskCount, int frequentBefore, int frequentAfter,
-                      int nonSensitiveBefore) {
+                      int nonSensitiveBefore, int lostSubsequence, double supDistSubsequence,
+                      int nonSensitiveBeforeSubsequence) {
 
         /**
          * Lost as a share of what could have been lost, which is the quantity H2 is stated on.
@@ -70,6 +71,15 @@ public final class Metrics {
          */
         public double lostRelative() {
             return nonSensitiveBefore == 0 ? 0 : (double) lost / nonSensitiveBefore;
+        }
+
+        /**
+         * Lost relative to |F_sigma(D) \ S-plus| with S-plus under the earlier subsequence rule
+         * ({@link FrequentPatterns.Closure#SUBSEQUENCE}): the quantity every result file written
+         * before 2026-11-08 reports, kept beside the corrected one.
+         */
+        public double lostRelativeSubsequence() {
+            return nonSensitiveBeforeSubsequence == 0 ? 0 : (double) lostSubsequence / nonSensitiveBeforeSubsequence;
         }
     }
 
@@ -169,15 +179,27 @@ public final class Metrics {
             private final HideProblem problem;
             private final Set<Pattern> closure;
             private final List<Pattern> watched = new ArrayList<>();
+            /** The patterns watched under the subsequence rule, a subset of {@code watched}. */
+            private final List<Pattern> watchedSubsequence = new ArrayList<>();
             private final List<Pattern> all;
             private final Map<Integer, Map<Set<Integer>, Map<Pattern, Integer>>> seen = new HashMap<>();
 
             private Session(HideProblem problem) {
                 this.problem = problem;
-                this.closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+                this.closure = problem.closureOf(frequent.keySet());
+                Set<Pattern> subsequence = problem.subsequenceClosureOf(frequent.keySet());
                 for (Pattern q : frequent.keySet()) {
                     if (!closure.contains(q)) {
                         watched.add(q);
+                    }
+                    if (!subsequence.contains(q)) {
+                        watchedSubsequence.add(q);
+                        if (closure.contains(q)) {
+                            // Every rule keeps at most the subsequence closure, so its watched set
+                            // holds this one; a failure here means a rule broke that property.
+                            throw new IllegalStateException(q + " is watched under the subsequence rule but not under "
+                                    + problem.closure().label());
+                        }
                     }
                 }
                 // A sensitive pattern is never in watched, because the closure has removed it, so
@@ -267,21 +289,61 @@ public final class Metrics {
                 double distR = (double) sanitization.maskCount() / database.totalLength();
                 double supDist = supportBefore == 0
                         ? 0 : (double) (supportBefore - supportAfter) / supportBefore;
-                int frequentAfter = frequent.size() - lost - countClosureLost(closure, drop);
-                return new Row(hidingFailure, lost, 0, distR, supDist, sanitization.maskCount(),
-                        frequent.size(), frequentAfter, watched.size());
-            }
-        }
 
-        private int countClosureLost(Set<Pattern> closure, Map<Pattern, Long> drop) {
-            int lost = 0;
-            for (Pattern q : closure) {
-                Long before = frequent.get(q);
-                if (before != null && before - drop.getOrDefault(q, 0L) < sigma) {
-                    lost++;
+                int lostSubsequence = 0;
+                long beforeSubsequence = 0;
+                long afterSubsequence = 0;
+                for (Pattern q : watchedSubsequence) {
+                    long before = frequent.get(q);
+                    long now = before - drop.getOrDefault(q, 0L);
+                    if (now < sigma) {
+                        lostSubsequence++;
+                    }
+                    beforeSubsequence += before;
+                    afterSubsequence += now;
                 }
+                double supDistSubsequence = beforeSubsequence == 0
+                        ? 0 : (double) (beforeSubsequence - afterSubsequence) / beforeSubsequence;
+
+                int frequentAfter = frequent.size() - lost - countClosureLost(sanitization, drop);
+                return new Row(hidingFailure, lost, 0, distR, supDist, sanitization.maskCount(),
+                        frequent.size(), frequentAfter, watched.size(), lostSubsequence, supDistSubsequence,
+                        watchedSubsequence.size());
             }
-            return lost;
+
+            /**
+             * The frequent patterns of S-plus that fall below sigma. The drops of the sensitive
+             * patterns are in {@code drop}; the drops of their frequent super-patterns are not,
+             * because no method steers by them, so they are counted here from the masked sequences.
+             */
+            private int countClosureLost(Sanitization sanitization, Map<Pattern, Long> drop) {
+                int lostHere = 0;
+                for (Pattern q : closure) {
+                    Long before = frequent.get(q);
+                    if (before == null) {
+                        continue;
+                    }
+                    long down;
+                    if (drop.containsKey(q) || problem.sensitive().contains(q)) {
+                        down = drop.getOrDefault(q, 0L);
+                    } else {
+                        down = 0;
+                        for (Map.Entry<Integer, Set<Integer>> e : sanitization.masked().entrySet()) {
+                            if (e.getValue().isEmpty()) {
+                                continue;
+                            }
+                            int was = supportIn(q, e.getKey());
+                            if (was > 0) {
+                                down += was - SupportNO.of(q, database.get(e.getKey()).mask(e.getValue()), gap);
+                            }
+                        }
+                    }
+                    if (before - down < sigma) {
+                        lostHere++;
+                    }
+                }
+                return lostHere;
+            }
         }
 
         private boolean exceedsPerSequenceLimit(HideProblem problem, Pattern pattern,
@@ -306,11 +368,16 @@ public final class Metrics {
             SequenceDatabase after = problem.database().delete(sanitization.masked());
             Map<Pattern, Long> frequentAfter =
                     FrequentPatterns.mine(after, gap, maxLength, sigma);
-            Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequent.keySet());
+            Set<Pattern> closure = problem.closureOf(frequent.keySet());
+            Set<Pattern> subsequence = problem.subsequenceClosureOf(frequent.keySet());
             int lost = 0;
             long supportBefore = 0;
             long supportAfter = 0;
             int watched = 0;
+            int lostSubsequence = 0;
+            long beforeSubsequence = 0;
+            long afterSubsequence = 0;
+            int watchedSubsequence = 0;
             for (Map.Entry<Pattern, Long> e : frequent.entrySet()) {
                 if (closure.contains(e.getKey())) {
                     continue;
@@ -323,6 +390,14 @@ public final class Metrics {
                 }
                 supportBefore += e.getValue();
                 supportAfter += now;
+                if (!subsequence.contains(e.getKey())) {
+                    watchedSubsequence++;
+                    if (now < sigma) {
+                        lostSubsequence++;
+                    }
+                    beforeSubsequence += e.getValue();
+                    afterSubsequence += now;
+                }
             }
             int ghost = 0;
             for (Pattern q : frequentAfter.keySet()) {
@@ -334,8 +409,11 @@ public final class Metrics {
             double distR = (double) sanitization.maskCount() / database.totalLength();
             double supDist = supportBefore == 0
                     ? 0 : (double) (supportBefore - supportAfter) / supportBefore;
+            double supDistSubsequence = beforeSubsequence == 0
+                    ? 0 : (double) (beforeSubsequence - afterSubsequence) / beforeSubsequence;
             return new Row(hidingFailure, lost, ghost, distR, supDist, sanitization.maskCount(),
-                    frequent.size(), frequentAfter.size(), watched);
+                    frequent.size(), frequentAfter.size(), watched, lostSubsequence, supDistSubsequence,
+                    watchedSubsequence);
         }
     }
 
@@ -381,7 +459,7 @@ public final class Metrics {
         long sigma = problem.frequentThreshold();
         Map<Pattern, Long> frequentBefore =
                 FrequentPatterns.mine(problem.database(), gap, problem.maxPatternLength(), sigma);
-        Set<Pattern> closure = FrequentPatterns.closure(problem.sensitive(), frequentBefore.keySet());
+        Set<Pattern> closure = problem.closureOf(frequentBefore.keySet());
         Set<Pattern> lost = new LinkedHashSet<>();
         for (Pattern q : frequentBefore.keySet()) {
             if (!closure.contains(q) && SupportNO.of(q, after, gap) < sigma) {

@@ -569,9 +569,7 @@ public final class CutHide implements HidingMethod {
                     }
                 }
             }
-            HideProblem single = new HideProblem(database, List.of(p), problem.gap(), problem.mode(),
-                    problem.threshold(), problem.epsilon(), problem.maxPatternLength(),
-                    problem.frequentThreshold());
+            HideProblem single = problem.withSensitive(List.of(p));
             Sanitization exact = new Sanitization(database);
             runSinglePattern(single, p, exact);
             if (exact.maskCount() < part.size()) {

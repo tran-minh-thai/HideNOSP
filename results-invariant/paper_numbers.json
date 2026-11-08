@@ -1,9 +1,9 @@
 {
  "_meta": {
   "command": "python tools/paper_numbers.py --machine=ADMIN-PC",
-  "commit": "37144a5aa28f8ac5a435b02129e8d27cd791548a",
+  "commit": "0df87ea782a34f2c6f9c03ba224327e5de673ba1",
   "tree": "clean",
-  "tool_sha256": "a050a991c481",
+  "tool_sha256": "6c07a1ec9e94",
   "python": "3.14.6",
   "machine": "ADMIN-PC",
   "small_machine": "dev"
@@ -842,6 +842,118 @@
     "": 25623
    },
    "source": "SC3 files of ADMIN-PC (every batch)"
+  },
+  "sens.h2.datasets.max": {
+   "value": 3,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2.datasets.min": {
+   "value": 2,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2.min_attainable_p": {
+   "value": 0.125,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2.p.min": {
+   "value": 1.0,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2.p_holm.min": {
+   "value": 1.0,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2.positive.max": {
+   "value": 3,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2.positive.min": {
+   "value": 1,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2r.datasets.max": {
+   "value": 4,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2r.datasets.min": {
+   "value": 4,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2r.min_attainable_p": {
+   "value": 0.0625,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2r.p.min": {
+   "value": 0.3125,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2r.p_holm.min": {
+   "value": 1.0,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2r.positive.max": {
+   "value": 3,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h2r.positive.min": {
+   "value": 2,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4b.datasets.max": {
+   "value": 3,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4b.datasets.min": {
+   "value": 3,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4b.min_attainable_p": {
+   "value": 0.125,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4b.p.min": {
+   "value": 0.875,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4b.p_holm.min": {
+   "value": 1.0,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4b.positive.max": {
+   "value": 3,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4b.positive.min": {
+   "value": 3,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4br.datasets.max": {
+   "value": 4,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4br.datasets.min": {
+   "value": 4,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4br.min_attainable_p": {
+   "value": 0.0625,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4br.p.min": {
+   "value": 0.3125,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4br.p_holm.min": {
+   "value": 0.625,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4br.positive.max": {
+   "value": 3,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
+  },
+  "sens.h4br.positive.min": {
+   "value": 3,
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
   },
   "several.same.n": {
    "value": 1579,
@@ -3245,6 +3357,159 @@
     }
    ],
    "source": "reduced_optimum_table.py --machine=ADMIN-PC"
+  },
+  "sensitivity": {
+   "columns": [
+    "test",
+    "method"
+   ],
+   "rows": [
+    {
+     "test": "H2",
+     "scope": "distinct",
+     "method": "hha",
+     "datasets": 3,
+     "above": 0,
+     "positive": 3,
+     "n": 3,
+     "p": 1.0,
+     "p_holm": 1.0,
+     "min_p": 0.125
+    },
+    {
+     "test": "H2",
+     "scope": "distinct",
+     "method": "dbsh",
+     "datasets": 2,
+     "above": 0,
+     "positive": 1,
+     "n": 2,
+     "p": 1.0,
+     "p_holm": 1.0,
+     "min_p": 0.25
+    },
+    {
+     "test": "H2",
+     "scope": "distinct",
+     "method": "sbsh-r1",
+     "datasets": 3,
+     "above": 0,
+     "positive": 1,
+     "n": 3,
+     "p": 1.0,
+     "p_holm": 1.0,
+     "min_p": 0.125
+    },
+    {
+     "test": "H2",
+     "scope": "distinct",
+     "method": "sbsh-rmax",
+     "datasets": 3,
+     "above": 0,
+     "positive": 1,
+     "n": 3,
+     "p": 1.0,
+     "p_holm": 1.0,
+     "min_p": 0.125
+    },
+    {
+     "test": "H2-R",
+     "scope": "repeated",
+     "method": "hha",
+     "datasets": 4,
+     "above": 3,
+     "positive": 3,
+     "n": 4,
+     "p": 0.3125,
+     "p_holm": 1.0,
+     "min_p": 0.0625
+    },
+    {
+     "test": "H2-R",
+     "scope": "repeated",
+     "method": "dbsh",
+     "datasets": 4,
+     "above": 2,
+     "positive": 3,
+     "n": 4,
+     "p": 0.6875,
+     "p_holm": 1.0,
+     "min_p": 0.0625
+    },
+    {
+     "test": "H2-R",
+     "scope": "repeated",
+     "method": "sbsh-r1",
+     "datasets": 4,
+     "above": 0,
+     "positive": 2,
+     "n": 4,
+     "p": 1.0,
+     "p_holm": 1.0,
+     "min_p": 0.0625
+    },
+    {
+     "test": "H2-R",
+     "scope": "repeated",
+     "method": "sbsh-rmax",
+     "datasets": 4,
+     "above": 0,
+     "positive": 2,
+     "n": 4,
+     "p": 1.0,
+     "p_holm": 1.0,
+     "min_p": 0.0625
+    },
+    {
+     "test": "H4b",
+     "scope": "distinct",
+     "method": "occurrence",
+     "datasets": 3,
+     "above": 1,
+     "positive": 3,
+     "n": 3,
+     "p": 0.875,
+     "p_holm": 1.0,
+     "min_p": 0.125
+    },
+    {
+     "test": "H4b",
+     "scope": "distinct",
+     "method": "hha-stop",
+     "datasets": 3,
+     "above": 1,
+     "positive": 3,
+     "n": 3,
+     "p": 0.875,
+     "p_holm": 1.0,
+     "min_p": 0.125
+    },
+    {
+     "test": "H4b-R",
+     "scope": "repeated",
+     "method": "occurrence",
+     "datasets": 4,
+     "above": 3,
+     "positive": 3,
+     "n": 4,
+     "p": 0.3125,
+     "p_holm": 0.625,
+     "min_p": 0.0625
+    },
+    {
+     "test": "H4b-R",
+     "scope": "repeated",
+     "method": "hha-stop",
+     "datasets": 4,
+     "above": 3,
+     "positive": 3,
+     "n": 4,
+     "p": 0.3125,
+     "p_holm": 0.625,
+     "min_p": 0.0625
+    }
+   ],
+   "source": "dataset_sensitivity.py --machine=ADMIN-PC"
   }
  }
 }

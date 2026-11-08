@@ -30,7 +30,9 @@ Generation 2 (preregistration section 19), run with --generation=2:
 Generation 3 (preregistration section 21), run with --generation=3: the invariant batches again with the
 corrected S-plus (option closure=necessary, FrequentPatterns.Closure), because the methods read S-plus as
 well as the measures. Each g3- batch is its batch of generation 1 or 2, cell for cell, with that option
-added, so a file of the earlier rule (no closure option) never counts as one of its cells:
+added, so a file of the earlier rule (no closure option) never counts as one of its cells. A cell is matched on the
+"# closure" header line of the file (no line: the earlier rule), and a cell of generation 1 or 2 of these scenarios
+runs with --closure=subsequence, so that it reproduces the files of the earlier rule:
 
     g3-sc3-s1 .. g3-sc3-s20, g3-sc3-degenerate, g3-sc3-refine, g3-sc3-stop, g3-sc3lost, g3-sc3cert, g3-sc3opt
 
@@ -85,6 +87,12 @@ OPT_SIZES = "8,16"
 CLOSURE_BATCHES = ("sc3-s1", "sc3-s5", "sc3-s10", "sc3-s20", "sc3-degenerate", "sc3-refine", "sc3-stop",
                    "sc3lost", "sc3cert", "sc3opt")
 CLOSURE_OPTION = ("closure", "necessary")
+# The scenarios whose methods or measures read S-plus. A cell of theirs without a closure option is a cell of the
+# earlier rule: it runs with --closure=subsequence and is done only by a file whose "# closure" header line is
+# subsequence or absent (files written before the rule existed carry no such line).
+CLOSURE_SCENARIOS = ("SC3", "SC3LOST", "SC3CERT", "SC3OPT", "SC6")
+EARLIER_RULE = "subsequence"
+HEADER_RULE = "# closure "
 BATCHES = ("sc1", "sc2", "sc3-s1", "sc3-s5", "sc3-s10", "sc3-s20", "sc3-degenerate", "sc3-refine",
            "sc3lb", "sc3opt", "sc3-pareto", "sc3-stop", "sc3lost", "sc3cert", "sc6")
 # The generation a batch belongs to (preregistration section 19 opened the second).
@@ -185,7 +193,7 @@ def result_files(root, machine):
         for path in sorted(directory.iterdir()):
             if not (path.is_file() and path.name.endswith(".csv")):
                 continue
-            stamp, scenario, options = None, None, None
+            stamp, scenario, options, rule = None, None, None, EARLIER_RULE
             with io.open(path, encoding="utf-8", newline="") as handle:
                 for line in handle:
                     line = line.rstrip("\r\n")
@@ -197,14 +205,26 @@ def result_files(root, machine):
                         scenario = line[len("# scenario "):].strip()
                     elif line.startswith("# options ") and options is None:
                         options = sc3.parse_options(line)
+                    elif line.startswith(HEADER_RULE):
+                        rule = line[len(HEADER_RULE):].strip()
             match = STAMP.match("# run " + stamp) if stamp else None
+            if options is not None:
+                options = dict(options, **{HEADER_RULE: rule})
             if match and match.group(2) == machine:
                 out.append((path, scenario, options, match.group(4)))
     return out
 
 
+def wanted_rule(c):
+    """The closure rule a cell asks for: its closure option, or the earlier rule; None when the scenario has none."""
+    if c["scenario"] not in CLOSURE_SCENARIOS:
+        return None
+    return dict(c["options"]).get("closure", EARLIER_RULE)
+
+
 def is_done(c, files):
     wanted = dict(c["options"])
+    rule = wanted_rule(c)
     for path, scenario, options, seed in files:
         if scenario != c["scenario"]:
             continue
@@ -212,6 +232,8 @@ def is_done(c, files):
             # SC1 writes no options line: scenario, machine and seed name the run.
             if c["scenario"] == "SC1" and seed == wanted.get("seed"):
                 return path
+            continue
+        if rule is not None and options.get(HEADER_RULE, EARLIER_RULE) != rule:
             continue
         same = True
         for key, value in wanted.items():
@@ -388,6 +410,8 @@ def sanitize(text, root):
 def real_runner(root, machine, c):
     command = [sys.executable, str(root / "tools" / "run.py"), "--jvm=" + c["heap"], c["scenario"],
                "--machine=" + machine] + ["--%s=%s" % kv for kv in c["options"]]
+    if wanted_rule(c) == EARLIER_RULE and "closure" not in dict(c["options"]):
+        command.append("--closure=" + EARLIER_RULE)
     process = subprocess.Popen(command, cwd=str(root), stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                text=True, encoding="utf-8", errors="replace")
     lines = []
@@ -599,10 +623,16 @@ def self_test():
     base = batch_cells(REPO, "sc3-s1")[0]
     g3 = batch_cells(REPO, "g3-sc3-s1")[0]
     old_file = [(Path("old.csv"), "SC3", dict(base["options"]), "2026")]
-    new_file = [(Path("new.csv"), "SC3", dict(g3["options"]), "2026")]
-    other_rule = [(Path("sub.csv"), "SC3", dict(base["options"], closure="subsequence"), "2026")]
+    new_file = [(Path("new.csv"), "SC3", dict(g3["options"], **{HEADER_RULE: "necessary"}), "2026")]
+    other_rule = [(Path("sub.csv"), "SC3", dict(base["options"], closure="subsequence", **{HEADER_RULE: "subsequence"}),
+                   "2026")]
     check("a file of the earlier rule does not count as a g3 cell, and the g3 file does",
           is_done(g3, old_file) is None and is_done(g3, new_file) is not None and is_done(g3, other_rule) is None)
+    check("a g3 file does not count as its base cell, and a file of the earlier rule does",
+          is_done(base, new_file) is None and is_done(base, old_file) is not None and is_done(base, other_rule) is not None)
+    check("a base cell of a closure scenario runs with --closure=subsequence, a g3 cell with its own option",
+          wanted_rule(base) == "subsequence" and wanted_rule(g3) == "necessary"
+          and wanted_rule(batch_cells(REPO, "sc2")[0]) is None)
     official = [(p, s, o, seed) for p, s, o, seed in result_files(REPO, "DESKTOP-L8A6EPO") if s == "SC3"]
     covered = sum(1 for b in ("sc3-s1", "sc3-s5", "sc3-s10", "sc3-s20")
                   for c in batch_cells(REPO, b) if is_done(c, official))

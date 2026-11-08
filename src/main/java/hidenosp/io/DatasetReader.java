@@ -13,18 +13,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Reads the public datasets of section 11.2 into single-item event sequences.
+ * Reads the public datasets into single-item event sequences.
  *
  * <p>Two formats cover every candidate. {@link Format#PLAIN} is one sequence per line with the item
  * codes separated by blanks, which is how MSNBC and the discretised trucks trajectories arrive.
  * {@link Format#SPMF} is the sequence format of the SPMF library: blank separated items, -1 closing
  * an itemset and -2 closing the sequence.
  *
- * <p>An SPMF itemset holding more than one item is outside the data model of this paper, which is a
- * sequence of single events (section 8.3). Such an itemset is linearised in ascending item order,
+ * <p>An SPMF itemset holding more than one item is outside the data model, which is a sequence of
+ * single events. Such an itemset is linearised in ascending item order,
  * a deterministic rule, and the share of positions that required it is returned in
- * {@link Loaded#linearisedShare()}. Rule 2.2.10 asks for that share to be declared next to the
- * dataset, so a scenario must print it and not silently drop it.
+ * {@link Loaded#linearisedShare()}. That share is declared next to the dataset, so a scenario
+ * must print it and not silently drop it.
  */
 public final class DatasetReader {
 

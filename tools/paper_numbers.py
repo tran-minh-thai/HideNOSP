@@ -659,6 +659,10 @@ def sensitivity(nums, machine):
         nums.put(k + ".positive.min", min(r["positive"] for r in rs), src)
         nums.put(k + ".positive.max", max(r["positive"] for r in rs), src)
         nums.put(k + ".min_attainable_p", min(r["min_p"] for r in rs), src)
+    # The text states one dataset count for H2-R and H4b-R together.
+    counts = {test: sorted({r["datasets"] for r in rows if r["test"] == test}) for test in ("H2-R", "H4b-R")}
+    if counts["H2-R"] != counts["H4b-R"]:
+        raise Missing("dataset counts differ between H2-R %s and H4b-R %s; the text states one count" % (counts["H2-R"], counts["H4b-R"]))
 
 
 # ---------------------------------------------------------------- SC1, SC2, datasets

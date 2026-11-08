@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Nettree cut index of design doc section 9.1, held for one sequence S.
+ * The Nettree cut index, held for one sequence S.
  *
  * <p>It merges the Nettrees of every sensitive pattern and of every near-threshold pattern of
  * B_eps over a shared position table: {@link #patternsAtPosition(int)} says which Nettrees carry a
@@ -173,7 +173,7 @@ public final class NettreeCutIndex {
     }
 
     /**
-     * Step 4 of section 9.2: w(i) = sum over the patterns Q of B_eps for which i is vital of
+     * Step 4 of CUT-HIDE: w(i) = sum over the patterns Q of B_eps for which i is vital of
      * {@code factor[Q]}, where the caller passes factor[Q] = 1 / (sup_NO(Q, D) - sigma + 1). The
      * weight is an approximation, because the effect of several masks does not add up; that is
      * declared in the paper and measured against the exact integer program at SC3.

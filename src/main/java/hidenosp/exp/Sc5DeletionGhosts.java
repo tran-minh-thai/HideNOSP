@@ -5,12 +5,12 @@ import hidenosp.io.ResultSink;
 import hidenosp.util.Cli;
 
 /**
- * SC5 of section 11.1: how many ghost patterns deletion creates, swept over g+ in {0, 1, 2, 4,
+ * SC5: how many ghost patterns deletion creates, swept over g+ in {0, 1, 2, 4,
  * infinity}.
  *
  * <p>This scenario measures one side only. By P5(a) masking never raises sup_NO, so its Ghost count
  * is identically zero and a table of zeros would be a restatement of the lemma, not a measurement;
- * rule 1.2.2 forbids reporting it as a finding. What is worth measuring is the deletion arm: P5(b)
+ * it is not reported as a finding. What is worth measuring is the deletion arm: P5(b)
  * says deletion stops being monotone exactly when g+ is finite, and the size of the effect on real
  * data is not predicted by the lemma.
  *

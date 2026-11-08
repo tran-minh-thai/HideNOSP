@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * A single-item event sequence S = e_1 ... e_n over the alphabet Sigma (design doc section 2).
+ * A single-item event sequence S = e_1 ... e_n over the alphabet Sigma.
  *
  * <p>Items are encoded as non-negative {@code int} codes; {@link #MASK} is the sentinel for the
  * masked symbol &perp;, which by definition matches no item of Sigma. Positions are 0-based
@@ -45,7 +45,7 @@ public final class EventSequence {
         return events;
     }
 
-    /** che(S, R): replace every position of {@code positions} by &perp; (design doc section 2). */
+    /** che(S, R): replace every position of {@code positions} by &perp;. */
     public EventSequence mask(Collection<Integer> positions) {
         int[] out = events.clone();
         for (int i : positions) {
@@ -62,7 +62,7 @@ public final class EventSequence {
     }
 
     /**
-     * xoa(S, R): drop the positions of {@code positions} (design doc section 2). Only used by the
+     * xoa(S, R): drop the positions of {@code positions}. Only used by the
      * deletion arm of SC5; CUT-HIDE itself never deletes, because P5(b) shows deletion is
      * non-monotone as soon as g+ is finite.
      */

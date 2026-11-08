@@ -7,11 +7,11 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 
 /**
- * Repeated timing under the rules of section 11.6 of the design doc.
+ * Repeated timing.
  *
  * <p>The number of repetitions follows the duration of a single run: at least fifteen below one
  * second, at least ten from one to ten seconds, five up to two minutes and three above, the last
- * with a reason recorded. Wall clock and processor time are both taken, as rule 2.3.5 asks, and the
+ * with a reason recorded. Wall clock and processor time are both taken, and the
  * warm-up runs are discarded, which row 9 of the protocol table has to describe.
  *
  * <p>Every value produced here is machine dependent, so it may only be written into
@@ -30,7 +30,7 @@ public final class Timing {
     private Timing() {
     }
 
-    /** Repetitions for a run of the given duration, per the table of section 11.6. */
+    /** Repetitions for a run of the given duration, per the repetition table above. */
     public static int repetitionsFor(double singleRunMillis) {
         if (singleRunMillis < 1_000) {
             return 15;

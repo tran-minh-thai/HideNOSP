@@ -42,7 +42,7 @@ class Sc3LostOptimumTest {
     private static final List<String> CUT_HIDE = List.of("cut-hide", "cut-hide-rw", "cut-hide-rw-ls");
 
     @Test
-    @DisplayName("Rows join SC3 on the set and obey the implementation checks of section 19.2")
+    @DisplayName("Rows join SC3 on the set and obey the implementation checks of preregistration section 19.2")
     void checks() throws IOException {
         Path data = Files.createTempFile("sc3lost", ".txt");
         Random random = new Random(7);

@@ -31,12 +31,12 @@ CLEAN = {
         "    int soMany = 3;  // so + many\n"
         "}\n"),
     "tools/clean_tool.py": (
-        "\"\"\"Print the cut of a Nettree (doc/THIET_KE_NGHIEN_CUU_AN_MAU_LAP.md, section 9).\n"
+        "\"\"\"Print the cut of a Nettree (doc/THIET_KE_NGHIEN_CUU_AN_MAU_LAP.md; Section 4 of that paper).\n"
         "\"\"\"\n"
         "DIGEST = \"dbcbeedd1bc947829fee398dc346e87545fc52bf0ff314e924669e0f0d9b4f3e\"\n"
         "def main():\n"
         "    print(\"hat and cat, dot and tap: English words, one at a time\")\n"),
-    "config/settings.yaml": "row_1_thresholds:\n  sigma: [100, 200]   # design doc section 11.5\n",
+    "config/settings.yaml": "row_1_thresholds:\n  sigma: [100, 200]   # preregistration section 9\n",
     "config/table.tsv": "key\tlabel\ncut-hide\tCUT-HIDE\n",
     ".gitignore": "target/\n",
     "README.md": "# Notes\nSee config/quyet_dinh_can_chot.md and \u00a711.8 of the design; "
@@ -196,6 +196,39 @@ def test_theorem_number_without_diacritics():
 
 def test_corollary_with_a_design_document_label():
     expect_caught("src/main/java/demo/D.java", "class D { // He qua P%dc\n}\n" % 1, "numbering")
+
+
+def test_rule_number_of_an_internal_document():
+    expect_caught("src/main/java/demo/E.java", "class E { // as rule 2.3.4 asks\n}\n", "reference")
+
+
+def test_design_document_section():
+    expect_caught("tools/h.py", "# the gap constraint (design doc section 2)\n", "reference")
+
+
+def test_bare_section_number():
+    expect_caught("src/main/java/demo/F.java", "/** SC1 of section 11.1: the check. */\nclass F {}\n", "reference")
+
+
+def test_bare_section_number_in_a_printed_string():
+    expect_caught("tools/i.py", "print(\"see section 8.4\")\n", "reference")
+
+
+def test_rule_number_is_caught_in_a_preregistration_reader():
+    expect_caught("tools/preregistered_analysis.py", "# reported under rule 3.4.9\n", "reference")
+
+
+def test_cited_sections_are_clean():
+    root = make_repo({
+        "src/main/java/demo/G.java": "/** (preregistration section 19.1); its Section 4.3; Section 5.1 of that paper. */\nclass G {}\n",
+        "tools/preregistered_analysis.py": "ALPHA = 0.05  # section 2\n",
+        "tools/check_english_test.py": "SAMPLE = 'design doc section 11.5, rule 2.3.4'\n",
+    })
+    try:
+        code, output = run(root)
+        assert code == 0, output
+    finally:
+        shutil.rmtree(root)
 
 
 def test_digest_with_listed_letters_is_not_a_word():

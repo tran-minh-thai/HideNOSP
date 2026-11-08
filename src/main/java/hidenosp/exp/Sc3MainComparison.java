@@ -39,10 +39,10 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * SC3 of section 11.1: the main comparison on HIDE-DB.
+ * SC3: the main comparison on HIDE-DB.
  *
  * <p>One row per instance and per method, where an instance is a triple of dataset, sigma and
- * sensitive set, which is the unit of repetition fixed by section 11.6. The columns are Lost,
+ * sensitive set, which is the unit of repetition. The columns are Lost,
  * Ghost, SupDist, |R| and HF, plus the ratio |R| over |R| star that answers RQ3 and the share of
  * cost pairs certified optimal by the lambda sweep. None of them depends on the machine, so the
  * rows go to {@code results-invariant/}; the timing of the same runs belongs to SC6.
@@ -95,8 +95,8 @@ public final class Sc3MainComparison implements Scenario {
             throw new IllegalArgumentException("--methods=none only makes sense with --pareto=true");
         }
         // Proposition P10: also write the exact convex Pareto front of CUT-HIDE between |R| and the
-        // surrogate weight, one row per vertex, into SC3PARETO_<stamp>.csv (preregistration
-        // section 11, point 6: descriptive). One sensitive pattern and g- = 0 only.
+        // surrogate weight, one row per vertex, into SC3PARETO_<stamp>.csv
+        // (preregistration section 11, point 6: descriptive). One sensitive pattern and g- = 0 only.
         boolean pareto = options.getBoolean("pareto", false);
         // Seconds of wall clock for one method on one sensitive set; 0 means no limit. A method
         // over the limit gets status OT, one out of memory status OOM, and the analysis drops the

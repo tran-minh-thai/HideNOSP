@@ -11,7 +11,7 @@ import hidenosp.index.NettreeCutIndex;
 import java.util.List;
 
 /**
- * Tier (a) of section 11.3: mask the position lying on the most occurrences, repeat. This is the
+ * Tier (a) of the baselines: mask the position lying on the most occurrences, repeat. This is the
  * local rule of [R20] transferred to sup_NO, stripped of everything else, and it is the object of
  * RQ3 and of gap G3.
  *
@@ -30,7 +30,7 @@ import java.util.List;
  * search and stays out of the Java code.
  *
  * <p>With several sensitive patterns the rule is unchanged: the count through a position is summed
- * over the patterns that still need a drop. Section 11.5 sweeps |S| over {1, 5, 10, 20}, so the
+ * over the patterns that still need a drop. The experiments sweep |S| over {1, 5, 10, 20}, so the
  * control has to handle all four.
  */
 public final class OccurrenceCountHeuristic implements HidingMethod {

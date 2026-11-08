@@ -4,7 +4,7 @@ package hidenosp.core;
 import java.util.Arrays;
 
 /**
- * A pattern P = p_1 ... p_m over Sigma (design doc section 2).
+ * A pattern P = p_1 ... p_m over Sigma.
  *
  * <p>{@link #mu()} is mu(P), the largest number of repetitions of one item inside P. The exact
  * results P1, P2 and the vital-node corollary of L5 hold for mu(P) = 1 only; for mu(P) &ge; 2 only

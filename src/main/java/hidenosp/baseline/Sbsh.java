@@ -49,8 +49,8 @@ import java.util.TreeSet;
  *
  * <ul>
  *   <li><em>Exclude-SBSH.</em> The text describes it as removing from D_S the transaction that
- *       supports the largest number of sensitive sequences, while the worked example of its
- *       Section 5.2.3 justifies the choices by the number of non-sensitive frequent sequences each
+ *       supports the largest number of sensitive sequences, while its worked example
+ *       (Section 5.2.3 of that paper) justifies the choices by the number of non-sensitive frequent sequences each
  *       transaction supports. Reproduced by hand, only the second reading yields the published
  *       output of its Figure 1(f): with the first one the third transaction of the example is
  *       sanitised before the eighth and loses its first two events instead of its last three. This

@@ -34,8 +34,8 @@ import java.util.function.Supplier;
  * <p>For one SC3 cell, the sets of SC3 are drawn again and the first set drawn in each stratum is kept.
  * Each method is built by the factory of SC3 and timed by {@link Timing#measure}: one warm-up run, one
  * run that sets the number of repetitions (both discarded), then the repetitions of protocol row 8.
- * F_sigma(D) is a preprocessing of the database shared by every hiding request on it (preregistration
- * section 20.1, which amends 19.3): it is timed once per cell on its own row {@code mine-frequent}, mined
+ * F_sigma(D) is a preprocessing of the database shared by every hiding request on it
+ * (preregistration section 20.1, which amends 19.3): it is timed once per cell on its own row {@code mine-frequent}, mined
  * once outside the clocks and handed to every method, and each timed call builds a fresh evaluator on it,
  * so no cache carries over between repetitions. The column {@code reads_frequent} says which methods need
  * it (the three CUT-HIDE keys and the two SBSH keys); the tables print their time beside the mining time,

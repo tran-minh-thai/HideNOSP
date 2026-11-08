@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.Locale;
 
 /**
- * Where a result file is allowed to go, following the project layout of section 11.8.
+ * Where a result file is allowed to go, following the layout of the repository.
  *
  * <ul>
  *   <li>{@link Kind#INVARIANT} writes to {@code results-invariant/}: Lost, Ghost, |R|, HF and
@@ -53,7 +53,7 @@ public final class ResultSink {
     /**
      * @param probeMode when true, an invariant file is redirected to {@code results-probe/}. An
      *     exploratory run on a development machine, or one on generated data that stands in for a
-     *     dataset, is a probe: section 8.2 keeps such numbers out of the paper, and the only way to
+     *     dataset, is a probe: such numbers stay out of the paper, and the only way to
      *     keep that promise is to keep them out of the results directories in the first place
      */
     public ResultSink(Path root, RunId runId, boolean probeMode) {

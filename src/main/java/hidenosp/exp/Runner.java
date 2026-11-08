@@ -64,7 +64,7 @@ public final class Runner {
     }
 
     /**
-     * Every scenario of the table of section 11.1, keyed by its identifier, and SIGMA, the helper
+     * Every scenario, keyed by its identifier, and SIGMA, the helper
      * that applies the sigma rule of the protocol before any scenario runs on a dataset.
      */
     public static Map<String, Scenario> registry() {

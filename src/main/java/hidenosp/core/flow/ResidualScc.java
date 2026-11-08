@@ -10,7 +10,7 @@ import java.util.Arrays;
  * <p>This is the second half of the vital-node test of lemma L5 (computation note): the node arc
  * in(v) to out(v) belongs to some minimum cut exactly when it is saturated and its two endpoints
  * lie in different components [R29]. One max flow plus one run of this class therefore yields every
- * vital node of a Nettree at once, which is what the index of section 9.1 stores.
+ * vital node of a Nettree at once, which is what the Nettree cut index stores.
  */
 public final class ResidualScc {
 

@@ -26,7 +26,7 @@ import java.util.TreeSet;
  *
  * <p>The upper bound is the best sum of the k smallest true weights over the cuts met during the
  * sweep. When ceiling(LB) = UB the solution is certified optimal, which for integer weights means
- * UB - LB &lt; 1. The certified share is a quantity the paper reports (section 9.2, step 5).
+ * UB - LB &lt; 1. The certified share is a quantity the paper reports (step 5 of CUT-HIDE).
  *
  * <p>Weights arrive already scaled to integers by {@link CostCurve}; lambda therefore moves over
  * integer values in the same unit. Evaluating h at a rounded lambda keeps the bound valid, since

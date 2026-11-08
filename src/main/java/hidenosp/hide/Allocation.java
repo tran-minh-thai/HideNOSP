@@ -4,7 +4,7 @@ package hidenosp.hide;
 import java.util.List;
 
 /**
- * Step 6 of section 9.2, the allocation of remark P7: choose how many masks each sequence takes.
+ * Step 6 of CUT-HIDE, the allocation of remark P7: choose how many masks each sequence takes.
  *
  * <p>For HIDE-DB with one sensitive pattern of distinct items, P1 says the total is fixed at
  * sum(F_S) - sigma + 1 and every split into per-sequence counts k_S reaches it, so the only freedom

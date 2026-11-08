@@ -7,7 +7,7 @@ import hidenosp.core.flow.NettreeFlow;
 import java.util.Arrays;
 
 /**
- * The per-sequence cost curve c_S(k) of section 9.2, step 5: for k = 0 .. F_S, the least total
+ * The per-sequence cost curve c_S(k) of CUT-HIDE, step 5: for k = 0 .. F_S, the least total
  * weight of k masked positions that bring sup_NO down to F_S - k.
  *
  * <ul>

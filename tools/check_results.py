@@ -73,7 +73,7 @@ def check_directory(root, name, expect_timing):
                 stamp = match
                 break
         if stamp is None:
-            problems.append("%s/%s: no run stamp in the header (rule 2.6.8)" % (name, entry))
+            problems.append("%s/%s: no run stamp in the header" % (name, entry))
         timing = [c for c in header if is_timing_column(c)]
         if expect_timing:
             if not timing:

@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 /**
- * The run stamp required by rule 2.6.8: every result file carries one, so a table in the paper can
+ * The run stamp: every result file carries one, so a table in the paper can
  * be traced back to the run that produced it.
  *
  * <p>The timestamp carries milliseconds. Second resolution was not enough: two fast scenarios run

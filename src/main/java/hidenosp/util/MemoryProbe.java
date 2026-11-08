@@ -5,7 +5,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 
 /**
- * Peak memory during a run, for row 6 of the protocol table of section 11.7.
+ * Peak memory during a run, for row 6 of the protocol table.
  *
  * <p>The design doc asks for the largest resident set size of the process together with the
  * sampling period. The Java virtual machine does not expose the resident set directly, so two

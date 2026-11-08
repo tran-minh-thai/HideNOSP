@@ -18,7 +18,7 @@ import java.util.Map;
  * <p>The sequences that support a sensitive pattern are visited in the order the caller fixes (by
  * Cost, descending, for DBSH; Exclude-SBSH puts another key first). A sequence is left intact "only
  * if every sensitive sequence supported by T has been encountered fewer than (psi - 1) times"
- * (Section 5.1). The count M(s) grows with every sequence visited, sanitised or not; that is the
+ * (Section 5.1 of that paper). The count M(s) grows with every sequence visited, sanitised or not; that is the
  * reading that reproduces Figure 1(e), where T8 is sanitised although T5 already was.
  *
  * <p>Under the transfer to sup_NO a sequence brings sup_NO(s, T) units instead of one, so it is left

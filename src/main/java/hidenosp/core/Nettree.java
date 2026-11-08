@@ -8,12 +8,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * NT(P, S) of design doc section 2: a node (j, i) for every pair with e_i = p_j, and an arc
+ * The Nettree NT(P, S): a node (j, i) for every pair with e_i = p_j, and an arc
  * (j, i) to (j+1, i2) whenever g- &le; i2 - i - 1 &le; g+. Every occurrence of P in S is a path
  * from level 1 to level m and conversely (lemma L0).
  *
  * <p>Nodes are numbered 0..nodeCount-1 in (level, position) order. {@link #nodesAtPosition(int)}
- * is the shared position table of section 9.1: masking position i deletes every node in that list,
+ * is the shared position table of the Nettree cut index: masking position i deletes every node in that list,
  * which is what makes masking a node-deletion operation on the merged index (remark O1).
  *
  * <p>Sizes: at most mu(P) * n nodes and (node count) * w arcs, with w = min(n, g+ - g- + 1).

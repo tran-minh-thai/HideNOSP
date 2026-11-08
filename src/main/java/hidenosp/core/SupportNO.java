@@ -5,7 +5,7 @@ import hidenosp.core.flow.NettreeFlow;
 
 /**
  * sup_NO, the non-overlapping support of [R1]: the largest number of pairwise non-overlapping
- * occurrences of P in S, and its sum over the database (design doc section 2).
+ * occurrences of P in S, and its sum over the database.
  *
  * <p>Every value here comes from a max flow on the Nettree (lemma L0). The exhaustive counterpart
  * used to check this implementation lives in {@link BruteForce} and is only called by SC1.
@@ -79,7 +79,7 @@ public final class SupportNO {
 
     /**
      * The largest sup_NO reachable without the gap constraint, used by the effective-constraint
-     * ratio beta of section 8.4.
+     * ratio beta.
      */
     public static long withoutGap(Pattern pattern, SequenceDatabase database) {
         return of(pattern, database, GapConstraint.unbounded(0));

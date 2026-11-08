@@ -5,7 +5,7 @@ import hidenosp.io.ResultSink;
 import hidenosp.util.Cli;
 
 /**
- * SC7 of section 11.1: the design variants of CUT-HIDE, each changing exactly one factor.
+ * SC7: the design variants of CUT-HIDE, each changing exactly one factor.
  *
  * <ul>
  *   <li>uniform weights against the vital-node weights of step 4;</li>
@@ -16,7 +16,7 @@ import hidenosp.util.Cli;
  * </ul>
  *
  * <p>These variants change the output, so the comparison is at equal masking budget and is called a
- * comparison of design variants, not an ablation that keeps the result set fixed (rule 2.3.8). The
+ * comparison of design variants, not an ablation that keeps the result set fixed. The
  * scenario also reports the share of cost pairs certified optimal, which is a quantity of the
  * paper in its own right.
  *

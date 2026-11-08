@@ -5,7 +5,7 @@
 
 Reads the SC3LOST_*.csv files of one machine in DIR (default: results-invariant/ of the repository) and
 prints, per scope and method, the quantities of preregistration section 19.2, on the instances solved
-exactly, with protein_sdb1 reported apart (section 11, point 5):
+exactly, with protein_sdb1 reported apart (preregistration section 11, point 5):
 
   - instances, and the skipped instances by reason (the denominators);
   - the share of instances with |R| = |R|*; among them the share with Lost = OPT_Lost, the sum and the

@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * F_sigma(D), the patterns of length 1 to l_max whose non-overlapping support reaches sigma
- * (design doc section 2). Lost, Ghost and SupDist are all counted over this set, so every scenario
+ * Lost, Ghost and SupDist are all counted over this set, so every scenario
  * that reports a side effect builds it twice, once on D and once on D-prime.
  *
  * <p>The enumeration is level-wise and prunes on the prefix, which is sound: if L and L-prime are

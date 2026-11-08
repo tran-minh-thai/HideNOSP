@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * The reduced SC6 (preregistration section 19.3): the timed code is the code of SC3, which the |R| and
  * Lost of every timed run must show, row by row; F_sigma(D) is timed once per cell on its own row
- * (section 20.1) and its pattern count is that of SC3's mining; and a development run may not write times.
+ * (preregistration section 20.1) and its pattern count is that of SC3's mining; and a development run may not write times.
  */
 class Sc6ScalabilityTest {
 

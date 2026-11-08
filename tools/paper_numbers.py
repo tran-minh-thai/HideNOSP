@@ -180,8 +180,8 @@ def analysis(nums, machine):
                      "--machine=%s" % machine], "preregistered_analysis")
     src = "preregistered_analysis.py --machine=%s" % machine
     i_rep = text.index("Scope: repeated-item sensitive patterns")
-    i_h4 = text.index("Section 19.1, distinct-item scope")
-    i_h4r = text.index("Section 19.1, repeated-item scope")
+    i_h4 = text.index("Section 19.1, distinct-item scope")    # preregistration section 19.1
+    i_h4r = text.index("Section 19.1, repeated-item scope")  # preregistration section 19.1
     dist, rep, h4, h4r = text[:i_rep], text[i_rep:i_h4], text[i_h4:i_h4r], text[i_h4r:]
     nums.put("sc3.n_rows.analysis", int(one(r"After merging the reruns by their median: (\d+) rows", text, src)), src)
     tested = []

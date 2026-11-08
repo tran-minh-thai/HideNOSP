@@ -4,7 +4,7 @@ package hidenosp.index;
 import hidenosp.core.Nettree;
 
 /**
- * Forward and backward path counts on a Nettree (design doc section 9.1).
+ * Forward and backward path counts on a Nettree.
  *
  * <p>{@code forward[v]} counts the paths from level 1 to v and {@code backward[v]} the paths from v
  * to level m, so their product is the number of occurrences through v. One pass over the Nettree

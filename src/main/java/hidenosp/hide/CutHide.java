@@ -20,9 +20,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * CUT-HIDE, the algorithm of section 9 of the design doc, run on the Nettree cut index.
+ * CUT-HIDE, run on the Nettree cut index.
  *
- * <p>The eight steps of section 9.2 map onto this class as follows.
+ * <p>The eight steps of CUT-HIDE map onto this class as follows.
  *
  * <ol>
  *   <li>Build NT(P, S) for every sensitive pattern and every sequence that carries it:
@@ -432,7 +432,7 @@ public final class CutHide implements HidingMethod {
     }
 
     /**
-     * HIDE-DB with several sensitive patterns: step 7 of section 9.2, run over the whole database.
+     * HIDE-DB with several sensitive patterns: step 7 of CUT-HIDE, run over the whole database.
      *
      * <p>The database threshold couples the sequences. A mask placed anywhere counts against the
      * same global gap, so the choice cannot be made one sequence at a time; doing that over-masks,

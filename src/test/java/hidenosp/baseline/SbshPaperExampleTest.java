@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * SBSH against the worked examples of Gkoulalas-Divanis and Loukides, KDD 2011, run on the problem
  * of the paper itself (support = number of sequences, no maximum gap).
  *
- * <p>Figure 1(a) is the database, Figure 1(b) the sensitive sequences, psi = 3, and Section 5.2.3
+ * <p>Figure 1(a) is the database, Figure 1(b) the sensitive sequences, psi = 3, and its Section 5.2.3
  * runs SBSH with r = 3. Figure 1(f) prints the output, and Figure 4(b) lists its distance (6) and
  * its side effects (&lt;a,c&gt;, &lt;a,e&gt;, &lt;d,g&gt;). Example 3 with Figure 2(e) fixes
  * Replace on its own. These are the only published outputs of the procedure, so the class is
@@ -208,7 +208,7 @@ class SbshPaperExampleTest {
     }
 
     /**
-     * "We compute supports as if the marked nodes had been removed" (Section 5.2.2), under the
+     * "We compute supports as if the marked nodes had been removed" (its Section 5.2.2), under the
      * transfer to sup_NO, where one sequence can carry several units of a support. Constructed.
      *
      * <p>D = {T = xxxyyyzzzw, U = xw}, sensitive &lt;x,y&gt;, sigma = 2, non-sensitive &lt;x,z&gt;

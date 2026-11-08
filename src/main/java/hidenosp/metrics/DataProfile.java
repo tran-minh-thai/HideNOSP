@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The bounds that section 8.4 requires to be printed before a configuration is run, and the data
+ * The bounds to be printed before a configuration is run, and the data
  * regime measured by SC2.
  *
  * <ul>
@@ -28,7 +28,7 @@ import java.util.List;
  *       it. Near zero means the gap constraint does no work.</li>
  * </ul>
  *
- * <p>Both ratios select the groups of rule 2.2.4: a configuration with rho_rep near zero or beta
+ * <p>Both ratios select the data groups: a configuration with rho_rep near zero or beta
  * near zero is kept as a declared control, never as evidence for the contribution.
  */
 public record DataProfile(Pattern pattern, long supNO, int supSeq, long supNOWithoutGap,

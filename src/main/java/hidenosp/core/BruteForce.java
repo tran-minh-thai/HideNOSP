@@ -10,7 +10,7 @@ import java.util.List;
  * <p>These methods enumerate occurrences and search over subsets, so they are exponential and must
  * never appear in a timed scenario. They mirror {@code occs} and {@code sup_no_brute} of the probe
  * script {@code nettree_checks.py}, which keeps the Java results comparable with the numbers
- * already recorded in section 8.2 of the design doc.
+ * already recorded by those checks.
  */
 public final class BruteForce {
 
@@ -44,7 +44,7 @@ public final class BruteForce {
 
     /**
      * sup_NO(P, S) by exhaustive search over sets of pairwise non-overlapping occurrences. Two
-     * occurrences overlap when they share a position at the same level (design doc section 2).
+     * occurrences overlap when they share a position at the same level.
      */
     public static int supNO(Pattern pattern, EventSequence sequence, GapConstraint gap) {
         List<int[]> all = occurrences(pattern, sequence, gap);

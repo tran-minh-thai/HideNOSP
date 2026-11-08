@@ -18,10 +18,10 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * Tier (c) of section 11.3: the exact solution on small instances, used to measure how far CUT-HIDE
+ * Tier (c) of the baselines: the exact solution on small instances, used to measure how far CUT-HIDE
  * sits from the optimum once several sensitive patterns make the problem NP-hard (L4a).
  *
- * <p>The model is the integer program of section 2: one binary variable per position, the
+ * <p>The model is the integer program of HIDE-DB: one binary variable per position, the
  * constraint that sup_NO of every sensitive pattern falls below the threshold, and the
  * lexicographic objective, smallest |R| first and fewest lost patterns second. It is solved by
  * branch and bound here rather than by an external solver, which keeps the build self-contained and

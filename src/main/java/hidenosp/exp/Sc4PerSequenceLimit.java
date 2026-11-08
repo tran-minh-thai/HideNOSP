@@ -5,7 +5,7 @@ import hidenosp.io.ResultSink;
 import hidenosp.util.Cli;
 
 /**
- * SC4 of section 11.1: HIDE-SEQ at r in {1, 2, 3, 5}, the per-sequence limit on how often one
+ * SC4: HIDE-SEQ at r in {1, 2, 3, 5}, the per-sequence limit on how often one
  * individual may repeat the sensitive behaviour.
  *
  * <p>It answers RQ5: at the same nominal privacy level, how many masks and how much pattern loss

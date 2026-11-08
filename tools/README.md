@@ -61,7 +61,7 @@ comes from, so that they can be checked by eye.
 
 It checks three things itself and **stops with exit code 1** when one fails: an SC3 file lacks
 columns (it was produced by an old version of the code), the configuration groups recomputed from
-SC2 differ from the table locked in section 3, or the share of excluded instances exceeds 10%.
+SC2 differ from the table locked in section 3 of the preregistration, or the share of excluded instances exceeds 10%.
 
 Next to H2 it prints the table of pairs (|R|, Lost) that section 5 of the preregistration specifies
 for the instances where a baseline uses more masks — descriptive, not tested. H3 groups by

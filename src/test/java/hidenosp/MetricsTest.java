@@ -54,7 +54,7 @@ class MetricsTest {
         return new SequenceDatabase(sequences);
     }
 
-    /** Lost and SupDist straight from the definition of section 2, with no incremental shortcut. */
+    /** Lost and SupDist straight from their definition, with no incremental shortcut. */
     private static int[] byDefinition(HideProblem problem, Sanitization sanitization) {
         SequenceDatabase after = sanitization.sanitized();
         long sigma = problem.frequentThreshold();

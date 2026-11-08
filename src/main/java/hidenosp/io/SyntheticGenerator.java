@@ -12,18 +12,18 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Controlled synthetic data for the regime checks of section 11.2 and for the scaling of SC6.
+ * Controlled synthetic data for the regime checks and for the scaling of SC6.
  *
  * <p>Two regimes matter and both are measured, never assumed. A database is useful for the
  * contribution when the repetition ratio rho_rep is high, that is when the pattern repeats inside
  * single sequences so sup_NO says more than the sequence support; and when beta is high, that is
  * when the gap constraint actually removes occurrences. A database with either ratio near zero is
- * kept as a declared degenerate control (rule 2.2.4).
+ * kept as a declared degenerate control.
  *
  * <p>{@link #generate} plants a target number of occurrences of one pattern per sequence and fills
  * the rest with noise; {@link #measure} then reports what was actually achieved, because planting k
  * occurrences does not guarantee sup_NO = k once the gap constraint and the noise are taken into
- * account. Only the measured value is reported, following rule 2.2.3.
+ * account. Only the measured value is reported.
  *
  * <p>The seed is written into row 3 of the protocol table, and every file records it in its run
  * stamp.
@@ -66,7 +66,7 @@ public final class SyntheticGenerator {
         return new SequenceDatabase(sequences);
     }
 
-    /** The two regime ratios actually achieved, to be printed before the run (section 8.4). */
+    /** The two regime ratios actually achieved, to be printed before the run. */
     public static double[] measure(SequenceDatabase database, Pattern pattern, GapConstraint gap) {
         long supNO = SupportNO.of(pattern, database, gap);
         int supSeq = SupportNO.sequenceSupport(pattern, database, gap);

@@ -5,7 +5,7 @@ import hidenosp.io.ResultSink;
 import hidenosp.util.Cli;
 
 /**
- * SC8 of section 11.1: the original problem of [R20] and [R3], where support counts sequences
+ * SC8: the original problem of [R20] and [R3], where support counts sequences
  * rather than non-overlapping occurrences.
  *
  * <p>Running there matters because it is the only place where the numbers of this paper can be put

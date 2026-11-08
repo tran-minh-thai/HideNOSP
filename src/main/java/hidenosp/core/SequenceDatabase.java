@@ -9,10 +9,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * D = {S_1, ..., S_N}, a database of single-item event sequences (design doc section 2).
+ * D = {S_1, ..., S_N}, a database of single-item event sequences.
  *
  * <p>{@code labels} keeps the original symbol of each item code so tables and figures can be
- * printed with the names of the dataset; the central label table of rule 3.3.12 reads from here.
+ * printed with the names of the dataset; every table of item labels reads from here.
  */
 public final class SequenceDatabase {
 

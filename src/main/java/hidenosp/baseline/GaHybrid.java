@@ -5,7 +5,7 @@ import hidenosp.hide.HideProblem;
 import hidenosp.hide.Sanitization;
 
 /**
- * Tier (c) of section 11.3: a metaheuristic in the style of [R12], and the hybrid that seeds it
+ * Tier (c) of the baselines: a metaheuristic in the style of [R12], and the hybrid that seeds it
  * from the cuts.
  *
  * <p>Two variants are needed and they answer different questions. The plain genetic algorithm,

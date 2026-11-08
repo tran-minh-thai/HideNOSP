@@ -104,7 +104,7 @@ class HhaStopTest {
         assertTrue(compared >= 150, "too few instances could be compared: " + compared);
     }
 
-    /** The definition of section 19.1, with every count taken by the dynamic program of the papers. */
+    /** The definition of preregistration section 19.1, with every count taken by the dynamic program of the papers. */
     private static Map<Integer, Set<Integer>> reference(HideProblem problem) {
         SequenceDatabase database = problem.database();
         List<Pattern> sensitive = problem.sensitive();

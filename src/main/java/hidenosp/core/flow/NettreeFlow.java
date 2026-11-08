@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * The flow state of one Nettree: the node-split network, a max flow on it, and the derived
- * quantities of section 9.1 of the design doc.
+ * quantities that the Nettree cut index stores.
  *
  * <p>Every Nettree node v is split into in(v) = 2v and out(v) = 2v+1 joined by an arc of capacity
  * one; the source feeds every level-1 node and every level-m node feeds the sink, both with
@@ -21,7 +21,7 @@ import java.util.List;
  * <p>{@link #maskPosition(int)} is the incremental update: it cancels the flow path through each
  * node carried by that position and then re-augments, instead of rebuilding the network. When the
  * masked node was vital the flow drops by exactly one and no augmenting path exists, which is the
- * cost model claimed in section 9.1 and measured in SC6.
+ * cost model of the Nettree cut index, measured in SC6.
  */
 public final class NettreeFlow {
 

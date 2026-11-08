@@ -17,8 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The side-effect measures of design doc section 2, shared by every method and every scenario
- * (rule 2.1.7).
+ * The side-effect measures, shared by every method and every scenario.
  *
  * <ul>
  *   <li>HF: the share of sensitive patterns that still meet the threshold after sanitizing. Zero by

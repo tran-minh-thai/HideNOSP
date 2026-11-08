@@ -10,7 +10,7 @@ empty-band selector of CUT-HIDE (preregistration section 19.2).
 
 Reads the SC3CERT_*.csv files of one machine in DIR (default: results-invariant/ of the repository), with the
 SC3_*.csv and SC3LOST_*.csv files of the same machine, and prints per scope, with protein_sdb1 reported apart
-(section 11, point 5):
+(preregistration section 11, point 5):
 
   - full data: the number of sets, the share certified optimal (Lost = B), the share with B > 0, and the
     median of Lost - B; the denominators of rows with a status (OT, OOM, method failed) are printed;

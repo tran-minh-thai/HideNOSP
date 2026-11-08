@@ -2,7 +2,7 @@
 package hidenosp.core;
 
 /**
- * The gap constraint [g-, g+] of design doc section 2, applied to every pattern, sensitive or not.
+ * The gap constraint [g-, g+], applied to every pattern, sensitive or not.
  *
  * <p>An occurrence L = &lt;l_1, ..., l_m&gt; must satisfy g- &le; l_{j+1} - l_j - 1 &le; g+ for every
  * j. {@link #UNBOUNDED_MAX} encodes g+ = infinity; P5(b) says deletion is monotone exactly in that
@@ -56,7 +56,7 @@ public final class GapConstraint {
         return (int) Math.min(hi, n - 1);
     }
 
-    /** w = min(n, g+ - g- + 1), the gap width used in every complexity statement (section 8.1). */
+    /** w = min(n, g+ - g- + 1), the gap width used in every complexity statement. */
     public int width(int n) {
         long w = (long) gmax - gmin + 1;
         return (int) Math.min(w, n);

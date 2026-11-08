@@ -10,7 +10,7 @@ Every file git lists -- tracked, or untracked and not ignored -- falls in exactl
 
 A file of no class is an error, so that a new kind of file cannot pass unseen.
 
-The text of every code file, and its path, are checked against three rules.
+The text of every code file, and its path, are checked against four rules.
 
   diacritic  a Vietnamese letter with a diacritic: a Latin vowel carrying one of the Vietnamese
              marks, or d with stroke. The text is NFC-normalised first, so that a letter typed as a
@@ -31,6 +31,12 @@ The text of every code file, and its path, are checked against three rules.
   numbering  a section sign followed by a digit, or the Vietnamese name of a theorem, lemma,
              proposition, corollary or definition followed by a number, with or without
              diacritics: the numbering of the paper and of the design documents stays out of code.
+  reference  the number of a section or a rule of a document that is not in the repository:
+             "rule" followed by a dotted number, "design doc section", or "section" followed by
+             a number on a line that does not say which document it cites. A line that names the
+             preregistration, or says "its section" or "of that paper" for a cited paper, is
+             clean. In PREREGISTRATION_READERS, whose module text declares that every section
+             number is one of config/preregistration.md, only the first two forms are checked.
 
 Not detected, by design: a free-text phrase in which every word is also an English word or a
 two-letter syllable; the English words Theorem, Lemma and so on followed by a number, which in this
@@ -73,6 +79,7 @@ CODE_NAMES = (".gitignore", ".gitattributes")
 DOCUMENTATION_SUFFIXES = (".md",)
 DOCUMENTATION_NAMES = ("license",)       # compared with the lower-cased file name
 SELF = ("tools/check_english.py", "tools/check_english_test.py")
+PREREGISTRATION_READERS = ("tools/preregistered_analysis.py", "tools/preregistered_analysis_test.py")
 
 # The marks that turn a Latin vowel into a Vietnamese letter: grave, acute, tilde, hook above, dot
 # below, circumflex, breve and horn.
@@ -86,6 +93,10 @@ IDENTIFIER = re.compile(r"[A-Za-z0-9_-]+")
 TOKEN = re.compile(r"[A-Z]+(?![a-z])|[A-Z]?[a-z]+")
 LOWER_RUN = re.compile(r"[a-z]{6,}")
 DOC_PATH = re.compile(r"[A-Za-z0-9_./-]*[A-Za-z0-9_-]+\.md\b")
+RULE_NUMBER = re.compile(r"(?<![A-Za-z])[Rr]ule \d+\.\d+(?:\.\d+)*")
+DESIGN_SECTION = re.compile(r"(?i)\bdesign(?: doc(?:ument)?)? section\b")
+SECTION_NUMBER = re.compile(r"(?<![A-Za-z])[Ss]ection \d+(?:\.\d+)*")
+CITED_DOCUMENT = re.compile(r"(?i)preregistration|\bits section\b|\bof that paper\b")
 HEX_LETTERS = frozenset("abcdefABCDEF")
 ENGLISH_FUNCTION_WORDS = frozenset(
     "and of is are was were for with from this which when what where has have been would should "
@@ -206,6 +217,15 @@ def numbering_violations(line):
     return found
 
 
+def reference_violations(line, bare_sections=True):
+    """("reference", text) for every section or rule number of a document outside the repository."""
+    found = [("reference", m.group(0)) for m in RULE_NUMBER.finditer(line)]
+    found += [("reference", m.group(0)) for m in DESIGN_SECTION.finditer(line)]
+    if bare_sections and not CITED_DOCUMENT.search(line):
+        found += [("reference", m.group(0)) for m in SECTION_NUMBER.finditer(line)]
+    return found
+
+
 def word_violations(line):
     """("word", identifier) for every identifier of the line that is Vietnamese."""
     found = []
@@ -264,6 +284,10 @@ def check_file(root, path, rules=None):
     if rules is None:
         word_rule = path not in SELF
         rules = [diacritic_violations, numbering_violations] + ([word_violations] if word_rule else [])
+        if path in PREREGISTRATION_READERS:
+            rules.append(lambda line: reference_violations(line, bare_sections=False))
+        elif path not in SELF:
+            rules.append(reference_violations)
     violations = [(0, kind, what, "(the path)") for rule in rules for kind, what in rule(path)]
     text, problem = read_text(root, path)
     if problem == "missing":
@@ -322,6 +346,10 @@ def check(root, show_list):
     if exempt:
         print("Word rule not applied to: %s (they hold the word lists and the test samples)"
               % ", ".join(exempt))
+        print("Reference rule not applied to: %s (they hold the test samples)" % ", ".join(exempt))
+    readers = [p for p in PREREGISTRATION_READERS if p in classes["code"]]
+    if readers:
+        print("Bare section numbers read as preregistration sections in: %s" % ", ".join(readers))
     if missing:
         print("Listed by git but missing from the working tree, not checked: %s"
               % ", ".join(missing))

@@ -21,11 +21,11 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * SC2 of section 11.1: the data regime of each dataset and each sigma, printed before any
+ * SC2: the data regime of each dataset and each sigma, printed before any
  * comparison is run.
  *
  * <p>For every candidate sensitive pattern it reports rho_rep, beta, the least number of masks
- * |R| star from P1 and its share of the database, exactly the four quantities section 8.4 requires
+ * |R| star from P1 and its share of the database, exactly the four quantities to be known
  * in advance. Their purpose is to classify a configuration before the results arrive: a
  * configuration whose rho_rep is near zero has sup_NO collapse to the sequence support and belongs
  * to the degenerate control group, and the same holds for beta and the gap constraint. Deciding
@@ -159,7 +159,7 @@ public final class Sc2DataRegime implements Scenario {
     }
 
     /**
-     * Sensitive-set candidates drawn across the quantiles of sup_NO, as section 11.5 prescribes,
+     * Sensitive-set candidates drawn across the quantiles of sup_NO,
      * rather than from the top of the list only.
      */
     private List<Pattern> sampleByQuantile(Map<Pattern, Long> frequent, int count, long seed) {

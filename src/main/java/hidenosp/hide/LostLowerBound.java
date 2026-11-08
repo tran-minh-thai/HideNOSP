@@ -14,8 +14,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The certified lower bound on the optimum Lost of proposition P12 of the design (preregistration
- * section 20.2), for one sensitive pattern P under HIDE-DB with g- = 0, where theorem P8 is exact.
+ * The certified lower bound on the optimum Lost of proposition P12 of the design
+ * (preregistration section 20.2), for one sensitive pattern P under HIDE-DB with g- = 0, where theorem P8 is exact.
  *
  * <p>For a non-sensitive frequent pattern Q, take in every sequence S carrying P one minimum cut C_S of
  * the Nettree of Q in S and weigh each position by the number of nodes of C_S on it. By lemma L8(a) the

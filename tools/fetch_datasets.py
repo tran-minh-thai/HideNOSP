@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Download the public datasets of section 11.2 into datasets/ and record their provenance.
+"""Download the public datasets into datasets/ and record their provenance.
 
 Raw data never enters git (see .gitignore); what enters git is datasets/provenance.tsv, which
 records for every file its URL, the day it was fetched, its SHA-256 and its size. That record is
@@ -22,7 +22,7 @@ import urllib.request
 
 BASE = "https://www.philippe-fournier-viger.com/spmf/publicdatasets"
 
-# name -> (url, local file, format for io.DatasetReader, expected bytes or None, role in section 11.2)
+# name -> (url, local file, format for io.DatasetReader, expected bytes or None, role of the dataset)
 CATALOGUE = {
     "msnbc": (BASE + "/MSNBC.txt", "msnbc.txt", "SPMF", 2314085,
               "main group: clicks by page category, much repetition; [R3] uses the MSN copy"),

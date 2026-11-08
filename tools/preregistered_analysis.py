@@ -799,7 +799,7 @@ def run_h3(rows, groups, write, descriptive=False):
             float(np.median(v)) <= LOCKED.R_NEAR_1 for v in family_main):
         write("")
         write("  Every tier (b) baseline gives r near 1 on the main group: H3 is NOT rejected. Section 2")
-        write("  anticipated this case -- it is a negative result to be reported under rule 3.4.9,")
+        write("  anticipated this case -- it is a negative result to be reported,")
         write("  not an implementation error.")
 
 

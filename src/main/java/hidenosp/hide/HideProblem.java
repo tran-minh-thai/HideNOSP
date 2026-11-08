@@ -8,7 +8,7 @@ import hidenosp.core.SequenceDatabase;
 import java.util.List;
 
 /**
- * An instance of HIDE-DB or HIDE-SEQ (design doc section 2).
+ * An instance of HIDE-DB or HIDE-SEQ.
  *
  * <p>HIDE-DB asks for a set of positions R with sup_NO(P, che(D, R)) &lt; sigma for every sensitive
  * P; HIDE-SEQ asks for sup_NO(P, S) &lt; r in every single sequence, which bounds how often one

@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * SC1 of section 11.1: the implementation check. Every quantity here is a check, not a finding, and
+ * SC1: the implementation check. Every quantity here is a check, not a finding, and
  * the only acceptable result is zero mismatches.
  *
  * <p>It repeats on small random instances what the probe script {@code nettree_checks.py}
@@ -33,7 +33,7 @@ import java.util.Random;
  *   <li>P1: for a distinct-item pattern the least number of masks reaching t is F - t;</li>
  *   <li>L5: a node is vital exactly when masking its position lowers sup_NO;</li>
  *   <li>the incremental update after a mask agrees with a rebuild from scratch, which is the
- *       correctness claim behind the index of section 9.1;</li>
+ *       correctness claim behind the Nettree cut index;</li>
  *   <li>P5: masking never raises sup_NO, while deletion can once the maximum gap is finite;</li>
  *   <li>the level-wise mining of F_sigma with prefix pruning agrees with plain enumeration.</li>
  * </ul>

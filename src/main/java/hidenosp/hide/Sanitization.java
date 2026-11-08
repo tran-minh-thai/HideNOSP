@@ -13,7 +13,7 @@ import java.util.TreeSet;
  * the bookkeeping every scenario reports next to it.
  *
  * <p>R is stored as a map from sequence index to masked positions, because both objectives of
- * section 2 and the per-sequence constraint of HIDE-SEQ are read per sequence.
+ * HIDE-DB and the per-sequence constraint of HIDE-SEQ are read per sequence.
  */
 public final class Sanitization {
 

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Tier (a) of section 11.3, the two-way control of [R20]: the sequence may be picked by heuristic
+ * Tier (a) of the baselines, the two-way control of [R20]: the sequence may be picked by heuristic
  * (H) or at random (R), and so may the position, giving HH, HR, RH and RR. It shows that the
  * problem does not solve itself, and it separates the contribution of the sequence choice from the
  * contribution of the position choice.
@@ -27,7 +27,7 @@ import java.util.Random;
  * the control weak for the wrong reason.
  *
  * <p>With several sensitive patterns the rules are unchanged; only the candidate set becomes the
- * union over the patterns that still need a drop. Section 11.5 sweeps |S| over {1, 5, 10, 20}, so
+ * union over the patterns that still need a drop. The experiments sweep |S| over {1, 5, 10, 20}, so
  * a control that only handled one pattern would leave three quarters of that sweep without a
  * tier (a) row.
  *

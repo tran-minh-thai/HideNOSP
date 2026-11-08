@@ -2,8 +2,8 @@
 package hidenosp.hide;
 
 /**
- * The design variants of CUT-HIDE compared at SC7. Each field changes exactly one factor, as
- * required by rule 2.3.7; the scenario prints the whole record into the run header so a result file
+ * The design variants of CUT-HIDE compared at SC7. Each field changes exactly one factor;
+ * the scenario prints the whole record into the run header so a result file
  * always names the variant that produced it.
  */
 public record CutHideConfig(Weighting weighting, boolean refineLambda, AllocationRule allocation,
@@ -32,7 +32,7 @@ public record CutHideConfig(Weighting weighting, boolean refineLambda, Allocatio
         FRONTIER_DP,
         /**
          * Theorem P8 with the order of the two costs reversed: least surrogate weight, then fewest
-         * masks. It departs from the lexicographic objective of section 2 on purpose, to measure
+         * masks. It departs from the lexicographic objective of HIDE-DB on purpose, to measure
          * the other end of the trade-off; with g- &gt; 0 it falls back to the lambda sweep.
          */
         FRONTIER_DP_WEIGHT_FIRST,

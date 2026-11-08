@@ -12,7 +12,7 @@ time and the median ratio of rebuilding after each mask to the incremental updat
 
 Checks that stop the run with exit status 1, each with the number of rows it covered:
   - a row with a status (OT, OOM, method failed, does not hide) is printed and counted, not hidden;
-  - each file holds exactly one mine-frequent row, before every method row (section 20.1);
+  - each file holds exactly one mine-frequent row, before every method row (preregistration section 20.1);
   - |R| and Lost of a timed run equal the SC3 row of the same set and method on the same machine
     (results-invariant/SC3_*.csv): the timed code is the code of the comparison tables.
 """

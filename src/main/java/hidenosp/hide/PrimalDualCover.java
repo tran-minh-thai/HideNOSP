@@ -39,7 +39,7 @@ import java.util.TreeSet;
  *
  * <h2>Why primal-dual rather than solving the program and rounding</h2>
  *
- * <p>Section 7 of the design doc describes this contribution as linear-programming rounding. The
+ * <p>The design describes this contribution as linear-programming rounding. The
  * classical primal-dual method reaches the same factor, and three things make it the better fit:
  *
  * <ul>
@@ -54,7 +54,7 @@ import java.util.TreeSet;
  *       spirit as the certified bracket of the lambda sweep.</li>
  * </ul>
  *
- * <p>The wording of section 7 should be adjusted to match, since primal-dual is a different
+ * <p>That wording should be adjusted to match, since primal-dual is a different
  * technique from rounding even though the analysis goes through the same linear program.
  *
  * <h2>The argument</h2>
@@ -81,7 +81,7 @@ public final class PrimalDualCover implements HidingMethod {
     private Bound lastBound;
 
     /**
-     * Minimises the number of masks, which is objective (1) of section 2.
+     * Minimises the number of masks, which is the first objective of HIDE-DB.
      *
      * <p>A weighted variant would be a small change — the argument never looks at the costs beyond
      * comparing slacks, so any non-negative cost keeps the factor — but it needs B_eps wired in the

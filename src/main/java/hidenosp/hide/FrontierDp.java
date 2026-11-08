@@ -51,7 +51,7 @@ public final class FrontierDp {
 
     /** The order in which the two costs of a masking set are minimised. */
     public enum Objective {
-        /** The objective of HIDE-DB and HIDE-SEQ (design section 2): fewest masks, then weight. */
+        /** The objective of HIDE-DB and HIDE-SEQ: fewest masks, then weight. */
         MASKS_THEN_WEIGHT,
         /** Least position weight (the side-effect surrogate) first, then fewest masks. */
         WEIGHT_THEN_MASKS

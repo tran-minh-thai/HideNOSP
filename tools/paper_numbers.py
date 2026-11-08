@@ -230,6 +230,11 @@ def analysis(nums, machine):
         nums.put("h2r.%s.p_holm" % b, r["p_holm"], src)
         nums.put("h2r.%s.median" % b, r["median_diff"], src)
         nums.put("h2r.%s.rb" % b, r["rank_biserial"], src)
+    # The contributions and the conclusion say the baselines use more masks on MOST instances.
+    for test in ("H2", "H2-R"):
+        rs = sel(test)
+        if any(2 * r["base_more"] <= r["instances"] for r in rs):
+            raise Missing("%s: a baseline uses more masks on at most half of the instances; the text says most" % test)
     nums.put("h2r.ours_more.hha", sel("H2-R", "hha")[0]["ours_more"], src)
     others = {r["ours_more"] for r in sel("H2-R") if r["method"] != "hha"}
     if len(others) != 1:
@@ -402,6 +407,8 @@ def lost_optimum(nums, small_machine):
         if rs[OURS]["at_R"] != rs[OURS]["n"]:
             raise Missing("SC3LOST %s: CUT-HIDE not at |R|* on every instance" % scope)
         nums.put("lostopt.ours.opt.%s" % scope, rs[OURS]["opt"], src)
+        if 2 * rs[OURS]["opt"] <= rs[OURS]["n"]:
+            raise Missing("SC3LOST %s: CUT-HIDE optimal on at most half of the instances; the text says most" % scope)
         nums.put("lostopt.chaw.opt.%s" % scope, rs["cut-hide-rw"]["opt"], src)
         nums.put("lostopt.chfw.opt.%s" % scope, rs["cut-hide"]["opt"], src)
         if not rs["cut-hide"]["opt"] < rs["cut-hide-rw"]["opt"] < rs[OURS]["opt"]:

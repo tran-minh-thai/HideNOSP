@@ -746,19 +746,22 @@ def platform(nums, machine):
     heaps = Counter()
     for tree, scenario in ((TIMED, "SC6"), (INV, "SC3")):
         for path in files(tree, scenario, machine):
+            # The Pareto-front batch (methods=none) runs apart, without a time limit and with its own heap.
+            kind = "SC3PARETO" if scenario == "SC3" and options_of(path).get("methods") == "none" else scenario
             with open(path, encoding="utf-8") as f:
                 for line in f:
                     if line.startswith("# heap_max_bytes "):
-                        heaps[(scenario, int(line.split()[2]))] += 1
+                        heaps[(kind, int(line.split()[2]))] += 1
                         break
     sc6 = {h for (s, h) in heaps if s == "SC6"}
     if len(sc6) != 1:
         raise Missing("SC6 files run with %d heap sizes: %s" % (len(sc6), heaps))
     nums.put("platform.heap_bytes.sc6", sc6.pop(), "heap_max_bytes of the SC6 files")
-    sc3 = {h for (s, h) in heaps if s == "SC3"}
-    if len(sc3) != 1:
-        raise Missing("SC3 files run with %d heap sizes: %s; the text states one" % (len(sc3), heaps))
-    nums.put("platform.heap_bytes.sc3", sc3.pop(), "heap_max_bytes of the SC3 files")
+    for kind, key in (("SC3", "platform.heap_bytes.sc3"), ("SC3PARETO", "platform.heap_bytes.pareto")):
+        sizes = {h for (s, h) in heaps if s == kind}
+        if len(sizes) != 1:
+            raise Missing("%s files run with %d heap sizes: %s; the text states one" % (kind, len(sizes), heaps))
+        nums.put(key, sizes.pop(), "heap_max_bytes of the %s files" % kind)
 
 
 # ---------------------------------------------------------------- main

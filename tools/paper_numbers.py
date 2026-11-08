@@ -624,6 +624,42 @@ def levels(nums, machine):
                 nums.put("%s.rivals.%s.max" % (tag, name), max(o[field] for o in others), src)
 
 
+# ---------------------------------------------------------------- dataset-level sensitivity analysis
+
+def parse_sensitivity(text, src):
+    rows = []
+    for test, scope, body in re.findall(r"^== (H2|H2-R|H4b|H4b-R) \((distinct|repeated) scope\), dataset as the unit[^\n]*\n   method[^\n]*\n((?:   .*\n)+)",
+                                        text, re.M):
+        for line in body.splitlines():
+            f = line.split("|")[0].split()
+            if len(f) != 8:
+                raise Missing("dataset_sensitivity: line not understood: %r" % line)
+            rows.append({"test": test, "scope": scope, "method": f[0], "datasets": int(f[1]), "above": int(f[2]),
+                         "positive": int(f[3]), "n": int(f[4]), "p": float(f[5]), "p_holm": float(f[6]),
+                         "min_p": float(f[7])})
+    have = sorted({r["test"] for r in rows})
+    if have != ["H2", "H2-R", "H4b", "H4b-R"]:
+        raise Missing("dataset_sensitivity: tests %s" % have)
+    return rows
+
+
+def sensitivity(nums, machine):
+    text = run_tool(["dataset_sensitivity.py", "--machine=%s" % machine], "dataset_sensitivity")
+    src = "dataset_sensitivity.py --machine=%s" % machine
+    rows = parse_sensitivity(text, src)
+    nums.table("sensitivity", ["test", "method"], rows, src)
+    for test in ("H2", "H2-R", "H4b", "H4b-R"):
+        rs = [r for r in rows if r["test"] == test]
+        k = "sens.%s" % test.lower().replace("-", "")
+        nums.put(k + ".datasets.min", min(r["datasets"] for r in rs), src)
+        nums.put(k + ".datasets.max", max(r["datasets"] for r in rs), src)
+        nums.put(k + ".p_holm.min", min(r["p_holm"] for r in rs), src)
+        nums.put(k + ".p.min", min(r["p"] for r in rs), src)
+        nums.put(k + ".positive.min", min(r["positive"] for r in rs), src)
+        nums.put(k + ".positive.max", max(r["positive"] for r in rs), src)
+        nums.put(k + ".min_attainable_p", min(r["min_p"] for r in rs), src)
+
+
 # ---------------------------------------------------------------- SC1, SC2, datasets
 
 def sc1(nums, machine):
@@ -805,6 +841,7 @@ def build(machine, small_machine):
     nums = Numbers()
     for step in (lambda: sc1(nums, machine), lambda: sc2(nums), lambda: datasets_table(nums),
                  lambda: sc3_rows(nums, machine), lambda: analysis(nums, machine), lambda: levels(nums, machine),
+                 lambda: sensitivity(nums, machine),
                  lambda: lower_bounds(nums, machine),
                  lambda: reduced_optimum(nums, machine), lambda: pareto(nums, machine),
                  lambda: lost_optimum(nums, small_machine), lambda: certified(nums, machine, small_machine),

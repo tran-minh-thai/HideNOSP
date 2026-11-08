@@ -204,6 +204,12 @@ def analysis(nums, machine):
                         "ratio_verdict": " ".join(f[5:])})
     h3 = parse_h3(dist[dist.index("\nH3  r = "):], "distinct", "H3") + parse_h3(
         rep[rep.index("r = |R|/|R|* per method and group"):], "repeated", "H3-R")
+    # The conclusion states that at equal masking count CUT-HIDE never loses more patterns than any
+    # baseline or rival, in either scope: every '>' cell of the pairs tables must be 0.
+    worse = [(r["test"], r["method"], r["same_gt"]) for r in tested if r["same_gt"] != 0]
+    if worse:
+        raise Missing("pairs tables: CUT-HIDE loses more patterns at equal |R| in %s; the text says never" % worse)
+    nums.put("pairs.same_gt.total", 0, src)
     nums.table("h2", ["test", "scope", "method"], tested, src)
     nums.table("h3", ["scope", "group", "method"], h3, src)
 
@@ -333,6 +339,7 @@ def reduced_optimum(nums, machine):
         nums.put("opt.bound_share.%s.min" % scope, min(r["bound_share"] for r in rs), src)
         nums.put("opt.bound_share.%s.max" % scope, max(r["bound_share"] for r in rs), src)
         nums.put("opt.refined_vs_opt.%s.max" % scope, max(r["refined_opt"] for r in rs), src)
+        nums.put("opt.greedy_vs_opt.%s.max" % scope, max(r["greedy_opt"] for r in rs), src)
         for size in (5, 10, 20):
             s8 = next(r for r in rs if r["size"] == size and r["sequences"] == 8)
             s16 = next(r for r in rs if r["size"] == size and r["sequences"] == 16)

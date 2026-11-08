@@ -24,6 +24,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+import closure_rule  # noqa: E402
 from lower_bound_table import machine_of, one_machine
 
 REPO = Path(__file__).resolve().parent.parent
@@ -68,10 +69,16 @@ def main(argv):
     if not files:
         print("no SC6 file in %s" % (root / "results").as_posix(), file=sys.stderr)
         return 1
+    # The timed methods read S-plus: the SC3 rows a timed run must equal are those of the rule the SC6 files name.
+    rules = {closure_rule.closure_of(p) for p in files}
+    if len(rules) != 1:
+        print("the SC6 files of %s mix closure rules %s; time one rule per table" % (machine, sorted(rules)), file=sys.stderr)
+        return 1
+    rule = rules.pop()
+    sc3_files = [p for p in sorted(glob.glob(str(root / "results-invariant" / "SC3_*.csv"))) if machine_of(p) == machine]
+    sc3_files, sc3_found = closure_rule.keep(sc3_files, rule)
     sc3 = {}
-    for path in sorted(glob.glob(str(root / "results-invariant" / "SC3_*.csv"))):
-        if machine_of(path) != machine:
-            continue
+    for path in sc3_files:
         for r in rows_of(path):
             sc3[(dataset_name(r["dataset"]), r["gap"], r["sigma"], r["sensitive_set"], r["method_key"])] = r
 
@@ -112,7 +119,8 @@ def main(argv):
                                                                                same["mask_count"], same["lost"]))
             times[group][key].append(float(r["wall_ms_mean"]))
 
-    lines = ["SC6 files of %s: %d (one mining row checked in %d); timed rows %d, joined with an SC3 row %d"
+    lines = ["SC6 files of %s under closure rule %s; %s" % (machine, rule, closure_rule.describe("SC3", rule, sc3_files, sc3_found)),
+             "SC6 files of %s: %d (one mining row checked in %d); timed rows %d, joined with an SC3 row %d"
              % (machine, len(files), covered["files checked for one mining row"], covered["timed rows"],
                 covered["joined with SC3"]),
              "Methods marked * read F_sigma(D); its mining time is the separate line, not part of their times."]

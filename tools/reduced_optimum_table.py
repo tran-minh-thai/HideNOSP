@@ -26,6 +26,7 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+import closure_rule  # noqa: E402
 from lower_bound_table import one_machine
 
 REPO = Path(__file__).resolve().parent.parent
@@ -44,6 +45,7 @@ def main(argv):
     out_path = None
     machine = ""
     directories = []
+    rule = "necessary"
     i = 0
     while i < len(argv):
         if argv[i] == "--out" and i + 1 < len(argv):
@@ -51,6 +53,9 @@ def main(argv):
             i += 2
         elif argv[i].startswith("--machine="):
             machine = argv[i].split("=", 1)[1]
+            i += 1
+        elif argv[i].startswith("--closure=") and argv[i].split("=", 1)[1] in closure_rule.RULES:
+            rule = argv[i].split("=", 1)[1]
             i += 1
         else:
             directories.append(Path(argv[i]))
@@ -63,6 +68,7 @@ def main(argv):
         files += sorted(glob.glob(str(d / "**" / "SC3OPT_*.csv"), recursive=True))
         partial += sorted(glob.glob(str(d / "**" / "SC3OPT_*.csv.partial"), recursive=True))
     files, machine, refusal = one_machine(files, machine, "--machine", "SC3OPT")
+    files, found = closure_rule.keep(files, rule)
     if refusal:
         print(refusal, file=sys.stderr)
         return 1
@@ -81,7 +87,7 @@ def main(argv):
                 problems.append("order broken on %s %s: %d %d %d %d" % (r["dataset"], r["sensitive_set"], b, o, f, gr))
             groups[g].append(r)
 
-    lines = ["SC3OPT files: %d, machine %s" % (len(files), machine)]
+    lines = [closure_rule.describe("SC3OPT", rule, files, found), "SC3OPT files: %d, machine %s" % (len(files), machine)]
     for g in sorted(set(groups) | set(skipped)):
         rows = groups[g]
         lines.append("")

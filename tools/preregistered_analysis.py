@@ -53,6 +53,9 @@ from collections import defaultdict
 import numpy as np
 from scipy import stats
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import closure_rule  # noqa: E402
+
 
 class LOCKED:
     """Constants locked in config/preregistration.md. Changing one here changes the locked plan."""
@@ -128,6 +131,14 @@ def collect_files(directory, prefix):
         if name.startswith(prefix) and name.endswith(".csv"):
             out.append(os.path.join(directory, name))
     return out
+
+
+# The closure rule of S-plus of a result file (tools/closure_rule.py): every analysis reads the files of one rule.
+CLOSURE_RULES = closure_rule.RULES
+EARLIER_RULE = closure_rule.EARLIER_RULE
+closure_of = closure_rule.closure_of
+keep_closure = closure_rule.keep
+describe_closure = closure_rule.describe
 
 
 def machine_of(path):
@@ -338,6 +349,15 @@ def merge_reruns(rows, write):
     for key, many in sorted(runs.items()):
         first = many[0]
         seeds = sorted({r.get("method_seed", "") for r in many} - {""})
+        if not seeds and len(many) > 1:
+            # A deterministic method has one row per instance. Two rows that differ come from two files of the same
+            # cell written under different code or rules; their median would be a number nobody measured.
+            differing = [c for c in ("lost", "lost_rel", "sup_dist", "mask_count", "hf", "nonsensitive_before", "status")
+                         if len({r.get(c, "") for r in many}) > 1]
+            if differing:
+                raise ValueError("%d rows of the deterministic method %s on %s %s sigma %s set %s differ in %s: two files "
+                                 "of one cell under different code or closure rules; read one rule (--closure)"
+                                 % (len(many), key[5], key[0], key[2], key[3], key[4], ", ".join(differing)))
         if seeds and len(seeds) != len(LOCKED.SEEDS):
             missing_seeds.append((key[5], len(seeds)))
         merged = {
@@ -865,6 +885,9 @@ def main(argv=None):
     parser.add_argument("--machine", default="",
                         help="read only the SC3 files whose run stamp names this machine; required "
                              "when the files come from more than one machine")
+    parser.add_argument("--closure", default="necessary", choices=CLOSURE_RULES,
+                        help="read only the SC3 files written under this closure rule of S-plus (default necessary, "
+                             "the corrected rule; subsequence reads the files written before 2026-11-08)")
     parser.add_argument("--write-groups", action="store_true",
                         help="write config/configuration_groups.tsv from the SC2 pool files and "
                              "stop; done once, from the official runs, and committed")
@@ -916,7 +939,16 @@ def main(argv=None):
             file=sys.stderr)
         return 1
 
+    sc3_files, found = keep_closure(sc3_files, args.closure)
+    if not sc3_files:
+        print("no SC3 file under closure rule %s%s; rules found: %s" % (
+            args.closure, " of machine " + args.machine if args.machine else "",
+            ", ".join("%s (%d)" % (r, n) for r, n in sorted(found.items()))), file=sys.stderr)
+        return 1
+
     write("Statistical analysis of H2 and H3 under config/preregistration.md")
+    write("")
+    write(describe_closure("SC3", args.closure, sc3_files, found))
     write("")
     write("SC3 files read:")
     # Check the columns file by file, not on the first row of the whole batch: a directory can mix

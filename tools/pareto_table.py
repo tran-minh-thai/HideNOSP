@@ -29,6 +29,7 @@ import statistics
 import sys
 
 import sc3_commands
+import closure_rule  # noqa: E402
 from lower_bound_table import header_options, machine_of, one_machine
 
 
@@ -64,7 +65,8 @@ def method_file(front, machine):
         path = os.path.join(directory, name)
         if not (name.startswith("SC3_") and name.endswith(".csv")) or path == own:
             continue
-        if machine_of(path) == machine and same_cell(front_options, header_options(path)):
+        if (machine_of(path) == machine and closure_rule.closure_of(path) == closure_rule.closure_of(front)
+                and same_cell(front_options, header_options(path))):
             candidates.append(path)
     if not candidates:
         return None, "no method-batch SC3 file of the same cell on %s" % machine

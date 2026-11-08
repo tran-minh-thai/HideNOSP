@@ -38,6 +38,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+import closure_rule  # noqa: E402
 import sc3_commands
 
 REPO = Path(__file__).resolve().parent.parent
@@ -115,6 +116,7 @@ def main(argv):
     out_path = None
     directory = REPO / "results-invariant"
     machine = bound_machine = ""
+    rule = "necessary"
     i = 0
     while i < len(argv):
         a = argv[i]
@@ -128,9 +130,11 @@ def main(argv):
             bound_machine = a.split("=", 1)[1]
         elif a.startswith("--dir="):
             directory = Path(a.split("=", 1)[1])
+        elif a.startswith("--closure=") and a.split("=", 1)[1] in closure_rule.RULES:
+            rule = a.split("=", 1)[1]
         else:
             print("usage: python tools/lower_bound_table.py [--machine=NAME] [--bound-machine=NAME] "
-                  "[--dir=DIR] [--out FILE]", file=sys.stderr)
+                  "[--dir=DIR] [--closure=necessary|subsequence] [--out FILE]", file=sys.stderr)
             return 1
         i += 1
     if not directory.is_dir():
@@ -145,6 +149,11 @@ def main(argv):
         sorted(glob.glob(str(directory / "SC3_*.csv"))), machine, "--machine", "SC3")
     if refusal:
         print(refusal, file=sys.stderr)
+        return 1
+    # SC3LB reads no S-plus; the SC3 rows it is compared with do.
+    sc3_files, found = closure_rule.keep(sc3_files, rule)
+    if not sc3_files:
+        print("no SC3 file under closure rule %s; rules found: %s" % (rule, found), file=sys.stderr)
         return 1
     bounds = {}
     for path in bound_files:
@@ -177,7 +186,7 @@ def main(argv):
             key = (dataset_name(r["dataset"]), r["gap"], r["sigma"], o["patternKind"], o["sensitiveSize"], r["sensitive_set"])
             results[key][r["method_key"]] = r   # two |S| = 1 cells have two identical files
 
-    lines = []
+    lines = [closure_rule.describe("SC3", rule, sc3_files, found)]
 
     def write(text=""):
         lines.append(text)

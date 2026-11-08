@@ -28,6 +28,7 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+import closure_rule  # noqa: E402
 from lower_bound_table import one_machine
 
 REPO = Path(__file__).resolve().parent.parent
@@ -50,6 +51,7 @@ def main(argv):
     out_path = None
     directory = REPO / "results-invariant"
     machine = ""
+    rule = "necessary"
     i = 0
     while i < len(argv):
         a = argv[i]
@@ -61,8 +63,11 @@ def main(argv):
             machine = a.split("=", 1)[1]
         elif a.startswith("--dir="):
             directory = Path(a.split("=", 1)[1])
+        elif a.startswith("--closure=") and a.split("=", 1)[1] in closure_rule.RULES:
+            rule = a.split("=", 1)[1]
         else:
-            print("usage: python tools/lost_optimum_table.py [--machine=NAME] [--dir=DIR] [--out FILE]", file=sys.stderr)
+            print("usage: python tools/lost_optimum_table.py [--machine=NAME] [--dir=DIR] [--closure=necessary|subsequence] "
+                  "[--out FILE]", file=sys.stderr)
             return 1
         i += 1
     files, machine, refusal = one_machine(sorted(glob.glob(str(directory / "SC3LOST_*.csv"))), machine,
@@ -70,8 +75,10 @@ def main(argv):
     if refusal:
         print(refusal, file=sys.stderr)
         return 1
+    files, found = closure_rule.keep(files, rule)
     if not files:
-        print("no SC3LOST file in %s" % directory.as_posix(), file=sys.stderr)
+        print("no SC3LOST file under closure rule %s in %s; rules found: %s" % (rule, directory.as_posix(), found),
+              file=sys.stderr)
         return 1
     problems = []
     checked = Counter()
@@ -113,7 +120,8 @@ def main(argv):
                 empty_band[(part, scope)][r["method_key"]] += 1
                 empty_band[(part, scope)][r["method_key"] + " opt"] += int(masks == least and lost == opt)
 
-    lines = ["SC3LOST files of %s: %d" % (machine, len(files)),
+    lines = [closure_rule.describe("SC3LOST", rule, files, found),
+             "SC3LOST files of %s: %d" % (machine, len(files)),
              "checks covered: %d method rows, %d of them at |R|*, %d CUT-HIDE rows"
              % (checked["rows"], checked["rows at |R|*"], checked["cut-hide rows"])]
     for part, scope in sorted(set(groups) | set(skipped)):

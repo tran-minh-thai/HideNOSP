@@ -50,10 +50,13 @@ def box(values):
     return {"lo": lo, "q1": q1, "median": med, "q3": q3, "hi": hi, "max": float(v.max()), "beyond": beyond}
 
 
-def load(directory, machine, write):
+def load(directory, machine, write, closure="necessary"):
     files = [p for p in pa.collect_files(directory, "SC3_") if pa.machine_of(p) == machine]
+    files, found = pa.keep_closure(files, closure)
     if not files:
-        raise SystemExit("no SC3 file of machine %s in %s" % (machine, directory))
+        raise SystemExit("no SC3 file of machine %s under closure rule %s in %s; rules found: %s"
+                         % (machine, closure, directory, found))
+    write(pa.describe_closure("SC3", closure, files, found))
     raw, used = [], 0
     for path in files:
         comments, rows = pa.read_csv(path)
@@ -151,6 +154,8 @@ def main(argv=None):
     parser.add_argument("--sc3", default=os.path.join(ROOT, "results-invariant"))
     parser.add_argument("--sc2", default=os.path.join(ROOT, "results-invariant"))
     parser.add_argument("--machine", default="ADMIN-PC")
+    parser.add_argument("--closure", default="necessary", choices=pa.CLOSURE_RULES,
+                        help="closure rule of S-plus of the files read (default necessary)")
     parser.add_argument("--out", default="")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args(argv)
@@ -159,7 +164,7 @@ def main(argv=None):
     lines = []
     write = lines.append
     write("Levels of Lost_rel, distortion rate and SupDist at each method's own solution, DESCRIPTIVE")
-    rows = load(args.sc3, args.machine, write)
+    rows = load(args.sc3, args.machine, write, args.closure)
     out, failed = blocks(rows, pa.collect_files(args.sc2, "SC2_"), write)
     report(out, write)
     text = "\n".join(lines) + "\n"

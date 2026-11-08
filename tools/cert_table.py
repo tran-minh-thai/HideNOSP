@@ -35,6 +35,7 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+import closure_rule  # noqa: E402
 from lower_bound_table import machine_of, one_machine
 
 REPO = Path(__file__).resolve().parent.parent
@@ -51,8 +52,9 @@ def dataset_name(path_text):
     return Path(path_text.replace("\\", "/")).stem
 
 
-def same_machine(directory, pattern, machine):
-    return [p for p in sorted(glob.glob(str(directory / pattern))) if machine_of(p) == machine]
+def same_machine(directory, pattern, machine, rule):
+    """The files of this machine written under this closure rule of S-plus."""
+    return closure_rule.keep([p for p in sorted(glob.glob(str(directory / pattern))) if machine_of(p) == machine], rule)[0]
 
 
 def share(k, n):
@@ -68,6 +70,7 @@ def main(argv):
     directory = REPO / "results-invariant"
     machine = ""
     small_machine = ""
+    rule = "necessary"
     i = 0
     while i < len(argv):
         a = argv[i]
@@ -81,9 +84,11 @@ def main(argv):
             small_machine = a.split("=", 1)[1]
         elif a.startswith("--dir="):
             directory = Path(a.split("=", 1)[1])
+        elif a.startswith("--closure=") and a.split("=", 1)[1] in closure_rule.RULES:
+            rule = a.split("=", 1)[1]
         else:
-            print("usage: python tools/cert_table.py [--machine=NAME] [--small-machine=NAME] [--dir=DIR] [--out FILE]",
-                  file=sys.stderr)
+            print("usage: python tools/cert_table.py [--machine=NAME] [--small-machine=NAME] [--dir=DIR] "
+                  "[--closure=necessary|subsequence] [--out FILE]", file=sys.stderr)
             return 1
         i += 1
     files, machine, refusal = one_machine(sorted(glob.glob(str(directory / "SC3CERT_*.csv"))), machine,
@@ -91,26 +96,28 @@ def main(argv):
     if refusal:
         print(refusal, file=sys.stderr)
         return 1
+    files, found = closure_rule.keep(files, rule)
     if not files:
-        print("no SC3CERT file in %s" % directory.as_posix(), file=sys.stderr)
+        print("no SC3CERT file under closure rule %s in %s; rules found: %s" % (rule, directory.as_posix(), found),
+              file=sys.stderr)
         return 1
     small_files = []
     if small_machine:
         if not machine or machine == small_machine:
             print("--small-machine needs --machine naming another machine", file=sys.stderr)
             return 1
-        small_files = same_machine(directory, "SC3CERT_*.csv", small_machine)
+        small_files = same_machine(directory, "SC3CERT_*.csv", small_machine, rule)
         if not small_files:
             print("no SC3CERT file of machine %s in %s" % (small_machine, directory.as_posix()), file=sys.stderr)
             return 1
 
     sc3 = {}
-    for path in same_machine(directory, "SC3_*.csv", machine):
+    for path in same_machine(directory, "SC3_*.csv", machine, rule):
         for r in rows_of(path):
             if r["method_key"] == METHOD:
                 sc3[(dataset_name(r["dataset"]), r["gap"], r["sigma"], r["sensitive_set"])] = r
     lost_rows = {}
-    for path in same_machine(directory, "SC3LOST_*.csv", small_machine or machine):
+    for path in same_machine(directory, "SC3LOST_*.csv", small_machine or machine, rule):
         for r in rows_of(path):
             if r["method_key"] in (METHOD, ""):
                 # A row without a method key is an instance SC3LOST skipped (its status says why).
@@ -177,7 +184,8 @@ def main(argv):
                 problems.append("%s: bound %d above the exact optimum %d" % (where, bound, opt))
             small[group].append((opt, bound))
 
-    lines = ["SC3CERT files of %s: %d" % (machine, len(files))
+    lines = [closure_rule.describe("SC3CERT", rule, files, found),
+             "SC3CERT files of %s: %d" % (machine, len(files))
              + ("; small instances from the %d SC3CERT files of %s (%d small rows of %s skipped), joined with "
                 "the SC3LOST files of %s" % (len(small_files), small_machine,
                                              checked["small rows of %s skipped" % machine], machine, small_machine)

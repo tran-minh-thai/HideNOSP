@@ -114,8 +114,12 @@ def header_of(raw):
 
 
 def cell_key(name, head):
-    """Scenario and options without machine=: the identity of a cell across machines."""
-    return name.split("_", 1)[0], re.sub(r"machine=[^,}]*,?\s*", "", head.get("options", ""))
+    """Scenario, options without machine= and closure=, and the closure rule of the header (tools/closure_rule.py):
+    the identity of a cell across machines. A file without a "# closure" line was written under the earlier rule, so a
+    cell rerun with closure=subsequence pairs with it, and no file of one rule pairs with a file of the other."""
+    options = re.sub(r"(machine|closure)=[^,}]*,?\s*", "", head.get("options", ""))
+    options = re.sub(r",\s*\}", "}", options)
+    return name.split("_", 1)[0], options, head.get("closure", "subsequence")
 
 
 def git_files(ref, directory, repo=REPO):

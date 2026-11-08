@@ -152,5 +152,13 @@ with tempfile.TemporaryDirectory() as tmp:
     code, out = pair(text("OLD", OPT, ROWS), text("NEW", OPT, ROWS, header=HEADER + ",x"))
     check("pair: changed header", code == 1 and "headers differ" in out, out.splitlines()[-1])
 
+# --- the closure rule of S-plus is part of the identity of a cell ---------------------------------
+earlier = ci.cell_key("SC3_x.csv", {"options": "{machine=A, dataset=d, sigma=1}"})
+rerun = ci.cell_key("SC3_y.csv", {"options": "{machine=B, dataset=d, sigma=1, closure=subsequence}", "closure": "subsequence"})
+corrected = ci.cell_key("SC3_z.csv", {"options": "{machine=B, dataset=d, sigma=1, closure=necessary}", "closure": "necessary"})
+check("closure: a file without the line pairs with a rerun under the earlier rule", earlier == rerun, str((earlier, rerun)))
+check("closure: no file of one rule pairs with a file of the other", earlier != corrected and rerun != corrected,
+      str((earlier, corrected)))
+
 print("%d checks, %d failed" % (checks, len(failures)))
 sys.exit(1 if failures else 0)

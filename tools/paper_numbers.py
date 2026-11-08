@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: MIT
 """Every number the manuscript quotes, read back from the result files, written as data.
 
-    python tools/paper_numbers.py [--machine=ADMIN-PC] [--small-machine=dev] [--out-dir=DIR]
+    python tools/paper_numbers.py [--machine=ADMIN-PC] [--closure=necessary|subsequence] [--small-machine=NAME]
+                                  [--out-dir=DIR]
     python tools/paper_numbers.py --self-test
 
 The tool runs the table tools of this repository on the result files (preregistered_analysis,
@@ -19,6 +20,13 @@ Each value carries the tool and the output line it was read from. Values are not
 Exit code 1 when any expected line is missing, when a pattern matches more or fewer times than
 expected, when a table tool exits non-zero, or when two sources of the same quantity disagree.
 It never falls back to a default value.
+
+--closure names the rule of S-plus of the files read (tools/closure_rule.py; default necessary, the corrected rule of
+preregistration section 21). Every table tool that reads S-plus is run with it, and the files read here are the files
+of that rule. Under the corrected rule the small instances come from the same machine (--small-machine defaults to
+--machine) and the Pareto fronts, run under the earlier rule only and not quoted by the manuscript, are not read.
+The running times (SC6) were measured under the earlier rule; timing_table checks them against the SC3 files of the
+rule the SC6 files name.
 """
 import csv
 import glob
@@ -34,6 +42,13 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import closure_rule  # noqa: E402
+RULE = ["necessary"]   # set by main from --closure
+# The table tools that read files of a closure rule, and the scenarios whose files carry one.
+CLOSURE_TOOLS = ("preregistered_analysis.py", "lower_bound_table.py", "reduced_optimum_table.py", "lost_optimum_table.py",
+                 "cert_table.py", "levels_table.py", "dataset_sensitivity.py")
+CLOSURE_SCENARIOS = ("SC3", "SC3LOST", "SC3CERT", "SC3OPT", "SC3PARETO")
 TOOLS = ROOT / "tools"
 INV = ROOT / "results-invariant"
 TIMED = ROOT / "results"
@@ -77,6 +92,8 @@ def run_tool(args, what):
     with tempfile.TemporaryDirectory() as tmp:
         out = Path(tmp) / "out.txt"
         cmd = [sys.executable, str(TOOLS / args[0])] + args[1:]
+        if args[0] in CLOSURE_TOOLS:
+            cmd.append("--closure=" + RULE[0])
         if "--stdout" in cmd:
             cmd.remove("--stdout")
             p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True,
@@ -121,7 +138,9 @@ def machine_of(path):
 
 
 def files(tree, scenario, machine):
-    return [p for p in sorted(glob.glob(str(tree / ("%s_*.csv" % scenario)))) if machine_of(p) == machine]
+    """The files of this scenario and machine; for a scenario that reads S-plus, only those of the rule in RULE."""
+    out = [p for p in sorted(glob.glob(str(tree / ("%s_*.csv" % scenario)))) if machine_of(p) == machine]
+    return closure_rule.keep(out, RULE[0])[0] if scenario in CLOSURE_SCENARIOS else out
 
 
 def dataset_name(path_text):
@@ -471,8 +490,10 @@ def lost_optimum(nums, small_machine):
 # ---------------------------------------------------------------- certified bound (SC3CERT)
 
 def certified(nums, machine, small_machine):
-    text = run_tool(["cert_table.py", "--machine=%s" % machine, "--small-machine=%s" % small_machine], "cert_table")
-    src = "cert_table.py --machine=%s --small-machine=%s" % (machine, small_machine)
+    # The small instances of one machine need no second machine: cert_table reads them from the same files.
+    extra = ["--small-machine=%s" % small_machine] if small_machine != machine else []
+    text = run_tool(["cert_table.py", "--machine=%s" % machine] + extra, "cert_table")
+    src = "cert_table.py --machine=%s%s" % (machine, (" " + extra[0]) if extra else "")
     for scope in ("distinct", "repeated"):
         body = text.split("== tested datasets, %s scope" % scope)[1].split("\n\n")[0]
         full = one(r"full data: (\d+) sets; certified optimal \(Lost = B\) (\d+)/\d+; B > 0 (\d+)/\d+", body, src)
@@ -844,11 +865,20 @@ TIMING_PREFIXES = ("sc6.", "platform.")
 
 def build(machine, small_machine):
     nums = Numbers()
+    # Without files of the rule asked for, every later step would fail on a symptom; say the cause first.
+    for scenario, who in (("SC3", machine), ("SC3LOST", small_machine), ("SC3CERT", machine), ("SC3OPT", machine)):
+        if not files(INV, scenario, who):
+            every = [q for q in glob.glob(str(INV / ("%s_*.csv" % scenario))) if machine_of(q) == who]
+            raise Missing("no %s file of %s under closure rule %s (rules found: %s)%s" % (
+                scenario, who, RULE[0], closure_rule.keep(every, RULE[0])[1] or "none",
+                "; the files of the corrected rule come from generation 3 of the campaign" if RULE[0] == "necessary" else ""))
     for step in (lambda: sc1(nums, machine), lambda: sc2(nums), lambda: datasets_table(nums),
                  lambda: sc3_rows(nums, machine), lambda: analysis(nums, machine), lambda: levels(nums, machine),
                  lambda: sensitivity(nums, machine),
                  lambda: lower_bounds(nums, machine),
-                 lambda: reduced_optimum(nums, machine), lambda: pareto(nums, machine),
+                 lambda: reduced_optimum(nums, machine),
+                 # The fronts exist under the earlier rule only, and the manuscript quotes none of their numbers.
+                 lambda: pareto(nums, machine) if RULE[0] == "subsequence" else None,
                  lambda: lost_optimum(nums, small_machine), lambda: certified(nums, machine, small_machine),
                  lambda: timing(nums, machine), lambda: platform(nums, machine)):
         step()
@@ -874,7 +904,7 @@ def write(nums, out_dir, machine, small_machine, argv):
             "tree": "clean" if not git("status", "--porcelain") else "MODIFIED (%d files)" % len(
                 git("status", "--porcelain").splitlines()),
             "tool_sha256": sha12(__file__), "python": sys.version.split()[0], "machine": machine,
-            "small_machine": small_machine}
+            "small_machine": small_machine, "closure": RULE[0]}
     inv = {"_meta": meta, "values": {k: v for k, v in sorted(nums.values.items()) if not k.startswith(TIMING_PREFIXES)},
            "tables": {k: v for k, v in sorted(nums.tables.items()) if k != "timing"}}
     tim = {"_meta": meta, "values": {k: v for k, v in sorted(nums.values.items()) if k.startswith(TIMING_PREFIXES)},
@@ -894,7 +924,13 @@ def main(argv):
         return self_test()
     opts = dict(a[2:].split("=", 1) for a in argv if a.startswith("--") and "=" in a)
     machine = opts.get("machine", "ADMIN-PC")
-    small = opts.get("small-machine", "dev")
+    rule = opts.get("closure", "necessary")
+    if rule not in closure_rule.RULES:
+        print("paper_numbers: --closure is one of %s" % ", ".join(closure_rule.RULES), file=sys.stderr)
+        return 1
+    RULE[0] = rule
+    # Under the earlier rule the small instances were rerun on the development machine (log entries 57-58).
+    small = opts.get("small-machine", "dev" if rule == "subsequence" else machine)
     try:
         nums = build(machine, small)
     except Missing as e:

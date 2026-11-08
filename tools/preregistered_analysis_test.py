@@ -448,15 +448,17 @@ def test_h2_leaves_out_protein_sdb1():
     assert any("into Wilcoxon (same |R|)                1 instances" in s for s in out), out
 
 
-def _write_sc3(path, rows, options=None):
-    """An SC3 file with the columns the analysis requires; rows = (set, method, lost_rel)."""
+def _write_sc3(path, rows, options=None, closure="necessary"):
+    """An SC3 file with the columns the analysis requires; rows = (set, method, lost_rel). closure=None writes no
+    "# closure" line, as the files written before 2026-11-08."""
     import io as _io
     columns = ("dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,"
                "lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,"
                "certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,"
                "nonsensitive_before,frequent_after")
     with _io.open(path, "w", encoding="utf-8", newline="\n") as f:
-        f.write("# run x\n" + ("# options {%s}\n" % options if options else "") + columns + "\n")
+        f.write("# run x\n" + ("# options {%s}\n" % options if options else "")
+                + ("# closure %s\n" % closure if closure else "") + columns + "\n")
         for sensitive_set, method, lost in rows:
             f.write('datasets/x.txt,"N=1,len=1","[0,3]",100,"%s",p10,%s,%s,,0,1,%s,0,0.1,0.1,'
                     '10,10,1.0,1,1,10,1.0,50,40,49\n' % (sensitive_set, method, method, lost))
@@ -589,6 +591,54 @@ def test_one_machine_per_analysis():
     text = _io.open(report, encoding="utf-8").read()
     assert "distinct items 1, repeated items 0" in text, text[:600]
     assert pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--machine", "C", "--out", report]) == 1
+
+
+def test_closure_rule_selects_the_files():
+    """One cell written twice, under the earlier rule (no closure line) and under the corrected one. By hand: the old
+    file has 4 rows (2 sets), the new one 2 rows (1 set). The default reads the new file only and names the old one as
+    left out; --closure=subsequence reads the old file only; a directory with only old files and the default exits 1."""
+    import tempfile
+    import io as _io
+    directory = tempfile.mkdtemp()
+    _write_sc3(os.path.join(directory, "SC3_old.csv"),
+               [("[[1, 2]]", OURS, 0.10), ("[[1, 2]]", "hha", 0.30), ("[[3, 4]]", OURS, 0.10), ("[[3, 4]]", "hha", 0.20)],
+               closure=None)
+    _write_sc3(os.path.join(directory, "SC3_new.csv"), [("[[1, 2]]", OURS, 0.12), ("[[1, 2]]", "hha", 0.30)])
+    assert pa.closure_of(os.path.join(directory, "SC3_old.csv")) == "subsequence"
+    assert pa.closure_of(os.path.join(directory, "SC3_new.csv")) == "necessary"
+    report = os.path.join(directory, "report.txt")
+    pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--out", report])
+    text = _io.open(report, encoding="utf-8").read()
+    assert "SC3 files under closure rule necessary: 1 read (left out: 1 of rule subsequence)" in text, text[:400]
+    assert "SC3_new.csv" in text and "SC3_old.csv" not in text.split("SC3 files read:")[1].split("\n\n")[0], text[:800]
+    assert "distinct items 2, repeated items 0" in text, text[:800]
+    pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--closure", "subsequence", "--out", report])
+    text = _io.open(report, encoding="utf-8").read()
+    assert "distinct items 4, repeated items 0" in text, text[:800]
+    only_old = tempfile.mkdtemp()
+    _write_sc3(os.path.join(only_old, "SC3_old.csv"), [("[[1, 2]]", OURS, 0.10)], closure=None)
+    import contextlib
+    err = _io.StringIO()
+    with contextlib.redirect_stderr(err):
+        code = pa.main(["--sc3", only_old, "--sc2", only_old, "--skip-groups", "--out", os.path.join(only_old, "r.txt")])
+    assert code == 1 and "no SC3 file under closure rule necessary" in err.getvalue(), (code, err.getvalue())
+
+
+def test_merge_refuses_two_different_rows_of_a_deterministic_method():
+    """Two rows of one deterministic method on one instance that differ would be averaged by the median: refused.
+    Two identical rows (the same file read twice) are kept as one."""
+    def row(lost):
+        return {"dataset": "datasets/x.txt", "shape": "", "gap": "[0,3]", "sigma": "100", "sensitive_set": "[[1, 2]]",
+                "method_key": "hha", "method": "hha", "method_seed": "", "lost": str(lost), "lost_rel": str(lost / 10),
+                "mask_count": "10", "hf": "0", "sup_dist": "0.1", "nonsensitive_before": "10", "status": ""}
+    merged = pa.merge_reruns([row(1), row(1)], lambda s="": None)
+    assert len(merged) == 1 and merged[0]["lost"] == 1.0, merged
+    try:
+        pa.merge_reruns([row(1), row(3)], lambda s="": None)
+    except ValueError as e:
+        assert "differ in lost" in str(e) and "--closure" in str(e), str(e)
+    else:
+        raise AssertionError("two different rows of a deterministic method were merged")
 
 
 def test_h2_not_tested_fails_the_run():

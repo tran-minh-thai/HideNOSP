@@ -8,6 +8,7 @@ Supporting tools, not part of the algorithm.
 | `fetch_datasets.py` | Downloads the public datasets and verifies them against `datasets/provenance.tsv` |
 | `build_datasets.py` | Converts the event logs and the protein files to the SPMF input format |
 | `check_results.py` | Re-checks the rules of the three result directories on the files actually on disk |
+| `closure_rule.py` | The closure rule of S-plus a result file was written under (its `# closure` header line; no line: the earlier subsequence rule), and the selection of the files of one rule. Every tool that reads SC3, SC3LOST, SC3CERT, SC3OPT or SC6 files reads one rule only (`--closure`, default `necessary`, preregistration section 21); `--self-test` |
 | `preregistered_analysis.py` | **Analysis of H2, H2-R, H3 and H4** exactly as `config/preregistration.md` locks them |
 | `preregistered_analysis_test.py` | Pins the statistics to hand-computed values. Run it before trusting any table |
 | `check_english.py` | Language check of the repository files; exit code 1 on a violation |
@@ -15,7 +16,7 @@ Supporting tools, not part of the algorithm.
 | `compare_invariant.py` | Compare machine-invariant result files exactly: one pair, or (`--machine=<host> [--ref=<branch>]`) every file of one machine against the committed file of the same cell made on another host |
 | `compare_invariant_test.py` | Builds files with one known property each and requires `compare_invariant.py` to report it (18 checks) |
 | `sc3_commands.py` | **Generates the missing SC3 commands** from the two locked group tables (main group), skipping cells that already have a result file; `--self-test` injects faults into the cell-matching rule |
-| `campaign.py` | Runs every batch of the paper on one measuring machine cell by cell, resumes after a stop, commits and pushes each cell; lock generations (`--generation=2` for the batches of preregistration section 19); `--self-test` |
+| `campaign.py` | Runs every batch of the paper on one measuring machine cell by cell, resumes after a stop, commits and pushes each cell; lock generations (`--generation=2` for the batches of preregistration section 19, `--generation=3` for the `g3-` batches of section 21); `--self-test` |
 | `lower_bound_table.py` | Joins the SC3LB bounds to the SC3 rows of one machine (`--machine`, `--bound-machine`, `--dir`) and reports \|R\| against the bound per scope and size |
 | `reduced_optimum_table.py` | SC3OPT: bound, optimum, refinement and greedy on small instances, for one machine (`--machine`) |
 | `pareto_table.py` | The exact Pareto fronts (descriptive batch, not reported in the paper), each paired with the method-batch file of its cell and machine (`--machine`) |
@@ -26,7 +27,7 @@ Supporting tools, not part of the algorithm.
 | `timing_table.py` | Reduced SC6 (preregistration sections 19.3 and 20.1): running time per method, mining time of F_sigma(D) on its own line, and index cost; checks one mining row per cell and that every timed run equals its SC3 row |
 | `dataset_sensitivity.py` | Sensitivity analysis fixed after the main comparison: H2, H2-R, H4b and H4b-R with the dataset as the unit (median Lost_rel difference per dataset over equal-count instances, one-sided exact sign test against DELTA_L, Holm over each family); prints the smallest attainable p-value; `--self-test` |
 | `levels_table.py` | Descriptive levels of Lost_rel (box statistics), distortion rate and SupDist at the solution each method returns, on the instances of the pairs tables where CUT-HIDE, the four baselines and the two stopping rivals all have a row; by scope and number of sensitive patterns; `--self-test` |
-| `paper_numbers.py` | Every number and table row the manuscript quotes, read back by running the table tools on the result files, plus the counts no tool prints; writes `results-invariant/paper_numbers.json` and `results/paper_numbers_timing.json`, each value with its source; exit 1 on any unread line or disagreement; `--self-test` |
+| `paper_numbers.py` | Every number and table row the manuscript quotes (`--closure`, default `necessary`), read back by running the table tools on the result files, plus the counts no tool prints; writes `results-invariant/paper_numbers.json` and `results/paper_numbers_timing.json`, each value with its source; exit 1 on any unread line or disagreement; `--self-test` |
 
 `check_results.py` checks the same rule that `hidenosp.io.ResultSink` enforces when it opens a file,
 but on disk: a file moved or edited by hand, or produced by an old version of the code, is still

@@ -108,6 +108,8 @@ def main(argv=None):
     parser.add_argument("--sc3", default=os.path.join(ROOT, "results-invariant"))
     parser.add_argument("--sc2", default=os.path.join(ROOT, "results-invariant"))
     parser.add_argument("--machine", default="ADMIN-PC")
+    parser.add_argument("--closure", default="necessary", choices=pa.CLOSURE_RULES,
+                        help="closure rule of S-plus of the files read (default necessary)")
     parser.add_argument("--out", default="")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args(argv)
@@ -116,7 +118,7 @@ def main(argv=None):
     lines = []
     write = lines.append
     write("Sensitivity analysis, dataset as the unit (fixed after the main comparison)")
-    rows = levels_table.load(args.sc3, args.machine, write)
+    rows = levels_table.load(args.sc3, args.machine, write, args.closure)
     failed = run(rows, pa.collect_files(args.sc2, "SC2_"), write)
     text = "\n".join(lines) + "\n"
     if args.out:

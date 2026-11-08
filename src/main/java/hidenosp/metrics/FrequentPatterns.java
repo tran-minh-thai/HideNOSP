@@ -35,7 +35,8 @@ import java.util.Map;
  * </ul>
  *
  * <p>This class is a counting device, not a contribution: the mining algorithm of [R1] is cited for
- * the definition, and NETGAP is used at SC1 to check that the supports agree.
+ * the definition. SC1 checks the pruned mining against plain enumeration; a comparison against
+ * NETGAP is not implemented (see the TODO in Sc1ImplementationCheck).
  */
 public final class FrequentPatterns {
 

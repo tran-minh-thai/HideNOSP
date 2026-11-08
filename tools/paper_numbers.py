@@ -478,6 +478,9 @@ def sc3_rows(nums, machine):
         for r in rows_of(path):
             total += 1
             status[r.get("status", "")] += 1
+            if r.get("method_key") and float(r.get("hf") or 0) != 0:
+                raise Missing("SC3 row with HF > 0 (%s, %s): the text says every method hides on every row"
+                              % (Path(path).name, r["method_key"]))
             key = (dataset_name(r["dataset"]), r["gap"], r["sigma"], kind, r["sensitive_set"])
             if r["method_key"] == OURS and opts.get("methods", "") not in ("none",):
                 ours.setdefault(key, set()).add(int(r["lost"]))
@@ -616,6 +619,15 @@ def timing(nums, machine):
             vals = [r["median_ms"] for r in rows if r["size"] == size and pick(r)]
             nums.put("sc6.%s.ms.s%d.min" % (key, size), min(vals), src)
             nums.put("sc6.%s.ms.s%d.max" % (key, size), max(vals), src)
+    index = [r for r in rows if r["method"] == "index"]
+    if len(index) != 4:
+        raise Missing("timing_table: %d index lines, expected 4" % len(index))
+    nums.put("sc6.index.build_ms.min", min(r["build_ms"] for r in index), src)
+    nums.put("sc6.index.build_ms.max", max(r["build_ms"] for r in index), src)
+    nums.put("sc6.index.ratio.min", min(r["rebuild_over_incremental"] for r in index), src)
+    nums.put("sc6.index.ratio.max", max(r["rebuild_over_incremental"] for r in index), src)
+    if min(r["rebuild_over_incremental"] for r in index) <= 1:
+        raise Missing("timing_table: the incremental update is not faster than a rebuild in some block")
     for (scope, size) in blocks:
         b = {r["method"]: r for r in rows if (r["scope"], r["size"]) == (scope, size)}
         if not b["mine F_sigma"]["median_ms"] > b[OURS]["median_ms"]:

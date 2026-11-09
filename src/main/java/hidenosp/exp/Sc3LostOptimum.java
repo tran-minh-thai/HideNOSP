@@ -70,6 +70,18 @@ public final class Sc3LostOptimum implements Scenario {
 
     @Override
     public void run(ResultSink sink, Cli options) {
+        runLost(id(), sink, options, HideProblem.Mode.HIDE_DB);
+    }
+
+    /**
+     * The small instances under either problem. HIDE-DB is SC3LOST. HIDE-SEQ is SC4LOST: the same windows
+     * and the same instance threshold sigma_I = sup_NO(P, I) - drop + 1, which here only defines
+     * F_sigma_I(I), and for every per-sequence limit r of {@code --rs} the hiding constraint
+     * sup_NO(P, S) &lt; r in every window. The file then has a column {@code r} after {@code drop}, and an
+     * instance in which no window reaches r is written with that status.
+     */
+    static void runLost(String id, ResultSink sink, Cli options, HideProblem.Mode mode) {
+        boolean perSequence = mode == HideProblem.Mode.HIDE_SEQ;
         // Which frequent patterns count as hidden with the sensitive ones (FrequentPatterns.Closure); written
         // into the header even at the default, so a file without the line was written under the subsequence rule.
         FrequentPatterns.Closure closureRule = FrequentPatterns.Closure.parse(options.get("closure", "necessary"));
@@ -92,6 +104,10 @@ public final class Sc3LostOptimum implements Scenario {
         int without = options.getInt("without", 5);
         int[] drops = Arrays.stream(options.get("drops", "2,3,4").split(","))
                 .map(String::trim).mapToInt(Integer::parseInt).toArray();
+        int[] limits = perSequence
+                ? Arrays.stream(options.get("rs", "1,2,3").split(",")).map(String::trim)
+                        .mapToInt(Integer::parseInt).toArray()
+                : new int[] {0};
         long instanceSeed = options.getLong("instanceSeed", 20261106L);
         String[] methods = options.get("methods", DEFAULT_METHODS).split(",");
         DatasetReader.Format format = DatasetReader.Format
@@ -102,13 +118,20 @@ public final class Sc3LostOptimum implements Scenario {
                 patternKind.equals("repeated"));
         System.out.println(sampling.describe());
 
-        String[] header = {"dataset", "gap", "sigma", "pattern_kind", "sensitive_set", "stratum", "drop",
-            "instance_sigma", "sequences", "carrying_windows", "frequent_patterns", "min_masks", "optimal_sets",
-            "opt_lost", "worst_lost", "method_key", "method", "mask_count", "lost", "status"};
-        String[] provenance = {"options " + options.all(), sampling.describe(), "closure " + closureRule.label()};
+        String[] header = perSequence
+                ? new String[] {"dataset", "gap", "sigma", "pattern_kind", "sensitive_set", "stratum", "drop", "r",
+                    "instance_sigma", "sequences", "carrying_windows", "frequent_patterns", "min_masks",
+                    "optimal_sets", "opt_lost", "worst_lost", "method_key", "method", "mask_count", "lost", "status"}
+                : new String[] {"dataset", "gap", "sigma", "pattern_kind", "sensitive_set", "stratum", "drop",
+                    "instance_sigma", "sequences", "carrying_windows", "frequent_patterns", "min_masks",
+                    "optimal_sets", "opt_lost", "worst_lost", "method_key", "method", "mask_count", "lost", "status"};
+        String[] provenance = perSequence
+                ? new String[] {"options " + options.all(), sampling.describe(), "closure " + closureRule.label(),
+                    "mode HIDE_SEQ"}
+                : new String[] {"options " + options.all(), sampling.describe(), "closure " + closureRule.label()};
         int instances = 0;
         int solved = 0;
-        try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header, provenance)) {
+        try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id, header, provenance)) {
             List<SensitiveSampling.Draw> draws = sampling.draws();
             for (int d = 0; d < draws.size(); d++) {
                 Pattern pattern = draws.get(d).patterns().get(0);
@@ -118,31 +141,53 @@ public final class Sc3LostOptimum implements Scenario {
                 SequenceDatabase instance = new SequenceDatabase(windows);
                 long support = SupportNO.of(pattern, instance, gap);
                 for (int r : drops) {
+                  for (int limit : limits) {
                     instances++;
-                    String[] base = {dataset, gap.toString(), Integer.toString(sigma), patternKind,
-                        List.of(pattern).toString(), "p" + draws.get(d).percentile(), Integer.toString(r),
-                        "", Integer.toString(windows.size()), Integer.toString(found)};
+                    String[] base = perSequence
+                            ? new String[] {dataset, gap.toString(), Integer.toString(sigma), patternKind,
+                                List.of(pattern).toString(), "p" + draws.get(d).percentile(), Integer.toString(r),
+                                Integer.toString(limit), "", Integer.toString(windows.size()), Integer.toString(found)}
+                            : new String[] {dataset, gap.toString(), Integer.toString(sigma), patternKind,
+                                List.of(pattern).toString(), "p" + draws.get(d).percentile(), Integer.toString(r),
+                                "", Integer.toString(windows.size()), Integer.toString(found)};
+                    int sigmaColumn = perSequence ? 8 : 7;
                     if (found < carrying) {
                         writer.writeRow(row(base, "", "", "", "", "", "", "", "", "",
                                 "fewer than " + carrying + " windows with an occurrence"));
                         continue;
                     }
                     long instanceSigma = support - r + 1;
-                    base[7] = Long.toString(instanceSigma);
+                    base[sigmaColumn] = Long.toString(instanceSigma);
                     if (instanceSigma < 2) {
                         writer.writeRow(row(base, "", "", "", "", "", "", "", "", "",
                                 "threshold of the instance below 2"));
                         continue;
                     }
-                    if (solve(writer, base, instance, pattern, gap, (int) instanceSigma, epsilon,
-                            maxPatternLength, seed, methods, closureRule)) {
+                    if (perSequence && !reachesLimit(instance, pattern, gap, limit)) {
+                        writer.writeRow(row(base, "", "", "", "", "", "", "", "", "",
+                                "no sequence reaches r"));
+                        continue;
+                    }
+                    if (solve(writer, base, instance, pattern, gap, mode, perSequence ? limit : (int) instanceSigma,
+                            (int) instanceSigma, epsilon, maxPatternLength, seed, methods, closureRule)) {
                         solved++;
                     }
+                  }
                 }
             }
             writer.complete();
         }
         System.out.printf("%d instances, %d solved exactly%n", instances, solved);
+    }
+
+    /** True when some window has sup_NO(P) of at least r. */
+    private static boolean reachesLimit(SequenceDatabase instance, Pattern pattern, GapConstraint gap, int r) {
+        for (int s = 0; s < instance.size(); s++) {
+            if (SupportNO.of(pattern, instance.get(s), gap) >= r) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -198,10 +243,11 @@ public final class Sc3LostOptimum implements Scenario {
 
     /** Solves one instance exactly and runs every method on it; returns whether the exact part succeeded. */
     private static boolean solve(CsvWriter writer, String[] base, SequenceDatabase instance, Pattern pattern,
-                                 GapConstraint gap, int instanceSigma, double epsilon, int maxPatternLength,
-                                 long seed, String[] methods, FrequentPatterns.Closure closureRule) {
-        HideProblem problem = new HideProblem(instance, List.of(pattern), gap, HideProblem.Mode.HIDE_DB,
-                instanceSigma, epsilon, maxPatternLength).withClosure(closureRule);
+                                 GapConstraint gap, HideProblem.Mode mode, int threshold, int instanceSigma,
+                                 double epsilon, int maxPatternLength, long seed, String[] methods,
+                                 FrequentPatterns.Closure closureRule) {
+        HideProblem problem = new HideProblem(instance, List.of(pattern), gap, mode, threshold, epsilon,
+                maxPatternLength, instanceSigma).withClosure(closureRule);
         Metrics.Context context = Metrics.Context.of(instance, gap, maxPatternLength, instanceSigma);
         Map<Pattern, Long> frequent = context.frequent();
         String watched = Integer.toString(frequent.size());

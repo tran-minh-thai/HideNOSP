@@ -64,6 +64,11 @@ TABLES = (
     ("config/configuration_groups.tsv", "distinct"),
     ("config/configuration_groups_repeated.tsv", "repeated"),
 )
+# The group tables of the gaps with g- > 0 (preregistration section 22.3), written from their SC2 files.
+GAP_TABLES = (
+    ("config/configuration_groups_gap.tsv", "distinct"),
+    ("config/configuration_groups_gap_repeated.tsv", "repeated"),
+)
 
 # The options that name a cell. A file with the same values is the same cell; any other option
 # (machine, seed default, root) does not change what the cell is.
@@ -123,7 +128,7 @@ def batch_of(options):
     return {REFINE: "refine", STOP: "stop"}.get(methods, "methods")
 
 
-def planned(root, size, front=False, group="main", refine=False, stop=False):
+def planned(root, size, front=False, group="main", refine=False, stop=False, tables=TABLES):
     if front and size != 1:
         raise ValueError("the Pareto front exists for |S| = 1 only")
     if refine and (front or size == 1):
@@ -131,7 +136,7 @@ def planned(root, size, front=False, group="main", refine=False, stop=False):
     if stop and (front or refine):
         raise ValueError("the stop-at-threshold batch is a batch of its own")
     cells = []
-    for name, kind in TABLES:
+    for name, kind in tables:
         for cell in read_table(root / name, kind, group):
             if max(strata(cell["pool"])) < size:
                 continue

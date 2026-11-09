@@ -1,24 +1,25 @@
 // SPDX-License-Identifier: MIT
 package hidenosp.exp;
 
+import hidenosp.hide.HideProblem;
 import hidenosp.io.ResultSink;
 import hidenosp.util.Cli;
 
 /**
- * SC4: HIDE-SEQ at r in {1, 2, 3, 5}, the per-sequence limit on how often one
- * individual may repeat the sensitive behaviour.
+ * SC4: the comparison of SC3 under HIDE-SEQ, the per-sequence limit r on how often one individual may
+ * repeat the sensitive behaviour.
  *
- * <p>It answers RQ5: at the same nominal privacy level, how many masks and how much pattern loss
- * does the per-sequence limit cost compared with the database threshold. By the corollary of P1 the
- * number of masks is fixed at sum over S of max(0, F_S - r + 1), so the comparison is about where
- * they fall, not how many there are, and the table must print both numbers side by side.
+ * <p>Everything except the problem is the one of SC3 ({@link Sc3MainComparison#runComparison}): the
+ * sensitive sets are drawn from the same F_sigma(D) with the same strata and seed, the methods are built by
+ * the same factory, and the same evaluator counts Lost and SupDist against F_sigma(D), so sigma only
+ * defines F_sigma(D) here. The hiding constraint is sup_NO(P, S) &lt; r in every sequence, so the methods
+ * have no sequence to choose: every sequence at or above r is sanitised. The least number of masks is the
+ * fixed sum over the sequences of OPT_S(r - 1) (Theorem 1 for distinct items, Theorem 2(b) or its
+ * corollary otherwise), written as {@code min_masks} for one sensitive pattern.
  *
- * <p>Note that sigma and r are different quantities, so the side effects of this scenario are
- * counted against a sigma that has to be stated in the table caption; {@link
- * hidenosp.hide.HideProblem} carries it as a separate field for that reason.
- *
- * <p>TODO(code): implement on the same instance unit as SC3, sweeping r and reporting |R|, Lost and
- * SupDist next to the HIDE-DB row at the same nominal level.
+ * <p>The result file carries the line {@code mode HIDE_SEQ r=<r>} in its header. An instance in which no
+ * sequence reaches r needs no mask; it is written with the status {@code no sequence reaches r} and counted
+ * apart, never as a tie.
  */
 public final class Sc4PerSequenceLimit implements Scenario {
 
@@ -29,16 +30,18 @@ public final class Sc4PerSequenceLimit implements Scenario {
 
     @Override
     public String title() {
-        return "HIDE-SEQ at r in {1, 2, 3, 5}: masks and pattern loss against the database threshold";
+        return "the main comparison under HIDE-SEQ: Lost, SupDist and |R| at a per-sequence limit r";
     }
 
     @Override
     public String[] options() {
-        return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "r", "seed"};
+        return new String[] {"dataset", "format", "gmin", "gmax", "sigma", "r", "maxPatternLength",
+                "epsilon", "setsPerStratum", "sensitiveSize", "seed", "methodSeed", "repeats",
+                "methods", "patternKind", "timeLimit", "closure"};
     }
 
     @Override
     public void run(ResultSink sink, Cli options) {
-        throw new UnsupportedOperationException("SC4 is not implemented yet");
+        Sc3MainComparison.runComparison(id(), sink, options, HideProblem.Mode.HIDE_SEQ);
     }
 }

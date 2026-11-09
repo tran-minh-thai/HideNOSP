@@ -71,6 +71,7 @@ public final class Runner {
         Map<String, Scenario> map = new LinkedHashMap<>();
         for (Scenario scenario : List.of(
                 new Sc1ImplementationCheck(),
+                new Sc1WindowCheck(),
                 new Sc2DataRegime(),
                 new Sc3MainComparison(),
                 new Sc3LowerBound(),
@@ -78,6 +79,7 @@ public final class Runner {
                 new Sc3LostOptimum(),
                 new Sc3CertifiedBound(),
                 new Sc4PerSequenceLimit(),
+                new Sc4LostOptimum(),
                 new Sc5DeletionGhosts(),
                 new Sc6Scalability(),
                 new Sc7DesignVariants(),

@@ -13,6 +13,7 @@ import hidenosp.core.EventSequence;
 import hidenosp.core.GapConstraint;
 import hidenosp.core.Pattern;
 import hidenosp.core.SequenceDatabase;
+import hidenosp.core.SupportNO;
 import hidenosp.hide.AdaptiveCutHide;
 import hidenosp.hide.CutHide;
 import hidenosp.hide.CutHideConfig;
@@ -71,8 +72,23 @@ public final class Sc3MainComparison implements Scenario {
 
     @Override
     public void run(ResultSink sink, Cli options) {
+        runComparison(id(), sink, options, HideProblem.Mode.HIDE_DB);
+    }
+
+    /**
+     * The comparison under either problem. HIDE-DB is SC3. HIDE-SEQ is SC4, with the per-sequence limit
+     * {@code --r}: the sensitive sets are drawn exactly as in SC3 (the same F_sigma(D), strata and seed),
+     * sigma only defines F_sigma(D) for Lost and SupDist, and an instance in which no sequence reaches r
+     * for any sensitive pattern needs no mask at all, so it is written with that status and no method row.
+     */
+    static void runComparison(String id, ResultSink sink, Cli options, HideProblem.Mode mode) {
         GapConstraint gap = new GapConstraint(options.getInt("gmin", 0), options.getInt("gmax", 3));
         int sigma = options.getInt("sigma", 20);
+        boolean perSequence = mode == HideProblem.Mode.HIDE_SEQ;
+        int threshold = perSequence ? options.getInt("r", 0) : sigma;
+        if (perSequence && threshold < 1) {
+            throw new IllegalArgumentException("HIDE-SEQ needs the per-sequence limit --r, at least 1");
+        }
         int maxPatternLength = options.getInt("maxPatternLength", 3);
         double epsilon = options.getDouble("epsilon", 0.5);
         // Five strata of sup_NO (percentiles 10 to 90), this many distinct sets from each: the
@@ -144,7 +160,13 @@ public final class Sc3MainComparison implements Scenario {
         // line is written even at the default, so a file without it is one written before the rule existed,
         // under the subsequence rule.
         FrequentPatterns.Closure closureRule = FrequentPatterns.Closure.parse(options.get("closure", "necessary"));
-        String[] provenance = {"options " + options.all(), sampling.describe(), "closure " + closureRule.label()};
+        String[] provenance = perSequence
+                ? new String[] {"options " + options.all(), sampling.describe(), "closure " + closureRule.label(),
+                    "mode HIDE_SEQ r=" + threshold}
+                : new String[] {"options " + options.all(), sampling.describe(), "closure " + closureRule.label()};
+        if (pareto && perSequence) {
+            throw new IllegalArgumentException("--pareto is defined for HIDE-DB only");
+        }
         if (pareto && (sensitiveSize != 1 || gap.gmin() != 0)) {
             throw new IllegalArgumentException("--pareto needs --sensitiveSize=1 and g- = 0, got "
                     + sensitiveSize + " and " + gap);
@@ -153,16 +175,24 @@ public final class Sc3MainComparison implements Scenario {
                 "vertex", "vertices", "mask_count", "weight", "min_masks", "mask_ratio", "hf",
                 "lost", "lost_rel", "ghost", "sup_dist", "frequent_before", "nonsensitive_before",
                 "frequent_after", "lost_subseq", "lost_rel_subseq", "sup_dist_subseq", "nonsensitive_before_subseq"};
-        try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header, provenance);
+        try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id, header, provenance);
              CsvWriter front = pareto
-                     ? sink.open(ResultSink.Kind.INVARIANT, id() + "PARETO", frontHeader, provenance)
+                     ? sink.open(ResultSink.Kind.INVARIANT, id + "PARETO", frontHeader, provenance)
                      : null) {
             for (int index = 0; index < draws.size(); index++) {
                 List<Pattern> sensitive = draws.get(index).patterns();
                 String stratum = "p" + draws.get(index).percentile();
-                HideProblem problem = new HideProblem(database, sensitive, gap,
-                        HideProblem.Mode.HIDE_DB, sigma, epsilon, maxPatternLength).withClosure(closureRule);
-                long minMasks = boundFromP1(database, sensitive, gap, sigma);
+                HideProblem problem = new HideProblem(database, sensitive, gap, mode, threshold, epsilon,
+                        maxPatternLength, sigma).withClosure(closureRule);
+                long minMasks = boundFromP1(database, sensitive, gap, mode, threshold);
+                if (perSequence && !reachesLimit(database, sensitive, gap, threshold)) {
+                    writer.writeRow(describe(options), shape(database), gap.toString(), Integer.toString(sigma),
+                            sensitive.toString(), stratum, "", "", "",
+                            "", "", "", "", "", "", "", Long.toString(minMasks),
+                            "", "", "", "", "", "", "", "", "", "", "", "", "no sequence reaches r");
+                    System.out.printf("set %d  no sequence reaches r = %d: no mask is needed%n", index, threshold);
+                    continue;
+                }
                 if (front != null) {
                     CutHide cutHide = (CutHide) create("cut-hide", problem, frequent, sigma, epsilon,
                             methodSeed, context);
@@ -278,14 +308,26 @@ public final class Sc3MainComparison implements Scenario {
      * |R| star for a single sensitive pattern: the corollary of P1 for distinct items, theorem P8
      * with its allocation for repeated items when g- = 0; 0 when neither applies.
      */
-    private long boundFromP1(SequenceDatabase database, List<Pattern> sensitive, GapConstraint gap,
-                             int sigma) {
+    private static long boundFromP1(SequenceDatabase database, List<Pattern> sensitive, GapConstraint gap,
+                                    HideProblem.Mode mode, int threshold) {
         if (sensitive.size() != 1) {
             return 0;
         }
-        DataProfile profile =
-                DataProfile.of(database, sensitive.get(0), gap, HideProblem.Mode.HIDE_DB, sigma);
+        DataProfile profile = DataProfile.of(database, sensitive.get(0), gap, mode, threshold);
         return profile.isExact() ? profile.minMasks() : 0;
+    }
+
+    /** True when some sequence has sup_NO of some sensitive pattern at r or above. */
+    private static boolean reachesLimit(SequenceDatabase database, List<Pattern> sensitive, GapConstraint gap,
+                                        int r) {
+        for (Pattern p : sensitive) {
+            for (int s = 0; s < database.size(); s++) {
+                if (SupportNO.of(p, database.get(s), gap) >= r) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -391,6 +433,10 @@ public final class Sc3MainComparison implements Scenario {
                         RandomMasking.PositionChoice.RANDOM, seed);
             case "hha":
                 return new Hha();
+            case "hha-emb":
+                // The occurrence-count rule of Abul, Bonchi and Giannotti (TKDE 2010): sanitise until the
+                // matching set of the sequence holds at most r - 1 embeddings. HIDE-SEQ only.
+                return Hha.perSequenceEmbeddings();
             case "hha-stop":
                 // Preregistration section 19.1: HHA's order and position rule, stopping as soon as
                 // every sensitive support is below sigma.
@@ -444,7 +490,7 @@ public final class Sc3MainComparison implements Scenario {
         return longest;
     }
 
-    private SequenceDatabase load(Cli options, long seed) {
+    private static SequenceDatabase load(Cli options, long seed) {
         String dataset = options.get("dataset", "");
         if (dataset.isEmpty()) {
             Random random = new Random(seed);
@@ -473,12 +519,12 @@ public final class Sc3MainComparison implements Scenario {
      * onto these rows. SC2 writes the dataset path; describing the database by its shape instead
      * would leave the two tables with no key in common and no way to say which group a row is in.
      */
-    private String describe(Cli options) {
+    private static String describe(Cli options) {
         String dataset = options.get("dataset", "");
         return dataset.isEmpty() ? "synthetic" : dataset;
     }
 
-    private String shape(SequenceDatabase database) {
+    private static String shape(SequenceDatabase database) {
         return "N=" + database.size() + ",len=" + database.totalLength();
     }
 

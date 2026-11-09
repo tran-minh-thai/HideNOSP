@@ -188,7 +188,7 @@ class AdaptiveCutHideTest {
     }
 
     @Test
-    @DisplayName("refuses what theorem P8 does not solve exactly")
+    @DisplayName("refuses what no exact program solves: several patterns, g- > 0 with g+ unbounded, a state too large")
     void refusesUnsupportedProblems() {
         SequenceDatabase db = new SequenceDatabase(List.of(new EventSequence(0, new int[] {0, 1, 0, 1, 2}),
                 new EventSequence(1, new int[] {0, 1, 2, 0, 1})));
@@ -198,9 +198,9 @@ class AdaptiveCutHideTest {
         assertThrows(IllegalArgumentException.class, () -> method.run(new HideProblem(db,
                 List.of(new Pattern(0, 1), new Pattern(1, 2)), gap, HideProblem.Mode.HIDE_DB, 2, 0.5, 3)));
         assertThrows(IllegalArgumentException.class, () -> method.run(new HideProblem(db,
-                List.of(new Pattern(0, 1)), GapConstraint.of(1, 2), HideProblem.Mode.HIDE_DB, 2, 0.5, 3)));
+                List.of(new Pattern(0, 1)), GapConstraint.unbounded(1), HideProblem.Mode.HIDE_DB, 2, 0.5, 3)));
         assertThrows(IllegalArgumentException.class, () -> method.run(new HideProblem(db,
-                List.of(new Pattern(0, 1)), gap, HideProblem.Mode.HIDE_SEQ, 1, 0.5, 3)));
+                List.of(new Pattern(0, 1)), GapConstraint.of(1, 70), HideProblem.Mode.HIDE_DB, 2, 0.5, 3)));
         assertThrows(IllegalArgumentException.class, () -> new AdaptiveCutHide(List.of(), new double[0],
                 Map.of(), 2, 0, s -> new HashMap<>()));
         assertArrayEquals(new int[0], method.lostPerIteration());

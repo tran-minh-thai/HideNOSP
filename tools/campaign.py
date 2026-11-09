@@ -36,6 +36,18 @@ runs with --closure=subsequence, so that it reproduces the files of the earlier 
 
     g3-sc3-s1 .. g3-sc3-s20, g3-sc3-degenerate, g3-sc3-refine, g3-sc3-stop, g3-sc3lost, g3-sc3cert, g3-sc3opt
 
+Generation 4 (preregistration section 22), run with --generation=4: HIDE-SEQ and gaps with g- > 0, closure rule
+necessary.
+
+    g4-sc1gap        SC1GAP, the exact program for g- > 0 against exhaustive search, 3000 trials
+    g4-sc2gap        SC2 at [1,2] and [1,3] for every (dataset, sigma) of both group tables
+    g4-sc4-s1        SC4 (HIDE-SEQ) on the cells of sc3-s1 and sc3-degenerate, r = 1, 2, 3
+    g4-sc4-s5        SC4 on the cells of sc3-s5, r = 1, 2, 3
+    g4-sc4lost       SC4LOST on the cells of sc3-s1, r = 1, 2, 3
+    g4-gap-s1 .. s20, g4-gap-degenerate
+                     SC3 on the main (and degenerate) rows of the g- > 0 group tables
+                     config/configuration_groups_gap.tsv and config/configuration_groups_gap_repeated.tsv
+
 A cell is done when results-invariant/ holds a complete file of its scenario whose run stamp names
 THIS machine and whose options line names the cell (SC1 writes no options line: scenario, machine and
 seed). Files of other machines never count, so a new machine reruns everything. A cell whose run
@@ -90,7 +102,7 @@ CLOSURE_OPTION = ("closure", "necessary")
 # The scenarios whose methods or measures read S-plus. A cell of theirs without a closure option is a cell of the
 # earlier rule: it runs with --closure=subsequence and is done only by a file whose "# closure" header line is
 # subsequence or absent (files written before the rule existed carry no such line).
-CLOSURE_SCENARIOS = ("SC3", "SC3LOST", "SC3CERT", "SC3OPT", "SC6")
+CLOSURE_SCENARIOS = ("SC3", "SC3LOST", "SC3CERT", "SC3OPT", "SC6", "SC4", "SC4LOST")
 EARLIER_RULE = "subsequence"
 HEADER_RULE = "# closure "
 BATCHES = ("sc1", "sc2", "sc3-s1", "sc3-s5", "sc3-s10", "sc3-s20", "sc3-degenerate", "sc3-refine",
@@ -100,6 +112,14 @@ GENERATION = {b: "1" for b in BATCHES}
 GENERATION.update({"sc3-stop": "2", "sc3lost": "2", "sc3cert": "2", "sc6": "2"})
 BATCHES = BATCHES + tuple("g3-" + b for b in CLOSURE_BATCHES)
 GENERATION.update({"g3-" + b: "3" for b in CLOSURE_BATCHES})
+# Generation 4 (preregistration section 22): HIDE-SEQ and gaps with g- > 0, closure rule necessary.
+NEW_GAPS = (("1", "2"), ("1", "3"))
+SEQ_METHODS = "cut-hide-rw-ls,cut-hide-rw,cut-hide,hha,hha-emb,dbsh,sbsh-r1,sbsh-rmax,occurrence"
+LIMITS = ("1", "2", "3")
+G4_BATCHES = ("g4-sc1gap", "g4-sc2gap", "g4-sc4-s1", "g4-sc4-s5", "g4-sc4lost",
+              "g4-gap-s1", "g4-gap-s5", "g4-gap-s10", "g4-gap-s20", "g4-gap-degenerate")
+BATCHES = BATCHES + G4_BATCHES
+GENERATION.update({b: "4" for b in G4_BATCHES})
 # What a later generation must share with the one before: only the measured code may differ.
 CARRIED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor")
 LOCKED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor", "source_tree", "pom")
@@ -125,6 +145,40 @@ def sc2_cells(root):
     return cells
 
 
+def gap_sc2_cells(root):
+    """SC2 at every new gap, for every (dataset, sigma) of the two locked group tables (preregistration section 22.3)."""
+    cells = []
+    for name, profile in SC2_TABLES:
+        kind = "distinct" if profile == "pool" else "repeated"
+        pairs = []
+        for group in sc3.GROUPS:
+            for c in sc3.read_table(root / name, kind, group):
+                if (c["dataset"], c["sigma"]) not in pairs:
+                    pairs.append((c["dataset"], c["sigma"]))
+        pairs.sort(key=lambda d: (d[0], int(d[1])))
+        for gmin, gmax in NEW_GAPS:
+            for dataset, sigma in pairs:
+                cells.append({"dataset": dataset, "format": "SPMF", "sigma": sigma, "gmin": gmin, "gmax": gmax,
+                              "maxPatternLength": "4", "profile": profile})
+    return cells
+
+
+def seq_cell(c, r):
+    """The SC4 (HIDE-SEQ) cell of an SC3 cell at the per-sequence limit r (preregistration section 22.2)."""
+    options = {k: c[k] for k in sc3.IDENTITY if k not in ("pareto", "methods")}
+    options.update({"methods": SEQ_METHODS, "r": r})
+    return cell("SC4", options, extra=[CLOSURE_OPTION])
+
+
+def gap_tables(root):
+    for name, _ in sc3.GAP_TABLES:
+        if not (root / name).is_file():
+            raise ValueError("%s is missing: the g- > 0 cells come from the group tables of preregistration section 22.3, "
+                             "written from the SC2 files of batch g4-sc2gap and locked by commit"
+                             % Path(name).as_posix())
+    return sc3.GAP_TABLES
+
+
 def cell(scenario, options, heap=HEAP, extra=()):
     """One run: scenario, ordered options (name -> value), JVM heap."""
     return {"scenario": scenario, "options": list(options.items()) + list(extra), "heap": heap}
@@ -133,6 +187,25 @@ def cell(scenario, options, heap=HEAP, extra=()):
 def batch_cells(root, batch):
     if batch.startswith("g3-") and batch[3:] in CLOSURE_BATCHES:
         return [dict(c, options=c["options"] + [CLOSURE_OPTION]) for c in batch_cells(root, batch[3:])]
+    if batch == "g4-sc1gap":
+        return [cell("SC1GAP", {"trials": "3000", "seed": "2026"})]
+    if batch == "g4-sc2gap":
+        return [cell("SC2", c) for c in gap_sc2_cells(root)]
+    if batch == "g4-sc4-s1":
+        return [seq_cell(c, r) for c in sc3.planned(root, 1) + sc3.planned(root, 1, group="degenerate")
+                for r in LIMITS]
+    if batch == "g4-sc4-s5":
+        return [seq_cell(c, r) for c in sc3.planned(root, 5) for r in LIMITS]
+    if batch == "g4-sc4lost":
+        return [cell("SC4LOST", {k: c[k] for k in CELL_KEYS if k != "sensitiveSize"},
+                     extra=[("rs", ",".join(LIMITS)), CLOSURE_OPTION]) for c in sc3.planned(root, 1)]
+    match = re.fullmatch(r"g4-gap-s(\d+)", batch)
+    if match:
+        return [cell("SC3", {k: c[k] for k in sc3.IDENTITY}, extra=[CLOSURE_OPTION])
+                for c in sc3.planned(root, int(match.group(1)), tables=gap_tables(root))]
+    if batch == "g4-gap-degenerate":
+        return [cell("SC3", {k: c[k] for k in sc3.IDENTITY}, extra=[CLOSURE_OPTION])
+                for c in sc3.planned(root, 1, group="degenerate", tables=gap_tables(root))]
     if batch == "sc1":
         return [cell("SC1", {"trials": "1500", "seed": "2026"})]
     if batch == "sc2":
@@ -168,11 +241,11 @@ def batch_cells(root, batch):
 
 def label(c):
     o = dict(c["options"])
-    if c["scenario"] == "SC1":
-        return "SC1 trials=%s" % o["trials"]
+    if c["scenario"] in ("SC1", "SC1GAP"):
+        return "%s trials=%s" % (c["scenario"], o["trials"])
     parts = [c["scenario"], Path(o["dataset"]).stem, "[%s,%s]" % (o["gmin"], o["gmax"]), "sigma=%s" % o["sigma"]]
-    for key, name in (("profile", ""), ("patternKind", ""), ("sensitiveSize", "S="), ("methods", ""),
-                      ("closure", "closure=")):
+    for key, name in (("profile", ""), ("patternKind", ""), ("sensitiveSize", "S="), ("r", "r="), ("rs", "rs="),
+                      ("methods", ""), ("closure", "closure=")):
         if key in o:
             value = o[key]
             if key == "methods":
@@ -606,12 +679,35 @@ def self_test():
                 "sc3-refine": 82, "sc3lb": 136, "sc3opt": 82, "sc3-pareto": 54, "sc3-stop": 136, "sc3lost": 54, "sc3cert": 54,
                 "sc6": 81}
     expected.update({"g3-" + b: expected[b] for b in CLOSURE_BATCHES})
+    expected.update({"g4-sc1gap": 1, "g4-sc2gap": 72, "g4-sc4-s1": 3 * (54 + 17), "g4-sc4-s5": 3 * 34,
+                     "g4-sc4lost": 54})
+    gap_batches = [b for b in G4_BATCHES if b.startswith("g4-gap-")]
+    tables_present = all((REPO / name).is_file() for name, _ in sc3.GAP_TABLES)
+    plannable = [b for b in BATCHES if tables_present or b not in gap_batches]
     for b in BATCHES:
+        if b in gap_batches and not tables_present:
+            try:
+                batch_cells(REPO, b)
+                refused = False
+            except ValueError as e:
+                refused = "is missing" in str(e)
+            check("without the g- > 0 group tables, %s refuses with the missing table named" % b, refused)
+            continue
         n = len(batch_cells(REPO, b))
+        if b in gap_batches:
+            check("plan of %s comes from the g- > 0 tables and is not empty" % b, n > 0, str(n))
+            continue
         check("plan of %s has %d cells" % (b, expected[b]), n == expected[b], str(n))
+    seq = batch_cells(REPO, "g4-sc4-s1")
+    base_cells = [c for c in batch_cells(REPO, "sc3-s1") + batch_cells(REPO, "sc3-degenerate")]
+    check("every g4-sc4-s1 cell is an SC3 cell of sc3-s1 or sc3-degenerate at r = 1, 2, 3, under HIDE-SEQ",
+          len(seq) == 3 * len(base_cells) and all(
+              s["scenario"] == "SC4" and dict(s["options"])["r"] == r and dict(s["options"])["closure"] == "necessary"
+              and all(dict(s["options"])[k] == v for k, v in c["options"] if k not in ("pareto", "methods"))
+              for i, c in enumerate(base_cells) for r, s in zip(LIMITS, seq[3 * i:3 * i + 3])))
     check("only the Pareto batch runs at -Xmx32g",
-          {b for b in BATCHES if any(c["heap"] == PARETO_HEAP for c in batch_cells(REPO, b))} == {"sc3-pareto"})
-    labels = [label(c) for b in BATCHES for c in batch_cells(REPO, b)]
+          {b for b in plannable if any(c["heap"] == PARETO_HEAP for c in batch_cells(REPO, b))} == {"sc3-pareto"})
+    labels = [label(c) for b in plannable for c in batch_cells(REPO, b)]
     check("cell labels are unique across the campaign", len(labels) == len(set(labels)),
           "%d labels, %d distinct" % (len(labels), len(set(labels))))
     same = all(len(batch_cells(REPO, "g3-" + b)) == len(batch_cells(REPO, b)) and all(
@@ -620,6 +716,8 @@ def self_test():
     check("every g3 batch is its base batch, cell for cell, plus closure=necessary", same)
     check("the g3 batches belong to generation 3 and nothing else does",
           {b for b in BATCHES if GENERATION[b] == "3"} == {"g3-" + b for b in CLOSURE_BATCHES})
+    check("the g4 batches belong to generation 4 and nothing else does",
+          {b for b in BATCHES if GENERATION[b] == "4"} == set(G4_BATCHES))
     base = batch_cells(REPO, "sc3-s1")[0]
     g3 = batch_cells(REPO, "g3-sc3-s1")[0]
     old_file = [(Path("old.csv"), "SC3", dict(base["options"]), "2026")]

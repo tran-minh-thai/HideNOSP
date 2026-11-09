@@ -18,8 +18,10 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * Local search over the minimum-mask hiding sets of one sensitive pattern (HIDE-DB, g- = 0), with
- * the exact number of lost patterns as its objective.
+ * Local search over the minimum-mask hiding sets of one sensitive pattern, with the exact number of
+ * lost patterns as its objective, for every gap where an exact program applies ({@link ExactCurve}).
+ * Under HIDE-SEQ only one-sequence moves exist, since the remaining support of each sequence is
+ * bounded by r - 1 on its own.
  *
  * <p>A move changes the masks of one or two sequences and keeps the solution a minimum-mask hiding
  * set: a <em>one-sequence move</em> replaces the masks X_s of sequence s by another set of the same
@@ -82,11 +84,11 @@ public final class MaskLocalSearch {
     public MaskLocalSearch(HideProblem problem, Map<Pattern, Long> watched, long sigma,
                            Map<Integer, Map<Pattern, int[]>> vital, AdaptiveCutHide.DropOracle oracle,
                            int maxPasses, int receivers) {
-        if (problem.sensitive().size() != 1 || !problem.isDatabaseMode()
-                || !FrontierDp.applies(problem.gap())) {
-            throw new IllegalArgumentException("the local search needs one sensitive pattern, HIDE-DB "
-                    + "and g- = 0; got " + problem.sensitive().size() + " pattern(s), mode "
-                    + problem.mode() + ", gap " + problem.gap());
+        if (problem.sensitive().size() != 1
+                || !ExactCurve.applies(problem.gap(), problem.sensitive().get(0))) {
+            throw new IllegalArgumentException("the local search needs one sensitive pattern and a gap "
+                    + "where the exact program applies; got " + problem.sensitive().size()
+                    + " pattern(s), mode " + problem.mode() + ", gap " + problem.gap());
         }
         this.problem = problem;
         this.p = problem.sensitive().get(0);
@@ -134,7 +136,9 @@ public final class MaskLocalSearch {
             for (int s : damaging()) {
                 improved |= oneSequenceMove(s);
             }
-            if (!improved) {
+            // HIDE-SEQ fixes the remaining support of every sequence at r - 1 at most, so a move
+            // between two sequences does not exist there: one-sequence moves only.
+            if (!improved && problem.isDatabaseMode()) {
                 improved = allocationMove();
             }
             if (!improved) {
@@ -311,7 +315,7 @@ public final class MaskLocalSearch {
         Set<Integer> bestSet = null;
         Map<Pattern, Integer> bestDrop = null;
         for (long[] w : weightings) {
-            FrontierDp.Curve curve = FrontierDp.solve(p, sequence, gap(), w);
+            FrontierDp.Curve curve = ExactCurve.solve(p, sequence, gap(), w);
             if (curve.masks()[target] != current.size()) {
                 continue;
             }
@@ -351,7 +355,7 @@ public final class MaskLocalSearch {
             for (int i = 0; i < w.length; i++) {
                 w[i] = current.contains(i) ? 0 : CostCurve.SCALE * (1 + count[i]);
             }
-            return FrontierDp.solve(p, sequence, gap(), w);
+            return ExactCurve.solve(p, sequence, gap(), w);
         });
     }
 
@@ -388,7 +392,7 @@ public final class MaskLocalSearch {
             for (int i = 0; i < keep.length; i++) {
                 keep[i] = current.contains(i) ? 0 : CostCurve.SCALE;
             }
-            FrontierDp.Curve c1 = FrontierDp.solve(p, sequence, gap(), keep);
+            FrontierDp.Curve c1 = ExactCurve.solve(p, sequence, gap(), keep);
             if (r1 + 1 > c1.supNO()) {
                 continue;
             }

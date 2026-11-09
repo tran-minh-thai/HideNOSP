@@ -7,7 +7,7 @@ import hidenosp.core.SequenceDatabase;
 import hidenosp.core.EventSequence;
 import hidenosp.core.SupportNO;
 import hidenosp.hide.Allocation;
-import hidenosp.hide.FrontierDp;
+import hidenosp.hide.ExactCurve;
 import hidenosp.hide.HideProblem;
 
 import java.util.ArrayList;
@@ -19,8 +19,9 @@ import java.util.List;
  *
  * <ul>
  *   <li>{@code minMasks}: |R| star, the least number of masks. For distinct items it is P1 and its
- *       corollary. For a repeated-item pattern it is exact when g- = 0 (theorem P8 with the
- *       allocation of P8b); with g- &gt; 0 only P3 brackets it, the value is the upper bound of the
+ *       corollary. For a repeated-item pattern it is exact when an exact program applies (theorem
+ *       P8 when g- = 0, its corollary when g- &gt; 0 with a finite g+; see {@link ExactCurve}), with
+ *       the allocation of P8b; otherwise only P3 brackets it, the value is the upper bound of the
  *       cut, and {@link #isExact()} says so.</li>
  *   <li>{@code repetitionRatio}: rho_rep = 1 - sup_seq / sup_NO. Near zero means sup_NO collapses
  *       to the sequence support, so the configuration belongs to the degenerate control group.</li>
@@ -48,7 +49,7 @@ public record DataProfile(Pattern pattern, long supNO, int supSeq, long supNOWit
 
         long minMasks;
         boolean exact = pattern.hasDistinctItems();
-        if (!exact && FrontierDp.applies(gap)) {
+        if (!exact && ExactCurve.applies(gap, pattern)) {
             minMasks = exactRepeated(database, pattern, gap, mode, threshold, perSequence, total);
             exact = true;
         } else if (mode == HideProblem.Mode.HIDE_DB) {
@@ -66,7 +67,7 @@ public record DataProfile(Pattern pattern, long supNO, int supSeq, long supNOWit
                 repetition, effect, exact);
     }
 
-    /** |R| star of a repeated-item pattern when g- = 0: the curves of P8, allocated as in P8b. */
+    /** |R| star of a repeated-item pattern: the exact curves (P8 or its corollary), allocated as in P8b. */
     private static long exactRepeated(SequenceDatabase database, Pattern pattern, GapConstraint gap,
                                       HideProblem.Mode mode, int threshold, int[] perSequence,
                                       long total) {
@@ -76,7 +77,7 @@ public record DataProfile(Pattern pattern, long supNO, int supSeq, long supNOWit
                 continue;
             }
             EventSequence sequence = database.get(s);
-            curves.add(FrontierDp.solve(pattern, sequence, gap, null).masks());
+            curves.add(ExactCurve.solve(pattern, sequence, gap, null).masks());
         }
         if (mode == HideProblem.Mode.HIDE_SEQ) {
             long sum = 0;

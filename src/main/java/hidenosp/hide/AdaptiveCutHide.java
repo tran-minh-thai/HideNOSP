@@ -47,8 +47,10 @@ import java.util.Set;
  * local search moves one or two sequences at a time, which pairs of masks and small supports need.
  *
  * <p>The drops come from the caller's evaluator, the same code that counts Lost in the result files,
- * so the method and the metric cannot disagree about a drop. Only one sensitive pattern, HIDE-DB and
- * g- = 0 (where theorem P8 is exact) are accepted; anything else is refused, not approximated.
+ * so the method and the metric cannot disagree about a drop. Only one sensitive pattern and a gap where
+ * an exact program applies ({@link ExactCurve}) are accepted; anything else is refused, not
+ * approximated. Under HIDE-SEQ every iteration keeps the fixed allocation r - 1 of CUT-HIDE, and the
+ * local search makes one-sequence moves only.
  */
 public final class AdaptiveCutHide implements HidingMethod {
 
@@ -137,11 +139,11 @@ public final class AdaptiveCutHide implements HidingMethod {
 
     @Override
     public Sanitization run(HideProblem problem) {
-        if (problem.sensitive().size() != 1 || !problem.isDatabaseMode()
-                || !FrontierDp.applies(problem.gap())) {
-            throw new IllegalArgumentException("the adaptive weight needs one sensitive pattern, "
-                    + "HIDE-DB and g- = 0, where theorem P8 is exact; got " + problem.sensitive().size()
-                    + " pattern(s), mode " + problem.mode() + ", gap " + problem.gap());
+        if (problem.sensitive().size() != 1
+                || !ExactCurve.applies(problem.gap(), problem.sensitive().get(0))) {
+            throw new IllegalArgumentException("the adaptive weight needs one sensitive pattern and a "
+                    + "gap where the exact program applies (theorem P8 or its corollary); got "
+                    + problem.sensitive().size() + " pattern(s), gap " + problem.gap());
         }
         Pattern p = problem.sensitive().get(0);
         int n = problem.database().size();
@@ -222,11 +224,23 @@ public final class AdaptiveCutHide implements HidingMethod {
                 searched.mask(e.getKey(), position);
             }
         }
-        // Step 8 again: the moves keep the support of P below sigma by construction; check it.
-        long left = SupportNO.of(p, problem.database().mask(searchResult.masks()), problem.gap());
-        if (left >= problem.threshold()) {
-            throw new IllegalStateException("the local search left sup_NO(P) = " + left
-                    + ", not below " + problem.threshold() + "; this is a bug");
+        // Step 8 again: the moves keep the support of P below the threshold by construction (sigma
+        // over the database for HIDE-DB, r in every sequence for HIDE-SEQ); check it.
+        var masked = problem.database().mask(searchResult.masks());
+        if (problem.isDatabaseMode()) {
+            long left = SupportNO.of(p, masked, problem.gap());
+            if (left >= problem.threshold()) {
+                throw new IllegalStateException("the local search left sup_NO(P) = " + left
+                        + ", not below " + problem.threshold() + "; this is a bug");
+            }
+        } else {
+            for (int s = 0; s < masked.size(); s++) {
+                int left = SupportNO.of(p, masked.get(s), problem.gap());
+                if (left >= problem.threshold()) {
+                    throw new IllegalStateException("the local search left sup_NO(P) = " + left
+                            + " in sequence " + s + ", not below r = " + problem.threshold() + "; this is a bug");
+                }
+            }
         }
         // The search counts Lost incrementally; the evaluator must agree, or the search is wrong.
         int checked = lost(oracle.drops(searched));

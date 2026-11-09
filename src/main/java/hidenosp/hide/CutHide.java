@@ -38,10 +38,12 @@ import java.util.TreeSet;
  *       zero by construction.</li>
  * </ol>
  *
- * <p>With one sensitive pattern and g- = 0, steps 5 and 6 are exact for any mu(P): the curves come
- * from theorem P8 ({@link FrontierDp}) and the allocation minimises the masks and then the weight.
- * With g- &gt; 0 they are exact for distinct items only (P1, P2, P6(b)), the lambda sweep brackets
- * the weight, and a repeated-item pattern gets the cut of P3. With several patterns the problem is
+ * <p>With one sensitive pattern, steps 5 and 6 are exact for any mu(P) whenever an exact program
+ * applies ({@link ExactCurve}): theorem P8 ({@link FrontierDp}) when g- = 0, the program of its
+ * corollary ({@link WindowDp}) when g- &gt; 0 and g+ is finite; the allocation minimises the masks
+ * and then the weight. Otherwise (g- &gt; 0 with g+ unbounded, or a state too large) they are exact
+ * for distinct items only (P1, P2, P6(b)), the lambda sweep brackets the weight, and a
+ * repeated-item pattern gets the cut of P3. With several patterns the problem is
  * NP-hard (L4a) and this class runs the greedy of step 7.
  */
 public final class CutHide implements HidingMethod {
@@ -142,7 +144,7 @@ public final class CutHide implements HidingMethod {
      * With g- = 0 the exact curves of P8 replace both, for any mu(P).
      */
     private void runSinglePattern(HideProblem problem, Pattern pattern, Sanitization result) {
-        if (config.curves() != CutHideConfig.Curves.LAMBDA_SWEEP && FrontierDp.applies(problem.gap())) {
+        if (config.curves() != CutHideConfig.Curves.LAMBDA_SWEEP && ExactCurve.applies(problem.gap(), pattern)) {
             runSinglePatternExact(problem, pattern, result);
             return;
         }
@@ -211,9 +213,10 @@ public final class CutHide implements HidingMethod {
      * and then the fewest masks. Weights are in the scaled unit of {@link CostCurve#SCALE}.
      */
     public List<ParetoVertex> paretoFront(HideProblem problem) {
-        if (problem.sensitive().size() != 1 || !FrontierDp.applies(problem.gap())) {
+        if (problem.sensitive().size() != 1
+                || !ExactCurve.applies(problem.gap(), problem.sensitive().get(0))) {
             throw new IllegalArgumentException("the exact Pareto front needs one sensitive pattern "
-                    + "and g- = 0; got " + problem.sensitive().size() + " patterns, gap "
+                    + "and an exact program for its gap; got " + problem.sensitive().size() + " patterns, gap "
                     + problem.gap());
         }
         requireNonEmptyBand(problem);
@@ -315,7 +318,7 @@ public final class CutHide implements HidingMethod {
         FrontierDp.Curve[] curves = new FrontierDp.Curve[n];
         for (int s = 0; s < n; s++) {
             curves[s] = fixed != null && fixed[s] != null ? fixed[s]
-                    : FrontierDp.solve(pattern, problem.database().get(s), problem.gap(),
+                    : ExactCurve.solve(pattern, problem.database().get(s), problem.gap(),
                     scaled[s], order);
         }
         return curves;

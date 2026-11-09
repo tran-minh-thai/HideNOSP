@@ -150,10 +150,51 @@ public final class IlpExact implements HidingMethod {
     private int lowerBound(HideProblem problem) {
         int bound = 0;
         for (Pattern p : problem.sensitive()) {
+            if (!problem.isDatabaseMode()) {
+                // HIDE-SEQ: a mask acts on one sequence, so every sequence needs its own share.
+                bound = Math.max(bound, (int) Math.min(Integer.MAX_VALUE,
+                        perSequenceNeed(problem, p, problem.database())));
+                continue;
+            }
             long gap = gapOf(problem, p, problem.database());
             bound = Math.max(bound, (int) Math.ceil((double) gap / p.mu()));
         }
         return bound;
+    }
+
+    /**
+     * HIDE-SEQ: the masks pattern P still needs, summed over the sequences, each sequence needing at
+     * least ceil(its excess over r - 1 / mu(P)) by L1 and O1.
+     */
+    private long perSequenceNeed(HideProblem problem, Pattern pattern, SequenceDatabase database) {
+        long need = 0;
+        for (int s = 0; s < database.size(); s++) {
+            long excess = Math.max(0, SupportNO.of(pattern, database.get(s), problem.gap())
+                    - problem.threshold() + 1);
+            need += (excess + pattern.mu() - 1) / pattern.mu();
+        }
+        return need;
+    }
+
+    /**
+     * HIDE-SEQ: true when some sequence still above r - 1 has no candidate left at or after index
+     * {@code from}, so no completion of this partial solution can be feasible. The candidates are
+     * listed sequence by sequence, so the ones of a sequence form one block.
+     */
+    private boolean exhausted(HideProblem problem, List<int[]> candidates, int from, SequenceDatabase current) {
+        int[] left = new int[current.size()];
+        for (int i = from; i < candidates.size(); i++) {
+            left[candidates.get(i)[0]]++;
+        }
+        for (int s = 0; s < current.size(); s++) {
+            for (Pattern p : problem.sensitive()) {
+                long excess = SupportNO.of(p, current.get(s), problem.gap()) - problem.threshold() + 1;
+                if (excess > (long) left[s] * p.mu()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /** How much the support of P still has to fall in the current database. */
@@ -186,6 +227,12 @@ public final class IlpExact implements HidingMethod {
             if (gapOf(problem, p, current) > (long) left * p.mu()) {
                 return;
             }
+            if (!problem.isDatabaseMode() && perSequenceNeed(problem, p, current) > left) {
+                return;
+            }
+        }
+        if (!problem.isDatabaseMode() && exhausted(problem, candidates, from, current)) {
+            return;
         }
         for (int i = from; i <= candidates.size() - left; i++) {
             chosen.add(candidates.get(i));

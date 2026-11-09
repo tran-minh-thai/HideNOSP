@@ -988,3 +988,114 @@ number of generation 3 exists.
 **Unchanged:** every hypothesis, threshold, test, margin, exclusion rule and group table of sections 1–20. The
 analysis reads the files of generation 3 for every invariant number; files of the two rules are never mixed in one
 table.
+
+---
+
+## 22. Added after the main comparison (2026-11-08) — HIDE-SEQ and g⁻ > 0 (written 2026-11-09, before any of these runs)
+
+**Decision of the author** (2026-11-08): widen the experiments instead of narrowing the claims, by running HIDE-SEQ
+and gaps with g⁻ > 0. Everything below was fixed after every result of sections 14–21 had been seen (see
+Provenance), and before any run of this section. The paper states it as "fixed after the main comparison". No result
+of SC1 to SC3 is rerun or changed by this section.
+
+### 22.1 What the code adds
+
+- **The exact program for g⁻ > 0** (`hidenosp.hide.WindowDp`, the dynamic program of the corollary of Theorem 2): the
+  state is, per level j < m, the set of positions among the g⁺ + 1 latest that carry a reachable node of level j
+  outside the cut, (m − 1)(g⁺ + 1) bits in all, at most 62; g⁺ must be finite. `hidenosp.hide.ExactCurve` calls the
+  program of Theorem 2 when g⁻ = 0, exactly as before, and this one when g⁻ > 0. CUT-HIDE (stages i–iii), the data
+  profile (|R|* of a repeated-item pattern) and the local search go through it.
+- **HIDE-SEQ in the three stages of CUT-HIDE.** Stage (i): the fixed allocation t_S = r − 1. Stage (ii): the six
+  reweighting rounds of (13) with that allocation. Stage (iii): one-sequence moves only (an allocation move does not
+  exist under a per-sequence limit). Several patterns: the greedy rule (15) in every sequence, until every sensitive
+  pattern is below r in every sequence.
+- **`hha-emb`**, the occurrence-count rule of Abul, Bonchi and Giannotti (TKDE 2010, p. 1713, "Maximum occurrence
+  counts"): "the iteration in Sanitize(T, P^h) can be terminated whenever |M_T^{P^h}| ≤ ρ", with ρ = r − 1. Every
+  sequence whose matching set (every embedding of every sensitive pattern) holds at least r embeddings is sanitized
+  by the local rule of HHA. With several patterns the bound applies to the matching set of all of them together, as
+  the paper states it.
+- **Scenarios** (repository identifiers; the paper numbers its experiments separately): `SC4` (the comparison of SC3
+  under HIDE-SEQ, option `--r`), `SC4LOST` (the exact Lost optimum of SC3LOST under HIDE-SEQ, option `--rs`), `SC1GAP`
+  (implementation check of `WindowDp`). The SC3 scenario itself runs g⁻ > 0 through its existing options `gmin` and
+  `gmax`.
+- **Checks.** `WindowDpTest` (2,179 targets on 832 random instances with g⁻ ∈ {1, 2}, 504 with repeated items, 0
+  mismatches against every subset of positions, weight as well as size; agreement with the program of Theorem 2 when
+  g⁻ = 0); `CutHideExtendedScopeTest` (the three stages against every subset, HIDE-SEQ and HIDE-DB with g⁻ = 1:
+  hiding, |R| = |R|*, Lost not rising across the stages, never below the optimum); `PerSequenceBaselineTest` (the
+  exact enumeration under HIDE-SEQ against every subset, the occurrence-count rule). Seven injected faults (three in
+  the program, two in the HIDE-SEQ stages, two in the pruning of the exact enumeration) were each caught. With g⁻ = 0, four SC3 cells and one SC3LOST cell (206 rows) are identical, row for row and header for
+  header, between the code before and after this section; a control run under the earlier closure rule differs.
+
+### 22.2 HIDE-SEQ (`SC4`, `SC4LOST`)
+
+**Cells.** The cells of `sc3-s1` and `sc3-degenerate` (|𝒮| = 1) and of `sc3-s5` (|𝒮| = 5): the same dataset, σ, gap,
+scope, sampling (section 9: five strata, 4 sets per stratum, seed 2026), l_max = 4, closure rule `necessary`, each at
+r ∈ {1, 2, 3}. σ only defines F_σ(D) for Lost and SupDist. The intermediate group does not run, as in section 14.
+An instance in which no sequence reaches r for any sensitive pattern needs no mask; it is written with the status
+`no sequence reaches r` and counted apart, never as a tie.
+
+**Methods.** `cut-hide-rw-ls` (the method under test), `cut-hide-rw` and `cut-hide` (its stages), the Holm family
+`hha`, `dbsh`, `sbsh-r1`, `sbsh-rmax` under HIDE-SEQ (each reads sup_NO per sequence and masks), `occurrence`
+(descriptive), `hha-emb` (H5a only, descriptive otherwise). Time limit 1,800 s per method and set, `-Xmx8g`, the
+exclusion rules of section 5.
+
+**H5a (masks).** For each baseline and for `hha-emb`, the median over the main-group instances with |𝒮| = 1 (without
+`protein_sdb1`) of |R| / |R|*_SEQ, with |R|*_SEQ = Σ_S OPT_S(r − 1) exact (Theorem 1 for distinct items, Theorem 2(b)
+or its corollary otherwise); verdict on the median with the thresholds of H3 (≥ 1.10 more masks, ≤ 1.05 the same, in
+between no conclusion), no test, as H4a. Reported per r and pooled.
+
+**H5b (Lost at equal masks).** The procedure of H2 (sections 2, 4, 5: one-sided Wilcoxon signed-rank with Pratt's
+treatment of zeros on the difference of Lost_rel, δ_L = 0.02, α = 0.05, Holm over the four baselines, rank-biserial on
+the raw differences, the equivalence margins ±0.02 for Lost_rel and ±0.01 for SupDist, the table of pairs (|R|,
+Lost)), on the main-group instances at equal |R|, **separately for each pair (|𝒮|, r)**: six families of four tests.
+The instances of one sensitive set at different r are not independent, so no test pools r. The result is written
+"the null of H5b is rejected" or "is not rejected", per baseline and family. Sensitivity analysis: the dataset as the
+unit, as for H2 (median difference over the equal-count instances of each dataset, one-sided sign test over the
+datasets).
+
+**Small instances (`SC4LOST`).** The cells of `sc3-s1`; the windows, strata, seeds and the instance threshold
+σ_I = sup_NO(P, I) − drop + 1 (drop ∈ {2, 3, 4}) of SC3LOST, so F_σI(I) is the one of SC3LOST; the hiding constraint
+sup_NO(P, S) < r in every window, r ∈ {1, 2, 3}. Every minimum hiding set is enumerated (the exact class, with the
+per-sequence bounds of 22.1); reported: instances solved, instances where each method reaches |R|*_SEQ, reaches the
+optimum Lost, and the total excess. Descriptive.
+
+### 22.3 g⁻ > 0 (`SC2`, `SC3`, `SC1GAP`)
+
+**Gaps.** [1,2] and [1,3]. [2,4] runs only if the author adds it after the estimate of running time; it is not run by
+default.
+
+**Groups.** SC2 `--profile=pool` and `--profile=repeated` on the 12 datasets and every σ of row 1 of the protocol table,
+at each new gap; the groups follow section 3 and section 10 with the same thresholds (ρ_rep ≥ 0.20 main, ≤ 0.05
+degenerate, β ≥ 0.20 effective). The two tables are written by the analysis tool from the SC2 files and locked by
+commit before any SC3 run at g⁻ > 0.
+
+**Cells and methods.** The main-group rows of the new tables at |𝒮| ∈ {1, 5, 10, 20} in both scopes, and the
+degenerate-group rows at |𝒮| = 1, exactly as sections 14 and 16: the seven methods of section 14, 1,800 s, `-Xmx8g`,
+closure rule `necessary`.
+
+**H6.** H2, H2-R and H3 repeated at g⁻ > 0 with the same thresholds, tests and margins, reported separately for
+|𝒮| = 1 and for several patterns. For distinct items, |R|* comes from Theorem 1 (the flow), independent of the program
+CUT-HIDE runs; every row of CUT-HIDE must mask exactly |R|*, and the count of rows compared is reported.
+
+**SC1GAP.** 3,000 random instances (sequence length 6–11, m = 2–4, g⁻ ∈ {1, 2}, g⁺ ≤ 4, alphabets of 2 or 3 items):
+OPT(t) of the program against exhaustive search over subsets with exhaustive packing, every t; the number of
+instances, targets and mismatches is reported per gap and per kind of pattern.
+
+### 22.4 Where this differs from the request of 2026-11-08
+
+1. `hha-emb` with several patterns bounds the matching set of all sensitive patterns together, as the paper states,
+   not each pattern.
+2. H5b is tested per pair (|𝒮|, r), not pooled over r (dependence).
+3. The HIDE-SEQ cells are those of SC3 (main and degenerate groups at |𝒮| = 1, main at |𝒮| = 5), so every instance is
+   paired with its SC3 instance; the intermediate group does not run.
+4. Running time of HIDE-SEQ and of g⁻ > 0 is not measured by these batches: SC4 and SC3 write machine-invariant rows
+   only. A timed run needs SC6 extended to these problems, which is not done; the author decides whether to add it.
+
+### 22.5 Provenance
+
+Before writing this section the proposer had seen every result of sections 14–21 and, from generation 3, the SC3LOST,
+SC3OPT and SC3CERT files and 24 of the 34 cells of `g3-sc3-s5`. Of the new problems the proposer had seen only: the
+tests of 22.1, one SC4 cell (sepsis [0,1] σ = 300, r = 2, one set per stratum) and one SC1GAP run on the development
+machine, and the running-time probe used for the estimate. None of these is reported.
+
+**Unchanged:** all of sections 1–21.

@@ -67,6 +67,15 @@ import java.util.List;
  * a sequence intact by the budget rule and never sanitises past the threshold. Under HIDE-SEQ HHA
  * already stops at r, so the variant equals HHA there. The name describes the behaviour; it is not a
  * published algorithm.
+ *
+ * <p><b>The occurrence-count rule of the TKDE paper</b> ({@link #perSequenceEmbeddings()}, key
+ * {@code hha-emb}, HIDE-SEQ only). Abul, Bonchi and Giannotti (TKDE 2010, p. 1713, paragraph
+ * "Maximum occurrence counts"): "Given an upper bound rho of the occurrence count, the iteration in
+ * Sanitize(T, P^h) can be terminated whenever |M_T^{P^h}| &lt;= rho", where M_T^{P^h} is the matching set
+ * of the sequence, every embedding of every sensitive pattern under the gap constraint. With rho = r - 1
+ * every sequence whose matching set holds r or more embeddings is sanitised by the local rule, and the
+ * iteration stops when the matching set holds at most r - 1. With several sensitive patterns the bound
+ * applies to the matching set of all of them together, as the paper states it, not to each pattern.
  */
 public final class Hha implements HidingMethod {
 
@@ -81,6 +90,7 @@ public final class Hha implements HidingMethod {
     private final Delta delta;
     private final SupportCount support;
     private final boolean stopAtThreshold;
+    private final boolean embeddingCount;
 
     /** The configuration used in the comparison tables. */
     public Hha() {
@@ -96,9 +106,22 @@ public final class Hha implements HidingMethod {
     }
 
     private Hha(Delta delta, SupportCount support, boolean stopAtThreshold) {
+        this(delta, support, stopAtThreshold, false);
+    }
+
+    private Hha(Delta delta, SupportCount support, boolean stopAtThreshold, boolean embeddingCount) {
         this.delta = delta;
         this.support = support;
         this.stopAtThreshold = stopAtThreshold;
+        this.embeddingCount = embeddingCount;
+    }
+
+    /**
+     * The occurrence-count rule of the TKDE paper under a per-sequence limit r: sanitise every sequence
+     * whose matching set holds at least r embeddings, until it holds at most r - 1 (HIDE-SEQ only).
+     */
+    public static Hha perSequenceEmbeddings() {
+        return new Hha(Delta.PATH_COUNTS, SupportCount.NON_OVERLAPPING, false, true);
     }
 
     /** HHA's order and position rule, stopping as soon as every sensitive support is below sigma. */
@@ -108,7 +131,7 @@ public final class Hha implements HidingMethod {
 
     @Override
     public String name() {
-        return "HHA" + (stopAtThreshold ? "-stop" : "")
+        return "HHA" + (stopAtThreshold ? "-stop" : "") + (embeddingCount ? "-emb" : "")
                 + (support == SupportCount.SEQUENCE_COUNT ? "-original" : "")
                 + (delta == Delta.ORIGINAL_DP ? "-dp" : "");
     }
@@ -118,6 +141,9 @@ public final class Hha implements HidingMethod {
         if (support == SupportCount.SEQUENCE_COUNT && !problem.isDatabaseMode()) {
             throw new IllegalArgumentException("the sequence-count support of the paper is defined "
                     + "for a database threshold only");
+        }
+        if (embeddingCount) {
+            return runEmbeddingCount(problem);
         }
         SequenceDatabase database = problem.database();
         List<Pattern> sensitive = problem.sensitive();
@@ -184,6 +210,43 @@ public final class Hha implements HidingMethod {
         }
         Exclude.verify(problem, result, support, name());
         return result;
+    }
+
+    /**
+     * The occurrence-count rule: every sequence whose matching set holds at least r embeddings of the
+     * sensitive patterns is sanitised by the local rule until the matching set holds at most r - 1.
+     */
+    private Sanitization runEmbeddingCount(HideProblem problem) {
+        if (problem.isDatabaseMode()) {
+            throw new IllegalArgumentException("the occurrence-count rule bounds the matchings of one "
+                    + "sequence, so it is defined for a per-sequence limit (HIDE-SEQ) only");
+        }
+        long bound = problem.threshold() - 1L;
+        Sanitization result = new Sanitization(problem.database()).method(name());
+        for (int s = 0; s < problem.database().size(); s++) {
+            EventSequence sequence = problem.database().get(s);
+            NettreeCutIndex index = index(problem, s);
+            while (matchingSet(index) > bound) {
+                int target = bestPosition(problem, sequence, index);
+                if (target < 0) {
+                    throw new IllegalStateException("the matching set is not empty but no position lies "
+                            + "on a matching");
+                }
+                index.maskPosition(target);
+                result.mask(s, target);
+            }
+        }
+        Exclude.verify(problem, result, support, name());
+        return result;
+    }
+
+    /** |M_T^{P^h}|: every embedding of every sensitive pattern in the sequence of the index. */
+    private static long matchingSet(NettreeCutIndex index) {
+        long total = 0;
+        for (int id = 0; id < index.patternCount(); id++) {
+            total = Math.min(hidenosp.index.PathCounts.SATURATED, total + index.totalOccurrences(id));
+        }
+        return total;
     }
 
     /** Sanitize(T, Sh): mask the position on the most matchings until none (or none at r) is left. */

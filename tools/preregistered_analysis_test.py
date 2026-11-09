@@ -338,6 +338,25 @@ def _write_sc2(path, rows, profile):
                     % (name, pattern, rho, beta))
 
 
+def test_groups_keep_positive_minimum_gaps_apart():
+    """Section 22.3: an SC2 file at g- > 0 never enters the locked groups of g- = 0, and groups on its own."""
+    import tempfile
+    directory = tempfile.mkdtemp()
+    zero = os.path.join(directory, "SC2_zero.csv")
+    positive = os.path.join(directory, "SC2_positive.csv")
+    _write_sc2(zero, [("x", 0.01, 0.5, True), ("x", 0.02, 0.5, True), ("x", 0.03, 0.5, True)], "pool")
+    _write_sc2(positive, [("x", 0.50, 0.5, True), ("x", 0.60, 0.5, True), ("x", 0.70, 0.5, True)], "pool")
+    with open(positive, encoding="utf-8") as f:
+        text = f.read().replace('"[0,3]"', '"[1,3]"')
+    with open(positive, "w", encoding="utf-8", newline="\n") as f:
+        f.write(text)
+    default = pa.group_configurations([zero, positive])
+    gap = pa.group_configurations([zero, positive], positive_gap=True)
+    assert set(default) == {("x", "[0,3]", 100)} and default[("x", "[0,3]", 100)]["group"] == "degenerate", default
+    assert set(gap) == {("x", "[1,3]", 100)} and gap[("x", "[1,3]", 100)]["group"] == "main", gap
+    assert pa.positive_minimum_gap("[2,4]") and not pa.positive_minimum_gap("[0,10]")
+
+
 def test_groups_read_only_pool_files():
     """Section 10: only SC2 files of the pool profile group; a sampled file is ignored."""
     import tempfile

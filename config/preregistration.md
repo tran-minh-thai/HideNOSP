@@ -1074,6 +1074,14 @@ at each new gap; the groups follow section 3 and section 10 with the same thresh
 degenerate, β ≥ 0.20 effective). The two tables are written by the analysis tool from the SC2 files and locked by
 commit before any SC3 run at g⁻ > 0.
 
+> **Locked 2026-11-09, commit `0c83332`** (`tools/preregistered_analysis.py --write-gap-groups`, from 71 SC2 files of the
+> development machine; SC2 measures properties of the data only, as the tables of section 10 were). Main scope: 37
+> configurations, 14 in the main group, 13 degenerate. Repeated-item scope: 34 configurations, 31 main, 1 degenerate.
+> fifa [1,2] σ = 3000 has no distinct-item candidate of length 2–4 in F_σ: the configuration has nothing to hide and
+> does not exist in the main scope. The tables of g⁻ = 0 are unchanged and still validate (42 and 39 configurations).
+> Cells: 47, 23, 17 and 11 at |𝒮| = 1, 5, 10, 20 and 13 degenerate-group cells. The batch `g4-sc2gap` reruns these SC2
+> cells on the measuring machine, and the analysis compares its groups with the locked tables.
+
 **Cells and methods.** The main-group rows of the new tables at |𝒮| ∈ {1, 5, 10, 20} in both scopes, and the
 degenerate-group rows at |𝒮| = 1, exactly as sections 14 and 16: the seven methods of section 14, 1,800 s, `-Xmx8g`,
 closure rule `necessary`.

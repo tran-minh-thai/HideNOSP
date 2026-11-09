@@ -1116,8 +1116,9 @@ tests of 22.1, one SC4 cell (sepsis [0,1] σ = 300, r = 2, one set per stratum) 
 machine, and the running-time probe used for the estimate. None of these is reported.
 
 The hypotheses H5a, H5b and H6 were written before the Lost and |R| of the probe were read. The scope above was fixed
-after they were read: on 166 pairs (instance × baseline) no baseline used no more masks and lost no more patterns than
-`cut-hide-rw-ls` with one of the two strictly smaller; under HIDE-SEQ the median |R| / |R|* of HHA and of the
+after they were read: on 264 pairs (instance × baseline) under HIDE-SEQ and 168 pairs at [1,3], no baseline used no
+more masks and lost no more patterns than `cut-hide-rw-ls` with one of the two strictly smaller (corrected 2026-11-09:
+an earlier version of this sentence gave 166 pairs, a hand count from a table that left out three of the baselines); under HIDE-SEQ the median |R| / |R|* of HHA and of the
 occurrence heuristic was 1.000–1.024, so H5a may not hold for them. Neither the hypotheses nor their thresholds were
 changed after reading these numbers.
 

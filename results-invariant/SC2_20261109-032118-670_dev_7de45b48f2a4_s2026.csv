@@ -1,0 +1,18 @@
+# run 20261109-032118-670_dev_7de45b48f2a4_s2026
+# host unknown-host
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Apple M5
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC2
+# profile repeated
+# options {machine=dev, dataset=datasets/leviathan.txt, format=SPMF, sigma=500, gmin=1, gmax=2, maxPatternLength=4, profile=repeated}
+dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,mask_share,rho_rep,beta,min_masks_exact
+datasets/leviathan.txt,"[1,2]",500,"[18, 18]",690,556,5157,136,0.000689,0.194203,0.866201,true
+datasets/leviathan.txt,"[1,2]",500,"[1, 1, 1, 1]",1090,47,1480,189,0.000958,0.956881,0.263514,true
+datasets/leviathan.txt,"[1,2]",500,"[1, 1, 1]",1225,48,2689,303,0.001536,0.960816,0.544440,true
+datasets/leviathan.txt,"[1,2]",500,"[8, 8]",1721,1227,8344,1005,0.005095,0.287042,0.793744,true
+datasets/leviathan.txt,"[1,2]",500,"[1, 1]",2554,1209,3908,1552,0.007868,0.526625,0.346469,true

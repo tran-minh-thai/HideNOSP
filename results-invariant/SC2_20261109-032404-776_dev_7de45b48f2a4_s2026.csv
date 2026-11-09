@@ -1,0 +1,17 @@
+# run 20261109-032404-776_dev_7de45b48f2a4_s2026
+# host unknown-host
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Apple M5
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC2
+# profile repeated
+# options {machine=dev, dataset=datasets/protein_sdb1.txt, format=SPMF, sigma=800, gmin=1, gmax=2, maxPatternLength=4, profile=repeated}
+dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,mask_share,rho_rep,beta,min_masks_exact
+datasets/protein_sdb1.txt,"[1,2]",800,"[17, 17]",834,363,5852,18,0.000196,0.564748,0.857485,true
+datasets/protein_sdb1.txt,"[1,2]",800,"[5, 5]",1080,354,6778,158,0.001720,0.672222,0.840661,true
+datasets/protein_sdb1.txt,"[1,2]",800,"[9, 9]",1358,398,7615,367,0.003995,0.706922,0.821668,true
+datasets/protein_sdb1.txt,"[1,2]",800,"[0, 0]",1493,393,7635,451,0.004909,0.736772,0.804453,true

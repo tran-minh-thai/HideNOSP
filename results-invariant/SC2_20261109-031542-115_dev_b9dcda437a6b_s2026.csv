@@ -1,0 +1,19 @@
+# run 20261109-031542-115_dev_b9dcda437a6b_s2026
+# host unknown-host
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Apple M5
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC2
+# profile repeated
+# options {machine=dev, dataset=datasets/bible.txt, format=SPMF, sigma=2000, gmin=1, gmax=2, maxPatternLength=4, profile=repeated}
+dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,mask_share,rho_rep,beta,min_masks_exact
+datasets/bible.txt,"[1,2]",2000,"[10, 46, 46]",2040,1691,11305,21,0.000027,0.171078,0.819549,true
+datasets/bible.txt,"[1,2]",2000,"[10, 10, 10]",2181,1486,19197,61,0.000078,0.318661,0.886388,true
+datasets/bible.txt,"[1,2]",2000,"[10, 10, 46]",2838,2335,14146,615,0.000781,0.177237,0.799378,true
+datasets/bible.txt,"[1,2]",2000,"[46, 46]",3535,2696,14732,1101,0.001399,0.237341,0.760046,true
+datasets/bible.txt,"[1,2]",2000,"[31, 31]",3840,2620,15907,1115,0.001417,0.317708,0.758597,true
+datasets/bible.txt,"[1,2]",2000,"[10, 10]",11408,7668,34473,7691,0.009772,0.327840,0.669074,true

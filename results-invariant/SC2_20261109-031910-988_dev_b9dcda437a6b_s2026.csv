@@ -1,0 +1,16 @@
+# run 20261109-031910-988_dev_b9dcda437a6b_s2026
+# host unknown-host
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Apple M5
+# logical_processors 10
+# ram_bytes 34359738368
+# kind INVARIANT
+# scenario SC2
+# profile repeated
+# options {machine=dev, dataset=datasets/fifa.txt, format=SPMF, sigma=3000, gmin=1, gmax=2, maxPatternLength=4, profile=repeated}
+dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,mask_share,rho_rep,beta,min_masks_exact
+datasets/fifa.txt,"[1,2]",3000,"[17, 17, 17, 17]",4181,180,4980,356,0.000480,0.956948,0.160442,true
+datasets/fifa.txt,"[1,2]",3000,"[17, 17, 17]",4556,207,5289,624,0.000842,0.954565,0.138590,true
+datasets/fifa.txt,"[1,2]",3000,"[17, 17]",5064,306,5853,1201,0.001621,0.939573,0.134803,true

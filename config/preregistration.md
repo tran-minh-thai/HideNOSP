@@ -998,6 +998,11 @@ and gaps with g⁻ > 0. Everything below was fixed after every result of section
 Provenance), and before any run of this section. The paper states it as "fixed after the main comparison". No result
 of SC1 to SC3 is rerun or changed by this section.
 
+**Scope fixed by the author** (2026-11-09), chosen among three options with their estimated machine time: HIDE-SEQ at
+r = 2 only, the small HIDE-SEQ instances at r = 1 only, and g⁻ > 0 in full (22.2, 22.3). This is the last experimental
+batch of the paper: nothing is added after it, whatever its results. r = 1 and r = 3 of the comparison and r = 2 and
+r = 3 of the small instances do not run (22.4).
+
 ### 22.1 What the code adds
 
 - **The exact program for g⁻ > 0** (`hidenosp.hide.WindowDp`, the dynamic program of the corollary of Theorem 2): the
@@ -1029,8 +1034,8 @@ of SC1 to SC3 is rerun or changed by this section.
 ### 22.2 HIDE-SEQ (`SC4`, `SC4LOST`)
 
 **Cells.** The cells of `sc3-s1` and `sc3-degenerate` (|𝒮| = 1) and of `sc3-s5` (|𝒮| = 5): the same dataset, σ, gap,
-scope, sampling (section 9: five strata, 4 sets per stratum, seed 2026), l_max = 4, closure rule `necessary`, each at
-r ∈ {1, 2, 3}. σ only defines F_σ(D) for Lost and SupDist. The intermediate group does not run, as in section 14.
+scope, sampling (section 9: five strata, 4 sets per stratum, seed 2026), l_max = 4, closure rule `necessary`, at
+r = 2. σ only defines F_σ(D) for Lost and SupDist. The intermediate group does not run, as in section 14.
 An instance in which no sequence reaches r for any sensitive pattern needs no mask; it is written with the status
 `no sequence reaches r` and counted apart, never as a tie.
 
@@ -1042,20 +1047,20 @@ exclusion rules of section 5.
 **H5a (masks).** For each baseline and for `hha-emb`, the median over the main-group instances with |𝒮| = 1 (without
 `protein_sdb1`) of |R| / |R|*_SEQ, with |R|*_SEQ = Σ_S OPT_S(r − 1) exact (Theorem 1 for distinct items, Theorem 2(b)
 or its corollary otherwise); verdict on the median with the thresholds of H3 (≥ 1.10 more masks, ≤ 1.05 the same, in
-between no conclusion), no test, as H4a. Reported per r and pooled.
+between no conclusion), no test, as H4a.
 
 **H5b (Lost at equal masks).** The procedure of H2 (sections 2, 4, 5: one-sided Wilcoxon signed-rank with Pratt's
 treatment of zeros on the difference of Lost_rel, δ_L = 0.02, α = 0.05, Holm over the four baselines, rank-biserial on
 the raw differences, the equivalence margins ±0.02 for Lost_rel and ±0.01 for SupDist, the table of pairs (|R|,
-Lost)), on the main-group instances at equal |R|, **separately for each pair (|𝒮|, r)**: six families of four tests.
-The instances of one sensitive set at different r are not independent, so no test pools r. The result is written
+Lost)), on the main-group instances at equal |R|, **separately for |𝒮| = 1 and |𝒮| = 5**: two families of four tests.
+The result is written
 "the null of H5b is rejected" or "is not rejected", per baseline and family. Sensitivity analysis: the dataset as the
 unit, as for H2 (median difference over the equal-count instances of each dataset, one-sided sign test over the
 datasets).
 
 **Small instances (`SC4LOST`).** The cells of `sc3-s1`; the windows, strata, seeds and the instance threshold
 σ_I = sup_NO(P, I) − drop + 1 (drop ∈ {2, 3, 4}) of SC3LOST, so F_σI(I) is the one of SC3LOST; the hiding constraint
-sup_NO(P, S) < r in every window, r ∈ {1, 2, 3}. Every minimum hiding set is enumerated (the exact class, with the
+sup_NO(P, S) < r in every window, r = 1. Every minimum hiding set is enumerated (the exact class, with the
 per-sequence bounds of 22.1); reported: instances solved, instances where each method reaches |R|*_SEQ, reaches the
 optimum Lost, and the total excess. Descriptive.
 
@@ -1085,7 +1090,11 @@ instances, targets and mismatches is reported per gap and per kind of pattern.
 
 1. `hha-emb` with several patterns bounds the matching set of all sensitive patterns together, as the paper states,
    not each pattern.
-2. H5b is tested per pair (|𝒮|, r), not pooled over r (dependence).
+2. Only r = 2 runs for the comparison and only r = 1 for the small instances. Measured reason (probe on the
+   development machine, three configurations, |𝒮| = 1, not reported): at r = 2 the methods stand as at g⁻ = 0, so
+   r = 1 and r = 3 would repeat the picture at three times the machine time (35–46 hours for r ∈ {1, 2, 3} against
+   12–15 hours for r = 2); on the windows of 15 events of the small instances most instances need no mask at r ≥ 2
+   (protein_sdb4: 45 of 60 at r = 2, 54 of 60 at r = 3), so only r = 1 gives instances to solve.
 3. The HIDE-SEQ cells are those of SC3 (main and degenerate groups at |𝒮| = 1, main at |𝒮| = 5), so every instance is
    paired with its SC3 instance; the intermediate group does not run.
 4. Running time of HIDE-SEQ and of g⁻ > 0 is not measured by these batches: SC4 and SC3 write machine-invariant rows
@@ -1097,5 +1106,11 @@ Before writing this section the proposer had seen every result of sections 14–
 SC3OPT and SC3CERT files and 24 of the 34 cells of `g3-sc3-s5`. Of the new problems the proposer had seen only: the
 tests of 22.1, one SC4 cell (sepsis [0,1] σ = 300, r = 2, one set per stratum) and one SC1GAP run on the development
 machine, and the running-time probe used for the estimate. None of these is reported.
+
+The hypotheses H5a, H5b and H6 were written before the Lost and |R| of the probe were read. The scope above was fixed
+after they were read: on 166 pairs (instance × baseline) no baseline used no more masks and lost no more patterns than
+`cut-hide-rw-ls` with one of the two strictly smaller; under HIDE-SEQ the median |R| / |R|* of HHA and of the
+occurrence heuristic was 1.000–1.024, so H5a may not hold for them. Neither the hypotheses nor their thresholds were
+changed after reading these numbers.
 
 **Unchanged:** all of sections 1–21.

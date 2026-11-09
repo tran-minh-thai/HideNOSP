@@ -41,9 +41,9 @@ necessary.
 
     g4-sc1gap        SC1GAP, the exact program for g- > 0 against exhaustive search, 3000 trials
     g4-sc2gap        SC2 at [1,2] and [1,3] for every (dataset, sigma) of both group tables
-    g4-sc4-s1        SC4 (HIDE-SEQ) on the cells of sc3-s1 and sc3-degenerate, r = 1, 2, 3
-    g4-sc4-s5        SC4 on the cells of sc3-s5, r = 1, 2, 3
-    g4-sc4lost       SC4LOST on the cells of sc3-s1, r = 1, 2, 3
+    g4-sc4-s1        SC4 (HIDE-SEQ) on the cells of sc3-s1 and sc3-degenerate, r = 2
+    g4-sc4-s5        SC4 on the cells of sc3-s5, r = 2
+    g4-sc4lost       SC4LOST on the cells of sc3-s1, r = 1
     g4-gap-s1 .. s20, g4-gap-degenerate
                      SC3 on the main (and degenerate) rows of the g- > 0 group tables
                      config/configuration_groups_gap.tsv and config/configuration_groups_gap_repeated.tsv
@@ -115,7 +115,9 @@ GENERATION.update({"g3-" + b: "3" for b in CLOSURE_BATCHES})
 # Generation 4 (preregistration section 22): HIDE-SEQ and gaps with g- > 0, closure rule necessary.
 NEW_GAPS = (("1", "2"), ("1", "3"))
 SEQ_METHODS = "cut-hide-rw-ls,cut-hide-rw,cut-hide,hha,hha-emb,dbsh,sbsh-r1,sbsh-rmax,occurrence"
-LIMITS = ("1", "2", "3")
+# The scope fixed by the author (preregistration section 22): the comparison at r = 2, the small instances at r = 1.
+LIMITS = ("2",)
+SMALL_LIMITS = ("1",)
 G4_BATCHES = ("g4-sc1gap", "g4-sc2gap", "g4-sc4-s1", "g4-sc4-s5", "g4-sc4lost",
               "g4-gap-s1", "g4-gap-s5", "g4-gap-s10", "g4-gap-s20", "g4-gap-degenerate")
 BATCHES = BATCHES + G4_BATCHES
@@ -198,7 +200,7 @@ def batch_cells(root, batch):
         return [seq_cell(c, r) for c in sc3.planned(root, 5) for r in LIMITS]
     if batch == "g4-sc4lost":
         return [cell("SC4LOST", {k: c[k] for k in CELL_KEYS if k != "sensitiveSize"},
-                     extra=[("rs", ",".join(LIMITS)), CLOSURE_OPTION]) for c in sc3.planned(root, 1)]
+                     extra=[("rs", ",".join(SMALL_LIMITS)), CLOSURE_OPTION]) for c in sc3.planned(root, 1)]
     match = re.fullmatch(r"g4-gap-s(\d+)", batch)
     if match:
         return [cell("SC3", {k: c[k] for k in sc3.IDENTITY}, extra=[CLOSURE_OPTION])
@@ -679,7 +681,7 @@ def self_test():
                 "sc3-refine": 82, "sc3lb": 136, "sc3opt": 82, "sc3-pareto": 54, "sc3-stop": 136, "sc3lost": 54, "sc3cert": 54,
                 "sc6": 81}
     expected.update({"g3-" + b: expected[b] for b in CLOSURE_BATCHES})
-    expected.update({"g4-sc1gap": 1, "g4-sc2gap": 72, "g4-sc4-s1": 3 * (54 + 17), "g4-sc4-s5": 3 * 34,
+    expected.update({"g4-sc1gap": 1, "g4-sc2gap": 72, "g4-sc4-s1": 54 + 17, "g4-sc4-s5": 34,
                      "g4-sc4lost": 54})
     gap_batches = [b for b in G4_BATCHES if b.startswith("g4-gap-")]
     tables_present = all((REPO / name).is_file() for name, _ in sc3.GAP_TABLES)
@@ -700,11 +702,12 @@ def self_test():
         check("plan of %s has %d cells" % (b, expected[b]), n == expected[b], str(n))
     seq = batch_cells(REPO, "g4-sc4-s1")
     base_cells = [c for c in batch_cells(REPO, "sc3-s1") + batch_cells(REPO, "sc3-degenerate")]
-    check("every g4-sc4-s1 cell is an SC3 cell of sc3-s1 or sc3-degenerate at r = 1, 2, 3, under HIDE-SEQ",
-          len(seq) == 3 * len(base_cells) and all(
+    check("every g4-sc4-s1 cell is an SC3 cell of sc3-s1 or sc3-degenerate at r = 2, under HIDE-SEQ",
+          len(seq) == len(LIMITS) * len(base_cells) and all(
               s["scenario"] == "SC4" and dict(s["options"])["r"] == r and dict(s["options"])["closure"] == "necessary"
               and all(dict(s["options"])[k] == v for k, v in c["options"] if k not in ("pareto", "methods"))
-              for i, c in enumerate(base_cells) for r, s in zip(LIMITS, seq[3 * i:3 * i + 3])))
+              for i, c in enumerate(base_cells)
+              for r, s in zip(LIMITS, seq[len(LIMITS) * i:len(LIMITS) * (i + 1)])))
     check("only the Pareto batch runs at -Xmx32g",
           {b for b in plannable if any(c["heap"] == PARETO_HEAP for c in batch_cells(REPO, b))} == {"sc3-pareto"})
     labels = [label(c) for b in plannable for c in batch_cells(REPO, b)]

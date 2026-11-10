@@ -1,0 +1,16 @@
+# run 20261110-131810-435_ADMIN-PC_3255b9552cb2_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC2
+# profile pool
+# options {machine=ADMIN-PC, dataset=datasets/sign.txt, format=SPMF, sigma=200, gmin=1, gmax=2, maxPatternLength=4, profile=pool}
+dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,mask_share,rho_rep,beta,min_masks_exact
+datasets\sign.txt,"[1,2]",200,"[143, 144]",209,209,408,10,0.000263,0.000000,0.487745,true
+datasets\sign.txt,"[1,2]",200,"[17, 18]",228,228,429,29,0.000764,0.000000,0.468531,true
+datasets\sign.txt,"[1,2]",200,"[8, 9]",339,339,491,140,0.003688,0.000000,0.309572,true

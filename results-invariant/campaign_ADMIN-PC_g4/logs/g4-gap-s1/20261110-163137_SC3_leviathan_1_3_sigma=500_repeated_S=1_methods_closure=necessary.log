@@ -1,0 +1,82 @@
+# cell SC3 leviathan [1,3] sigma=500 repeated S=1 methods closure=necessary
+# machine ADMIN-PC
+# exit 0 after 210 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 1bcebde65e65
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3 main comparison on HIDE-DB: Lost, Ghost, SupDist, |R| and HF against the baselines
+# run 20261110-163139-875_ADMIN-PC_1bcebde65e65_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, repeated-item pool 9 candidates, 9 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 1 -> 1, p30: 2 -> 2, p50: 2 -> 2, p70: 2 -> 2, p90: 2 -> 2
+WARNING: the pool gives 9 distinct sets, not 20; the cell runs with these and the result file header says so. No set is repeated to make up the number.
+set 0  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|   29  lost    0 (0.0000)  supDist 0.0011  0.9 s
+set 0  CUT-HIDE adaptive weight (6 iterations) |R|   29  lost    0 (0.0000)  supDist 0.0011  0.9 s
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|   29  lost    0 (0.0000)  supDist 0.0011  0.3 s
+set 0  HHA                                |R|   87  lost    0 (0.0000)  supDist 0.0025  0.0 s
+set 0  DBSH                               |R|   87  lost    0 (0.0000)  supDist 0.0024  0.0 s
+set 0  SBSH-r1                            |R|   87  lost    0 (0.0000)  supDist 0.0020  0.1 s
+set 0  SBSH-r3                            |R|   87  lost    0 (0.0000)  supDist 0.0020  0.0 s
+set 1  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|   60  lost    0 (0.0000)  supDist 0.0005  0.7 s
+set 1  CUT-HIDE adaptive weight (6 iterations) |R|   60  lost    0 (0.0000)  supDist 0.0005  0.4 s
+set 1  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|   60  lost    0 (0.0000)  supDist 0.0005  0.3 s
+set 1  HHA                                |R|  120  lost    0 (0.0000)  supDist 0.0013  0.0 s
+set 1  DBSH                               |R|  120  lost    0 (0.0000)  supDist 0.0015  0.0 s
+set 1  SBSH-r1                            |R|  121  lost    0 (0.0000)  supDist 0.0013  0.0 s
+set 1  SBSH-r2                            |R|  121  lost    0 (0.0000)  supDist 0.0013  0.0 s
+set 2  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  162  lost    0 (0.0000)  supDist 0.0040  0.5 s
+set 2  CUT-HIDE adaptive weight (6 iterations) |R|  162  lost    0 (0.0000)  supDist 0.0040  0.5 s
+set 2  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  162  lost    0 (0.0000)  supDist 0.0040  0.3 s
+set 2  HHA                                |R|  207  lost    1 (0.0110)  supDist 0.0055  0.0 s
+set 2  DBSH                               |R|  207  lost    1 (0.0110)  supDist 0.0058  0.0 s
+set 2  SBSH-r1                            |R|  207  lost    1 (0.0110)  supDist 0.0054  0.1 s
+set 2  SBSH-r3                            |R|  207  lost    1 (0.0110)  supDist 0.0054  0.1 s
+set 3  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  190  lost    0 (0.0000)  supDist 0.0049  0.5 s
+set 3  CUT-HIDE adaptive weight (6 iterations) |R|  190  lost    0 (0.0000)  supDist 0.0049  0.5 s
+set 3  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  190  lost    0 (0.0000)  supDist 0.0049  0.3 s
+set 3  HHA                                |R|  229  lost    2 (0.0220)  supDist 0.0063  0.0 s
+set 3  DBSH                               |R|  229  lost    1 (0.0110)  supDist 0.0053  0.0 s
+set 3  SBSH-r1                            |R|  229  lost    1 (0.0110)  supDist 0.0051  0.1 s
+set 3  SBSH-r3                            |R|  229  lost    1 (0.0110)  supDist 0.0051  0.1 s
+set 4  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  371  lost    0 (0.0000)  supDist 0.0050  0.5 s
+set 4  CUT-HIDE adaptive weight (6 iterations) |R|  371  lost    0 (0.0000)  supDist 0.0050  0.5 s
+set 4  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  371  lost    0 (0.0000)  supDist 0.0050  0.3 s
+set 4  HHA                                |R|  497  lost    2 (0.0220)  supDist 0.0084  0.0 s
+set 4  DBSH                               |R|  498  lost    2 (0.0220)  supDist 0.0082  0.0 s
+set 4  SBSH-r1                            |R|  497  lost    2 (0.0220)  supDist 0.0077  0.1 s
+set 4  SBSH-r2                            |R|  497  lost    2 (0.0220)  supDist 0.0077  0.1 s
+set 5  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  241  lost    0 (0.0000)  supDist 0.0083  57.1 s
+set 5  CUT-HIDE adaptive weight (6 iterations) |R|  241  lost    0 (0.0000)  supDist 0.0083  57.0 s
+set 5  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  241  lost    0 (0.0000)  supDist 0.0083  9.7 s
+set 5  HHA                                |R|  379  lost    0 (0.0000)  supDist 0.0110  0.0 s
+set 5  DBSH                               |R|  694  lost    0 (0.0000)  supDist 0.0148  0.0 s
+set 5  SBSH-r1                            |R|  681  lost    0 (0.0000)  supDist 0.0145  0.0 s
+set 5  SBSH-r4                            |R|  681  lost    0 (0.0000)  supDist 0.0145  0.0 s
+set 6  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  367  lost    0 (0.0000)  supDist 0.0068  3.1 s
+set 6  CUT-HIDE adaptive weight (6 iterations) |R|  367  lost    0 (0.0000)  supDist 0.0068  3.1 s
+set 6  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  367  lost    0 (0.0000)  supDist 0.0068  0.7 s
+set 6  HHA                                |R|  498  lost    0 (0.0000)  supDist 0.0084  0.0 s
+set 6  DBSH                               |R|  822  lost    0 (0.0000)  supDist 0.0118  0.0 s
+set 6  SBSH-r1                            |R|  797  lost    0 (0.0000)  supDist 0.0114  0.0 s
+set 6  SBSH-r3                            |R|  797  lost    0 (0.0000)  supDist 0.0114  0.0 s
+set 7  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 1607  lost    1 (0.0112)  supDist 0.0234  0.8 s
+set 7  CUT-HIDE adaptive weight (6 iterations) |R| 1607  lost    1 (0.0112)  supDist 0.0234  0.8 s
+set 7  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 1607  lost    1 (0.0112)  supDist 0.0234  0.3 s
+set 7  HHA                                |R| 1776  lost    2 (0.0225)  supDist 0.0303  0.0 s
+set 7  DBSH                               |R| 2071  lost    4 (0.0449)  supDist 0.0356  0.0 s
+set 7  SBSH-r1                            |R| 2069  lost    4 (0.0449)  supDist 0.0349  0.1 s
+set 7  SBSH-r2                            |R| 2069  lost    4 (0.0449)  supDist 0.0349  0.1 s
+set 8  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 1647  lost    0 (0.0000)  supDist 0.0120  0.9 s
+set 8  CUT-HIDE adaptive weight (6 iterations) |R| 1647  lost    0 (0.0000)  supDist 0.0120  0.8 s
+set 8  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 1647  lost    0 (0.0000)  supDist 0.0120  0.3 s
+set 8  HHA                                |R| 1840  lost    0 (0.0000)  supDist 0.0134  0.0 s
+set 8  DBSH                               |R| 2136  lost    0 (0.0000)  supDist 0.0156  0.0 s
+set 8  SBSH-r1                            |R| 2091  lost    0 (0.0000)  supDist 0.0153  0.1 s
+set 8  SBSH-r2                            |R| 2091  lost    0 (0.0000)  supDist 0.0153  0.1 s
+done in 207.9 s

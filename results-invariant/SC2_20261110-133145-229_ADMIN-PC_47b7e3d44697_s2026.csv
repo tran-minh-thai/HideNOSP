@@ -1,0 +1,19 @@
+# run 20261110-133145-229_ADMIN-PC_47b7e3d44697_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC2
+# profile repeated
+# options {machine=ADMIN-PC, dataset=datasets/bible.txt, format=SPMF, sigma=2000, gmin=1, gmax=2, maxPatternLength=4, profile=repeated}
+dataset,gap,sigma,pattern,sup_NO,sup_seq,sup_NO_no_gap,min_masks,mask_share,rho_rep,beta,min_masks_exact
+datasets\bible.txt,"[1,2]",2000,"[10, 46, 46]",2040,1691,11305,21,0.000027,0.171078,0.819549,true
+datasets\bible.txt,"[1,2]",2000,"[10, 10, 10]",2181,1486,19197,61,0.000078,0.318661,0.886388,true
+datasets\bible.txt,"[1,2]",2000,"[10, 10, 46]",2838,2335,14146,615,0.000781,0.177237,0.799378,true
+datasets\bible.txt,"[1,2]",2000,"[46, 46]",3535,2696,14732,1101,0.001399,0.237341,0.760046,true
+datasets\bible.txt,"[1,2]",2000,"[31, 31]",3840,2620,15907,1115,0.001417,0.317708,0.758597,true
+datasets\bible.txt,"[1,2]",2000,"[10, 10]",11408,7668,34473,7691,0.009772,0.327840,0.669074,true

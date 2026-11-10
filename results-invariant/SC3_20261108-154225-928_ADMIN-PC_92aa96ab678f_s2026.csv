@@ -1,0 +1,20 @@
+# run 20261108-154225-928_ADMIN-PC_92aa96ab678f_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/fifa.txt, format=SPMF, sigma=3000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=occurrence,hha-stop, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 3 candidates, 3 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 0 -> 0, p70: 1 -> 1, p90: 1 -> 1
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/fifa.txt,"N=20450,len=741092","[0,1]",3000,"[[17, 17, 17, 17]]",p30,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.001262,0.010044,935,630,1.484127,0,0,0,,54,53,53,0,0.000000,0.010044,53,
+datasets/fifa.txt,"N=20450,len=741092","[0,1]",3000,"[[17, 17, 17, 17]]",p30,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.001281,0.010362,949,630,1.506349,0,0,0,,54,53,53,0,0.000000,0.010362,53,
+datasets/fifa.txt,"N=20450,len=741092","[0,1]",3000,"[[17, 17, 17]]",p70,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.001560,0.007562,1156,917,1.260632,0,0,0,,54,52,52,0,0.000000,0.007562,52,
+datasets/fifa.txt,"N=20450,len=741092","[0,1]",3000,"[[17, 17, 17]]",p70,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.001622,0.007767,1202,917,1.310796,0,0,0,,54,52,52,0,0.000000,0.007767,52,
+datasets/fifa.txt,"N=20450,len=741092","[0,1]",3000,"[[17, 17]]",p90,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.002186,0.004626,1620,1512,1.071429,0,0,0,,54,51,51,0,0.000000,0.004626,51,
+datasets/fifa.txt,"N=20450,len=741092","[0,1]",3000,"[[17, 17]]",p90,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.002274,0.004825,1685,1512,1.114418,0,0,0,,54,51,51,0,0.000000,0.004825,51,

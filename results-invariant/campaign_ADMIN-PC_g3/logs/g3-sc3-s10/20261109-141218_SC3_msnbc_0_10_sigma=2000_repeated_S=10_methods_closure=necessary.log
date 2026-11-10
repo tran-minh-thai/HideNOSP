@@ -1,0 +1,158 @@
+# cell SC3 msnbc [0,10] sigma=2000 repeated S=10 methods closure=necessary
+# machine ADMIN-PC
+# exit 0 after 2456 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = c0ed8edb5a6f
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3 main comparison on HIDE-DB: Lost, Ghost, SupDist, |R| and HF against the baselines
+# run 20261109-141220-587_ADMIN-PC_c0ed8edb5a6f_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 10, repeated-item pool 591 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 118 -> 4, p30: 118 -> 4, p50: 118 -> 4, p70: 118 -> 4, p90: 119 -> 4
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  547  lost    8 (0.0090)  supDist 0.0057  12.7 s
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  547  lost    8 (0.0090)  supDist 0.0057  12.6 s
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  547  lost    8 (0.0090)  supDist 0.0057  12.4 s
+set 0  HHA                                |R| 13665  lost  201 (0.2256)  supDist 0.1102  0.9 s
+set 0  DBSH                               |R| 1197  lost    9 (0.0101)  supDist 0.0075  0.5 s
+set 0  SBSH-r1                            |R| 1177  lost    4 (0.0045)  supDist 0.0053  7.8 s
+set 0  SBSH-r4                            |R| 1177  lost    4 (0.0045)  supDist 0.0053  7.4 s
+set 1  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  680  lost   15 (0.0169)  supDist 0.0090  12.6 s
+set 1  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  680  lost   15 (0.0169)  supDist 0.0090  12.8 s
+set 1  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  680  lost   15 (0.0169)  supDist 0.0090  12.6 s
+set 1  HHA                                |R| 14384  lost  195 (0.2191)  supDist 0.1122  0.9 s
+set 1  DBSH                               |R| 1524  lost   18 (0.0202)  supDist 0.0097  0.4 s
+set 1  SBSH-r1                            |R| 1478  lost    8 (0.0090)  supDist 0.0065  7.6 s
+set 1  SBSH-r4                            |R| 1478  lost    8 (0.0090)  supDist 0.0065  7.5 s
+set 2  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  886  lost   11 (0.0124)  supDist 0.0064  9.7 s
+set 2  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  886  lost   11 (0.0124)  supDist 0.0064  9.9 s
+set 2  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  886  lost   11 (0.0124)  supDist 0.0064  9.7 s
+set 2  HHA                                |R| 11200  lost  139 (0.1562)  supDist 0.0728  0.6 s
+set 2  DBSH                               |R| 1528  lost   11 (0.0124)  supDist 0.0085  0.4 s
+set 2  SBSH-r1                            |R| 1281  lost    4 (0.0045)  supDist 0.0040  6.2 s
+set 2  SBSH-r4                            |R| 1281  lost    4 (0.0045)  supDist 0.0040  6.1 s
+set 3  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  601  lost    4 (0.0045)  supDist 0.0054  12.7 s
+set 3  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  601  lost    4 (0.0045)  supDist 0.0054  12.8 s
+set 3  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  601  lost    4 (0.0045)  supDist 0.0054  12.6 s
+set 3  HHA                                |R| 13983  lost  182 (0.2043)  supDist 0.1104  0.9 s
+set 3  DBSH                               |R| 1022  lost   10 (0.0112)  supDist 0.0059  0.4 s
+set 3  SBSH-r1                            |R| 1059  lost    6 (0.0067)  supDist 0.0039  8.0 s
+set 3  SBSH-r4                            |R| 1059  lost    6 (0.0067)  supDist 0.0039  7.6 s
+set 4  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2969  lost   28 (0.0314)  supDist 0.0191  14.5 s
+set 4  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2969  lost   28 (0.0314)  supDist 0.0191  14.9 s
+set 4  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2969  lost   28 (0.0314)  supDist 0.0191  14.3 s
+set 4  HHA                                |R| 18620  lost  201 (0.2256)  supDist 0.1216  0.9 s
+set 4  DBSH                               |R| 5484  lost   57 (0.0640)  supDist 0.0324  0.4 s
+set 4  SBSH-r1                            |R| 5078  lost   30 (0.0337)  supDist 0.0226  9.0 s
+set 4  SBSH-r4                            |R| 5071  lost   29 (0.0325)  supDist 0.0226  8.4 s
+set 5  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2563  lost   43 (0.0483)  supDist 0.0251  15.6 s
+set 5  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2563  lost   43 (0.0483)  supDist 0.0251  16.1 s
+set 5  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2563  lost   43 (0.0483)  supDist 0.0251  15.7 s
+set 5  HHA                                |R| 17287  lost  234 (0.2626)  supDist 0.1424  1.0 s
+set 5  DBSH                               |R| 4635  lost   47 (0.0527)  supDist 0.0314  0.4 s
+set 5  SBSH-r1                            |R| 4694  lost   38 (0.0426)  supDist 0.0260  9.5 s
+set 5  SBSH-r4                            |R| 4848  lost   34 (0.0382)  supDist 0.0268  9.0 s
+set 6  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 3149  lost   49 (0.0550)  supDist 0.0265  15.4 s
+set 6  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 3149  lost   49 (0.0550)  supDist 0.0265  15.5 s
+set 6  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 3149  lost   49 (0.0550)  supDist 0.0265  15.5 s
+set 6  HHA                                |R| 16644  lost  235 (0.2637)  supDist 0.1336  0.9 s
+set 6  DBSH                               |R| 4727  lost   50 (0.0561)  supDist 0.0303  0.4 s
+set 6  SBSH-r1                            |R| 4983  lost   36 (0.0404)  supDist 0.0237  9.0 s
+set 6  SBSH-r4                            |R| 5014  lost   34 (0.0382)  supDist 0.0238  8.8 s
+set 7  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 3416  lost   29 (0.0325)  supDist 0.0201  15.4 s
+set 7  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 3416  lost   29 (0.0325)  supDist 0.0201  15.4 s
+set 7  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 3416  lost   29 (0.0325)  supDist 0.0201  15.4 s
+set 7  HHA                                |R| 19456  lost  217 (0.2435)  supDist 0.1208  0.9 s
+set 7  DBSH                               |R| 4926  lost   47 (0.0527)  supDist 0.0246  0.4 s
+set 7  SBSH-r1                            |R| 4819  lost   26 (0.0292)  supDist 0.0190  8.9 s
+set 7  SBSH-r4                            |R| 4850  lost   24 (0.0269)  supDist 0.0191  8.5 s
+set 8  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 7054  lost   61 (0.0687)  supDist 0.0484  18.0 s
+set 8  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 7054  lost   61 (0.0687)  supDist 0.0484  18.4 s
+set 8  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 7054  lost   61 (0.0687)  supDist 0.0484  17.8 s
+set 8  HHA                                |R| 22517  lost  270 (0.3041)  supDist 0.1762  1.2 s
+set 8  DBSH                               |R| 11410  lost  130 (0.1464)  supDist 0.0787  0.5 s
+set 8  SBSH-r1                            |R| 10340  lost   67 (0.0755)  supDist 0.0569  9.7 s
+set 8  SBSH-r4                            |R| 10358  lost   66 (0.0743)  supDist 0.0568  9.4 s
+set 9  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 7979  lost   87 (0.0976)  supDist 0.0597  19.4 s
+set 9  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 7979  lost   87 (0.0976)  supDist 0.0597  20.1 s
+set 9  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 7979  lost   87 (0.0976)  supDist 0.0597  19.5 s
+set 9  HHA                                |R| 23872  lost  283 (0.3176)  supDist 0.1813  1.2 s
+set 9  DBSH                               |R| 12862  lost  151 (0.1695)  supDist 0.0868  0.5 s
+set 9  SBSH-r1                            |R| 11907  lost   90 (0.1010)  supDist 0.0684  9.9 s
+set 9  SBSH-r4                            |R| 11973  lost   88 (0.0988)  supDist 0.0686  9.7 s
+set 10  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 7283  lost   68 (0.0763)  supDist 0.0519  18.3 s
+set 10  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 7283  lost   68 (0.0763)  supDist 0.0519  18.9 s
+set 10  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 7283  lost   68 (0.0763)  supDist 0.0519  18.3 s
+set 10  HHA                                |R| 23353  lost  273 (0.3064)  supDist 0.1713  1.2 s
+set 10  DBSH                               |R| 11961  lost  121 (0.1358)  supDist 0.0751  0.5 s
+set 10  SBSH-r1                            |R| 10587  lost   61 (0.0685)  supDist 0.0536  9.6 s
+set 10  SBSH-r4                            |R| 10627  lost   59 (0.0662)  supDist 0.0537  9.3 s
+set 11  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 6581  lost   82 (0.0922)  supDist 0.0503  17.7 s
+set 11  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 6581  lost   82 (0.0922)  supDist 0.0503  18.0 s
+set 11  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 6581  lost   82 (0.0922)  supDist 0.0503  17.9 s
+set 11  HHA                                |R| 20863  lost  265 (0.2981)  supDist 0.1650  1.1 s
+set 11  DBSH                               |R| 10094  lost  114 (0.1282)  supDist 0.0670  0.5 s
+set 11  SBSH-r1                            |R| 9682  lost   70 (0.0787)  supDist 0.0561  9.5 s
+set 11  SBSH-r4                            |R| 9785  lost   70 (0.0787)  supDist 0.0562  9.4 s
+set 12  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 21321  lost  100 (0.1140)  supDist 0.0944  25.2 s
+set 12  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 21321  lost  100 (0.1140)  supDist 0.0944  24.7 s
+set 12  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 21321  lost  100 (0.1140)  supDist 0.0944  25.5 s
+set 12  HHA                                |R| 36115  lost  306 (0.3489)  supDist 0.2092  1.2 s
+set 12  DBSH                               |R| 28399  lost  227 (0.2588)  supDist 0.1580  0.5 s
+set 12  SBSH-r1                            |R| 24977  lost  146 (0.1665)  supDist 0.1139  10.6 s
+set 12  SBSH-r4                            |R| 25058  lost  140 (0.1596)  supDist 0.1136  10.5 s
+set 13  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 15442  lost  123 (0.1412)  supDist 0.0987  21.4 s
+set 13  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 15442  lost  123 (0.1412)  supDist 0.0987  20.8 s
+set 13  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 15442  lost  123 (0.1412)  supDist 0.0987  20.8 s
+set 13  HHA                                |R| 29962  lost  307 (0.3525)  supDist 0.2217  1.1 s
+set 13  DBSH                               |R| 25575  lost  242 (0.2778)  supDist 0.1784  0.5 s
+set 13  SBSH-r1                            |R| 21979  lost  147 (0.1688)  supDist 0.1241  10.3 s
+set 13  SBSH-r4                            |R| 21952  lost  147 (0.1688)  supDist 0.1239  10.2 s
+set 14  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 15338  lost   80 (0.0911)  supDist 0.0740  20.0 s
+set 14  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 15338  lost   80 (0.0911)  supDist 0.0740  20.8 s
+set 14  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 15338  lost   80 (0.0911)  supDist 0.0740  20.4 s
+set 14  HHA                                |R| 28944  lost  245 (0.2790)  supDist 0.1711  1.1 s
+set 14  DBSH                               |R| 20259  lost  166 (0.1891)  supDist 0.1168  0.6 s
+set 14  SBSH-r1                            |R| 18897  lost  108 (0.1230)  supDist 0.0925  10.0 s
+set 14  SBSH-r4                            |R| 18897  lost  108 (0.1230)  supDist 0.0925  9.8 s
+set 15  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 17895  lost   91 (0.1029)  supDist 0.0853  23.3 s
+set 15  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 17895  lost   91 (0.1029)  supDist 0.0853  23.8 s
+set 15  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 17895  lost   91 (0.1029)  supDist 0.0853  23.3 s
+set 15  HHA                                |R| 31225  lost  263 (0.2975)  supDist 0.1884  1.2 s
+set 15  DBSH                               |R| 23390  lost  204 (0.2308)  supDist 0.1397  0.6 s
+set 15  SBSH-r1                            |R| 21694  lost  139 (0.1572)  supDist 0.1085  10.4 s
+set 15  SBSH-r4                            |R| 21696  lost  140 (0.1584)  supDist 0.1087  10.5 s
+set 16  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 119907  lost  371 (0.5708)  supDist 0.4551  82.5 s
+set 16  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 119907  lost  371 (0.5708)  supDist 0.4551  81.1 s
+set 16  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 119907  lost  371 (0.5708)  supDist 0.4551  83.7 s
+set 16  HHA                                |R| 125231  lost  386 (0.5938)  supDist 0.4885  2.1 s
+set 16  DBSH                               |R| 135986  lost  431 (0.6631)  supDist 0.5710  1.1 s
+set 16  SBSH-r1                            |R| 133333  lost  413 (0.6354)  supDist 0.5348  11.1 s
+set 16  SBSH-r4                            |R| 133345  lost  412 (0.6338)  supDist 0.5347  11.1 s
+set 17  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 58622  lost  319 (0.3867)  supDist 0.2945  52.2 s
+set 17  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 58622  lost  319 (0.3867)  supDist 0.2945  52.3 s
+set 17  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 58622  lost  319 (0.3867)  supDist 0.2945  55.9 s
+set 17  HHA                                |R| 72406  lost  385 (0.4667)  supDist 0.3672  2.2 s
+set 17  DBSH                               |R| 75614  lost  439 (0.5321)  supDist 0.4031  1.1 s
+set 17  SBSH-r1                            |R| 73231  lost  402 (0.4873)  supDist 0.3674  14.8 s
+set 17  SBSH-r4                            |R| 73250  lost  403 (0.4885)  supDist 0.3674  14.7 s
+set 18  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 40474  lost  256 (0.2943)  supDist 0.2251  36.9 s
+set 18  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 40474  lost  256 (0.2943)  supDist 0.2251  37.7 s
+set 18  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 40474  lost  256 (0.2943)  supDist 0.2251  39.0 s
+set 18  HHA                                |R| 50005  lost  364 (0.4184)  supDist 0.3122  1.8 s
+set 18  DBSH                               |R| 51130  lost  361 (0.4149)  supDist 0.3150  1.4 s
+set 18  SBSH-r1                            |R| 48524  lost  329 (0.3782)  supDist 0.2910  17.4 s
+set 18  SBSH-r4                            |R| 48508  lost  328 (0.3770)  supDist 0.2906  17.6 s
+set 19  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 33973  lost  265 (0.3121)  supDist 0.2189  36.8 s
+set 19  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 33973  lost  265 (0.3121)  supDist 0.2189  35.4 s
+set 19  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 33973  lost  265 (0.3121)  supDist 0.2189  35.3 s
+set 19  HHA                                |R| 46785  lost  374 (0.4405)  supDist 0.3130  2.0 s
+set 19  DBSH                               |R| 46636  lost  375 (0.4417)  supDist 0.3099  1.1 s
+set 19  SBSH-r1                            |R| 44072  lost  334 (0.3934)  supDist 0.2810  13.3 s
+set 19  SBSH-r4                            |R| 44041  lost  330 (0.3887)  supDist 0.2806  13.3 s
+done in 2452.9 s

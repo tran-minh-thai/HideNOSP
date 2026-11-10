@@ -1,0 +1,36 @@
+# run 20261108-155322-967_ADMIN-PC_b59cd1c7ba8b_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/protein_sdb4.txt, format=SPMF, sigma=500, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=occurrence,hha-stop, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 11 candidates, 11 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 2 -> 2, p30: 2 -> 2, p50: 2 -> 2, p70: 2 -> 2, p90: 3 -> 3
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[11, 11]]",p10,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.000037,0.000039,4,3,1.333333,0,0,0,,208,207,207,0,0.000000,0.000039,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[11, 11]]",p10,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.000046,0.000055,5,3,1.666667,0,0,0,,208,207,207,0,0.000000,0.000055,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[7, 7]]",p10,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.000064,0.000059,7,5,1.400000,0,0,0,,208,207,207,0,0.000000,0.000059,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[7, 7]]",p10,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.000082,0.000086,9,5,1.800000,0,0,0,,208,207,207,0,0.000000,0.000086,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[16, 16]]",p30,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.001033,0.001137,113,62,1.822581,0,0,0,,208,207,207,0,0.000000,0.001137,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[16, 16]]",p30,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.001115,0.001306,122,62,1.967742,0,0,0,,208,207,207,0,0.000000,0.001306,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[15, 15]]",p30,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.002020,0.002079,221,173,1.277457,0,0,0,,208,207,207,0,0.000000,0.002079,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[15, 15]]",p30,hha-stop,HHA-stop,,0.000000,1,0.004831,0,0.002102,0.002327,230,173,1.329480,0,0,0,,208,207,206,1,0.004831,0.002327,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[8, 8]]",p50,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.002303,0.002468,252,223,1.130045,0,0,0,,208,207,207,0,0.000000,0.002468,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[8, 8]]",p50,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.002376,0.002574,260,223,1.165919,0,0,0,,208,207,207,0,0.000000,0.002574,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[3, 3]]",p50,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.002806,0.002692,307,272,1.128676,0,0,0,,208,207,207,0,0.000000,0.002692,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[3, 3]]",p50,hha-stop,HHA-stop,,0.000000,1,0.004831,0,0.002906,0.003065,318,272,1.169118,0,0,0,,208,207,206,1,0.004831,0.003065,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[17, 17]]",p70,occurrence,occurrence-count-heuristic,,0.000000,1,0.004831,0,0.004058,0.004340,444,404,1.099010,0,0,0,,208,207,206,1,0.004831,0.004340,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[17, 17]]",p70,hha-stop,HHA-stop,,0.000000,1,0.004831,0,0.004231,0.004756,463,404,1.146040,0,0,0,,208,207,206,1,0.004831,0.004756,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[2, 2]]",p70,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.004122,0.004976,451,404,1.116337,0,0,0,,208,207,207,0,0.000000,0.004976,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[2, 2]]",p70,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.004286,0.005141,469,404,1.160891,0,0,0,,208,207,207,0,0.000000,0.005141,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[9, 9]]",p90,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.005511,0.006048,603,559,1.078712,0,0,0,,208,207,207,0,0.000000,0.006048,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[9, 9]]",p90,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.005648,0.006374,618,559,1.105546,0,0,0,,208,207,207,0,0.000000,0.006374,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[5, 5]]",p90,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.005538,0.006190,606,549,1.103825,0,0,0,,208,207,207,0,0.000000,0.006190,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[5, 5]]",p90,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.005666,0.006748,620,549,1.129326,0,0,0,,208,207,207,0,0.000000,0.006748,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[0, 0]]",p90,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.010820,0.011177,1184,1118,1.059034,0,0,0,,208,207,207,0,0.000000,0.011177,207,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",500,"[[0, 0]]",p90,hha-stop,HHA-stop,,0.000000,0,0.000000,0,0.011149,0.011827,1220,1118,1.091234,0,0,0,,208,207,207,0,0.000000,0.011827,207,

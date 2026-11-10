@@ -1,0 +1,23 @@
+# run 20261108-183034-456_ADMIN-PC_0c2e9be25e49_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3CERT
+# options {machine=ADMIN-PC, dataset=datasets/dna_mt745584.txt, format=SPMF, sigma=4000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, patternKind=repeated, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 2 candidates, 2 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 0 -> 0, p50: 1 -> 1, p70: 0 -> 0, p90: 1 -> 1
+# reference method cut-hide-rw-ls
+# closure necessary
+dataset,gap,sigma,pattern_kind,sensitive_set,stratum,instance,drop,instance_sigma,mask_count,lost,bound,examined,certified,status
+datasets/dna_mt745584.txt,"[0,1]",4000,repeated,"[[1, 1]]",p50,full,,4000,314,0,0,0,true,
+datasets/dna_mt745584.txt,"[0,1]",4000,repeated,"[[1, 1]]",p50,small,2,14,1,0,0,0,true,
+datasets/dna_mt745584.txt,"[0,1]",4000,repeated,"[[1, 1]]",p50,small,3,13,2,0,0,0,true,
+datasets/dna_mt745584.txt,"[0,1]",4000,repeated,"[[1, 1]]",p50,small,4,12,2,0,0,0,true,
+datasets/dna_mt745584.txt,"[0,1]",4000,repeated,"[[4, 4]]",p90,full,,4000,557,0,0,0,true,
+datasets/dna_mt745584.txt,"[0,1]",4000,repeated,"[[4, 4]]",p90,small,2,20,1,0,0,0,true,
+datasets/dna_mt745584.txt,"[0,1]",4000,repeated,"[[4, 4]]",p90,small,3,19,2,0,0,0,true,
+datasets/dna_mt745584.txt,"[0,1]",4000,repeated,"[[4, 4]]",p90,small,4,18,2,0,0,0,true,

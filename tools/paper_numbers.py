@@ -851,7 +851,14 @@ def platform(nums, machine):
     if len(sc6) != 1:
         raise Missing("SC6 files run with %d heap sizes: %s" % (len(sc6), heaps))
     nums.put("platform.heap_bytes.sc6", sc6.pop(), "heap_max_bytes of the SC6 files")
-    for kind, key in (("SC3", "platform.heap_bytes.sc3"), ("SC3PARETO", "platform.heap_bytes.pareto")):
+    # The Pareto fronts exist under the earlier rule only (see build); their heap is read with them.
+    kinds = [("SC3", "platform.heap_bytes.sc3")]
+    if RULE[0] == "subsequence":
+        kinds.append(("SC3PARETO", "platform.heap_bytes.pareto"))
+    elif any(s == "SC3PARETO" for (s, h) in heaps):
+        raise Missing("Pareto-front files under closure rule %s: %s; the fronts are read under the earlier rule only"
+                      % (RULE[0], heaps))
+    for kind, key in kinds:
         sizes = {h for (s, h) in heaps if s == kind}
         if len(sizes) != 1:
             raise Missing("%s files run with %d heap sizes: %s; the text states one" % (kind, len(sizes), heaps))

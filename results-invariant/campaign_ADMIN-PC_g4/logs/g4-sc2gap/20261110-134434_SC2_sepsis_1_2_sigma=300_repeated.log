@@ -1,0 +1,40 @@
+# cell SC2 sepsis [1,2] sigma=300 repeated
+# machine ADMIN-PC
+# exit 0 after 4 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 3e2c1fb6139e
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC2 data regime: rho_rep, beta and the bound of P1 per dataset and per sigma
+# run 20261110-134437-288_ADMIN-PC_3e2c1fb6139e_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+dataset datasets\sepsis.txt, |D| = 1050, total length 15214, alphabet 16, linearised share 0.0
+|F_sigma(D)| = 68 at sigma = 300, gap [1,2], l_max = 4
+[2, 2, 9, 2]       sup_NO   302  sup_seq   132  rho_rep 0.563  beta 0.755  min masks     1 (0.0001 of D)
+[9, 9, 2, 9]       sup_NO   307  sup_seq   125  rho_rep 0.593  beta 0.750  min masks     3 (0.0002 of D)
+[2, 9, 9, 2]       sup_NO   312  sup_seq   138  rho_rep 0.558  beta 0.756  min masks     7 (0.0005 of D)
+[2, 9, 2, 2]       sup_NO   313  sup_seq   146  rho_rep 0.534  beta 0.750  min masks     5 (0.0003 of D)
+[2, 9, 2, 9]       sup_NO   319  sup_seq   133  rho_rep 0.583  beta 0.759  min masks    10 (0.0007 of D)
+[9, 9, 9, 2]       sup_NO   320  sup_seq   128  rho_rep 0.600  beta 0.727  min masks     7 (0.0005 of D)
+[2, 9, 9, 9]       sup_NO   326  sup_seq   139  rho_rep 0.574  beta 0.719  min masks     9 (0.0006 of D)
+[9, 2, 9, 9]       sup_NO   332  sup_seq   143  rho_rep 0.569  beta 0.734  min masks    14 (0.0009 of D)
+[9, 2, 9, 2]       sup_NO   354  sup_seq   144  rho_rep 0.593  beta 0.750  min masks    28 (0.0018 of D)
+[9, 9, 9, 9]       sup_NO   369  sup_seq   117  rho_rep 0.683  beta 0.701  min masks    18 (0.0012 of D)
+[2, 2, 2]          sup_NO   509  sup_seq   202  rho_rep 0.603  beta 0.674  min masks    70 (0.0046 of D)
+[2, 2, 9]          sup_NO   522  sup_seq   221  rho_rep 0.577  beta 0.674  min masks   129 (0.0085 of D)
+[9, 9, 2]          sup_NO   559  sup_seq   225  rho_rep 0.597  beta 0.668  min masks   150 (0.0099 of D)
+[9, 2, 2]          sup_NO   560  sup_seq   238  rho_rep 0.575  beta 0.676  min masks   158 (0.0104 of D)
+[2, 9, 9]          sup_NO   599  sup_seq   249  rho_rep 0.584  beta 0.629  min masks   208 (0.0137 of D)
+[9, 2, 9]          sup_NO   621  sup_seq   247  rho_rep 0.602  beta 0.650  min masks   205 (0.0135 of D)
+[9, 9, 9]          sup_NO   628  sup_seq   201  rho_rep 0.680  beta 0.629  min masks   122 (0.0080 of D)
+[2, 9, 2]          sup_NO   631  sup_seq   255  rho_rep 0.596  beta 0.643  min masks   201 (0.0132 of D)
+[2, 2]             sup_NO  1085  sup_seq   442  rho_rep 0.593  beta 0.519  min masks   476 (0.0313 of D)
+[9, 9]             sup_NO  1209  sup_seq   425  rho_rep 0.648  beta 0.490  min masks   546 (0.0359 of D)
+pool of 20 repeated-item candidates: median rho_rep 0.593, median beta 0.688
+done in 1.4 s

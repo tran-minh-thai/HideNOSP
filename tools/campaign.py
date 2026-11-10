@@ -47,6 +47,8 @@ necessary.
     g4-gap-s1 .. s20, g4-gap-degenerate
                      SC3 on the main (and degenerate) rows of the g- > 0 group tables
                      config/configuration_groups_gap.tsv and config/configuration_groups_gap_repeated.tsv
+    g4-sc6           SC6 running time again, the batch sc6 cell for cell with closure=necessary, so that the
+                     timed runs and the comparison tables follow one rule of S-plus
 
 A cell is done when results-invariant/ holds a complete file of its scenario whose run stamp names
 THIS machine and whose options line names the cell (SC1 writes no options line: scenario, machine and
@@ -119,7 +121,7 @@ SEQ_METHODS = "cut-hide-rw-ls,cut-hide-rw,cut-hide,hha,hha-emb,dbsh,sbsh-r1,sbsh
 LIMITS = ("2",)
 SMALL_LIMITS = ("1",)
 G4_BATCHES = ("g4-sc1gap", "g4-sc2gap", "g4-sc4-s1", "g4-sc4-s5", "g4-sc4lost",
-              "g4-gap-s1", "g4-gap-s5", "g4-gap-s10", "g4-gap-s20", "g4-gap-degenerate")
+              "g4-gap-s1", "g4-gap-s5", "g4-gap-s10", "g4-gap-s20", "g4-gap-degenerate", "g4-sc6")
 BATCHES = BATCHES + G4_BATCHES
 GENERATION.update({b: "4" for b in G4_BATCHES})
 # What a later generation must share with the one before: only the measured code may differ.
@@ -189,6 +191,8 @@ def cell(scenario, options, heap=HEAP, extra=()):
 def batch_cells(root, batch):
     if batch.startswith("g3-") and batch[3:] in CLOSURE_BATCHES:
         return [dict(c, options=c["options"] + [CLOSURE_OPTION]) for c in batch_cells(root, batch[3:])]
+    if batch == "g4-sc6":
+        return [dict(c, options=c["options"] + [CLOSURE_OPTION]) for c in batch_cells(root, "sc6")]
     if batch == "g4-sc1gap":
         return [cell("SC1GAP", {"trials": "3000", "seed": "2026"})]
     if batch == "g4-sc2gap":
@@ -682,7 +686,7 @@ def self_test():
                 "sc6": 81}
     expected.update({"g3-" + b: expected[b] for b in CLOSURE_BATCHES})
     expected.update({"g4-sc1gap": 1, "g4-sc2gap": 72, "g4-sc4-s1": 54 + 17, "g4-sc4-s5": 34,
-                     "g4-sc4lost": 54})
+                     "g4-sc4lost": 54, "g4-sc6": expected["sc6"]})
     gap_batches = [b for b in G4_BATCHES if b.startswith("g4-gap-")]
     tables_present = all((REPO / name).is_file() for name, _ in sc3.GAP_TABLES)
     plannable = [b for b in BATCHES if tables_present or b not in gap_batches]
@@ -717,6 +721,14 @@ def self_test():
         g["scenario"] == c["scenario"] and g["heap"] == c["heap"] and g["options"] == c["options"] + [CLOSURE_OPTION]
         for g, c in zip(batch_cells(REPO, "g3-" + b), batch_cells(REPO, b))) for b in CLOSURE_BATCHES)
     check("every g3 batch is its base batch, cell for cell, plus closure=necessary", same)
+    timed, earlier = batch_cells(REPO, "g4-sc6"), batch_cells(REPO, "sc6")
+    check("g4-sc6 is the batch sc6, cell for cell, plus closure=necessary",
+          len(timed) == len(earlier) and all(
+              g["scenario"] == "SC6" and g["heap"] == c["heap"] and g["options"] == c["options"] + [CLOSURE_OPTION]
+              for g, c in zip(timed, earlier)), "%d cells" % len(timed))
+    timed_file = [(Path("results/old.csv"), "SC6", dict(earlier[0]["options"]), "2026")]
+    check("an SC6 file of the earlier rule does not count as a g4-sc6 cell",
+          not is_done(timed[0], timed_file) and is_done(earlier[0], timed_file))
     check("the g3 batches belong to generation 3 and nothing else does",
           {b for b in BATCHES if GENERATION[b] == "3"} == {"g3-" + b for b in CLOSURE_BATCHES})
     check("the g4 batches belong to generation 4 and nothing else does",

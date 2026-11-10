@@ -963,6 +963,7 @@ super-patterns of 𝒮⁺ as kept; it now counts their real losses. No table rea
 - SC6 (running time). Its methods read 𝒮⁺ as an input, so its rows keep the earlier rule. Their check against SC3
   (equal |R| and Lost) is made against the SC3 files of the earlier rule. The paper states that the timing was
   measured with the earlier 𝒮⁺.
+  **Amended 2026-11-10 (22.6):** SC6 is measured again under the corrected rule, as a batch of generation 4.
 
 **Checks before the lock of generation 3** (development machine, results not reported):
 - the current code with `closure=subsequence` reproduces every common column of 14 stored files: five SC3 method
@@ -1121,5 +1122,33 @@ more masks and lost no more patterns than `cut-hide-rw-ls` with one of the two s
 an earlier version of this sentence gave 166 pairs, a hand count from a table that left out three of the baselines); under HIDE-SEQ the median |R| / |R|* of HHA and of the
 occurrence heuristic was 1.000–1.024, so H5a may not hold for them. Neither the hypotheses nor their thresholds were
 changed after reading these numbers.
+
+### 22.6 Running time under the corrected 𝒮⁺ (decision of the author, 2026-11-10, before any of these runs)
+
+**Decision.** The reduced SC6 of 19.3, as amended by 20.1, is measured again under the corrected rule of section 21,
+as the batch `g4-sc6` of this generation. This replaces the last item of "Not rerun" in section 21. Generation 4 stays
+the last experimental batch; this batch is part of it.
+
+**Why.** The comparison tables now come from the files of the corrected rule. The timed methods read 𝒮⁺ (19.3), and
+Lost is counted on F_σ(D) \ 𝒮⁺, so a timed run of the earlier rule is no longer the run of the table row beside it:
+of the 3,528 timed rows of the earlier rule, joined with the SC3 rows of the corrected rule on the same machine,
+2,764 carry the same |R| and Lost and 764 do not (89 of the 392 timed sets, 43 of the 81 cells). With the batch
+measured again, every table of the paper follows one rule and the check of 19.3 (equal |R| and Lost in the timed run
+and in the SC3 row) is made against the files the tables read.
+
+**What runs.** The batch `sc6`, cell for cell (81 cells), with the option `closure=necessary` and nothing else
+changed: the same cells, the same sets (the first set drawn in each stratum), the nine methods, one warm-up run, the
+same time limit, the same clock (19.3, 20.1), the same measuring machine, JDK and heap (`-Xmx8g`) as generations 1 to
+3. The whole batch runs again, also the methods that do not read 𝒮⁺, so that the timing table comes from one batch.
+
+**What is reported.** Exactly what 19.3 and 20.1 report, read from the files of the corrected rule. The timing files
+of the earlier rule stay in `results/`; no table of the paper reads them. No hypothesis is attached to running time,
+as in 19.3. Running time of HIDE-SEQ and of g⁻ > 0 is still not measured (22.4, item 4).
+
+**Provenance.** Written after every running time of the earlier rule had been seen. Before the lock of this batch one
+cell (sepsis [0,1] σ = 300, repeated items, |𝒮| = 1) was run on the development machine under the corrected rule,
+written outside the repository, to check the join only: its 45 timed rows carry the |R| and Lost of the SC3 rows of
+the corrected rule (45 of 45), and 9 of the 45 differ from the SC3 rows of the earlier rule. Its times are not
+reported.
 
 **Unchanged:** all of sections 1–21.

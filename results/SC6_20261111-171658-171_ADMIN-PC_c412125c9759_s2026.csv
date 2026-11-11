@@ -1,0 +1,76 @@
+# run 20261111-171658-171_ADMIN-PC_c412125c9759_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind TIMED
+# scenario SC6
+# options {machine=ADMIN-PC, dataset=datasets/protein_sdb4.txt, format=SPMF, sigma=900, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, timeLimit=1800, warmups=1, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 13 candidates, 13 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 2 -> 2, p30: 3 -> 3, p50: 2 -> 2, p70: 3 -> 3, p90: 3 -> 3
+# sets: the first set drawn in each stratum (5 of 13)
+# closure necessary
+dataset,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,method_key,method,reads_frequent,mask_count,lost,wall_ms_mean,wall_ms_sd,cpu_ms_mean,repetitions,warmups,note,status
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,,,mine-frequent,F_sigma(D) with l_max = 4: 211 patterns,false,,,13297.722,43.833,13162.500,5,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[11, 11]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,62,0,452.939,6.602,451.042,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[11, 11]]",p10,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,62,0,1287.846,9.193,1273.438,10,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[11, 11]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,62,0,1285.326,11.547,1273.438,10,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[11, 11]]",p10,hha,HHA,false,123,0,9.741,0.734,9.375,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[11, 11]]",p10,dbsh,DBSH,false,123,0,11.578,0.605,11.458,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[11, 11]]",p10,sbsh-r1,SBSH-r1,true,123,0,412.512,5.495,409.375,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[11, 11]]",p10,sbsh-rmax,SBSH-r2,true,123,0,410.217,4.228,405.208,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[11, 11]]",p10,occurrence,occurrence-count-heuristic,false,107,0,4.078,0.376,4.167,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[11, 11]]",p10,hha-stop,HHA-stop,false,123,0,12.100,0.464,12.500,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[11, 11]]",p10,index-build,NettreeCutIndex,false,,,3.735,0.254,3.125,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[11, 11]]",p10,index-incremental,maskPosition after each mask,false,62,,0.611,0.022,1.042,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[11, 11]]",p10,index-rebuild,rebuild after each mask,false,62,,0.765,0.028,1.042,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[4, 4]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,73,0,443.695,5.233,439.583,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[4, 4]]",p30,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,73,0,1366.538,12.745,1348.438,10,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[4, 4]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,73,0,1371.324,10.296,1353.125,10,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[4, 4]]",p30,hha,HHA,false,146,1,9.610,0.365,10.417,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[4, 4]]",p30,dbsh,DBSH,false,146,1,8.945,0.135,8.333,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[4, 4]]",p30,sbsh-r1,SBSH-r1,true,146,2,460.182,4.757,456.250,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[4, 4]]",p30,sbsh-rmax,SBSH-r2,true,146,2,460.152,3.807,455.208,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[4, 4]]",p30,occurrence,occurrence-count-heuristic,false,127,1,3.565,0.438,4.167,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[4, 4]]",p30,hha-stop,HHA-stop,false,146,1,12.511,0.448,12.500,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[4, 4]]",p30,index-build,NettreeCutIndex,false,,,3.655,0.108,3.125,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[4, 4]]",p30,index-incremental,maskPosition after each mask,false,73,,0.652,0.031,1.042,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[4, 4]]",p30,index-rebuild,rebuild after each mask,false,73,,0.669,0.014,1.042,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[15, 15]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,348,0,451.261,5.023,447.917,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[15, 15]]",p50,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,348,0,1861.303,14.680,1832.813,10,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[15, 15]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,348,0,1868.980,9.378,1835.938,10,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[15, 15]]",p50,hha,HHA,false,480,1,12.748,0.970,12.500,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[15, 15]]",p50,dbsh,DBSH,false,528,1,11.346,1.568,10.417,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[15, 15]]",p50,sbsh-r1,SBSH-r1,true,526,1,489.036,6.209,485.417,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[15, 15]]",p50,sbsh-rmax,SBSH-r2,true,526,1,488.728,3.704,480.208,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[15, 15]]",p50,occurrence,occurrence-count-heuristic,false,462,1,5.349,0.295,5.208,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[15, 15]]",p50,hha-stop,HHA-stop,false,479,1,14.967,0.369,14.583,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[15, 15]]",p50,index-build,NettreeCutIndex,false,,,4.115,0.428,4.167,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[15, 15]]",p50,index-incremental,maskPosition after each mask,false,348,,1.912,0.036,1.042,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[15, 15]]",p50,index-rebuild,rebuild after each mask,false,348,,3.383,0.377,3.125,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[3, 3]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,513,0,455.085,3.109,454.167,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[3, 3]]",p70,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,513,0,1924.172,7.046,1893.750,10,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[3, 3]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,513,0,1924.627,13.966,1887.500,10,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[3, 3]]",p70,hha,HHA,false,669,1,12.789,0.343,12.500,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[3, 3]]",p70,dbsh,DBSH,false,740,1,11.718,0.351,11.458,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[3, 3]]",p70,sbsh-r1,SBSH-r1,true,740,0,492.654,5.174,490.625,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[3, 3]]",p70,sbsh-rmax,SBSH-r2,true,740,0,493.121,3.656,481.250,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[3, 3]]",p70,occurrence,occurrence-count-heuristic,false,635,0,6.157,0.345,5.208,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[3, 3]]",p70,hha-stop,HHA-stop,false,667,1,15.956,0.453,15.625,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[3, 3]]",p70,index-build,NettreeCutIndex,false,,,4.075,0.223,4.167,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[3, 3]]",p70,index-incremental,maskPosition after each mask,false,513,,2.426,0.202,3.125,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[3, 3]]",p70,index-rebuild,rebuild after each mask,false,513,,4.246,0.247,4.167,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[5, 5]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,969,0,467.292,9.890,464.583,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[5, 5]]",p90,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,969,0,2603.477,9.284,2560.938,10,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[5, 5]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,969,0,2609.191,19.176,2575.000,10,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[5, 5]]",p90,hha,HHA,false,1110,1,15.783,0.505,15.625,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[5, 5]]",p90,dbsh,DBSH,false,1266,2,14.584,0.359,14.583,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[5, 5]]",p90,sbsh-r1,SBSH-r1,true,1262,1,589.425,5.933,575.000,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[5, 5]]",p90,sbsh-rmax,SBSH-r2,true,1262,1,590.348,4.470,583.333,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[5, 5]]",p90,occurrence,occurrence-count-heuristic,false,1084,1,8.504,0.047,8.333,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[5, 5]]",p90,hha-stop,HHA-stop,false,1105,1,19.272,0.552,19.792,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[5, 5]]",p90,index-build,NettreeCutIndex,false,,,4.500,0.199,5.208,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[5, 5]]",p90,index-incremental,maskPosition after each mask,false,969,,4.091,0.264,4.167,15,1,,
+datasets/protein_sdb4.txt,"[0,3]",900,repeated,1,"[[5, 5]]",p90,index-rebuild,rebuild after each mask,false,969,,9.875,0.420,10.417,15,1,,

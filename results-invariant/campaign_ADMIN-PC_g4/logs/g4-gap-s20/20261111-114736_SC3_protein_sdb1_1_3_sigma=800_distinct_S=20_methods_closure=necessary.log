@@ -1,0 +1,40 @@
+# cell SC3 protein_sdb1 [1,3] sigma=800 distinct S=20 methods closure=necessary
+# machine ADMIN-PC
+# exit 0 after 40 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = f0e38bc958ac
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3 main comparison on HIDE-DB: Lost, Ghost, SupDist, |R| and HF against the baselines
+# run 20261111-114738-936_ADMIN-PC_f0e38bc958ac_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 20, pool 98 candidates, 3 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 19 -> 0, p30: 20 -> 1, p50: 19 -> 0, p70: 20 -> 1, p90: 20 -> 1
+WARNING: the pool gives 3 distinct sets, not 20; the cell runs with these and the result file header says so. No set is repeated to make up the number.
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  830  lost    0 (0.0000)  supDist 0.0087  2.4 s
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  830  lost    0 (0.0000)  supDist 0.0087  2.0 s
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  830  lost    0 (0.0000)  supDist 0.0087  1.9 s
+set 0  HHA                                |R| 7645  lost   29 (0.2710)  supDist 0.1151  0.4 s
+set 0  DBSH                               |R| 2040  lost    9 (0.0841)  supDist 0.0313  0.2 s
+set 0  SBSH-r1                            |R| 1972  lost    8 (0.0748)  supDist 0.0303  0.4 s
+set 0  SBSH-r2                            |R| 1972  lost    8 (0.0748)  supDist 0.0303  0.4 s
+set 1  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2555  lost    4 (0.0374)  supDist 0.0364  2.4 s
+set 1  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2555  lost    4 (0.0374)  supDist 0.0364  2.4 s
+set 1  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2555  lost    4 (0.0374)  supDist 0.0364  2.4 s
+set 1  HHA                                |R| 9774  lost   53 (0.4953)  supDist 0.1659  0.4 s
+set 1  DBSH                               |R| 5510  lost   24 (0.2243)  supDist 0.1028  0.2 s
+set 1  SBSH-r1                            |R| 5636  lost   21 (0.1963)  supDist 0.1041  0.4 s
+set 1  SBSH-r2                            |R| 5636  lost   21 (0.1963)  supDist 0.1041  0.4 s
+set 2  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 4135  lost    3 (0.0280)  supDist 0.0574  2.9 s
+set 2  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 4135  lost    3 (0.0280)  supDist 0.0574  2.9 s
+set 2  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 4135  lost    3 (0.0280)  supDist 0.0574  2.9 s
+set 2  HHA                                |R| 10933  lost   69 (0.6449)  supDist 0.1860  0.5 s
+set 2  DBSH                               |R| 10221  lost   46 (0.4299)  supDist 0.1833  0.2 s
+set 2  SBSH-r1                            |R| 9757  lost   47 (0.4393)  supDist 0.1723  0.5 s
+set 2  SBSH-r2                            |R| 9757  lost   47 (0.4393)  supDist 0.1723  0.5 s
+done in 37.5 s

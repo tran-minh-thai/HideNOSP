@@ -1,0 +1,62 @@
+# cell SC4 bpi2012 [0,3] sigma=4000 distinct S=1 r=2 methods closure=necessary
+# machine ADMIN-PC
+# exit 0 after 50 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = c3cf44381884
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC4 the main comparison under HIDE-SEQ: Lost, SupDist and |R| at a per-sequence limit r
+# run 20261111-012555-942_ADMIN-PC_c3cf44381884_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, pool 110 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 22 -> 4, p30: 22 -> 4, p50: 22 -> 4, p70: 22 -> 4, p90: 22 -> 4
+set 0  no sequence reaches r = 2: no mask is needed
+set 1  no sequence reaches r = 2: no mask is needed
+set 2  no sequence reaches r = 2: no mask is needed
+set 3  no sequence reaches r = 2: no mask is needed
+set 4  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|    8  lost    0 (0.0000)  supDist 0.0000  3.6 s
+set 4  CUT-HIDE adaptive weight (6 iterations) |R|    8  lost    0 (0.0000)  supDist 0.0000  3.1 s
+set 4  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|    8  lost    0 (0.0000)  supDist 0.0000  1.6 s
+set 4  HHA                                |R|    8  lost    0 (0.0000)  supDist 0.0001  0.0 s
+set 4  HHA-emb                            |R| 3320  lost   37 (0.2701)  supDist 0.1539  0.0 s
+set 4  DBSH                               |R|    8  lost    0 (0.0000)  supDist 0.0001  0.0 s
+set 4  SBSH-r1                            |R|    8  lost    0 (0.0000)  supDist 0.0001  0.8 s
+set 4  SBSH-r2                            |R|    8  lost    0 (0.0000)  supDist 0.0001  0.9 s
+set 4  occurrence-count-heuristic         |R|    8  lost    0 (0.0000)  supDist 0.0001  0.0 s
+set 5  no sequence reaches r = 2: no mask is needed
+set 6  no sequence reaches r = 2: no mask is needed
+set 7  no sequence reaches r = 2: no mask is needed
+set 8  no sequence reaches r = 2: no mask is needed
+set 9  no sequence reaches r = 2: no mask is needed
+set 10  no sequence reaches r = 2: no mask is needed
+set 11  no sequence reaches r = 2: no mask is needed
+set 12  no sequence reaches r = 2: no mask is needed
+set 13  no sequence reaches r = 2: no mask is needed
+set 14  no sequence reaches r = 2: no mask is needed
+set 15  no sequence reaches r = 2: no mask is needed
+set 16  no sequence reaches r = 2: no mask is needed
+set 17  no sequence reaches r = 2: no mask is needed
+set 18  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 2015  lost    2 (0.0146)  supDist 0.0172  3.8 s
+set 18  CUT-HIDE adaptive weight (6 iterations) |R| 2015  lost    2 (0.0146)  supDist 0.0172  3.6 s
+set 18  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2015  lost    2 (0.0146)  supDist 0.0172  1.6 s
+set 18  HHA                                |R| 2015  lost   25 (0.1825)  supDist 0.0482  0.0 s
+set 18  HHA-emb                            |R| 2015  lost   25 (0.1825)  supDist 0.0482  0.0 s
+set 18  DBSH                               |R| 2015  lost   25 (0.1825)  supDist 0.0482  0.0 s
+set 18  SBSH-r1                            |R| 2015  lost   24 (0.1752)  supDist 0.0529  1.1 s
+set 18  SBSH-r2                            |R| 2015  lost   24 (0.1752)  supDist 0.0529  1.1 s
+set 18  occurrence-count-heuristic         |R| 2015  lost   25 (0.1825)  supDist 0.0482  0.0 s
+set 19  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  864  lost    0 (0.0000)  supDist 0.0102  3.5 s
+set 19  CUT-HIDE adaptive weight (6 iterations) |R|  864  lost    0 (0.0000)  supDist 0.0102  3.5 s
+set 19  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  864  lost    0 (0.0000)  supDist 0.0102  1.6 s
+set 19  HHA                                |R|  864  lost    3 (0.0219)  supDist 0.0172  0.0 s
+set 19  HHA-emb                            |R| 4658  lost   46 (0.3358)  supDist 0.1952  0.0 s
+set 19  DBSH                               |R|  864  lost   18 (0.1314)  supDist 0.0317  0.0 s
+set 19  SBSH-r1                            |R|  955  lost   18 (0.1314)  supDist 0.0302  1.0 s
+set 19  SBSH-r2                            |R|  955  lost   18 (0.1314)  supDist 0.0302  1.0 s
+set 19  occurrence-count-heuristic         |R|  864  lost    3 (0.0219)  supDist 0.0172  0.0 s
+done in 47.4 s

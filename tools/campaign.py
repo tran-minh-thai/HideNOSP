@@ -5,6 +5,7 @@
     python tools/campaign.py lock  --machine=NAME [--generation=G]
     python tools/campaign.py run   --machine=NAME [--generation=G] --batch=B [--branch=campaign-NAME]
                                    [--report-ps1=PATH --status-project=HideNOSP] [--retry-failed]
+    python tools/campaign.py orphans --machine=NAME [--delete]
     python tools/campaign.py --self-test
 
 A campaign is the ordered list of batches below. Each batch is a list of cells, one call of
@@ -352,6 +353,100 @@ def failed_cells(root, machine, generation="1"):
     return {k for k, v in last.items() if v == "failed"}
 
 
+def stamped_machine(path):
+    """The machine field of the run stamp in the header of a result file, or None."""
+    try:
+        with io.open(path, encoding="utf-8", newline="") as handle:
+            for line in handle:
+                line = line.rstrip("\r\n")
+                if not line.startswith("#"):
+                    return None
+                match = STAMP.match(line)
+                if match:
+                    return match.group(2)
+    except OSError:
+        return None
+    return None
+
+
+def ledger_rows_of_every_generation(root, machine):
+    """Every ledger row of this machine: the campaign directory of each generation has its own ledger."""
+    base = root / "results-invariant"
+    if not base.is_dir():
+        return []
+    out = []
+    for directory in sorted(base.glob("campaign_" + machine)) + sorted(base.glob("campaign_" + machine + "_g*")):
+        path = directory / "cells.tsv"
+        if path.is_file():
+            with io.open(path, encoding="utf-8", newline="") as handle:
+                out.extend(csv.DictReader(handle, delimiter="\t"))
+    return out
+
+
+def orphan_files(root, machine):
+    """Result files of this machine that git does not track and that no ledger row names.
+
+    A run killed after CsvWriter has renamed its .partial file, but before the ledger row and the
+    commit, leaves a COMPLETE result file behind. No later cell commits it, because do_run commits
+    only the files that appeared while it ran that cell; and the campaign reads the file as a cell
+    already done, so the cell never runs again. The measurement then has no exit code, no console log
+    and no ledger row, and it never reaches the campaign branch. A tracked file is never reported,
+    however old and whatever ledger it belongs to: git carries it, so every reader can find it.
+    """
+    named = set()
+    for row in ledger_rows_of_every_generation(root, machine):
+        named.update((row.get("result_files") or "").split())
+    listing = git_out(root, "status", "--porcelain", "--untracked-files=all", "--",
+                      "results", "results-invariant")
+    out = []
+    for line in (listing or "").splitlines():
+        if not line.startswith("?? "):
+            continue
+        path = root / line[3:].strip().strip('"')
+        if path.suffix != ".csv" or not path.is_file() or path.name in named:
+            continue
+        if stamped_machine(path) != machine:
+            continue
+        out.append(path)
+    return sorted(out)
+
+
+def orphan_cell(root, machine, path):
+    """(batch, cell) that this one file would mark done, so the reader knows which measurement is loose."""
+    files = [f for f in result_files(root, machine) if f[0] == path]
+    if not files:
+        return None
+    for batch in BATCHES:
+        try:
+            cells = batch_cells(root, batch)
+        except ValueError:
+            continue
+        for c in cells:
+            if is_done(c, files):
+                return batch, label(c)
+    return None
+
+
+def do_orphans(root, machine, delete=False):
+    out = orphan_files(root, machine)
+    if not out:
+        print("no untracked result file of %s is missing a ledger row" % machine)
+        return 0
+    for path in out:
+        where = orphan_cell(root, machine, path)
+        print("%s: %s" % (path.relative_to(root).as_posix(),
+                          "would mark cell %s of %s done" % (where[1], where[0]) if where
+                          else "no planned cell matches its options"))
+    if not delete:
+        print("%d file(s) hold a measurement with no record. With --delete they are removed, and the"
+              " batch then runs those cells again, with a log and a ledger row." % len(out))
+        return 1
+    for path in out:
+        path.unlink()
+        print("deleted %s" % path.relative_to(root).as_posix())
+    return 0
+
+
 def status(root, machine, batch):
     files = result_files(root, machine)
     failed = failed_cells(root, machine, GENERATION[batch])
@@ -575,6 +670,13 @@ def do_run(root, machine, batch, branch=None, ps1=None, project="HideNOSP", retr
         p.unlink()
     if stale:
         report(ps1, project, "%s: removed %d .partial file(s) of a run stopped before" % (batch, len(stale)))
+    loose = orphan_files(root, machine)
+    if loose:
+        report(ps1, project, "%s: %d untracked result file(s) with no ledger row: %s"
+               % (batch, len(loose), ", ".join(p.name for p in loose)))
+        print("WARNING: %d result file(s) of %s are untracked and have no ledger row, so they hold a"
+              " measurement with no record and the cells they cover will not run. See"
+              " 'python tools/campaign.py orphans --machine=%s'." % (len(loose), machine, machine))
     cells, done, gave_up = status(root, machine, batch)
     todo = [c for c in cells if c not in done and (retry_failed or c not in gave_up)]
     report(ps1, project, "%s: start, %d cells, %d done, %d failed before%s, %d to run"
@@ -635,7 +737,7 @@ def do_plan(root, machine, batches):
 def main(argv):
     if argv[:1] == ["--self-test"]:
         return self_test()
-    if not argv or argv[0] not in ("plan", "lock", "run"):
+    if not argv or argv[0] not in ("plan", "lock", "run", "orphans"):
         print(__doc__)
         return 1
     action, args = argv[0], dict(a[2:].split("=", 1) if "=" in a else (a[2:], "true") for a in argv[1:])
@@ -656,6 +758,8 @@ def main(argv):
         return do_plan(REPO, machine, [args["batch"]] if "batch" in args else own)
     if action == "lock":
         return do_lock(REPO, machine, generation=generation)
+    if action == "orphans":
+        return do_orphans(REPO, machine, delete="delete" in args)
     batch = args.get("batch")
     if batch not in BATCHES:
         print("--batch is one of: %s" % ", ".join(BATCHES))
@@ -833,6 +937,46 @@ def self_test():
             "# run 20261001-000000-001_XPS_abc_s2026\n# scenario SC3\n" + refine_line + "a\n", encoding="utf-8")
         _, done_ref, _ = status(root, "XPS", "sc3-s1")
         check("a refinement file does not mark a method cell done", not done_ref, str(len(done_ref)))
+
+        # An orphan result file: untracked, and no ledger row names it. The two files just written are
+        # untracked, one of OLD and one of XPS, so only the XPS one may be reported.
+        loose = orphan_files(root, "XPS")
+        check("an untracked result file with no ledger row is reported, one of another machine is not",
+              [q.name for q in loose] == ["SC3_20261001-000000-001_XPS_abc_s2026.csv"],
+              str([q.name for q in loose]))
+        no_cell = root / "results-invariant" / "SC3_20261001-000000-001_XPS_abc_s2026.csv"
+        check("an orphan whose options match no planned cell says so",
+              orphan_cell(root, "XPS", no_cell) is None)
+        subprocess.run(["git", "-C", str(root), "add", "--", "results-invariant/" + no_cell.name], check=True)
+        subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "a result file with no ledger row"], check=True)
+        check("a tracked result file with no ledger row is not an orphan",
+              [q.name for q in orphan_files(root, "XPS")] == [], str([q.name for q in orphan_files(root, "XPS")]))
+        # A file the ledger names but git stopped tracking (its commit failed) has a record: not an orphan.
+        named_row = next(r for r in read_ledger(root, "XPS") if r["result_files"])
+        named_file = named_row["result_files"].split()[0]
+        subprocess.run(["git", "-C", str(root), "rm", "-q", "--cached", "--",
+                        "results-invariant/" + named_file], check=True)
+        check("an untracked file that a ledger row names is not an orphan",
+              named_file not in [q.name for q in orphan_files(root, "XPS")], named_file)
+        subprocess.run(["git", "-C", str(root), "add", "--", "results-invariant/" + named_file], check=True)
+        check("putting it back in the index makes it tracked again, so still not an orphan",
+              named_file not in [q.name for q in orphan_files(root, "XPS")], named_file)
+        victim = batch_cells(root, "sc3-s5")[0]
+        check("the cell of the orphan to come is not done yet", not status(root, "XPS", "sc3-s5")[1])
+        (root / "results-invariant" / "SC3_20261001-000000-002_XPS_abc_s2026.csv").write_text(
+            "# run 20261001-000000-002_XPS_abc_s2026\n# scenario SC3\n"
+            + "# options {machine=XPS, %s}\n" % ", ".join("%s=%s" % kv for kv in dict(victim["options"]).items())
+            + "a\n", encoding="utf-8")
+        loose = orphan_files(root, "XPS")
+        check("an orphan hides its cell from the batch, and is reported with that cell",
+              len(loose) == 1 and len(status(root, "XPS", "sc3-s5")[1]) == 1
+              and orphan_cell(root, "XPS", loose[0]) == ("sc3-s5", label(victim)),
+              "%d orphan(s), %d done" % (len(loose), len(status(root, "XPS", "sc3-s5")[1])))
+        check("orphans without --delete refuses and keeps the file",
+              do_orphans(root, "XPS") == 1 and loose[0].is_file())
+        check("orphans --delete removes it and the cell returns to the batch",
+              do_orphans(root, "XPS", delete=True) == 0 and not loose[0].is_file()
+              and not status(root, "XPS", "sc3-s5")[1] and orphan_files(root, "XPS") == [])
         bad = subprocess.run(["git", "-C", str(root), "remote", "set-url", "origin", str(tmp / "missing.git")])
         before = len(calls)
         do_run(root, "XPS", "sc3-s1", branch="campaign-xps", runner=lambda r, m, c: (fake(r, m, c) if len(calls) - before < 2

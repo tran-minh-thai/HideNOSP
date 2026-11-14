@@ -6,7 +6,7 @@ the index, and the time of mining F_sigma(D), printed beside the methods and nev
 
 Reads the SC6_*.csv files of one machine in DIR/results (default: the repository) and prints, per scope
 and size of the sensitive set, the median over the timed sets of each method's mean wall-clock time, with
-the number of sets; the median over the cells of the time of mining F_sigma(D) (the preprocessing that the
+the number of sets (printed with three decimals, so that whoever formats the table rounds once, not twice); the median over the cells of the time of mining F_sigma(D) (the preprocessing that the
 methods reading it share, timed once per cell on the row mine-frequent); and for the index the median build
 time and the median ratio of rebuilding after each mask to the incremental update.
 
@@ -147,10 +147,10 @@ def main(argv):
         for m in METHODS:
             values = times[group].get(m)
             if values:
-                lines.append("   %-15s %5d %16.1f" % (m + ("*" if m in READS else ""), len(values),
+                lines.append("   %-15s %5d %16.3f" % (m + ("*" if m in READS else ""), len(values),
                                                      statistics.median(values)))
         if mining[group]:
-            lines.append("   %-15s %5d %16.1f   (cells, not sets)" % ("mine F_sigma", len(mining[group]),
+            lines.append("   %-15s %5d %16.3f   (cells, not sets)" % ("mine F_sigma", len(mining[group]),
                                                                        statistics.median(mining[group])))
         build, ratio = [], []
         for parts in index[group].values():
@@ -160,7 +160,7 @@ def main(argv):
             if d.get("index-incremental", 0) > 0 and "index-rebuild" in d:
                 ratio.append(d["index-rebuild"] / d["index-incremental"])
         if build:
-            lines.append("   index: build median %.1f ms over %d sets; rebuild / incremental median %.2f over %d sets"
+            lines.append("   index: build median %.3f ms over %d sets; rebuild / incremental median %.4f over %d sets"
                          % (statistics.median(build), len(build), statistics.median(ratio) if ratio else float("nan"),
                             len(ratio)))
     lines.append("")

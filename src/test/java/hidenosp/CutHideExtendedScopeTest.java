@@ -231,7 +231,7 @@ class CutHideExtendedScopeTest {
                     needed |= SupportNO.of(p, db.get(s), gap) >= r;
                     assertTrue(SupportNO.of(p, after.get(s), gap) < r, "visible after the greedy");
                 }
-                // A mask is never placed where it lowers nothing: the lower bound per sequence holds.
+                // Checked again by exhaustive packing, apart from the index the greedy reads.
                 assertTrue(BruteForce.supNO(p, after.get(0), gap) < r);
             }
             if (needed) {
@@ -239,5 +239,67 @@ class CutHideExtendedScopeTest {
             }
         }
         assertTrue(checked >= 60, "too few instances need a mask: " + checked);
+    }
+
+    @Test
+    @DisplayName("HIDE-SEQ with several patterns: a pattern already below r does not attract a mask")
+    void perSequenceGreedyIgnoresSatisfiedPatterns() {
+        // c d a b a b with r = 2: <c,d> occurs once, already below r; <a,b> occurs twice and needs one mask.
+        // With uniform weights every vital position of either pattern removes one unit, and the greedy
+        // keeps the first best position, so counting the satisfied pattern would mask c first, uselessly,
+        // and then a: two masks. One mask on <a,b> is enough.
+        int a = 0, b = 1, c = 2, d = 3;
+        SequenceDatabase db = new SequenceDatabase(List.of(new EventSequence(0, new int[] {c, d, a, b, a, b})));
+        GapConstraint gap = new GapConstraint(0, 3);
+        List<Pattern> sensitive = List.of(new Pattern(a, b), new Pattern(c, d));
+        HideProblem problem = new HideProblem(db, sensitive, gap, HideProblem.Mode.HIDE_SEQ, 2, 0.5, 3, 2);
+        assertEquals(2, SupportNO.of(new Pattern(a, b), db.get(0), gap));
+        assertEquals(1, SupportNO.of(new Pattern(c, d), db.get(0), gap));
+        Sanitization result = new CutHide(CutHideConfig.uniformWeights()).run(problem);
+        assertEquals(1, result.maskCount(), "masked " + result.masked());
+        assertTrue(SupportNO.of(new Pattern(a, b), db.mask(result.masked()).get(0), gap) < 2);
+    }
+
+    @Test
+    @DisplayName("HIDE-SEQ with several patterns: no more masks than the summed need of every sequence")
+    void perSequenceGreedyStaysWithinTheSummedNeed() {
+        // Each mask lands on a position vital for a pattern still at or above r, which lowers its support by
+        // at least one, so the greedy places at most sum over S and P of max(0, sup_NO(P, S) - r + 1) masks.
+        // A mask spent on a pattern already below r lowers no need and can push the count above this sum.
+        Random random = new Random(20261114L);
+        int compared = 0;
+        int withSatisfied = 0;
+        for (int round = 0; round < 400; round++) {
+            GapConstraint gap = new GapConstraint(random.nextInt(2), 1 + random.nextInt(3));
+            SequenceDatabase db = randomDatabase(random, 3, 12, 4, new Pattern(0, 1), gap);
+            List<Pattern> sensitive = List.of(new Pattern(0, 1), new Pattern(2, 3), new Pattern(1, 2));
+            int r = 1 + random.nextInt(3);
+            HideProblem problem = new HideProblem(db, sensitive, gap, HideProblem.Mode.HIDE_SEQ, r, 0.5, 3, 2);
+            long need = 0;
+            boolean satisfiedOne = false;
+            for (int s = 0; s < db.size(); s++) {
+                boolean needy = false;
+                boolean satisfied = false;
+                for (Pattern p : sensitive) {
+                    int f = SupportNO.of(p, db.get(s), gap);
+                    need += Math.max(0, f - r + 1);
+                    needy |= f >= r;
+                    satisfied |= f > 0 && f < r;
+                }
+                satisfiedOne |= needy && satisfied;
+            }
+            if (need == 0) {
+                continue;
+            }
+            Sanitization result = new CutHide(CutHideConfig.uniformWeights()).run(problem);
+            assertTrue(result.maskCount() <= need, result.maskCount() + " masks, summed need " + need);
+            compared++;
+            if (satisfiedOne) {
+                withSatisfied++;
+            }
+        }
+        // The bound only bites where a sequence holds a needy pattern beside one already below r.
+        assertTrue(compared >= 200 && withSatisfied >= 100, compared + " compared, " + withSatisfied
+                + " with a satisfied pattern beside a needy one");
     }
 }

@@ -712,7 +712,7 @@ public final class CutHide implements HidingMethod {
             NettreeCutIndex index = buildIndex(problem, sequence);
             while (needsMask(index, problem)) {
                 double[] weights = indexWeights(index, problem);
-                double[] drop = sensitiveDropPerPosition(index, sequence.length());
+                double[] drop = sensitiveDropPerPosition(index, sequence.length(), problem.threshold());
                 int target = -1;
                 double bestRatio = 0;
                 for (int i = 0; i < sequence.length(); i++) {
@@ -747,12 +747,15 @@ public final class CutHide implements HidingMethod {
 
     /**
      * How much total sensitive support each position would remove, by L5: one pass over the vital
-     * sets of the sensitive patterns, not one flow per candidate position.
+     * sets of the sensitive patterns, not one flow per candidate position. Only the patterns still at
+     * or above the limit r in this sequence count, as in the database loop, where only a pattern that
+     * is still needed counts ({@link Candidate#ratio}): a pattern already below r gains nothing from a
+     * mask, and counting it would lead the greedy to positions that leave the remaining patterns above r.
      */
-    private double[] sensitiveDropPerPosition(NettreeCutIndex index, int length) {
+    private double[] sensitiveDropPerPosition(NettreeCutIndex index, int length, int threshold) {
         double[] drop = new double[length];
         for (int id = 0; id < index.patternCount(); id++) {
-            if (!index.isSensitive(id)) {
+            if (!index.isSensitive(id) || index.supNO(id) < threshold) {
                 continue;
             }
             for (int position : index.vitalPositions(id)) {

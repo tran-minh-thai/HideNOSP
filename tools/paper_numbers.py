@@ -47,8 +47,11 @@ import closure_rule  # noqa: E402
 RULE = ["necessary"]   # set by main from --closure
 # The table tools that read files of a closure rule, and the scenarios whose files carry one.
 CLOSURE_TOOLS = ("preregistered_analysis.py", "lower_bound_table.py", "reduced_optimum_table.py", "lost_optimum_table.py",
-                 "cert_table.py", "levels_table.py", "dataset_sensitivity.py")
-CLOSURE_SCENARIOS = ("SC3", "SC3LOST", "SC3CERT", "SC3OPT", "SC3PARETO")
+                 "cert_table.py", "levels_table.py", "dataset_sensitivity.py", "timing_table.py")
+# Every scenario whose methods or measures read S-plus, so that files() keeps the files of one rule.
+# The running time was measured under both rules, so SC6 belongs here too: without it the repetitions
+# and the spread would be read from the files of both rules at once.
+CLOSURE_SCENARIOS = ("SC3", "SC3LOST", "SC3CERT", "SC3OPT", "SC3PARETO", "SC6", "SC4", "SC4LOST")
 TOOLS = ROOT / "tools"
 INV = ROOT / "results-invariant"
 TIMED = ROOT / "results"
@@ -832,10 +835,41 @@ def timing(nums, machine):
     nums.put("sc6.cv.median", statistics.median(cv), "SC6 files of %s: wall_ms_sd / wall_ms_mean" % machine)
 
 
+MACHINE_KEYS = ("cpu", "logical_processors", "ram_bytes", "os", "java_vendor", "java_runtime_version", "hostname")
+
+
+def locks(machine):
+    """The environment lock of every generation of this machine, oldest first."""
+    first = sorted(INV.glob("campaign_%s/ENV_LOCK.json" % machine))
+    later = sorted(INV.glob("campaign_%s_g*/ENV_LOCK.json" % machine),
+                   key=lambda p: int(re.search(r"_g(\d+)$", p.parent.name).group(1)))
+    return first + later
+
+
+def one_platform(read, machine):
+    """The newest of the locks, once every lock agrees on the machine it describes.
+
+    The paper states one measuring environment. Each generation locks its own copy, so a key that
+    differs between two generations means the environment moved under the campaign and the sentence
+    would describe only part of the numbers.
+    """
+    if not read:
+        raise Missing("no environment lock of %s" % machine)
+    for k in MACHINE_KEYS:
+        seen = {d.get(k) for _, d in read}
+        if len(seen) != 1:
+            raise Missing("the %d environment locks of %s disagree on %s: %s; the paper states one platform"
+                          % (len(read), machine, k, sorted(map(str, seen))))
+    return read[-1]
+
+
 def platform(nums, machine):
-    lock = json.loads((INV / ("campaign_%s_g2" % machine) / "ENV_LOCK.json").read_text(encoding="utf-8"))
-    src = "results-invariant/campaign_%s_g2/ENV_LOCK.json" % machine
-    for k in ("cpu", "logical_processors", "ram_bytes", "os", "java_vendor", "java_runtime_version", "hostname"):
+    read = [(p, json.loads(p.read_text(encoding="utf-8"))) for p in locks(machine)]
+    path, lock = one_platform(read, machine)
+    src = path.relative_to(ROOT).as_posix()
+    nums.put("platform.n_locks", len(read), "%s/campaign_%s*/ENV_LOCK.json" % (INV.name, machine))
+    nums.put("platform.lock", path.name, src)
+    for k in MACHINE_KEYS:
         nums.put("platform.%s" % k, lock[k], src)
     heaps = Counter()
     for tree, scenario in ((TIMED, "SC6"), (INV, "SC3")):
@@ -994,9 +1028,27 @@ def self_test():
         failures.append("good levels text misread")
     expect_stop("levels: a method missing", lambda: parse_levels(lv.replace("   hha-stop", "   other   ", 1), "t"))
     expect_stop("levels: instance count of a row differs", lambda: parse_levels(lv.replace(" hha                 10 ", " hha                 11 ", 1), "t"))
+    # one_platform: every generation's lock must agree, and the newest one fills the sentence.
+    same = {k: "v" for k in MACHINE_KEYS}
+    pair = [(Path("campaign_X/ENV_LOCK.json"), dict(same)), (Path("campaign_X_g2/ENV_LOCK.json"), dict(same))]
+    def stop_message(fn):
+        try:
+            fn()
+        except Missing as e:
+            return str(e)
+        return ""
+    if "no environment lock" not in stop_message(lambda: one_platform([], "X")):
+        failures.append("the empty case does not name the missing lock")
+    expect_stop("two locks disagree on the JDK",
+                lambda: one_platform([pair[0], (pair[1][0], dict(same, java_runtime_version="other"))], "X"))
+    expect_stop("two locks disagree on the machine name",
+                lambda: one_platform([pair[0], (pair[1][0], dict(same, hostname="OTHER"))], "X"))
+    if one_platform(pair, "X")[0].parent.name != "campaign_X_g2":
+        failures.append("one_platform does not take the newest lock")
     print("self-test: %d failures%s" % (len(failures), (": " + "; ".join(failures)) if failures else ""))
     print("checks: same key twice, absent pattern, repeated pattern, a good block, pairs/test mismatch, "
-          "missing Holm line, missing equivalence line, levels text, levels method missing, levels count")
+          "missing Holm line, missing equivalence line, levels text, levels method missing, levels count, no lock named as "
+          "missing, two locks disagree on the JDK, two locks disagree on the machine name, the newest lock wins")
     return 1 if failures else 0
 
 

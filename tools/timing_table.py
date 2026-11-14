@@ -2,7 +2,7 @@
 """Summarise the reduced SC6 (preregistration sections 19.3 and 20.1): running time of every method, cost of
 the index, and the time of mining F_sigma(D), printed beside the methods and never added to them.
 
-    python tools/timing_table.py [--machine=NAME] [--dir=DIR] [--out FILE]
+    python tools/timing_table.py [--machine=NAME] [--dir=DIR] [--out FILE] [--closure=RULE]
 
 Reads the SC6_*.csv files of one machine in DIR/results (default: the repository) and prints, per scope
 and size of the sensitive set, the median over the timed sets of each method's mean wall-clock time, with
@@ -15,6 +15,11 @@ Checks that stop the run with exit status 1, each with the number of rows it cov
   - each file holds exactly one mine-frequent row, before every method row (preregistration section 20.1);
   - |R| and Lost of a timed run equal the SC3 row of the same set and method on the same machine
     (results-invariant/SC3_*.csv): the timed code is the code of the comparison tables.
+
+--closure names the rule of S-plus of the SC6 files to read, and the SC3 rows they are checked against
+are the rows of that same rule (default necessary, the corrected rule). The running time was measured
+under both rules, so the directory holds a set of files for each, and a table that mixed them would
+hold two measurements of one cell.
 """
 import csv
 import glob
@@ -46,6 +51,7 @@ def main(argv):
     out_path = None
     root = REPO
     machine = ""
+    want = "necessary"
     i = 0
     while i < len(argv):
         a = argv[i]
@@ -57,8 +63,11 @@ def main(argv):
             machine = a.split("=", 1)[1]
         elif a.startswith("--dir="):
             root = Path(a.split("=", 1)[1])
+        elif a.startswith("--closure="):
+            want = a.split("=", 1)[1]
         else:
-            print("usage: python tools/timing_table.py [--machine=NAME] [--dir=DIR] [--out FILE]", file=sys.stderr)
+            print("usage: python tools/timing_table.py [--machine=NAME] [--dir=DIR] [--out FILE] "
+                  "[--closure=RULE]", file=sys.stderr)
             return 1
         i += 1
     files, machine, refusal = one_machine(sorted(glob.glob(str(root / "results" / "SC6_*.csv"))), machine,
@@ -69,10 +78,17 @@ def main(argv):
     if not files:
         print("no SC6 file in %s" % (root / "results").as_posix(), file=sys.stderr)
         return 1
-    # The timed methods read S-plus: the SC3 rows a timed run must equal are those of the rule the SC6 files name.
+    # The timed methods read S-plus, so one table holds the files of one rule, and the SC3 rows a timed
+    # run must equal are the rows of that same rule.
+    every = files
+    files, found = closure_rule.keep(files, want)
+    if not files:
+        print("no SC6 file of %s under closure rule %s (%d file(s) read, rules found: %s)"
+              % (machine, want, len(every), found or "none"), file=sys.stderr)
+        return 1
     rules = {closure_rule.closure_of(p) for p in files}
     if len(rules) != 1:
-        print("the SC6 files of %s mix closure rules %s; time one rule per table" % (machine, sorted(rules)), file=sys.stderr)
+        print("the SC6 files kept for rule %s still mix rules %s" % (want, sorted(rules)), file=sys.stderr)
         return 1
     rule = rules.pop()
     sc3_files = [p for p in sorted(glob.glob(str(root / "results-invariant" / "SC3_*.csv"))) if machine_of(p) == machine]

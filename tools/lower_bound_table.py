@@ -175,6 +175,11 @@ def main(argv):
         if o.get("methods") == "none":
             taken["front"] += 1
             continue
+        # The gaps added after the main comparison are not in this table's group tables, so a file of
+        # theirs matches no planned cell. Leave it out and count it, instead of reading it as a problem.
+        if sc3_commands.positive_minimum_gap("[%s,%s]" % (o["gmin"], o["gmax"])):
+            taken["positive-gap"] += 1
+            continue
         batch = next((b for b, cs in cells.items() if any(sc3_commands.matches(c, o) for c in cs)), None)
         if batch is None:
             problems.append("SC3 file matches no planned cell: %s" % Path(path).name)
@@ -192,10 +197,11 @@ def main(argv):
         lines.append(text)
 
     write("SC3 files of %s: %d method-batch, %d refinement-batch%s; left out: %d degenerate-group (SC3LB covers "
-          "the main group only), %d Pareto-front. SC3LB files of %s: %d."
+          "the main group only), %d Pareto-front, %d with a positive minimum gap (this table covers g- = 0). "
+          "SC3LB files of %s: %d."
           % (machine, taken["methods"], taken["refine"],
              ", %d stop-at-threshold-batch" % taken["stop"] if taken["stop"] else "",
-             taken["degenerate"], taken["front"], bound_machine, len(bound_files)))
+             taken["degenerate"], taken["front"], taken["positive-gap"], bound_machine, len(bound_files)))
     missing_results = [k for k in bounds if k not in results]
     missing_bounds = [k for k in results if k not in bounds]
     write("Bound rows: %d; SC3 sets: %d; joined: %d; bound without SC3: %d; SC3 without bound: %d"

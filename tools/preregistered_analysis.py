@@ -55,6 +55,7 @@ from scipy import stats
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import closure_rule  # noqa: E402
+import sc3_commands  # noqa: E402
 
 
 class LOCKED:
@@ -199,11 +200,9 @@ def items_of_pattern(text):
 
 
 def positive_minimum_gap(gap):
-    """True for a gap "[a,b]" with a > 0 (preregistration section 22.3)."""
-    match = re.fullmatch(r"\[(\d+),(\d+|inf)\]", gap.strip())
-    if not match:
-        raise ValueError("cannot read the gap %r" % gap)
-    return int(match.group(1)) > 0
+    """True for a gap "[a,b]" with a > 0 (preregistration section 22.3). One definition, in
+    sc3_commands, because every table tool of the main comparison has to leave those files out."""
+    return sc3_commands.positive_minimum_gap(gap)
 
 
 def group_configurations(sc2_files, profile="pool", positive_gap=False):

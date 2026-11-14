@@ -153,6 +153,15 @@ def planned(root, size, front=False, group="main", refine=False, stop=False, tab
     return cells
 
 
+def positive_minimum_gap(gap):
+    """True for a gap "[a,b]" with a > 0: the gaps added after the main comparison, which the tables of
+    the main comparison do not cover. Callers holding gmin and gmax apart build the string first."""
+    match = re.fullmatch(r"\[(\d+),(\d+|inf)\]", gap.strip())
+    if not match:
+        raise ValueError("cannot read the gap %r" % gap)
+    return int(match.group(1)) > 0
+
+
 def parse_options(line):
     """The options line of a result header: '# options {a=1, b=x,y, c=z}'."""
     body = line.strip()[len("# options "):].strip()

@@ -1,0 +1,26 @@
+# cell SC3 bpi2013 [1,2] sigma=1000 repeated S=10 methods closure=necessary
+# machine ADMIN-PC
+# exit 0 after 19 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 77701e57051f
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3 main comparison on HIDE-DB: Lost, Ghost, SupDist, |R| and HF against the baselines
+# run 20261111-092311-745_ADMIN-PC_77701e57051f_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 10, repeated-item pool 46 candidates, 1 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 9 -> 0, p30: 9 -> 0, p50: 9 -> 0, p70: 9 -> 0, p90: 10 -> 1
+WARNING: the pool gives 1 distinct sets, not 20; the cell runs with these and the result file header says so. No set is repeated to make up the number.
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 14131  lost    7 (0.1892)  supDist 0.3007  3.4 s
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 14131  lost    7 (0.1892)  supDist 0.3007  3.4 s
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 14131  lost    7 (0.1892)  supDist 0.3007  3.1 s
+set 0  HHA                                |R| 13458  lost   11 (0.2973)  supDist 0.3002  0.5 s
+set 0  DBSH                               |R| 22955  lost   17 (0.4595)  supDist 0.4647  0.4 s
+set 0  SBSH-r1                            |R| 23014  lost   17 (0.4595)  supDist 0.4646  0.7 s
+set 0  SBSH-r4                            |R| 23019  lost   17 (0.4595)  supDist 0.4647  0.5 s
+done in 16.1 s

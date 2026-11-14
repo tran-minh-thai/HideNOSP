@@ -1,0 +1,21 @@
+# run 20261111-092311-745_ADMIN-PC_77701e57051f_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/bpi2013.txt, format=SPMF, sigma=1000, gmin=1, gmax=2, maxPatternLength=4, setsPerStratum=4, sensitiveSize=10, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,cut-hide-rw,cut-hide,hha,dbsh,sbsh-r1,sbsh-rmax, closure=necessary}
+# sensitive sets: size 10, repeated-item pool 46 candidates, 1 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 9 -> 0, p30: 9 -> 0, p50: 9 -> 0, p70: 9 -> 0, p90: 10 -> 1
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/bpi2013.txt,"N=7554,len=65533","[1,2]",1000,"[[11, 1, 1, 1], [1, 1, 11], [1, 11, 1, 1], [1, 1, 8], [11, 11], [11, 1, 1], [1, 11, 1], [1, 1, 1, 1], [1, 1, 1], [1, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,7,0.189189,0,0.215632,0.300714,14131,0,,0,0,0,,80,37,30,5,0.147059,0.289845,34,
+datasets/bpi2013.txt,"N=7554,len=65533","[1,2]",1000,"[[11, 1, 1, 1], [1, 1, 11], [1, 11, 1, 1], [1, 1, 8], [11, 11], [11, 1, 1], [1, 11, 1], [1, 1, 1, 1], [1, 1, 1], [1, 1]]",p90,cut-hide-rw,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,7,0.189189,0,0.215632,0.300714,14131,0,,0,0,0,,80,37,30,5,0.147059,0.289845,34,
+datasets/bpi2013.txt,"N=7554,len=65533","[1,2]",1000,"[[11, 1, 1, 1], [1, 1, 11], [1, 11, 1, 1], [1, 1, 8], [11, 11], [11, 1, 1], [1, 11, 1], [1, 1, 1, 1], [1, 1, 1], [1, 1]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,7,0.189189,0,0.215632,0.300714,14131,0,,0,0,0,,80,37,30,5,0.147059,0.289845,34,
+datasets/bpi2013.txt,"N=7554,len=65533","[1,2]",1000,"[[11, 1, 1, 1], [1, 1, 11], [1, 11, 1, 1], [1, 1, 8], [11, 11], [11, 1, 1], [1, 11, 1], [1, 1, 1, 1], [1, 1, 1], [1, 1]]",p90,hha,HHA,,0.000000,11,0.297297,0,0.205362,0.300185,13458,0,,0,0,0,,80,37,26,8,0.235294,0.287525,34,
+datasets/bpi2013.txt,"N=7554,len=65533","[1,2]",1000,"[[11, 1, 1, 1], [1, 1, 11], [1, 11, 1, 1], [1, 1, 8], [11, 11], [11, 1, 1], [1, 11, 1], [1, 1, 1, 1], [1, 1, 1], [1, 1]]",p90,dbsh,DBSH,,0.000000,17,0.459459,0,0.350282,0.464680,22955,0,,0,0,0,,80,37,20,14,0.411765,0.450178,34,
+datasets/bpi2013.txt,"N=7554,len=65533","[1,2]",1000,"[[11, 1, 1, 1], [1, 1, 11], [1, 11, 1, 1], [1, 1, 8], [11, 11], [11, 1, 1], [1, 11, 1], [1, 1, 1, 1], [1, 1, 1], [1, 1]]",p90,sbsh-r1,SBSH-r1,,0.000000,17,0.459459,0,0.351182,0.464591,23014,0,,0,0,0,,80,37,20,14,0.411765,0.449621,34,
+datasets/bpi2013.txt,"N=7554,len=65533","[1,2]",1000,"[[11, 1, 1, 1], [1, 1, 11], [1, 11, 1, 1], [1, 1, 8], [11, 11], [11, 1, 1], [1, 11, 1], [1, 1, 1, 1], [1, 1, 1], [1, 1]]",p90,sbsh-rmax,SBSH-r4,,0.000000,17,0.459459,0,0.351258,0.464709,23019,0,,0,0,0,,80,37,20,14,0.411765,0.449743,34,

@@ -1,0 +1,30 @@
+# cell SC2 bpi2012 [1,2] sigma=4000 repeated
+# machine ADMIN-PC
+# exit 0 after 9 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 464579ccb9b3
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC2 data regime: rho_rep, beta and the bound of P1 per dataset and per sigma
+# run 20261110-133713-266_ADMIN-PC_464579ccb9b3_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+dataset datasets\bpi2012.txt, |D| = 13087, total length 164506, alphabet 23, linearised share 0.0
+|F_sigma(D)| = 40 at sigma = 4000, gap [1,2], l_max = 4
+[14, 15, 21, 21]   sup_NO  4352  sup_seq  4107  rho_rep 0.056  beta 0.252  min masks   353 (0.0021 of D)
+[15, 21, 21]       sup_NO  4352  sup_seq  4107  rho_rep 0.056  beta 0.252  min masks   353 (0.0021 of D)
+[12, 21, 21]       sup_NO  4419  sup_seq  4096  rho_rep 0.073  beta 0.241  min masks   420 (0.0026 of D)
+[19, 19, 19, 19]   sup_NO  4575  sup_seq   927  rho_rep 0.797  beta 0.510  min masks   192 (0.0012 of D)
+[20, 20, 20]       sup_NO  5151  sup_seq   867  rho_rep 0.832  beta 0.378  min masks   421 (0.0026 of D)
+[21, 21, 21]       sup_NO  6882  sup_seq  2241  rho_rep 0.674  beta 0.497  min masks  1329 (0.0081 of D)
+[19, 19, 19]       sup_NO  6947  sup_seq  1430  rho_rep 0.794  beta 0.430  min masks  1262 (0.0077 of D)
+[20, 20]           sup_NO  7662  sup_seq  1282  rho_rep 0.833  beta 0.215  min masks  2065 (0.0126 of D)
+[19, 19]           sup_NO 11049  sup_seq  2616  rho_rep 0.763  beta 0.334  min masks  4288 (0.0261 of D)
+[21, 21]           sup_NO 13306  sup_seq  4234  rho_rep 0.682  beta 0.259  min masks  6190 (0.0376 of D)
+pool of 10 repeated-item candidates: median rho_rep 0.723, median beta 0.297
+done in 6.9 s

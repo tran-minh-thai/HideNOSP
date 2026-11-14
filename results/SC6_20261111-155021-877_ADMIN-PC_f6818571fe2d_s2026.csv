@@ -1,0 +1,64 @@
+# run 20261111-155021-877_ADMIN-PC_f6818571fe2d_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind TIMED
+# scenario SC6
+# options {machine=ADMIN-PC, dataset=datasets/bible.txt, format=SPMF, sigma=2000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, timeLimit=1800, warmups=1, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 4 candidates, 4 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+# sets: the first set drawn in each stratum (4 of 4)
+# closure necessary
+dataset,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,method_key,method,reads_frequent,mask_count,lost,wall_ms_mean,wall_ms_sd,cpu_ms_mean,repetitions,warmups,note,status
+datasets/bible.txt,"[0,1]",2000,repeated,1,,,mine-frequent,F_sigma(D) with l_max = 4: 78 patterns,false,,,298990.654,1733.485,297822.917,3,1,three repetitions: a single run exceeds two minutes,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,4,0,885.357,10.725,876.042,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,4,0,1569.029,14.086,1546.875,10,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,4,0,1601.423,15.050,1589.063,10,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,hha,HHA,false,8,0,58.506,1.680,58.333,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,dbsh,DBSH,false,8,0,59.271,5.339,59.375,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,sbsh-r1,SBSH-r1,true,8,0,92.943,2.433,90.625,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,sbsh-rmax,SBSH-r3,true,8,0,93.707,2.997,93.750,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,occurrence,occurrence-count-heuristic,false,8,0,26.206,0.852,26.042,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,hha-stop,HHA-stop,false,8,0,83.658,2.107,84.375,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,index-build,NettreeCutIndex,false,,,51.957,0.935,52.083,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,index-incremental,maskPosition after each mask,false,4,,0.015,0.007,0.000,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 31, 10]]",p30,index-rebuild,rebuild after each mask,false,4,,0.010,0.005,0.000,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[356, 356]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,844,0,903.131,7.733,894.792,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[356, 356]]",p50,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,844,0,1696.862,9.728,1670.313,10,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[356, 356]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,844,0,1721.221,12.673,1704.688,10,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[356, 356]]",p50,hha,HHA,false,844,0,50.478,0.945,51.042,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[356, 356]]",p50,dbsh,DBSH,false,844,0,55.756,2.037,54.167,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[356, 356]]",p50,sbsh-r1,SBSH-r1,true,844,0,100.874,2.736,100.000,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[356, 356]]",p50,sbsh-rmax,SBSH-r2,true,844,0,100.527,2.716,98.958,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[356, 356]]",p50,occurrence,occurrence-count-heuristic,false,844,0,22.796,0.767,22.917,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[356, 356]]",p50,hha-stop,HHA-stop,false,844,0,71.205,1.002,71.875,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[356, 356]]",p50,index-build,NettreeCutIndex,false,,,34.852,0.628,33.333,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[356, 356]]",p50,index-incremental,maskPosition after each mask,false,844,,1.571,0.061,1.042,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[356, 356]]",p50,index-rebuild,rebuild after each mask,false,844,,1.385,0.038,1.042,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,964,0,999.198,11.640,989.063,10,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,964,0,2053.528,13.694,2015.625,10,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,964,0,2076.963,10.938,2053.125,10,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,hha,HHA,false,1311,0,69.122,0.994,67.708,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,dbsh,DBSH,false,1312,0,71.772,4.450,70.833,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,sbsh-r1,SBSH-r1,true,1311,0,132.232,5.196,131.250,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,sbsh-rmax,SBSH-r3,true,1311,0,129.958,1.857,128.125,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,occurrence,occurrence-count-heuristic,false,1191,0,32.082,0.535,32.292,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,hha-stop,HHA-stop,false,1311,0,98.100,3.217,97.917,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,index-build,NettreeCutIndex,false,,,51.365,1.060,50.000,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,index-incremental,maskPosition after each mask,false,964,,3.269,0.034,3.125,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[46, 10, 46]]",p70,index-rebuild,rebuild after each mask,false,964,,3.481,0.529,3.125,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,5395,1,1331.304,8.149,1325.000,10,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,5395,0,4681.028,22.196,4575.000,10,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,5395,0,4705.418,17.946,4595.313,10,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,hha,HHA,false,5746,4,98.851,2.448,97.917,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,dbsh,DBSH,false,5975,2,98.492,2.277,97.917,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,sbsh-r1,SBSH-r1,true,5975,2,248.330,6.414,246.875,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,sbsh-rmax,SBSH-r3,true,5975,2,246.843,3.844,242.708,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,occurrence,occurrence-count-heuristic,false,5467,4,49.612,1.289,50.000,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,hha-stop,HHA-stop,false,5746,4,128.682,2.633,127.083,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,index-build,NettreeCutIndex,false,,,56.844,2.627,57.292,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,index-incremental,maskPosition after each mask,false,5395,,14.412,0.348,13.542,15,1,,
+datasets/bible.txt,"[0,1]",2000,repeated,1,"[[10, 46, 10]]",p90,index-rebuild,rebuild after each mask,false,5395,,15.114,0.674,15.625,15,1,,

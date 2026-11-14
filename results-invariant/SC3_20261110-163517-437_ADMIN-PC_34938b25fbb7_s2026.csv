@@ -1,0 +1,77 @@
+# run 20261110-163517-437_ADMIN-PC_34938b25fbb7_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/protein_sdb1.txt, format=SPMF, sigma=800, gmin=1, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,cut-hide-rw,cut-hide,hha,dbsh,sbsh-r1,sbsh-rmax, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 9 candidates, 9 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 1 -> 1, p30: 2 -> 2, p50: 2 -> 2, p70: 2 -> 2, p90: 2 -> 2
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[4, 4]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000120,0.000053,11,11,1.000000,0,0,0,,127,126,126,0,0.000000,0.000053,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[4, 4]]",p10,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.000120,0.000053,11,11,1.000000,11,11,0,,127,126,126,0,0.000000,0.000053,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[4, 4]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000120,0.000053,11,11,1.000000,11,11,0,,127,126,126,0,0.000000,0.000053,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[4, 4]]",p10,hha,HHA,,0.000000,0,0.000000,0,0.000239,0.000306,22,11,2.000000,0,0,0,,127,126,126,0,0.000000,0.000306,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[4, 4]]",p10,dbsh,DBSH,,0.000000,0,0.000000,0,0.000239,0.000311,22,11,2.000000,0,0,0,,127,126,126,0,0.000000,0.000311,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[4, 4]]",p10,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.000239,0.000311,22,11,2.000000,0,0,0,,127,126,126,0,0.000000,0.000311,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[4, 4]]",p10,sbsh-rmax,SBSH-r2,,0.000000,0,0.000000,0,0.000239,0.000311,22,11,2.000000,0,0,0,,127,126,126,0,0.000000,0.000311,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[8, 8]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000381,0.000248,35,35,1.000000,0,0,0,,127,126,126,0,0.000000,0.000248,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[8, 8]]",p30,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.000381,0.000248,35,35,1.000000,34,34,0,,127,126,126,0,0.000000,0.000248,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[8, 8]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000381,0.000248,35,35,1.000000,34,34,0,,127,126,126,0,0.000000,0.000248,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[8, 8]]",p30,hha,HHA,,0.000000,0,0.000000,0,0.000762,0.001049,70,35,2.000000,0,0,0,,127,126,126,0,0.000000,0.001049,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[8, 8]]",p30,dbsh,DBSH,,0.000000,0,0.000000,0,0.000762,0.001030,70,35,2.000000,0,0,0,,127,126,126,0,0.000000,0.001030,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[8, 8]]",p30,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.000795,0.001044,73,35,2.085714,0,0,0,,127,126,126,0,0.000000,0.001044,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[8, 8]]",p30,sbsh-rmax,SBSH-r2,,0.000000,0,0.000000,0,0.000795,0.001044,73,35,2.085714,0,0,0,,127,126,126,0,0.000000,0.001044,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[15, 15]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000381,0.000194,35,35,1.000000,0,0,0,,127,126,126,0,0.000000,0.000194,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[15, 15]]",p30,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.000381,0.000194,35,35,1.000000,32,32,0,,127,126,126,0,0.000000,0.000194,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[15, 15]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000381,0.000194,35,35,1.000000,32,32,0,,127,126,126,0,0.000000,0.000194,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[15, 15]]",p30,hha,HHA,,0.000000,0,0.000000,0,0.000762,0.000879,70,35,2.000000,0,0,0,,127,126,126,0,0.000000,0.000879,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[15, 15]]",p30,dbsh,DBSH,,0.000000,0,0.000000,0,0.000795,0.000874,73,35,2.085714,0,0,0,,127,126,126,0,0.000000,0.000874,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[15, 15]]",p30,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.000838,0.000845,77,35,2.200000,0,0,0,,127,126,126,0,0.000000,0.000845,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[15, 15]]",p30,sbsh-rmax,SBSH-r2,,0.000000,0,0.000000,0,0.000838,0.000845,77,35,2.200000,0,0,0,,127,126,126,0,0.000000,0.000845,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[3, 3]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000414,0.000185,38,38,1.000000,0,0,0,,127,126,126,0,0.000000,0.000185,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[3, 3]]",p50,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.000414,0.000185,38,38,1.000000,37,37,0,,127,126,126,0,0.000000,0.000185,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[3, 3]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000414,0.000185,38,38,1.000000,37,37,0,,127,126,126,0,0.000000,0.000185,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[3, 3]]",p50,hha,HHA,,0.000000,1,0.007937,0,0.000816,0.001005,75,38,1.973684,0,0,0,,127,126,125,1,0.007937,0.001005,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[3, 3]]",p50,dbsh,DBSH,,0.000000,1,0.007937,0,0.000871,0.001088,80,38,2.105263,0,0,0,,127,126,125,1,0.007937,0.001088,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[3, 3]]",p50,sbsh-r1,SBSH-r1,,0.000000,1,0.007937,0,0.000903,0.000947,83,38,2.184211,0,0,0,,127,126,125,1,0.007937,0.000947,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[3, 3]]",p50,sbsh-rmax,SBSH-r2,,0.000000,1,0.007937,0,0.000903,0.000947,83,38,2.184211,0,0,0,,127,126,125,1,0.007937,0.000947,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[2, 2]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001230,0.001439,113,113,1.000000,0,0,0,,127,126,126,0,0.000000,0.001439,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[2, 2]]",p50,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.001230,0.001439,113,113,1.000000,85,85,0,,127,126,126,0,0.000000,0.001439,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[2, 2]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001230,0.001439,113,113,1.000000,85,85,0,,127,126,126,0,0.000000,0.001439,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[2, 2]]",p50,hha,HHA,,0.000000,1,0.007937,0,0.002307,0.003353,212,113,1.876106,0,0,0,,127,126,125,1,0.007937,0.003353,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[2, 2]]",p50,dbsh,DBSH,,0.000000,1,0.007937,0,0.002514,0.003592,231,113,2.044248,0,0,0,,127,126,125,1,0.007937,0.003592,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[2, 2]]",p50,sbsh-r1,SBSH-r1,,0.000000,1,0.007937,0,0.002525,0.003572,232,113,2.053097,0,0,0,,127,126,125,1,0.007937,0.003572,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[2, 2]]",p50,sbsh-rmax,SBSH-r2,,0.000000,1,0.007937,0,0.002525,0.003572,232,113,2.053097,0,0,0,,127,126,125,1,0.007937,0.003572,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[17, 17]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002569,0.003225,236,236,1.000000,0,0,0,,127,126,126,0,0.000000,0.003225,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[17, 17]]",p70,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.002569,0.003225,236,236,1.000000,166,166,0,,127,126,126,0,0.000000,0.003225,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[17, 17]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.002569,0.003225,236,236,1.000000,166,166,0,,127,126,126,0,0.000000,0.003225,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[17, 17]]",p70,hha,HHA,,0.000000,5,0.039683,0,0.003810,0.006488,350,236,1.483051,0,0,0,,127,126,121,5,0.039683,0.006488,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[17, 17]]",p70,dbsh,DBSH,,0.000000,5,0.039683,0,0.004310,0.007330,396,236,1.677966,0,0,0,,127,126,121,5,0.039683,0.007330,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[17, 17]]",p70,sbsh-r1,SBSH-r1,,0.000000,4,0.031746,0,0.004332,0.007145,398,236,1.686441,0,0,0,,127,126,122,4,0.031746,0.007145,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[17, 17]]",p70,sbsh-rmax,SBSH-r2,,0.000000,4,0.031746,0,0.004332,0.007145,398,236,1.686441,0,0,0,,127,126,122,4,0.031746,0.007145,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[5, 5]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.007937,0,0.005355,0.006986,492,492,1.000000,0,0,0,,127,126,125,1,0.007937,0.006986,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[5, 5]]",p70,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,1,0.007937,0,0.005355,0.006986,492,492,1.000000,251,251,0,,127,126,125,1,0.007937,0.006986,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[5, 5]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.007937,0,0.005355,0.006986,492,492,1.000000,251,251,0,,127,126,125,1,0.007937,0.006986,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[5, 5]]",p70,hha,HHA,,0.000000,2,0.015873,0,0.006803,0.011979,625,492,1.270325,0,0,0,,127,126,124,2,0.015873,0.011979,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[5, 5]]",p70,dbsh,DBSH,,0.000000,2,0.015873,0,0.008087,0.014561,743,492,1.510163,0,0,0,,127,126,124,2,0.015873,0.014561,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[5, 5]]",p70,sbsh-r1,SBSH-r1,,0.000000,2,0.015873,0,0.008000,0.014415,735,492,1.493902,0,0,0,,127,126,124,2,0.015873,0.014415,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[5, 5]]",p70,sbsh-rmax,SBSH-r2,,0.000000,2,0.015873,0,0.008000,0.014415,735,492,1.493902,0,0,0,,127,126,124,2,0.015873,0.014415,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[9, 9]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.009078,0.013086,834,834,1.000000,0,0,0,,127,126,126,0,0.000000,0.013086,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[9, 9]]",p90,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.009078,0.013086,834,834,1.000000,329,329,0,,127,126,126,0,0.000000,0.013086,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[9, 9]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.009078,0.013086,834,834,1.000000,329,329,0,,127,126,126,0,0.000000,0.013086,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[9, 9]]",p90,hha,HHA,,0.000000,2,0.015873,0,0.010884,0.020250,1000,834,1.199041,0,0,0,,127,126,124,2,0.015873,0.020250,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[9, 9]]",p90,dbsh,DBSH,,0.000000,2,0.015873,0,0.013584,0.025255,1248,834,1.496403,0,0,0,,127,126,124,2,0.015873,0.025255,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[9, 9]]",p90,sbsh-r1,SBSH-r1,,0.000000,2,0.015873,0,0.013507,0.024459,1241,834,1.488010,0,0,0,,127,126,124,2,0.015873,0.024459,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[9, 9]]",p90,sbsh-rmax,SBSH-r2,,0.000000,2,0.015873,0,0.013507,0.024459,1241,834,1.488010,0,0,0,,127,126,124,2,0.015873,0.024459,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[0, 0]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.010569,0.013521,971,971,1.000000,0,0,0,,127,126,126,0,0.000000,0.013521,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[0, 0]]",p90,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.010569,0.013521,971,971,1.000000,348,348,0,,127,126,126,0,0.000000,0.013521,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[0, 0]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.010569,0.013521,971,971,1.000000,348,348,0,,127,126,126,0,0.000000,0.013521,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[0, 0]]",p90,hha,HHA,,0.000000,4,0.031746,0,0.012463,0.020739,1145,971,1.179197,0,0,0,,127,126,122,4,0.031746,0.020739,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[0, 0]]",p90,dbsh,DBSH,,0.000000,4,0.031746,0,0.015619,0.026221,1435,971,1.477858,0,0,0,,127,126,122,4,0.031746,0.026221,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[0, 0]]",p90,sbsh-r1,SBSH-r1,,0.000000,4,0.031746,0,0.015663,0.026045,1439,971,1.481977,0,0,0,,127,126,122,4,0.031746,0.026045,126,
+datasets/protein_sdb1.txt,"N=507,len=91875","[1,3]",800,"[[0, 0]]",p90,sbsh-rmax,SBSH-r2,,0.000000,4,0.031746,0,0.015663,0.026045,1439,971,1.481977,0,0,0,,127,126,122,4,0.031746,0.026045,126,

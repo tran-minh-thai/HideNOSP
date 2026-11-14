@@ -1,0 +1,35 @@
+# run 20261110-161051-009_ADMIN-PC_92c0c247667a_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/fifa.txt, format=SPMF, sigma=3000, gmin=1, gmax=2, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,cut-hide-rw,cut-hide,hha,dbsh,sbsh-r1,sbsh-rmax, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 3 candidates, 3 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 0 -> 0, p70: 1 -> 1, p90: 1 -> 1
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17, 17]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000480,0.005556,356,356,1.000000,0,0,0,,49,48,48,0,0.000000,0.005556,48,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17, 17]]",p30,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.000480,0.005556,356,356,1.000000,73,73,0,,49,48,48,0,0.000000,0.005556,48,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17, 17]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000480,0.005556,356,356,1.000000,73,73,0,,49,48,48,0,0.000000,0.005556,48,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17, 17]]",p30,hha,HHA,,0.000000,0,0.000000,0,0.000688,0.006885,510,356,1.432584,0,0,0,,49,48,48,0,0.000000,0.006885,48,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17, 17]]",p30,dbsh,DBSH,,0.000000,0,0.000000,0,0.001619,0.010458,1200,356,3.370787,0,0,0,,49,48,48,0,0.000000,0.010458,48,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17, 17]]",p30,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.001596,0.010318,1183,356,3.323034,0,0,0,,49,48,48,0,0.000000,0.010318,48,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17, 17]]",p30,sbsh-rmax,SBSH-r4,,0.000000,0,0.000000,0,0.001596,0.010318,1183,356,3.323034,0,0,0,,49,48,48,0,0.000000,0.010318,48,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000842,0.005056,624,624,1.000000,0,0,0,,49,47,47,0,0.000000,0.005056,47,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17]]",p70,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.000842,0.005056,624,624,1.000000,112,112,0,,49,47,47,0,0.000000,0.005056,47,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000842,0.005056,624,624,1.000000,112,112,0,,49,47,47,0,0.000000,0.005056,47,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17]]",p70,hha,HHA,,0.000000,0,0.000000,0,0.001173,0.006205,869,624,1.392628,0,0,0,,49,47,47,0,0.000000,0.006205,47,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17]]",p70,dbsh,DBSH,,0.000000,0,0.000000,0,0.002135,0.009314,1582,624,2.535256,0,0,0,,49,47,47,0,0.000000,0.009314,47,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17]]",p70,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.002102,0.009181,1558,624,2.496795,0,0,0,,49,47,47,0,0.000000,0.009181,47,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17, 17]]",p70,sbsh-rmax,SBSH-r3,,0.000000,0,0.000000,0,0.002102,0.009181,1558,624,2.496795,0,0,0,,49,47,47,0,0.000000,0.009181,47,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001621,0.003592,1201,1201,1.000000,0,0,0,,49,46,46,0,0.000000,0.003592,46,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17]]",p90,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.001621,0.003592,1201,1201,1.000000,151,151,0,,49,46,46,0,0.000000,0.003592,46,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001621,0.003592,1201,1201,1.000000,151,151,0,,49,46,46,0,0.000000,0.003592,46,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17]]",p90,hha,HHA,,0.000000,0,0.000000,0,0.001869,0.004143,1385,1201,1.153206,0,0,0,,49,46,46,0,0.000000,0.004143,46,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17]]",p90,dbsh,DBSH,,0.000000,0,0.000000,0,0.002853,0.006323,2114,1201,1.760200,0,0,0,,49,46,46,0,0.000000,0.006323,46,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17]]",p90,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.002786,0.006177,2065,1201,1.719400,0,0,0,,49,46,46,0,0.000000,0.006177,46,
+datasets/fifa.txt,"N=20450,len=741092","[1,2]",3000,"[[17, 17]]",p90,sbsh-rmax,SBSH-r2,,0.000000,0,0.000000,0,0.002786,0.006177,2065,1201,1.719400,0,0,0,,49,46,46,0,0.000000,0.006177,46,

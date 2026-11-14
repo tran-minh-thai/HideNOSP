@@ -1,0 +1,26 @@
+# cell SC2 bible [1,2] sigma=2000 repeated
+# machine ADMIN-PC
+# exit 0 after 299 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 47b7e3d44697
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC2 data regime: rho_rep, beta and the bound of P1 per dataset and per sigma
+# run 20261110-133145-229_ADMIN-PC_47b7e3d44697_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+dataset datasets\bible.txt, |D| = 36369, total length 787066, alphabet 13905, linearised share 0.0
+|F_sigma(D)| = 76 at sigma = 2000, gap [1,2], l_max = 4
+[10, 46, 46]       sup_NO  2040  sup_seq  1691  rho_rep 0.171  beta 0.820  min masks    21 (0.0000 of D)
+[10, 10, 10]       sup_NO  2181  sup_seq  1486  rho_rep 0.319  beta 0.886  min masks    61 (0.0001 of D)
+[10, 10, 46]       sup_NO  2838  sup_seq  2335  rho_rep 0.177  beta 0.799  min masks   615 (0.0008 of D)
+[46, 46]           sup_NO  3535  sup_seq  2696  rho_rep 0.237  beta 0.760  min masks  1101 (0.0014 of D)
+[31, 31]           sup_NO  3840  sup_seq  2620  rho_rep 0.318  beta 0.759  min masks  1115 (0.0014 of D)
+[10, 10]           sup_NO 11408  sup_seq  7668  rho_rep 0.328  beta 0.669  min masks  7691 (0.0098 of D)
+pool of 6 repeated-item candidates: median rho_rep 0.278, median beta 0.780
+done in 296.2 s

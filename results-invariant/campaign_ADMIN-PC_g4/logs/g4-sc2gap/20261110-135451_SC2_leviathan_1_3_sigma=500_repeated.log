@@ -1,0 +1,29 @@
+# cell SC2 leviathan [1,3] sigma=500 repeated
+# machine ADMIN-PC
+# exit 0 after 68 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 7e68455ac17b
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC2 data regime: rho_rep, beta and the bound of P1 per dataset and per sigma
+# run 20261110-135453-725_ADMIN-PC_7e68455ac17b_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+dataset datasets\leviathan.txt, |D| = 5834, total length 197251, alphabet 9025, linearised share 0.0
+|F_sigma(D)| = 92 at sigma = 500, gap [1,3], l_max = 4
+[8, 8, 8]          sup_NO   586  sup_seq   408  rho_rep 0.304  beta 0.884  min masks    29 (0.0001 of D)
+[71, 71]           sup_NO   619  sup_seq   496  rho_rep 0.199  beta 0.801  min masks    60 (0.0003 of D)
+[8, 18, 8]         sup_NO   706  sup_seq   610  rho_rep 0.136  beta 0.838  min masks   162 (0.0008 of D)
+[8, 8, 18]         sup_NO   728  sup_seq   615  rho_rep 0.155  beta 0.817  min masks   190 (0.0010 of D)
+[18, 18]           sup_NO   996  sup_seq   747  rho_rep 0.250  beta 0.807  min masks   371 (0.0019 of D)
+[1, 1, 1, 1]       sup_NO  1174  sup_seq    47  rho_rep 0.960  beta 0.207  min masks   241 (0.0012 of D)
+[1, 1, 1]          sup_NO  1290  sup_seq    48  rho_rep 0.963  beta 0.520  min masks   367 (0.0019 of D)
+[8, 8]             sup_NO  2568  sup_seq  1592  rho_rep 0.380  beta 0.692  min masks  1607 (0.0081 of D)
+[1, 1]             sup_NO  2590  sup_seq  1209  rho_rep 0.533  beta 0.337  min masks  1647 (0.0083 of D)
+pool of 9 repeated-item candidates: median rho_rep 0.304, median beta 0.801
+done in 66.0 s

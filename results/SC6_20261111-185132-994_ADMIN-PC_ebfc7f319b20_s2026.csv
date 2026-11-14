@@ -1,0 +1,76 @@
+# run 20261111-185132-994_ADMIN-PC_ebfc7f319b20_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind TIMED
+# scenario SC6
+# options {machine=ADMIN-PC, dataset=datasets/sepsis.txt, format=SPMF, sigma=300, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, timeLimit=1800, warmups=1, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 25 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 5 -> 4, p30: 5 -> 4, p50: 5 -> 4, p70: 5 -> 4, p90: 5 -> 4
+# sets: the first set drawn in each stratum (5 of 20)
+# closure necessary
+dataset,gap,sigma,pattern_kind,sensitive_size,sensitive_set,stratum,method_key,method,reads_frequent,mask_count,lost,wall_ms_mean,wall_ms_sd,cpu_ms_mean,repetitions,warmups,note,status
+datasets/sepsis.txt,"[0,1]",300,repeated,1,,,mine-frequent,F_sigma(D) with l_max = 4: 95 patterns,false,,,571.705,6.472,565.625,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9, 9, 2]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,6,0,116.192,11.505,115.625,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9, 9, 2]]",p10,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,6,0,225.402,3.594,220.833,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9, 9, 2]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,6,0,226.469,3.614,225.000,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9, 9, 2]]",p10,hha,HHA,false,16,1,6.666,0.397,6.250,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9, 9, 2]]",p10,dbsh,DBSH,false,18,0,6.165,0.284,6.250,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9, 9, 2]]",p10,sbsh-r1,SBSH-r1,true,19,0,43.409,1.398,43.750,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9, 9, 2]]",p10,sbsh-rmax,SBSH-r4,true,19,0,42.895,1.804,41.667,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9, 9, 2]]",p10,occurrence,occurrence-count-heuristic,false,16,1,2.766,0.154,3.125,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9, 9, 2]]",p10,hha-stop,HHA-stop,false,16,1,9.141,1.357,8.333,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9, 9, 2]]",p10,index-build,NettreeCutIndex,false,,,2.890,0.161,3.125,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9, 9, 2]]",p10,index-incremental,maskPosition after each mask,false,6,,0.078,0.013,0.000,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9, 9, 2]]",p10,index-rebuild,rebuild after each mask,false,6,,0.063,0.015,0.000,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 2]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,51,4,104.207,1.211,104.167,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 2]]",p30,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,51,4,265.669,5.420,259.375,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 2]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,51,4,279.770,4.790,277.083,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 2]]",p30,hha,HHA,false,115,7,6.984,0.161,7.292,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 2]]",p30,dbsh,DBSH,false,144,6,6.482,0.388,6.250,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 2]]",p30,sbsh-r1,SBSH-r1,true,149,6,58.767,1.038,59.375,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 2]]",p30,sbsh-rmax,SBSH-r4,true,149,6,58.088,0.772,58.333,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 2]]",p30,occurrence,occurrence-count-heuristic,false,95,6,3.469,0.092,3.125,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 2]]",p30,hha-stop,HHA-stop,false,115,7,9.583,0.341,9.375,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 2]]",p30,index-build,NettreeCutIndex,false,,,3.005,0.129,3.125,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 2]]",p30,index-incremental,maskPosition after each mask,false,51,,0.428,0.017,0.000,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 2]]",p30,index-rebuild,rebuild after each mask,false,51,,0.497,0.013,0.000,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 9, 2]]",p50,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,173,6,108.673,2.606,109.375,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 9, 2]]",p50,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,173,6,327.400,5.752,325.000,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 9, 2]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,173,6,353.313,6.286,351.042,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 9, 2]]",p50,hha,HHA,false,247,7,7.905,0.128,7.292,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 9, 2]]",p50,dbsh,DBSH,false,317,11,7.131,0.254,7.292,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 9, 2]]",p50,sbsh-r1,SBSH-r1,true,314,11,79.916,3.589,80.208,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 9, 2]]",p50,sbsh-rmax,SBSH-r4,true,314,11,77.238,1.083,77.083,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 9, 2]]",p50,occurrence,occurrence-count-heuristic,false,235,8,4.072,0.444,3.125,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 9, 2]]",p50,hha-stop,HHA-stop,false,247,7,10.224,0.104,10.417,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 9, 2]]",p50,index-build,NettreeCutIndex,false,,,2.967,0.246,3.125,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 9, 2]]",p50,index-incremental,maskPosition after each mask,false,173,,0.971,0.022,1.042,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 9, 2]]",p50,index-rebuild,rebuild after each mask,false,173,,1.631,0.031,1.042,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 9]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,168,8,110.561,3.017,108.333,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 9]]",p70,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,168,7,336.758,6.217,331.250,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 9]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,168,7,340.442,8.195,334.375,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 9]]",p70,hha,HHA,false,260,12,7.863,0.453,8.333,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 9]]",p70,dbsh,DBSH,false,375,13,6.970,0.093,7.292,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 9]]",p70,sbsh-r1,SBSH-r1,true,371,13,77.243,4.152,73.958,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 9]]",p70,sbsh-rmax,SBSH-r4,true,371,13,76.144,0.839,75.000,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 9]]",p70,occurrence,occurrence-count-heuristic,false,240,10,3.939,0.177,4.167,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 9]]",p70,hha-stop,HHA-stop,false,260,12,11.205,0.610,11.458,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 9]]",p70,index-build,NettreeCutIndex,false,,,3.113,0.205,3.125,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 9]]",p70,index-incremental,maskPosition after each mask,false,168,,1.039,0.046,1.042,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[2, 9, 2, 9]]",p70,index-rebuild,rebuild after each mask,false,168,,1.897,0.125,2.083,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",true,478,1,89.272,1.217,88.542,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9]]",p90,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),true,478,1,313.699,7.922,310.417,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",true,478,1,314.699,4.001,311.458,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9]]",p90,hha,HHA,false,580,4,5.030,0.124,5.208,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9]]",p90,dbsh,DBSH,false,772,10,4.910,0.249,5.208,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9]]",p90,sbsh-r1,SBSH-r1,true,768,9,78.899,0.906,79.167,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9]]",p90,sbsh-rmax,SBSH-r2,true,768,9,78.934,0.848,77.083,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9]]",p90,occurrence,occurrence-count-heuristic,false,564,4,2.952,0.156,3.125,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9]]",p90,hha-stop,HHA-stop,false,574,4,6.467,0.241,6.250,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9]]",p90,index-build,NettreeCutIndex,false,,,1.776,0.205,2.083,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9]]",p90,index-incremental,maskPosition after each mask,false,478,,1.149,0.069,1.042,15,1,,
+datasets/sepsis.txt,"[0,1]",300,repeated,1,"[[9, 9]]",p90,index-rebuild,rebuild after each mask,false,478,,2.529,0.168,2.083,15,1,,

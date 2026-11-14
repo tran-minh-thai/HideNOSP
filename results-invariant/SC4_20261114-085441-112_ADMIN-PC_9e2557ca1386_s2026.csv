@@ -1,0 +1,42 @@
+# run 20261114-085441-112_ADMIN-PC_9e2557ca1386_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC4
+# options {machine=ADMIN-PC, dataset=datasets/dna_mt745584.txt, format=SPMF, sigma=2500, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=5, patternKind=distinct, timeLimit=1800, methods=cut-hide-rw-ls,cut-hide-rw,cut-hide,hha,hha-emb,dbsh,sbsh-r1,sbsh-rmax,occurrence, r=2, closure=necessary}
+# sensitive sets: size 5, pool 23 candidates, 3 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 4 -> 0, p30: 5 -> 1, p50: 4 -> 0, p70: 5 -> 1, p90: 5 -> 1
+# closure necessary
+# mode HIDE_SEQ r=2
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 4], [1, 2, 4], [2, 1, 4], [4, 3, 1], [1, 3, 4]]",p30,cut-hide-rw-ls,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,47,0.758065,0,0.163932,0.342412,4895,0,,0,0,0,,67,62,15,47,0.758065,0.342412,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 4], [1, 2, 4], [2, 1, 4], [4, 3, 1], [1, 3, 4]]",p30,cut-hide-rw,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,47,0.758065,0,0.163932,0.342412,4895,0,,0,0,0,,67,62,15,47,0.758065,0.342412,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 4], [1, 2, 4], [2, 1, 4], [4, 3, 1], [1, 3, 4]]",p30,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,47,0.758065,0,0.163932,0.342412,4895,0,,0,0,0,,67,62,15,47,0.758065,0.342412,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 4], [1, 2, 4], [2, 1, 4], [4, 3, 1], [1, 3, 4]]",p30,hha,HHA,,0.000000,47,0.758065,0,0.175486,0.415132,5240,0,,0,0,0,,67,62,15,47,0.758065,0.415132,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 4], [1, 2, 4], [2, 1, 4], [4, 3, 1], [1, 3, 4]]",p30,hha-emb,HHA-emb,,0.000000,49,0.790323,0,0.198694,0.453279,5933,0,,0,0,0,,67,62,13,49,0.790323,0.453279,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 4], [1, 2, 4], [2, 1, 4], [4, 3, 1], [1, 3, 4]]",p30,dbsh,DBSH,,0.000000,46,0.741935,0,0.216242,0.527652,6457,0,,0,0,0,,67,62,16,46,0.741935,0.527652,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 4], [1, 2, 4], [2, 1, 4], [4, 3, 1], [1, 3, 4]]",p30,sbsh-r1,SBSH-r1,,0.000000,47,0.758065,0,0.217582,0.528124,6497,0,,0,0,0,,67,62,15,47,0.758065,0.528124,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 4], [1, 2, 4], [2, 1, 4], [4, 3, 1], [1, 3, 4]]",p30,sbsh-rmax,SBSH-r3,,0.000000,47,0.758065,0,0.217716,0.528080,6501,0,,0,0,0,,67,62,15,47,0.758065,0.528080,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 4], [1, 2, 4], [2, 1, 4], [4, 3, 1], [1, 3, 4]]",p30,occurrence,occurrence-count-heuristic,,0.000000,46,0.741935,0,0.165807,0.391577,4951,0,,0,0,0,,67,62,16,46,0.741935,0.391577,62,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1], [4, 2], [1, 2], [1, 3], [2, 1]]",p70,cut-hide-rw-ls,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,44,0.709677,0,0.273979,0.403513,8181,0,,0,0,0,,67,62,18,24,0.571429,0.263975,42,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1], [4, 2], [1, 2], [1, 3], [2, 1]]",p70,cut-hide-rw,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,44,0.709677,0,0.273979,0.403513,8181,0,,0,0,0,,67,62,18,24,0.571429,0.263975,42,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1], [4, 2], [1, 2], [1, 3], [2, 1]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,44,0.709677,0,0.273979,0.403513,8181,0,,0,0,0,,67,62,18,24,0.571429,0.263975,42,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1], [4, 2], [1, 2], [1, 3], [2, 1]]",p70,hha,HHA,,0.000000,50,0.806452,0,0.298326,0.487342,8908,0,,0,0,0,,67,62,12,30,0.714286,0.346867,42,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1], [4, 2], [1, 2], [1, 3], [2, 1]]",p70,hha-emb,HHA-emb,,0.000000,50,0.806452,0,0.316175,0.512872,9441,0,,0,0,0,,67,62,12,30,0.714286,0.371256,42,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1], [4, 2], [1, 2], [1, 3], [2, 1]]",p70,dbsh,DBSH,,0.000000,50,0.806452,0,0.354789,0.600496,10594,0,,0,0,0,,67,62,12,30,0.714286,0.495422,42,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1], [4, 2], [1, 2], [1, 3], [2, 1]]",p70,sbsh-r1,SBSH-r1,,0.000000,51,0.822581,0,0.375988,0.627912,11227,0,,0,0,0,,67,62,11,31,0.738095,0.516589,42,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1], [4, 2], [1, 2], [1, 3], [2, 1]]",p70,sbsh-rmax,SBSH-r2,,0.000000,51,0.822581,0,0.375988,0.627912,11227,0,,0,0,0,,67,62,11,31,0.738095,0.516589,42,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1], [4, 2], [1, 2], [1, 3], [2, 1]]",p70,occurrence,occurrence-count-heuristic,,0.000000,50,0.806452,0,0.277729,0.461753,8293,0,,0,0,0,,67,62,12,30,0.714286,0.331802,42,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4], [3, 4], [4, 3], [1, 4], [4, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,50,0.806452,0,0.299498,0.616187,8943,0,,0,0,0,,67,62,12,13,0.520000,0.309964,25,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4], [3, 4], [4, 3], [1, 4], [4, 1]]",p90,cut-hide-rw,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,50,0.806452,0,0.299498,0.616187,8943,0,,0,0,0,,67,62,12,13,0.520000,0.309964,25,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4], [3, 4], [4, 3], [1, 4], [4, 1]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,50,0.806452,0,0.299498,0.616187,8943,0,,0,0,0,,67,62,12,13,0.520000,0.309964,25,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4], [3, 4], [4, 3], [1, 4], [4, 1]]",p90,hha,HHA,,0.000000,49,0.790323,0,0.292565,0.627668,8736,0,,0,0,0,,67,62,13,12,0.480000,0.289809,25,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4], [3, 4], [4, 3], [1, 4], [4, 1]]",p90,hha-emb,HHA-emb,,0.000000,49,0.790323,0,0.315271,0.650737,9414,0,,0,0,0,,67,62,13,12,0.480000,0.309341,25,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4], [3, 4], [4, 3], [1, 4], [4, 1]]",p90,dbsh,DBSH,,0.000000,43,0.693548,0,0.301909,0.637034,9015,0,,0,0,0,,67,62,19,6,0.240000,0.300724,25,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4], [3, 4], [4, 3], [1, 4], [4, 1]]",p90,sbsh-r1,SBSH-r1,,0.000000,43,0.693548,0,0.302177,0.637252,9023,0,,0,0,0,,67,62,19,6,0.240000,0.301171,25,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4], [3, 4], [4, 3], [1, 4], [4, 1]]",p90,sbsh-rmax,SBSH-r2,,0.000000,43,0.693548,0,0.302177,0.637252,9023,0,,0,0,0,,67,62,19,6,0.240000,0.301171,25,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4], [3, 4], [4, 3], [1, 4], [4, 1]]",p90,occurrence,occurrence-count-heuristic,,0.000000,48,0.774194,0,0.283121,0.615533,8454,0,,0,0,0,,67,62,14,11,0.440000,0.288385,25,

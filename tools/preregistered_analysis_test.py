@@ -812,6 +812,129 @@ def test_equivalence_on_main_group_only():
     assert any("rows: main group" in s and ": 4" in s for s in out), out
 
 
+def test_pattern_count_and_sizes():
+    """The size of a sensitive set is the number of patterns in it; "several" means two or more, never one."""
+    assert pa.pattern_count("[[1, 2]]") == 1
+    assert pa.pattern_count("[[1, 2], [3, 4]]") == 2
+    assert pa.pattern_count("[[1, 2], [3, 4], [5, 6], [7, 8], [9, 1]]") == 5
+    rows = [{"sensitive_set": s} for s in ("[[1, 2]]", "[[1, 2], [3, 4]]", "[[1, 2], [3, 4], [5, 6], [7, 8], [9, 1]]")]
+    assert [len(pa.keep_sizes(rows, k)[0]) for k in ("all", "1", "5", "several")] == [3, 1, 1, 2]
+    assert pa.keep_sizes(rows, "several")[1] == 1, "the one-pattern row is the one left out"
+
+
+def test_keep_gaps_splits_on_the_minimum_gap():
+    """g- = 0 for "zero", g- > 0 for "positive"; a large g+ with g- = 0 is still zero."""
+    rows = [{"gap": g} for g in ("[0,3]", "[1,2]", "[1,3]", "[0,10]")]
+    zero, other_zero = pa.keep_gaps(rows, "zero")
+    positive, other_positive = pa.keep_gaps(rows, "positive")
+    assert [r["gap"] for r in zero] == ["[0,3]", "[0,10]"] and other_zero == 2
+    assert [r["gap"] for r in positive] == ["[1,2]", "[1,3]"] and other_positive == 2
+
+
+def test_no_mask_instances_are_set_apart_and_only_they():
+    """Section 22.2: an instance where no sequence reaches r needs no mask; it is set apart. A run that failed (a
+    status such as OT) is not set apart here: it is an exclusion and stays visible to the rule of section 5."""
+    rows = [{"status": pa.NO_MASK_STATUS}, {"status": "OT"}, {"status": ""}]
+    kept, apart = pa.set_aside_no_mask(rows)
+    assert len(apart) == 1 and apart[0]["status"] == pa.NO_MASK_STATUS
+    assert [r["status"] for r in kept] == ["OT", ""]
+
+
+def _merged(method, masks, minimum, sensitive_set="[[1, 2]]", status=""):
+    return {"dataset": "x", "gap": "[0,3]", "sigma": 100, "sensitive_set": sensitive_set, "method_key": method,
+            "status": status, "mask_count": float(masks), "min_masks": float(minimum)}
+
+
+def test_reaches_optimum_counts_and_catches_one_row_off():
+    """The method under test must mask exactly |R|* on every one-pattern row; one row off fails the run, a baseline
+    off does not count, several-pattern rows are not compared, and an empty scope is NOT CHECKED, never passed."""
+    out = []
+    ok = pa.run_reaches_optimum([_merged(OURS, 10, 10), _merged(OURS, 7, 7, "[[3, 3]]"),
+                                 _merged("hha", 12, 10), _merged(OURS, 30, 0, "[[1, 2], [3, 4]]")], out.append)
+    text = "\n".join(out)
+    assert ok, text
+    assert "distinct scope: 1 rows compared, 0 mask another count" in text, text
+    assert "repeated scope: 1 rows compared, 0 mask another count" in text, text
+    out = []
+    ok = pa.run_reaches_optimum([_merged(OURS, 10, 10), _merged(OURS, 11, 10, "[[4, 5]]")], out.append)
+    text = "\n".join(out)
+    assert not ok and "distinct scope: 2 rows compared, 1 mask another count" in text, text
+    assert "repeated scope: NOT CHECKED" in text, text
+    out = []
+    assert pa.run_reaches_optimum([_merged(OURS, 10, 10, status=pa.NO_MASK_STATUS)], out.append)
+    assert "distinct scope: NOT CHECKED" in "\n".join(out), "a row with a status is not compared"
+
+
+def _write_sc4(path, rows):
+    """An SC4 file: rows = (set, method, lost_rel, masks, min_masks, status); method "" with the no-mask status is
+    the single row of an instance that needs no mask."""
+    import io as _io
+    columns = ("dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,"
+               "dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,"
+               "frequent_before,nonsensitive_before,frequent_after,status")
+    with _io.open(path, "w", encoding="utf-8", newline="\n") as f:
+        f.write("# run x\n# closure necessary\n# mode HIDE_SEQ r=2\n" + columns + "\n")
+        for sensitive_set, method, lost, masks, minimum, status in rows:
+            ratio = "%.6f" % (masks / minimum) if minimum else ""
+            f.write('datasets/x.txt,"N=1,len=1","[0,3]",100,"%s",p10,%s,%s,,0,1,%s,0,0.1,0.1,%d,%d,%s,1,1,10,1.0,'
+                    '50,40,49,%s\n' % (sensitive_set, method, method, lost, masks, minimum, ratio, status))
+
+
+def test_sc4_reads_as_h5_and_counts_no_mask_instances_apart():
+    """--scenario=SC4 reads the SC4 files as H5b and H5a, sets the no-mask instances apart with their count, keeps
+    the sizes asked for, and fails the run when the method under test misses |R|*_SEQ on a one-pattern row."""
+    import io as _io
+    import tempfile
+    directory = tempfile.mkdtemp()
+    _write_sc4(os.path.join(directory, "SC4_a.csv"),
+               [("[[1, 2]]", OURS, 0.10, 10, 10, ""), ("[[1, 2]]", "hha", 0.30, 10, 10, ""),
+                ("[[1, 2]]", "hha-emb", 0.30, 12, 10, ""),
+                ("[[3, 4]]", "", 0, 0, 0, pa.NO_MASK_STATUS),
+                ("[[1, 2], [3, 4], [5, 6], [7, 8], [9, 1]]", OURS, 0.10, 40, 0, ""),
+                ("[[1, 2], [3, 4], [5, 6], [7, 8], [9, 1]]", "hha", 0.20, 30, 0, "")])
+    report = os.path.join(directory, "report.txt")
+    code = pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--scenario", "SC4", "--sizes", "1",
+                    "--out", report])
+    text = _io.open(report, encoding="utf-8").read()
+    assert "Statistical analysis of H5b, H5b-R and H5a" in text, text[:400]
+    assert "need no mask (no sequence reaches r), counted apart and never as a tie (section 22.2): distinct " \
+           "items 1, repeated items 0" in text, text[:1200]
+    assert "2 of the other sizes" in text, "the two five-pattern rows are left out"
+    assert "tested as H5b" in text and "H5b is" not in text.split("tested as H5b")[0]
+    assert "distinct scope: 1 rows compared, 0 mask another count" in text, text[-1500:]
+    # The exit code must turn on the |R|* check alone: with the full Holm family and every row at |R|*_SEQ the run
+    # passes, and the only difference in the second file is the method under test masking one more than |R|*_SEQ
+    # (the baselines move with it, so the pairs stay at equal |R|). Without the first assertion the second one could
+    # hold for another reason, such as an incomplete family.
+    family = pa.LOCKED.BASELINE_FAMILY
+    _write_sc4(os.path.join(directory, "SC4_a.csv"),
+               [("[[1, 2]]", OURS, 0.10, 10, 10, "")] + [("[[1, 2]]", b, 0.30, 10, 10, "") for b in family])
+    code = pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--scenario", "SC4", "--sizes", "1",
+                    "--out", report])
+    assert code == 0, "with every row at |R|*_SEQ and the full family the run passes: %s" % code
+    _write_sc4(os.path.join(directory, "SC4_a.csv"),
+               [("[[1, 2]]", OURS, 0.10, 11, 10, "")] + [("[[1, 2]]", b, 0.30, 11, 10, "") for b in family])
+    code = pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--scenario", "SC4", "--sizes", "1",
+                    "--out", report])
+    text = _io.open(report, encoding="utf-8").read()
+    assert code == 1 and "1 mask another count than |R|*" in text, "one row above |R|*_SEQ must fail the run"
+
+
+def test_non_default_mode_does_not_read_the_stop_batch():
+    """The stop-at-threshold batch belongs to H4 (HIDE-DB, g- = 0, every size); another mode says so and skips it."""
+    import io as _io
+    import tempfile
+    directory = tempfile.mkdtemp()
+    _write_sc3(os.path.join(directory, "SC3_a.csv"), [("[[1, 2]]", OURS, 0.10), ("[[1, 2]]", "hha", 0.30)])
+    _write_sc3(os.path.join(directory, "SC3_b.csv"), [("[[1, 2]]", "occurrence", 0.30)],
+               options="methods=%s" % pa.LOCKED.STOP_METHODS)
+    report = os.path.join(directory, "report.txt")
+    pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--sizes", "1", "--out", report])
+    text = _io.open(report, encoding="utf-8").read()
+    assert "belongs to H4 under HIDE-DB at g- = 0; not read here" in text, text[-800:]
+    assert "Section 19.1, distinct-item scope" not in text
+
+
 TESTS = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
 
 

@@ -205,6 +205,39 @@ def positive_minimum_gap(gap):
     return sc3_commands.positive_minimum_gap(gap)
 
 
+# Preregistration section 22.2: an SC4 instance in which no sequence reaches r needs no mask. Its single row carries
+# this status and no method; it is counted apart and never enters a test, not even as a tie.
+NO_MASK_STATUS = "no sequence reaches r"
+# Section 22.2: the occurrence-count rule of Abul, Bonchi and Giannotti is judged in H5a and descriptive otherwise.
+SEQUENCE_ONLY = ("hha-emb",)
+SIZE_TESTS = {"all": lambda n: True, "1": lambda n: n == 1, "5": lambda n: n == 5, "several": lambda n: n >= 2}
+
+
+def pattern_count(sensitive_set):
+    """The number of patterns in a sensitive set written "[[...], [...], ...]"."""
+    return sensitive_set.count("[") - 1
+
+
+def keep_sizes(rows, sizes):
+    """(the rows whose sensitive set has a size that sizes admits, the count of the others)."""
+    test = SIZE_TESTS[sizes]
+    kept = [r for r in rows if test(pattern_count(r["sensitive_set"]))]
+    return kept, len(rows) - len(kept)
+
+
+def keep_gaps(rows, gaps):
+    """(the rows of the gaps asked for: g- = 0 for "zero", g- > 0 for "positive", the count of the others)."""
+    positive = gaps == "positive"
+    kept = [r for r in rows if positive_minimum_gap(r["gap"]) == positive]
+    return kept, len(rows) - len(kept)
+
+
+def set_aside_no_mask(rows):
+    """(the rows that may enter the analysis, the rows of the instances that need no mask)."""
+    apart = [r for r in rows if r.get("status", "") == NO_MASK_STATUS]
+    return [r for r in rows if r.get("status", "") != NO_MASK_STATUS], apart
+
+
 def group_configurations(sc2_files, profile="pool", positive_gap=False):
     """Group of every configuration (dataset, gap, sigma) under preregistration section 10.
 
@@ -563,20 +596,20 @@ def run_h2(rows, write, groups=None, hypothesis="H2", locked=None, label="tier (
         write("")
         write("  rows by group: "
               + ", ".join("%s %d" % (k, v) for k, v in sorted(by_group.items())))
-        write("  H2 is tested on the %d rows of the main group only." % len(kept))
+        write("  %s is tested on the %d rows of the main group only." % (hypothesis, len(kept)))
         rows = kept
     else:
         write("")
-        write("  PROBE: no group filter (--skip-groups); every row enters H2.")
+        write("  PROBE: no group filter (--skip-groups); every row enters %s." % hypothesis)
 
     if not present(rows, LOCKED.OUR_METHOD):
         keys = sorted({r["method_key"] for r in rows})
         write("")
-        write("  NO '%s' in the files. H2 compares two sides, and without this side there is"
-              % LOCKED.OUR_METHOD)
+        write("  NO '%s' in the files. %s compares two sides, and without this side there is"
+              % (LOCKED.OUR_METHOD, hypothesis))
         write("  nothing to test. The files hold: %s" % ", ".join(keys))
         write("  Note: 'cut-hide-uniform', 'cut-hide' and 'cut-hide-rw' are CONTROL variants and")
-        write("  cannot stand in for '%s' in H2 (preregistration, section 12)." % LOCKED.OUR_METHOD)
+        write("  cannot stand in for '%s' in %s (preregistration, section 12)." % (LOCKED.OUR_METHOD, hypothesis))
         write("  %s NOT TESTED: the exit code is 1." % hypothesis)
         return False
 
@@ -643,7 +676,7 @@ def run_h2(rows, write, groups=None, hypothesis="H2", locked=None, label="tier (
         write("Share of instances excluded: %d/%d = %.1f%%  (the threshold of section 5 is %.0f%%)"
               % (total_excluded, total_pairs, 100 * share, 100 * LOCKED.MAX_EXCLUDED_SHARE))
         if share > LOCKED.MAX_EXCLUDED_SHARE:
-            write("NO CONCLUSION ON H2: the share excluded exceeds the locked threshold.")
+            write("NO CONCLUSION ON %s: the share excluded exceeds the locked threshold." % hypothesis)
             return False
 
     if len(results) >= 2:
@@ -675,7 +708,7 @@ def present(rows, key):
 
 # ---------------------------------------------------------------- pairs (|R|, Lost), section 5
 
-def run_dominance(rows, groups, write, locked=None, label="tier (b) baseline"):
+def run_dominance(rows, groups, write, locked=None, label="tier (b) baseline", hypothesis="H2"):
     """The report that section 5 asks for beside H2, DESCRIPTIVE: no test.
 
     Section 5 sends the instances where the baseline uses more masks to a report "as pairs (|R|,
@@ -694,8 +727,8 @@ def run_dominance(rows, groups, write, locked=None, label="tier (b) baseline"):
     if groups is not None:
         rows = [r for r in rows
                 if (groups.get((r["dataset"], r["gap"], r["sigma"])) or {}).get("group") == "main"]
-        write("  rows: main group, without %s (the rows of H2): %d"
-              % (", ".join(LOCKED.REPORT_ONLY), len(rows)))
+        write("  rows: main group, without %s (the rows of %s): %d"
+              % (", ".join(LOCKED.REPORT_ONLY), hypothesis, len(rows)))
     else:
         write("  PROBE: no group filter (--skip-groups): %d rows" % len(rows))
     if not present(rows, LOCKED.OUR_METHOD):
@@ -764,14 +797,15 @@ def run_h4a(rows, groups, write, hypothesis="H4a"):
 
 # ---------------------------------------------------------------- H3
 
-def run_h3(rows, groups, write, descriptive=False):
+def run_h3(rows, groups, write, descriptive=False, hypothesis="H3", judged=None, judge_degenerate=True):
+    judged = LOCKED.BASELINE_FAMILY if judged is None else judged
     write("")
     write("=" * 78)
     if descriptive:
         write("r = |R|/|R|* per method and group, DESCRIPTIVE (section 11, point 7): no verdict")
     else:
-        write("H3  r = |R|/|R|* above 1 on the main group (r >= %.2f), near 1 on the degenerate"
-              " group (r <= %.2f)" % (LOCKED.R_ABOVE_1, LOCKED.R_NEAR_1))
+        write("%s  r = |R|/|R|* above 1 on the main group (r >= %.2f), near 1 on the degenerate"
+              " group (r <= %.2f)" % (hypothesis, LOCKED.R_ABOVE_1, LOCKED.R_NEAR_1))
     write("=" * 78)
     reported = [r for r in rows if r["dataset"] in LOCKED.REPORT_ONLY]
     if reported:
@@ -818,9 +852,11 @@ def run_h3(rows, groups, write, descriptive=False):
             if descriptive:
                 write("   %-34s %5d %8.4f %8.4f" % (name[:34], len(v), med, max(v)))
                 continue
-            if name not in LOCKED.BASELINE_FAMILY:
+            if name not in judged:
                 # Section 2 states H3 for the tier (b) baselines; other methods are shown only.
                 verdict = "(not a tier (b) baseline: shown, not judged)"
+            elif group != "main" and not judge_degenerate:
+                verdict = "(%s judges the main group only: shown, not judged)" % hypothesis
             elif group == "main":
                 verdict = ("above 1" if med >= LOCKED.R_ABOVE_1
                            else "near 1" if med <= LOCKED.R_NEAR_1 else "no conclusion")
@@ -829,22 +865,22 @@ def run_h3(rows, groups, write, descriptive=False):
                            else "above 1" if med >= LOCKED.R_ABOVE_1 else "no conclusion")
             write("   %-34s %5d %8.4f %8.4f   %s" % (name[:34], len(v), med, max(v), verdict))
 
-    family_main = [v for k, v in by_group["main"].items() if k in LOCKED.BASELINE_FAMILY]
-    if not descriptive and not by_group["degenerate"]:
+    family_main = [v for k, v in by_group["main"].items() if k in judged]
+    if not descriptive and judge_degenerate and not by_group["degenerate"]:
         write("")
-        write("  The second half of H3 (r near 1 on the degenerate group) is NOT TESTED: the SC3")
+        write("  The second half of %s (r near 1 on the degenerate group) is NOT TESTED: the SC3" % hypothesis)
         write("  files hold no row of the degenerate group.")
     if not descriptive and family_main and all(
             float(np.median(v)) <= LOCKED.R_NEAR_1 for v in family_main):
         write("")
-        write("  Every tier (b) baseline gives r near 1 on the main group: H3 is NOT rejected. Section 2")
+        write("  Every tier (b) baseline gives r near 1 on the main group: %s is NOT rejected. Section 2" % hypothesis)
         write("  anticipated this case -- it is a negative result to be reported,")
         write("  not an implementation error.")
 
 
 # ---------------------------------------------------------------- equivalence, section 4
 
-def run_equivalence(rows, write, groups=None, locked=None, label="tier (b) baseline"):
+def run_equivalence(rows, write, groups=None, locked=None, label="tier (b) baseline", hypothesis="H2"):
     locked = LOCKED.BASELINE_FAMILY if locked is None else locked
     write("")
     write("=" * 78)
@@ -857,8 +893,8 @@ def run_equivalence(rows, write, groups=None, locked=None, label="tier (b) basel
     if groups is not None:
         rows = [r for r in rows
                 if (groups.get((r["dataset"], r["gap"], r["sigma"])) or {}).get("group") == "main"]
-        write("  rows: main group, without %s (the rows of H2): %d"
-              % (", ".join(LOCKED.REPORT_ONLY), len(rows)))
+        write("  rows: main group, without %s (the rows of %s): %d"
+              % (", ".join(LOCKED.REPORT_ONLY), hypothesis, len(rows)))
     else:
         write("  PROBE: no group filter (--skip-groups): %d rows" % len(rows))
     family = [b for b in locked if present(rows, b)]
@@ -890,6 +926,39 @@ def run_equivalence(rows, write, groups=None, locked=None, label="tier (b) basel
 
 # ---------------------------------------------------------------- running
 
+def run_reaches_optimum(rows, write):
+    """Every one-pattern row of the method under test must mask exactly |R|*; False when one does not.
+
+    For distinct items |R|* is the closed form of the flow theorem, computed apart from the program the method runs,
+    so the agreement is evidence. For repeated items |R|* comes from the exact program, the same family the method
+    runs; its own check against exhaustive search is SC1GAP. The count of rows compared is reported, and a scope with
+    no row to compare says so instead of passing.
+    """
+    write("")
+    write("=" * 78)
+    write("The method under test masks exactly |R|* on every one-pattern instance")
+    write("=" * 78)
+    ok = True
+    for scope, reference in (("distinct", "the closed form of the flow theorem, computed apart from the method"),
+                             ("repeated", "the exact program; checked against exhaustive search by SC1GAP")):
+        compared = [r for r in rows if r["method_key"] == LOCKED.OUR_METHOD and not r["status"]
+                    and pattern_count(r["sensitive_set"]) == 1 and scope_of_set(r["sensitive_set"]) == scope
+                    and not np.isnan(r["min_masks"])]
+        if not compared:
+            write("  %-8s scope: NOT CHECKED, no one-pattern row of %s" % (scope, LOCKED.OUR_METHOD))
+            continue
+        off = [r for r in compared if r["mask_count"] != r["min_masks"]]
+        write("  %-8s scope: %d rows compared, %d mask another count than |R|* (reference: %s)"
+              % (scope, len(compared), len(off), reference))
+        for r in off[:5]:
+            write("    %s %s sigma %s set %s: %d masks, |R|* %d"
+                  % (r["dataset"], r["gap"], r["sigma"], r["sensitive_set"], r["mask_count"], r["min_masks"]))
+        ok = ok and not off
+    if not ok:
+        write("  A row above masks another count than |R|*: the exit code is 1.")
+    return ok
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -907,6 +976,14 @@ def main(argv=None):
     parser.add_argument("--closure", default="necessary", choices=CLOSURE_RULES,
                         help="read only the SC3 files written under this closure rule of S-plus (default necessary, "
                              "the corrected rule; subsequence reads the files written before 2026-11-08)")
+    parser.add_argument("--scenario", default="SC3", choices=("SC3", "SC4"),
+                        help="SC3: the comparison under HIDE-DB (default); SC4: the same comparison under HIDE-SEQ at a "
+                             "per-sequence limit r, read as H5a and H5b (preregistration section 22.2)")
+    parser.add_argument("--gaps", default="zero", choices=("zero", "positive"),
+                        help="zero: the gaps of the main comparison, g- = 0 (default); positive: the gaps with g- > 0 and "
+                             "their own group tables, read as H6 (preregistration section 22.3)")
+    parser.add_argument("--sizes", default="all", choices=sorted(SIZE_TESTS),
+                        help="the sizes of sensitive set kept: all (default), 1, 5, or several (two or more)")
     parser.add_argument("--write-gap-groups", action="store_true",
                         help="write the two group tables of the gaps with g- > 0 (preregistration section 22.3) "
                              "from their SC2 files and stop; done once and committed")
@@ -950,9 +1027,16 @@ def main(argv=None):
             return 1
         return 0
 
-    sc3_files = collect_files(args.sc3, "SC3_")
+    default_mode = (args.scenario, args.gaps, args.sizes) == ("SC3", "zero", "all")
+    if args.scenario == "SC4":
+        names, h3_name = {"distinct": "H5b", "repeated": "H5b-R"}, "H5a"
+    elif args.gaps == "positive":
+        names, h3_name = {"distinct": "H6", "repeated": "H6-R"}, "H6 (its H3 part)"
+    else:
+        names, h3_name = {"distinct": "H2", "repeated": "H2-R"}, "H3"
+    sc3_files = collect_files(args.sc3, args.scenario + "_")
     if not sc3_files:
-        print("no SC3 file found in %s" % args.sc3, file=sys.stderr)
+        print("no %s file found in %s" % (args.scenario, args.sc3), file=sys.stderr)
         return 1
     # One machine per analysis. Rows of two machines are the same cells measured twice; merged as
     # reruns they would be averaged into one row without a word (the OT rows depend on the machine).
@@ -979,7 +1063,11 @@ def main(argv=None):
             ", ".join("%s (%d)" % (r, n) for r, n in sorted(found.items()))), file=sys.stderr)
         return 1
 
-    write("Statistical analysis of H2 and H3 under config/preregistration.md")
+    write("Statistical analysis of %s, %s and %s under config/preregistration.md"
+          % (names["distinct"], names["repeated"], h3_name))
+    if not default_mode:
+        write("Scenario %s, gaps %s (g- %s), sizes of the sensitive set: %s"
+              % (args.scenario, args.gaps, "= 0" if args.gaps == "zero" else "> 0", args.sizes))
     write("")
     write(describe_closure("SC3", args.closure, sc3_files, found))
     write("")
@@ -1054,10 +1142,24 @@ def main(argv=None):
         emit(out_lines, args.out)
         return 1
 
+    raw_rows, no_mask = set_aside_no_mask(raw_rows)
     rows = merge_reruns(raw_rows, write)
     write("")
     write("After merging the reruns by their median: %d rows (from %d)"
           % (len(rows), len(raw_rows)))
+    if no_mask:
+        counted = defaultdict(int)
+        for r in no_mask:
+            if SIZE_TESTS[args.sizes](pattern_count(r["sensitive_set"])) and \
+                    positive_minimum_gap(r["gap"]) == (args.gaps == "positive"):
+                counted[scope_of_set(r["sensitive_set"])] += 1
+        write("Instances that need no mask (%s), counted apart and never as a tie (section 22.2): "
+              "distinct items %d, repeated items %d" % (NO_MASK_STATUS, counted["distinct"], counted["repeated"]))
+    rows, other_gaps = keep_gaps(rows, args.gaps)
+    rows, other_sizes = keep_sizes(rows, args.sizes)
+    if not default_mode or other_gaps or other_sizes:
+        write("Rows left out: %d of the other gaps (g- %s), %d of the other sizes; %d rows kept"
+              % (other_gaps, "> 0" if args.gaps == "zero" else "= 0", other_sizes, len(rows)))
 
     # Section 11: split by the items of the sensitive patterns, never by file name or option.
     by_scope = {"distinct": [], "repeated": []}
@@ -1068,8 +1170,20 @@ def main(argv=None):
           % (len(by_scope["distinct"]), len(by_scope["repeated"])))
 
     sc2_files = collect_files(args.sc2, "SC2_")
+    # The groups are checked on the SC2 files of the machine analysed, so the check says that this machine
+    # reproduces the locked tables (for g- > 0 that is what the batch g4-sc2gap is for, section 22.3).
+    if args.machine and sc2_files:
+        own = [f for f in sc2_files if machine_of(f) == args.machine]
+        write("")
+        if own:
+            write("SC2 files of machine %s used for the groups: %d (of %d found)" % (args.machine, len(own), len(sc2_files)))
+            sc2_files = own
+        else:
+            write("No SC2 file of machine %s: the groups come from the SC2 files of %s" % (
+                args.machine, ", ".join(sorted({machine_of(f) for f in sc2_files}))))
     all_valid = True
-    for scope, profile, name in (("distinct", "pool", "H2"), ("repeated", "repeated", "H2-R")):
+    reaches_ok = True
+    for scope, profile, name in (("distinct", "pool", names["distinct"]), ("repeated", "repeated", names["repeated"])):
         scope_rows = by_scope[scope]
         if not scope_rows:
             continue
@@ -1081,9 +1195,13 @@ def main(argv=None):
         groups = {}
         groups_valid = True
         if sc2_files:
-            groups = group_configurations(sc2_files, profile=profile)
+            groups = group_configurations(sc2_files, profile=profile, positive_gap=(args.gaps == "positive"))
             if not args.skip_groups:
-                groups_valid = check_groups(groups, write, profile=profile)
+                table = None
+                if args.gaps == "positive":
+                    table = read_group_table(LOCKED.GAP_GROUP_TABLE if profile == "pool"
+                                             else LOCKED.GAP_GROUP_TABLE_REPEATED)
+                groups_valid = check_groups(groups, write, table=table, profile=profile)
         else:
             write("")
             write("  No SC2 file: no groups, so H3 cannot split the main and degenerate groups.")
@@ -1091,14 +1209,25 @@ def main(argv=None):
             groups_valid = args.skip_groups
 
         h2_valid = run_h2(scope_rows, write, None if args.skip_groups else groups, name)
-        run_dominance(scope_rows, None if args.skip_groups else groups, write)
+        run_dominance(scope_rows, None if args.skip_groups else groups, write, hypothesis=name)
         # H3 is preregistered for the main scope; section 11, point 7 makes the ratio of the
-        # repeated scope descriptive.
-        run_h3(scope_rows, groups, write, descriptive=(scope == "repeated"))
-        run_equivalence(scope_rows, write, None if args.skip_groups else groups)
+        # repeated scope descriptive. H6 repeats H3 as it is. H5a states a verdict on the main group for each
+        # baseline and for hha-emb, in either scope, since |R|*_SEQ is exact in both (section 22.2).
+        if args.scenario == "SC4":
+            run_h3(scope_rows, groups, write, hypothesis=h3_name,
+                   judged=LOCKED.BASELINE_FAMILY + SEQUENCE_ONLY, judge_degenerate=False)
+        else:
+            run_h3(scope_rows, groups, write, descriptive=(scope == "repeated"), hypothesis=h3_name)
+        run_equivalence(scope_rows, write, None if args.skip_groups else groups, hypothesis=name)
         all_valid = all_valid and h2_valid and groups_valid
 
-    if stop_raw:
+    if not default_mode:
+        reaches_ok = run_reaches_optimum(rows, write)
+
+    if stop_raw and not default_mode:
+        write("")
+        write("  The stop-at-threshold batch (section 19.1) belongs to H4 under HIDE-DB at g- = 0; not read here.")
+    if stop_raw and default_mode:
         stop_rows = merge_reruns(stop_raw, write)
         for scope, profile, h4b, h4a in (("distinct", "pool", "H4b", "H4a"), ("repeated", "repeated", "H4b-R", "H4a-R")):
             scope_rows = [r for r in by_scope[scope] if r["method_key"] == LOCKED.OUR_METHOD]
@@ -1125,7 +1254,7 @@ def main(argv=None):
     write("analysis ran, and the conclusion is in the tables above.")
 
     emit(out_lines, args.out)
-    return 0 if all_valid else 1
+    return 0 if all_valid and reaches_ok else 1
 
 
 def emit(out_lines, path):

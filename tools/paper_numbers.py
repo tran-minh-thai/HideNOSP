@@ -868,7 +868,7 @@ def platform(nums, machine):
     path, lock = one_platform(read, machine)
     src = path.relative_to(ROOT).as_posix()
     nums.put("platform.n_locks", len(read), "%s/campaign_%s*/ENV_LOCK.json" % (INV.name, machine))
-    nums.put("platform.lock", path.name, src)
+    nums.put("platform.lock", "%s/%s" % (path.parent.name, path.name), src)
     for k in MACHINE_KEYS:
         nums.put("platform.%s" % k, lock[k], src)
     heaps = Counter()

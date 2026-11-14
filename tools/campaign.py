@@ -51,6 +51,11 @@ necessary.
     g4-sc6           SC6 running time again, the batch sc6 cell for cell with closure=necessary, so that the
                      timed runs and the comparison tables follow one rule of S-plus
 
+Generation 5 (preregistration section 22.7), run with --generation=5: the batch g4-sc4-s5 again, cell for cell,
+after the fix of CUT-HIDE under HIDE-SEQ with several patterns. Only that batch runs the changed code.
+
+    g5-sc4-s5        SC4 on the cells of sc3-s5, r = 2 (the cells of g4-sc4-s5)
+
 A cell is done when results-invariant/ holds a complete file of its scenario whose run stamp names
 THIS machine and whose options line names the cell (SC1 writes no options line: scenario, machine and
 seed). Files of other machines never count, so a new machine reruns everything. A cell whose run
@@ -83,6 +88,7 @@ import json
 import os
 import platform
 import re
+from collections import defaultdict
 import shutil
 import subprocess
 import sys
@@ -125,6 +131,13 @@ G4_BATCHES = ("g4-sc1gap", "g4-sc2gap", "g4-sc4-s1", "g4-sc4-s5", "g4-sc4lost",
               "g4-gap-s1", "g4-gap-s5", "g4-gap-s10", "g4-gap-s20", "g4-gap-degenerate", "g4-sc6")
 BATCHES = BATCHES + G4_BATCHES
 GENERATION.update({b: "4" for b in G4_BATCHES})
+# Generation 5 (preregistration section 22.7): the only batch whose code changed with the fix of CUT-HIDE under
+# HIDE-SEQ with several patterns. Its result files of generation 4 moved to results-invariant/superseded/.
+G5_BATCHES = ("g5-sc4-s5",)
+# A later batch that reruns an earlier one cell for cell, after a fix of the code that batch runs: later -> earlier.
+RERUNS = {"g5-sc4-s5": "g4-sc4-s5"}
+BATCHES = BATCHES + G5_BATCHES
+GENERATION.update({b: "5" for b in G5_BATCHES})
 # What a later generation must share with the one before: only the measured code may differ.
 CARRIED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor")
 LOCKED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor", "source_tree", "pom")
@@ -192,6 +205,8 @@ def cell(scenario, options, heap=HEAP, extra=()):
 def batch_cells(root, batch):
     if batch.startswith("g3-") and batch[3:] in CLOSURE_BATCHES:
         return [dict(c, options=c["options"] + [CLOSURE_OPTION]) for c in batch_cells(root, batch[3:])]
+    if batch == "g5-sc4-s5":
+        return batch_cells(root, "g4-sc4-s5")
     if batch == "g4-sc6":
         return [dict(c, options=c["options"] + [CLOSURE_OPTION]) for c in batch_cells(root, "sc6")]
     if batch == "g4-sc1gap":
@@ -790,7 +805,7 @@ def self_test():
                 "sc6": 81}
     expected.update({"g3-" + b: expected[b] for b in CLOSURE_BATCHES})
     expected.update({"g4-sc1gap": 1, "g4-sc2gap": 72, "g4-sc4-s1": 54 + 17, "g4-sc4-s5": 34,
-                     "g4-sc4lost": 54, "g4-sc6": expected["sc6"]})
+                     "g4-sc4lost": 54, "g4-sc6": expected["sc6"], "g5-sc4-s5": 34})
     gap_batches = [b for b in G4_BATCHES if b.startswith("g4-gap-")]
     tables_present = all((REPO / name).is_file() for name, _ in sc3.GAP_TABLES)
     plannable = [b for b in BATCHES if tables_present or b not in gap_batches]
@@ -818,9 +833,23 @@ def self_test():
               for r, s in zip(LIMITS, seq[len(LIMITS) * i:len(LIMITS) * (i + 1)])))
     check("only the Pareto batch runs at -Xmx32g",
           {b for b in plannable if any(c["heap"] == PARETO_HEAP for c in batch_cells(REPO, b))} == {"sc3-pareto"})
-    labels = [label(c) for b in plannable for c in batch_cells(REPO, b)]
-    check("cell labels are unique across the campaign", len(labels) == len(set(labels)),
-          "%d labels, %d distinct" % (len(labels), len(set(labels))))
+    # A label names a cell in the ledger of its generation, so it must be unique within a generation. Across
+    # generations a label repeats only where a later generation reruns a batch on purpose (RERUNS); any other
+    # repetition is a cell planned twice by mistake.
+    by_generation = defaultdict(list)
+    for b in plannable:
+        by_generation[GENERATION[b]] += [label(c) for c in batch_cells(REPO, b)]
+    within = {g: len(v) - len(set(v)) for g, v in sorted(by_generation.items())}
+    check("cell labels are unique within each generation", not any(within.values()), str(within))
+    declared = {label(c) for later in RERUNS for c in batch_cells(REPO, later)}
+    owners = defaultdict(set)
+    for b in plannable:
+        for c in batch_cells(REPO, b):
+            owners[label(c)].add(b)
+    undeclared = sorted(k for k, v in owners.items() if len(v) > 1 and not (
+        k in declared and all(b in RERUNS or b in RERUNS.values() for b in v)))
+    check("across generations a label repeats only in a declared rerun", not undeclared,
+          "%d repeated labels, %d of them declared reruns" % (sum(1 for v in owners.values() if len(v) > 1), len(declared)))
     same = all(len(batch_cells(REPO, "g3-" + b)) == len(batch_cells(REPO, b)) and all(
         g["scenario"] == c["scenario"] and g["heap"] == c["heap"] and g["options"] == c["options"] + [CLOSURE_OPTION]
         for g, c in zip(batch_cells(REPO, "g3-" + b), batch_cells(REPO, b))) for b in CLOSURE_BATCHES)
@@ -833,6 +862,10 @@ def self_test():
     timed_file = [(Path("results/old.csv"), "SC6", dict(earlier[0]["options"]), "2026")]
     check("an SC6 file of the earlier rule does not count as a g4-sc6 cell",
           not is_done(timed[0], timed_file) and is_done(earlier[0], timed_file))
+    check("g5-sc4-s5 is the batch g4-sc4-s5, cell for cell",
+          batch_cells(REPO, "g5-sc4-s5") == batch_cells(REPO, "g4-sc4-s5"), "%d cells" % len(batch_cells(REPO, "g5-sc4-s5")))
+    check("the g5 batches belong to generation 5 and nothing else does",
+          {b for b in BATCHES if GENERATION[b] == "5"} == set(G5_BATCHES))
     check("the g3 batches belong to generation 3 and nothing else does",
           {b for b in BATCHES if GENERATION[b] == "3"} == {"g3-" + b for b in CLOSURE_BATCHES})
     check("the g4 batches belong to generation 4 and nothing else does",

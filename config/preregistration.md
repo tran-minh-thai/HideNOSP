@@ -1151,4 +1151,42 @@ written outside the repository, to check the join only: its 45 timed rows carry 
 the corrected rule (45 of 45), and 9 of the 45 differ from the SC3 rows of the earlier rule. Its times are not
 reported.
 
+### 22.7 CUT-HIDE under HIDE-SEQ with several patterns: a fix, and one batch run again (decision of the author, 2026-11-14, before any run of generation 5)
+
+**Decision.** The defect below is fixed and the batch `g4-sc4-s5` runs again, cell for cell, as the batch `g5-sc4-s5`
+of a fifth generation. This corrects the method under test; it adds no experiment. Every other result stands.
+
+**What was wrong.** Under HIDE-SEQ with several sensitive patterns, CUT-HIDE runs one greedy loop per sequence. It
+scored a candidate position by its drop in sensitive support summed over every sensitive pattern, including the
+patterns already below the limit r in that sequence. The loop over the whole database under HIDE-DB counts only the
+patterns still needed, as its own documentation states. Counting a pattern already below r can lead the loop to a
+position that leaves the remaining patterns above r, so it spends masks for nothing.
+
+**How it was found.** The analysis of `g4-sc4-s5`: on the main group without `protein_sdb1`, CUT-HIDE used more
+masks than HHA on 152 of 177 distinct-item instances and on 334 of 365 repeated-item instances, against 0 of 177 and
+25 of 365 under HIDE-DB on the same cells. With one sensitive pattern the defect cannot act (while a mask is needed
+the pattern is the only one), and CUT-HIDE masked exactly |R|*_SEQ on every one-pattern instance (442 and 540).
+
+**The fix** (commit `5eb2bf2c`): the per-sequence loop counts only the patterns still at or above r in the sequence.
+Two tests fail on the code before the fix and pass after it: a hand-built sequence where the earlier scoring masks a
+position of a pattern already below r (two masks for a need of one), and a bound over 400 random instances: the loop
+places at most the summed need, sum over S and P of max(0, sup_NO(P, S) - r + 1).
+
+**Why only this batch.** The changed method has one caller, the per-sequence loop for several patterns, reached only
+under HIDE-SEQ with two or more sensitive patterns; in this campaign that is `g4-sc4-s5` alone. On the development
+machine, with the fix, two one-pattern HIDE-SEQ cells and two five-pattern HIDE-DB cells give the same rows as the
+measured files (360 of 360 and 56 of 56 method rows, on masks, Lost, Lost_rel, SupDist, HF and |R|*).
+
+**What runs and what is reported.** `g5-sc4-s5`: the 34 cells of `g4-sc4-s5`, the same options, sets, methods, time
+limit, machine, JDK and heap, under its own environment lock. H5b at |S| = 5 and the table of pairs at |S| = 5 are
+read from these files. The 34 files of `g4-sc4-s5` move to `results-invariant/superseded/g4-sc4-s5/`, kept and read
+by no analysis tool; their ledger rows stay in the ledger of generation 4.
+
+**Provenance.** Written after the results of `g4-sc4-s5` had been read, and after a probe of the fix on the
+development machine, with the fix outside the repository: nine of the 34 cells, CUT-HIDE and HHA only, 148
+instances. In the probe HHA gave the masks and Lost of the measured files on 148 of 148 instances, so the probe drew
+the same sets; CUT-HIDE used more masks than HHA on 1 of 63 distinct-item instances after the fix against 54 before,
+and on 40 of 85 repeated-item instances against 82. None of these probe numbers is reported. H5a, H5b and H6, their
+thresholds and their tests are unchanged.
+
 **Unchanged:** all of sections 1–21.

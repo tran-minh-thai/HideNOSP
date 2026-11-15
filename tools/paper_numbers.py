@@ -489,6 +489,37 @@ def parse_seq_lost(nums, text, src):
             raise Missing("SC4LOST %s: some method loses fewer patterns in excess than CUT-HIDE" % scope)
 
 
+def sc4_rows(nums, machine):
+    """SC4 (HIDE-SEQ): rows, rows of an instance that needs no mask, Ghost and HF, the three CUT-HIDE keys."""
+    paths = files(INV, "SC4", machine)
+    total, method_rows, nomask = 0, 0, 0
+    several = defaultdict(dict)
+    for path in paths:
+        for r in rows_of(path):
+            total += 1
+            if not r.get("method_key"):
+                if r.get("status") != "no sequence reaches r":
+                    raise Missing("SC4 row without a method and with status %r (%s)" % (r.get("status"), Path(path).name))
+                nomask += 1
+                continue
+            method_rows += 1
+            if r.get("status"):
+                raise Missing("SC4 method row with status %r (%s)" % (r["status"], Path(path).name))
+            if float(r.get("ghost") or 0) != 0 or float(r.get("hf") or 0) != 0:
+                raise Missing("SC4 row with Ghost or HF above 0 (%s, %s)" % (Path(path).name, r["method_key"]))
+            if r["method_key"] in ("cut-hide-rw-ls", "cut-hide-rw", "cut-hide") and r["sensitive_set"].count("[") > 2:
+                k = (dataset_name(r["dataset"]), r["gap"], r["sigma"], r["sensitive_set"])
+                several[k][r["method_key"]] = (r["mask_count"], r["lost"], r["lost_rel"], r["sup_dist"], r["dist_r"])
+    src = "SC4 files of %s" % machine
+    complete = {k: v for k, v in several.items() if len(v) == 3}
+    if not complete or any(len(set(v.values())) != 1 for v in complete.values()):
+        raise Missing("SC4 |S| >= 2: the three CUT-HIDE keys differ on some set, or no set has all three")
+    nums.put("sc4.n_rows", total, src)
+    nums.put("sc4.method_rows", method_rows, src)
+    nums.put("sc4.nomask_rows", nomask, src)
+    nums.put("sc4.several.same.n", len(complete), src)
+
+
 def sc1gap(nums, machine):
     """SC1GAP: the exact program for g- > 0 against exhaustive search (preregistration 22.3)."""
     paths = [p for p in sorted(glob.glob(str(INV / "SC1GAP_*.csv"))) if machine_of(p) == machine]
@@ -755,8 +786,14 @@ def certified(nums, machine, small_machine):
 
 # ---------------------------------------------------------------- SC3 rows, refinement
 
+def positive_gap(gap):
+    """g- > 0: the lower end of the gap "[a,b]" is above 0 (the definition of preregistered_analysis.py)."""
+    return int(re.match(r"\[\s*(\d+)", gap).group(1)) > 0
+
+
 def sc3_rows(nums, machine):
     total, status = 0, Counter()
+    by_gap = Counter()
     ours, refine = {}, {}
     ghost_rows, params = 0, defaultdict(set)
     several = defaultdict(dict)
@@ -768,6 +805,9 @@ def sc3_rows(nums, machine):
         for r in rows_of(path):
             total += 1
             status[r.get("status", "")] += 1
+            g = "gpos" if positive_gap(r["gap"]) else "gzero"
+            by_gap[("rows", g)] += 1
+            by_gap[("method", g)] += bool(r.get("method_key"))
             if r.get("method_key") in ("cut-hide-rw-ls", "cut-hide-rw", "cut-hide") and r["sensitive_set"].count("[") > 2:
                 k = (dataset_name(r["dataset"]), r["gap"], r["sigma"], r["sensitive_set"])
                 several[k][r["method_key"]] = (r["mask_count"], r["lost"], r["lost_rel"], r["sup_dist"], r["dist_r"])
@@ -795,6 +835,11 @@ def sc3_rows(nums, machine):
     if not complete or differ:
         raise Missing("|S| >= 2: %d sets with the three CUT-HIDE keys, %d with different measures" % (len(complete), len(differ)))
     nums.put("several.same.n", len(complete), src)
+    # Section 22 added the rows with g- > 0 to SC3; the sentences that count rows may need one part only.
+    for g in ("gzero", "gpos"):
+        nums.put("sc3.n_rows.%s" % g, by_gap[("rows", g)], src)
+        nums.put("sc3.ghost.rows.%s" % g, by_gap[("method", g)], src)
+        nums.put("several.same.n.%s" % g, sum(1 for k in complete if positive_gap(k[1]) == (g == "gpos")), src)
     for name, key in (("maxPatternLength", "params.l_max"), ("timeLimit", "params.time_limit_s")):
         if len(params[name]) != 1 or None in params[name]:
             raise Missing("SC3 files of %s run with %s = %s; the text states one value" % (machine, name, sorted(map(str, params[name]))))
@@ -1146,7 +1191,8 @@ def build(machine, small_machine):
                  lambda: lost_optimum(nums, small_machine), lambda: certified(nums, machine, small_machine),
                  lambda: timing(nums, machine), lambda: platform(nums, machine),
                  # HIDE-SEQ and g- > 0 were run under the corrected rule only (preregistration 22).
-                 ] + ([lambda: seq_lost(nums, small_machine), lambda: sc1gap(nums, machine)] + [
+                 ] + ([lambda: seq_lost(nums, small_machine), lambda: sc1gap(nums, machine),
+                       lambda: sc4_rows(nums, machine)] + [
                      (lambda m=m: analysis_mode(nums, machine, *m)) for m in NEW_MODES] if RULE[0] == "necessary" else []):
         step()
     # The same quantity read from two tools must agree.
@@ -1154,6 +1200,11 @@ def build(machine, small_machine):
         if nums.values["levels.n.%s" % scope]["value"] != nums.values[key]["value"]:
             raise Missing("levels_table %s: %d instances, the pairs table %d" % (
                 scope, nums.values["levels.n.%s" % scope]["value"], nums.values[key]["value"]))
+    if RULE[0] == "necessary" and nums.values["sc4.nomask_rows"]["value"] != \
+            nums.values["h5.nomask.distinct"]["value"] + nums.values["h5.nomask.repeated"]["value"]:
+        raise Missing("SC4: %d no-mask rows read here, the analysis counts %d + %d" % (
+            nums.values["sc4.nomask_rows"]["value"], nums.values["h5.nomask.distinct"]["value"],
+            nums.values["h5.nomask.repeated"]["value"]))
     a, b = nums.values["sc3.n_excluded"]["value"], sum(v["value"][0] for k, v in nums.values.items()
                                                         if k.startswith("excluded."))
     if b != 0 and a == 0:

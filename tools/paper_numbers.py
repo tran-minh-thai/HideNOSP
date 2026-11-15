@@ -28,6 +28,7 @@ of that rule. Under the corrected rule the small instances come from the same ma
 The running times (SC6) were measured under the earlier rule; timing_table checks them against the SC3 files of the
 rule the SC6 files name.
 """
+import ast
 import csv
 import glob
 import hashlib
@@ -791,10 +792,59 @@ def positive_gap(gap):
     return int(re.match(r"\[\s*(\d+)", gap).group(1)) > 0
 
 
+def has_single_component(sensitive_set):
+    """True when some pattern of a set of two or more shares no item with any other pattern of the set
+    (a one-pattern component of the shared-item graph, where the refinement substitutes the single-pattern optimum)."""
+    pats = [set(p) for p in ast.literal_eval(sensitive_set)]
+    return len(pats) >= 2 and any(all(not (p & q) for j, q in enumerate(pats) if j != i) for i, p in enumerate(pats))
+
+
+def check_equal_counts(masks):
+    """With g- = 0, every instance where a baseline masks as many positions as CUT-HIDE has one sensitive pattern.
+
+    masks: instance key -> method key -> set of mask counts. Every group is read, so the check is stronger than the
+    sentence about the main group. Returns the number of equal-count pairs (all single-pattern)."""
+    equal, several = 0, []
+    for key, ms in masks.items():
+        if positive_gap(key[1]) or OURS not in ms:
+            continue
+        for b in BASELINES:
+            if b in ms and ms[b] == ms[OURS]:
+                equal += 1
+                if len(ast.literal_eval(key[4])) >= 2:
+                    several.append((key, b))
+    if several:
+        raise Missing("%d equal-count pairs with |S| >= 2 (first %s); the text says every equal-count instance has one pattern"
+                      % (len(several), several[0]))
+    if not equal:
+        raise Missing("no equal-count pair at g- = 0: the one-pattern check compared nothing")
+    return equal
+
+
+def check_refine_up(refine, ours, masks):
+    """Every set where the refinement raises Lost has fewer masks after it and a one-pattern component.
+
+    refine, ours: instance key -> set of Lost values; masks as in check_equal_counts. Returns the number of sets."""
+    up, bad = 0, []
+    for key, lost in refine.items():
+        if next(iter(lost)) <= next(iter(ours[key])):
+            continue
+        up += 1
+        before, after = masks[key].get(OURS, set()), masks[key].get(REFINE, set())
+        if len(before) != 1 or len(after) != 1 or not next(iter(after)) < next(iter(before)) \
+                or not has_single_component(key[4]):
+            bad.append((key, sorted(before), sorted(after)))
+    if bad:
+        raise Missing("refinement raises Lost on %d sets without fewer masks or a one-pattern component (first %s)"
+                      % (len(bad), bad[0]))
+    return up
+
+
 def sc3_rows(nums, machine):
     total, status = 0, Counter()
     by_gap = Counter()
     ours, refine = {}, {}
+    masks = defaultdict(lambda: defaultdict(set))
     ghost_rows, params = 0, defaultdict(set)
     several = defaultdict(dict)
     for path in files(INV, "SC3", machine):
@@ -820,6 +870,8 @@ def sc3_rows(nums, machine):
                 raise Missing("SC3 row with HF > 0 (%s, %s): the text says every method hides on every row"
                               % (Path(path).name, r["method_key"]))
             key = (dataset_name(r["dataset"]), r["gap"], r["sigma"], kind, r["sensitive_set"])
+            if r.get("method_key") and opts.get("methods", "") not in ("none",):
+                masks[key][r["method_key"]].add(int(r["mask_count"]))
             if r["method_key"] == OURS and opts.get("methods", "") not in ("none",):
                 ours.setdefault(key, set()).add(int(r["lost"]))
             elif r["method_key"] == REFINE:
@@ -863,6 +915,9 @@ def sc3_rows(nums, machine):
     nums.put("refine.lost_up", up, src)
     nums.put("refine.lost_down", down, src)
     nums.put("refine.lost_median", statistics.median(changes), src)
+    if check_refine_up(refine, ours, masks) != up:
+        raise Missing("refinement: two counts of the sets where Lost rises differ")
+    nums.put("sc3.equal_count.pairs", check_equal_counts(masks), src)
 
 
 # ---------------------------------------------------------------- levels at each method's own solution
@@ -1205,11 +1260,89 @@ def build(machine, small_machine):
         raise Missing("SC4: %d no-mask rows read here, the analysis counts %d + %d" % (
             nums.values["sc4.nomask_rows"]["value"], nums.values["h5.nomask.distinct"]["value"],
             nums.values["h5.nomask.repeated"]["value"]))
+    if RULE[0] == "necessary":
+        sentence_checks(nums)
     a, b = nums.values["sc3.n_excluded"]["value"], sum(v["value"][0] for k, v in nums.values.items()
                                                         if k.startswith("excluded."))
     if b != 0 and a == 0:
         raise Missing("the analysis excluded %d instances while no SC3 row carries a status" % b)
     return nums
+
+
+# The thresholds of H3 and the margin of H2, as locked in tools/preregistered_analysis.py (read, not copied).
+def locked_constants():
+    sys.path.insert(0, str(TOOLS))
+    import preregistered_analysis as pa
+    return pa.LOCKED.R_ABOVE_1, pa.LOCKED.R_NEAR_1, pa.LOCKED.DELTA_L
+
+
+def sentence_checks(nums):
+    """Sentences of the manuscript that state a relation between numbers rather than a number.
+
+    Each check reads values already exported and stops when the relation does not hold, so that a new
+    result file cannot silently contradict the wording. Under the corrected closure rule only (HIDE-SEQ and
+    g- > 0 exist under it only)."""
+    v = lambda k: nums.values[k]["value"]
+    tab = lambda name: nums.tables[name]["rows"]
+    above, near, delta = locked_constants()
+    # At equal masking count CUT-HIDE loses more patterns than a baseline on exactly one instance, against HHA
+    # in the distinct-item scope of HIDE-SEQ; no such instance elsewhere (HIDE-DB with g- = 0 and g- > 0, the
+    # rivals, several patterns).
+    worse = [(name, r["scope"], r["method"], r["same_gt"]) for name in ("h2", "h5", "h6", "h5s5", "h6sev")
+             for r in tab(name) if r["same_gt"]]
+    if worse != [("h5", "distinct", "hha", 1)] or v("h5.distinct.hha.same_gt") != 1:
+        raise Missing("equal masking count, CUT-HIDE losing more: %s; the text names one instance, HHA, HIDE-SEQ, "
+                      "distinct-item scope" % worse)
+    # HIDE-SEQ, one pattern: no baseline uses fewer masks than CUT-HIDE on any instance.
+    if any(r["ours_more"] for r in tab("h5")):
+        raise Missing("HIDE-SEQ, one pattern: a baseline uses fewer masks than CUT-HIDE; the text says none")
+    # g- > 0, several distinct-item patterns: every baseline uses more masks on every instance.
+    if any(r["base_more"] != r["instances"] for r in tab("h6sev") if r["scope"] == "distinct"):
+        raise Missing("g- > 0, several distinct-item patterns: a baseline does not use more masks everywhere")
+    # HIDE-SEQ, five patterns: at most one instance with equal counts (the text writes "instance"); neither SBSH
+    # variant uses fewer masks than CUT-HIDE in the repeated-item scope; some baseline uses fewer somewhere.
+    same = max(r["same"] for r in tab("h5s5"))
+    if same != v("h5s5.repeated.same.max") or same != 1:
+        raise Missing("HIDE-SEQ, five patterns: at most %d equal-count instances over both scopes, the text quotes %d "
+                      "as one instance" % (same, v("h5s5.repeated.same.max")))
+    if any(r["ours_more"] for r in tab("h5s5") if r["scope"] == "repeated" and r["method"].startswith("sbsh")):
+        raise Missing("HIDE-SEQ, five repeated-item patterns: an SBSH variant uses fewer masks than CUT-HIDE")
+    if not any(r["ours_more"] for r in tab("h5s5")):
+        raise Missing("HIDE-SEQ, five patterns: no baseline uses fewer masks than CUT-HIDE; the limitation says some does")
+    # Ratios |R|/|R|*: one distinct-item pattern is near the minimum under HIDE-DB (at most the near-1 threshold of
+    # H3) and below the more-masks threshold under HIDE-SEQ and with g- > 0; in the repeated-item scope of HIDE-SEQ,
+    # DBSH and both SBSH variants reach that threshold while HHA stays below it.
+    if not v("h3.main.median.max") <= near:
+        raise Missing("H3, one distinct-item pattern: median ratio %.4f above %.2f; the text says close to the minimum"
+                      % (v("h3.main.median.max"), near))
+    for key in ("h5.ratio.distinct.median.max", "h6.ratio.distinct.median.max"):
+        if not v(key) < above:
+            raise Missing("%s = %.4f, not below the threshold %.2f of H3" % (key, v(key), above))
+    reach = {m: v("h5.ratio.repeated.%s" % m) >= above for m in BASELINES}
+    if reach != {"hha": False, "dbsh": True, "sbsh-r1": True, "sbsh-rmax": True}:
+        raise Missing("HIDE-SEQ, repeated-item: methods reaching %.2f: %s; the text names DBSH and both SBSH" % (above, reach))
+    # Exact optimum: CUT-HIDE is optimal on more instances than every other method under HIDE-SEQ, and its share of
+    # optimal instances is lowest under HIDE-SEQ in the repeated-item scope ("its least favorable setting").
+    for scope in ("distinct", "repeated"):
+        rs = {r["method"]: r for r in tab("seqlost") if r["scope"] == scope}
+        if any(r["opt"] >= rs[OURS]["opt"] for m, r in rs.items() if m != OURS):
+            raise Missing("SC4LOST %s: a method is optimal on as many instances as CUT-HIDE; the text says more" % scope)
+    share = {(t, s): v("%s.ours.opt.%s" % (t, s)) / v("%s.n.%s" % (t, s))
+             for t in ("lostopt", "seqlost") for s in ("distinct", "repeated")}
+    if min(share, key=share.get) != ("seqlost", "repeated"):
+        raise Missing("the lowest share of exact optima of CUT-HIDE is %s, not HIDE-SEQ repeated-item" % (min(share, key=share.get),))
+    # Medians of Lost_rel of the other methods with one sensitive pattern are of the order of the margin: at most twice.
+    for scope in ("distinct", "repeated"):
+        key = "levels.%s.1.rivals.lost_rel.max" % scope
+        if not v(key) <= 2 * delta:
+            raise Missing("%s = %.4f, above twice the margin %.2f; the text says the same order" % (key, v(key), delta))
+    # Tests: across HIDE-DB (g- = 0, g- > 0) and HIDE-SEQ, the null hypothesis is rejected exactly for H2-R against
+    # HHA and for H4b-R against both rivals.
+    rejected = sorted((r["test"], r["method"]) for name in ("h2", "h5", "h6") for r in tab(name)
+                      if r["verdict"] == "H0 rejected")
+    if rejected != [("H2-R", "hha"), ("H4b-R", "hha-stop"), ("H4b-R", "occurrence")]:
+        raise Missing("rejected null hypotheses %s; the text names H2-R against HHA and H4b-R against both rivals" % rejected)
+    nums.put("sentence_checks.passed", 13, "sentence_checks in paper_numbers.py")
 
 
 def git(*args):
@@ -1400,13 +1533,97 @@ def self_test():
         failures.append("good SC1GAP rows refused: %s" % e)
     expect_stop("SC1GAP with one mismatch", lambda: check_sc1gap(Numbers(), [gap[0], dict(gap[1], mismatches="1")], "t"))
     expect_stop("SC1GAP with no row", lambda: check_sc1gap(Numbers(), [], "t"))
+    # One-pattern components, the equal-count check and the refinement check on small inputs.
+    for s, want in (("[[1, 2]]", False), ("[[1, 2], [3, 4]]", True), ("[[1, 2], [2, 3]]", False),
+                    ("[[1, 2], [2, 3], [5, 6]]", True), ("[[1, 1, 2], [2, 3]]", False)):
+        if has_single_component(s) != want:
+            failures.append("has_single_component(%s) is not %s" % (s, want))
+    k1, k2 = ("d", "[0,1]", "10", "distinct", "[[1, 2]]"), ("d", "[0,1]", "10", "distinct", "[[1, 2], [3, 4]]")
+    good_masks = {k1: {OURS: {3}, "hha": {3}}, k2: {OURS: {5}, "hha": {6}, REFINE: {4}}}
+    if check_equal_counts(good_masks) != 1:
+        failures.append("equal-count check misreads a good input")
+    expect_stop("an equal-count pair with two patterns",
+                lambda: check_equal_counts({**good_masks, k2: {OURS: {5}, "hha": {5}}}))
+    expect_stop("no equal-count pair at all", lambda: check_equal_counts({k2: good_masks[k2]}))
+    if check_refine_up({k2: {7}}, {k2: {6}}, good_masks) != 1:
+        failures.append("refinement check misreads a good input")
+    expect_stop("refinement raises Lost without fewer masks",
+                lambda: check_refine_up({k2: {7}}, {k2: {6}}, {k2: {OURS: {5}, REFINE: {5}}}))
+    k3 = ("d", "[0,1]", "10", "distinct", "[[1, 2], [2, 3]]")
+    expect_stop("refinement raises Lost on a set without a one-pattern component",
+                lambda: check_refine_up({k3: {7}}, {k3: {6}}, {k3: {OURS: {5}, REFINE: {4}}}))
+    # The sentence checks on the exported numbers, then with one fault per check.
+    exported = INV / "paper_numbers.json"
+    if not exported.exists():
+        failures.append("sentence checks: %s absent, nothing to check" % exported)
+    else:
+        import copy
+        data = json.loads(exported.read_text(encoding="utf-8"))
+
+        def loaded(edit=None):
+            n2 = Numbers()
+            n2.values = copy.deepcopy(data["values"])
+            n2.values.pop("sentence_checks.passed", None)
+            n2.tables = copy.deepcopy(data["tables"])
+            if edit:
+                edit(n2)
+            return n2
+
+        def row(n2, name, **match):
+            rs = [r for r in n2.tables[name]["rows"] if all(r[k] == w for k, w in match.items())]
+            if len(rs) != 1:
+                raise KeyError("%s %s: %d rows" % (name, match, len(rs)))
+            return rs[0]
+
+        def setv(key, value):
+            def edit(n2):
+                n2.values[key]["value"] = value
+            return edit
+
+        def setr(name, field, value, **match):
+            def edit(n2):
+                row(n2, name, **match)[field] = value
+            return edit
+        try:
+            sentence_checks(loaded())
+        except Missing as e:
+            failures.append("sentence checks refuse the exported numbers: %s" % e)
+        faults = [
+            ("a second instance where CUT-HIDE loses more", setr("h6", "same_gt", 1, scope="repeated", method="dbsh")),
+            ("the one instance against another baseline", lambda n2: (setr("h5", "same_gt", 0, scope="distinct", method="hha")(n2),
+                                                                     setr("h5", "same_gt", 1, scope="distinct", method="dbsh")(n2))),
+            ("a baseline with fewer masks under HIDE-SEQ, one pattern", setr("h5", "ours_more", 1, scope="repeated", method="hha")),
+            ("g- > 0, several distinct-item: a baseline not above everywhere",
+             setr("h6sev", "base_more", 267, scope="distinct", method="dbsh")),
+            ("HIDE-SEQ five patterns: two equal-count instances", setr("h5s5", "same", 2, scope="distinct", method="hha")),
+            ("HIDE-SEQ five patterns: SBSH with fewer masks", setr("h5s5", "ours_more", 1, scope="repeated", method="sbsh-r1")),
+            ("HIDE-SEQ five patterns: no baseline with fewer masks",
+             lambda n2: [r.__setitem__("ours_more", 0) for r in n2.tables["h5s5"]["rows"]]),
+            ("H3 distinct median above the near-1 threshold", setv("h3.main.median.max", 1.06)),
+            ("HIDE-SEQ distinct median at the more-masks threshold", setv("h5.ratio.distinct.median.max", 1.10)),
+            ("HIDE-SEQ repeated: HHA reaches the threshold", setv("h5.ratio.repeated.hha", 1.10)),
+            ("SC4LOST: CH-AW as often optimal as CUT-HIDE",
+             setr("seqlost", "opt", 545, scope="distinct", method="cut-hide-rw")),
+            ("the lowest share moves to HIDE-DB", setv("lostopt.ours.opt.repeated", 700)),
+            ("a rival's median Lost_rel above twice the margin", setv("levels.repeated.1.rivals.lost_rel.max", 0.041)),
+            ("one more rejected null hypothesis", setr("h2", "verdict", "H0 rejected", test="H2-R", method="dbsh")),
+        ]
+        for name, edit in faults:
+            try:
+                n2 = loaded(edit)
+            except KeyError as e:
+                failures.append("sentence fault %r could not be injected: %s" % (name, e))
+                continue
+            expect_stop("sentence check: " + name, lambda: sentence_checks(n2))
     print("self-test: %d failures%s" % (len(failures), (": " + "; ".join(failures)) if failures else ""))
     print("checks: same key twice, absent pattern, repeated pattern, a good block, pairs/test mismatch, "
           "missing Holm line, missing equivalence line, levels text, levels method missing, levels count, no lock named as "
           "missing, two locks disagree on the JDK, two locks disagree on the machine name, the newest lock wins, "
           "the two real HIDE-SEQ reports read, |R|* mismatch, group check missing, pairs line vs block (tested and untestable), method under test "
           "above |R|*, rank-biserial on d - delta_L in a new family, rank-biserial vs pairs table, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
-          "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty")
+          "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty, "
+          "one-pattern components, equal-count check (good, two patterns, empty), refinement check (good, masks, component), "
+          "sentence checks on the exported numbers and 14 faults")
     return 1 if failures else 0
 
 

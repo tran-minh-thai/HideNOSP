@@ -293,6 +293,218 @@ def analysis(nums, machine):
             raise Missing("H3 table: %s does not reach |R|* everywhere (%s, %s)" % (r["method"], r["scope"], r["group"]))
 
 
+# ---------------------------------------------------------------- HIDE-SEQ and g- > 0 (preregistration 22.2, 22.3)
+
+def parse_pairs_only(part, family, prefix, scope):
+    """A family with no test: the per-method blocks and the pairs table only.
+
+    With several sensitive patterns the methods almost never mask the same number of positions, so the H2
+    procedure has nothing to test; the report says "not enough pairs for a test" for each baseline, and the
+    evidence is the table of pairs. Each baseline must say so, so a family that does become testable is not read
+    here by mistake.
+    """
+    rows = []
+    for name in family:
+        block = one(r"^-- %s\n((?:   .*\n)+)" % re.escape(name), part, "%s block of %s" % (prefix, name))
+        same = int(one(r"into Wilcoxon \(same \|R\|\)\s+(\d+) instances", block, prefix + name))
+        more = int(one(r"baseline uses more masks\s+(\d+) instances", block, prefix + name))
+        ours = int(one(r"CUT-HIDE uses more masks\s+(\d+) instances", block, prefix + name))
+        if "not enough pairs for a test" not in block:
+            raise Missing("%s %s: a test was run on %d pairs; read this family with parse_family" % (prefix, name, same))
+        pairs = one(r"^  %s\s+(\d+) \|\s+(\d+)\s+(\d+)\s+(\d+) \|\s+(\d+)\s+(\d+)\s+(\d+) \|\s+(\d+)\s+(\d+)/(\d+)\s*$"
+                    % re.escape(name), part, "%s pairs line of %s" % (prefix, name))
+        pairs = [int(x) for x in pairs]
+        if pairs[0] != pairs[9] or pairs[1] + pairs[2] + pairs[3] != same or pairs[7] != ours \
+                or pairs[4] + pairs[5] + pairs[6] != more:
+            raise Missing("%s %s: pairs table %s disagrees with the block (same %d, baseline more %d, ours more %d)"
+                          % (prefix, name, pairs, same, more, ours))
+        rows.append({"scope": scope, "method": name, "instances": pairs[0], "same": same, "base_more": more,
+                     "ours_more": ours, "same_lt": pairs[1], "same_eq": pairs[2], "same_gt": pairs[3],
+                     "more_lt": pairs[4], "more_eq": pairs[5], "more_gt": pairs[6], "no_worse_both": pairs[8]})
+    return rows
+
+
+def parse_ratio_block(part, scope):
+    """The |R|/|R|* block (H3, H5a, the H3 part of H6): per group and method, n, median, max and the verdict."""
+    out = []
+    for group in ("main", "degenerate"):
+        sec = one(r"^-- group %s\n((?:   .*\n)+)" % group, part, "ratio block, group %s" % group)
+        if sec.strip() == "no rows":
+            continue
+        for line in sec.splitlines()[1:]:
+            m = re.match(r"^   (\S+)\s+(\d+)\s+([\d.]+)\s+([\d.]+)(?:\s+(.*?))?\s*$", line)
+            if not m:
+                raise Missing("ratio block: line not understood: %r" % line)
+            out.append({"scope": scope, "group": group, "method": m.group(1), "n": int(m.group(2)),
+                        "median": float(m.group(3)), "max": float(m.group(4)), "verdict": m.group(5) or ""})
+    return out
+
+
+# The four readings of the new problems, each one call of preregistered_analysis.py.
+# (key, scenario, gaps, sizes, a test is expected, the label of the scopes)
+NEW_MODES = (("h5", "SC4", "zero", "1", True, ("H5b", "H5b-R")),
+             ("h5s5", "SC4", "zero", "5", False, ("H5b", "H5b-R")),
+             ("h6", "SC3", "positive", "1", True, ("H6", "H6-R")),
+             ("h6sev", "SC3", "positive", "several", False, ("H6", "H6-R")))
+
+
+def mode_report(machine, key, scenario, gaps, sizes):
+    text = run_tool(["preregistered_analysis.py", "--sc3", "results-invariant", "--sc2", "results-invariant",
+                     "--machine=%s" % machine, "--scenario=%s" % scenario, "--gaps=%s" % gaps, "--sizes=%s" % sizes],
+                    "preregistered_analysis %s" % key)
+    return text, "preregistered_analysis.py --machine=%s --scenario=%s --gaps=%s --sizes=%s" % (
+        machine, scenario, gaps, sizes)
+
+
+def analysis_mode(nums, machine, key, scenario, gaps, sizes, tested, labels):
+    text, src = mode_report(machine, key, scenario, gaps, sizes)
+    parse_mode(nums, text, src, key, scenario, sizes, tested, labels)
+
+
+def parse_mode(nums, text, src, key, scenario, sizes, tested, labels):
+    i_dist = text.index("Scope: distinct-item sensitive patterns")
+    i_rep = text.index("Scope: repeated-item sensitive patterns")
+    i_check = text.index("The method under test masks exactly |R|* on every one-pattern instance")
+    parts = {"distinct": text[i_dist:i_rep], "repeated": text[i_rep:i_check]}
+    # The groups: the measuring machine's SC2 files must give the locked tables (twice: pool, repeated).
+    locked = [int(x) for x in re.findall(r"^  (\d+) configurations, all as locked\.$", text, re.M)]
+    if len(locked) != 2:
+        raise Missing("%s: %d group checks passed, expected 2" % (key, len(locked)))
+    nums.put("%s.groups.pool" % key, locked[0], src)
+    nums.put("%s.groups.repeated" % key, locked[1], src)
+    if scenario == "SC4":
+        m = re.search(r"^Instances that need no mask \(no sequence reaches r\)[^\n]*: distinct items (\d+), "
+                      r"repeated items (\d+)$", text, re.M)
+        nums.put("%s.nomask.distinct" % key, int(m.group(1)) if m else 0, src)
+        nums.put("%s.nomask.repeated" % key, int(m.group(2)) if m else 0, src)
+    rows, ratios = [], []
+    for scope, label in zip(("distinct", "repeated"), labels):
+        part = parts[scope]
+        excluded = one(r"Share of instances excluded: (\d+)/(\d+)", part, "%s %s" % (key, label))
+        nums.put("%s.%s.excluded" % (key, scope), [int(excluded[0]), int(excluded[1])], src)
+        family = parse_family(part, BASELINES, label, Numbers(), scope) if tested else \
+            parse_pairs_only(part, BASELINES, label, scope)
+        for r in family:
+            r["test"] = label
+        rows += family
+        if sizes == "1":
+            start = part.index("|R|/|R|*")
+            ratios += parse_ratio_block(part[start:], scope)
+    # The method under test masks exactly |R|* on every one-pattern instance; with one pattern this is checked.
+    for scope in ("distinct", "repeated"):
+        m = re.search(r"^  %s scope: (\d+) rows compared, (\d+) mask another count" % scope, text, re.M)
+        if sizes == "1":
+            if not m:
+                raise Missing("%s %s: the |R|* check compared no row" % (key, scope))
+            if int(m.group(2)):
+                raise Missing("%s %s: %s rows mask another count than |R|*" % (key, scope, m.group(2)))
+            nums.put("%s.rstar.%s" % (key, scope), int(m.group(1)), src)
+    nums.table(key, ["test", "scope", "method"], rows, src)
+    if ratios:
+        nums.table(key + "_ratio", ["scope", "group", "method"], ratios, src)
+    for scope in ("distinct", "repeated"):
+        rs = [r for r in rows if r["scope"] == scope]
+        ns = {r["instances"] for r in rs}
+        if len(ns) != 1:
+            raise Missing("%s %s: instance counts differ across methods: %s" % (key, scope, ns))
+        k = "%s.%s" % (key, scope)
+        nums.put(k + ".n", ns.pop(), src)
+        for field, name in (("same", "same"), ("base_more", "base_more"), ("ours_more", "ours_more"),
+                            ("no_worse_both", "nowb"), ("same_gt", "same_gt")):
+            nums.put("%s.%s.min" % (k, name), min(r[field] for r in rs), src)
+            nums.put("%s.%s.max" % (k, name), max(r[field] for r in rs), src)
+        for r in rs:
+            for field in ("same", "base_more", "ours_more", "no_worse_both", "same_gt"):
+                nums.put("%s.%s.%s" % (k, r["method"], field), r[field], src)
+        if tested:
+            nums.put(k + ".rejected", sum(r["verdict"] == "H0 rejected" for r in rs), src)
+            nums.put(k + ".equivalent_lost", sum(r["eq_lost"] == "equivalent" for r in rs), src)
+            nums.put(k + ".equivalent_supdist", sum(r["eq_supdist"] == "equivalent" for r in rs), src)
+            nums.put(k + ".p_holm.min", min(r["p_holm"] for r in rs), src)
+    for r in ratios:
+        if r["group"] == "main" and r["method"] in BASELINES + ("hha-emb",):
+            nums.put("%s.ratio.%s.%s" % (key, r["scope"], r["method"]), r["median"], src)
+        if r["method"].startswith("cut-hide") and (r["median"], r["max"]) != (1.0, 1.0):
+            raise Missing("%s: %s does not reach |R|* everywhere (%s, %s)" % (key, r["method"], r["scope"], r["group"]))
+    for scope in ("distinct", "repeated"):
+        main = [r for r in ratios if r["scope"] == scope and r["group"] == "main" and r["method"] in BASELINES]
+        if main:
+            nums.put("%s.ratio.%s.n" % (key, scope), main[0]["n"], src)
+            nums.put("%s.ratio.%s.median.min" % (key, scope), min(r["median"] for r in main), src)
+            nums.put("%s.ratio.%s.median.max" % (key, scope), max(r["median"] for r in main), src)
+            if any(r["verdict"] for r in main):  # a descriptive block carries no verdict
+                nums.put("%s.ratio.%s.above" % (key, scope), sum(r["verdict"] == "above 1" for r in main), src)
+
+
+def seq_lost(nums, machine):
+    """SC4LOST: the exact Lost optimum under HIDE-SEQ on small instances (preregistration 22.2), descriptive."""
+    text = run_tool(["lost_optimum_table.py", "--machine=%s" % machine, "--scenario=SC4LOST"], "lost_optimum_table SC4LOST")
+    parse_seq_lost(nums, text, "lost_optimum_table.py --machine=%s --scenario=SC4LOST" % machine)
+
+
+def parse_seq_lost(nums, text, src):
+    rows = []
+    for scope in ("distinct", "repeated"):
+        head = one(r"^== tested datasets, %s scope: (\d+) instances solved; skipped (.*)$" % scope, text, src)
+        skipped = sum(int(x) for x in re.findall(r"(\d+)", head[1])) if head[1] != "none" else 0
+        nums.put("seqlost.n.%s" % scope, int(head[0]), src)
+        nums.put("seqlost.skipped.%s" % scope, skipped, src)
+        body = one(r"^== tested datasets, %s scope:[^\n]*\n   method[^\n]*\n((?:   \S.*\n)+)" % scope, text, src)
+        for line in body.splitlines():
+            if line.strip().startswith("empty B_eps"):
+                continue
+            m = re.match(r"^   (\S+)\s+(\d+)\s+(\d+)/(\d+)\s+(\d+)/(\d+)\s+(\d+)\s+(\S+)\s+(\S+)\s+(\d+)\s+(\d+)/(\d+)", line)
+            if not m:
+                raise Missing("lost_optimum_table SC4LOST: line not understood: %r" % line)
+            g = m.groups()
+            rows.append({"scope": scope, "method": g[0], "n": int(g[1]), "at_R": int(g[2]), "opt": int(g[4]),
+                         "excess": int(g[6]), "above": int(g[9]), "opt_no_worse": int(g[10])})
+    if "No problem:" not in text:
+        raise Missing("lost_optimum_table SC4LOST reports a problem")
+    nums.table("seqlost", ["scope", "method"], rows, src)
+    for scope in ("distinct", "repeated"):
+        rs = {r["method"]: r for r in rows if r["scope"] == scope}
+        if rs[OURS]["at_R"] != rs[OURS]["n"]:
+            raise Missing("SC4LOST %s: CUT-HIDE not at |R|*_SEQ on every instance" % scope)
+        nums.put("seqlost.ours.opt.%s" % scope, rs[OURS]["opt"], src)
+        nums.put("seqlost.ours.excess.%s" % scope, rs[OURS]["excess"], src)
+        nums.put("seqlost.chaw.opt.%s" % scope, rs["cut-hide-rw"]["opt"], src)
+        nums.put("seqlost.chfw.opt.%s" % scope, rs["cut-hide"]["opt"], src)
+        others = [r for m, r in rs.items() if m in BASELINES + RIVALS]
+        nums.put("seqlost.base.opt.min.%s" % scope, min(r["opt"] for r in others), src)
+        nums.put("seqlost.base.opt.max.%s" % scope, max(r["opt"] for r in others), src)
+        nums.put("seqlost.base.excess.min.%s" % scope, min(r["excess"] for r in others), src)
+        nums.put("seqlost.base.above.max.%s" % scope, max(r["above"] for r in others), src)
+        if not min(r["excess"] for r in others) > rs[OURS]["excess"]:
+            raise Missing("SC4LOST %s: some method loses fewer patterns in excess than CUT-HIDE" % scope)
+
+
+def sc1gap(nums, machine):
+    """SC1GAP: the exact program for g- > 0 against exhaustive search (preregistration 22.3)."""
+    paths = [p for p in sorted(glob.glob(str(INV / "SC1GAP_*.csv"))) if machine_of(p) == machine]
+    if len(paths) != 1:
+        raise Missing("SC1GAP files of %s: %d, expected 1" % (machine, len(paths)))
+    check_sc1gap(nums, rows_of(paths[0]), Path(paths[0]).name)
+
+
+def check_sc1gap(nums, rows, src):
+    if not rows:
+        raise Missing("SC1GAP %s: no row" % src)
+    total = Counter()
+    for r in rows:
+        if int(r["mismatches"]):
+            raise Missing("SC1GAP %s %s: %s mismatches" % (r["gap"], r["items"], r["mismatches"]))
+        for c in ("instances", "targets", "targets_needing_a_mask"):
+            total[c] += int(r[c])
+    nums.put("sc1gap.gaps", len({r["gap"] for r in rows}), src)
+    nums.put("sc1gap.instances", total["instances"], src)
+    nums.put("sc1gap.targets", total["targets"], src)
+    nums.put("sc1gap.targets_needing", total["targets_needing_a_mask"], src)
+    nums.put("sc1gap.mismatches", 0, src)
+    for scope in ("distinct", "repeated"):
+        nums.put("sc1gap.instances.%s" % scope, sum(int(r["instances"]) for r in rows if r["items"] == scope), src)
+
+
 # ---------------------------------------------------------------- lower bounds
 
 def lower_bounds(nums, machine):
@@ -907,13 +1119,14 @@ TIMING_PREFIXES = ("sc6.", "platform.")
 def build(machine, small_machine):
     nums = Numbers()
     # Without files of the rule asked for, every later step would fail on a symptom; say the cause first.
-    for scenario, who in (("SC3", machine), ("SC3LOST", small_machine), ("SC3CERT", machine), ("SC3OPT", machine)):
+    for scenario, who in (("SC3", machine), ("SC3LOST", small_machine), ("SC3CERT", machine), ("SC3OPT", machine),
+                          ) + ((("SC4", machine), ("SC4LOST", small_machine)) if RULE[0] == "necessary" else ()):
         if not files(INV, scenario, who):
             every = [q for q in glob.glob(str(INV / ("%s_*.csv" % scenario))) if machine_of(q) == who]
             raise Missing("no %s file of %s under closure rule %s (rules found: %s)%s" % (
                 scenario, who, RULE[0], closure_rule.keep(every, RULE[0])[1] or "none",
                 "; the files of the corrected rule come from generation 3 of the campaign" if RULE[0] == "necessary" else ""))
-    for step in (lambda: sc1(nums, machine), lambda: sc2(nums), lambda: datasets_table(nums),
+    for step in [lambda: sc1(nums, machine), lambda: sc2(nums), lambda: datasets_table(nums),
                  lambda: sc3_rows(nums, machine), lambda: analysis(nums, machine), lambda: levels(nums, machine),
                  lambda: sensitivity(nums, machine),
                  lambda: lower_bounds(nums, machine),
@@ -921,7 +1134,10 @@ def build(machine, small_machine):
                  # The fronts exist under the earlier rule only, and the manuscript quotes none of their numbers.
                  lambda: pareto(nums, machine) if RULE[0] == "subsequence" else None,
                  lambda: lost_optimum(nums, small_machine), lambda: certified(nums, machine, small_machine),
-                 lambda: timing(nums, machine), lambda: platform(nums, machine)):
+                 lambda: timing(nums, machine), lambda: platform(nums, machine),
+                 # HIDE-SEQ and g- > 0 were run under the corrected rule only (preregistration 22).
+                 ] + ([lambda: seq_lost(nums, small_machine), lambda: sc1gap(nums, machine)] + [
+                     (lambda m=m: analysis_mode(nums, machine, *m)) for m in NEW_MODES] if RULE[0] == "necessary" else []):
         step()
     # The same quantity read from two tools must agree.
     for scope, key in (("distinct", "h2.n"), ("repeated", "h2r.n")):
@@ -1045,10 +1261,85 @@ def self_test():
                 lambda: one_platform([pair[0], (pair[1][0], dict(same, hostname="OTHER"))], "X"))
     if one_platform(pair, "X")[0].parent.name != "campaign_X_g2":
         failures.append("one_platform does not take the newest lock")
+    # The readers of HIDE-SEQ and g- > 0 are tested on the real reports, each with one fault injected.
+    # Each injection must change the text exactly once, or the check would test nothing.
+    def inject(text, old, new, name):
+        if text.count(old) < 1:
+            failures.append("%s: the text to change is absent" % name)
+            return text
+        changed = text.replace(old, new, 1)
+        if changed == text:
+            failures.append("%s: the injection changed nothing" % name)
+        return changed
+
+    machine = "ADMIN-PC"
+    mode = {m[0]: m for m in NEW_MODES}
+    reports = {}
+    try:
+        for k in ("h5", "h5s5"):
+            reports[k] = mode_report(machine, *mode[k][:4])[0]
+    except Missing as e:
+        failures.append("the reports of the new modes could not be read: %s" % e)
+    if len(reports) == 2:
+        def parse(k, text, tested=None):
+            m = mode[k]
+            parse_mode(Numbers(), text, "t", k, m[1], m[3], m[4] if tested is None else tested, m[5])
+        try:
+            parse("h5", reports["h5"])
+            parse("h5s5", reports["h5s5"])
+        except Missing as e:
+            failures.append("the unchanged reports are refused: %s" % e)
+        h5, s5 = reports["h5"], reports["h5s5"]
+        expect_stop("|R|* check reports one mismatch",
+                    lambda: parse("h5", inject(h5, "rows compared, 0 mask another", "rows compared, 1 mask another", "rstar")))
+        expect_stop("a group check missing",
+                    lambda: parse("h5", inject(h5, "configurations, all as locked.", "configurations, one not as locked.", "groups")))
+        expect_stop("a pairs line disagrees with its block",
+                    lambda: parse("h5", inject(h5, "  hha              232 |     85     31      1 |",
+                                               "  hha              232 |     85     30      1 |", "pairs")))
+        expect_stop("the method under test above |R|*",
+                    lambda: parse("h5", inject(h5, "   cut-hide-rw-ls                       232   1.0000   1.0000",
+                                               "   cut-hide-rw-ls                       232   1.0000   1.0100", "ratio")))
+        expect_stop("an untestable family: pairs line disagrees with its block",
+                    lambda: parse("h5s5", inject(s5, "  hha              177 |      0      0      0 |    154 ",
+                                                 "  hha              177 |      0      0      0 |    153 ", "pairs s5")))
+        expect_stop("a tested family read as untestable", lambda: parse("h5", h5, tested=False))
+        expect_stop("an untestable family read as tested", lambda: parse("h5s5", s5, tested=True))
+        expect_stop("an untestable family where one baseline was tested",
+                    lambda: parse("h5s5", inject(s5, "   not enough pairs for a test\n", "\n", "untestable")))
+    lot = ("== tested datasets, %s scope: 10 instances solved; skipped none\n"
+           "   method              n  |R|=|R|*  Lost=OPT  sum exc  med exc   med pos  |R|>|R|* opt no worse\n"
+           + "".join("   %-16s 10   10/10     %s/10        %s      0.0     0.000         0      0/0\n"
+                     % (m, "9" if m == OURS else "5", "1" if m == OURS else "9")
+                     for m in (OURS, "cut-hide-rw", "cut-hide") + BASELINES + RIVALS)
+           + "   empty B_eps, CUT-HIDE with uniform weights: none\n\n")
+    lot = lot % "distinct" + lot % "repeated" + "No problem: every method hides.\n"
+    try:
+        parse_seq_lost(Numbers(), lot, "t")
+    except Missing as e:
+        failures.append("good SC4LOST text refused: %s" % e)
+    expect_stop("SC4LOST reports a problem", lambda: parse_seq_lost(Numbers(), inject(lot, "No problem", "Problem", "lot"), "t"))
+    expect_stop("SC4LOST: CUT-HIDE below |R|*_SEQ on an instance",
+                lambda: parse_seq_lost(Numbers(), inject(lot, "   cut-hide-rw-ls   10   10/10", "   cut-hide-rw-ls   10    9/10",
+                                                         "lot at R"), "t"))
+    expect_stop("SC4LOST: a baseline with less excess than CUT-HIDE",
+                lambda: parse_seq_lost(Numbers(), inject(lot, "   hha              10   10/10     5/10        9",
+                                                         "   hha              10   10/10     5/10        0", "lot excess"), "t"))
+    gap = [{"gap": "[1,2]", "items": s, "instances": "5", "targets": "9", "targets_needing_a_mask": "4", "mismatches": "0"}
+           for s in ("distinct", "repeated")]
+    try:
+        check_sc1gap(Numbers(), gap, "t")
+    except Missing as e:
+        failures.append("good SC1GAP rows refused: %s" % e)
+    expect_stop("SC1GAP with one mismatch", lambda: check_sc1gap(Numbers(), [gap[0], dict(gap[1], mismatches="1")], "t"))
+    expect_stop("SC1GAP with no row", lambda: check_sc1gap(Numbers(), [], "t"))
     print("self-test: %d failures%s" % (len(failures), (": " + "; ".join(failures)) if failures else ""))
     print("checks: same key twice, absent pattern, repeated pattern, a good block, pairs/test mismatch, "
           "missing Holm line, missing equivalence line, levels text, levels method missing, levels count, no lock named as "
-          "missing, two locks disagree on the JDK, two locks disagree on the machine name, the newest lock wins")
+          "missing, two locks disagree on the JDK, two locks disagree on the machine name, the newest lock wins, "
+          "the two real HIDE-SEQ reports read, |R|* mismatch, group check missing, pairs line vs block (tested and untestable), method under test "
+          "above |R|*, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
+          "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty")
     return 1 if failures else 0
 
 

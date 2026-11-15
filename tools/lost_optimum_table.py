@@ -1,7 +1,11 @@
 # SPDX-License-Identifier: MIT
-"""Summarise SC3LOST: how far each method is from the exact Lost optimum on small instances.
+"""Summarise SC3LOST or SC4LOST: how far each method is from the exact Lost optimum on small instances.
 
-    python tools/lost_optimum_table.py [--machine=NAME] [--dir=DIR] [--out FILE]
+    python tools/lost_optimum_table.py [--machine=NAME] [--dir=DIR] [--scenario=SC3LOST|SC4LOST] [--out FILE]
+
+--scenario picks the files: SC3LOST (default) under HIDE-DB, SC4LOST under HIDE-SEQ (preregistration section 22.2),
+whose |R|* is |R|*_SEQ and whose hiding constraint is the per-sequence limit r. The quantities and the checks are the
+same for both; an SC4LOST instance is also keyed by its limit r.
 
 Reads the SC3LOST_*.csv files of one machine in DIR (default: results-invariant/ of the repository) and
 prints, per scope and method, the quantities of preregistration section 19.2, on the instances solved
@@ -52,6 +56,7 @@ def main(argv):
     directory = REPO / "results-invariant"
     machine = ""
     rule = "necessary"
+    scenario = "SC3LOST"
     i = 0
     while i < len(argv):
         a = argv[i]
@@ -65,19 +70,21 @@ def main(argv):
             directory = Path(a.split("=", 1)[1])
         elif a.startswith("--closure=") and a.split("=", 1)[1] in closure_rule.RULES:
             rule = a.split("=", 1)[1]
+        elif a.startswith("--scenario=") and a.split("=", 1)[1] in ("SC3LOST", "SC4LOST"):
+            scenario = a.split("=", 1)[1]
         else:
             print("usage: python tools/lost_optimum_table.py [--machine=NAME] [--dir=DIR] [--closure=necessary|subsequence] "
-                  "[--out FILE]", file=sys.stderr)
+                  "[--scenario=SC3LOST|SC4LOST] [--out FILE]", file=sys.stderr)
             return 1
         i += 1
-    files, machine, refusal = one_machine(sorted(glob.glob(str(directory / "SC3LOST_*.csv"))), machine,
-                                          "--machine", "SC3LOST")
+    files, machine, refusal = one_machine(sorted(glob.glob(str(directory / ("%s_*.csv" % scenario)))), machine,
+                                          "--machine", scenario)
     if refusal:
         print(refusal, file=sys.stderr)
         return 1
     files, found = closure_rule.keep(files, rule)
     if not files:
-        print("no SC3LOST file under closure rule %s in %s; rules found: %s" % (rule, directory.as_posix(), found),
+        print("no %s file under closure rule %s in %s; rules found: %s" % (scenario, rule, directory.as_posix(), found),
               file=sys.stderr)
         return 1
     problems = []
@@ -95,7 +102,7 @@ def main(argv):
                 reason = r["status"].split(":")[0] if r["status"] else "(no status)"
                 skipped[(part, scope)][reason] += 1
                 continue
-            key = (name, r["gap"], r["sigma"], r["sensitive_set"], r["drop"])
+            key = (name, r["gap"], r["sigma"], r["sensitive_set"], r["drop"], r.get("r", ""))
             instances[(part, scope)].add(key)
             if r["status"]:
                 problems.append("%s %s: %s" % (key, r["method_key"], r["status"]))
@@ -120,8 +127,8 @@ def main(argv):
                 empty_band[(part, scope)][r["method_key"]] += 1
                 empty_band[(part, scope)][r["method_key"] + " opt"] += int(masks == least and lost == opt)
 
-    lines = [closure_rule.describe("SC3LOST", rule, files, found),
-             "SC3LOST files of %s: %d" % (machine, len(files)),
+    lines = [closure_rule.describe(scenario, rule, files, found),
+             "%s files of %s: %d" % (scenario, machine, len(files)),
              "checks covered: %d method rows, %d of them at |R|*, %d CUT-HIDE rows"
              % (checked["rows"], checked["rows at |R|*"], checked["cut-hide rows"])]
     for part, scope in sorted(set(groups) | set(skipped)):

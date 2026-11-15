@@ -64,8 +64,8 @@ class LOCKED:
     DELTA_L = 0.02              # section 2, the practical-effect threshold of H2 on Lost_rel
     ALPHA = 0.05               # section 2
     # section 2, the Holm family of four. These are method_key values, i.e. the names given on the
-    # SC3 command line, not the names the methods give themselves: SBSH-rmax calls itself "SBSH-r3"
-    # when l_max = 3.
+    # SC3 command line, not the names the methods give themselves: SBSH-rmax calls itself "SBSH-r2",
+    # "-r3" or "-r4" by the length of the longest sensitive pattern of the set.
     BASELINE_FAMILY = ("hha", "dbsh", "sbsh-r1", "sbsh-rmax")
     # preregistration section 12: the method under test of H2 and H2-R; config/protocol.yaml
     # (method_H2R) must name the same key, and preregistered_analysis_test.py checks that it does.

@@ -1309,9 +1309,20 @@ def sentence_checks(nums):
         raise Missing("HIDE-SEQ, five repeated-item patterns: an SBSH variant uses fewer masks than CUT-HIDE")
     if not any(r["ours_more"] for r in tab("h5s5")):
         raise Missing("HIDE-SEQ, five patterns: no baseline uses fewer masks than CUT-HIDE; the limitation says some does")
+    # The abstract names that baseline once and then times CUT-HIDE against it: it must be HHA, the key of the ratio.
+    rep5 = {r["method"]: r["ours_more"] for r in tab("h5s5") if r["scope"] == "repeated"}
+    if max(rep5, key=rep5.get) != "hha" or sorted(rep5.values())[-2] == rep5["hha"]:
+        raise Missing("HIDE-SEQ, five repeated-item patterns: the baseline with most instances of fewer masks is not HHA "
+                      "alone (%s); the abstract times CUT-HIDE against HHA as that baseline" % rep5)
     # Ratios |R|/|R|*: one distinct-item pattern is near the minimum under HIDE-DB (at most the near-1 threshold of
     # H3) and below the more-masks threshold under HIDE-SEQ and with g- > 0; in the repeated-item scope of HIDE-SEQ,
     # DBSH and both SBSH variants reach that threshold while HHA stays below it.
+    # One distinct-item pattern, both problems: every baseline uses few masks beyond the minimum (all three scenarios
+    # below the more-masks threshold of H3).
+    few = {k: v(k) for k in ("h3.main.median.max", "h5.ratio.distinct.median.max", "h6.ratio.distinct.median.max")}
+    if not max(few.values()) < above:
+        raise Missing("one distinct-item pattern: median ratios %s, not all below %.2f; the abstract says few masks beyond "
+                      "the minimum" % (few, above))
     if not v("h3.main.median.max") <= near:
         raise Missing("H3, one distinct-item pattern: median ratio %.4f above %.2f; the text says close to the minimum"
                       % (v("h3.main.median.max"), near))
@@ -1327,6 +1338,11 @@ def sentence_checks(nums):
         rs = {r["method"]: r for r in tab("seqlost") if r["scope"] == scope}
         if any(r["opt"] >= rs[OURS]["opt"] for m, r in rs.items() if m != OURS):
             raise Missing("SC4LOST %s: a method is optimal on as many instances as CUT-HIDE; the text says more" % scope)
+    # The excess of CUT-HIDE in tab_lostopt is summed over at least as many instances as that of any other method.
+    for scope in ("distinct", "repeated"):
+        rs = {r["method"]: r for r in tab("lostopt") if r["scope"] == scope}
+        if any(r["at_R"] > rs[OURS]["at_R"] for r in rs.values()):
+            raise Missing("SC3LOST %s: a method is at |R|* on more instances than CUT-HIDE; the text says at least as many" % scope)
     share = {(t, s): v("%s.ours.opt.%s" % (t, s)) / v("%s.n.%s" % (t, s))
              for t in ("lostopt", "seqlost") for s in ("distinct", "repeated")}
     if min(share, key=share.get) != ("seqlost", "repeated"):
@@ -1342,7 +1358,7 @@ def sentence_checks(nums):
                       if r["verdict"] == "H0 rejected")
     if rejected != [("H2-R", "hha"), ("H4b-R", "hha-stop"), ("H4b-R", "occurrence")]:
         raise Missing("rejected null hypotheses %s; the text names H2-R against HHA and H4b-R against both rivals" % rejected)
-    nums.put("sentence_checks.passed", 13, "sentence_checks in paper_numbers.py")
+    nums.put("sentence_checks.passed", 16, "sentence_checks in paper_numbers.py")
 
 
 def git(*args):
@@ -1607,6 +1623,12 @@ def self_test():
             ("the lowest share moves to HIDE-DB", setv("lostopt.ours.opt.repeated", 700)),
             ("a rival's median Lost_rel above twice the margin", setv("levels.repeated.1.rivals.lost_rel.max", 0.041)),
             ("one more rejected null hypothesis", setr("h2", "verdict", "H0 rejected", test="H2-R", method="dbsh")),
+            ("H3 distinct median at the more-masks threshold",
+             lambda n2: (setv("h3.main.median.max", 1.10)(n2), setv("h3.main.median.min", 1.0)(n2))),
+            ("HIDE-SEQ five repeated: DBSH ties HHA on fewer masks",
+             setr("h5s5", "ours_more", 190, scope="repeated", method="dbsh")),
+            ("SC3LOST: a method at |R|* more often than CUT-HIDE",
+             setr("lostopt", "at_R", 630, scope="distinct", method="hha-stop")),
         ]
         for name, edit in faults:
             try:
@@ -1623,7 +1645,7 @@ def self_test():
           "above |R|*, rank-biserial on d - delta_L in a new family, rank-biserial vs pairs table, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
           "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty, "
           "one-pattern components, equal-count check (good, two patterns, empty), refinement check (good, masks, component), "
-          "sentence checks on the exported numbers and 14 faults")
+          "sentence checks on the exported numbers and 17 faults")
     return 1 if failures else 0
 
 

@@ -264,9 +264,9 @@ public final class Sc3MainComparison implements Scenario {
                         Metrics.Row row = context.evaluateMasking(problem, sanitization);
                         // method_key is the name given on the command line, and it is stable;
                         // method is the name the method gives itself, which may carry its
-                        // parameters. SBSH-rmax calls itself SBSH-r3 when l_max = 3, so the
-                        // analysis must key on method_key, or the locked Holm family never
-                        // matches a name in the file.
+                        // parameters. SBSH-rmax calls itself SBSH-r2, -r3 or -r4 by the length of
+                        // the longest sensitive pattern, so the analysis must key on method_key, or
+                        // the locked Holm family never matches a name in the file.
                         writer.writeRow(describe(options), shape(database),
                                 gap.toString(), Integer.toString(sigma),
                                 sensitive.toString(), stratum,

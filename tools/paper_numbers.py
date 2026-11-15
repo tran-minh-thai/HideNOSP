@@ -1299,14 +1299,16 @@ def sentence_checks(nums):
     # g- > 0, several distinct-item patterns: every baseline uses more masks on every instance.
     if any(r["base_more"] != r["instances"] for r in tab("h6sev") if r["scope"] == "distinct"):
         raise Missing("g- > 0, several distinct-item patterns: a baseline does not use more masks everywhere")
-    # HIDE-SEQ, five patterns: at most one instance with equal counts (the text writes "instance"); neither SBSH
-    # variant uses fewer masks than CUT-HIDE in the repeated-item scope; some baseline uses fewer somewhere.
+    # HIDE-SEQ, five patterns: no instance has equal counts in either scope (the text gives this as the reason no test
+    # applies); in the repeated-item scope HHA is the only baseline that uses fewer masks than CUT-HIDE on some instance;
+    # some baseline uses fewer somewhere (the limitation).
     same = max(r["same"] for r in tab("h5s5"))
-    if same != v("h5s5.repeated.same.max") or same != 1:
-        raise Missing("HIDE-SEQ, five patterns: at most %d equal-count instances over both scopes, the text quotes %d "
-                      "as one instance" % (same, v("h5s5.repeated.same.max")))
-    if any(r["ours_more"] for r in tab("h5s5") if r["scope"] == "repeated" and r["method"].startswith("sbsh")):
-        raise Missing("HIDE-SEQ, five repeated-item patterns: an SBSH variant uses fewer masks than CUT-HIDE")
+    if same != 0 or v("h5s5.repeated.same.max") != 0:
+        raise Missing("HIDE-SEQ, five patterns: %d equal-count instances; the text says no instance has equal counts" % same)
+    fewer = sorted(r["method"] for r in tab("h5s5") if r["scope"] == "repeated" and r["ours_more"])
+    if fewer != ["hha"]:
+        raise Missing("HIDE-SEQ, five repeated-item patterns: baselines with fewer masks than CUT-HIDE on some instance %s; "
+                      "the text names HHA only" % fewer)
     if not any(r["ours_more"] for r in tab("h5s5")):
         raise Missing("HIDE-SEQ, five patterns: no baseline uses fewer masks than CUT-HIDE; the limitation says some does")
     # The abstract names that baseline once and then times CUT-HIDE against it: it must be HHA, the key of the ratio.
@@ -1611,8 +1613,9 @@ def self_test():
             ("a baseline with fewer masks under HIDE-SEQ, one pattern", setr("h5", "ours_more", 1, scope="repeated", method="hha")),
             ("g- > 0, several distinct-item: a baseline not above everywhere",
              setr("h6sev", "base_more", 267, scope="distinct", method="dbsh")),
-            ("HIDE-SEQ five patterns: two equal-count instances", setr("h5s5", "same", 2, scope="distinct", method="hha")),
+            ("HIDE-SEQ five patterns: one equal-count instance", setr("h5s5", "same", 1, scope="distinct", method="hha")),
             ("HIDE-SEQ five patterns: SBSH with fewer masks", setr("h5s5", "ours_more", 1, scope="repeated", method="sbsh-r1")),
+            ("HIDE-SEQ five patterns: DBSH with fewer masks", setr("h5s5", "ours_more", 2, scope="repeated", method="dbsh")),
             ("HIDE-SEQ five patterns: no baseline with fewer masks",
              lambda n2: [r.__setitem__("ours_more", 0) for r in n2.tables["h5s5"]["rows"]]),
             ("H3 distinct median above the near-1 threshold", setv("h3.main.median.max", 1.06)),
@@ -1645,7 +1648,7 @@ def self_test():
           "above |R|*, rank-biserial on d - delta_L in a new family, rank-biserial vs pairs table, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
           "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty, "
           "one-pattern components, equal-count check (good, two patterns, empty), refinement check (good, masks, component), "
-          "sentence checks on the exported numbers and 17 faults")
+          "sentence checks on the exported numbers and 18 faults")
     return 1 if failures else 0
 
 

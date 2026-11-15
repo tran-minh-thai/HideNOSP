@@ -152,8 +152,12 @@ def dataset_name(path_text):
 
 # ---------------------------------------------------------------- preregistered analysis
 
-def parse_family(part, family, prefix, nums, scope):
-    """Per-method blocks, Holm table, pairs table and equivalence lines of one H2-like family."""
+def parse_family(part, family, prefix, nums, scope, raw_effect=False):
+    """Per-method blocks, Holm table, pairs table and equivalence lines of one H2-like family.
+
+    raw_effect: the family must print its rank-biserial on the raw differences (H5b, H6, preregistration 22);
+    otherwise on d - delta_L (H2, H4b). The label is read, so a family printed the other way stops here.
+    """
     rows = []
     for name in family:
         block = one(r"^-- %s\n((?:   .*\n)+)" % re.escape(name), part, "%s block of %s" % (prefix, name))
@@ -161,7 +165,8 @@ def parse_family(part, family, prefix, nums, scope):
         more = int(one(r"baseline uses more masks\s+(\d+) instances", block, prefix + name))
         ours = int(one(r"CUT-HIDE uses more masks\s+(\d+) instances", block, prefix + name))
         median = float(one(r"median difference of Lost_rel\s+([+-][\d.]+)", block, prefix + name))
-        rb = float(one(r"rank-biserial\s+([+-]?[\d.]+)", block, prefix + name))
+        rb = float(one(r"rank-biserial %s\s+([+-]?[\d.]+)" % (r"\(raw differences\)" if raw_effect else ""),
+                       block, "%s rank-biserial of %s (%s)" % (prefix, name, "raw" if raw_effect else "d - delta_L")))
         holm = one(r"^  %s\s+(\S+)\s+(\S+)\s+(H0 rejected|not rejected)\s*$" % re.escape(name), part,
                    "%s Holm line of %s" % (prefix, name))
         pairs = one(r"^  %s\s+(\d+) \|\s+(\d+)\s+(\d+)\s+(\d+) \|\s+(\d+)\s+(\d+)\s+(\d+) \|\s+(\d+)\s+(\d+)/(\d+)\s*$"
@@ -382,10 +387,15 @@ def parse_mode(nums, text, src, key, scenario, sizes, tested, labels):
         part = parts[scope]
         excluded = one(r"Share of instances excluded: (\d+)/(\d+)", part, "%s %s" % (key, label))
         nums.put("%s.%s.excluded" % (key, scope), [int(excluded[0]), int(excluded[1])], src)
-        family = parse_family(part, BASELINES, label, Numbers(), scope) if tested else \
+        family = parse_family(part, BASELINES, label, Numbers(), scope, raw_effect=True) if tested else \
             parse_pairs_only(part, BASELINES, label, scope)
         for r in family:
             r["test"] = label
+            # On the raw differences the effect is +1 exactly when no equal-mask instance has CUT-HIDE losing more
+            # (Lost and Lost_rel share the denominator of an instance, so they have the same sign).
+            if tested and r["same"] and (r["rank_biserial"] == 1.0) != (r["same_gt"] == 0 and r["same_lt"] > 0):
+                raise Missing("%s %s %s: rank-biserial %+.3f disagrees with the pairs table (< %d, > %d)"
+                              % (key, label, r["method"], r["rank_biserial"], r["same_lt"], r["same_gt"]))
         rows += family
         if sizes == "1":
             start = part.index("|R|/|R|*")
@@ -1303,6 +1313,12 @@ def self_test():
         expect_stop("an untestable family: pairs line disagrees with its block",
                     lambda: parse("h5s5", inject(s5, "  hha              177 |      0      0      0 |    154 ",
                                                  "  hha              177 |      0      0      0 |    153 ", "pairs s5")))
+        expect_stop("a new family printing the rank-biserial on d - delta_L",
+                    lambda: parse("h5", inject(h5, "rank-biserial (raw differences)", "rank-biserial                  ",
+                                               "raw label")))
+        expect_stop("a rank-biserial that disagrees with the pairs table",
+                    lambda: parse("h5", inject(h5, "rank-biserial (raw differences)      +1.000",
+                                               "rank-biserial (raw differences)      +0.900", "rb vs pairs")))
         expect_stop("a tested family read as untestable", lambda: parse("h5", h5, tested=False))
         expect_stop("an untestable family read as tested", lambda: parse("h5s5", s5, tested=True))
         expect_stop("an untestable family where one baseline was tested",
@@ -1338,7 +1354,7 @@ def self_test():
           "missing Holm line, missing equivalence line, levels text, levels method missing, levels count, no lock named as "
           "missing, two locks disagree on the JDK, two locks disagree on the machine name, the newest lock wins, "
           "the two real HIDE-SEQ reports read, |R|* mismatch, group check missing, pairs line vs block (tested and untestable), method under test "
-          "above |R|*, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
+          "above |R|*, rank-biserial on d - delta_L in a new family, rank-biserial vs pairs table, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
           "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty")
     return 1 if failures else 0
 

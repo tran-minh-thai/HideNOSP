@@ -458,6 +458,16 @@ def rank_biserial(d):
     return float("nan") if total == 0 else (w_plus - w_minus) / total
 
 
+def effect_size(d, raw):
+    """The rank-biserial of a family of the H2 procedure.
+
+    Section 2 (H2, H2-R, H4b): on d - delta_L, the differences the test ranks (log entry 89).
+    Section 22 (H5b, H6): on the raw differences d, as section 22 states.
+    """
+    x = np.asarray(d, dtype=float)
+    return rank_biserial(x if raw else x - LOCKED.DELTA_L)
+
+
 def wilcoxon_one_sided(d, shift=0.0):
     """One-sided Pratt-style Wilcoxon signed-rank test; alternative: the median of d exceeds shift.
 
@@ -567,7 +577,7 @@ def exclusion_reason(ours, theirs):
 
 # ---------------------------------------------------------------- H2
 
-def run_h2(rows, write, groups=None, hypothesis="H2", locked=None, label="tier (b) baselines"):
+def run_h2(rows, write, groups=None, hypothesis="H2", locked=None, label="tier (b) baselines", raw_effect=False):
     locked = LOCKED.BASELINE_FAMILY if locked is None else locked
     write("")
     write("=" * 78)
@@ -661,6 +671,8 @@ def run_h2(rows, write, groups=None, hypothesis="H2", locked=None, label="tier (
             write("   not enough pairs for a test")
             continue
         statistic, p, effect, n, zeros = wilcoxon_one_sided(d, LOCKED.DELTA_L)
+        if raw_effect:
+            effect = effect_size(d, raw=True)
         median = float(np.median(d))
         absolute = float(np.median([m[3]["lost"] - m[2]["lost"] for m in bins["tested"]]))
         results[name] = p
@@ -668,7 +680,10 @@ def run_h2(rows, write, groups=None, hypothesis="H2", locked=None, label="tier (
               % (median, absolute))
         write("   Wilcoxon-Pratt one-sided, H1 > %.2f  W = %.1f, p = %.4g, n = %d"
               " (%d differences of 0)" % (LOCKED.DELTA_L, statistic, p, n, zeros))
-        write("   rank-biserial                        %+.3f" % effect)
+        if raw_effect:
+            write("   rank-biserial (raw differences)      %+.3f" % effect)
+        else:
+            write("   rank-biserial                        %+.3f" % effect)
 
     if total_pairs:
         share = total_excluded / total_pairs
@@ -1208,7 +1223,7 @@ def main(argv=None):
             # Without groups H2 has no main group to be tested on; only a probe may go on.
             groups_valid = args.skip_groups
 
-        h2_valid = run_h2(scope_rows, write, None if args.skip_groups else groups, name)
+        h2_valid = run_h2(scope_rows, write, None if args.skip_groups else groups, name, raw_effect=not default_mode)
         run_dominance(scope_rows, None if args.skip_groups else groups, write, hypothesis=name)
         # H3 is preregistered for the main scope; section 11, point 7 makes the ratio of the
         # repeated scope descriptive. H6 repeats H3 as it is. H5a states a verdict on the main group for each

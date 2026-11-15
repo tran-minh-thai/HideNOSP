@@ -920,6 +920,28 @@ def test_sc4_reads_as_h5_and_counts_no_mask_instances_apart():
     assert code == 1 and "1 mask another count than |R|*" in text, "one row above |R|*_SEQ must fail the run"
 
 
+def test_new_hypotheses_take_the_rank_biserial_on_the_raw_differences():
+    """Section 22 locks the rank-biserial of H5b and H6 on the raw differences; H2 keeps d - delta_L (log entry 89).
+    Every difference here is +0.01, below delta_L = 0.02: raw gives +1, shifted gives -1, so the two cannot agree."""
+    import io as _io
+    import tempfile
+    d = [0.01, 0.01, 0.01]
+    close(pa.effect_size(d, raw=True), 1.0)
+    close(pa.effect_size(d, raw=False), -1.0)
+    directory = tempfile.mkdtemp()
+    sets = ("[[1, 2]]", "[[3, 4]]", "[[5, 6]]")
+    _write_sc4(os.path.join(directory, "SC4_a.csv"),
+               [(s, OURS, 0.10, 10, 10, "") for s in sets] +
+               [(s, b, 0.11, 10, 10, "") for s in sets for b in pa.LOCKED.BASELINE_FAMILY])
+    report = os.path.join(directory, "report.txt")
+    pa.main(["--sc3", directory, "--sc2", directory, "--skip-groups", "--scenario", "SC4", "--sizes", "1",
+             "--out", report])
+    text = _io.open(report, encoding="utf-8").read()
+    found = re.findall(r"rank-biserial \(raw differences\)\s+([+-][\d.]+)", text)
+    assert found and all(f == "+1.000" for f in found), (found, text[-2500:])
+    assert not re.search(r"rank-biserial\s+[+-]", text), "an H5b block printed the shifted effect"
+
+
 def test_non_default_mode_does_not_read_the_stop_batch():
     """The stop-at-threshold batch belongs to H4 (HIDE-DB, g- = 0, every size); another mode says so and skips it."""
     import io as _io

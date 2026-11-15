@@ -705,14 +705,21 @@ public final class CutHide implements HidingMethod {
         return true;
     }
 
-    /** HIDE-SEQ with several patterns: the sequences are independent, so one loop each. */
+    /**
+     * HIDE-SEQ with several patterns: the sequences are independent, so one loop each. A candidate is a
+     * position vital for a pattern still at or above r; its score is the exact drop it causes, summed over
+     * those patterns and capped per pattern at what the pattern still needs ({@link #exactDropPerPosition}),
+     * divided by 1 + w(i). A position of a repeated item can carry several nodes of one pattern, so masking
+     * it can lower that support by more than one; counting each vital pattern once would miss this.
+     */
     private void runMultiPatternPerSequence(HideProblem problem, Sanitization result) {
         for (int s = 0; s < problem.database().size(); s++) {
             EventSequence sequence = problem.database().get(s);
             NettreeCutIndex index = buildIndex(problem, sequence);
             while (needsMask(index, problem)) {
                 double[] weights = indexWeights(index, problem);
-                double[] drop = sensitiveDropPerPosition(index, sequence.length(), problem.threshold());
+                double[] vital = sensitiveDropPerPosition(index, sequence.length(), problem.threshold());
+                double[] drop = exactDropPerPosition(index, sequence, problem, vital);
                 int target = -1;
                 double bestRatio = 0;
                 for (int i = 0; i < sequence.length(); i++) {
@@ -763,6 +770,43 @@ public final class CutHide implements HidingMethod {
             }
         }
         return drop;
+    }
+
+    /**
+     * For every position with a positive vital count that is not yet masked: the exact drop of the patterns
+     * still at or above r when the position is masked on top of the masks already placed in the sequence,
+     * each pattern capped at what it still needs, sup_NO - r + 1. A pattern whose items do not include the
+     * event at the position cannot lose support there and is skipped.
+     */
+    private double[] exactDropPerPosition(NettreeCutIndex index, EventSequence sequence, HideProblem problem,
+                                          double[] vital) {
+        int r = problem.threshold();
+        List<Integer> masked = index.maskedPositions();
+        double[] exact = new double[sequence.length()];
+        int[] events = sequence.events();
+        for (int i = 0; i < sequence.length(); i++) {
+            if (vital[i] <= 0 || index.isMasked(i)) {
+                continue;
+            }
+            List<Integer> plus = new ArrayList<>(masked);
+            plus.add(i);
+            EventSequence after = sequence.mask(plus);
+            double gain = 0;
+            for (int id = 0; id < index.patternCount(); id++) {
+                if (!index.isSensitive(id) || index.supNO(id) < r) {
+                    continue;
+                }
+                Pattern p = index.pattern(id);
+                if (!p.contains(events[i])) {
+                    continue;
+                }
+                int now = index.supNO(id);
+                int d = now - SupportNO.of(p, after, problem.gap());
+                gain += Math.min(d, now - r + 1);
+            }
+            exact[i] = gain;
+        }
+        return exact;
     }
 
     private NettreeCutIndex buildIndex(HideProblem problem, EventSequence sequence) {

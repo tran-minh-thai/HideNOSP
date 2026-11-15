@@ -56,6 +56,12 @@ after the fix of CUT-HIDE under HIDE-SEQ with several patterns. Only that batch 
 
     g5-sc4-s5        SC4 on the cells of sc3-s5, r = 2 (the cells of g4-sc4-s5)
 
+Generation 6 (preregistration section 22.8), run with --generation=6: the batch g5-sc4-s5 again, cell for cell,
+after CUT-HIDE under HIDE-SEQ with several patterns scores a position by the exact drop it causes. Only that batch
+runs the changed code.
+
+    g6-sc4-s5        SC4 on the cells of sc3-s5, r = 2 (the cells of g4-sc4-s5 and g5-sc4-s5)
+
 A cell is done when results-invariant/ holds a complete file of its scenario whose run stamp names
 THIS machine and whose options line names the cell (SC1 writes no options line: scenario, machine and
 seed). Files of other machines never count, so a new machine reruns everything. A cell whose run
@@ -138,6 +144,12 @@ G5_BATCHES = ("g5-sc4-s5",)
 RERUNS = {"g5-sc4-s5": "g4-sc4-s5"}
 BATCHES = BATCHES + G5_BATCHES
 GENERATION.update({b: "5" for b in G5_BATCHES})
+# Generation 6 (preregistration section 22.8): the same batch after the per-sequence greedy of CUT-HIDE scores a position
+# by its exact drop. Its result files of generation 5 moved to results-invariant/superseded/g5-sc4-s5/.
+G6_BATCHES = ("g6-sc4-s5",)
+RERUNS["g6-sc4-s5"] = "g5-sc4-s5"
+BATCHES = BATCHES + G6_BATCHES
+GENERATION.update({b: "6" for b in G6_BATCHES})
 # What a later generation must share with the one before: only the measured code may differ.
 CARRIED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor")
 LOCKED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor", "source_tree", "pom")
@@ -205,7 +217,7 @@ def cell(scenario, options, heap=HEAP, extra=()):
 def batch_cells(root, batch):
     if batch.startswith("g3-") and batch[3:] in CLOSURE_BATCHES:
         return [dict(c, options=c["options"] + [CLOSURE_OPTION]) for c in batch_cells(root, batch[3:])]
-    if batch == "g5-sc4-s5":
+    if batch in ("g5-sc4-s5", "g6-sc4-s5"):
         return batch_cells(root, "g4-sc4-s5")
     if batch == "g4-sc6":
         return [dict(c, options=c["options"] + [CLOSURE_OPTION]) for c in batch_cells(root, "sc6")]
@@ -805,7 +817,8 @@ def self_test():
                 "sc6": 81}
     expected.update({"g3-" + b: expected[b] for b in CLOSURE_BATCHES})
     expected.update({"g4-sc1gap": 1, "g4-sc2gap": 72, "g4-sc4-s1": 54 + 17, "g4-sc4-s5": 34,
-                     "g4-sc4lost": 54, "g4-sc6": expected["sc6"], "g5-sc4-s5": 34})
+                     "g4-sc4lost": 54, "g4-sc6": expected["sc6"], "g5-sc4-s5": 34,
+                     "g6-sc4-s5": 34})
     gap_batches = [b for b in G4_BATCHES if b.startswith("g4-gap-")]
     tables_present = all((REPO / name).is_file() for name, _ in sc3.GAP_TABLES)
     plannable = [b for b in BATCHES if tables_present or b not in gap_batches]
@@ -866,6 +879,10 @@ def self_test():
           batch_cells(REPO, "g5-sc4-s5") == batch_cells(REPO, "g4-sc4-s5"), "%d cells" % len(batch_cells(REPO, "g5-sc4-s5")))
     check("the g5 batches belong to generation 5 and nothing else does",
           {b for b in BATCHES if GENERATION[b] == "5"} == set(G5_BATCHES))
+    check("g6-sc4-s5 is the batch g4-sc4-s5, cell for cell",
+          batch_cells(REPO, "g6-sc4-s5") == batch_cells(REPO, "g4-sc4-s5"), "%d cells" % len(batch_cells(REPO, "g6-sc4-s5")))
+    check("the g6 batches belong to generation 6 and nothing else does",
+          {b for b in BATCHES if GENERATION[b] == "6"} == set(G6_BATCHES))
     check("the g3 batches belong to generation 3 and nothing else does",
           {b for b in BATCHES if GENERATION[b] == "3"} == {"g3-" + b for b in CLOSURE_BATCHES})
     check("the g4 batches belong to generation 4 and nothing else does",

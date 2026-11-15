@@ -1190,3 +1190,44 @@ and on 40 of 85 repeated-item instances against 82. None of these probe numbers 
 thresholds and their tests are unchanged.
 
 **Unchanged:** all of sections 1–21.
+
+### 22.8 CUT-HIDE under HIDE-SEQ with several patterns: scoring by the exact drop, and the same batch run again (decision of the author, 2026-11-15, before any run of generation 6)
+
+**Decision.** The per-sequence greedy of CUT-HIDE scores a candidate position by the exact drop it causes, and the batch
+`g5-sc4-s5` runs again, cell for cell, as the batch `g6-sc4-s5` of a sixth generation. This changes the method under
+test in one case; it adds no experiment. Every other result stands.
+
+**What changes.** Under HIDE-SEQ with several sensitive patterns, CUT-HIDE runs one greedy loop per sequence. A
+candidate is a position vital for a pattern still at or above r in that sequence. It was scored by the number of such
+patterns, divided by 1 + w(i). It is now scored by the exact drop of those patterns when the position is masked on top
+of the masks already placed, each pattern capped at what it still needs (sup_NO - r + 1), divided by 1 + w(i). The
+candidates, the weights, the tie rule (the lowest position) and the stopping rule are unchanged.
+
+**Why.** A position of a repeated item can carry several nodes of one pattern in its Nettree, so one mask can lower
+that support by more than one; the count of vital patterns gives such a position the same score as a position that
+lowers it by one. Under HIDE-SEQ with five repeated-item patterns, CUT-HIDE used more masks than HHA on 190 of 365
+main-group instances in generation 5. Two probes on the development machine, both outside the repository, read the
+cause: uniform weights did not lower that count, and the exact-drop score did (journal entries 111 and 115).
+
+**The change** (`CutHide.exactDropPerPosition`, called by `runMultiPatternPerSequence`): a new test fails on the
+code before it and passes after it. On a a a a with gap [0, 0] and r = 2, the pattern <a,a> has support 3; masking
+the second position lowers it to 1, masking the first to 2, and every position is vital, so the earlier score masks
+the first position and needs two masks, the new one masks the second and needs one. The test that bounds the masks by
+the summed need over 400 random instances still passes, as do the other 125 tests.
+
+**Why only this batch.** The changed method has one caller, the per-sequence loop for several patterns, reached only
+under HIDE-SEQ with two or more sensitive patterns; in this campaign that is `g5-sc4-s5` alone. On the development
+machine, the repository code with the change gives the rows of the probe on five cells of the batch (204 of 204 rows
+of the three CUT-HIDE keys, on masks, Lost, Lost_rel, SupDist, DR and HF).
+
+**What runs and what is reported.** `g6-sc4-s5`: the 34 cells of `g5-sc4-s5`, the same options, sets, methods, time
+limit, machine, JDK and heap, under its own environment lock. H5b at |S| = 5 and the table of pairs at |S| = 5 are
+read from these files. The 34 files of `g5-sc4-s5` move to `results-invariant/superseded/g5-sc4-s5/`, kept and read
+by no analysis tool; their ledger rows stay in the ledger of generation 5.
+
+**Provenance.** Written after the results of `g5-sc4-s5` had been read, and after the two probes named above, run on
+all 34 cells of the batch with CUT-HIDE (both scores) and HHA only. The probe numbers are not reported. H5a, H5b and
+H6, their thresholds and their tests are unchanged.
+
+**Unchanged:** all of sections 1–21, and sections 22.1 to 22.7 except that the batch read for |S| = 5 under HIDE-SEQ is
+now `g6-sc4-s5`.

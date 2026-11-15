@@ -261,6 +261,27 @@ class CutHideExtendedScopeTest {
     }
 
     @Test
+    @DisplayName("HIDE-SEQ with several patterns: the greedy scores a position by the exact drop it causes")
+    void perSequenceGreedyScoresTheExactDrop() {
+        // a a a a with gap [0, 0] and r = 2: <a,a> has three node-disjoint occurrences (1,2), (2,3), (3,4), so it
+        // needs a drop of two. Position 2 carries the second node of (1,2) and the first of (2,3): one mask
+        // there removes both, and one mask is enough. Every position is vital, so counting each vital pattern
+        // once ties all four and the first, position 1, is masked, with a drop of one: two masks in all.
+        // <c,d> does not occur; it only makes the set a set of several patterns.
+        int a = 0, c = 2, d = 3;
+        SequenceDatabase db = new SequenceDatabase(List.of(new EventSequence(0, new int[] {a, a, a, a})));
+        GapConstraint gap = new GapConstraint(0, 0);
+        List<Pattern> sensitive = List.of(new Pattern(a, a), new Pattern(c, d));
+        HideProblem problem = new HideProblem(db, sensitive, gap, HideProblem.Mode.HIDE_SEQ, 2, 0.5, 3, 2);
+        assertEquals(3, SupportNO.of(new Pattern(a, a), db.get(0), gap));
+        assertEquals(1, SupportNO.of(new Pattern(a, a), db.get(0).mask(1), gap));
+        assertEquals(2, SupportNO.of(new Pattern(a, a), db.get(0).mask(0), gap));
+        Sanitization result = new CutHide(CutHideConfig.uniformWeights()).run(problem);
+        assertEquals(1, result.maskCount(), "masked " + result.masked());
+        assertTrue(SupportNO.of(new Pattern(a, a), db.mask(result.masked()).get(0), gap) < 2);
+    }
+
+    @Test
     @DisplayName("HIDE-SEQ with several patterns: no more masks than the summed need of every sequence")
     void perSequenceGreedyStaysWithinTheSummedNeed() {
         // Each mask lands on a position vital for a pattern still at or above r, which lowers its support by

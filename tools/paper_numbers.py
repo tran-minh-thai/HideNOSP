@@ -835,7 +835,7 @@ def sc3_rows(nums, machine):
     if not complete or differ:
         raise Missing("|S| >= 2: %d sets with the three CUT-HIDE keys, %d with different measures" % (len(complete), len(differ)))
     nums.put("several.same.n", len(complete), src)
-    # Section 22 added the rows with g- > 0 to SC3; the sentences that count rows may need one part only.
+    # The positive-gap batch (preregistration 22.3) added rows with g- > 0 to SC3; a sentence may count one part only.
     for g in ("gzero", "gpos"):
         nums.put("sc3.n_rows.%s" % g, by_gap[("rows", g)], src)
         nums.put("sc3.ghost.rows.%s" % g, by_gap[("method", g)], src)

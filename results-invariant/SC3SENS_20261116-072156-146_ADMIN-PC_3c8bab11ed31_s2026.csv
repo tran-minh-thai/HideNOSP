@@ -1,0 +1,23 @@
+# run 20261116-072156-146_ADMIN-PC_3c8bab11ed31_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/dna_mt745584.txt, format=SPMF, sigma=2500, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=distinct, pareto=false, timeLimit=1800, methods=cut-hide-uniform, epsilon=0.5, closure=necessary}
+# sensitive sets: size 1, pool 9 candidates, 9 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 1 -> 1, p30: 2 -> 2, p50: 2 -> 2, p70: 2 -> 2, p90: 2 -> 2
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,1]",2500,"[[4, 2]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.003014,0.002928,90,90,1.000000,18,18,0,,16,15,15,0,0.000000,0.002928,15,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,1]",2500,"[[1, 3]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.005894,0.004307,176,176,1.000000,29,29,0,,16,15,15,0,0.000000,0.004307,15,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,1]",2500,"[[1, 2]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.007200,0.007303,215,215,1.000000,38,38,0,,16,15,15,0,0.000000,0.007303,15,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,1]",2500,"[[2, 1]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.009545,0.011655,285,285,1.000000,42,42,0,,16,15,15,0,0.000000,0.011655,15,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,1]",2500,"[[2, 4]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.066667,0,0.009645,0.013737,288,288,1.000000,50,50,0,,16,15,14,1,0.066667,0.013737,15,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,1]",2500,"[[3, 4]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.066667,0,0.018252,0.026453,545,545,1.000000,104,104,0,,16,15,14,1,0.066667,0.026453,15,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,1]",2500,"[[4, 3]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.023711,0.020096,708,708,1.000000,120,120,0,,16,15,15,0,0.000000,0.020096,15,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,1]",2500,"[[1, 4]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,2,0.133333,0,0.039618,0.056592,1183,1183,1.000000,161,161,0,,16,15,13,2,0.133333,0.056592,15,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,1]",2500,"[[4, 1]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,2,0.133333,0,0.040522,0.052636,1210,1210,1.000000,173,173,0,,16,15,13,2,0.133333,0.052636,15,

@@ -1477,6 +1477,14 @@ def sentence_checks(nums):
               ("H5a", "distinct", "sbsh-rmax")]
     if crossing != wanted:
         raise Missing("intervals crossing a threshold: %s; the text names %s" % (crossing, wanted))
+    # Which threshold: the three of H5a cross the lower one (1.05) only, that of OCC the upper one (1.10) only.
+    for r in tab("ci"):
+        key = (r["test"], r["scope"], r["method"])
+        if judged(r) and key in wanted:
+            zones = {zone(r["lo"]), zone(r["hi"])}
+            if zones != ({1, 2} if key[0] == "H4a" else {0, 1}):
+                raise Missing("%s %s %s: the interval [%.4f, %.4f] does not cross only the %s threshold the text names"
+                              % (key + (r["lo"], r["hi"], "upper" if key[0] == "H4a" else "lower")))
     # Lot E (4): with one distinct-item pattern both stopping rivals use exactly the masks of CUT-HIDE (median 1).
     ones = [v("h4a.size.distinct.%s.s1" % c) for c in ("occurrence", "hha-stop")]
     if ones != [1.0, 1.0]:
@@ -1787,6 +1795,8 @@ def self_test():
             ("the interval of OCC no longer crosses 1.10", setr("ci", "lo", 1.101, test="H4a", scope="distinct",
                                                                group="main", method="occurrence")),
             ("H4a, one pattern: OCC not exactly 1", setv("h4a.size.distinct.occurrence.s1", 1.0001)),
+            ("an interval of H5a crosses the upper threshold", setr("ci", "hi", 1.12, test="H5a", scope="distinct",
+                                                                    group="main", method="sbsh-r1")),
             ("lot D: one baseline not rejected", setr("noninf", "verdict", "not rejected", scope="repeated", method="dbsh")),
             ("lot D: fewer masks and fewer patterns on half the instances",
              setr("noninf", "cross_fewer_fewer", 296, scope="distinct", method="hha")),
@@ -1813,7 +1823,7 @@ def self_test():
           "above |R|*, rank-biserial on d - delta_L in a new family, rank-biserial vs pairs table, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
           "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty, "
           "one-pattern components, equal-count check (good, two patterns, empty), refinement check (good, masks, component), "
-          "sentence checks on the exported numbers and 30 faults")
+          "sentence checks on the exported numbers and 31 faults")
     return 1 if failures else 0
 
 

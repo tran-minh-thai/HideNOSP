@@ -1360,7 +1360,29 @@ def sentence_checks(nums):
                       if r["verdict"] == "H0 rejected")
     if rejected != [("H2-R", "hha"), ("H4b-R", "hha-stop"), ("H4b-R", "occurrence")]:
         raise Missing("rejected null hypotheses %s; the text names H2-R against HHA and H4b-R against both rivals" % rejected)
-    nums.put("sentence_checks.passed", 16, "sentence_checks in paper_numbers.py")
+    # The conclusion names these rejections "against HHA and OCC": the HHA-stop row of H4b-R must coincide with the HHA
+    # row of H2-R on every column of the test except the Holm-adjusted p, which is taken within another family.
+    h2r = {r["method"]: r for r in tab("h2") if r["scope"] == "repeated"}
+    cols = ("same", "median_diff", "p_raw", "rank_biserial", "hl_lost", "eq_lost", "hl_supdist", "eq_supdist",
+            "same_lt", "same_eq", "same_gt")
+    apart = [c for c in cols if h2r["hha-stop"][c] != h2r["hha"][c]]
+    if apart:
+        raise Missing("H4b-R HHA-stop and H2-R HHA differ on %s; the conclusion counts them as one result" % apart)
+    # Under HIDE-DB the baselines exceed the minimum count once patterns repeat items: every median ratio of the
+    # repeated-item scope at or above the more-masks threshold of H3.
+    if not v("h3r.main.median.min") >= above:
+        raise Missing("H3, repeated-item: median ratio %.4f below %.2f; the conclusion says the baselines exceed the "
+                      "minimum" % (v("h3r.main.median.min"), above))
+    # ... or several patterns are hidden: at every |S| >= 2 and in both scopes, the median ratio to LB_U of every
+    # baseline is above that of CUT-HIDE, whose count is itself at least the minimum.
+    for scope in ("distinct", "repeated"):
+        for size in sorted({r["size"] for r in tab("bound") if r["size"] > 1}):
+            rs = {r["method"]: r["median"] for r in tab("bound") if r["scope"] == scope and r["size"] == size}
+            low = [m for m in BASELINES if not rs[m] > rs[OURS]]
+            if low:
+                raise Missing("several patterns, %s |S|=%d: %s not above CUT-HIDE in median ratio to LB_U; the conclusion "
+                              "says the baselines exceed the minimum" % (scope, size, low))
+    nums.put("sentence_checks.passed", 19, "sentence_checks in paper_numbers.py")
 
 
 def git(*args):
@@ -1632,6 +1654,10 @@ def self_test():
              setr("h5s5", "ours_more", 190, scope="repeated", method="dbsh")),
             ("SC3LOST: a method at |R|* more often than CUT-HIDE",
              setr("lostopt", "at_R", 630, scope="distinct", method="hha-stop")),
+            ("H4b-R HHA-stop apart from H2-R HHA", setr("h2", "median_diff", 0.04, scope="repeated", method="hha-stop")),
+            ("H3 repeated median below the more-masks threshold", setv("h3r.main.median.min", 1.09)),
+            ("several patterns: a baseline at the median ratio of CUT-HIDE",
+             setr("bound", "median", 1.3003, scope="distinct", size=5, method="sbsh-r1")),
         ]
         for name, edit in faults:
             try:
@@ -1648,7 +1674,7 @@ def self_test():
           "above |R|*, rank-biserial on d - delta_L in a new family, rank-biserial vs pairs table, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
           "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty, "
           "one-pattern components, equal-count check (good, two patterns, empty), refinement check (good, masks, component), "
-          "sentence checks on the exported numbers and 18 faults")
+          "sentence checks on the exported numbers and 21 faults")
     return 1 if failures else 0
 
 

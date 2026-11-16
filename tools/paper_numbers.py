@@ -1011,6 +1011,85 @@ def sensitivity(nums, machine):
         raise Missing("dataset counts differ between H2-R %s and H4b-R %s; the text states one count" % (counts["H2-R"], counts["H4b-R"]))
 
 
+# ---------------------------------------------------------------- lots D and E (preregistration section 23)
+
+# The intervals that give a verdict: H3 and the H3 part of H6 judge the distinct-item scope (main and degenerate
+# groups; the repeated-item ratios are descriptive), H5a and H4a judge the main group of both scopes.
+JUDGED_INTERVALS = {("H3", "distinct"), ("H6", "distinct"), ("H5a", "distinct"), ("H5a", "repeated"), ("H4a", "distinct"),
+                    ("H4a", "repeated")}
+
+
+def judged(r):
+    return (r["test"], r["scope"]) in JUDGED_INTERVALS and (r["group"] == "main" or r["test"] in ("H3", "H6"))
+
+
+def reopened(nums, machine):
+    """Lots D and E from tools/reopened_analysis.py, run on the tables built above so that its reproduction check
+    compares with this build, not with an earlier export."""
+    with tempfile.TemporaryDirectory() as tmp:
+        tables = Path(tmp) / "tables.json"
+        tables.write_text(json.dumps({"tables": nums.tables}), encoding="utf-8")
+        report = Path(tmp) / "report.json"
+        run_tool(["reopened_analysis.py", "--machine=%s" % machine, "--numbers", str(tables), "--json", str(report),
+                  "--stdout"], "reopened_analysis")
+        data = json.loads(report.read_text(encoding="utf-8"))
+    src = "reopened_analysis.py --machine=%s" % machine
+    # Lot D: the non-inferiority test without the equal-mask filter.
+    rows = []
+    for scope in ("distinct", "repeated"):
+        by_method = data["lot_d"][scope]
+        if sorted(by_method) != sorted(("hha", "dbsh", "sbsh-r1", "sbsh-rmax")):
+            raise Missing("lot D %s: baselines %s" % (scope, sorted(by_method)))
+        for m, v in by_method.items():
+            c = v["cross"]
+            rows.append({"scope": scope, "method": m, "n": v["n"], "median": v["median"], "p_holm": v["p_holm"],
+                         "verdict": v["verdict"], "rb_shifted": v["rb_shifted"], "excluded": v["excluded"],
+                         **{"cross_" + k.replace("/", "_"): c.get(k, 0) for k in
+                            ("fewer/fewer", "fewer/same", "fewer/more", "same/fewer", "same/same", "same/more",
+                             "more/fewer", "more/same", "more/more")}})
+        ns = {v["n"] for v in by_method.values()}
+        if len(ns) != 1:
+            raise Missing("lot D %s: the baselines have different n %s; the text states one" % (scope, sorted(ns)))
+        nums.put("noninf.%s.n" % scope, ns.pop(), src)
+        rs = [r for r in rows if r["scope"] == scope]
+        nums.put("noninf.%s.fewer_more.min" % scope, min(r["cross_fewer_more"] for r in rs), src)
+        nums.put("noninf.%s.fewer_more.max" % scope, max(r["cross_fewer_more"] for r in rs), src)
+        nums.put("noninf.%s.median.min" % scope, min(r["median"] for r in rs), src)
+        nums.put("noninf.%s.median.max" % scope, max(r["median"] for r in rs), src)
+        nums.put("noninf.%s.p_holm.max" % scope, max(r["p_holm"] for r in rs), src)
+    nums.put("noninf.repeated.hha.more_more",
+             next(r["cross_more_more"] for r in rows if r["scope"] == "repeated" and r["method"] == "hha"), src)
+    nums.table("noninf", ["scope", "method"], rows, src)
+    e = data["lot_e"]
+    # Lot E (1): intervals.
+    for r in e["intervals"]:
+        base = "ci.%s.%s.%s.%s" % (r["test"].lower(), r["scope"], r["group"], r["method"])
+        nums.put(base + ".lo", r["lo"], src)
+        nums.put(base + ".hi", r["hi"], src)
+    nums.table("ci", ["test", "scope", "group", "method"], e["intervals"], src)
+    # Lot E (4): H4a by size.
+    for r in e["h4a_size"]:
+        nums.put("h4a.size.%s.%s.s%d" % (r["scope"], r["method"], r["size"]), r["median"], src)
+    nums.table("h4a_size", ["scope", "method", "size"], e["h4a_size"], src)
+    # Lot E (2): the datasets with equal-count instances in H2-R, the same for every baseline.
+    sets = {}
+    for r in e["per_dataset"]:
+        if r["test"] == "H2-R" and r["n_diff"] > 0:
+            sets.setdefault(r["method"], set()).add(r["dataset"])
+    if len({tuple(sorted(s)) for s in sets.values()}) != 1 or len(sets) != 4:
+        raise Missing("H2-R: the datasets with equal-count instances differ between baselines: %s; the text names one set"
+                      % {k: sorted(v) for k, v in sets.items()})
+    names = sorted(next(iter(sets.values())))
+    nums.put("h2r.equal.datasets", len(names), src)
+    nums.put("names.h2r.equal", ", ".join(names[:-1]) + " and " + names[-1], src)
+    nums.table("per_dataset", ["test", "method", "dataset"], e["per_dataset"], src)
+    nums.table("rb_raw", ["test", "method"], e["rb_raw"], src)
+    # Lot E (5): tests, Holm families and equivalence verdicts of the tables of this build.
+    nums.put("tests.total", sum(f["tests"] for f in e["families"]), src)
+    nums.put("tests.families", len(e["families"]), src)
+    nums.put("tests.equivalence", sum(f["equivalence"] for f in e["families"]), src)
+
+
 # ---------------------------------------------------------------- SC1, SC2, datasets
 
 def sc1(nums, machine):
@@ -1248,7 +1327,8 @@ def build(machine, small_machine):
                  # HIDE-SEQ and g- > 0 were run under the corrected rule only (preregistration 22).
                  ] + ([lambda: seq_lost(nums, small_machine), lambda: sc1gap(nums, machine),
                        lambda: sc4_rows(nums, machine)] + [
-                     (lambda m=m: analysis_mode(nums, machine, *m)) for m in NEW_MODES] if RULE[0] == "necessary" else []):
+                     (lambda m=m: analysis_mode(nums, machine, *m)) for m in NEW_MODES] +
+                    [lambda: reopened(nums, machine)] if RULE[0] == "necessary" else []):
         step()
     # The same quantity read from two tools must agree.
     for scope, key in (("distinct", "h2.n"), ("repeated", "h2r.n")):
@@ -1382,7 +1462,26 @@ def sentence_checks(nums):
             if low:
                 raise Missing("several patterns, %s |S|=%d: %s not above CUT-HIDE in median ratio to LB_U; the conclusion "
                               "says the baselines exceed the minimum" % (scope, size, low))
-    nums.put("sentence_checks.passed", 19, "sentence_checks in paper_numbers.py")
+    # Lot E (3): at equal masks CUT-HIDE never loses more in SC3, so the rank-biserial on the raw differences is 1 in
+    # every row of table h2; the text says so instead of a column.
+    off = [(r["test"], r["method"], r["rb_raw"]) for r in tab("rb_raw") if r["rb_raw"] != 1.0]
+    if off or any(r["same_gt"] for r in tab("h2")):
+        raise Missing("raw rank-biserial not 1 in %s, or an SC3 instance where CUT-HIDE loses more at equal masks; the "
+                      "text says it never does" % off)
+    # Lot E (1): exactly four intervals of a verdict cross a threshold of H3 (1.05 or 1.10).
+    def zone(x):
+        return 2 if x >= above else (0 if x <= near else 1)
+    crossing = sorted((r["test"], r["scope"], r["method"]) for r in tab("ci") if judged(r)
+                      and len({zone(r["lo"]), zone(r["median"]), zone(r["hi"])}) > 1)
+    wanted = [("H4a", "distinct", "occurrence"), ("H5a", "distinct", "hha-emb"), ("H5a", "distinct", "sbsh-r1"),
+              ("H5a", "distinct", "sbsh-rmax")]
+    if crossing != wanted:
+        raise Missing("intervals crossing a threshold: %s; the text names %s" % (crossing, wanted))
+    # Lot E (4): with one distinct-item pattern both stopping rivals use exactly the masks of CUT-HIDE (median 1).
+    ones = [v("h4a.size.distinct.%s.s1" % c) for c in ("occurrence", "hha-stop")]
+    if ones != [1.0, 1.0]:
+        raise Missing("H4a, one distinct-item pattern: medians %s; the text says both equal 1" % ones)
+    nums.put("sentence_checks.passed", 22, "sentence_checks in paper_numbers.py")
 
 
 def git(*args):
@@ -1656,6 +1755,12 @@ def self_test():
              setr("lostopt", "at_R", 630, scope="distinct", method="hha-stop")),
             ("H4b-R HHA-stop apart from H2-R HHA", setr("h2", "median_diff", 0.04, scope="repeated", method="hha-stop")),
             ("H3 repeated median below the more-masks threshold", setv("h3r.main.median.min", 1.09)),
+            ("a raw rank-biserial below 1", setr("rb_raw", "rb_raw", 0.99, test="H2-R", method="dbsh")),
+            ("a fifth interval crosses a threshold", setr("ci", "hi", 1.051, test="H6", scope="distinct", group="main",
+                                                          method="dbsh")),
+            ("the interval of OCC no longer crosses 1.10", setr("ci", "lo", 1.101, test="H4a", scope="distinct",
+                                                               group="main", method="occurrence")),
+            ("H4a, one pattern: OCC not exactly 1", setv("h4a.size.distinct.occurrence.s1", 1.0001)),
             ("several patterns: a baseline at the median ratio of CUT-HIDE",
              setr("bound", "median", 1.3003, scope="distinct", size=5, method="sbsh-r1")),
         ]
@@ -1674,7 +1779,7 @@ def self_test():
           "above |R|*, rank-biserial on d - delta_L in a new family, rank-biserial vs pairs table, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
           "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty, "
           "one-pattern components, equal-count check (good, two patterns, empty), refinement check (good, masks, component), "
-          "sentence checks on the exported numbers and 21 faults")
+          "sentence checks on the exported numbers and 25 faults")
     return 1 if failures else 0
 
 

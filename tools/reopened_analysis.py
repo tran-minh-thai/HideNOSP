@@ -565,13 +565,16 @@ def main(argv):
     parser.add_argument("--machine", default="ADMIN-PC")
     parser.add_argument("--out", default="")
     parser.add_argument("--json", default="")
+    parser.add_argument("--numbers", default=NUMBERS,
+                        help="the tables to rebuild (default results-invariant/paper_numbers.json); tools/paper_numbers.py "
+                             "passes the tables it has just built, so the check never compares with a stale export")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args(argv)
     if args.self_test:
         return self_test()
     lines = []
     try:
-        result = run(args.machine, lines.append)
+        result = run(args.machine, lines.append, numbers_path=args.numbers)
     except Failed as e:
         print("\n".join(lines))
         print("FAILED: %s" % e, file=sys.stderr)

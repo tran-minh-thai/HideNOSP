@@ -1,0 +1,34 @@
+# run 20261116-074116-442_ADMIN-PC_fad6c9e6f212_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/bpi2013.txt, format=SPMF, sigma=1000, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-uniform, epsilon=0.5, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 110 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 22 -> 4, p30: 22 -> 4, p50: 22 -> 4, p70: 22 -> 4, p90: 22 -> 4
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[1, 1, 2, 1]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000626,0.002519,41,41,1.000000,34,34,0,,191,190,190,0,0.000000,0.002519,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[1, 11, 1, 2]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000259,0.000731,17,17,1.000000,16,16,0,,191,190,190,0,0.000000,0.000731,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[0, 1, 0, 1]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000076,0.000290,5,5,1.000000,5,5,0,,191,190,190,0,0.000000,0.000290,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[1, 1, 0, 5]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,7,0.036842,0,0.002060,0.008445,135,135,1.000000,116,116,0,,191,190,183,7,0.036842,0.008445,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[5, 1, 1, 1]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,4,0.021053,0,0.001389,0.005488,91,91,1.000000,78,78,0,,191,190,186,4,0.021053,0.005488,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[11, 1, 11, 8]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.005263,0,0.003220,0.009028,211,211,1.000000,210,210,0,,191,190,189,1,0.005263,0.009028,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[1, 5, 1, 10]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,4,0.021053,0,0.004029,0.010341,264,264,1.000000,262,262,0,,191,190,186,4,0.021053,0.010341,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[1, 11, 5, 1]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,8,0.042105,0,0.004456,0.018467,292,292,1.000000,251,251,0,,191,190,182,8,0.042105,0.018467,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[11, 11, 10, 8]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,2,0.010526,0,0.010987,0.026102,720,720,1.000000,717,717,0,,191,190,188,2,0.010526,0.026102,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[1, 1, 11, 0]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,28,0.147368,0,0.018311,0.062591,1200,1200,1.000000,909,909,0,,191,190,162,28,0.147368,0.062591,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[11, 1, 1, 0]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,33,0.173684,0,0.013062,0.051750,856,856,1.000000,631,631,0,,191,190,157,33,0.173684,0.051750,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[1, 1, 5, 1]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,30,0.157895,0,0.019425,0.060937,1273,1273,1.000000,907,907,0,,191,190,160,30,0.157895,0.060937,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[1, 11, 1, 8]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,23,0.121053,0,0.039461,0.091893,2586,2586,1.000000,2569,2569,0,,191,190,167,23,0.121053,0.091893,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[11, 11, 11, 1]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,2,0.010526,0,0.017884,0.064838,1172,1172,1.000000,692,692,0,,191,190,188,2,0.010526,0.064838,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[1, 1, 1, 5]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,34,0.178947,0,0.028978,0.087313,1899,1899,1.000000,1461,1461,0,,191,190,156,34,0.178947,0.087313,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[11, 1, 1, 10]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,25,0.131579,0,0.034731,0.099656,2276,2276,1.000000,2202,2202,0,,191,190,165,25,0.131579,0.099656,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[11, 11, 1, 1]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,18,0.094737,0,0.037493,0.128285,2457,2457,1.000000,1340,1340,0,,191,190,172,18,0.094737,0.128285,190,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[11, 11]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,15,0.090361,0,0.058001,0.100063,3801,3801,1.000000,2098,2098,0,,191,166,151,10,0.063694,0.077002,157,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[1, 1, 11]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,35,0.192308,0,0.109853,0.216699,7199,7199,1.000000,3445,3445,0,,191,182,147,33,0.184358,0.210998,179,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",1000,"[[11, 1, 11, 1]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,39,0.205263,0,0.061603,0.209836,4037,4037,1.000000,2022,2022,0,,191,190,151,39,0.205263,0.209836,190,

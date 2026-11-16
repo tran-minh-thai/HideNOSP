@@ -1481,7 +1481,33 @@ def sentence_checks(nums):
     ones = [v("h4a.size.distinct.%s.s1" % c) for c in ("occurrence", "hha-stop")]
     if ones != [1.0, 1.0]:
         raise Missing("H4a, one distinct-item pattern: medians %s; the text says both equal 1" % ones)
-    nums.put("sentence_checks.passed", 22, "sentence_checks in paper_numbers.py")
+    # Lot D: the null hypothesis of non-inferiority is rejected for every baseline in both scopes, and on most instances
+    # (more than half of every row) CUT-HIDE uses fewer masks and loses fewer patterns.
+    kept = [(r["scope"], r["method"]) for r in tab("noninf") if r["verdict"] != "H0 rejected"]
+    if kept or len(tab("noninf")) != 8:
+        raise Missing("lot D: not rejected for %s (of %d rows); the text says rejected for every baseline in both scopes"
+                      % (kept, len(tab("noninf"))))
+    few = [(r["scope"], r["method"], r["cross_fewer_fewer"], r["n"]) for r in tab("noninf")
+           if not 2 * r["cross_fewer_fewer"] > r["n"]]
+    if few:
+        raise Missing("lot D: fewer masks and fewer patterns on at most half of the instances in %s; the text says most" % few)
+    # Lot E (2): in the distinct-item scope the median difference of every dataset with equal-count instances is below
+    # delta_L, for every baseline.
+    high = [(r["method"], r["dataset"], r["median_diff"]) for r in tab("per_dataset")
+            if r["scope"] == "distinct" and r["n_diff"] > 0 and not r["median_diff"] < delta]
+    if high or not any(r["scope"] == "distinct" and r["n_diff"] > 0 for r in tab("per_dataset")):
+        raise Missing("lot E: a distinct-item dataset at or above delta_L: %s; the text says every one is below" % high)
+    # Lot E (4): the ratio of OCC in the distinct-item scope grows with the size of the sensitive set.
+    occ = [v("h4a.size.distinct.occurrence.s%d" % s) for s in (1, 5, 10, 20)]
+    if not all(a < b for a, b in zip(occ, occ[1:])):
+        raise Missing("H4a, OCC, distinct-item scope: ratios %s by size do not grow; the text says they do" % occ)
+    # Lot E (2): the names of the H2-R datasets are those with equal-count instances against HHA in the per-dataset table.
+    named = v("names.h2r.equal").replace(" and ", ", ").split(", ")
+    shown = sorted(r["dataset"] for r in tab("per_dataset") if r["scope"] == "repeated" and r["method"] == "hha"
+                   and r["n_diff"] > 0)
+    if sorted(named) != shown or v("h2r.equal.datasets") != len(shown):
+        raise Missing("H2-R datasets named %s, the per-dataset table shows %s" % (named, shown))
+    nums.put("sentence_checks.passed", 27, "sentence_checks in paper_numbers.py")
 
 
 def git(*args):
@@ -1761,6 +1787,14 @@ def self_test():
             ("the interval of OCC no longer crosses 1.10", setr("ci", "lo", 1.101, test="H4a", scope="distinct",
                                                                group="main", method="occurrence")),
             ("H4a, one pattern: OCC not exactly 1", setv("h4a.size.distinct.occurrence.s1", 1.0001)),
+            ("lot D: one baseline not rejected", setr("noninf", "verdict", "not rejected", scope="repeated", method="dbsh")),
+            ("lot D: fewer masks and fewer patterns on half the instances",
+             setr("noninf", "cross_fewer_fewer", 296, scope="distinct", method="hha")),
+            ("lot E: a distinct-item dataset at delta_L",
+             setr("per_dataset", "median_diff", 0.02, test="H2", method="dbsh", dataset="msnbc")),
+            ("H4a, OCC distinct: the ratio at 10 patterns below that at 5",
+             setv("h4a.size.distinct.occurrence.s10", 1.2)),
+            ("H2-R: a dataset named without equal-count instances", setv("names.h2r.equal", "bible, bpi2012, msnbc and sepsis")),
             ("several patterns: a baseline at the median ratio of CUT-HIDE",
              setr("bound", "median", 1.3003, scope="distinct", size=5, method="sbsh-r1")),
         ]
@@ -1779,7 +1813,7 @@ def self_test():
           "above |R|*, rank-biserial on d - delta_L in a new family, rank-biserial vs pairs table, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
           "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty, "
           "one-pattern components, equal-count check (good, two patterns, empty), refinement check (good, masks, component), "
-          "sentence checks on the exported numbers and 25 faults")
+          "sentence checks on the exported numbers and 30 faults")
     return 1 if failures else 0
 
 

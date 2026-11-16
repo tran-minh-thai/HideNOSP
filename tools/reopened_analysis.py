@@ -211,7 +211,7 @@ def lot_d(rows, groups, scope, write, label="SC3"):
             masks = "fewer" if ours["mask_count"] < theirs["mask_count"] else (
                 "same" if ours["mask_count"] == theirs["mask_count"] else "more")
             lost = "fewer" if ours["lost"] < theirs["lost"] else ("same" if ours["lost"] == theirs["lost"] else "more")
-            cross[(masks, lost)] += 1
+            cross["%s/%s" % (masks, lost)] += 1
         p_by[b] = p
         out[b] = {"n": n, "zeros": zeros, "median": float(np.median(d)), "p": p,
                   "rb_shifted": effect, "rb_raw": pa.rank_biserial(d), "cross": dict(cross),
@@ -231,7 +231,8 @@ def lot_d(rows, groups, scope, write, label="SC3"):
         write("   %-10s n %4d  median d %+.4f  p %.4g  Holm %.4g  %-13s  rb(d+delta) %+.3f  rb(raw) %+.3f  excluded %d"
               % (b, v["n"], v["median"], v["p"], v["p_holm"], v["verdict"], v["rb_shifted"], v["rb_raw"], v["excluded"]))
         write("   %-10s masks x lost (CUT-HIDE against %s): " % ("", b) + ", ".join(
-            "%s/%s %d" % (m, l, c.get((m, l), 0)) for m in ("fewer", "same", "more") for l in ("fewer", "same", "more")))
+            "%s/%s %d" % (m, l, c.get("%s/%s" % (m, l), 0)) for m in ("fewer", "same", "more")
+            for l in ("fewer", "same", "more")))
         write("   %-10s by size (descriptive): " % "" + ", ".join(
             "|S|=%d n %d median %+.4f p %.4g" % (s, *t) for s, t in sorted(v["by_size"].items())))
     write("   excluded %d of %d pairs (%.1f%%; the threshold of preregistration section 5 is %.0f%%)"

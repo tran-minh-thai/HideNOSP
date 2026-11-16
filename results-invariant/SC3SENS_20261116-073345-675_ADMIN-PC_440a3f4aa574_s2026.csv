@@ -1,0 +1,34 @@
+# run 20261116-073345-675_ADMIN-PC_440a3f4aa574_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/sepsis.txt, format=SPMF, sigma=300, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-uniform, epsilon=0.5, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 25 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 5 -> 4, p30: 5 -> 4, p50: 5 -> 4, p70: 5 -> 4, p90: 5 -> 4
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9, 2]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.010638,0,0.000394,0.002405,6,6,1.000000,5,5,0,,95,94,93,1,0.010638,0.002405,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 9]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.010638,0,0.000789,0.004629,12,12,1.000000,11,11,0,,95,94,93,1,0.010638,0.004629,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 9, 2, 9]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001446,0.006753,22,22,1.000000,21,21,0,,95,94,94,0,0.000000,0.006753,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 9]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000263,0.001393,4,4,1.000000,4,4,0,,95,94,94,0,0.000000,0.001393,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 2]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,5,0.053191,0,0.003352,0.022502,51,51,1.000000,36,36,0,,95,94,89,5,0.053191,0.022502,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9, 2]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,3,0.031915,0,0.002629,0.017259,40,40,1.000000,30,30,0,,95,94,91,3,0.031915,0.017259,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 2, 9, 2]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001380,0.006853,21,21,1.000000,21,21,0,,95,94,94,0,0.000000,0.006853,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 2, 2]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,2,0.021277,0,0.001643,0.010324,25,25,1.000000,16,16,0,,95,94,92,2,0.021277,0.010324,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 2]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,7,0.074468,0,0.011371,0.055843,173,173,1.000000,99,99,0,,95,94,87,7,0.074468,0.055843,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 9]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,3,0.031915,0,0.003812,0.025214,58,58,1.000000,45,45,0,,95,94,91,3,0.031915,0.025214,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 2, 9]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,8,0.085106,0,0.008939,0.046680,136,136,1.000000,82,82,0,,95,94,86,8,0.085106,0.046680,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 9]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,2,0.021739,0,0.004798,0.016056,73,73,1.000000,46,46,0,,95,92,90,2,0.022222,0.013435,90,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 9]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,8,0.085106,0,0.011042,0.062386,168,168,1.000000,99,99,0,,95,94,86,8,0.085106,0.062386,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 2]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,10,0.106383,0,0.012817,0.069788,195,195,1.000000,116,116,0,,95,94,84,10,0.106383,0.069788,94,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,6,0.066667,0,0.020376,0.068940,310,310,1.000000,174,174,0,,95,90,84,6,0.067416,0.066314,89,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2, 9]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,8,0.087912,0,0.014986,0.054749,228,228,1.000000,137,137,0,,95,91,83,8,0.088889,0.052092,90,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,3,0.035714,0,0.031418,0.052405,478,478,1.000000,235,235,0,,95,84,81,2,0.025316,0.037386,79,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,11,0.123596,0,0.025371,0.090281,386,386,1.000000,221,221,0,,95,89,78,11,0.125000,0.087998,88,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,11,0.123596,0,0.026883,0.097482,409,409,1.000000,229,229,0,,95,89,78,11,0.125000,0.095250,88,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 2]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,6,0.070588,0,0.025174,0.051837,383,383,1.000000,230,230,0,,95,85,79,5,0.062500,0.037440,80,

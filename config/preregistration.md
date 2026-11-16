@@ -1231,3 +1231,156 @@ H6, their thresholds and their tests are unchanged.
 
 **Unchanged:** all of sections 1–21, and sections 22.1 to 22.7 except that the batch read for |S| = 5 under HIDE-SEQ is
 now `g6-sc4-s5`.
+
+## 23. Addendum of 2026-11-16 — experiments reopened after the reviews: lots A to G (written before any of these runs)
+
+**Decision of the author** (2026-11-15, scope fixed 2026-11-16): seven additions, lots A to G, run as generation 7 of
+`tools/campaign.py` on the measuring machine of section 18 with the locked environment (JDK 25.0.4.1, `-Xmx8g`,
+1,800 seconds per method and set, the sampling of section 9, closure rule necessary). The analyses D and E read
+result files that exist already and run on any machine.
+
+**What does not change.** CUT-HIDE, every baseline, every hypothesis of sections 2–22, their tests, thresholds and
+reported results. No file of SC1–SC6 is rerun, moved or rewritten. Each new lot writes under a scenario prefix of its
+own (`SC3SENS`, `SC3ROB`, `SC2REP`, `SC3REP`, `SC4R`), which no reader of the earlier tables reads, so no earlier number
+can change through these runs.
+
+**What the code adds** (no change of a default; section 23.8 gives the checks).
+
+- `AdaptiveCutHide.withTauDivisor(d)`: the width τ_Q = max(1, m_Q / d); the method keeps d = 4, written `m_Q / 4.0`
+  instead of `0.25 * m_Q`, which gives the same doubles (division by a power of two is exact).
+- Method keys `cut-hide-rw-ls@<constant><value>` (SC3 factory): `cut-hide-rw-ls` with one constant changed: `krw`
+  the number of adaptive iterations (default 6), `tau` the divisor d (default 4), `passes` and `recv` the two limits of
+  the local search (defaults 50 and 30). A malformed key is refused.
+- The scenarios `SC3SENS` and `SC3REP` (the comparison of SC3 under their own prefix), `SC3ROB` (the comparison of
+  SC3 and the supports of lot F in `SC3ROBSUP_<stamp>.csv`), `SC4R` (the comparison of SC4 under its own prefix) and
+  `SC2REP` (SC2 under its own prefix).
+- Epsilon names a cell: `tools/sc3_commands.py` and `tools/campaign.py` compare the option, a file or cell without it
+  meaning 0.5, so every earlier file still matches its cell.
+
+### 23.1 Lot A — the contribution of each stage on the full data (secondary, tested)
+
+**Runs.** `g7-sens-uniform`: the 54 cells of `sc3-s1` (\|𝒮\| = 1, main group, both scopes, g⁻ = 0), `SC3SENS`
+with the method `cut-hide-uniform`, epsilon 0.5: the minimum solution with every weight 0 (same exact curves and
+allocation as CUT-HIDE, `CutHideConfig.uniformWeights()`). The rows of CH-FW (`cut-hide`), CH-AW (`cut-hide-rw`) and
+CUT-HIDE (`cut-hide-rw-ls`) are those of `g3-sc3-s1`, paired by dataset, gap, σ and sensitive set.
+
+**Check.** Every method of the four uses \|R\| = \|R\|* on every instance; an instance where one does not is an
+implementation error and stops the analysis.
+
+**Test.** Instances of the main group without `protein_sdb1`; an instance with a status or HF > 0 in one of the four
+rows is excluded and counted. For each of three pairs, d = Lost_rel(first) − Lost_rel(second): uniform − CH-FW,
+CH-FW − CH-AW, CH-AW − CUT-HIDE. H₀: the median of d is at most 0; one-sided Wilcoxon signed-rank with Pratt's
+treatment of zeros, α = 0.05, Holm over the three pairs, separately per scope. Reported with each: n, the numbers of
+d > 0, d = 0, d < 0, the median of d, the rank-biserial on the raw differences, and the medians of SupDist of the four
+methods. No running time (the files are invariant ones).
+
+### 23.2 Lot B — sensitivity of the constants (descriptive, no test)
+
+**Runs.** `g7-sens-constants`: the 54 cells of `sc3-s1`, `SC3SENS`, epsilon 0.5, the keys `cut-hide-rw-ls` (the
+control) and `cut-hide-rw-ls@` `krw3`, `krw12`, `tau2`, `tau8`, `passes25`, `passes100`, `recv15`, `recv60`.
+`g7-sens-epsilon`: the same 54 cells at epsilon 0.25 and 1.0, key `cut-hide-rw-ls`.
+
+**Check.** The control rows equal the `cut-hide-rw-ls` rows of `g3-sc3-s1` on every column of the file; one
+difference stops the analysis.
+
+**Reported**, per scope and per changed value: the median and quartiles of Lost_rel of CUT-HIDE, the number of
+instances whose Lost differs from that at the default (more, fewer), the number whose \|R\| differs, and at epsilon
+0.25 the number of instances whose band B_ε is empty (the method name says so). The instances are those of lot A. No
+running time.
+
+### 23.3 Lot C — replication on a dataset not used before (tested, reported apart)
+
+**Dataset.** BIKE (`datasets/bike.txt`, SPMF `BIKE.txt`, already in `datasets/provenance.tsv` with its SHA-256),
+chosen by the author on 2026-11-16 among the SPMF candidates, before any method ran on it. The other candidates were
+left out on measured grounds: BMSWebView2 and Kosarak have almost no sequence that repeats an item, so ρ_rep = 0
+(degenerate group) and no repeated-item candidate; E-Shop has itemsets at every position, outside the model of a
+sequence of single events.
+
+**σ rule.** The smallest multiple of 100 with \|F_σ\| in [50, 700] at both [0,1] and [0,3] (SIGMA scan): σ = 200
+(σ = 100 gives 754 and 1,227 patterns). One σ, the two gaps [0,1] and [0,3], both scopes.
+
+**Groups.** `SC2REP` (both profiles) at σ = 200 and both gaps; the groups of section 10 are written by
+`tools/preregistered_analysis.py --write-rep-groups` into `config/configuration_groups_rep.tsv` and
+`config/configuration_groups_rep_repeated.tsv` and locked by commit before any `SC3REP` run. The measuring machine runs
+`SC2REP` again (`g7-rep-sc2`); its rows must equal those of the locked tables.
+
+**Runs.** Under `SC3REP`, every batch of SC3 that its groups call for, with the options of section 14: the method
+batch at \|𝒮\| = 1, 5, 10, 20 on the main group (`g7-rep-s1` … `s20`), the degenerate group at \|𝒮\| = 1
+(`g7-rep-degenerate`), and the stopping rivals on the main group (`g7-rep-stop`). The intermediate group is not run,
+as in SC3.
+
+**Tests.** H2, H2-R, H3, H4a and H4b (and their -R forms) exactly as stated in sections 2–5, 16 and 19.1, on the
+`SC3REP` rows only, never pooled with SC3, reported next to the results of SC3. The dataset-level sensitivity
+analysis is not run on the union (the author's decision of 2026-11-16, after the arithmetic of the attainable
+p-values); the per-dataset table of lot E includes BIKE.
+
+**Smallest testable n** (new rule, for every Wilcoxon test of this section; pending confirmation by the author before
+any `SC3REP` file is read). A test is run only when the smallest p-value it can return on its n differences, with the
+same number of zeros, is at most the first level of its Holm family (α divided by the size of the family); otherwise
+it is reported as "not testable" with its n. With no zeros that is n ≥ 7 for a family of four, n ≥ 6 for a family of
+two, n ≥ 5 for a single test.
+
+### 23.4 Lot D — Lost without the equal-mask filter (fixed after the main comparison)
+
+**Instances.** Every main-group instance of SC3 (both scopes, \|𝒮\| = 1 to 20 pooled, `protein_sdb1` left out), and
+of `SC3REP`, with the exclusion rules of section 5 applied to the pair.
+
+**Test.** For each baseline b, d = Lost_rel(b) − Lost_rel(CUT-HIDE) on every instance, whatever the two mask counts.
+H₀: the median of d is at most −δ_L, δ_L = 0.02 (non-inferiority of CUT-HIDE); one-sided Wilcoxon signed-rank with
+Pratt's treatment of zeros on d + δ_L, α = 0.05, Holm over the four baselines, separately per scope, and for `SC3REP`
+apart. Reported with it: the cross table of the instances where CUT-HIDE uses fewer, the same or more masks than b,
+by whether it loses fewer, the same or more patterns; and the same test per size of 𝒮, descriptive.
+
+**Status.** On the SC3 rows this analysis is fixed after the results of SC3 had been read, like the sensitivity
+analysis of section 19; on `SC3REP` it is fixed before.
+
+### 23.5 Lot E — intervals and the dependence between instances (from existing files)
+
+- A 95% percentile bootstrap interval for every median that gives a verdict: the ratios of H3 (main and degenerate
+  groups, both scopes), H4a, H5a and the H3 part of H6. The bootstrap resamples instances with replacement within
+  each dataset (strata = datasets), 10,000 resamples, seed 2026.
+- Per dataset: the median difference of Lost_rel of H2 and H2-R (equal-count instances) and the median ratio of H3,
+  with n, BIKE included.
+- The rank-biserial on the raw differences, added as a column next to the one of section 2 (on the differences minus
+  δ_L), which stays.
+- The ratio of H4a by size of 𝒮 (1, 5, 10, 20), next to the pooled verdict, which stays.
+- The number of tests and of equivalence verdicts of the paper, per Holm family.
+
+### 23.6 Lot F — robustness under wider gap constraints (descriptive, no test)
+
+**Runs.** `g7-rob-s1` … `s20`: the 136 main-group cells of `sc3-s1` … `sc3-s20`, `SC3ROB`, the methods
+`cut-hide-rw-ls`, `hha`, `dbsh`, `sbsh-r1`, `sbsh-rmax`. For every sensitive pattern P, set and method, the file
+`SC3ROBSUP` holds sup_NO(P) on the database before and after masking under [g⁻, g⁺] and under [g⁻, g⁺ + 1],
+[g⁻, 2g⁺] and [g⁻, ∞], a constraint equal to an earlier one left out (at [0,1], g⁺ + 1 = 2g⁺ = 2).
+
+**Check.** The comparison rows of `SC3ROB` equal those of SC3 on every column (the methods are deterministic); one
+difference stops the analysis.
+
+**Reported**, per method, scope and constraint: the share and number of sensitive patterns whose support after
+masking is at least σ.
+
+### 23.7 Lot G — HIDE-SEQ at r = 3 (tested, reported apart)
+
+**Runs.** `g7-seq3-s1` and `g7-seq3-s5`: the 105 cells of `g4-sc4-s1` and `g4-sc4-s5`, `SC4R` at r = 3, every other
+option as at r = 2. A probe on the development machine counted the instances in which some sequence reaches r = 3
+(a data property, section 22.2): almost every main-group instance does, so the stopping condition of the request
+("too few instances: report and stop") does not apply.
+
+**Tests.** H5a and H5b (and -R) as in section 22.2, on the `SC4R` rows, separately at \|𝒮\| = 1 and 5, reported next
+to r = 2. The exact Lost optimum on small instances (SC4LOST) is not run again.
+
+### 23.8 Checks of the new code (before generation 7)
+
+On the development machine, on the cell sepsis, [0,1], σ = 300, repeated-item scope, \|𝒮\| = 1, against the files
+of the measuring machine: the `SC3SENS` rows of `cut-hide-rw-ls` and of the keys `@krw6`, `@tau4`, `@passes50`,
+`@recv30` equal the `cut-hide-rw-ls` rows of SC3 (100 of 100 rows, every column but the key); the `SC3ROB` rows
+equal the SC3 rows (100 of 100); the `SC4R` rows at r = 2 equal the SC4 rows (180 of 180); `cut-hide-uniform` is
+at \|R\|* on 20 of 20 sets; `@tau8` changes one set. A new test (`ReopenedScenariosTest`) checks the constraints of
+lot F, the defaults against the plain key, the refusal of malformed keys, and the rows of `SC3ROB`; injecting a
+divisor that ignores its parameter, and a constraint list without its duplicate rule, each makes it fail.
+
+**Provenance.** Written after every result of sections 14–22 had been read, after two probes of data properties
+(the groups of the candidate datasets, the instances reaching r = 3) and after the checks above. No method result of
+the new lots has been seen.
+
+**Unchanged:** all of sections 1–22.

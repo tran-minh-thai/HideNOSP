@@ -64,6 +64,11 @@ public final class Sc2DataRegime implements Scenario {
 
     @Override
     public void run(ResultSink sink, Cli options) {
+        runAs(id(), sink, options);
+    }
+
+    /** The data regime written under another scenario identifier (SC2REP, preregistration section 23). */
+    void runAs(String id, ResultSink sink, Cli options) {
         String datasetOption = options.get("dataset", "");
         GapConstraint gap = new GapConstraint(options.getInt("gmin", 0),
                 options.getInt("gmax", 3));
@@ -116,7 +121,7 @@ public final class Sc2DataRegime implements Scenario {
         String[] provenance = {"profile " + profileMode, "options " + options.all()};
         List<Double> repetition = new ArrayList<>();
         List<Double> effect = new ArrayList<>();
-        try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id(), header, provenance)) {
+        try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id, header, provenance)) {
             System.out.println("dataset " + source + ", |D| = " + database.size()
                     + ", total length " + database.totalLength()
                     + ", alphabet " + database.alphabet().length

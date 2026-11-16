@@ -62,6 +62,19 @@ runs the changed code.
 
     g6-sc4-s5        SC4 on the cells of sc3-s5, r = 2 (the cells of g4-sc4-s5 and g5-sc4-s5)
 
+Generation 7 (preregistration section 23), run with --generation=7: the experiments reopened after the reviews, each
+under a scenario prefix of its own so that no table of SC3 or SC4 reads its rows.
+
+    g7-sens-uniform    lot A: SC3SENS cut-hide-uniform on the cells of sc3-s1
+    g7-rep-sc2         lot C: SC2REP on the rows of the replication group tables (reproduces the locked tables)
+    g7-rep-s1 .. s20, g7-rep-degenerate, g7-rep-stop
+                       lot C: SC3REP on the main (and degenerate) rows of the replication group tables
+    g7-seq3-s1, g7-seq3-s5
+                       lot G: SC4R at r = 3 on the cells of g4-sc4-s1 and g4-sc4-s5
+    g7-rob-s1 .. s20   lot F: SC3ROB (CUT-HIDE and the four baselines) on the cells of sc3-s1 .. s20
+    g7-sens-constants  lot B: SC3SENS, cut-hide-rw-ls and eight one-constant variants, cells of sc3-s1
+    g7-sens-epsilon    lot B: SC3SENS, cut-hide-rw-ls at epsilon 0.25 and 1.0, cells of sc3-s1
+
 A cell is done when results-invariant/ holds a complete file of its scenario whose run stamp names
 THIS machine and whose options line names the cell (SC1 writes no options line: scenario, machine and
 seed). Files of other machines never count, so a new machine reruns everything. A cell whose run
@@ -117,7 +130,8 @@ CLOSURE_OPTION = ("closure", "necessary")
 # The scenarios whose methods or measures read S-plus. A cell of theirs without a closure option is a cell of the
 # earlier rule: it runs with --closure=subsequence and is done only by a file whose "# closure" header line is
 # subsequence or absent (files written before the rule existed carry no such line).
-CLOSURE_SCENARIOS = ("SC3", "SC3LOST", "SC3CERT", "SC3OPT", "SC6", "SC4", "SC4LOST")
+CLOSURE_SCENARIOS = ("SC3", "SC3LOST", "SC3CERT", "SC3OPT", "SC6", "SC4", "SC4LOST",
+                     "SC3SENS", "SC3ROB", "SC3REP", "SC4R")
 EARLIER_RULE = "subsequence"
 HEADER_RULE = "# closure "
 BATCHES = ("sc1", "sc2", "sc3-s1", "sc3-s5", "sc3-s10", "sc3-s20", "sc3-degenerate", "sc3-refine",
@@ -150,6 +164,24 @@ G6_BATCHES = ("g6-sc4-s5",)
 RERUNS["g6-sc4-s5"] = "g5-sc4-s5"
 BATCHES = BATCHES + G6_BATCHES
 GENERATION.update({b: "6" for b in G6_BATCHES})
+# Generation 7 (preregistration section 23): the experiments reopened after the reviews, lots A, B, C, F and G. Each
+# writes under a scenario prefix of its own (SC3SENS, SC3ROB, SC2REP, SC3REP, SC4R), so that no table of SC3 or SC4
+# reads its rows.
+UNIFORM = "cut-hide-uniform"     # lot A: the minimum solution with uniform weights
+# Lot B: one constant of CUT-HIDE at half and twice its value, the others at their defaults; the plain key is the
+# control, whose rows must equal those of SC3.
+CONSTANTS = ",".join(["cut-hide-rw-ls"] + ["cut-hide-rw-ls@%s" % v for v in (
+    "krw3", "krw12", "tau2", "tau8", "passes25", "passes100", "recv15", "recv60")])
+EPSILONS = ("0.25", "1.0")       # lot B: epsilon at half and twice 0.5
+ROB_METHODS = "cut-hide-rw-ls,hha,dbsh,sbsh-r1,sbsh-rmax"   # lot F: CUT-HIDE and the four baselines
+OTHER_LIMITS = ("3",)            # lot G
+REP_TABLES = (("config/configuration_groups_rep.tsv", "distinct"),
+              ("config/configuration_groups_rep_repeated.tsv", "repeated"))   # lot C, written from SC2REP
+G7_BATCHES = ("g7-sens-uniform", "g7-rep-sc2", "g7-rep-s1", "g7-rep-s5", "g7-rep-s10", "g7-rep-s20",
+              "g7-rep-degenerate", "g7-rep-stop", "g7-seq3-s1", "g7-seq3-s5", "g7-rob-s1", "g7-rob-s5",
+              "g7-rob-s10", "g7-rob-s20", "g7-sens-constants", "g7-sens-epsilon")
+BATCHES = BATCHES + G7_BATCHES
+GENERATION.update({b: "7" for b in G7_BATCHES})
 # What a later generation must share with the one before: only the measured code may differ.
 CARRIED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor")
 LOCKED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor", "source_tree", "pom")
@@ -214,7 +246,73 @@ def cell(scenario, options, heap=HEAP, extra=()):
     return {"scenario": scenario, "options": list(options.items()) + list(extra), "heap": heap}
 
 
+def rep_tables(root):
+    for name, _ in REP_TABLES:
+        if not (root / name).is_file():
+            raise ValueError("%s is missing: the cells of lot C come from the group tables of preregistration section 23, "
+                             "written from the SC2REP files and locked by commit" % Path(name).as_posix())
+    return REP_TABLES
+
+
+def g7_cells(root, batch):
+    """The cells of generation 7 (preregistration section 23), or None for a batch of another generation."""
+    def sc3_like(scenario, c, methods, extra=()):
+        options = {k: c[k] for k in sc3.IDENTITY}
+        options["methods"] = methods
+        return cell(scenario, options, extra=[("epsilon", "0.5")] + list(extra) + [CLOSURE_OPTION])
+    if batch == "g7-sens-uniform":
+        return [sc3_like("SC3SENS", c, UNIFORM) for c in sc3.planned(root, 1)]
+    if batch == "g7-sens-constants":
+        return [sc3_like("SC3SENS", c, CONSTANTS) for c in sc3.planned(root, 1)]
+    if batch == "g7-sens-epsilon":
+        out = []
+        for c in sc3.planned(root, 1):
+            for eps in EPSILONS:
+                options = {k: c[k] for k in sc3.IDENTITY}
+                options["methods"] = "cut-hide-rw-ls"
+                out.append(cell("SC3SENS", options, extra=[("epsilon", eps), CLOSURE_OPTION]))
+        return out
+    match = re.fullmatch(r"g7-rob-s(\d+)", batch)
+    if match:
+        return [sc3_like("SC3ROB", c, ROB_METHODS) for c in sc3.planned(root, int(match.group(1)))]
+    if batch in ("g7-seq3-s1", "g7-seq3-s5"):
+        source = (sc3.planned(root, 1) + sc3.planned(root, 1, group="degenerate")) if batch == "g7-seq3-s1" \
+            else sc3.planned(root, 5)
+        out = []
+        for c in source:
+            for r in OTHER_LIMITS:
+                options = {k: c[k] for k in sc3.IDENTITY if k not in ("pareto", "methods")}
+                options.update({"methods": SEQ_METHODS, "r": r})
+                out.append(cell("SC4R", options, extra=[CLOSURE_OPTION]))
+        return out
+    if batch == "g7-rep-sc2":
+        cells = []
+        for name, kind in rep_tables(root):
+            profile = "pool" if kind == "distinct" else "repeated"
+            for group in sc3.GROUPS:
+                for c in sc3.read_table(root / name, kind, group):
+                    cells.append(cell("SC2REP", {"dataset": c["dataset"], "format": "SPMF", "sigma": c["sigma"],
+                                                 "gmin": c["gmin"], "gmax": c["gmax"], "maxPatternLength": "4",
+                                                 "profile": profile}))
+        return cells
+    match = re.fullmatch(r"g7-rep-s(\d+)", batch)
+    if match:
+        return [cell("SC3REP", {k: c[k] for k in sc3.IDENTITY}, extra=[CLOSURE_OPTION])
+                for c in sc3.planned(root, int(match.group(1)), tables=rep_tables(root))]
+    if batch == "g7-rep-degenerate":
+        return [cell("SC3REP", {k: c[k] for k in sc3.IDENTITY}, extra=[CLOSURE_OPTION])
+                for c in sc3.planned(root, 1, group="degenerate", tables=rep_tables(root))]
+    if batch == "g7-rep-stop":
+        return [cell("SC3REP", {k: c[k] for k in sc3.IDENTITY}, extra=[CLOSURE_OPTION]) for size in (1, 5, 10, 20)
+                for c in sc3.planned(root, size, stop=True, tables=rep_tables(root))]
+    return None
+
+
 def batch_cells(root, batch):
+    if batch.startswith("g7-"):
+        cells = g7_cells(root, batch)
+        if cells is not None:
+            return cells
     if batch.startswith("g3-") and batch[3:] in CLOSURE_BATCHES:
         return [dict(c, options=c["options"] + [CLOSURE_OPTION]) for c in batch_cells(root, batch[3:])]
     if batch in ("g5-sc4-s5", "g6-sc4-s5"):
@@ -279,11 +377,12 @@ def label(c):
         return "%s trials=%s" % (c["scenario"], o["trials"])
     parts = [c["scenario"], Path(o["dataset"]).stem, "[%s,%s]" % (o["gmin"], o["gmax"]), "sigma=%s" % o["sigma"]]
     for key, name in (("profile", ""), ("patternKind", ""), ("sensitiveSize", "S="), ("r", "r="), ("rs", "rs="),
-                      ("methods", ""), ("closure", "closure=")):
+                      ("methods", ""), ("epsilon", "eps="), ("closure", "closure=")):
         if key in o:
             value = o[key]
             if key == "methods":
-                value = {"none": "pareto", sc3.REFINE: "refine", sc3.STOP: "stop"}.get(value, "methods")
+                value = {"none": "pareto", sc3.REFINE: "refine", sc3.STOP: "stop", UNIFORM: "uniform",
+                         CONSTANTS: "constants", ROB_METHODS: "robust"}.get(value, "methods")
             parts.append(name + value)
     return " ".join(parts)
 
@@ -341,6 +440,8 @@ def is_done(c, files):
                 return path
             continue
         if rule is not None and options.get(HEADER_RULE, EARLIER_RULE) != rule:
+            continue
+        if c["scenario"] not in ("SC1", "SC1GAP") and not sc3.same_epsilon(wanted, options):
             continue
         same = True
         for key, value in wanted.items():
@@ -819,10 +920,27 @@ def self_test():
     expected.update({"g4-sc1gap": 1, "g4-sc2gap": 72, "g4-sc4-s1": 54 + 17, "g4-sc4-s5": 34,
                      "g4-sc4lost": 54, "g4-sc6": expected["sc6"], "g5-sc4-s5": 34,
                      "g6-sc4-s5": 34})
+    expected.update({"g7-sens-uniform": 54, "g7-sens-constants": 54, "g7-sens-epsilon": 2 * 54, "g7-rob-s1": 54,
+                     "g7-rob-s5": 34, "g7-rob-s10": 27, "g7-rob-s20": 21, "g7-seq3-s1": 54 + 17, "g7-seq3-s5": 34})
     gap_batches = [b for b in G4_BATCHES if b.startswith("g4-gap-")]
     tables_present = all((REPO / name).is_file() for name, _ in sc3.GAP_TABLES)
-    plannable = [b for b in BATCHES if tables_present or b not in gap_batches]
+    rep_batches = [b for b in G7_BATCHES if b.startswith("g7-rep-")]
+    rep_present = all((REPO / name).is_file() for name, _ in REP_TABLES)
+    plannable = [b for b in BATCHES if (tables_present or b not in gap_batches) and (rep_present or b not in rep_batches)]
     for b in BATCHES:
+        if b in rep_batches:
+            if not rep_present:
+                try:
+                    batch_cells(REPO, b)
+                    refused = False
+                except ValueError as e:
+                    refused = "is missing" in str(e)
+                check("without the lot C group tables, %s refuses with the missing table named" % b, refused)
+            else:
+                cells = batch_cells(REPO, b)
+                check("plan of %s comes from the lot C tables, under SC2REP or SC3REP" % b,
+                      all(c["scenario"] in ("SC2REP", "SC3REP") for c in cells), str(len(cells)))
+            continue
         if b in gap_batches and not tables_present:
             try:
                 batch_cells(REPO, b)
@@ -883,6 +1001,48 @@ def self_test():
           batch_cells(REPO, "g6-sc4-s5") == batch_cells(REPO, "g4-sc4-s5"), "%d cells" % len(batch_cells(REPO, "g6-sc4-s5")))
     check("the g6 batches belong to generation 6 and nothing else does",
           {b for b in BATCHES if GENERATION[b] == "6"} == set(G6_BATCHES))
+    # Generation 7 (preregistration section 23): every cell is an existing cell under its own scenario prefix.
+    def identity(c, drop=()):
+        return [(k, v) for k, v in c["options"] if k in sc3.IDENTITY and k not in ("methods",) + tuple(drop)]
+    base = {s: batch_cells(REPO, "sc3-s%d" % s) for s in (1, 5, 10, 20)}
+    for b, scenario, size, methods in (("g7-sens-uniform", "SC3SENS", 1, UNIFORM),
+                                       ("g7-sens-constants", "SC3SENS", 1, CONSTANTS),
+                                       ("g7-rob-s1", "SC3ROB", 1, ROB_METHODS), ("g7-rob-s5", "SC3ROB", 5, ROB_METHODS),
+                                       ("g7-rob-s10", "SC3ROB", 10, ROB_METHODS),
+                                       ("g7-rob-s20", "SC3ROB", 20, ROB_METHODS)):
+        cells = batch_cells(REPO, b)
+        check("%s is the batch sc3-s%d cell for cell, under %s with methods %s, epsilon 0.5" % (b, size, scenario,
+              "uniform" if methods == UNIFORM else ("constants" if methods == CONSTANTS else "robust")),
+              len(cells) == len(base[size]) and all(
+                  g["scenario"] == scenario and identity(g) == identity(c) and dict(g["options"])["methods"] == methods
+                  and dict(g["options"])["epsilon"] == "0.5" and dict(g["options"])["closure"] == "necessary"
+                  for g, c in zip(cells, base[size])))
+    eps = batch_cells(REPO, "g7-sens-epsilon")
+    check("g7-sens-epsilon is every sc3-s1 cell at epsilon 0.25 and 1.0",
+          [dict(c["options"])["epsilon"] for c in eps] == list(EPSILONS) * len(base[1]) and all(
+              identity(eps[2 * i]) == identity(c) == identity(eps[2 * i + 1]) for i, c in enumerate(base[1])))
+    seq3 = batch_cells(REPO, "g7-seq3-s1") + batch_cells(REPO, "g7-seq3-s5")
+    seq2 = batch_cells(REPO, "g4-sc4-s1") + batch_cells(REPO, "g4-sc4-s5")
+    check("the g7-seq3 batches are the g4-sc4 batches cell for cell, under SC4R at r = 3",
+          len(seq3) == len(seq2) and all(
+              s3["scenario"] == "SC4R" and [kv for kv in s3["options"] if kv[0] != "r"] ==
+              [kv for kv in s2["options"] if kv[0] != "r"] and dict(s3["options"])["r"] == "3" for s3, s2 in zip(seq3, seq2)))
+    check("the g7 batches belong to generation 7 and nothing else does",
+          {b for b in BATCHES if GENERATION[b] == "7"} == set(G7_BATCHES))
+    # Epsilon names a cell: a file at 0.25 does not stand for the cell at 1.0 or at the default, and an SC3 file
+    # without the option still stands for its cell (it ran at 0.5).
+    c25, c10 = eps[0], eps[1]
+    f25 = [(Path("results-invariant/x.csv"), "SC3SENS", dict(dict(c25["options"]), **{HEADER_RULE: "necessary"}), "2026")]
+    check("an SC3SENS file at epsilon 0.25 is done for its cell and for no other epsilon",
+          is_done(c25, f25) and not is_done(c10, f25)
+          and not is_done(batch_cells(REPO, "g7-sens-constants")[0], [(f25[0][0], "SC3SENS", dict(
+              dict(batch_cells(REPO, "g7-sens-constants")[0]["options"]), epsilon="0.25", **{HEADER_RULE: "necessary"}),
+              "2026")]))
+    old = batch_cells(REPO, "g3-sc3-s1")[0]
+    old_file = [(Path("results-invariant/y.csv"), "SC3", dict(dict(old["options"]), **{HEADER_RULE: "necessary"}), "2026")]
+    check("an SC3 file without epsilon is still done for its cell", bool(is_done(old, old_file)))
+    check("an SC3 file at epsilon 0.25 is not done for the SC3 cell at the default",
+          not is_done(old, [(old_file[0][0], "SC3", dict(old_file[0][2], epsilon="0.25"), "2026")]))
     check("the g3 batches belong to generation 3 and nothing else does",
           {b for b in BATCHES if GENERATION[b] == "3"} == {"g3-" + b for b in CLOSURE_BATCHES})
     check("the g4 batches belong to generation 4 and nothing else does",

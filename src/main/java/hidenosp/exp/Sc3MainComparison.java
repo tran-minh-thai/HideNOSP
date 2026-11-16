@@ -82,6 +82,16 @@ public final class Sc3MainComparison implements Scenario {
      * for any sensitive pattern needs no mask at all, so it is written with that status and no method row.
      */
     static void runComparison(String id, ResultSink sink, Cli options, HideProblem.Mode mode) {
+        runComparison(id, sink, options, mode, false);
+    }
+
+    /**
+     * The comparison, and with {@code robust} also the support of every sensitive pattern on each masked
+     * database under wider gap constraints (preregistration section 23, lot F), written to the file
+     * {@code <id>SUP_<stamp>.csv}: one row per sensitive set, method, pattern and constraint. The comparison rows
+     * are the same as without it.
+     */
+    static void runComparison(String id, ResultSink sink, Cli options, HideProblem.Mode mode, boolean robust) {
         GapConstraint gap = new GapConstraint(options.getInt("gmin", 0), options.getInt("gmax", 3));
         int sigma = options.getInt("sigma", 20);
         boolean perSequence = mode == HideProblem.Mode.HIDE_SEQ;
@@ -175,9 +185,14 @@ public final class Sc3MainComparison implements Scenario {
                 "vertex", "vertices", "mask_count", "weight", "min_masks", "mask_ratio", "hf",
                 "lost", "lost_rel", "ghost", "sup_dist", "frequent_before", "nonsensitive_before",
                 "frequent_after", "lost_subseq", "lost_rel_subseq", "sup_dist_subseq", "nonsensitive_before_subseq"};
+        String[] supportHeader = {"dataset", "gap", "sigma", "sensitive_set", "method_key", "pattern",
+                "constraint", "sup_no_before", "sup_no_after"};
         try (CsvWriter writer = sink.open(ResultSink.Kind.INVARIANT, id, header, provenance);
              CsvWriter front = pareto
                      ? sink.open(ResultSink.Kind.INVARIANT, id + "PARETO", frontHeader, provenance)
+                     : null;
+             CsvWriter support = robust
+                     ? sink.open(ResultSink.Kind.INVARIANT, id + "SUP", supportHeader, provenance)
                      : null) {
             for (int index = 0; index < draws.size(); index++) {
                 List<Pattern> sensitive = draws.get(index).patterns();
@@ -290,6 +305,10 @@ public final class Sc3MainComparison implements Scenario {
                                 Integer.toString(row.lostSubsequence()), format(row.lostRelativeSubsequence()),
                                 format(row.supDistSubsequence()), Integer.toString(row.nonSensitiveBeforeSubsequence()),
                                 status);
+                        if (support != null) {
+                            writeSupports(support, describe(options), gap, sigma, sensitive,
+                                    name.trim().toLowerCase(Locale.ROOT), database, sanitization.sanitized());
+                        }
                         System.out.printf("set %d  %-34s |R| %4d  lost %4d (%.4f)  supDist %.4f  %.1f s%s%n",
                                 index, method.name(), row.maskCount(), row.lost(),
                                 row.lostRelative(), row.supDist(), seconds,
@@ -300,6 +319,9 @@ public final class Sc3MainComparison implements Scenario {
             writer.complete();
             if (front != null) {
                 front.complete();
+            }
+            if (support != null) {
+                support.complete();
             }
         }
     }
@@ -331,11 +353,107 @@ public final class Sc3MainComparison implements Scenario {
     }
 
     /**
+     * The constraints of lot F for the gap [g-, g+] of the run: [g-, g+] itself, [g-, g+ + 1], [g-, 2 g+] and
+     * [g-, infinity], with a constraint that repeats an earlier one left out (at [0,1], g+ + 1 = 2 g+ = 2).
+     */
+    public static List<GapConstraint> widerConstraints(GapConstraint gap) {
+        // GapConstraint has no equals: a repeated constraint is recognised by its g+.
+        List<GapConstraint> out = new ArrayList<>();
+        List<Integer> seen = new ArrayList<>();
+        out.add(gap);
+        seen.add(gap.gmax());
+        for (int gmax : new int[] {gap.gmax() + 1, 2 * gap.gmax()}) {
+            if (gmax > gap.gmax() && !seen.contains(gmax)) {
+                out.add(GapConstraint.of(gap.gmin(), gmax));
+                seen.add(gmax);
+            }
+        }
+        out.add(GapConstraint.unbounded(gap.gmin()));
+        return out;
+    }
+
+    private static void writeSupports(CsvWriter out, String dataset, GapConstraint gap, int sigma,
+                                      List<Pattern> sensitive, String methodKey, SequenceDatabase before,
+                                      SequenceDatabase after) {
+        for (Pattern p : sensitive) {
+            for (GapConstraint c : widerConstraints(gap)) {
+                out.writeRow(dataset, gap.toString(), Integer.toString(sigma), sensitive.toString(), methodKey,
+                        p.toString(), c.toString(), Long.toString(total(p, before, c)),
+                        Long.toString(total(p, after, c)));
+            }
+        }
+    }
+
+    private static long total(Pattern p, SequenceDatabase database, GapConstraint c) {
+        long sum = 0;
+        for (int f : SupportNO.perSequence(p, database, c)) {
+            sum += f;
+        }
+        return sum;
+    }
+
+    /**
+     * CUT-HIDE with one constant changed, for the sensitivity analysis of preregistration section 23: the key
+     * {@code cut-hide-rw-ls@<constant><value>} is cut-hide-rw-ls with that constant set to the value and every other
+     * constant at its default. The constants: {@code krw} the number of adaptive iterations (default 6), {@code tau}
+     * the divisor of tau_Q (default 4), {@code passes} and {@code recv} the two limits of the local search (defaults
+     * 50 and 30). With several sensitive patterns the key is cut-hide, as for cut-hide-rw-ls.
+     */
+    static HidingMethod createVariant(String name, HideProblem problem, Map<Pattern, Long> frequent,
+                                      int sigma, double epsilon, long seed, Metrics.Context context) {
+        String key = name.toLowerCase(Locale.ROOT);
+        java.util.regex.Matcher m = java.util.regex.Pattern
+                .compile("cut-hide-rw-ls@(krw|tau|passes|recv)(\\d+(?:\\.\\d+)?)").matcher(key);
+        if (!m.matches()) {
+            throw new IllegalArgumentException("unknown method variant " + name
+                    + "; the form is cut-hide-rw-ls@<krw|tau|passes|recv><value>");
+        }
+        if (problem.sensitive().size() != 1) {
+            return create("cut-hide", problem, frequent, sigma, epsilon, seed, context);
+        }
+        String constant = m.group(1);
+        double value = Double.parseDouble(m.group(2));
+        int iterations = AdaptiveCutHide.DEFAULT_ITERATIONS;
+        int passes = MaskLocalSearch.DEFAULT_PASSES;
+        int receivers = MaskLocalSearch.DEFAULT_RECEIVERS;
+        double divisor = AdaptiveCutHide.DEFAULT_TAU_DIVISOR;
+        switch (constant) {
+            case "krw": iterations = whole(value, name); break;
+            case "passes": passes = whole(value, name); break;
+            case "recv": receivers = whole(value, name); break;
+            default: divisor = value; break;
+        }
+        Set<Pattern> closure = problem.closureOf(frequent.keySet());
+        List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
+        double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
+        Map<Pattern, Long> watched = new LinkedHashMap<>();
+        for (Map.Entry<Pattern, Long> e : frequent.entrySet()) {
+            if (!closure.contains(e.getKey())) {
+                watched.put(e.getKey(), e.getValue());
+            }
+        }
+        Metrics.Context.Session session = context.session(problem);
+        return new AdaptiveCutHide(band, factor, watched, sigma, iterations, session::drops)
+                .withTauDivisor(divisor)
+                .withLocalSearch(passes, receivers);
+    }
+
+    private static int whole(double value, String name) {
+        if (value != Math.rint(value) || value < 1) {
+            throw new IllegalArgumentException("the value of " + name + " must be a whole number of at least 1");
+        }
+        return (int) value;
+    }
+
+    /**
      * The method a key names, configured exactly as SC3 runs it. Shared with SC3LOST and SC6, so the
      * small instances and the timing see the same methods as the main comparison.
      */
     static HidingMethod create(String name, HideProblem problem, Map<Pattern, Long> frequent,
                                 int sigma, double epsilon, long seed, Metrics.Context context) {
+        if (name.indexOf('@') >= 0) {
+            return createVariant(name, problem, frequent, sigma, epsilon, seed, context);
+        }
         switch (name.toLowerCase(Locale.ROOT)) {
             case "cut-hide": {
                 Set<Pattern> closure =

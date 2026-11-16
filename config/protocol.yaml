@@ -47,6 +47,12 @@ row_1_thresholds_and_scope:
     to l_max (scenario SIGMA applies it). Six dna_mt745584 and msnbc configurations lie outside
     [50, 700]: dna [0,1] sigma 2500 and 4000 and dna [0,3] sigma 4000 (6 to 16 patterns, so Lost_rel
     moves in coarse steps there), msnbc [0,3] sigma 1000 and msnbc [0,10] sigma 1000 and 2000.
+  replication_datasets:                       # preregistration section 23, lot C: analysed apart from SC3
+    bike: {sigma: [200], gaps: ["[0,1]", "[0,3]"]}
+    sigma_rule: >
+      The smallest multiple of 100 with |F_sigma| within [50, 700] at both [0,1] and [0,3] (SIGMA scan);
+      for bike, sigma 100 gives 754 and 1227 patterns.
+    group_tables: ["config/configuration_groups_rep.tsv", "config/configuration_groups_rep_repeated.tsv"]
 
 row_2_epsilon_of_B_eps:
   value: 0.5                          # every dataset

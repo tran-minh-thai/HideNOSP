@@ -62,6 +62,9 @@ public final class AdaptiveCutHide implements HidingMethod {
     /** The number of solutions tried by default, iteration 0 included. */
     public static final int DEFAULT_ITERATIONS = 6;
 
+    /** The divisor d of the width tau = max(1, m_Q / d) of the smoothed step; the method uses 4. */
+    public static final double DEFAULT_TAU_DIVISOR = 4.0;
+
     private final List<Pattern> band;
     private final double[] bandFactor;
     private final Map<Pattern, Long> watched;
@@ -72,6 +75,7 @@ public final class AdaptiveCutHide implements HidingMethod {
     private int chosen = -1;
     private int searchPasses = -1;
     private int searchReceivers = -1;
+    private double tauDivisor = DEFAULT_TAU_DIVISOR;
     private MaskLocalSearch.Result searchResult;
 
     /**
@@ -114,10 +118,24 @@ public final class AdaptiveCutHide implements HidingMethod {
         return this;
     }
 
+    /**
+     * The width of the smoothed step, tau = max(1, m_Q / divisor), for the sensitivity analysis of the
+     * constants (preregistration section 23). The default divisor 4 gives the same doubles as before:
+     * dividing by a power of two is exact, so m_Q / 4 equals 0.25 * m_Q bit for bit.
+     */
+    public AdaptiveCutHide withTauDivisor(double divisor) {
+        if (!(divisor > 0)) {
+            throw new IllegalArgumentException("the divisor of tau must be positive, got " + divisor);
+        }
+        this.tauDivisor = divisor;
+        return this;
+    }
+
     @Override
     public String name() {
         return "CUT-HIDE adaptive weight (" + iterations + " iterations"
-                + (band.isEmpty() ? "; B_eps empty, iteration 0 with uniform weights" : "") + ")"
+                + (band.isEmpty() ? "; B_eps empty, iteration 0 with uniform weights" : "")
+                + (tauDivisor != DEFAULT_TAU_DIVISOR ? "; tau = max(1, m / " + tauDivisor + ")" : "") + ")"
                 + (searchPasses > 0 ? " + local search (" + searchPasses + " passes, "
                 + searchReceivers + " receivers)" : "");
     }
@@ -269,7 +287,7 @@ public final class AdaptiveCutHide implements HidingMethod {
         Map<Pattern, Double> factor = new HashMap<>();
         for (Map.Entry<Pattern, Long> e : watched.entrySet()) {
             double margin = e.getValue() - sigma + 1;
-            double tau = Math.max(1.0, 0.25 * margin);
+            double tau = Math.max(1.0, margin / tauDivisor);
             double s = 1.0 / (1.0 + Math.exp(-(drop.getOrDefault(e.getKey(), 0L) - margin + 0.5) / tau));
             factor.put(e.getKey(), 1.0 / margin + s * (1 - s) / tau);
         }

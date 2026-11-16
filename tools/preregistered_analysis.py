@@ -99,6 +99,11 @@ class LOCKED:
                                    "config", "configuration_groups_gap.tsv")
     GAP_GROUP_TABLE_REPEATED = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                                             "config", "configuration_groups_gap_repeated.tsv")
+    # Preregistration section 23, lot C: the replication datasets, grouped from their SC2REP files, own tables.
+    REP_GROUP_TABLE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                                   "config", "configuration_groups_rep.tsv")
+    REP_GROUP_TABLE_REPEATED = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                                            "config", "configuration_groups_rep_repeated.tsv")
     # Section 11, point 5: reported only, never in a Wilcoxon test (shares 64-75% of its
     # sequences with protein_sdb4, which is tested).
     REPORT_ONLY = ("protein_sdb1",)
@@ -304,8 +309,12 @@ TABLE_COLUMNS = ("dataset", "gap", "sigma", "pool", "rho_rep_median", "beta_medi
 def write_group_table(groups, path):
     """Write the group table: done once, from the official SC2 runs, then committed (locked)."""
     with io.open(path, "w", encoding="utf-8", newline="\n") as f:
-        profile = "repeated" if path in (LOCKED.GROUP_TABLE_REPEATED, LOCKED.GAP_GROUP_TABLE_REPEATED) else "pool"
-        if path in (LOCKED.GAP_GROUP_TABLE, LOCKED.GAP_GROUP_TABLE_REPEATED):
+        profile = "repeated" if path in (LOCKED.GROUP_TABLE_REPEATED, LOCKED.GAP_GROUP_TABLE_REPEATED,
+                                         LOCKED.REP_GROUP_TABLE_REPEATED) else "pool"
+        if path in (LOCKED.REP_GROUP_TABLE, LOCKED.REP_GROUP_TABLE_REPEATED):
+            f.write("# Groups of preregistration section 23 (replication datasets, lot C), from SC2REP --profile=%s. "
+                    "Locked by commit.\n" % profile)
+        elif path in (LOCKED.GAP_GROUP_TABLE, LOCKED.GAP_GROUP_TABLE_REPEATED):
             f.write("# Groups of preregistration section 22.3 (gaps with g- > 0), from SC2 --profile=%s. "
                     "Locked by commit.\n" % profile)
         else:
@@ -1002,6 +1011,9 @@ def main(argv=None):
     parser.add_argument("--write-gap-groups", action="store_true",
                         help="write the two group tables of the gaps with g- > 0 (preregistration section 22.3) "
                              "from their SC2 files and stop; done once and committed")
+    parser.add_argument("--write-rep-groups", action="store_true",
+                        help="write config/configuration_groups_rep*.tsv from the SC2REP files (preregistration "
+                             "section 23, lot C) and stop; done once, then committed")
     parser.add_argument("--write-groups", action="store_true",
                         help="write config/configuration_groups.tsv from the SC2 pool files and "
                              "stop; done once, from the official runs, and committed")
@@ -1018,6 +1030,17 @@ def main(argv=None):
             groups = group_configurations(files, profile=profile, positive_gap=True)
             if not groups:
                 print("no SC2 file of the %s profile with g- > 0 in %s" % (profile, args.sc2), file=sys.stderr)
+                return 1
+            write_group_table(groups, path)
+            print("wrote %s (%d configurations)" % (path, len(groups)))
+        return 0
+
+    if args.write_rep_groups:
+        files = collect_files(args.sc2, "SC2REP_")
+        for profile, path in (("pool", LOCKED.REP_GROUP_TABLE), ("repeated", LOCKED.REP_GROUP_TABLE_REPEATED)):
+            groups = group_configurations(files, profile=profile)
+            if not groups:
+                print("no SC2REP file of the %s profile in %s" % (profile, args.sc2), file=sys.stderr)
                 return 1
             write_group_table(groups, path)
             print("wrote %s (%d configurations)" % (path, len(groups)))

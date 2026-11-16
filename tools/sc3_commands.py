@@ -201,7 +201,18 @@ def existing(root):
     return files
 
 
+DEFAULT_EPSILON = 0.5   # the epsilon of B_eps when a run gives none (Sc3MainComparison)
+
+
+def same_epsilon(wanted, given):
+    """Epsilon names a cell too (preregistration section 23, lot B): a file or a cell without the option means 0.5,
+    so the files written before the option was varied still match their cells."""
+    return float(wanted.get("epsilon", DEFAULT_EPSILON)) == float(given.get("epsilon", DEFAULT_EPSILON))
+
+
 def matches(cell, options):
+    if not same_epsilon(cell, options):
+        return False
     for key in IDENTITY:
         given = options.get(key)
         if key == "dataset" and given is not None:

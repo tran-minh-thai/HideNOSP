@@ -1,0 +1,74 @@
+# run 20261116-201021-470_ADMIN-PC_3d7997f2fc6a_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3ROBSUP
+# options {machine=ADMIN-PC, dataset=datasets/bible.txt, format=SPMF, sigma=2000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,hha,dbsh,sbsh-r1,sbsh-rmax, epsilon=0.5, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 4 candidates, 4 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+# closure necessary
+dataset,gap,sigma,sensitive_set,method_key,pattern,constraint,sup_no_before,sup_no_after
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",cut-hide-rw-ls,"[10, 31, 10]","[0,1]",2007,1999
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",cut-hide-rw-ls,"[10, 31, 10]","[0,2]",3000,2992
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",cut-hide-rw-ls,"[10, 31, 10]","[0,inf]",10660,10656
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",hha,"[10, 31, 10]","[0,1]",2007,1999
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",hha,"[10, 31, 10]","[0,2]",3000,2992
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",hha,"[10, 31, 10]","[0,inf]",10660,10658
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",dbsh,"[10, 31, 10]","[0,1]",2007,1999
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",dbsh,"[10, 31, 10]","[0,2]",3000,2992
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",dbsh,"[10, 31, 10]","[0,inf]",10660,10652
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",sbsh-r1,"[10, 31, 10]","[0,1]",2007,1999
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",sbsh-r1,"[10, 31, 10]","[0,2]",3000,2992
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",sbsh-r1,"[10, 31, 10]","[0,inf]",10660,10652
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",sbsh-rmax,"[10, 31, 10]","[0,1]",2007,1999
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",sbsh-rmax,"[10, 31, 10]","[0,2]",3000,2992
+datasets/bible.txt,"[0,1]",2000,"[[10, 31, 10]]",sbsh-rmax,"[10, 31, 10]","[0,inf]",10660,10652
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",cut-hide-rw-ls,"[356, 356]","[0,1]",2843,1999
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",cut-hide-rw-ls,"[356, 356]","[0,2]",2843,1999
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",cut-hide-rw-ls,"[356, 356]","[0,inf]",5267,4423
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",hha,"[356, 356]","[0,1]",2843,1999
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",hha,"[356, 356]","[0,2]",2843,1999
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",hha,"[356, 356]","[0,inf]",5267,4423
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",dbsh,"[356, 356]","[0,1]",2843,1999
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",dbsh,"[356, 356]","[0,2]",2843,1999
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",dbsh,"[356, 356]","[0,inf]",5267,4423
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",sbsh-r1,"[356, 356]","[0,1]",2843,1999
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",sbsh-r1,"[356, 356]","[0,2]",2843,1999
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",sbsh-r1,"[356, 356]","[0,inf]",5267,4423
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",sbsh-rmax,"[356, 356]","[0,1]",2843,1999
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",sbsh-rmax,"[356, 356]","[0,2]",2843,1999
+datasets/bible.txt,"[0,1]",2000,"[[356, 356]]",sbsh-rmax,"[356, 356]","[0,inf]",5267,4423
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",cut-hide-rw-ls,"[46, 10, 46]","[0,1]",3310,1999
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",cut-hide-rw-ls,"[46, 10, 46]","[0,2]",4397,3085
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",cut-hide-rw-ls,"[46, 10, 46]","[0,inf]",11695,10788
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",hha,"[46, 10, 46]","[0,1]",3310,1999
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",hha,"[46, 10, 46]","[0,2]",4397,3078
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",hha,"[46, 10, 46]","[0,inf]",11695,10540
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",dbsh,"[46, 10, 46]","[0,1]",3310,1998
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",dbsh,"[46, 10, 46]","[0,2]",4397,3082
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",dbsh,"[46, 10, 46]","[0,inf]",11695,10385
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",sbsh-r1,"[46, 10, 46]","[0,1]",3310,1999
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",sbsh-r1,"[46, 10, 46]","[0,2]",4397,3076
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",sbsh-r1,"[46, 10, 46]","[0,inf]",11695,10395
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",sbsh-rmax,"[46, 10, 46]","[0,1]",3310,1999
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",sbsh-rmax,"[46, 10, 46]","[0,2]",4397,3076
+datasets/bible.txt,"[0,1]",2000,"[[46, 10, 46]]",sbsh-rmax,"[46, 10, 46]","[0,inf]",11695,10395
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",cut-hide-rw-ls,"[10, 46, 10]","[0,1]",7974,1999
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",cut-hide-rw-ls,"[10, 46, 10]","[0,2]",9760,3733
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",cut-hide-rw-ls,"[10, 46, 10]","[0,inf]",16858,13343
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",hha,"[10, 46, 10]","[0,1]",7974,1998
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",hha,"[10, 46, 10]","[0,2]",9760,3628
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",hha,"[10, 46, 10]","[0,inf]",16858,12833
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",dbsh,"[10, 46, 10]","[0,1]",7974,1999
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",dbsh,"[10, 46, 10]","[0,2]",9760,3769
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",dbsh,"[10, 46, 10]","[0,inf]",16858,10902
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",sbsh-r1,"[10, 46, 10]","[0,1]",7974,1999
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",sbsh-r1,"[10, 46, 10]","[0,2]",9760,3745
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",sbsh-r1,"[10, 46, 10]","[0,inf]",16858,10927
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",sbsh-rmax,"[10, 46, 10]","[0,1]",7974,1999
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",sbsh-rmax,"[10, 46, 10]","[0,2]",9760,3745
+datasets/bible.txt,"[0,1]",2000,"[[10, 46, 10]]",sbsh-rmax,"[10, 46, 10]","[0,inf]",16858,10927

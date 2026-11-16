@@ -957,6 +957,31 @@ def test_non_default_mode_does_not_read_the_stop_batch():
     assert "Section 19.1, distinct-item scope" not in text
 
 
+def test_smallest_testable_n_of_section_23():
+    """Section 23.3: a test of lot C runs only when its smallest attainable p reaches the first Holm level. Without
+    zeros the smallest p of n differences is 2^-n. Only hha is in these rows, so the family has one member and its
+    first level is 0.05: n = 3 (p >= 0.125) is not testable and n = 8 (p >= 0.0039) is; without the option the rule
+    never applies."""
+    close(pa.smallest_p(7, 0), 2 ** -7)
+    assert pa.smallest_p(7, 1) > pa.smallest_p(7, 0)
+    assert pa.smallest_p(0, 0) == 1.0
+
+    def rows(n):
+        out = []
+        for i in range(n):
+            out += [_row(OURS, 10, 0.10, sensitive_set="S%d" % i), _row("hha", 10, 0.20 + 0.01 * i, sensitive_set="S%d" % i)]
+        return out
+    for n, testable in ((3, False), (8, True)):
+        out = []
+        pa.run_h2(rows(n), lambda s="": out.append(s), None, smallest_n=True)
+        text = "\n".join(out)
+        assert ("NOT TESTABLE" in text) == (not testable), text
+        assert ("Wilcoxon-Pratt one-sided" in text) == testable, text
+    out = []
+    pa.run_h2(rows(3), lambda s="": out.append(s), None)
+    assert "NOT TESTABLE" not in "\n".join(out)
+
+
 TESTS = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
 
 

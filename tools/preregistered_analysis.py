@@ -586,7 +586,16 @@ def exclusion_reason(ours, theirs):
 
 # ---------------------------------------------------------------- H2
 
-def run_h2(rows, write, groups=None, hypothesis="H2", locked=None, label="tier (b) baselines", raw_effect=False):
+def smallest_p(n, zeros):
+    """The smallest p the one-sided Wilcoxon-Pratt test can return on n differences of which this many are zero
+    (preregistration section 23.3): every non-zero difference positive, ranks above the zeros."""
+    if n == 0 or zeros >= n:
+        return 1.0
+    return wilcoxon_one_sided([0.0] * zeros + [1.0 + i for i in range(n - zeros)])[1]
+
+
+def run_h2(rows, write, groups=None, hypothesis="H2", locked=None, label="tier (b) baselines", raw_effect=False,
+           smallest_n=False):
     locked = LOCKED.BASELINE_FAMILY if locked is None else locked
     write("")
     write("=" * 78)
@@ -676,6 +685,15 @@ def run_h2(rows, write, groups=None, hypothesis="H2", locked=None, label="tier (
             write("   Dropping it silently would favour us, so it is counted apart for a decision.")
 
         d = [m[1] for m in bins["tested"]]
+        if smallest_n:
+            # Section 23.3: test only when the smallest p attainable on these differences reaches the first Holm level.
+            level = LOCKED.ALPHA / len(family)
+            zeros = sum(1 for x in d if x - LOCKED.DELTA_L == 0)
+            best = smallest_p(len(d), zeros)
+            if best > level:
+                write("   NOT TESTABLE (section 23.3): n = %d (%d differences of 0), smallest attainable p %.4g > %.4g"
+                      % (len(d), zeros, best, level))
+                continue
         if len(d) < 2:
             write("   not enough pairs for a test")
             continue
@@ -1000,7 +1018,7 @@ def main(argv=None):
     parser.add_argument("--closure", default="necessary", choices=CLOSURE_RULES,
                         help="read only the SC3 files written under this closure rule of S-plus (default necessary, "
                              "the corrected rule; subsequence reads the files written before 2026-11-08)")
-    parser.add_argument("--scenario", default="SC3", choices=("SC3", "SC4"),
+    parser.add_argument("--scenario", default="SC3", choices=("SC3", "SC4", "SC3REP", "SC4R"),
                         help="SC3: the comparison under HIDE-DB (default); SC4: the same comparison under HIDE-SEQ at a "
                              "per-sequence limit r, read as H5a and H5b (preregistration section 22.2)")
     parser.add_argument("--gaps", default="zero", choices=("zero", "positive"),
@@ -1066,7 +1084,18 @@ def main(argv=None):
         return 0
 
     default_mode = (args.scenario, args.gaps, args.sizes) == ("SC3", "zero", "all")
-    if args.scenario == "SC4":
+    # Preregistration section 23: SC3REP (lot C) is read as SC3 at g- = 0, all sizes, with its own SC2REP files and group
+    # tables and the rule of the smallest testable n; SC4R (lot G) is read as SC4.
+    sc3_like = args.scenario in ("SC3", "SC3REP") and (args.gaps, args.sizes) == ("zero", "all")
+    replication = args.scenario == "SC3REP"
+    if replication and not sc3_like:
+        print("--scenario=SC3REP is read at --gaps=zero --sizes=all only (preregistration section 23.3)", file=sys.stderr)
+        return 1
+    if args.scenario == "SC4R":
+        names, h3_name = {"distinct": "H5b (r = 3)", "repeated": "H5b-R (r = 3)"}, "H5a (r = 3)"
+    elif replication:
+        names, h3_name = {"distinct": "H2 (replication)", "repeated": "H2-R (replication)"}, "H3 (replication)"
+    elif args.scenario == "SC4":
         names, h3_name = {"distinct": "H5b", "repeated": "H5b-R"}, "H5a"
     elif args.gaps == "positive":
         names, h3_name = {"distinct": "H6", "repeated": "H6-R"}, "H6 (its H3 part)"
@@ -1207,7 +1236,7 @@ def main(argv=None):
     write("Rows by scope (section 11): distinct items %d, repeated items %d"
           % (len(by_scope["distinct"]), len(by_scope["repeated"])))
 
-    sc2_files = collect_files(args.sc2, "SC2_")
+    sc2_files = collect_files(args.sc2, "SC2REP_" if replication else "SC2_")
     # The groups are checked on the SC2 files of the machine analysed, so the check says that this machine
     # reproduces the locked tables (for g- > 0 that is what the batch g4-sc2gap is for, section 22.3).
     if args.machine and sc2_files:
@@ -1239,6 +1268,9 @@ def main(argv=None):
                 if args.gaps == "positive":
                     table = read_group_table(LOCKED.GAP_GROUP_TABLE if profile == "pool"
                                              else LOCKED.GAP_GROUP_TABLE_REPEATED)
+                elif replication:
+                    table = read_group_table(LOCKED.REP_GROUP_TABLE if profile == "pool"
+                                             else LOCKED.REP_GROUP_TABLE_REPEATED)
                 groups_valid = check_groups(groups, write, table=table, profile=profile)
         else:
             write("")
@@ -1246,12 +1278,13 @@ def main(argv=None):
             # Without groups H2 has no main group to be tested on; only a probe may go on.
             groups_valid = args.skip_groups
 
-        h2_valid = run_h2(scope_rows, write, None if args.skip_groups else groups, name, raw_effect=not default_mode)
+        h2_valid = run_h2(scope_rows, write, None if args.skip_groups else groups, name, raw_effect=not sc3_like,
+                          smallest_n=replication)
         run_dominance(scope_rows, None if args.skip_groups else groups, write, hypothesis=name)
         # H3 is preregistered for the main scope; section 11, point 7 makes the ratio of the
         # repeated scope descriptive. H6 repeats H3 as it is. H5a states a verdict on the main group for each
         # baseline and for hha-emb, in either scope, since |R|*_SEQ is exact in both (section 22.2).
-        if args.scenario == "SC4":
+        if args.scenario in ("SC4", "SC4R"):
             run_h3(scope_rows, groups, write, hypothesis=h3_name,
                    judged=LOCKED.BASELINE_FAMILY + SEQUENCE_ONLY, judge_degenerate=False)
         else:
@@ -1259,15 +1292,17 @@ def main(argv=None):
         run_equivalence(scope_rows, write, None if args.skip_groups else groups, hypothesis=name)
         all_valid = all_valid and h2_valid and groups_valid
 
-    if not default_mode:
+    if not sc3_like:
         reaches_ok = run_reaches_optimum(rows, write)
 
-    if stop_raw and not default_mode:
+    if stop_raw and not sc3_like:
         write("")
         write("  The stop-at-threshold batch (section 19.1) belongs to H4 under HIDE-DB at g- = 0; not read here.")
-    if stop_raw and default_mode:
+    if stop_raw and sc3_like:
         stop_rows = merge_reruns(stop_raw, write)
-        for scope, profile, h4b, h4a in (("distinct", "pool", "H4b", "H4a"), ("repeated", "repeated", "H4b-R", "H4a-R")):
+        tag = " (replication)" if replication else ""
+        for scope, profile, h4b, h4a in (("distinct", "pool", "H4b" + tag, "H4a" + tag),
+                                         ("repeated", "repeated", "H4b-R" + tag, "H4a-R" + tag)):
             scope_rows = [r for r in by_scope[scope] if r["method_key"] == LOCKED.OUR_METHOD]
             scope_rows += [r for r in stop_rows if scope_of_set(r["sensitive_set"]) == scope]
             groups = {}
@@ -1281,7 +1316,7 @@ def main(argv=None):
             write("#" * 78)
             run_h4a(scope_rows, use_groups, write, h4a)
             h4_valid = run_h2(scope_rows, write, use_groups, h4b, LOCKED.STOP_FAMILY,
-                              "competitors that stop at the threshold")
+                              "competitors that stop at the threshold", smallest_n=replication)
             run_dominance(scope_rows, use_groups, write, LOCKED.STOP_FAMILY, "competitor that stops at the threshold")
             run_equivalence(scope_rows, write, use_groups, LOCKED.STOP_FAMILY, "competitor that stops at the threshold")
             all_valid = all_valid and h4_valid

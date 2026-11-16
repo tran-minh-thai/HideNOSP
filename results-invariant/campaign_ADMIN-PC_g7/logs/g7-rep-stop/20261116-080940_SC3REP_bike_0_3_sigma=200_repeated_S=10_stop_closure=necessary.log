@@ -1,0 +1,35 @@
+# cell SC3REP bike [0,3] sigma=200 repeated S=10 stop closure=necessary
+# machine ADMIN-PC
+# exit 0 after 14 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 5dfa38102d4c
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3REP the comparison of SC3 on the replication datasets
+# run 20261116-080943-146_ADMIN-PC_5dfa38102d4c_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 10, repeated-item pool 51 candidates, 8 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 10 -> 1, p30: 10 -> 1, p50: 10 -> 1, p70: 10 -> 1, p90: 11 -> 4
+WARNING: the pool gives 8 distinct sets, not 20; the cell runs with these and the result file header says so. No set is repeated to make up the number.
+set 0  occurrence-count-heuristic         |R|  254  lost    0 (0.0000)  supDist 0.0015  0.1 s
+set 0  HHA-stop                           |R|  268  lost    0 (0.0000)  supDist 0.0016  0.2 s
+set 1  occurrence-count-heuristic         |R|  961  lost    2 (0.0040)  supDist 0.0045  0.0 s
+set 1  HHA-stop                           |R|  987  lost    3 (0.0060)  supDist 0.0046  0.1 s
+set 2  occurrence-count-heuristic         |R| 1934  lost    5 (0.0101)  supDist 0.0090  0.0 s
+set 2  HHA-stop                           |R| 2004  lost    9 (0.0181)  supDist 0.0097  0.1 s
+set 3  occurrence-count-heuristic         |R| 3313  lost   16 (0.0323)  supDist 0.0188  0.0 s
+set 3  HHA-stop                           |R| 3401  lost   15 (0.0302)  supDist 0.0199  0.2 s
+set 4  occurrence-count-heuristic         |R| 7019  lost   29 (0.0589)  supDist 0.0541  0.1 s
+set 4  HHA-stop                           |R| 7129  lost   33 (0.0671)  supDist 0.0553  0.3 s
+set 5  occurrence-count-heuristic         |R| 7152  lost   31 (0.0630)  supDist 0.0565  0.1 s
+set 5  HHA-stop                           |R| 7264  lost   34 (0.0691)  supDist 0.0575  0.2 s
+set 6  occurrence-count-heuristic         |R| 7021  lost   25 (0.0508)  supDist 0.0544  0.1 s
+set 6  HHA-stop                           |R| 7131  lost   28 (0.0569)  supDist 0.0556  0.2 s
+set 7  occurrence-count-heuristic         |R| 6867  lost   31 (0.0630)  supDist 0.0523  0.1 s
+set 7  HHA-stop                           |R| 6981  lost   33 (0.0671)  supDist 0.0537  0.2 s
+done in 11.7 s

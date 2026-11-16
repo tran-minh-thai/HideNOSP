@@ -1314,8 +1314,9 @@ as in SC3.
 analysis is not run on the union (the author's decision of 2026-11-16, after the arithmetic of the attainable
 p-values); the per-dataset table of lot E includes BIKE.
 
-**Smallest testable n** (new rule, for every Wilcoxon test of this section; pending confirmation by the author before
-any `SC3REP` file is read). A test is run only when the smallest p-value it can return on its n differences, with the
+**Smallest testable n** (new rule, for every Wilcoxon test of this section; written as "pending confirmation by the
+author before any `SC3REP` file is read", and confirmed by the author on 2026-11-16, when no `SC3REP` or `SC2REP` file of
+the measuring machine existed yet). A test is run only when the smallest p-value it can return on its n differences, with the
 same number of zeros, is at most the first level of its Holm family (α divided by the size of the family); otherwise
 it is reported as "not testable" with its n. With no zeros that is n ≥ 7 for a family of four, n ≥ 6 for a family of
 two, n ≥ 5 for a single test.

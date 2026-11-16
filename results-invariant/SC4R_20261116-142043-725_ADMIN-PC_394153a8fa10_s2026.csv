@@ -1,0 +1,59 @@
+# run 20261116-142043-725_ADMIN-PC_394153a8fa10_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC4R
+# options {machine=ADMIN-PC, dataset=datasets/bpi2012.txt, format=SPMF, sigma=4000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=distinct, timeLimit=1800, methods=cut-hide-rw-ls,cut-hide-rw,cut-hide,hha,hha-emb,dbsh,sbsh-r1,sbsh-rmax,occurrence, r=3, closure=necessary}
+# sensitive sets: size 1, pool 42 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 8 -> 4, p30: 8 -> 4, p50: 9 -> 4, p70: 8 -> 4, p90: 9 -> 4
+# closure necessary
+# mode HIDE_SEQ r=3
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 21]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000018,0.000015,3,3,1.000000,0,0,0,,67,66,67,0,0.000000,0.000016,61,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 21]]",p10,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.000018,0.000015,3,3,1.000000,1,1,0,,67,66,67,0,0.000000,0.000016,61,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 21]]",p10,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000018,0.000015,3,3,1.000000,1,1,0,,67,66,67,0,0.000000,0.000016,61,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 21]]",p10,hha,HHA,,0.000000,0,0.000000,0,0.000018,0.000051,3,3,1.000000,0,0,0,,67,66,67,0,0.000000,0.000043,61,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 21]]",p10,hha-emb,HHA-emb,,0.000000,0,0.000000,0,0.000024,0.000054,4,3,1.333333,0,0,0,,67,66,67,0,0.000000,0.000045,61,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 21]]",p10,dbsh,DBSH,,0.000000,0,0.000000,0,0.000018,0.000026,3,3,1.000000,0,0,0,,67,66,67,0,0.000000,0.000016,61,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 21]]",p10,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.000018,0.000026,3,3,1.000000,0,0,0,,67,66,67,0,0.000000,0.000016,61,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 21]]",p10,sbsh-rmax,SBSH-r2,,0.000000,0,0.000000,0,0.000018,0.000026,3,3,1.000000,0,0,0,,67,66,67,0,0.000000,0.000016,61,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 21]]",p10,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.000018,0.000051,3,3,1.000000,0,0,0,,67,66,67,0,0.000000,0.000043,61,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[9, 7, 19]]",p10,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 19, 21]]",p10,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[14, 12, 19, 21]]",p10,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[9, 6, 17]]",p30,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[0, 5, 12, 19]]",p30,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[0, 5]]",p30,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[6, 17]]",p30,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[5, 12, 15, 19]]",p50,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[5, 12, 19]]",p50,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[0, 14]]",p50,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[0, 14, 12, 15]]",p50,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 21]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001179,0.002004,194,194,1.000000,0,0,0,,67,66,67,0,0.000000,0.000852,60,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 21]]",p70,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.001179,0.002004,194,194,1.000000,142,142,0,,67,66,67,0,0.000000,0.000852,60,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 21]]",p70,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001179,0.002004,194,194,1.000000,142,142,0,,67,66,67,0,0.000000,0.000852,60,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 21]]",p70,hha,HHA,,0.000000,0,0.000000,0,0.001179,0.003046,194,194,1.000000,0,0,0,,67,66,67,0,0.000000,0.001489,60,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 21]]",p70,hha-emb,HHA-emb,,0.000000,2,0.030303,0,0.004565,0.011421,751,194,3.871134,0,0,0,,67,66,65,0,0.000000,0.005306,60,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 21]]",p70,dbsh,DBSH,,0.000000,0,0.000000,0,0.001179,0.004064,194,194,1.000000,0,0,0,,67,66,67,0,0.000000,0.002613,60,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 21]]",p70,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.001179,0.004064,194,194,1.000000,0,0,0,,67,66,67,0,0.000000,0.002613,60,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 21]]",p70,sbsh-rmax,SBSH-r2,,0.000000,0,0.000000,0,0.001179,0.004064,194,194,1.000000,0,0,0,,67,66,67,0,0.000000,0.002613,60,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 21]]",p70,occurrence,occurrence-count-heuristic,,0.000000,0,0.000000,0,0.001179,0.003046,194,194,1.000000,0,0,0,,67,66,67,0,0.000000,0.001489,60,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[14, 12, 15, 19]]",p70,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 19]]",p70,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 19]]",p70,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[9, 6]]",p90,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 15]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.003507,0.005206,577,577,1.000000,0,0,0,,67,66,67,0,0.000000,0.002282,55,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 15]]",p90,cut-hide-rw,CUT-HIDE adaptive weight (6 iterations),,0.000000,0,0.000000,0,0.003507,0.005206,577,577,1.000000,411,411,0,,67,66,67,0,0.000000,0.002282,55,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 15]]",p90,cut-hide,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.003507,0.005206,577,577,1.000000,411,411,0,,67,66,67,0,0.000000,0.002282,55,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 15]]",p90,hha,HHA,,0.000000,4,0.060606,0,0.003507,0.018708,577,577,1.000000,0,0,0,,67,66,63,3,0.054545,0.011778,55,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 15]]",p90,hha-emb,HHA-emb,,0.000000,4,0.060606,0,0.003507,0.018708,577,577,1.000000,0,0,0,,67,66,63,3,0.054545,0.011778,55,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 15]]",p90,dbsh,DBSH,,0.000000,4,0.060606,0,0.003507,0.018708,577,577,1.000000,0,0,0,,67,66,63,3,0.054545,0.011778,55,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 15]]",p90,sbsh-r1,SBSH-r1,,0.000000,4,0.060606,0,0.003507,0.018708,577,577,1.000000,0,0,0,,67,66,63,3,0.054545,0.011778,55,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 15]]",p90,sbsh-rmax,SBSH-r2,,0.000000,4,0.060606,0,0.003507,0.018708,577,577,1.000000,0,0,0,,67,66,63,3,0.054545,0.011778,55,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 15]]",p90,occurrence,occurrence-count-heuristic,,0.000000,4,0.060606,0,0.003507,0.018708,577,577,1.000000,0,0,0,,67,66,63,3,0.054545,0.011778,55,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[9, 6, 4]]",p90,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[9, 7]]",p90,,,,,,,,,,,0,,,,,,,,,,,,,no sequence reaches r

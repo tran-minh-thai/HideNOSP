@@ -1,0 +1,314 @@
+# run 20261116-211433-037_ADMIN-PC_60d74311bbb5_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3ROBSUP
+# options {machine=ADMIN-PC, dataset=datasets/msnbc.txt, format=SPMF, sigma=2000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=distinct, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,hha,dbsh,sbsh-r1,sbsh-rmax, epsilon=0.5, closure=necessary}
+# sensitive sets: size 1, pool 98 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 19 -> 4, p30: 20 -> 4, p50: 19 -> 4, p70: 20 -> 4, p90: 20 -> 4
+# closure necessary
+dataset,gap,sigma,sensitive_set,method_key,pattern,constraint,sup_no_before,sup_no_after
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",cut-hide-rw-ls,"[3, 12]","[0,1]",2009,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",cut-hide-rw-ls,"[3, 12]","[0,2]",2479,2469
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",cut-hide-rw-ls,"[3, 12]","[0,inf]",4257,4250
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",hha,"[3, 12]","[0,1]",2009,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",hha,"[3, 12]","[0,2]",2479,2471
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",hha,"[3, 12]","[0,inf]",4257,4251
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",dbsh,"[3, 12]","[0,1]",2009,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",dbsh,"[3, 12]","[0,2]",2479,2469
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",dbsh,"[3, 12]","[0,inf]",4257,4247
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",sbsh-r1,"[3, 12]","[0,1]",2009,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",sbsh-r1,"[3, 12]","[0,2]",2479,2469
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",sbsh-r1,"[3, 12]","[0,inf]",4257,4247
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",sbsh-rmax,"[3, 12]","[0,1]",2009,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",sbsh-rmax,"[3, 12]","[0,2]",2479,2469
+datasets/msnbc.txt,"[0,1]",2000,"[[3, 12]]",sbsh-rmax,"[3, 12]","[0,inf]",4257,4247
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",cut-hide-rw-ls,"[12, 2, 1]","[0,1]",2110,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",cut-hide-rw-ls,"[12, 2, 1]","[0,2]",2693,2619
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",cut-hide-rw-ls,"[12, 2, 1]","[0,inf]",4784,4729
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",hha,"[12, 2, 1]","[0,1]",2110,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",hha,"[12, 2, 1]","[0,2]",2693,2590
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",hha,"[12, 2, 1]","[0,inf]",4784,4698
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",dbsh,"[12, 2, 1]","[0,1]",2110,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",dbsh,"[12, 2, 1]","[0,2]",2693,2582
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",dbsh,"[12, 2, 1]","[0,inf]",4784,4673
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",sbsh-r1,"[12, 2, 1]","[0,1]",2110,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",sbsh-r1,"[12, 2, 1]","[0,2]",2693,2582
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",sbsh-r1,"[12, 2, 1]","[0,inf]",4784,4674
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",sbsh-rmax,"[12, 2, 1]","[0,1]",2110,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",sbsh-rmax,"[12, 2, 1]","[0,2]",2693,2582
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 2, 1]]",sbsh-rmax,"[12, 2, 1]","[0,inf]",4784,4674
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",cut-hide-rw-ls,"[1, 9]","[0,1]",2225,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",cut-hide-rw-ls,"[1, 9]","[0,2]",2605,2388
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",cut-hide-rw-ls,"[1, 9]","[0,inf]",3370,3166
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",hha,"[1, 9]","[0,1]",2225,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",hha,"[1, 9]","[0,2]",2605,2419
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",hha,"[1, 9]","[0,inf]",3370,3257
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",dbsh,"[1, 9]","[0,1]",2225,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",dbsh,"[1, 9]","[0,2]",2605,2379
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",dbsh,"[1, 9]","[0,inf]",3370,3144
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",sbsh-r1,"[1, 9]","[0,1]",2225,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",sbsh-r1,"[1, 9]","[0,2]",2605,2380
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",sbsh-r1,"[1, 9]","[0,inf]",3370,3148
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",sbsh-rmax,"[1, 9]","[0,1]",2225,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",sbsh-rmax,"[1, 9]","[0,2]",2605,2380
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 9]]",sbsh-rmax,"[1, 9]","[0,inf]",3370,3148
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",cut-hide-rw-ls,"[12, 3]","[0,1]",2138,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",cut-hide-rw-ls,"[12, 3]","[0,2]",2589,2450
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",cut-hide-rw-ls,"[12, 3]","[0,inf]",4213,4098
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",hha,"[12, 3]","[0,1]",2138,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",hha,"[12, 3]","[0,2]",2589,2459
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",hha,"[12, 3]","[0,inf]",4213,4109
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",dbsh,"[12, 3]","[0,1]",2138,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",dbsh,"[12, 3]","[0,2]",2589,2450
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",dbsh,"[12, 3]","[0,inf]",4213,4074
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",sbsh-r1,"[12, 3]","[0,1]",2138,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",sbsh-r1,"[12, 3]","[0,2]",2589,2451
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",sbsh-r1,"[12, 3]","[0,inf]",4213,4076
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",sbsh-rmax,"[12, 3]","[0,1]",2138,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",sbsh-rmax,"[12, 3]","[0,2]",2589,2451
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 3]]",sbsh-rmax,"[12, 3]","[0,inf]",4213,4076
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",cut-hide-rw-ls,"[12, 1, 2]","[0,1]",2389,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",cut-hide-rw-ls,"[12, 1, 2]","[0,2]",3502,3236
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",cut-hide-rw-ls,"[12, 1, 2]","[0,inf]",4910,4684
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",hha,"[12, 1, 2]","[0,1]",2389,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",hha,"[12, 1, 2]","[0,2]",3502,3165
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",hha,"[12, 1, 2]","[0,inf]",4910,4600
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",dbsh,"[12, 1, 2]","[0,1]",2389,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",dbsh,"[12, 1, 2]","[0,2]",3502,3112
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",dbsh,"[12, 1, 2]","[0,inf]",4910,4520
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",sbsh-r1,"[12, 1, 2]","[0,1]",2389,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",sbsh-r1,"[12, 1, 2]","[0,2]",3502,3115
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",sbsh-r1,"[12, 1, 2]","[0,inf]",4910,4529
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",sbsh-rmax,"[12, 1, 2]","[0,1]",2389,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",sbsh-rmax,"[12, 1, 2]","[0,2]",3502,3115
+datasets/msnbc.txt,"[0,1]",2000,"[[12, 1, 2]]",sbsh-rmax,"[12, 1, 2]","[0,inf]",4910,4529
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",cut-hide-rw-ls,"[1, 2, 7]","[0,1]",2355,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",cut-hide-rw-ls,"[1, 2, 7]","[0,2]",3512,3186
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",cut-hide-rw-ls,"[1, 2, 7]","[0,inf]",6331,6046
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",hha,"[1, 2, 7]","[0,1]",2355,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",hha,"[1, 2, 7]","[0,2]",3512,3275
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",hha,"[1, 2, 7]","[0,inf]",6331,6163
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",dbsh,"[1, 2, 7]","[0,1]",2355,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",dbsh,"[1, 2, 7]","[0,2]",3512,3156
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",dbsh,"[1, 2, 7]","[0,inf]",6331,5975
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",sbsh-r1,"[1, 2, 7]","[0,1]",2355,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",sbsh-r1,"[1, 2, 7]","[0,2]",3512,3165
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",sbsh-r1,"[1, 2, 7]","[0,inf]",6331,5984
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",sbsh-rmax,"[1, 2, 7]","[0,1]",2355,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",sbsh-rmax,"[1, 2, 7]","[0,2]",3512,3165
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 7]]",sbsh-rmax,"[1, 2, 7]","[0,inf]",6331,5984
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",cut-hide-rw-ls,"[8, 2]","[0,1]",2557,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",cut-hide-rw-ls,"[8, 2]","[0,2]",2820,2324
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",cut-hide-rw-ls,"[8, 2]","[0,inf]",3705,3289
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",hha,"[8, 2]","[0,1]",2557,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",hha,"[8, 2]","[0,2]",2820,2297
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",hha,"[8, 2]","[0,inf]",3705,3235
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",dbsh,"[8, 2]","[0,1]",2557,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",dbsh,"[8, 2]","[0,2]",2820,2262
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",dbsh,"[8, 2]","[0,inf]",3705,3147
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",sbsh-r1,"[8, 2]","[0,1]",2557,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",sbsh-r1,"[8, 2]","[0,2]",2820,2267
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",sbsh-r1,"[8, 2]","[0,inf]",3705,3154
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",sbsh-rmax,"[8, 2]","[0,1]",2557,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",sbsh-rmax,"[8, 2]","[0,2]",2820,2267
+datasets/msnbc.txt,"[0,1]",2000,"[[8, 2]]",sbsh-rmax,"[8, 2]","[0,inf]",3705,3154
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",cut-hide-rw-ls,"[13, 14]","[0,1]",2249,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",cut-hide-rw-ls,"[13, 14]","[0,2]",2455,2210
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",cut-hide-rw-ls,"[13, 14]","[0,inf]",2850,2626
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",hha,"[13, 14]","[0,1]",2249,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",hha,"[13, 14]","[0,2]",2455,2256
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",hha,"[13, 14]","[0,inf]",2850,2688
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",dbsh,"[13, 14]","[0,1]",2249,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",dbsh,"[13, 14]","[0,2]",2455,2205
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",dbsh,"[13, 14]","[0,inf]",2850,2600
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",sbsh-r1,"[13, 14]","[0,1]",2249,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",sbsh-r1,"[13, 14]","[0,2]",2455,2206
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",sbsh-r1,"[13, 14]","[0,inf]",2850,2600
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",sbsh-rmax,"[13, 14]","[0,1]",2249,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",sbsh-rmax,"[13, 14]","[0,2]",2455,2206
+datasets/msnbc.txt,"[0,1]",2000,"[[13, 14]]",sbsh-rmax,"[13, 14]","[0,inf]",2850,2600
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",cut-hide-rw-ls,"[1, 2, 4]","[0,1]",2990,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",cut-hide-rw-ls,"[1, 2, 4]","[0,2]",4384,3646
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",cut-hide-rw-ls,"[1, 2, 4]","[0,inf]",7909,7315
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",hha,"[1, 2, 4]","[0,1]",2990,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",hha,"[1, 2, 4]","[0,2]",4384,3771
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",hha,"[1, 2, 4]","[0,inf]",7909,7498
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",dbsh,"[1, 2, 4]","[0,1]",2990,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",dbsh,"[1, 2, 4]","[0,2]",4384,3393
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",dbsh,"[1, 2, 4]","[0,inf]",7909,6918
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",sbsh-r1,"[1, 2, 4]","[0,1]",2990,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",sbsh-r1,"[1, 2, 4]","[0,2]",4384,3408
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",sbsh-r1,"[1, 2, 4]","[0,inf]",7909,6948
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",sbsh-rmax,"[1, 2, 4]","[0,1]",2990,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",sbsh-rmax,"[1, 2, 4]","[0,2]",4384,3408
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 2, 4]]",sbsh-rmax,"[1, 2, 4]","[0,inf]",7909,6948
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",cut-hide-rw-ls,"[11, 2]","[0,1]",3249,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",cut-hide-rw-ls,"[11, 2]","[0,2]",3918,2706
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",cut-hide-rw-ls,"[11, 2]","[0,inf]",6655,5698
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",hha,"[11, 2]","[0,1]",3249,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",hha,"[11, 2]","[0,2]",3918,2704
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",hha,"[11, 2]","[0,inf]",6655,5515
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",dbsh,"[11, 2]","[0,1]",3249,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",dbsh,"[11, 2]","[0,2]",3918,2668
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",dbsh,"[11, 2]","[0,inf]",6655,5405
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",sbsh-r1,"[11, 2]","[0,1]",3249,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",sbsh-r1,"[11, 2]","[0,2]",3918,2688
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",sbsh-r1,"[11, 2]","[0,inf]",6655,5431
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",sbsh-rmax,"[11, 2]","[0,1]",3249,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",sbsh-rmax,"[11, 2]","[0,2]",3918,2688
+datasets/msnbc.txt,"[0,1]",2000,"[[11, 2]]",sbsh-rmax,"[11, 2]","[0,inf]",6655,5431
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",cut-hide-rw-ls,"[1, 15]","[0,1]",3328,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",cut-hide-rw-ls,"[1, 15]","[0,2]",3897,2676
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",cut-hide-rw-ls,"[1, 15]","[0,inf]",5221,4253
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",hha,"[1, 15]","[0,1]",3328,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",hha,"[1, 15]","[0,2]",3897,2762
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",hha,"[1, 15]","[0,inf]",5221,4494
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",dbsh,"[1, 15]","[0,1]",3328,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",dbsh,"[1, 15]","[0,2]",3897,2578
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",dbsh,"[1, 15]","[0,inf]",5221,3900
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",sbsh-r1,"[1, 15]","[0,1]",3328,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",sbsh-r1,"[1, 15]","[0,2]",3897,2594
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",sbsh-r1,"[1, 15]","[0,inf]",5221,3926
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",sbsh-rmax,"[1, 15]","[0,1]",3328,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",sbsh-rmax,"[1, 15]","[0,2]",3897,2594
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 15]]",sbsh-rmax,"[1, 15]","[0,inf]",5221,3926
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",cut-hide-rw-ls,"[7, 9]","[0,1]",2598,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",cut-hide-rw-ls,"[7, 9]","[0,2]",2968,2380
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",cut-hide-rw-ls,"[7, 9]","[0,inf]",3756,3241
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",hha,"[7, 9]","[0,1]",2598,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",hha,"[7, 9]","[0,2]",2968,2384
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",hha,"[7, 9]","[0,inf]",3756,3308
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",dbsh,"[7, 9]","[0,1]",2598,1998
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",dbsh,"[7, 9]","[0,2]",2968,2369
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",dbsh,"[7, 9]","[0,inf]",3756,3160
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",sbsh-r1,"[7, 9]","[0,1]",2598,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",sbsh-r1,"[7, 9]","[0,2]",2968,2370
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",sbsh-r1,"[7, 9]","[0,inf]",3756,3158
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",sbsh-rmax,"[7, 9]","[0,1]",2598,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",sbsh-rmax,"[7, 9]","[0,2]",2968,2370
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 9]]",sbsh-rmax,"[7, 9]","[0,inf]",3756,3158
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",cut-hide-rw-ls,"[7, 2]","[0,1]",4318,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",cut-hide-rw-ls,"[7, 2]","[0,2]",5718,3589
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",cut-hide-rw-ls,"[7, 2]","[0,inf]",8546,6817
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",hha,"[7, 2]","[0,1]",4318,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",hha,"[7, 2]","[0,2]",5718,3529
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",hha,"[7, 2]","[0,inf]",8546,7019
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",dbsh,"[7, 2]","[0,1]",4318,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",dbsh,"[7, 2]","[0,2]",5718,3411
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",dbsh,"[7, 2]","[0,inf]",8546,6261
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",sbsh-r1,"[7, 2]","[0,1]",4318,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",sbsh-r1,"[7, 2]","[0,2]",5718,3431
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",sbsh-r1,"[7, 2]","[0,inf]",8546,6372
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",sbsh-rmax,"[7, 2]","[0,1]",4318,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",sbsh-rmax,"[7, 2]","[0,2]",5718,3431
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 2]]",sbsh-rmax,"[7, 2]","[0,inf]",8546,6372
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",cut-hide-rw-ls,"[2, 10]","[0,1]",4356,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",cut-hide-rw-ls,"[2, 10]","[0,2]",5057,2858
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",cut-hide-rw-ls,"[2, 10]","[0,inf]",7364,5459
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",hha,"[2, 10]","[0,1]",4356,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",hha,"[2, 10]","[0,2]",5057,2962
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",hha,"[2, 10]","[0,inf]",7364,5904
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",dbsh,"[2, 10]","[0,1]",4356,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",dbsh,"[2, 10]","[0,2]",5057,2709
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",dbsh,"[2, 10]","[0,inf]",7364,5017
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",sbsh-r1,"[2, 10]","[0,1]",4356,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",sbsh-r1,"[2, 10]","[0,2]",5057,2747
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",sbsh-r1,"[2, 10]","[0,inf]",7364,5049
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",sbsh-rmax,"[2, 10]","[0,1]",4356,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",sbsh-rmax,"[2, 10]","[0,2]",5057,2747
+datasets/msnbc.txt,"[0,1]",2000,"[[2, 10]]",sbsh-rmax,"[2, 10]","[0,inf]",7364,5049
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",cut-hide-rw-ls,"[1, 7, 4]","[0,1]",4683,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",cut-hide-rw-ls,"[1, 7, 4]","[0,2]",5726,3892
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",cut-hide-rw-ls,"[1, 7, 4]","[0,inf]",8137,6528
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",hha,"[1, 7, 4]","[0,1]",4683,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",hha,"[1, 7, 4]","[0,2]",5726,3717
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",hha,"[1, 7, 4]","[0,inf]",8137,6804
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",dbsh,"[1, 7, 4]","[0,1]",4683,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",dbsh,"[1, 7, 4]","[0,2]",5726,3098
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",dbsh,"[1, 7, 4]","[0,inf]",8137,5489
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",sbsh-r1,"[1, 7, 4]","[0,1]",4683,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",sbsh-r1,"[1, 7, 4]","[0,2]",5726,3127
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",sbsh-r1,"[1, 7, 4]","[0,inf]",8137,5525
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",sbsh-rmax,"[1, 7, 4]","[0,1]",4683,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",sbsh-rmax,"[1, 7, 4]","[0,2]",5726,3129
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 7, 4]]",sbsh-rmax,"[1, 7, 4]","[0,inf]",8137,5536
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",cut-hide-rw-ls,"[5, 1]","[0,1]",3906,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",cut-hide-rw-ls,"[5, 1]","[0,2]",4278,2595
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",cut-hide-rw-ls,"[5, 1]","[0,inf]",5081,3612
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",hha,"[5, 1]","[0,1]",3906,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",hha,"[5, 1]","[0,2]",4278,2427
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",hha,"[5, 1]","[0,inf]",5081,3360
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",dbsh,"[5, 1]","[0,1]",3906,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",dbsh,"[5, 1]","[0,2]",4278,2392
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",dbsh,"[5, 1]","[0,inf]",5081,3209
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",sbsh-r1,"[5, 1]","[0,1]",3906,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",sbsh-r1,"[5, 1]","[0,2]",4278,2447
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",sbsh-r1,"[5, 1]","[0,inf]",5081,3301
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",sbsh-rmax,"[5, 1]","[0,1]",3906,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",sbsh-rmax,"[5, 1]","[0,2]",4278,2447
+datasets/msnbc.txt,"[0,1]",2000,"[[5, 1]]",sbsh-rmax,"[5, 1]","[0,inf]",5081,3301
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",cut-hide-rw-ls,"[1, 4]","[0,1]",13325,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",cut-hide-rw-ls,"[1, 4]","[0,2]",15052,5213
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",cut-hide-rw-ls,"[1, 4]","[0,inf]",18555,9935
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",hha,"[1, 4]","[0,1]",13325,1998
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",hha,"[1, 4]","[0,2]",15052,6867
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",hha,"[1, 4]","[0,inf]",18555,13430
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",dbsh,"[1, 4]","[0,1]",13325,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",dbsh,"[1, 4]","[0,2]",15052,3897
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",dbsh,"[1, 4]","[0,inf]",18555,7423
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",sbsh-r1,"[1, 4]","[0,1]",13325,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",sbsh-r1,"[1, 4]","[0,2]",15052,4137
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",sbsh-r1,"[1, 4]","[0,inf]",18555,7869
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",sbsh-rmax,"[1, 4]","[0,1]",13325,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",sbsh-rmax,"[1, 4]","[0,2]",15052,4137
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 4]]",sbsh-rmax,"[1, 4]","[0,inf]",18555,7869
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",cut-hide-rw-ls,"[7, 6]","[0,1]",7897,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",cut-hide-rw-ls,"[7, 6]","[0,2]",8722,2951
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",cut-hide-rw-ls,"[7, 6]","[0,inf]",10847,5497
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",hha,"[7, 6]","[0,1]",7897,1997
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",hha,"[7, 6]","[0,2]",8722,3005
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",hha,"[7, 6]","[0,inf]",10847,5801
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",dbsh,"[7, 6]","[0,1]",7897,1998
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",dbsh,"[7, 6]","[0,2]",8722,2862
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",dbsh,"[7, 6]","[0,inf]",10847,5012
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",sbsh-r1,"[7, 6]","[0,1]",7897,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",sbsh-r1,"[7, 6]","[0,2]",8722,2855
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",sbsh-r1,"[7, 6]","[0,inf]",10847,4985
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",sbsh-rmax,"[7, 6]","[0,1]",7897,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",sbsh-rmax,"[7, 6]","[0,2]",8722,2855
+datasets/msnbc.txt,"[0,1]",2000,"[[7, 6]]",sbsh-rmax,"[7, 6]","[0,inf]",10847,4985
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",cut-hide-rw-ls,"[1, 3]","[0,1]",8129,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",cut-hide-rw-ls,"[1, 3]","[0,2]",9025,3855
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",cut-hide-rw-ls,"[1, 3]","[0,inf]",11348,6612
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",hha,"[1, 3]","[0,1]",8129,1998
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",hha,"[1, 3]","[0,2]",9025,4980
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",hha,"[1, 3]","[0,inf]",11348,8841
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",dbsh,"[1, 3]","[0,1]",8129,1998
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",dbsh,"[1, 3]","[0,2]",9025,2944
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",dbsh,"[1, 3]","[0,inf]",11348,5280
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",sbsh-r1,"[1, 3]","[0,1]",8129,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",sbsh-r1,"[1, 3]","[0,2]",9025,3197
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",sbsh-r1,"[1, 3]","[0,inf]",11348,5711
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",sbsh-rmax,"[1, 3]","[0,1]",8129,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",sbsh-rmax,"[1, 3]","[0,2]",9025,3197
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 3]]",sbsh-rmax,"[1, 3]","[0,inf]",11348,5711
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",cut-hide-rw-ls,"[1, 14]","[0,1]",12222,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",cut-hide-rw-ls,"[1, 14]","[0,2]",13085,4003
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",cut-hide-rw-ls,"[1, 14]","[0,inf]",15149,6783
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",hha,"[1, 14]","[0,1]",12222,1995
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",hha,"[1, 14]","[0,2]",13085,5701
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",hha,"[1, 14]","[0,inf]",15149,10073
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",dbsh,"[1, 14]","[0,1]",12222,1997
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",dbsh,"[1, 14]","[0,2]",13085,2947
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",dbsh,"[1, 14]","[0,inf]",15149,5028
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",sbsh-r1,"[1, 14]","[0,1]",12222,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",sbsh-r1,"[1, 14]","[0,2]",13085,3257
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",sbsh-r1,"[1, 14]","[0,inf]",15149,5543
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",sbsh-rmax,"[1, 14]","[0,1]",12222,1999
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",sbsh-rmax,"[1, 14]","[0,2]",13085,3257
+datasets/msnbc.txt,"[0,1]",2000,"[[1, 14]]",sbsh-rmax,"[1, 14]","[0,inf]",15149,5543

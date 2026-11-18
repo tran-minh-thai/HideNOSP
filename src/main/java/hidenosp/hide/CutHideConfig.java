@@ -7,7 +7,14 @@ package hidenosp.hide;
  * always names the variant that produced it.
  */
 public record CutHideConfig(Weighting weighting, boolean refineLambda, AllocationRule allocation,
-                            boolean verifyPostcondition, Curves curves, boolean refineSeveral) {
+                            boolean verifyPostcondition, Curves curves, boolean refineSeveral,
+                            boolean exactDropDatabase) {
+
+    /** The configurations written before the exact-drop score of HIDE-DB existed: that score off. */
+    public CutHideConfig(Weighting weighting, boolean refineLambda, AllocationRule allocation,
+                         boolean verifyPostcondition, Curves curves, boolean refineSeveral) {
+        this(weighting, refineLambda, allocation, verifyPostcondition, curves, refineSeveral, false);
+    }
 
     public enum Weighting {
         /** Every position weighs the same; the cut then minimises only the number of masks. */
@@ -57,13 +64,14 @@ public record CutHideConfig(Weighting weighting, boolean refineLambda, Allocatio
 
     /** This configuration with the other weighting, everything else unchanged. */
     public CutHideConfig withWeighting(Weighting other) {
-        return new CutHideConfig(other, refineLambda, allocation, verifyPostcondition, curves, refineSeveral);
+        return new CutHideConfig(other, refineLambda, allocation, verifyPostcondition, curves, refineSeveral,
+                exactDropDatabase);
     }
 
     /** This configuration with the curves computed the other way, for SC7 and the ablations. */
     public CutHideConfig withCurves(Curves other) {
         return new CutHideConfig(weighting, refineLambda, allocation, verifyPostcondition, other,
-                refineSeveral);
+                refineSeveral, exactDropDatabase);
     }
 
     /**
@@ -73,7 +81,18 @@ public record CutHideConfig(Weighting weighting, boolean refineLambda, Allocatio
      * order of choice while every pattern stays hidden. One sensitive pattern is unaffected.
      */
     public CutHideConfig withRefineSeveral() {
-        return new CutHideConfig(weighting, refineLambda, allocation, verifyPostcondition, curves, true);
+        return new CutHideConfig(weighting, refineLambda, allocation, verifyPostcondition, curves, true,
+                exactDropDatabase);
+    }
+
+    /**
+     * This configuration with the step-7 greedy of HIDE-DB scoring a position by the exact drop it causes in each
+     * sensitive pattern still needed, capped at what that pattern still needs, as the greedy of HIDE-SEQ does since
+     * preregistration section 22.8. Off, a position is scored by the number of those patterns it is vital for.
+     */
+    public CutHideConfig withExactDropDatabase() {
+        return new CutHideConfig(weighting, refineLambda, allocation, verifyPostcondition, curves, refineSeveral,
+                true);
     }
 
     @Override
@@ -81,6 +100,7 @@ public record CutHideConfig(Weighting weighting, boolean refineLambda, Allocatio
         // The refinement is named only when on, so the configurations that existed before it keep the
         // display name already written in the result files.
         return "CutHide[" + weighting + ", refineLambda=" + refineLambda + ", " + allocation + ", "
-                + curves + (refineSeveral ? ", refineSeveral" : "") + "]";
+                + curves + (refineSeveral ? ", refineSeveral" : "") + (exactDropDatabase ? ", exactDropDatabase" : "")
+                + "]";
     }
 }

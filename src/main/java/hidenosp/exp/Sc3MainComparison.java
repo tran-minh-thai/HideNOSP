@@ -93,6 +93,10 @@ public final class Sc3MainComparison implements Scenario {
      */
     static void runComparison(String id, ResultSink sink, Cli options, HideProblem.Mode mode, boolean robust) {
         GapConstraint gap = new GapConstraint(options.getInt("gmin", 0), options.getInt("gmax", 3));
+        GapConstraint hideGap = hideGapOf(options.get("hideGmax", ""), gap);
+        if (hideGap != gap && mode != HideProblem.Mode.HIDE_DB) {
+            throw new IllegalArgumentException("--hideGmax is defined for HIDE-DB only");
+        }
         int sigma = options.getInt("sigma", 20);
         boolean perSequence = mode == HideProblem.Mode.HIDE_SEQ;
         int threshold = perSequence ? options.getInt("r", 0) : sigma;
@@ -173,6 +177,9 @@ public final class Sc3MainComparison implements Scenario {
         String[] provenance = perSequence
                 ? new String[] {"options " + options.all(), sampling.describe(), "closure " + closureRule.label(),
                     "mode HIDE_SEQ r=" + threshold}
+                : hideGap != gap
+                ? new String[] {"options " + options.all(), sampling.describe(), "closure " + closureRule.label(),
+                    "hide gap " + hideGap}
                 : new String[] {"options " + options.all(), sampling.describe(), "closure " + closureRule.label()};
         if (pareto && perSequence) {
             throw new IllegalArgumentException("--pareto is defined for HIDE-DB only");
@@ -199,7 +206,12 @@ public final class Sc3MainComparison implements Scenario {
                 String stratum = "p" + draws.get(index).percentile();
                 HideProblem problem = new HideProblem(database, sensitive, gap, mode, threshold, epsilon,
                         maxPatternLength, sigma).withClosure(closureRule);
-                long minMasks = boundFromP1(database, sensitive, gap, mode, threshold);
+                // SC3WIDE: the methods hide under a wider constraint, the side effects are counted under the gap of
+                // the run, as in SC3. Without --hideGmax both are the gap of the run and nothing changes.
+                HideProblem hiding = hideGap == gap ? problem
+                        : new HideProblem(database, sensitive, hideGap, mode, threshold, epsilon, maxPatternLength,
+                                sigma).withClosure(closureRule);
+                long minMasks = boundFromP1(database, sensitive, hideGap, mode, threshold);
                 if (perSequence && !reachesLimit(database, sensitive, gap, threshold)) {
                     writer.writeRow(describe(options), shape(database), gap.toString(), Integer.toString(sigma),
                             sensitive.toString(), stratum, "", "", "",
@@ -240,13 +252,13 @@ public final class Sc3MainComparison implements Scenario {
                     // times with consecutive seeds, one row per run. Taking the median belongs
                     // to the analysis and is not done here: with one row per run the table stays
                     // complete enough to be checked again.
-                    int runs = create(name.trim(), problem, frequent, sigma, epsilon, methodSeed,
+                    int runs = create(name.trim(), hiding, frequent, sigma, epsilon, methodSeed,
                             context)
                             .isRandomized() ? repeats : 1;
                     for (int k = 0; k < runs; k++) {
                         long thisSeed = methodSeed + k;
                         HidingMethod method =
-                                create(name.trim(), problem, frequent, sigma, epsilon, thisSeed,
+                                create(name.trim(), hiding, frequent, sigma, epsilon, thisSeed,
                                         context);
                         String status = "";
                         Sanitization sanitization = null;
@@ -254,7 +266,7 @@ public final class Sc3MainComparison implements Scenario {
                         // an invariant result file, and the console serves to plan the next batch.
                         long started = System.nanoTime();
                         try {
-                            sanitization = Deadline.within(timeLimit, () -> method.run(problem));
+                            sanitization = Deadline.within(timeLimit, () -> method.run(hiding));
                         } catch (Deadline.Exceeded e) {
                             status = "OT";
                         } catch (OutOfMemoryError e) {
@@ -277,6 +289,9 @@ public final class Sc3MainComparison implements Scenario {
                         }
                         double seconds = (System.nanoTime() - started) / 1e9;
                         Metrics.Row row = context.evaluateMasking(problem, sanitization);
+                        if (hiding != problem && Metrics.hidingFailure(hiding, sanitization.sanitized()) > 0) {
+                            status = "not hidden at the hiding gap";
+                        }
                         // method_key is the name given on the command line, and it is stable;
                         // method is the name the method gives itself, which may carry its
                         // parameters. SBSH-rmax calls itself SBSH-r2, -r3 or -r4 by the length of
@@ -350,6 +365,24 @@ public final class Sc3MainComparison implements Scenario {
             }
         }
         return false;
+    }
+
+    /**
+     * The constraint the methods hide under (preregistration section 23, lever 1): the gap of the run when the option is
+     * empty, [g-, infinity] for "inf", else [g-, value] with value at least g+ of the run.
+     */
+    public static GapConstraint hideGapOf(String option, GapConstraint gap) {
+        if (option == null || option.isEmpty()) {
+            return gap;
+        }
+        if (option.equals("inf")) {
+            return GapConstraint.unbounded(gap.gmin());
+        }
+        int value = Integer.parseInt(option);
+        if (value < gap.gmax()) {
+            throw new IllegalArgumentException("--hideGmax=" + value + " is narrower than the gap " + gap + " of the run");
+        }
+        return value == gap.gmax() ? gap : GapConstraint.of(gap.gmin(), value);
     }
 
     /**
@@ -532,6 +565,14 @@ public final class Sc3MainComparison implements Scenario {
                         sigma, epsilon, seed, context);
                 return adaptive.withLocalSearch(MaskLocalSearch.DEFAULT_PASSES,
                         MaskLocalSearch.DEFAULT_RECEIVERS);
+            }
+            case "cut-hide-exactdb": {
+                // A probe of the exact-drop score of the HIDE-DB greedy for several patterns, not in any H2 set.
+                // One pattern is cut-hide unchanged.
+                Set<Pattern> closure = problem.closureOf(frequent.keySet());
+                List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
+                double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
+                return CutHide.forBand(CutHideConfig.standard().withExactDropDatabase(), band, factor);
             }
             case "cut-hide-uniform":
                 return new CutHide(CutHideConfig.uniformWeights());

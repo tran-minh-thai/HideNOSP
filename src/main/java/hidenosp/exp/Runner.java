@@ -85,6 +85,7 @@ public final class Runner {
                 new Sc3Robustness(),
                 new Sc3Replication(),
                 new Sc4OtherLimit(),
+                new Sc3Wide(),
                 new Sc5DeletionGhosts(),
                 new Sc6Scalability(),
                 new Sc7DesignVariants(),

@@ -5,6 +5,7 @@ import hidenosp.core.GapConstraint;
 import hidenosp.exp.Sc3MainComparison;
 import hidenosp.exp.Sc3Robustness;
 import hidenosp.exp.Sc3Sensitivity;
+import hidenosp.exp.Sc3Wide;
 import hidenosp.exp.Scenario;
 import hidenosp.io.ResultSink;
 import hidenosp.io.RunId;
@@ -114,6 +115,66 @@ class ReopenedScenariosTest {
                 assertTrue(Long.parseLong(g.get(k).get("sup_no_after")) <= Long.parseLong(g.get(k).get("sup_no_before")));
             }
         }
+    }
+
+    @Test
+    @DisplayName("hideGmax: empty keeps the gap, inf is unbounded, a number widens it, a narrower one is refused")
+    void hideGap() {
+        GapConstraint gap = GapConstraint.of(0, 3);
+        assertTrue(Sc3MainComparison.hideGapOf("", gap) == gap);
+        assertTrue(Sc3MainComparison.hideGapOf("3", gap) == gap);
+        assertEquals("[0,inf]", Sc3MainComparison.hideGapOf("inf", gap).toString());
+        assertEquals("[0,6]", Sc3MainComparison.hideGapOf("6", gap).toString());
+        assertThrows(IllegalArgumentException.class, () -> Sc3MainComparison.hideGapOf("2", gap));
+    }
+
+    @Test
+    @DisplayName("SC3WIDE: every method hides under the wider gap; CUT-HIDE at |R|* there, never below its SC3 count")
+    void wide() throws IOException {
+        Path data = gadget();
+        List<String> base = args(data, "--methods=cut-hide-rw-ls,hha");
+        Map<String, Map<String, String>> sc3 = new HashMap<>();
+        for (Map<String, String> r : run(new Sc3MainComparison(), base).get("SC3")) {
+            sc3.put(r.get("sensitive_set") + "|" + r.get("method_key"), r);
+        }
+        for (String hide : List.of("4", "inf")) {
+            List<String> args = new ArrayList<>(base);
+            args.add("--hideGmax=" + hide);
+            List<Map<String, String>> rows = run(new Sc3Wide(), args).get("SC3WIDE");
+            assertEquals(sc3.size(), rows.size(), "one row per set and method");
+            for (Map<String, String> r : rows) {
+                assertEquals("", r.get("status"), r.toString());
+                assertEquals(0.0, Double.parseDouble(r.get("hf")), r.toString());
+                Map<String, String> narrow = sc3.get(r.get("sensitive_set") + "|" + r.get("method_key"));
+                if (r.get("method_key").equals("cut-hide-rw-ls")) {
+                    // A set that hides under the wider gap hides under the narrower one, so the least count can only
+                    // grow. A heuristic such as HHA has no such property, and it does use fewer masks on this data.
+                    assertTrue(Integer.parseInt(r.get("mask_count")) >= Integer.parseInt(narrow.get("mask_count")),
+                            r.toString());
+                    assertEquals(r.get("min_masks"), r.get("mask_count"), "CUT-HIDE at |R|* under " + hide);
+                }
+            }
+        }
+        assertThrows(IllegalArgumentException.class, () -> run(new Sc3Wide(), base));
+    }
+
+    @Test
+    @DisplayName("Exact-drop score of HIDE-DB: with distinct-item patterns the rows of cut-hide are unchanged")
+    void exactDropDistinct() throws IOException {
+        Path data = gadget();
+        List<String> args = new ArrayList<>(args(data, "--methods=cut-hide,cut-hide-exactdb"));
+        args.remove("--sensitiveSize=1");
+        args.add("--sensitiveSize=2");
+        List<Map<String, String>> rows = run(new Sc3MainComparison(), args).get("SC3");
+        Map<String, Map<String, String>> plain = new HashMap<>();
+        Map<String, Map<String, String>> exact = new HashMap<>();
+        for (Map<String, String> r : rows) {
+            Map<String, String> s = strip(r);
+            s.remove("method");
+            (r.get("method_key").equals("cut-hide") ? plain : exact).put(r.get("sensitive_set"), s);
+        }
+        assertTrue(plain.size() >= 2, "sets compared: " + plain.size());
+        assertEquals(plain, exact);
     }
 
     private static List<String> args(Path data, String methods) {

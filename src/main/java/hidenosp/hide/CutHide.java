@@ -666,6 +666,30 @@ public final class CutHide implements HidingMethod {
             }
         }
 
+        if (config.exactDropDatabase()) {
+            // Score by the exact drop of each pattern still needed when position i is masked on top of the masks of
+            // this sequence, capped at what the pattern still needs; the candidates stay the positions with a vital
+            // node, as under HIDE-SEQ. With distinct items the drop at a vital position is 1, so nothing changes.
+            int[] events = original.events();
+            for (int i = 0; i < original.length(); i++) {
+                if (dropAt[i] == null || here.contains(i)) {
+                    continue;
+                }
+                List<Integer> plus = new ArrayList<>(here);
+                plus.add(i);
+                EventSequence after = original.mask(plus);
+                int[] exact = new int[patternCount];
+                for (int p = 0; p < patternCount; p++) {
+                    Pattern pattern = problem.sensitive().get(p);
+                    if (needed[p] == 0 || !pattern.contains(events[i])) {
+                        continue;
+                    }
+                    long d = index.supNO(p) - SupportNO.of(pattern, after, problem.gap());
+                    exact[p] = (int) Math.min(d, needed[p]);
+                }
+                dropAt[i] = exact;
+            }
+        }
         Candidate best = null;
         double bestRatio = 0;
         for (int i = 0; i < original.length(); i++) {

@@ -1,0 +1,34 @@
+# run 20261118-101633-967_ADMIN-PC_35a736e056b0_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/msnbc.txt, format=SPMF, sigma=1000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls, epsilon=1.0, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 422 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 84 -> 4, p30: 84 -> 4, p50: 85 -> 4, p70: 84 -> 4, p90: 85 -> 4
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[1, 10, 1, 10]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.001508,0,0.000215,0.000943,91,91,1.000000,0,0,0,,664,663,662,1,0.001508,0.000943,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[7, 2, 7]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000295,0.000805,125,125,1.000000,0,0,0,,664,663,663,0,0.000000,0.000805,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[1, 1, 4, 2]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.001508,0,0.000526,0.001472,223,223,1.000000,0,0,0,,664,663,662,1,0.001508,0.001472,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[4, 2, 1, 1]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000087,0.000365,37,37,1.000000,0,0,0,,664,663,663,0,0.000000,0.000365,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[1, 1, 15]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.001508,0,0.000455,0.001035,193,193,1.000000,0,0,0,,664,663,662,1,0.001508,0.001035,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[1, 4, 7, 1]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.003017,0,0.000375,0.001571,159,159,1.000000,0,0,0,,664,663,661,2,0.003017,0.001571,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[9, 9, 7]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.001508,0,0.000307,0.000590,130,130,1.000000,0,0,0,,664,663,662,1,0.001508,0.000590,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[1, 3, 1, 3]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.001508,0,0.000467,0.001950,198,198,1.000000,0,0,0,,664,663,662,1,0.001508,0.001950,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[1, 17, 1]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001487,0.002089,630,630,1.000000,0,0,0,,664,661,661,0,0.000000,0.002089,661,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[9, 1, 1]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.001508,0,0.001097,0.002405,465,465,1.000000,0,0,0,,664,663,662,1,0.001508,0.002405,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[1, 7, 4, 1]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,6,0.009050,0,0.002261,0.006873,958,958,1.000000,0,0,0,,664,663,657,6,0.009050,0.006873,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[1, 7, 4, 7]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.003017,0,0.001916,0.007086,812,812,1.000000,0,0,0,,664,663,661,2,0.003017,0.007086,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[7, 4, 7, 7]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.001508,0,0.002976,0.019673,1261,1261,1.000000,0,0,0,,664,663,662,1,0.001508,0.019673,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[6, 7, 6, 7]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,9,0.013575,0,0.003433,0.012131,1455,1455,1.000000,0,0,0,,664,663,654,9,0.013575,0.012131,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[1, 7, 7, 1]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.001508,0,0.003875,0.016652,1642,1642,1.000000,0,0,0,,664,663,662,1,0.001508,0.016652,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[10, 10]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,4,0.006061,0,0.003964,0.003413,1680,1680,1.000000,0,0,0,,664,660,656,0,0.000000,0.002698,656,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[6, 7, 6]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,14,0.021277,0,0.007240,0.016444,3068,3068,1.000000,0,0,0,,664,658,644,14,0.021309,0.016225,657,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[2, 1, 1, 2]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,5,0.007541,0,0.006508,0.029841,2758,2758,1.000000,0,0,0,,664,663,658,5,0.007541,0.029841,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[12, 1, 1, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,4,0.006033,0,0.005781,0.025220,2450,2450,1.000000,0,0,0,,664,663,659,4,0.006033,0.025220,663,
+datasets/msnbc.txt,"N=31790,len=423776","[0,1]",1000,"[[12, 12]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,5,0.007692,0,0.007997,0.011677,3389,3389,1.000000,0,0,0,,664,650,645,3,0.004651,0.007895,645,

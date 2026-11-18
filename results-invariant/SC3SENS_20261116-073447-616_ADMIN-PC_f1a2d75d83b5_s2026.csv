@@ -1,0 +1,34 @@
+# run 20261116-073447-616_ADMIN-PC_f1a2d75d83b5_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/msnbc.txt, format=SPMF, sigma=5000, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=distinct, pareto=false, timeLimit=1800, methods=cut-hide-uniform, epsilon=0.5, closure=necessary}
+# sensitive sets: size 1, pool 38 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 7 -> 4, p30: 8 -> 4, p50: 7 -> 4, p70: 8 -> 4, p90: 8 -> 4
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[1, 2, 4]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001404,0.003185,595,595,1.000000,520,520,0,,174,173,173,0,0.000000,0.003185,173,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[2, 10]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.005780,0,0.001881,0.001466,797,797,1.000000,638,638,0,,174,173,172,1,0.005780,0.001466,173,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[10, 2]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001435,0.002276,608,608,1.000000,473,473,0,,174,173,173,0,0.000000,0.002276,173,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[3, 2]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001133,0.001909,480,480,1.000000,364,364,0,,174,173,173,0,0.000000,0.001909,173,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[2, 12]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.004913,0.006289,2082,2082,1.000000,1581,1581,0,,174,173,173,0,0.000000,0.006289,173,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[6, 2]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.005780,0,0.006836,0.009938,2897,2897,1.000000,2162,2162,0,,174,173,172,1,0.005780,0.009938,173,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[10, 1]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,4,0.023256,0,0.005524,0.009085,2341,2341,1.000000,1711,1711,0,,174,172,168,4,0.023256,0.009085,172,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[7, 2]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.004042,0.006353,1713,1713,1.000000,1343,1343,0,,174,173,173,0,0.000000,0.006353,173,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[7, 6]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,4,0.023392,0,0.010317,0.011041,4372,4372,1.000000,2504,2504,0,,174,171,167,4,0.023392,0.011041,171,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[4, 2]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.005780,0,0.007990,0.012687,3386,3386,1.000000,2543,2543,0,,174,173,172,1,0.005780,0.012687,173,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[11, 1]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,3,0.017647,0,0.008868,0.011987,3758,3758,1.000000,2973,2973,0,,174,170,167,3,0.017647,0.011987,170,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[3, 1]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,4,0.023392,0,0.008049,0.012701,3411,3411,1.000000,2437,2437,0,,174,171,167,4,0.023392,0.012701,171,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[12, 1]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,5,0.030120,0,0.020306,0.033089,8605,8605,1.000000,5084,5084,0,,174,166,161,5,0.030120,0.033089,166,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[6, 7]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.013653,0.016627,5786,5786,1.000000,3276,3276,0,,174,169,169,0,0.000000,0.016627,169,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[1, 11]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,2,0.011765,0,0.011558,0.006419,4898,4898,1.000000,3835,3835,0,,174,170,168,2,0.011765,0.006419,170,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[14, 1]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,5,0.030488,0,0.017752,0.028328,7523,7523,1.000000,4048,4048,0,,174,164,159,5,0.030488,0.028328,164,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[2, 1]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,20,0.126582,0,0.052363,0.098816,22190,22190,1.000000,11541,11541,0,,174,158,138,20,0.126582,0.098816,158,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[4, 7]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,11,0.068323,0,0.020737,0.037850,8788,8788,1.000000,4077,4077,0,,174,161,150,11,0.068323,0.037850,161,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[1, 2]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,17,0.108280,0,0.063316,0.086019,26832,26832,1.000000,13573,13573,0,,174,157,140,17,0.108280,0.086019,157,
+datasets/msnbc.txt,"N=31790,len=423776","[0,3]",5000,"[[1, 12]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,5,0.030303,0,0.024832,0.020484,10523,10523,1.000000,6022,6022,0,,174,165,160,5,0.030303,0.020484,165,

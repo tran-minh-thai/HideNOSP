@@ -1,0 +1,34 @@
+# run 20261118-092535-234_ADMIN-PC_c09c047825f2_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/protein_sdb1.txt, format=SPMF, sigma=800, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=distinct, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls, epsilon=0.25, closure=necessary}
+# sensitive sets: size 1, pool 157 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 31 -> 4, p30: 31 -> 4, p50: 32 -> 4, p70: 31 -> 4, p90: 32 -> 4
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[14, 5]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000773,0.001367,71,71,1.000000,0,0,0,,192,191,191,0,0.000000,0.001367,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[9, 13]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000860,0.000840,79,79,1.000000,0,0,0,,192,191,191,0,0.000000,0.000840,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[16, 11]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000218,0.000255,20,20,1.000000,0,0,0,,192,191,191,0,0.000000,0.000255,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[11, 7]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000239,0.000255,22,22,1.000000,0,0,0,,192,191,191,0,0.000000,0.000255,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[0, 14]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001883,0.002671,173,173,1.000000,0,0,0,,192,191,191,0,0.000000,0.002671,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[15, 7]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001720,0.002303,158,158,1.000000,0,0,0,,192,191,191,0,0.000000,0.002303,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[16, 3]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001121,0.001347,103,103,1.000000,0,0,0,,192,191,191,0,0.000000,0.001347,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[19, 0]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001339,0.001888,123,123,1.000000,0,0,0,,192,191,191,0,0.000000,0.001888,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[14, 9]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002808,0.004747,258,258,1.000000,0,0,0,,192,191,191,0,0.000000,0.004747,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[0, 12]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002950,0.004798,271,271,1.000000,0,0,0,,192,191,191,0,0.000000,0.004798,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[9, 14]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002699,0.004322,248,248,1.000000,0,0,0,,192,191,191,0,0.000000,0.004322,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[3, 17]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.003048,0.005105,280,280,1.000000,0,0,0,,192,191,191,0,0.000000,0.005105,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[16, 0]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.005301,0.009709,487,487,1.000000,0,0,0,,192,191,191,0,0.000000,0.009709,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[5, 8]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.004473,0.007402,411,411,1.000000,0,0,0,,192,191,191,0,0.000000,0.007402,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[5, 3]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.003788,0.006798,348,348,1.000000,0,0,0,,192,191,191,0,0.000000,0.006798,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[0, 3]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.005529,0.009601,508,508,1.000000,0,0,0,,192,191,191,0,0.000000,0.009601,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[0, 9]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.014879,0.027989,1367,1367,1.000000,0,0,0,,192,190,190,0,0.000000,0.027989,190,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[15, 0]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.006531,0.011829,600,600,1.000000,0,0,0,,192,191,191,0,0.000000,0.011829,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[0, 17]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.010482,0.018062,963,963,1.000000,0,0,0,,192,191,191,0,0.000000,0.018062,191,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,3]",800,"[[5, 0]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.011766,0.021570,1081,1081,1.000000,0,0,0,,192,191,191,0,0.000000,0.021570,191,

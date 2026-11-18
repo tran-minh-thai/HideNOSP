@@ -1,0 +1,33 @@
+# run 20261118-074145-877_ADMIN-PC_db5e5b54864f_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/bible.txt, format=SPMF, sigma=2000, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls, epsilon=1.0, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 19 candidates, 19 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 3 -> 3, p30: 4 -> 4, p50: 4 -> 4, p70: 4 -> 4, p90: 4 -> 4
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[46, 46, 10]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000034,0.000159,27,27,1.000000,0,0,0,,113,112,112,0,0.000000,0.000155,111,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[356, 10, 10]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000161,0.000653,127,127,1.000000,0,0,0,,113,112,112,0,0.000000,0.000653,112,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[10, 10, 46, 10]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000282,0.005225,222,222,1.000000,0,0,0,,113,112,112,0,0.000000,0.005225,112,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[46, 10, 46, 10]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.008929,0,0.000415,0.007002,327,327,1.000000,0,0,0,,113,112,111,1,0.008929,0.007002,112,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[10, 46, 10, 10]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000403,0.006938,317,317,1.000000,0,0,0,,113,112,112,0,0.000000,0.006938,112,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[356, 356]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001095,0.001258,862,862,1.000000,0,0,0,,113,112,112,0,0.000000,0.001258,112,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[31, 10, 10]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000947,0.006415,745,745,1.000000,0,0,0,,113,112,112,0,0.000000,0.006415,112,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[10, 10, 31]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000911,0.006468,717,717,1.000000,0,0,0,,113,112,112,0,0.000000,0.006468,112,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[10, 46, 46]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.008929,0,0.000914,0.009436,719,719,1.000000,0,0,0,,113,112,111,1,0.009009,0.008399,111,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[46, 10, 10]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.009009,0,0.001494,0.012105,1176,1176,1.000000,0,0,0,,113,111,110,1,0.009091,0.011609,110,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[10, 46, 10, 46]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,3,0.026786,0,0.001812,0.018798,1426,1426,1.000000,0,0,0,,113,112,109,3,0.026786,0.018798,112,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[10, 31, 10]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002697,0.015251,2123,2123,1.000000,0,0,0,,113,112,112,0,0.000000,0.015251,112,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[10, 10, 10]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.017857,0,0.001396,0.015799,1099,1099,1.000000,0,0,0,,113,112,110,0,0.000000,0.013407,110,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[10, 10, 46]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002790,0.021157,2196,2196,1.000000,0,0,0,,113,111,111,0,0.000000,0.019650,110,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[46, 46]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002727,0.014683,2146,2146,1.000000,0,0,0,,113,110,110,0,0.000000,0.010125,107,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[31, 31]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.003315,0.005899,2609,2609,1.000000,0,0,0,,113,112,112,0,0.000000,0.005899,112,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[46, 10, 46]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.009091,0,0.003676,0.024117,2893,2893,1.000000,0,0,0,,113,110,109,1,0.009091,0.024117,110,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[10, 46, 10]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.009259,0,0.010298,0.062296,8105,8105,1.000000,0,0,0,,113,108,107,1,0.009259,0.062296,108,
+datasets/bible.txt,"N=36369,len=787066","[0,3]",2000,"[[10, 10]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,3,0.028846,0,0.013389,0.058417,10538,10538,1.000000,0,0,0,,113,104,101,2,0.020000,0.043403,100,

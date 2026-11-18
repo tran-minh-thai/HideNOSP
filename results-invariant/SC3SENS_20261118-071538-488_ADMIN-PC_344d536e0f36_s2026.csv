@@ -1,0 +1,18 @@
+# run 20261118-071538-488_ADMIN-PC_344d536e0f36_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/protein_sdb1.txt, format=SPMF, sigma=800, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls, epsilon=0.25, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 4 candidates, 4 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",800,"[[17, 17]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000642,0.000500,59,59,1.000000,0,0,0,,55,54,54,0,0.000000,0.000500,54,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",800,"[[5, 5]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001459,0.001423,134,134,1.000000,0,0,0,,55,54,54,0,0.000000,0.001423,54,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",800,"[[9, 9]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002797,0.002881,257,257,1.000000,0,0,0,,55,54,54,0,0.000000,0.002881,54,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",800,"[[0, 0]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.006944,0.007503,638,638,1.000000,0,0,0,,55,54,54,0,0.000000,0.007503,54,

@@ -1,0 +1,38 @@
+# cell SC3SENS msnbc [0,10] sigma=5000 distinct S=1 methods eps=0.25 closure=necessary
+# machine ADMIN-PC
+# exit 0 after 251 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 2b097b6f6a8b
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3SENS the comparison of SC3 for the stage ablation and the sensitivity of the constants of CUT-HIDE
+# run 20261118-082141-835_ADMIN-PC_2b097b6f6a8b_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, pool 63 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 12 -> 4, p30: 13 -> 4, p50: 12 -> 4, p70: 13 -> 4, p90: 13 -> 4
+set 0  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  110  lost    0 (0.0000)  supDist 0.0005  8.0 s
+set 1  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  151  lost    0 (0.0000)  supDist 0.0002  5.3 s
+set 2  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|    7  lost    0 (0.0000)  supDist 0.0000  6.9 s
+set 3  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  317  lost    0 (0.0000)  supDist 0.0010  7.6 s
+set 4  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  511  lost    0 (0.0000)  supDist 0.0022  7.7 s
+set 5  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 1490  lost    0 (0.0000)  supDist 0.0033  8.0 s
+set 6  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 1483  lost    0 (0.0000)  supDist 0.0006  7.2 s
+set 7  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R|  639  lost    0 (0.0000)  supDist 0.0027  8.2 s
+set 8  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 1540  lost    1 (0.0043)  supDist 0.0069  9.2 s
+set 9  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 2220  lost    0 (0.0000)  supDist 0.0032  8.2 s
+set 10  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 2219  lost    1 (0.0043)  supDist 0.0039  8.3 s
+set 11  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 1891  lost    0 (0.0000)  supDist 0.0029  7.8 s
+set 12  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 4720  lost    2 (0.0088)  supDist 0.0080  11.6 s
+set 13  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 5639  lost    4 (0.0175)  supDist 0.0128  10.0 s
+set 14  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 4375  lost    2 (0.0087)  supDist 0.0156  10.8 s
+set 15  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 4801  lost    2 (0.0087)  supDist 0.0142  11.1 s
+set 16  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 23782  lost   32 (0.1495)  supDist 0.1029  38.3 s
+set 17  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 9780  lost    5 (0.0231)  supDist 0.0291  13.7 s
+set 18  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 9421  lost    5 (0.0226)  supDist 0.0229  15.5 s
+set 19  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 10340  lost   10 (0.0446)  supDist 0.0304  16.8 s
+done in 248.4 s

@@ -1,0 +1,34 @@
+# run 20261118-090912-048_ADMIN-PC_ee3ff5f6dd41_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/sepsis.txt, format=SPMF, sigma=300, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls, epsilon=1.0, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 140 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 28 -> 4, p30: 28 -> 4, p50: 28 -> 4, p70: 28 -> 4, p90: 28 -> 4
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[3, 2, 6, 2]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000066,0.000071,1,1,1.000000,0,0,0,,455,454,454,0,0.000000,0.000071,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[8, 1, 2, 2]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.002203,0,0.002038,0.004645,31,31,1.000000,0,0,0,,455,454,453,1,0.002203,0.004645,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[2, 7, 1, 2]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000657,0.001066,10,10,1.000000,0,0,0,,455,454,454,0,0.000000,0.001066,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[9, 8, 9, 8]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000131,0.000344,2,2,1.000000,0,0,0,,455,454,454,0,0.000000,0.000344,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[4, 9, 1, 9]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.002203,0,0.005850,0.013205,89,89,1.000000,0,0,0,,455,454,453,1,0.002203,0.013205,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[1, 2, 2, 9]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.002203,0,0.004732,0.009092,72,72,1.000000,0,0,0,,455,454,453,1,0.002203,0.009092,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[2, 6, 9, 2]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.004405,0,0.005258,0.016600,80,80,1.000000,0,0,0,,455,454,452,2,0.004405,0.016600,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[1, 2, 9, 9]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.002203,0,0.005193,0.009440,79,79,1.000000,0,0,0,,455,454,453,1,0.002203,0.009440,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[8, 2, 2, 2]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,5,0.011013,0,0.002103,0.007942,32,32,1.000000,0,0,0,,455,454,449,5,0.011013,0.007942,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[4, 2, 1, 2]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,4,0.008811,0,0.007427,0.017660,113,113,1.000000,0,0,0,,455,454,450,4,0.008811,0.017660,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[5, 2, 1, 2]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,3,0.006608,0,0.006179,0.013432,94,94,1.000000,0,0,0,,455,454,451,3,0.006608,0.013432,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[6, 2, 2]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,5,0.011062,0,0.006376,0.012512,97,97,1.000000,0,0,0,,455,452,447,3,0.006682,0.011971,449,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[1, 2, 2]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,6,0.013393,0,0.015249,0.026545,232,232,1.000000,0,0,0,,455,448,442,5,0.011211,0.025503,446,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[2, 2, 10]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.004425,0,0.009859,0.012090,150,150,1.000000,0,0,0,,455,452,450,1,0.002227,0.011411,449,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[8, 9, 2, 9]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,22,0.048458,0,0.014132,0.049948,215,215,1.000000,0,0,0,,455,454,432,22,0.048458,0.049948,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[2, 8, 9, 9]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,17,0.037445,0,0.007230,0.026962,110,110,1.000000,0,0,0,,455,454,437,17,0.037445,0.026962,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[9, 9, 2, 2]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,21,0.046256,0,0.020376,0.056144,310,310,1.000000,0,0,0,,455,454,433,21,0.046256,0.056144,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[2, 2, 2, 9]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,13,0.028634,0,0.012291,0.033316,187,187,1.000000,0,0,0,,455,454,441,13,0.028634,0.033316,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[9, 9, 9, 2]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,15,0.033040,0,0.015643,0.042226,238,238,1.000000,0,0,0,,455,454,439,15,0.033040,0.042226,454,
+datasets/sepsis.txt,"N=1050,len=15214","[0,3]",300,"[[9, 2, 2, 9]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,29,0.063877,0,0.031747,0.076043,483,483,1.000000,0,0,0,,455,454,425,29,0.063877,0.076043,454,

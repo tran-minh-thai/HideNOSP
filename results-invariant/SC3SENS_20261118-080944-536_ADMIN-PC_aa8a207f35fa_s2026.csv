@@ -1,0 +1,34 @@
+# run 20261118-080944-536_ADMIN-PC_aa8a207f35fa_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/dna_mt745584.txt, format=SPMF, sigma=2500, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls, epsilon=1.0, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 40 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 8 -> 4, p30: 8 -> 4, p50: 8 -> 4, p70: 8 -> 4, p90: 8 -> 4
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 1, 4, 1]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002043,0.007266,61,61,1.000000,0,0,0,,67,66,66,0,0.000000,0.007266,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 1, 2]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.015152,0,0.002646,0.006807,79,79,1.000000,0,0,0,,67,66,65,1,0.015152,0.006807,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 4, 1, 4]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001909,0.006934,57,57,1.000000,0,0,0,,67,66,66,0,0.000000,0.006934,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 1, 1]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001172,0.002458,35,35,1.000000,0,0,0,,67,66,66,0,0.000000,0.002458,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 1, 1, 4]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.030303,0,0.003751,0.013916,112,112,1.000000,0,0,0,,67,66,64,2,0.030303,0.013916,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 4, 4, 1]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.030303,0,0.005090,0.018425,152,152,1.000000,0,0,0,,67,66,64,2,0.030303,0.018425,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 1, 1, 4]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.015152,0,0.002713,0.009321,81,81,1.000000,0,0,0,,67,66,65,1,0.015152,0.009321,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 1, 1]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,3,0.045455,0,0.003617,0.009720,108,108,1.000000,0,0,0,,67,66,63,3,0.045455,0.009720,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 4, 1, 1]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.030303,0,0.007971,0.025971,238,238,1.000000,0,0,0,,67,66,64,2,0.030303,0.025971,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 2]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.007770,0.003655,232,232,1.000000,0,0,0,,67,66,66,0,0.000000,0.003655,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[2, 4, 4]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.005928,0.017961,177,177,1.000000,0,0,0,,67,66,66,0,0.000000,0.017961,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 4, 4, 1]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.015152,0,0.007100,0.021717,212,212,1.000000,0,0,0,,67,66,65,1,0.015152,0.021717,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 1, 4]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,14,0.225806,0,0.018453,0.064902,551,551,1.000000,0,0,0,,67,62,48,13,0.213115,0.063364,61,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 4, 4]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,3,0.045455,0,0.011253,0.034373,336,336,1.000000,0,0,0,,67,66,63,3,0.045455,0.034373,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 3, 4]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.015152,0,0.009444,0.028930,282,282,1.000000,0,0,0,,67,66,65,1,0.015152,0.028930,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[3, 3]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.013563,0.008533,405,405,1.000000,0,0,0,,67,66,66,0,0.000000,0.008533,66,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[1, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,16,0.313725,0,0.078701,0.071793,2350,2350,1.000000,0,0,0,,67,51,35,11,0.244444,0.062807,45,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 1, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,16,0.258065,0,0.027093,0.072823,809,809,1.000000,0,0,0,,67,62,46,15,0.245902,0.072069,61,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 4]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,21,0.411765,0,0.096216,0.082869,2873,2873,1.000000,0,0,0,,67,51,30,16,0.355556,0.072935,45,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",2500,"[[4, 4, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,17,0.274194,0,0.033858,0.082408,1011,1011,1.000000,0,0,0,,67,62,45,16,0.262295,0.081565,61,

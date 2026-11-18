@@ -1,0 +1,314 @@
+# run 20261116-203834-747_ADMIN-PC_f38e0706f339_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3ROBSUP
+# options {machine=ADMIN-PC, dataset=datasets/sepsis.txt, format=SPMF, sigma=300, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,hha,dbsh,sbsh-r1,sbsh-rmax, epsilon=0.5, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 25 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 5 -> 4, p30: 5 -> 4, p50: 5 -> 4, p70: 5 -> 4, p90: 5 -> 4
+# closure necessary
+dataset,gap,sigma,sensitive_set,method_key,pattern,constraint,sup_no_before,sup_no_after
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",cut-hide-rw-ls,"[9, 9, 9, 2]","[0,1]",315,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",cut-hide-rw-ls,"[9, 9, 9, 2]","[0,2]",616,613
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",cut-hide-rw-ls,"[9, 9, 9, 2]","[0,inf]",1174,1171
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",hha,"[9, 9, 9, 2]","[0,1]",315,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",hha,"[9, 9, 9, 2]","[0,2]",616,598
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",hha,"[9, 9, 9, 2]","[0,inf]",1174,1165
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",dbsh,"[9, 9, 9, 2]","[0,1]",315,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",dbsh,"[9, 9, 9, 2]","[0,2]",616,599
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",dbsh,"[9, 9, 9, 2]","[0,inf]",1174,1157
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",sbsh-r1,"[9, 9, 9, 2]","[0,1]",315,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",sbsh-r1,"[9, 9, 9, 2]","[0,2]",616,600
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",sbsh-r1,"[9, 9, 9, 2]","[0,inf]",1174,1155
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",sbsh-rmax,"[9, 9, 9, 2]","[0,1]",315,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",sbsh-rmax,"[9, 9, 9, 2]","[0,2]",616,600
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9, 2]]",sbsh-rmax,"[9, 9, 9, 2]","[0,inf]",1174,1155
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",cut-hide-rw-ls,"[2, 2, 9, 9]","[0,1]",322,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",cut-hide-rw-ls,"[2, 2, 9, 9]","[0,2]",606,597
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",cut-hide-rw-ls,"[2, 2, 9, 9]","[0,inf]",1145,1138
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",hha,"[2, 2, 9, 9]","[0,1]",322,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",hha,"[2, 2, 9, 9]","[0,2]",606,581
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",hha,"[2, 2, 9, 9]","[0,inf]",1145,1136
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",dbsh,"[2, 2, 9, 9]","[0,1]",322,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",dbsh,"[2, 2, 9, 9]","[0,2]",606,583
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",dbsh,"[2, 2, 9, 9]","[0,inf]",1145,1127
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",sbsh-r1,"[2, 2, 9, 9]","[0,1]",322,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",sbsh-r1,"[2, 2, 9, 9]","[0,2]",606,581
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",sbsh-r1,"[2, 2, 9, 9]","[0,inf]",1145,1126
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",sbsh-rmax,"[2, 2, 9, 9]","[0,1]",322,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",sbsh-rmax,"[2, 2, 9, 9]","[0,2]",606,581
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 9]]",sbsh-rmax,"[2, 2, 9, 9]","[0,inf]",1145,1126
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",cut-hide-rw-ls,"[1, 9, 2, 9]","[0,1]",333,299
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",cut-hide-rw-ls,"[1, 9, 2, 9]","[0,2]",422,399
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",cut-hide-rw-ls,"[1, 9, 2, 9]","[0,inf]",475,466
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",hha,"[1, 9, 2, 9]","[0,1]",333,299
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",hha,"[1, 9, 2, 9]","[0,2]",422,388
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",hha,"[1, 9, 2, 9]","[0,inf]",475,441
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",dbsh,"[1, 9, 2, 9]","[0,1]",333,299
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",dbsh,"[1, 9, 2, 9]","[0,2]",422,388
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",dbsh,"[1, 9, 2, 9]","[0,inf]",475,441
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",sbsh-r1,"[1, 9, 2, 9]","[0,1]",333,299
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",sbsh-r1,"[1, 9, 2, 9]","[0,2]",422,392
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",sbsh-r1,"[1, 9, 2, 9]","[0,inf]",475,444
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",sbsh-rmax,"[1, 9, 2, 9]","[0,1]",333,299
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",sbsh-rmax,"[1, 9, 2, 9]","[0,2]",422,392
+datasets/sepsis.txt,"[0,1]",300,"[[1, 9, 2, 9]]",sbsh-rmax,"[1, 9, 2, 9]","[0,inf]",475,444
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",cut-hide-rw-ls,"[2, 9, 9, 9]","[0,1]",309,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",cut-hide-rw-ls,"[2, 9, 9, 9]","[0,2]",640,637
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",cut-hide-rw-ls,"[2, 9, 9, 9]","[0,inf]",1160,1158
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",hha,"[2, 9, 9, 9]","[0,1]",309,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",hha,"[2, 9, 9, 9]","[0,2]",640,630
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",hha,"[2, 9, 9, 9]","[0,inf]",1160,1153
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",dbsh,"[2, 9, 9, 9]","[0,1]",309,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",dbsh,"[2, 9, 9, 9]","[0,2]",640,631
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",dbsh,"[2, 9, 9, 9]","[0,inf]",1160,1152
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",sbsh-r1,"[2, 9, 9, 9]","[0,1]",309,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",sbsh-r1,"[2, 9, 9, 9]","[0,2]",640,630
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",sbsh-r1,"[2, 9, 9, 9]","[0,inf]",1160,1153
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",sbsh-rmax,"[2, 9, 9, 9]","[0,1]",309,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",sbsh-rmax,"[2, 9, 9, 9]","[0,2]",640,630
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 9]]",sbsh-rmax,"[2, 9, 9, 9]","[0,inf]",1160,1153
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",cut-hide-rw-ls,"[2, 9, 2, 2]","[0,1]",427,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",cut-hide-rw-ls,"[2, 9, 2, 2]","[0,2]",724,652
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",cut-hide-rw-ls,"[2, 9, 2, 2]","[0,inf]",1252,1209
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",hha,"[2, 9, 2, 2]","[0,1]",427,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",hha,"[2, 9, 2, 2]","[0,2]",724,574
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",hha,"[2, 9, 2, 2]","[0,inf]",1252,1165
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",dbsh,"[2, 9, 2, 2]","[0,1]",427,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",dbsh,"[2, 9, 2, 2]","[0,2]",724,592
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",dbsh,"[2, 9, 2, 2]","[0,inf]",1252,1128
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",sbsh-r1,"[2, 9, 2, 2]","[0,1]",427,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",sbsh-r1,"[2, 9, 2, 2]","[0,2]",724,579
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",sbsh-r1,"[2, 9, 2, 2]","[0,inf]",1252,1119
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",sbsh-rmax,"[2, 9, 2, 2]","[0,1]",427,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",sbsh-rmax,"[2, 9, 2, 2]","[0,2]",724,579
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 2]]",sbsh-rmax,"[2, 9, 2, 2]","[0,inf]",1252,1119
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",cut-hide-rw-ls,"[2, 2, 9, 2]","[0,1]",400,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",cut-hide-rw-ls,"[2, 2, 9, 2]","[0,2]",682,623
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",cut-hide-rw-ls,"[2, 2, 9, 2]","[0,inf]",1231,1198
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",hha,"[2, 2, 9, 2]","[0,1]",400,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",hha,"[2, 2, 9, 2]","[0,2]",682,575
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",hha,"[2, 2, 9, 2]","[0,inf]",1231,1175
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",dbsh,"[2, 2, 9, 2]","[0,1]",400,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",dbsh,"[2, 2, 9, 2]","[0,2]",682,583
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",dbsh,"[2, 2, 9, 2]","[0,inf]",1231,1145
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",sbsh-r1,"[2, 2, 9, 2]","[0,1]",400,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",sbsh-r1,"[2, 2, 9, 2]","[0,2]",682,577
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",sbsh-r1,"[2, 2, 9, 2]","[0,inf]",1231,1142
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",sbsh-rmax,"[2, 2, 9, 2]","[0,1]",400,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",sbsh-rmax,"[2, 2, 9, 2]","[0,2]",682,577
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9, 2]]",sbsh-rmax,"[2, 2, 9, 2]","[0,inf]",1231,1142
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",cut-hide-rw-ls,"[1, 2, 9, 2]","[0,1]",335,299
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",cut-hide-rw-ls,"[1, 2, 9, 2]","[0,2]",424,394
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",cut-hide-rw-ls,"[1, 2, 9, 2]","[0,inf]",477,465
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",hha,"[1, 2, 9, 2]","[0,1]",335,299
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",hha,"[1, 2, 9, 2]","[0,2]",424,391
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",hha,"[1, 2, 9, 2]","[0,inf]",477,444
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",dbsh,"[1, 2, 9, 2]","[0,1]",335,299
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",dbsh,"[1, 2, 9, 2]","[0,2]",424,388
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",dbsh,"[1, 2, 9, 2]","[0,inf]",477,441
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",sbsh-r1,"[1, 2, 9, 2]","[0,1]",335,299
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",sbsh-r1,"[1, 2, 9, 2]","[0,2]",424,391
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",sbsh-r1,"[1, 2, 9, 2]","[0,inf]",477,443
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",sbsh-rmax,"[1, 2, 9, 2]","[0,1]",335,299
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",sbsh-rmax,"[1, 2, 9, 2]","[0,2]",424,390
+datasets/sepsis.txt,"[0,1]",300,"[[1, 2, 9, 2]]",sbsh-rmax,"[1, 2, 9, 2]","[0,inf]",477,442
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",cut-hide-rw-ls,"[9, 9, 2, 2]","[0,1]",349,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",cut-hide-rw-ls,"[9, 9, 2, 2]","[0,2]",631,612
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",cut-hide-rw-ls,"[9, 9, 2, 2]","[0,inf]",1182,1164
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",hha,"[9, 9, 2, 2]","[0,1]",349,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",hha,"[9, 9, 2, 2]","[0,2]",631,578
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",hha,"[9, 9, 2, 2]","[0,inf]",1182,1159
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",dbsh,"[9, 9, 2, 2]","[0,1]",349,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",dbsh,"[9, 9, 2, 2]","[0,2]",631,578
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",dbsh,"[9, 9, 2, 2]","[0,inf]",1182,1145
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",sbsh-r1,"[9, 9, 2, 2]","[0,1]",349,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",sbsh-r1,"[9, 9, 2, 2]","[0,2]",631,578
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",sbsh-r1,"[9, 9, 2, 2]","[0,inf]",1182,1141
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",sbsh-rmax,"[9, 9, 2, 2]","[0,1]",349,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",sbsh-rmax,"[9, 9, 2, 2]","[0,2]",631,578
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 2, 2]]",sbsh-rmax,"[9, 9, 2, 2]","[0,inf]",1182,1141
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",cut-hide-rw-ls,"[2, 9, 9, 2]","[0,1]",574,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",cut-hide-rw-ls,"[2, 9, 9, 2]","[0,2]",809,596
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",cut-hide-rw-ls,"[2, 9, 9, 2]","[0,inf]",1278,1140
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",hha,"[2, 9, 9, 2]","[0,1]",574,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",hha,"[2, 9, 9, 2]","[0,2]",809,565
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",hha,"[2, 9, 9, 2]","[0,inf]",1278,1128
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",dbsh,"[2, 9, 9, 2]","[0,1]",574,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",dbsh,"[2, 9, 9, 2]","[0,2]",809,528
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",dbsh,"[2, 9, 9, 2]","[0,inf]",1278,1044
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",sbsh-r1,"[2, 9, 9, 2]","[0,1]",574,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",sbsh-r1,"[2, 9, 9, 2]","[0,2]",809,525
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",sbsh-r1,"[2, 9, 9, 2]","[0,inf]",1278,1043
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",sbsh-rmax,"[2, 9, 9, 2]","[0,1]",574,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",sbsh-rmax,"[2, 9, 9, 2]","[0,2]",809,525
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9, 2]]",sbsh-rmax,"[2, 9, 9, 2]","[0,inf]",1278,1043
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",cut-hide-rw-ls,"[9, 2, 9, 9]","[0,1]",435,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",cut-hide-rw-ls,"[9, 2, 9, 9]","[0,2]",738,645
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",cut-hide-rw-ls,"[9, 2, 9, 9]","[0,inf]",1248,1208
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",hha,"[9, 2, 9, 9]","[0,1]",435,298
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",hha,"[9, 2, 9, 9]","[0,2]",738,593
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",hha,"[9, 2, 9, 9]","[0,inf]",1248,1155
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",dbsh,"[9, 2, 9, 9]","[0,1]",435,297
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",dbsh,"[9, 2, 9, 9]","[0,2]",738,591
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",dbsh,"[9, 2, 9, 9]","[0,inf]",1248,1107
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",sbsh-r1,"[9, 2, 9, 9]","[0,1]",435,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",sbsh-r1,"[9, 2, 9, 9]","[0,2]",738,596
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",sbsh-r1,"[9, 2, 9, 9]","[0,inf]",1248,1106
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",sbsh-rmax,"[9, 2, 9, 9]","[0,1]",435,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",sbsh-rmax,"[9, 2, 9, 9]","[0,2]",738,596
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 9]]",sbsh-rmax,"[9, 2, 9, 9]","[0,inf]",1248,1106
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",cut-hide-rw-ls,"[9, 2, 2, 9]","[0,1]",531,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",cut-hide-rw-ls,"[9, 2, 2, 9]","[0,2]",771,599
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",cut-hide-rw-ls,"[9, 2, 2, 9]","[0,inf]",1269,1159
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",hha,"[9, 2, 2, 9]","[0,1]",531,298
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",hha,"[9, 2, 2, 9]","[0,2]",771,567
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",hha,"[9, 2, 2, 9]","[0,inf]",1269,1150
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",dbsh,"[9, 2, 2, 9]","[0,1]",531,297
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",dbsh,"[9, 2, 2, 9]","[0,2]",771,537
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",dbsh,"[9, 2, 2, 9]","[0,inf]",1269,1094
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",sbsh-r1,"[9, 2, 2, 9]","[0,1]",531,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",sbsh-r1,"[9, 2, 2, 9]","[0,2]",771,533
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",sbsh-r1,"[9, 2, 2, 9]","[0,inf]",1269,1085
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",sbsh-rmax,"[9, 2, 2, 9]","[0,1]",531,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",sbsh-rmax,"[9, 2, 2, 9]","[0,2]",771,533
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 2, 9]]",sbsh-rmax,"[9, 2, 2, 9]","[0,inf]",1269,1085
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",cut-hide-rw-ls,"[9, 9, 9]","[0,1]",496,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",cut-hide-rw-ls,"[9, 9, 9]","[0,2]",929,826
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",cut-hide-rw-ls,"[9, 9, 9]","[0,inf]",1694,1621
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",hha,"[9, 9, 9]","[0,1]",496,297
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",hha,"[9, 9, 9]","[0,2]",929,690
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",hha,"[9, 9, 9]","[0,inf]",1694,1546
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",dbsh,"[9, 9, 9]","[0,1]",496,297
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",dbsh,"[9, 9, 9]","[0,2]",929,675
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",dbsh,"[9, 9, 9]","[0,inf]",1694,1495
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",sbsh-r1,"[9, 9, 9]","[0,1]",496,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",sbsh-r1,"[9, 9, 9]","[0,2]",929,681
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",sbsh-r1,"[9, 9, 9]","[0,inf]",1694,1497
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",sbsh-rmax,"[9, 9, 9]","[0,1]",496,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",sbsh-rmax,"[9, 9, 9]","[0,2]",929,681
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9, 9]]",sbsh-rmax,"[9, 9, 9]","[0,inf]",1694,1497
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",cut-hide-rw-ls,"[2, 9, 2, 9]","[0,1]",634,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",cut-hide-rw-ls,"[2, 9, 2, 9]","[0,2]",893,664
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",cut-hide-rw-ls,"[2, 9, 2, 9]","[0,inf]",1326,1173
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",hha,"[2, 9, 2, 9]","[0,1]",634,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",hha,"[2, 9, 2, 9]","[0,2]",893,607
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",hha,"[2, 9, 2, 9]","[0,inf]",1326,1132
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",dbsh,"[2, 9, 2, 9]","[0,1]",634,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",dbsh,"[2, 9, 2, 9]","[0,2]",893,527
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",dbsh,"[2, 9, 2, 9]","[0,inf]",1326,1001
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",sbsh-r1,"[2, 9, 2, 9]","[0,1]",634,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",sbsh-r1,"[2, 9, 2, 9]","[0,2]",893,526
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",sbsh-r1,"[2, 9, 2, 9]","[0,inf]",1326,993
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",sbsh-rmax,"[2, 9, 2, 9]","[0,1]",634,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",sbsh-rmax,"[2, 9, 2, 9]","[0,2]",893,526
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2, 9]]",sbsh-rmax,"[2, 9, 2, 9]","[0,inf]",1326,993
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",cut-hide-rw-ls,"[9, 2, 9, 2]","[0,1]",689,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",cut-hide-rw-ls,"[9, 2, 9, 2]","[0,2]",941,681
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",cut-hide-rw-ls,"[9, 2, 9, 2]","[0,inf]",1418,1240
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",hha,"[9, 2, 9, 2]","[0,1]",689,297
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",hha,"[9, 2, 9, 2]","[0,2]",941,599
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",hha,"[9, 2, 9, 2]","[0,inf]",1418,1173
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",dbsh,"[9, 2, 9, 2]","[0,1]",689,297
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",dbsh,"[9, 2, 9, 2]","[0,2]",941,520
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",dbsh,"[9, 2, 9, 2]","[0,inf]",1418,1030
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",sbsh-r1,"[9, 2, 9, 2]","[0,1]",689,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",sbsh-r1,"[9, 2, 9, 2]","[0,2]",941,509
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",sbsh-r1,"[9, 2, 9, 2]","[0,inf]",1418,1042
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",sbsh-rmax,"[9, 2, 9, 2]","[0,1]",689,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",sbsh-rmax,"[9, 2, 9, 2]","[0,2]",941,509
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9, 2]]",sbsh-rmax,"[9, 2, 9, 2]","[0,inf]",1418,1042
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",cut-hide-rw-ls,"[2, 9, 9]","[0,1]",720,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",cut-hide-rw-ls,"[2, 9, 9]","[0,2]",1038,672
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",cut-hide-rw-ls,"[2, 9, 9]","[0,inf]",1615,1381
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",hha,"[2, 9, 9]","[0,1]",720,298
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",hha,"[2, 9, 9]","[0,2]",1038,640
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",hha,"[2, 9, 9]","[0,inf]",1615,1327
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",dbsh,"[2, 9, 9]","[0,1]",720,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",dbsh,"[2, 9, 9]","[0,2]",1038,591
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",dbsh,"[2, 9, 9]","[0,inf]",1615,1187
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",sbsh-r1,"[2, 9, 9]","[0,1]",720,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",sbsh-r1,"[2, 9, 9]","[0,2]",1038,604
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",sbsh-r1,"[2, 9, 9]","[0,inf]",1615,1202
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",sbsh-rmax,"[2, 9, 9]","[0,1]",720,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",sbsh-rmax,"[2, 9, 9]","[0,2]",1038,604
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 9]]",sbsh-rmax,"[2, 9, 9]","[0,inf]",1615,1202
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",cut-hide-rw-ls,"[2, 2, 9]","[0,1]",642,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",cut-hide-rw-ls,"[2, 2, 9]","[0,2]",943,670
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",cut-hide-rw-ls,"[2, 2, 9]","[0,inf]",1600,1415
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",hha,"[2, 2, 9]","[0,1]",642,297
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",hha,"[2, 2, 9]","[0,2]",943,595
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",hha,"[2, 2, 9]","[0,inf]",1600,1416
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",dbsh,"[2, 2, 9]","[0,1]",642,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",dbsh,"[2, 2, 9]","[0,2]",943,590
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",dbsh,"[2, 2, 9]","[0,inf]",1600,1284
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",sbsh-r1,"[2, 2, 9]","[0,1]",642,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",sbsh-r1,"[2, 2, 9]","[0,2]",943,579
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",sbsh-r1,"[2, 2, 9]","[0,inf]",1600,1281
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",sbsh-rmax,"[2, 2, 9]","[0,1]",642,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",sbsh-rmax,"[2, 2, 9]","[0,2]",943,579
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2, 9]]",sbsh-rmax,"[2, 2, 9]","[0,inf]",1600,1280
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",cut-hide-rw-ls,"[9, 9]","[0,1]",1067,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",cut-hide-rw-ls,"[9, 9]","[0,2]",1522,868
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",cut-hide-rw-ls,"[9, 9]","[0,inf]",2371,1893
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",hha,"[9, 9]","[0,1]",1067,293
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",hha,"[9, 9]","[0,2]",1522,738
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",hha,"[9, 9]","[0,inf]",2371,1791
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",dbsh,"[9, 9]","[0,1]",1067,295
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",dbsh,"[9, 9]","[0,2]",1522,615
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",dbsh,"[9, 9]","[0,inf]",2371,1599
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",sbsh-r1,"[9, 9]","[0,1]",1067,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",sbsh-r1,"[9, 9]","[0,2]",1522,631
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",sbsh-r1,"[9, 9]","[0,inf]",2371,1603
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",sbsh-rmax,"[9, 9]","[0,1]",1067,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",sbsh-rmax,"[9, 9]","[0,2]",1522,631
+datasets/sepsis.txt,"[0,1]",300,"[[9, 9]]",sbsh-rmax,"[9, 9]","[0,inf]",2371,1603
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",cut-hide-rw-ls,"[2, 9, 2]","[0,1]",959,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",cut-hide-rw-ls,"[2, 9, 2]","[0,2]",1233,736
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",cut-hide-rw-ls,"[2, 9, 2]","[0,inf]",1766,1408
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",hha,"[2, 9, 2]","[0,1]",959,296
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",hha,"[2, 9, 2]","[0,2]",1233,657
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",hha,"[2, 9, 2]","[0,inf]",1766,1341
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",dbsh,"[2, 9, 2]","[0,1]",959,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",dbsh,"[2, 9, 2]","[0,2]",1233,546
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",dbsh,"[2, 9, 2]","[0,inf]",1766,1099
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",sbsh-r1,"[2, 9, 2]","[0,1]",959,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",sbsh-r1,"[2, 9, 2]","[0,2]",1233,548
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",sbsh-r1,"[2, 9, 2]","[0,inf]",1766,1101
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",sbsh-rmax,"[2, 9, 2]","[0,1]",959,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",sbsh-rmax,"[2, 9, 2]","[0,2]",1233,548
+datasets/sepsis.txt,"[0,1]",300,"[[2, 9, 2]]",sbsh-rmax,"[2, 9, 2]","[0,inf]",1766,1101
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",cut-hide-rw-ls,"[9, 2, 9]","[0,1]",967,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",cut-hide-rw-ls,"[9, 2, 9]","[0,2]",1222,688
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",cut-hide-rw-ls,"[9, 2, 9]","[0,inf]",1773,1408
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",hha,"[9, 2, 9]","[0,1]",967,297
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",hha,"[9, 2, 9]","[0,2]",1222,629
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",hha,"[9, 2, 9]","[0,inf]",1773,1338
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",dbsh,"[9, 2, 9]","[0,1]",967,295
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",dbsh,"[9, 2, 9]","[0,2]",1222,523
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",dbsh,"[9, 2, 9]","[0,inf]",1773,1096
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",sbsh-r1,"[9, 2, 9]","[0,1]",967,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",sbsh-r1,"[9, 2, 9]","[0,2]",1222,537
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",sbsh-r1,"[9, 2, 9]","[0,inf]",1773,1139
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",sbsh-rmax,"[9, 2, 9]","[0,1]",967,299
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",sbsh-rmax,"[9, 2, 9]","[0,2]",1222,537
+datasets/sepsis.txt,"[0,1]",300,"[[9, 2, 9]]",sbsh-rmax,"[9, 2, 9]","[0,inf]",1773,1139
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",cut-hide-rw-ls,"[2, 2]","[0,1]",904,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",cut-hide-rw-ls,"[2, 2]","[0,2]",1365,827
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",cut-hide-rw-ls,"[2, 2]","[0,inf]",2255,1872
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",hha,"[2, 2]","[0,1]",904,295
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",hha,"[2, 2]","[0,2]",1365,710
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",hha,"[2, 2]","[0,inf]",2255,1770
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",dbsh,"[2, 2]","[0,1]",904,295
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",dbsh,"[2, 2]","[0,2]",1365,635
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",dbsh,"[2, 2]","[0,inf]",2255,1646
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",sbsh-r1,"[2, 2]","[0,1]",904,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",sbsh-r1,"[2, 2]","[0,2]",1365,636
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",sbsh-r1,"[2, 2]","[0,inf]",2255,1650
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",sbsh-rmax,"[2, 2]","[0,1]",904,299
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",sbsh-rmax,"[2, 2]","[0,2]",1365,636
+datasets/sepsis.txt,"[0,1]",300,"[[2, 2]]",sbsh-rmax,"[2, 2]","[0,inf]",2255,1650

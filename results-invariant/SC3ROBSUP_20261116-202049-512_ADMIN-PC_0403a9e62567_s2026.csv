@@ -1,0 +1,274 @@
+# run 20261116-202049-512_ADMIN-PC_0403a9e62567_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3ROBSUP
+# options {machine=ADMIN-PC, dataset=datasets/leviathan.txt, format=SPMF, sigma=500, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,hha,dbsh,sbsh-r1,sbsh-rmax, epsilon=0.5, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 13 candidates, 13 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 2 -> 2, p30: 3 -> 3, p50: 2 -> 2, p70: 3 -> 3, p90: 3 -> 3
+# closure necessary
+dataset,gap,sigma,sensitive_set,method_key,pattern,constraint,sup_no_before,sup_no_after
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",cut-hide-rw-ls,"[8, 14, 8]","[0,3]",503,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",cut-hide-rw-ls,"[8, 14, 8]","[0,4]",677,673
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",cut-hide-rw-ls,"[8, 14, 8]","[0,6]",991,989
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",cut-hide-rw-ls,"[8, 14, 8]","[0,inf]",2177,2175
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",hha,"[8, 14, 8]","[0,3]",503,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",hha,"[8, 14, 8]","[0,4]",677,673
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",hha,"[8, 14, 8]","[0,6]",991,988
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",hha,"[8, 14, 8]","[0,inf]",2177,2175
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",dbsh,"[8, 14, 8]","[0,3]",503,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",dbsh,"[8, 14, 8]","[0,4]",677,673
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",dbsh,"[8, 14, 8]","[0,6]",991,987
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",dbsh,"[8, 14, 8]","[0,inf]",2177,2173
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",sbsh-r1,"[8, 14, 8]","[0,3]",503,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",sbsh-r1,"[8, 14, 8]","[0,4]",677,673
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",sbsh-r1,"[8, 14, 8]","[0,6]",991,987
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",sbsh-r1,"[8, 14, 8]","[0,inf]",2177,2173
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",sbsh-rmax,"[8, 14, 8]","[0,3]",503,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",sbsh-rmax,"[8, 14, 8]","[0,4]",677,673
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",sbsh-rmax,"[8, 14, 8]","[0,6]",991,987
+datasets/leviathan.txt,"[0,3]",500,"[[8, 14, 8]]",sbsh-rmax,"[8, 14, 8]","[0,inf]",2177,2173
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",cut-hide-rw-ls,"[8, 18, 8, 18]","[0,3]",527,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",cut-hide-rw-ls,"[8, 18, 8, 18]","[0,4]",736,712
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",cut-hide-rw-ls,"[8, 18, 8, 18]","[0,6]",1201,1183
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",cut-hide-rw-ls,"[8, 18, 8, 18]","[0,inf]",2794,2780
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",hha,"[8, 18, 8, 18]","[0,3]",527,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",hha,"[8, 18, 8, 18]","[0,4]",736,706
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",hha,"[8, 18, 8, 18]","[0,6]",1201,1172
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",hha,"[8, 18, 8, 18]","[0,inf]",2794,2771
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",dbsh,"[8, 18, 8, 18]","[0,3]",527,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",dbsh,"[8, 18, 8, 18]","[0,4]",736,708
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",dbsh,"[8, 18, 8, 18]","[0,6]",1201,1173
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",dbsh,"[8, 18, 8, 18]","[0,inf]",2794,2766
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",sbsh-r1,"[8, 18, 8, 18]","[0,3]",527,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",sbsh-r1,"[8, 18, 8, 18]","[0,4]",736,708
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",sbsh-r1,"[8, 18, 8, 18]","[0,6]",1201,1173
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",sbsh-r1,"[8, 18, 8, 18]","[0,inf]",2794,2766
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",sbsh-rmax,"[8, 18, 8, 18]","[0,3]",527,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",sbsh-rmax,"[8, 18, 8, 18]","[0,4]",736,708
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",sbsh-rmax,"[8, 18, 8, 18]","[0,6]",1201,1173
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8, 18]]",sbsh-rmax,"[8, 18, 8, 18]","[0,inf]",2794,2766
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",cut-hide-rw-ls,"[8, 8, 8]","[0,3]",586,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",cut-hide-rw-ls,"[8, 8, 8]","[0,4]",950,869
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",cut-hide-rw-ls,"[8, 8, 8]","[0,6]",1745,1710
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",cut-hide-rw-ls,"[8, 8, 8]","[0,inf]",5055,5026
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",hha,"[8, 8, 8]","[0,3]",586,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",hha,"[8, 8, 8]","[0,4]",950,860
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",hha,"[8, 8, 8]","[0,6]",1745,1634
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",hha,"[8, 8, 8]","[0,inf]",5055,4968
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",dbsh,"[8, 8, 8]","[0,3]",586,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",dbsh,"[8, 8, 8]","[0,4]",950,863
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",dbsh,"[8, 8, 8]","[0,6]",1745,1657
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",dbsh,"[8, 8, 8]","[0,inf]",5055,4968
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",sbsh-r1,"[8, 8, 8]","[0,3]",586,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",sbsh-r1,"[8, 8, 8]","[0,4]",950,863
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",sbsh-r1,"[8, 8, 8]","[0,6]",1745,1653
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",sbsh-r1,"[8, 8, 8]","[0,inf]",5055,4968
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",sbsh-rmax,"[8, 8, 8]","[0,3]",586,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",sbsh-rmax,"[8, 8, 8]","[0,4]",950,863
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",sbsh-rmax,"[8, 8, 8]","[0,6]",1745,1653
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 8]]",sbsh-rmax,"[8, 8, 8]","[0,inf]",5055,4968
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",cut-hide-rw-ls,"[18, 8, 8]","[0,3]",601,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",cut-hide-rw-ls,"[18, 8, 8]","[0,4]",850,753
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",cut-hide-rw-ls,"[18, 8, 8]","[0,6]",1411,1343
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",cut-hide-rw-ls,"[18, 8, 8]","[0,inf]",3439,3392
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",hha,"[18, 8, 8]","[0,3]",601,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",hha,"[18, 8, 8]","[0,4]",850,748
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",hha,"[18, 8, 8]","[0,6]",1411,1312
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",hha,"[18, 8, 8]","[0,inf]",3439,3350
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",dbsh,"[18, 8, 8]","[0,3]",601,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",dbsh,"[18, 8, 8]","[0,4]",850,748
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",dbsh,"[18, 8, 8]","[0,6]",1411,1309
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",dbsh,"[18, 8, 8]","[0,inf]",3439,3338
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",sbsh-r1,"[18, 8, 8]","[0,3]",601,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",sbsh-r1,"[18, 8, 8]","[0,4]",850,749
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",sbsh-r1,"[18, 8, 8]","[0,6]",1411,1308
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",sbsh-r1,"[18, 8, 8]","[0,inf]",3439,3337
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",sbsh-rmax,"[18, 8, 8]","[0,3]",601,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",sbsh-rmax,"[18, 8, 8]","[0,4]",850,749
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",sbsh-rmax,"[18, 8, 8]","[0,6]",1411,1308
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 8]]",sbsh-rmax,"[18, 8, 8]","[0,inf]",3439,3337
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",cut-hide-rw-ls,"[71, 71]","[0,3]",620,499
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",cut-hide-rw-ls,"[71, 71]","[0,4]",873,768
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",cut-hide-rw-ls,"[71, 71]","[0,6]",1324,1260
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",cut-hide-rw-ls,"[71, 71]","[0,inf]",3117,3056
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",hha,"[71, 71]","[0,3]",620,499
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",hha,"[71, 71]","[0,4]",873,748
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",hha,"[71, 71]","[0,6]",1324,1191
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",hha,"[71, 71]","[0,inf]",3117,2996
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",dbsh,"[71, 71]","[0,3]",620,499
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",dbsh,"[71, 71]","[0,4]",873,752
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",dbsh,"[71, 71]","[0,6]",1324,1203
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",dbsh,"[71, 71]","[0,inf]",3117,2996
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",sbsh-r1,"[71, 71]","[0,3]",620,499
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",sbsh-r1,"[71, 71]","[0,4]",873,748
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",sbsh-r1,"[71, 71]","[0,6]",1324,1191
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",sbsh-r1,"[71, 71]","[0,inf]",3117,2996
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",sbsh-rmax,"[71, 71]","[0,3]",620,499
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",sbsh-rmax,"[71, 71]","[0,4]",873,748
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",sbsh-rmax,"[71, 71]","[0,6]",1324,1191
+datasets/leviathan.txt,"[0,3]",500,"[[71, 71]]",sbsh-rmax,"[71, 71]","[0,inf]",3117,2996
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",cut-hide-rw-ls,"[8, 8, 18]","[0,3]",728,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",cut-hide-rw-ls,"[8, 8, 18]","[0,4]",1071,848
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",cut-hide-rw-ls,"[8, 8, 18]","[0,6]",1723,1533
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",cut-hide-rw-ls,"[8, 8, 18]","[0,inf]",3976,3848
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",hha,"[8, 8, 18]","[0,3]",728,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",hha,"[8, 8, 18]","[0,4]",1071,844
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",hha,"[8, 8, 18]","[0,6]",1723,1509
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",hha,"[8, 8, 18]","[0,inf]",3976,3832
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",dbsh,"[8, 8, 18]","[0,3]",728,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",dbsh,"[8, 8, 18]","[0,4]",1071,842
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",dbsh,"[8, 8, 18]","[0,6]",1723,1494
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",dbsh,"[8, 8, 18]","[0,inf]",3976,3750
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",sbsh-r1,"[8, 8, 18]","[0,3]",728,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",sbsh-r1,"[8, 8, 18]","[0,4]",1071,843
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",sbsh-r1,"[8, 8, 18]","[0,6]",1723,1493
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",sbsh-r1,"[8, 8, 18]","[0,inf]",3976,3751
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",sbsh-rmax,"[8, 8, 18]","[0,3]",728,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",sbsh-rmax,"[8, 8, 18]","[0,4]",1071,843
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",sbsh-rmax,"[8, 8, 18]","[0,6]",1723,1493
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8, 18]]",sbsh-rmax,"[8, 8, 18]","[0,inf]",3976,3751
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",cut-hide-rw-ls,"[18, 18]","[0,3]",996,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",cut-hide-rw-ls,"[18, 18]","[0,4]",1362,866
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",cut-hide-rw-ls,"[18, 18]","[0,6]",2166,1742
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",cut-hide-rw-ls,"[18, 18]","[0,inf]",5157,4786
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",hha,"[18, 18]","[0,3]",996,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",hha,"[18, 18]","[0,4]",1362,846
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",hha,"[18, 18]","[0,6]",2166,1598
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",hha,"[18, 18]","[0,inf]",5157,4660
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",dbsh,"[18, 18]","[0,3]",996,498
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",dbsh,"[18, 18]","[0,4]",1362,856
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",dbsh,"[18, 18]","[0,6]",2166,1629
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",dbsh,"[18, 18]","[0,inf]",5157,4659
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",sbsh-r1,"[18, 18]","[0,3]",996,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",sbsh-r1,"[18, 18]","[0,4]",1362,849
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",sbsh-r1,"[18, 18]","[0,6]",2166,1613
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",sbsh-r1,"[18, 18]","[0,inf]",5157,4660
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",sbsh-rmax,"[18, 18]","[0,3]",996,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",sbsh-rmax,"[18, 18]","[0,4]",1362,849
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",sbsh-rmax,"[18, 18]","[0,6]",2166,1613
+datasets/leviathan.txt,"[0,3]",500,"[[18, 18]]",sbsh-rmax,"[18, 18]","[0,inf]",5157,4660
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",cut-hide-rw-ls,"[18, 8, 18]","[0,3]",997,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",cut-hide-rw-ls,"[18, 8, 18]","[0,4]",1283,814
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",cut-hide-rw-ls,"[18, 8, 18]","[0,6]",1870,1463
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",cut-hide-rw-ls,"[18, 8, 18]","[0,inf]",3621,3261
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",hha,"[18, 8, 18]","[0,3]",997,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",hha,"[18, 8, 18]","[0,4]",1283,778
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",hha,"[18, 8, 18]","[0,6]",1870,1368
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",hha,"[18, 8, 18]","[0,inf]",3621,3192
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",dbsh,"[18, 8, 18]","[0,3]",997,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",dbsh,"[18, 8, 18]","[0,4]",1283,785
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",dbsh,"[18, 8, 18]","[0,6]",1870,1368
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",dbsh,"[18, 8, 18]","[0,inf]",3621,3129
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",sbsh-r1,"[18, 8, 18]","[0,3]",997,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",sbsh-r1,"[18, 8, 18]","[0,4]",1283,785
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",sbsh-r1,"[18, 8, 18]","[0,6]",1870,1370
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",sbsh-r1,"[18, 8, 18]","[0,inf]",3621,3135
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",sbsh-rmax,"[18, 8, 18]","[0,3]",997,499
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",sbsh-rmax,"[18, 8, 18]","[0,4]",1283,785
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",sbsh-rmax,"[18, 8, 18]","[0,6]",1870,1370
+datasets/leviathan.txt,"[0,3]",500,"[[18, 8, 18]]",sbsh-rmax,"[18, 8, 18]","[0,inf]",3621,3135
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",cut-hide-rw-ls,"[1, 1, 1, 1]","[0,3]",1351,499
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",cut-hide-rw-ls,"[1, 1, 1, 1]","[0,4]",1363,907
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",cut-hide-rw-ls,"[1, 1, 1, 1]","[0,6]",1408,952
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",cut-hide-rw-ls,"[1, 1, 1, 1]","[0,inf]",1480,1024
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",hha,"[1, 1, 1, 1]","[0,3]",1351,493
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",hha,"[1, 1, 1, 1]","[0,4]",1363,595
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",hha,"[1, 1, 1, 1]","[0,6]",1408,706
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",hha,"[1, 1, 1, 1]","[0,inf]",1480,907
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",dbsh,"[1, 1, 1, 1]","[0,3]",1351,495
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",dbsh,"[1, 1, 1, 1]","[0,4]",1363,507
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",dbsh,"[1, 1, 1, 1]","[0,6]",1408,540
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",dbsh,"[1, 1, 1, 1]","[0,inf]",1480,624
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",sbsh-r1,"[1, 1, 1, 1]","[0,3]",1351,499
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",sbsh-r1,"[1, 1, 1, 1]","[0,4]",1363,511
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",sbsh-r1,"[1, 1, 1, 1]","[0,6]",1408,541
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",sbsh-r1,"[1, 1, 1, 1]","[0,inf]",1480,628
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",sbsh-rmax,"[1, 1, 1, 1]","[0,3]",1351,499
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",sbsh-rmax,"[1, 1, 1, 1]","[0,4]",1363,511
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",sbsh-rmax,"[1, 1, 1, 1]","[0,6]",1408,541
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1, 1]]",sbsh-rmax,"[1, 1, 1, 1]","[0,inf]",1480,628
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",cut-hide-rw-ls,"[8, 18, 8]","[0,3]",1867,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",cut-hide-rw-ls,"[8, 18, 8]","[0,4]",2174,853
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",cut-hide-rw-ls,"[8, 18, 8]","[0,6]",2727,1509
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",cut-hide-rw-ls,"[8, 18, 8]","[0,inf]",4363,3371
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",hha,"[8, 18, 8]","[0,3]",1867,498
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",hha,"[8, 18, 8]","[0,4]",2174,844
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",hha,"[8, 18, 8]","[0,6]",2727,1515
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",hha,"[8, 18, 8]","[0,inf]",4363,3528
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",dbsh,"[8, 18, 8]","[0,3]",1867,498
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",dbsh,"[8, 18, 8]","[0,4]",2174,806
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",dbsh,"[8, 18, 8]","[0,6]",2727,1354
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",dbsh,"[8, 18, 8]","[0,inf]",4363,3007
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",sbsh-r1,"[8, 18, 8]","[0,3]",1867,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",sbsh-r1,"[8, 18, 8]","[0,4]",2174,806
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",sbsh-r1,"[8, 18, 8]","[0,6]",2727,1356
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",sbsh-r1,"[8, 18, 8]","[0,inf]",4363,3026
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",sbsh-rmax,"[8, 18, 8]","[0,3]",1867,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",sbsh-rmax,"[8, 18, 8]","[0,4]",2174,806
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",sbsh-rmax,"[8, 18, 8]","[0,6]",2727,1356
+datasets/leviathan.txt,"[0,3]",500,"[[8, 18, 8]]",sbsh-rmax,"[8, 18, 8]","[0,inf]",4363,3026
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",cut-hide-rw-ls,"[8, 8]","[0,3]",2568,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",cut-hide-rw-ls,"[8, 8]","[0,4]",3310,1216
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",cut-hide-rw-ls,"[8, 8]","[0,6]",4589,2729
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",cut-hide-rw-ls,"[8, 8]","[0,inf]",8344,6737
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",hha,"[8, 8]","[0,3]",2568,497
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",hha,"[8, 8]","[0,4]",3310,1143
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",hha,"[8, 8]","[0,6]",4589,2441
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",hha,"[8, 8]","[0,inf]",8344,6568
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",dbsh,"[8, 8]","[0,3]",2568,497
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",dbsh,"[8, 8]","[0,4]",3310,1124
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",dbsh,"[8, 8]","[0,6]",4589,2210
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",dbsh,"[8, 8]","[0,inf]",8344,6273
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",sbsh-r1,"[8, 8]","[0,3]",2568,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",sbsh-r1,"[8, 8]","[0,4]",3310,1114
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",sbsh-r1,"[8, 8]","[0,6]",4589,2188
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",sbsh-r1,"[8, 8]","[0,inf]",8344,6275
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",sbsh-rmax,"[8, 8]","[0,3]",2568,499
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",sbsh-rmax,"[8, 8]","[0,4]",3310,1114
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",sbsh-rmax,"[8, 8]","[0,6]",4589,2188
+datasets/leviathan.txt,"[0,3]",500,"[[8, 8]]",sbsh-rmax,"[8, 8]","[0,inf]",8344,6275
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",cut-hide-rw-ls,"[1, 1, 1]","[0,3]",2592,499
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",cut-hide-rw-ls,"[1, 1, 1]","[0,4]",2600,934
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",cut-hide-rw-ls,"[1, 1, 1]","[0,6]",2633,985
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",cut-hide-rw-ls,"[1, 1, 1]","[0,inf]",2689,1043
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",hha,"[1, 1, 1]","[0,3]",2592,460
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",hha,"[1, 1, 1]","[0,4]",2600,492
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",hha,"[1, 1, 1]","[0,6]",2633,641
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",hha,"[1, 1, 1]","[0,inf]",2689,785
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",dbsh,"[1, 1, 1]","[0,3]",2592,460
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",dbsh,"[1, 1, 1]","[0,4]",2600,464
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",dbsh,"[1, 1, 1]","[0,6]",2633,487
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",dbsh,"[1, 1, 1]","[0,inf]",2689,557
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",sbsh-r1,"[1, 1, 1]","[0,3]",2592,499
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",sbsh-r1,"[1, 1, 1]","[0,4]",2600,503
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",sbsh-r1,"[1, 1, 1]","[0,6]",2633,524
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",sbsh-r1,"[1, 1, 1]","[0,inf]",2689,596
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",sbsh-rmax,"[1, 1, 1]","[0,3]",2592,499
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",sbsh-rmax,"[1, 1, 1]","[0,4]",2600,503
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",sbsh-rmax,"[1, 1, 1]","[0,6]",2633,524
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1, 1]]",sbsh-rmax,"[1, 1, 1]","[0,inf]",2689,596
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",cut-hide-rw-ls,"[1, 1]","[0,3]",3838,499
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",cut-hide-rw-ls,"[1, 1]","[0,4]",3842,770
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",cut-hide-rw-ls,"[1, 1]","[0,6]",3863,797
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",cut-hide-rw-ls,"[1, 1]","[0,inf]",3908,848
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",hha,"[1, 1]","[0,3]",3838,477
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",hha,"[1, 1]","[0,4]",3842,517
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",hha,"[1, 1]","[0,6]",3863,646
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",hha,"[1, 1]","[0,inf]",3908,713
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",dbsh,"[1, 1]","[0,3]",3838,477
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",dbsh,"[1, 1]","[0,4]",3842,479
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",dbsh,"[1, 1]","[0,6]",3863,491
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",dbsh,"[1, 1]","[0,inf]",3908,547
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",sbsh-r1,"[1, 1]","[0,3]",3838,499
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",sbsh-r1,"[1, 1]","[0,4]",3842,501
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",sbsh-r1,"[1, 1]","[0,6]",3863,512
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",sbsh-r1,"[1, 1]","[0,inf]",3908,569
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",sbsh-rmax,"[1, 1]","[0,3]",3838,499
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",sbsh-rmax,"[1, 1]","[0,4]",3842,501
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",sbsh-rmax,"[1, 1]","[0,6]",3863,512
+datasets/leviathan.txt,"[0,3]",500,"[[1, 1]]",sbsh-rmax,"[1, 1]","[0,inf]",3908,569

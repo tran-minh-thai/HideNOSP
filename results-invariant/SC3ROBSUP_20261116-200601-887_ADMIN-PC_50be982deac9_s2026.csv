@@ -1,0 +1,59 @@
+# run 20261116-200601-887_ADMIN-PC_50be982deac9_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3ROBSUP
+# options {machine=ADMIN-PC, dataset=datasets/dna_mt745584.txt, format=SPMF, sigma=2500, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,hha,dbsh,sbsh-r1,sbsh-rmax, epsilon=0.5, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 3 candidates, 3 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 0 -> 0, p70: 1 -> 1, p90: 1 -> 1
+# closure necessary
+dataset,gap,sigma,sensitive_set,method_key,pattern,constraint,sup_no_before,sup_no_after
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",cut-hide-rw-ls,"[4, 4, 4]","[0,1]",2748,2499
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",cut-hide-rw-ls,"[4, 4, 4]","[0,2]",4456,4373
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",cut-hide-rw-ls,"[4, 4, 4]","[0,inf]",8603,8520
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",hha,"[4, 4, 4]","[0,1]",2748,2498
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",hha,"[4, 4, 4]","[0,2]",4456,4162
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",hha,"[4, 4, 4]","[0,inf]",8603,8403
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",dbsh,"[4, 4, 4]","[0,1]",2748,2499
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",dbsh,"[4, 4, 4]","[0,2]",4456,4160
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",dbsh,"[4, 4, 4]","[0,inf]",8603,8354
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",sbsh-r1,"[4, 4, 4]","[0,1]",2748,2499
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",sbsh-r1,"[4, 4, 4]","[0,2]",4456,4157
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",sbsh-r1,"[4, 4, 4]","[0,inf]",8603,8354
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",sbsh-rmax,"[4, 4, 4]","[0,1]",2748,2499
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",sbsh-rmax,"[4, 4, 4]","[0,2]",4456,4157
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4, 4]]",sbsh-rmax,"[4, 4, 4]","[0,inf]",8603,8354
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",cut-hide-rw-ls,"[1, 1]","[0,1]",4627,2499
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",cut-hide-rw-ls,"[1, 1]","[0,2]",5749,4552
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",cut-hide-rw-ls,"[1, 1]","[0,inf]",8417,7353
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",hha,"[1, 1]","[0,1]",4627,2496
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",hha,"[1, 1]","[0,2]",5749,3669
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",hha,"[1, 1]","[0,inf]",8417,6801
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",dbsh,"[1, 1]","[0,1]",4627,2498
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",dbsh,"[1, 1]","[0,2]",5749,3349
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",dbsh,"[1, 1]","[0,inf]",8417,6288
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",sbsh-r1,"[1, 1]","[0,1]",4627,2499
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",sbsh-r1,"[1, 1]","[0,2]",5749,3350
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",sbsh-r1,"[1, 1]","[0,inf]",8417,6289
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",sbsh-rmax,"[1, 1]","[0,1]",4627,2499
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",sbsh-rmax,"[1, 1]","[0,2]",5749,3350
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[1, 1]]",sbsh-rmax,"[1, 1]","[0,inf]",8417,6289
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",cut-hide-rw-ls,"[4, 4]","[0,1]",5113,2499
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",cut-hide-rw-ls,"[4, 4]","[0,2]",6567,5087
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",cut-hide-rw-ls,"[4, 4]","[0,inf]",9101,7780
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",hha,"[4, 4]","[0,1]",5113,2499
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",hha,"[4, 4]","[0,2]",6567,4133
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",hha,"[4, 4]","[0,inf]",9101,7164
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",dbsh,"[4, 4]","[0,1]",5113,2498
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",dbsh,"[4, 4]","[0,2]",6567,3616
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",dbsh,"[4, 4]","[0,inf]",9101,6486
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",sbsh-r1,"[4, 4]","[0,1]",5113,2499
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",sbsh-r1,"[4, 4]","[0,2]",6567,3617
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",sbsh-r1,"[4, 4]","[0,inf]",9101,6487
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",sbsh-rmax,"[4, 4]","[0,1]",5113,2499
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",sbsh-rmax,"[4, 4]","[0,2]",6567,3617
+datasets/dna_mt745584.txt,"[0,1]",2500,"[[4, 4]]",sbsh-rmax,"[4, 4]","[0,inf]",9101,6487

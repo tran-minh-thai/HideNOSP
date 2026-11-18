@@ -1,0 +1,34 @@
+# run 20261116-074557-618_ADMIN-PC_6f05f7af5617_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/protein_sdb1.txt, format=SPMF, sigma=400, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=distinct, pareto=false, timeLimit=1800, methods=cut-hide-uniform, epsilon=0.5, closure=necessary}
+# sensitive sets: size 1, pool 181 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 36 -> 4, p30: 36 -> 4, p50: 36 -> 4, p70: 36 -> 4, p90: 37 -> 4
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[5, 13]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000141,0.000112,13,13,1.000000,7,7,0,,212,211,211,0,0.000000,0.000112,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[14, 4]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000163,0.000218,15,15,1.000000,11,11,0,,212,211,211,0,0.000000,0.000218,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[12, 15]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.004739,0,0.000522,0.000688,48,48,1.000000,29,29,0,,212,211,210,1,0.004739,0.000688,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[3, 15]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.000022,0.000037,2,2,1.000000,2,2,0,,212,211,211,0,0.000000,0.000037,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[0, 13]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.004739,0,0.001197,0.000930,110,110,1.000000,61,61,0,,212,211,210,1,0.004739,0.000930,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[7, 3]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.004739,0,0.001045,0.001344,96,96,1.000000,52,52,0,,212,211,210,1,0.004739,0.001344,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[15, 16]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.004739,0,0.001273,0.001809,117,117,1.000000,64,64,0,,212,211,210,1,0.004739,0.001809,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[0, 14]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001361,0.001386,125,125,1.000000,78,78,0,,212,211,211,0,0.000000,0.001386,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[2, 8]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.002188,0.003047,201,201,1.000000,98,98,0,,212,211,211,0,0.000000,0.003047,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[17, 12]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.004739,0,0.002079,0.002558,191,191,1.000000,104,104,0,,212,211,210,1,0.004739,0.002558,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[13, 9]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.001752,0.002632,161,161,1.000000,92,92,0,,212,211,211,0,0.000000,0.002632,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[17, 16]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.002427,0.003378,223,223,1.000000,123,123,0,,212,211,211,0,0.000000,0.003378,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[5, 4]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.004739,0,0.003167,0.004384,291,291,1.000000,141,141,0,,212,211,210,1,0.004739,0.004384,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[11, 9]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.002710,0.004188,249,249,1.000000,129,129,0,,212,211,211,0,0.000000,0.004188,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[7, 5]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.004739,0,0.003831,0.005689,352,352,1.000000,156,156,0,,212,211,210,1,0.004739,0.005689,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[8, 5]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.004739,0,0.003483,0.005311,320,320,1.000000,163,163,0,,212,211,210,1,0.004739,0.005311,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[5, 7]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,2,0.009479,0,0.005072,0.007126,466,466,1.000000,177,177,0,,212,211,209,2,0.009479,0.007126,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[3, 9]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.006041,0.009212,555,555,1.000000,226,226,0,,212,211,211,0,0.000000,0.009212,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[9, 5]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.004739,0,0.009165,0.013895,842,842,1.000000,274,274,0,,212,211,210,1,0.004739,0.013895,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[9, 3]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,2,0.009479,0,0.004408,0.005750,405,405,1.000000,203,203,0,,212,211,209,2,0.009479,0.005750,211,

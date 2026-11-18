@@ -1,0 +1,25 @@
+# run 20261116-072206-541_ADMIN-PC_ad688a525e45_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/bpi2012.txt, format=SPMF, sigma=4000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-uniform, epsilon=0.5, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 11 candidates, 11 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 2 -> 2, p30: 2 -> 2, p50: 2 -> 2, p70: 2 -> 2, p90: 3 -> 3
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[12, 15, 21, 21]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,1,0.015152,0,0.003568,0.006923,587,587,1.000000,556,556,0,,67,66,65,1,0.015152,0.006923,66,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[15, 21, 21]]",p10,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.003568,0.005720,587,587,1.000000,556,556,0,,67,65,65,0,0.000000,0.005720,65,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[20, 20, 20, 20]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.004085,0.007234,672,672,1.000000,295,295,0,,67,66,66,0,0.000000,0.007234,66,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[20, 20, 20]]",p30,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.009586,0.008990,1577,1577,1.000000,511,511,0,,67,65,65,0,0.000000,0.008990,65,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[21, 21, 21, 21]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.010535,0.016957,1733,1733,1.000000,762,762,0,,67,66,66,0,0.000000,0.016957,66,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 19, 19, 19]]",p50,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.010699,0.017187,1760,1760,1.000000,613,613,0,,67,66,66,0,0.000000,0.017187,66,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[20, 20]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.019732,0.007241,3246,3246,1.000000,825,825,0,,67,64,64,0,0.000000,0.007241,64,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 19, 19]]",p70,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.020103,0.018672,3307,3307,1.000000,1060,1060,0,,67,65,65,0,0.000000,0.018672,65,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[21, 21, 21]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.023203,0.022132,3817,3817,1.000000,1777,1777,0,,67,65,65,0,0.000000,0.022132,65,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[19, 19]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.038224,0.014364,6288,6288,1.000000,1797,1797,0,,67,64,64,0,0.000000,0.014364,64,
+datasets/bpi2012.txt,"N=13087,len=164506","[0,1]",4000,"[[21, 21]]",p90,cut-hide-uniform,"CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP]",,0.000000,0,0.000000,0,0.046169,0.020407,7595,7595,1.000000,3019,3019,0,,67,62,62,0,0.000000,0.020407,62,

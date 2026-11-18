@@ -1,0 +1,38 @@
+# cell SC3SENS msnbc [0,3] sigma=5000 distinct S=1 uniform eps=0.5 closure=necessary
+# machine ADMIN-PC
+# exit 0 after 42 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = f1a2d75d83b5
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3SENS the comparison of SC3 for the stage ablation and the sensitivity of the constants of CUT-HIDE
+# run 20261116-073447-616_ADMIN-PC_f1a2d75d83b5_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, pool 38 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 7 -> 4, p30: 8 -> 4, p50: 7 -> 4, p70: 8 -> 4, p90: 8 -> 4
+set 0  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  595  lost    0 (0.0000)  supDist 0.0032  0.4 s
+set 1  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  797  lost    1 (0.0058)  supDist 0.0015  0.1 s
+set 2  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  608  lost    0 (0.0000)  supDist 0.0023  0.1 s
+set 3  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R|  480  lost    0 (0.0000)  supDist 0.0019  0.1 s
+set 4  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2082  lost    0 (0.0000)  supDist 0.0063  0.2 s
+set 5  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2897  lost    1 (0.0058)  supDist 0.0099  0.3 s
+set 6  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 2341  lost    4 (0.0233)  supDist 0.0091  0.2 s
+set 7  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 1713  lost    0 (0.0000)  supDist 0.0064  0.2 s
+set 8  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 4372  lost    4 (0.0234)  supDist 0.0110  0.4 s
+set 9  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 3386  lost    1 (0.0058)  supDist 0.0127  0.4 s
+set 10  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 3758  lost    3 (0.0176)  supDist 0.0120  0.4 s
+set 11  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 3411  lost    4 (0.0234)  supDist 0.0127  0.4 s
+set 12  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 8605  lost    5 (0.0301)  supDist 0.0331  0.9 s
+set 13  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 5786  lost    0 (0.0000)  supDist 0.0166  0.5 s
+set 14  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 4898  lost    2 (0.0118)  supDist 0.0064  0.5 s
+set 15  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 7523  lost    5 (0.0305)  supDist 0.0283  0.7 s
+set 16  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 22190  lost   20 (0.1266)  supDist 0.0988  3.6 s
+set 17  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 8788  lost   11 (0.0683)  supDist 0.0379  0.8 s
+set 18  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 26832  lost   17 (0.1083)  supDist 0.0860  4.9 s
+set 19  CUT-HIDE CutHide[UNIFORM, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP] |R| 10523  lost    5 (0.0303)  supDist 0.0205  1.2 s
+done in 39.8 s

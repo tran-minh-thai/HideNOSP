@@ -1,0 +1,414 @@
+# run 20261116-211138-108_ADMIN-PC_886f29561633_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3ROBSUP
+# options {machine=ADMIN-PC, dataset=datasets/protein_sdb4.txt, format=SPMF, sigma=500, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,hha,dbsh,sbsh-r1,sbsh-rmax, epsilon=0.5, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 78 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 15 -> 4, p30: 16 -> 4, p50: 15 -> 4, p70: 16 -> 4, p90: 16 -> 4
+# closure necessary
+dataset,gap,sigma,sensitive_set,method_key,pattern,constraint,sup_no_before,sup_no_after
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",cut-hide-rw-ls,"[9, 2, 2]","[0,3]",514,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",cut-hide-rw-ls,"[9, 2, 2]","[0,4]",725,714
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",cut-hide-rw-ls,"[9, 2, 2]","[0,6]",1195,1187
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",cut-hide-rw-ls,"[9, 2, 2]","[0,inf]",5522,5517
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",hha,"[9, 2, 2]","[0,3]",514,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",hha,"[9, 2, 2]","[0,4]",725,711
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",hha,"[9, 2, 2]","[0,6]",1195,1181
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",hha,"[9, 2, 2]","[0,inf]",5522,5516
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",dbsh,"[9, 2, 2]","[0,3]",514,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",dbsh,"[9, 2, 2]","[0,4]",725,710
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",dbsh,"[9, 2, 2]","[0,6]",1195,1179
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",dbsh,"[9, 2, 2]","[0,inf]",5522,5507
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",sbsh-r1,"[9, 2, 2]","[0,3]",514,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",sbsh-r1,"[9, 2, 2]","[0,4]",725,710
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",sbsh-r1,"[9, 2, 2]","[0,6]",1195,1179
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",sbsh-r1,"[9, 2, 2]","[0,inf]",5522,5507
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",sbsh-rmax,"[9, 2, 2]","[0,3]",514,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",sbsh-rmax,"[9, 2, 2]","[0,4]",725,710
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",sbsh-rmax,"[9, 2, 2]","[0,6]",1195,1179
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 2, 2]]",sbsh-rmax,"[9, 2, 2]","[0,inf]",5522,5507
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",cut-hide-rw-ls,"[17, 17, 2]","[0,3]",504,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",cut-hide-rw-ls,"[17, 17, 2]","[0,4]",672,668
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",cut-hide-rw-ls,"[17, 17, 2]","[0,6]",1059,1056
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",cut-hide-rw-ls,"[17, 17, 2]","[0,inf]",4821,4820
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",hha,"[17, 17, 2]","[0,3]",504,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",hha,"[17, 17, 2]","[0,4]",672,667
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",hha,"[17, 17, 2]","[0,6]",1059,1057
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",hha,"[17, 17, 2]","[0,inf]",4821,4819
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",dbsh,"[17, 17, 2]","[0,3]",504,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",dbsh,"[17, 17, 2]","[0,4]",672,667
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",dbsh,"[17, 17, 2]","[0,6]",1059,1054
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",dbsh,"[17, 17, 2]","[0,inf]",4821,4816
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",sbsh-r1,"[17, 17, 2]","[0,3]",504,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",sbsh-r1,"[17, 17, 2]","[0,4]",672,667
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",sbsh-r1,"[17, 17, 2]","[0,6]",1059,1054
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",sbsh-r1,"[17, 17, 2]","[0,inf]",4821,4816
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",sbsh-rmax,"[17, 17, 2]","[0,3]",504,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",sbsh-rmax,"[17, 17, 2]","[0,4]",672,667
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",sbsh-rmax,"[17, 17, 2]","[0,6]",1059,1054
+datasets/protein_sdb4.txt,"[0,3]",500,"[[17, 17, 2]]",sbsh-rmax,"[17, 17, 2]","[0,inf]",4821,4816
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",cut-hide-rw-ls,"[0, 0, 0, 0]","[0,3]",514,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",cut-hide-rw-ls,"[0, 0, 0, 0]","[0,4]",717,713
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",cut-hide-rw-ls,"[0, 0, 0, 0]","[0,6]",1310,1306
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",cut-hide-rw-ls,"[0, 0, 0, 0]","[0,inf]",7553,7549
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",hha,"[0, 0, 0, 0]","[0,3]",514,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",hha,"[0, 0, 0, 0]","[0,4]",717,695
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",hha,"[0, 0, 0, 0]","[0,6]",1310,1281
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",hha,"[0, 0, 0, 0]","[0,inf]",7553,7538
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",dbsh,"[0, 0, 0, 0]","[0,3]",514,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",dbsh,"[0, 0, 0, 0]","[0,4]",717,702
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",dbsh,"[0, 0, 0, 0]","[0,6]",1310,1294
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",dbsh,"[0, 0, 0, 0]","[0,inf]",7553,7538
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",sbsh-r1,"[0, 0, 0, 0]","[0,3]",514,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",sbsh-r1,"[0, 0, 0, 0]","[0,4]",717,701
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",sbsh-r1,"[0, 0, 0, 0]","[0,6]",1310,1292
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",sbsh-r1,"[0, 0, 0, 0]","[0,inf]",7553,7538
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",sbsh-rmax,"[0, 0, 0, 0]","[0,3]",514,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",sbsh-rmax,"[0, 0, 0, 0]","[0,4]",717,701
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",sbsh-rmax,"[0, 0, 0, 0]","[0,6]",1310,1292
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 0, 0]]",sbsh-rmax,"[0, 0, 0, 0]","[0,inf]",7553,7538
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",cut-hide-rw-ls,"[5, 5, 9]","[0,3]",531,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",cut-hide-rw-ls,"[5, 5, 9]","[0,4]",722,700
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",cut-hide-rw-ls,"[5, 5, 9]","[0,6]",1235,1219
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",cut-hide-rw-ls,"[5, 5, 9]","[0,inf]",5880,5869
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",hha,"[5, 5, 9]","[0,3]",531,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",hha,"[5, 5, 9]","[0,4]",722,693
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",hha,"[5, 5, 9]","[0,6]",1235,1204
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",hha,"[5, 5, 9]","[0,inf]",5880,5865
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",dbsh,"[5, 5, 9]","[0,3]",531,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",dbsh,"[5, 5, 9]","[0,4]",722,690
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",dbsh,"[5, 5, 9]","[0,6]",1235,1203
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",dbsh,"[5, 5, 9]","[0,inf]",5880,5853
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",sbsh-r1,"[5, 5, 9]","[0,3]",531,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",sbsh-r1,"[5, 5, 9]","[0,4]",722,690
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",sbsh-r1,"[5, 5, 9]","[0,6]",1235,1206
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",sbsh-r1,"[5, 5, 9]","[0,inf]",5880,5855
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",sbsh-rmax,"[5, 5, 9]","[0,3]",531,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",sbsh-rmax,"[5, 5, 9]","[0,4]",722,690
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",sbsh-rmax,"[5, 5, 9]","[0,6]",1235,1206
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 9]]",sbsh-rmax,"[5, 5, 9]","[0,inf]",5880,5855
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",cut-hide-rw-ls,"[5, 5, 0]","[0,3]",563,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",cut-hide-rw-ls,"[5, 5, 0]","[0,4]",781,723
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",cut-hide-rw-ls,"[5, 5, 0]","[0,6]",1199,1162
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",cut-hide-rw-ls,"[5, 5, 0]","[0,inf]",5963,5929
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",hha,"[5, 5, 0]","[0,3]",563,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",hha,"[5, 5, 0]","[0,4]",781,714
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",hha,"[5, 5, 0]","[0,6]",1199,1137
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",hha,"[5, 5, 0]","[0,inf]",5963,5922
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",dbsh,"[5, 5, 0]","[0,3]",563,497
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",dbsh,"[5, 5, 0]","[0,4]",781,716
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",dbsh,"[5, 5, 0]","[0,6]",1199,1136
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",dbsh,"[5, 5, 0]","[0,inf]",5963,5906
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",sbsh-r1,"[5, 5, 0]","[0,3]",563,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",sbsh-r1,"[5, 5, 0]","[0,4]",781,722
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",sbsh-r1,"[5, 5, 0]","[0,6]",1199,1144
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",sbsh-r1,"[5, 5, 0]","[0,inf]",5963,5911
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",sbsh-rmax,"[5, 5, 0]","[0,3]",563,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",sbsh-rmax,"[5, 5, 0]","[0,4]",781,723
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",sbsh-rmax,"[5, 5, 0]","[0,6]",1199,1146
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 5, 0]]",sbsh-rmax,"[5, 5, 0]","[0,inf]",5963,5918
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",cut-hide-rw-ls,"[3, 3, 9]","[0,3]",561,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",cut-hide-rw-ls,"[3, 3, 9]","[0,4]",762,707
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",cut-hide-rw-ls,"[3, 3, 9]","[0,6]",1081,1036
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",cut-hide-rw-ls,"[3, 3, 9]","[0,inf]",4919,4891
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",hha,"[3, 3, 9]","[0,3]",561,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",hha,"[3, 3, 9]","[0,4]",762,704
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",hha,"[3, 3, 9]","[0,6]",1081,1019
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",hha,"[3, 3, 9]","[0,inf]",4919,4870
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",dbsh,"[3, 3, 9]","[0,3]",561,498
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",dbsh,"[3, 3, 9]","[0,4]",762,700
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",dbsh,"[3, 3, 9]","[0,6]",1081,1019
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",dbsh,"[3, 3, 9]","[0,inf]",4919,4855
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",sbsh-r1,"[3, 3, 9]","[0,3]",561,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",sbsh-r1,"[3, 3, 9]","[0,4]",762,703
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",sbsh-r1,"[3, 3, 9]","[0,6]",1081,1026
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",sbsh-r1,"[3, 3, 9]","[0,inf]",4919,4869
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",sbsh-rmax,"[3, 3, 9]","[0,3]",561,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",sbsh-rmax,"[3, 3, 9]","[0,4]",762,703
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",sbsh-rmax,"[3, 3, 9]","[0,6]",1081,1026
+datasets/protein_sdb4.txt,"[0,3]",500,"[[3, 3, 9]]",sbsh-rmax,"[3, 3, 9]","[0,inf]",4919,4869
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",cut-hide-rw-ls,"[9, 5, 5]","[0,3]",562,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",cut-hide-rw-ls,"[9, 5, 5]","[0,4]",756,709
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",cut-hide-rw-ls,"[9, 5, 5]","[0,6]",1195,1159
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",cut-hide-rw-ls,"[9, 5, 5]","[0,inf]",5701,5681
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",hha,"[9, 5, 5]","[0,3]",562,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",hha,"[9, 5, 5]","[0,4]",756,694
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",hha,"[9, 5, 5]","[0,6]",1195,1137
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",hha,"[9, 5, 5]","[0,inf]",5701,5664
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",dbsh,"[9, 5, 5]","[0,3]",562,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",dbsh,"[9, 5, 5]","[0,4]",756,695
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",dbsh,"[9, 5, 5]","[0,6]",1195,1136
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",dbsh,"[9, 5, 5]","[0,inf]",5701,5640
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",sbsh-r1,"[9, 5, 5]","[0,3]",562,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",sbsh-r1,"[9, 5, 5]","[0,4]",756,696
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",sbsh-r1,"[9, 5, 5]","[0,6]",1195,1138
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",sbsh-r1,"[9, 5, 5]","[0,inf]",5701,5642
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",sbsh-rmax,"[9, 5, 5]","[0,3]",562,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",sbsh-rmax,"[9, 5, 5]","[0,4]",756,696
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",sbsh-rmax,"[9, 5, 5]","[0,6]",1195,1138
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 5, 5]]",sbsh-rmax,"[9, 5, 5]","[0,inf]",5701,5642
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",cut-hide-rw-ls,"[0, 5, 5]","[0,3]",583,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",cut-hide-rw-ls,"[0, 5, 5]","[0,4]",825,752
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",cut-hide-rw-ls,"[0, 5, 5]","[0,6]",1288,1224
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",cut-hide-rw-ls,"[0, 5, 5]","[0,inf]",5907,5860
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",hha,"[0, 5, 5]","[0,3]",583,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",hha,"[0, 5, 5]","[0,4]",825,743
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",hha,"[0, 5, 5]","[0,6]",1288,1210
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",hha,"[0, 5, 5]","[0,inf]",5907,5866
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",dbsh,"[0, 5, 5]","[0,3]",583,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",dbsh,"[0, 5, 5]","[0,4]",825,743
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",dbsh,"[0, 5, 5]","[0,6]",1288,1212
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",dbsh,"[0, 5, 5]","[0,inf]",5907,5834
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",sbsh-r1,"[0, 5, 5]","[0,3]",583,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",sbsh-r1,"[0, 5, 5]","[0,4]",825,742
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",sbsh-r1,"[0, 5, 5]","[0,6]",1288,1210
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",sbsh-r1,"[0, 5, 5]","[0,inf]",5907,5836
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",sbsh-rmax,"[0, 5, 5]","[0,3]",583,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",sbsh-rmax,"[0, 5, 5]","[0,4]",825,742
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",sbsh-rmax,"[0, 5, 5]","[0,6]",1288,1210
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 5, 5]]",sbsh-rmax,"[0, 5, 5]","[0,inf]",5907,5836
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",cut-hide-rw-ls,"[0, 8, 0]","[0,3]",610,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",cut-hide-rw-ls,"[0, 8, 0]","[0,4]",794,704
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",cut-hide-rw-ls,"[0, 8, 0]","[0,6]",1201,1134
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",cut-hide-rw-ls,"[0, 8, 0]","[0,inf]",4283,4246
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",hha,"[0, 8, 0]","[0,3]",610,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",hha,"[0, 8, 0]","[0,4]",794,687
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",hha,"[0, 8, 0]","[0,6]",1201,1101
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",hha,"[0, 8, 0]","[0,inf]",4283,4214
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",dbsh,"[0, 8, 0]","[0,3]",610,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",dbsh,"[0, 8, 0]","[0,4]",794,684
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",dbsh,"[0, 8, 0]","[0,6]",1201,1092
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",dbsh,"[0, 8, 0]","[0,inf]",4283,4175
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",sbsh-r1,"[0, 8, 0]","[0,3]",610,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",sbsh-r1,"[0, 8, 0]","[0,4]",794,688
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",sbsh-r1,"[0, 8, 0]","[0,6]",1201,1097
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",sbsh-r1,"[0, 8, 0]","[0,inf]",4283,4185
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",sbsh-rmax,"[0, 8, 0]","[0,3]",610,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",sbsh-rmax,"[0, 8, 0]","[0,4]",794,688
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",sbsh-rmax,"[0, 8, 0]","[0,6]",1201,1097
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 8, 0]]",sbsh-rmax,"[0, 8, 0]","[0,inf]",4283,4185
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",cut-hide-rw-ls,"[9, 9, 2]","[0,3]",600,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",cut-hide-rw-ls,"[9, 9, 2]","[0,4]",852,765
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",cut-hide-rw-ls,"[9, 9, 2]","[0,6]",1320,1245
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",cut-hide-rw-ls,"[9, 9, 2]","[0,inf]",5572,5544
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",hha,"[9, 9, 2]","[0,3]",600,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",hha,"[9, 9, 2]","[0,4]",852,750
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",hha,"[9, 9, 2]","[0,6]",1320,1226
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",hha,"[9, 9, 2]","[0,inf]",5572,5537
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",dbsh,"[9, 9, 2]","[0,3]",600,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",dbsh,"[9, 9, 2]","[0,4]",852,752
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",dbsh,"[9, 9, 2]","[0,6]",1320,1216
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",dbsh,"[9, 9, 2]","[0,inf]",5572,5476
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",sbsh-r1,"[9, 9, 2]","[0,3]",600,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",sbsh-r1,"[9, 9, 2]","[0,4]",852,752
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",sbsh-r1,"[9, 9, 2]","[0,6]",1320,1215
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",sbsh-r1,"[9, 9, 2]","[0,inf]",5572,5479
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",sbsh-rmax,"[9, 9, 2]","[0,3]",600,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",sbsh-rmax,"[9, 9, 2]","[0,4]",852,752
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",sbsh-rmax,"[9, 9, 2]","[0,6]",1320,1216
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 2]]",sbsh-rmax,"[9, 9, 2]","[0,inf]",5572,5478
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",cut-hide-rw-ls,"[8, 0, 0]","[0,3]",591,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",cut-hide-rw-ls,"[8, 0, 0]","[0,4]",783,712
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",cut-hide-rw-ls,"[8, 0, 0]","[0,6]",1182,1125
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",cut-hide-rw-ls,"[8, 0, 0]","[0,inf]",4690,4657
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",hha,"[8, 0, 0]","[0,3]",591,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",hha,"[8, 0, 0]","[0,4]",783,693
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",hha,"[8, 0, 0]","[0,6]",1182,1100
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",hha,"[8, 0, 0]","[0,inf]",4690,4631
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",dbsh,"[8, 0, 0]","[0,3]",591,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",dbsh,"[8, 0, 0]","[0,4]",783,690
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",dbsh,"[8, 0, 0]","[0,6]",1182,1091
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",dbsh,"[8, 0, 0]","[0,inf]",4690,4608
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",sbsh-r1,"[8, 0, 0]","[0,3]",591,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",sbsh-r1,"[8, 0, 0]","[0,4]",783,693
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",sbsh-r1,"[8, 0, 0]","[0,6]",1182,1099
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",sbsh-r1,"[8, 0, 0]","[0,inf]",4690,4618
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",sbsh-rmax,"[8, 0, 0]","[0,3]",591,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",sbsh-rmax,"[8, 0, 0]","[0,4]",783,693
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",sbsh-rmax,"[8, 0, 0]","[0,6]",1182,1099
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 0, 0]]",sbsh-rmax,"[8, 0, 0]","[0,inf]",4690,4618
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",cut-hide-rw-ls,"[2, 9, 9]","[0,3]",627,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",cut-hide-rw-ls,"[2, 9, 9]","[0,4]",872,762
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",cut-hide-rw-ls,"[2, 9, 9]","[0,6]",1438,1354
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",cut-hide-rw-ls,"[2, 9, 9]","[0,inf]",5808,5759
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",hha,"[2, 9, 9]","[0,3]",627,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",hha,"[2, 9, 9]","[0,4]",872,752
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",hha,"[2, 9, 9]","[0,6]",1438,1324
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",hha,"[2, 9, 9]","[0,inf]",5808,5720
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",dbsh,"[2, 9, 9]","[0,3]",627,498
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",dbsh,"[2, 9, 9]","[0,4]",872,742
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",dbsh,"[2, 9, 9]","[0,6]",1438,1306
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",dbsh,"[2, 9, 9]","[0,inf]",5808,5672
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",sbsh-r1,"[2, 9, 9]","[0,3]",627,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",sbsh-r1,"[2, 9, 9]","[0,4]",872,744
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",sbsh-r1,"[2, 9, 9]","[0,6]",1438,1304
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",sbsh-r1,"[2, 9, 9]","[0,inf]",5808,5691
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",sbsh-rmax,"[2, 9, 9]","[0,3]",627,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",sbsh-rmax,"[2, 9, 9]","[0,4]",872,744
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",sbsh-rmax,"[2, 9, 9]","[0,6]",1438,1304
+datasets/protein_sdb4.txt,"[0,3]",500,"[[2, 9, 9]]",sbsh-rmax,"[2, 9, 9]","[0,inf]",5808,5691
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",cut-hide-rw-ls,"[5, 0, 0]","[0,3]",711,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",cut-hide-rw-ls,"[5, 0, 0]","[0,4]",953,783
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",cut-hide-rw-ls,"[5, 0, 0]","[0,6]",1486,1336
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",cut-hide-rw-ls,"[5, 0, 0]","[0,inf]",6015,5923
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",hha,"[5, 0, 0]","[0,3]",711,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",hha,"[5, 0, 0]","[0,4]",953,747
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",hha,"[5, 0, 0]","[0,6]",1486,1298
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",hha,"[5, 0, 0]","[0,inf]",6015,5866
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",dbsh,"[5, 0, 0]","[0,3]",711,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",dbsh,"[5, 0, 0]","[0,4]",953,744
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",dbsh,"[5, 0, 0]","[0,6]",1486,1289
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",dbsh,"[5, 0, 0]","[0,inf]",6015,5806
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",sbsh-r1,"[5, 0, 0]","[0,3]",711,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",sbsh-r1,"[5, 0, 0]","[0,4]",953,746
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",sbsh-r1,"[5, 0, 0]","[0,6]",1486,1292
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",sbsh-r1,"[5, 0, 0]","[0,inf]",6015,5830
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",sbsh-rmax,"[5, 0, 0]","[0,3]",711,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",sbsh-rmax,"[5, 0, 0]","[0,4]",953,746
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",sbsh-rmax,"[5, 0, 0]","[0,6]",1486,1292
+datasets/protein_sdb4.txt,"[0,3]",500,"[[5, 0, 0]]",sbsh-rmax,"[5, 0, 0]","[0,inf]",6015,5830
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",cut-hide-rw-ls,"[0, 0, 17]","[0,3]",716,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",cut-hide-rw-ls,"[0, 0, 17]","[0,4]",977,790
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",cut-hide-rw-ls,"[0, 0, 17]","[0,6]",1465,1299
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",cut-hide-rw-ls,"[0, 0, 17]","[0,inf]",5354,5246
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",hha,"[0, 0, 17]","[0,3]",716,498
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",hha,"[0, 0, 17]","[0,4]",977,773
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",hha,"[0, 0, 17]","[0,6]",1465,1271
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",hha,"[0, 0, 17]","[0,inf]",5354,5252
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",dbsh,"[0, 0, 17]","[0,3]",716,494
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",dbsh,"[0, 0, 17]","[0,4]",977,762
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",dbsh,"[0, 0, 17]","[0,6]",1465,1247
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",dbsh,"[0, 0, 17]","[0,inf]",5354,5149
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",sbsh-r1,"[0, 0, 17]","[0,3]",716,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",sbsh-r1,"[0, 0, 17]","[0,4]",977,761
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",sbsh-r1,"[0, 0, 17]","[0,6]",1465,1249
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",sbsh-r1,"[0, 0, 17]","[0,inf]",5354,5152
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",sbsh-rmax,"[0, 0, 17]","[0,3]",716,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",sbsh-rmax,"[0, 0, 17]","[0,4]",977,761
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",sbsh-rmax,"[0, 0, 17]","[0,6]",1465,1249
+datasets/protein_sdb4.txt,"[0,3]",500,"[[0, 0, 17]]",sbsh-rmax,"[0, 0, 17]","[0,inf]",5354,5154
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",cut-hide-rw-ls,"[12, 12]","[0,3]",774,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",cut-hide-rw-ls,"[12, 12]","[0,4]",995,759
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",cut-hide-rw-ls,"[12, 12]","[0,6]",1338,1153
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",cut-hide-rw-ls,"[12, 12]","[0,inf]",4310,4130
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",hha,"[12, 12]","[0,3]",774,498
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",hha,"[12, 12]","[0,4]",995,716
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",hha,"[12, 12]","[0,6]",1338,1064
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",hha,"[12, 12]","[0,inf]",4310,4054
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",dbsh,"[12, 12]","[0,3]",774,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",dbsh,"[12, 12]","[0,4]",995,714
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",dbsh,"[12, 12]","[0,6]",1338,1049
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",dbsh,"[12, 12]","[0,inf]",4310,4035
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",sbsh-r1,"[12, 12]","[0,3]",774,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",sbsh-r1,"[12, 12]","[0,4]",995,713
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",sbsh-r1,"[12, 12]","[0,6]",1338,1046
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",sbsh-r1,"[12, 12]","[0,inf]",4310,4035
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",sbsh-rmax,"[12, 12]","[0,3]",774,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",sbsh-rmax,"[12, 12]","[0,4]",995,713
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",sbsh-rmax,"[12, 12]","[0,6]",1338,1046
+datasets/protein_sdb4.txt,"[0,3]",500,"[[12, 12]]",sbsh-rmax,"[12, 12]","[0,inf]",4310,4035
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",cut-hide-rw-ls,"[9, 9, 0]","[0,3]",691,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",cut-hide-rw-ls,"[9, 9, 0]","[0,4]",905,745
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",cut-hide-rw-ls,"[9, 9, 0]","[0,6]",1452,1338
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",cut-hide-rw-ls,"[9, 9, 0]","[0,inf]",5985,5910
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",hha,"[9, 9, 0]","[0,3]",691,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",hha,"[9, 9, 0]","[0,4]",905,718
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",hha,"[9, 9, 0]","[0,6]",1452,1275
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",hha,"[9, 9, 0]","[0,inf]",5985,5890
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",dbsh,"[9, 9, 0]","[0,3]",691,498
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",dbsh,"[9, 9, 0]","[0,4]",905,712
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",dbsh,"[9, 9, 0]","[0,6]",1452,1265
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",dbsh,"[9, 9, 0]","[0,inf]",5985,5804
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",sbsh-r1,"[9, 9, 0]","[0,3]",691,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",sbsh-r1,"[9, 9, 0]","[0,4]",905,713
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",sbsh-r1,"[9, 9, 0]","[0,6]",1452,1266
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",sbsh-r1,"[9, 9, 0]","[0,inf]",5985,5820
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",sbsh-rmax,"[9, 9, 0]","[0,3]",691,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",sbsh-rmax,"[9, 9, 0]","[0,4]",905,714
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",sbsh-rmax,"[9, 9, 0]","[0,6]",1452,1267
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9, 0]]",sbsh-rmax,"[9, 9, 0]","[0,inf]",5985,5819
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",cut-hide-rw-ls,"[9, 9]","[0,3]",2614,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",cut-hide-rw-ls,"[9, 9]","[0,4]",3091,1014
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",cut-hide-rw-ls,"[9, 9]","[0,6]",4026,2141
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",cut-hide-rw-ls,"[9, 9]","[0,inf]",8463,6764
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",hha,"[9, 9]","[0,3]",2614,492
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",hha,"[9, 9]","[0,4]",3091,921
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",hha,"[9, 9]","[0,6]",4026,1923
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",hha,"[9, 9]","[0,inf]",8463,6656
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",dbsh,"[9, 9]","[0,3]",2614,494
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",dbsh,"[9, 9]","[0,4]",3091,840
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",dbsh,"[9, 9]","[0,6]",4026,1632
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",dbsh,"[9, 9]","[0,inf]",8463,6343
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",sbsh-r1,"[9, 9]","[0,3]",2614,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",sbsh-r1,"[9, 9]","[0,4]",3091,839
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",sbsh-r1,"[9, 9]","[0,6]",4026,1621
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",sbsh-r1,"[9, 9]","[0,inf]",8463,6348
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",sbsh-rmax,"[9, 9]","[0,3]",2614,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",sbsh-rmax,"[9, 9]","[0,4]",3091,839
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",sbsh-rmax,"[9, 9]","[0,6]",4026,1621
+datasets/protein_sdb4.txt,"[0,3]",500,"[[9, 9]]",sbsh-rmax,"[9, 9]","[0,inf]",8463,6348
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",cut-hide-rw-ls,"[8, 8]","[0,3]",1485,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",cut-hide-rw-ls,"[8, 8]","[0,4]",1791,863
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",cut-hide-rw-ls,"[8, 8]","[0,6]",2320,1451
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",cut-hide-rw-ls,"[8, 8]","[0,inf]",5961,5168
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",hha,"[8, 8]","[0,3]",1485,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",hha,"[8, 8]","[0,4]",1791,792
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",hha,"[8, 8]","[0,6]",2320,1336
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",hha,"[8, 8]","[0,inf]",5961,5071
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",dbsh,"[8, 8]","[0,3]",1485,496
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",dbsh,"[8, 8]","[0,4]",1791,756
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",dbsh,"[8, 8]","[0,6]",2320,1234
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",dbsh,"[8, 8]","[0,inf]",5961,4972
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",sbsh-r1,"[8, 8]","[0,3]",1485,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",sbsh-r1,"[8, 8]","[0,4]",1791,756
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",sbsh-r1,"[8, 8]","[0,6]",2320,1232
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",sbsh-r1,"[8, 8]","[0,inf]",5961,4975
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",sbsh-rmax,"[8, 8]","[0,3]",1485,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",sbsh-rmax,"[8, 8]","[0,4]",1791,756
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",sbsh-rmax,"[8, 8]","[0,6]",2320,1232
+datasets/protein_sdb4.txt,"[0,3]",500,"[[8, 8]]",sbsh-rmax,"[8, 8]","[0,inf]",5961,4975
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",cut-hide-rw-ls,"[4, 4]","[0,3]",1045,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",cut-hide-rw-ls,"[4, 4]","[0,4]",1211,667
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",cut-hide-rw-ls,"[4, 4]","[0,6]",1569,1095
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",cut-hide-rw-ls,"[4, 4]","[0,inf]",4791,4346
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",hha,"[4, 4]","[0,3]",1045,498
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",hha,"[4, 4]","[0,4]",1211,647
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",hha,"[4, 4]","[0,6]",1569,1014
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",hha,"[4, 4]","[0,inf]",4791,4274
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",dbsh,"[4, 4]","[0,3]",1045,497
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",dbsh,"[4, 4]","[0,4]",1211,648
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",dbsh,"[4, 4]","[0,6]",1569,995
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",dbsh,"[4, 4]","[0,inf]",4791,4243
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",sbsh-r1,"[4, 4]","[0,3]",1045,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",sbsh-r1,"[4, 4]","[0,4]",1211,647
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",sbsh-r1,"[4, 4]","[0,6]",1569,990
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",sbsh-r1,"[4, 4]","[0,inf]",4791,4245
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",sbsh-rmax,"[4, 4]","[0,3]",1045,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",sbsh-rmax,"[4, 4]","[0,4]",1211,647
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",sbsh-rmax,"[4, 4]","[0,6]",1569,990
+datasets/protein_sdb4.txt,"[0,3]",500,"[[4, 4]]",sbsh-rmax,"[4, 4]","[0,inf]",4791,4245
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",cut-hide-rw-ls,"[7, 7]","[0,3]",1029,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",cut-hide-rw-ls,"[7, 7]","[0,4]",1235,749
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",cut-hide-rw-ls,"[7, 7]","[0,6]",1695,1239
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",cut-hide-rw-ls,"[7, 7]","[0,inf]",4988,4572
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",hha,"[7, 7]","[0,3]",1029,498
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",hha,"[7, 7]","[0,4]",1235,709
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",hha,"[7, 7]","[0,6]",1695,1164
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",hha,"[7, 7]","[0,inf]",4988,4500
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",dbsh,"[7, 7]","[0,3]",1029,497
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",dbsh,"[7, 7]","[0,4]",1235,688
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",dbsh,"[7, 7]","[0,6]",1695,1121
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",dbsh,"[7, 7]","[0,inf]",4988,4456
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",sbsh-r1,"[7, 7]","[0,3]",1029,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",sbsh-r1,"[7, 7]","[0,4]",1235,688
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",sbsh-r1,"[7, 7]","[0,6]",1695,1122
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",sbsh-r1,"[7, 7]","[0,inf]",4988,4458
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",sbsh-rmax,"[7, 7]","[0,3]",1029,499
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",sbsh-rmax,"[7, 7]","[0,4]",1235,688
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",sbsh-rmax,"[7, 7]","[0,6]",1695,1122
+datasets/protein_sdb4.txt,"[0,3]",500,"[[7, 7]]",sbsh-rmax,"[7, 7]","[0,inf]",4988,4458

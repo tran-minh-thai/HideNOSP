@@ -566,13 +566,13 @@ public final class Sc3MainComparison implements Scenario {
                 return adaptive.withLocalSearch(MaskLocalSearch.DEFAULT_PASSES,
                         MaskLocalSearch.DEFAULT_RECEIVERS);
             }
-            case "cut-hide-exactdb": {
-                // A probe of the exact-drop score of the HIDE-DB greedy for several patterns, not in any H2 set.
-                // One pattern is cut-hide unchanged.
+            case "cut-hide-count": {
+                // CUT-HIDE with the score of the HIDE-DB greedy used before preregistration section 23.9 (the count of
+                // vital patterns), to reproduce the earlier rows; not in any H2 set. One pattern is cut-hide unchanged.
                 Set<Pattern> closure = problem.closureOf(frequent.keySet());
                 List<Pattern> band = FrequentPatterns.nearThreshold(frequent, sigma, epsilon, closure);
                 double[] factor = FrequentPatterns.weightFactors(band, frequent, sigma);
-                return CutHide.forBand(CutHideConfig.standard().withExactDropDatabase(), band, factor);
+                return CutHide.forBand(CutHideConfig.standard().withCountScoreDatabase(), band, factor);
             }
             case "cut-hide-uniform":
                 return new CutHide(CutHideConfig.uniformWeights());

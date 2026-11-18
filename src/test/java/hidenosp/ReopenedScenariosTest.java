@@ -159,10 +159,10 @@ class ReopenedScenariosTest {
     }
 
     @Test
-    @DisplayName("Exact-drop score of HIDE-DB: with distinct-item patterns the rows of cut-hide are unchanged")
+    @DisplayName("Exact-drop score of HIDE-DB: with distinct-item patterns the rows equal those of the count score")
     void exactDropDistinct() throws IOException {
         Path data = gadget();
-        List<String> args = new ArrayList<>(args(data, "--methods=cut-hide,cut-hide-exactdb"));
+        List<String> args = new ArrayList<>(args(data, "--methods=cut-hide,cut-hide-count"));
         args.remove("--sensitiveSize=1");
         args.add("--sensitiveSize=2");
         List<Map<String, String>> rows = run(new Sc3MainComparison(), args).get("SC3");

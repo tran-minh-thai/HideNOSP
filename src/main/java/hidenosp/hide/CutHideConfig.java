@@ -52,14 +52,16 @@ public record CutHideConfig(Weighting weighting, boolean refineLambda, Allocatio
 
     /** The configuration the paper reports as CUT-HIDE. */
     public static CutHideConfig standard() {
+        // The exact-drop score of the HIDE-DB greedy is part of CUT-HIDE since preregistration section 23.9, as the
+        // greedy of HIDE-SEQ has been since preregistration section 22.8; withCountScoreDatabase() gives the earlier rule.
         return new CutHideConfig(Weighting.VITAL_NODE, true, AllocationRule.DYNAMIC_PROGRAM, true,
-                Curves.FRONTIER_DP, false);
+                Curves.FRONTIER_DP, false, true);
     }
 
     /** The variant without side-effect weights, the first row of SC7. */
     public static CutHideConfig uniformWeights() {
         return new CutHideConfig(Weighting.UNIFORM, true, AllocationRule.DYNAMIC_PROGRAM, true,
-                Curves.FRONTIER_DP, false);
+                Curves.FRONTIER_DP, false, true);
     }
 
     /** This configuration with the other weighting, everything else unchanged. */
@@ -93,6 +95,15 @@ public record CutHideConfig(Weighting weighting, boolean refineLambda, Allocatio
     public CutHideConfig withExactDropDatabase() {
         return new CutHideConfig(weighting, refineLambda, allocation, verifyPostcondition, curves, refineSeveral,
                 true);
+    }
+
+    /**
+     * This configuration with the score of the HIDE-DB greedy used before preregistration section 23.9: the number of
+     * sensitive patterns still needed for which the position is vital. It reproduces the rows of the earlier files.
+     */
+    public CutHideConfig withCountScoreDatabase() {
+        return new CutHideConfig(weighting, refineLambda, allocation, verifyPostcondition, curves, refineSeveral,
+                false);
     }
 
     @Override

@@ -1,0 +1,34 @@
+# run 20261118-093946-105_ADMIN-PC_1d2630db388c_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/bpi2013.txt, format=SPMF, sigma=500, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls, epsilon=0.25, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 204 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 40 -> 4, p30: 41 -> 4, p50: 41 -> 4, p70: 41 -> 4, p90: 41 -> 4
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[11, 5, 5]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000626,0.001811,41,41,1.000000,0,0,0,,325,323,323,0,0.000000,0.001735,321,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[1, 5, 11, 11]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.003086,0,0.001205,0.005564,79,79,1.000000,0,0,0,,325,324,323,1,0.003086,0.005564,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[0, 11, 11]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000565,0.002993,37,37,1.000000,0,0,0,,325,322,322,0,0.000000,0.002888,320,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[5, 1, 1, 0]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000015,0.000097,1,1,1.000000,0,0,0,,325,324,324,0,0.000000,0.000097,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[11, 1, 1, 2]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.003086,0,0.004929,0.013306,323,323,1.000000,0,0,0,,325,324,323,1,0.003086,0.013306,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[0, 11, 1, 11]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.006173,0,0.001175,0.005634,77,77,1.000000,0,0,0,,325,324,322,2,0.006173,0.005634,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[5, 1, 1, 11]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.006173,0,0.003052,0.009395,200,200,1.000000,0,0,0,,325,324,322,2,0.006173,0.009395,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[5, 1, 1, 8]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.003296,0.007615,216,216,1.000000,0,0,0,,325,324,324,0,0.000000,0.007615,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[0, 1, 1, 11]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,3,0.009259,0,0.005982,0.015279,392,392,1.000000,0,0,0,,325,324,321,3,0.009259,0.015279,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[11, 0, 11, 1]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,7,0.021605,0,0.005127,0.025292,336,336,1.000000,0,0,0,,325,324,317,7,0.021605,0.025292,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[0, 1, 1, 0]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,14,0.043210,0,0.003723,0.016489,244,244,1.000000,0,0,0,,325,324,310,14,0.043210,0.016489,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[11, 1, 0, 11]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,6,0.018519,0,0.006501,0.022653,426,426,1.000000,0,0,0,,325,324,318,6,0.018519,0.022653,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[11, 11, 0]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,4,0.012579,0,0.013001,0.048682,852,852,1.000000,0,0,0,,325,318,314,4,0.012658,0.046546,316,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[11, 1, 1, 5]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,9,0.027778,0,0.026048,0.081902,1707,1707,1.000000,0,0,0,,325,324,315,9,0.027778,0.081902,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[11, 11, 10, 8]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.018617,0.042453,1220,1220,1.000000,0,0,0,,325,324,324,0,0.000000,0.042453,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[1, 1, 0, 10]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.006173,0,0.012147,0.033504,796,796,1.000000,0,0,0,,325,324,322,2,0.006173,0.033504,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[1, 11, 1, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,32,0.098765,0,0.084690,0.243660,5550,5550,1.000000,0,0,0,,325,324,292,32,0.098765,0.243660,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[1, 1, 1, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,21,0.064815,0,0.079700,0.167463,5223,5223,1.000000,0,0,0,,325,324,303,21,0.064815,0.167463,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[1, 1, 0, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,19,0.058642,0,0.034944,0.106443,2290,2290,1.000000,0,0,0,,325,324,305,19,0.058642,0.106443,324,
+datasets/bpi2013.txt,"N=7554,len=65533","[0,3]",500,"[[1, 1, 1, 0]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,12,0.037037,0,0.030092,0.077175,1972,1972,1.000000,0,0,0,,325,324,312,12,0.037037,0.077175,324,

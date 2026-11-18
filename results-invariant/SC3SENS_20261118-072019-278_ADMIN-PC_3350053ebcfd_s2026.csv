@@ -1,0 +1,25 @@
+# run 20261118-072019-278_ADMIN-PC_3350053ebcfd_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3SENS
+# options {machine=ADMIN-PC, dataset=datasets/protein_sdb1.txt, format=SPMF, sigma=400, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls, epsilon=1.0, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 11 candidates, 11 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 2 -> 2, p30: 2 -> 2, p50: 2 -> 2, p70: 2 -> 2, p90: 3 -> 3
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[4, 4]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000522,0.000293,48,48,1.000000,0,0,0,,212,211,211,0,0.000000,0.000293,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[7, 7]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.000947,0.000535,87,87,1.000000,0,0,0,,212,211,211,0,0.000000,0.000535,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[16, 16]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001056,0.000660,97,97,1.000000,0,0,0,,212,211,211,0,0.000000,0.000660,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[15, 15]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001513,0.000981,139,139,1.000000,0,0,0,,212,211,211,0,0.000000,0.000981,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[8, 8]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.001861,0.001140,171,171,1.000000,0,0,0,,212,211,211,0,0.000000,0.001140,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[3, 3]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002014,0.001177,185,185,1.000000,0,0,0,,212,211,211,0,0.000000,0.001177,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[2, 2]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002667,0.002313,245,245,1.000000,0,0,0,,212,211,211,0,0.000000,0.002313,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[17, 17]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.004626,0.003597,425,425,1.000000,0,0,0,,212,211,211,0,0.000000,0.003597,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[5, 5]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.005812,0.004848,534,534,1.000000,0,0,0,,212,211,211,0,0.000000,0.004848,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[9, 9]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.007151,0.006671,657,657,1.000000,0,0,0,,212,211,211,0,0.000000,0.006671,211,
+datasets/protein_sdb1.txt,"N=507,len=91875","[0,1]",400,"[[0, 0]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.011298,0.009711,1038,1038,1.000000,0,0,0,,212,211,211,0,0.000000,0.009711,211,

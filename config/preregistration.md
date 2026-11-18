@@ -1384,4 +1384,67 @@ divisor that ignores its parameter, and a constraint list without its duplicate 
 (the groups of the candidate datasets, the instances reaching r = 3) and after the checks above. No method result of
 the new lots has been seen.
 
-**Unchanged:** all of sections 1–22.
+**Unchanged:** all of sections 1–22 (section 23.9 below changes CUT-HIDE under HIDE-DB with several patterns).
+
+### 23.9 CUT-HIDE under HIDE-DB with several patterns: scoring by the exact drop, and the batches it touches run again (decision of the author, 2026-11-18, before any run of generation 8)
+
+**Decision.** The step-7 greedy of CUT-HIDE under HIDE-DB scores a candidate position by the exact drop it causes, as
+the greedy of HIDE-SEQ has done since section 22.8. Every batch whose CUT-HIDE rows come from that greedy with
+repeated-item sensitive patterns runs again as generation 8. This changes the method under test; it adds no hypothesis.
+
+**What changes** (`CutHide.bestInSequence`, `CutHideConfig.standard()`). A candidate is a position that carries a vital
+node of a sensitive pattern still needed (unchanged). Its score was the number of such patterns, divided by 1 + w(i).
+It is now the sum over those patterns of min(exact drop of the pattern when the position is masked on top of the masks
+already placed in the sequence, what the pattern still needs over the database), divided by 1 + w(i). The weights, the
+tie rule, the ledger (which already subtracted the exact drop) and the stopping rule are unchanged. The key
+`cut-hide-count` keeps the earlier score and reproduces the earlier rows.
+
+**Why.** On BIKE (lot C), OCC used fewer masks than CUT-HIDE on 20 of 20 sets of five repeated-item patterns. Reading the
+code found the cause section 22.8 had fixed under HIDE-SEQ only: a position of a repeated item can lower a support by
+more than one, and the count of vital patterns does not see it.
+
+**Probe** (journal entries 128 and 129, hypotheses written before the run; development machine, 24 cells; numbers not
+reported): P1, the rows of distinct-item cells are unchanged (23 of 23 instances); P2, OCC fewer masks than CUT-HIDE on
+BIKE, five patterns, 20 to 2 (threshold of success at most 10); P3, the same on the repeated-item cells of SC3 at five
+patterns, 103 of 365 to 13 (threshold at most 52). All three held. Masks fell on 352 of 365 instances (median ratio
+0.87); Lost_rel rose on 180, fell on 103, with median change 0 and largest rise 0.104.
+
+**Checks of the change.** On sepsis [0,1], repeated items, five patterns: `cut-hide` gives the probe rows and
+`cut-hide-count` the rows of ADMIN-PC, 5 of 5 sets each; the two differ on 5 of 5. A test checks that the rows of
+distinct-item sets are those of `cut-hide-count`. Java tests 132 of 132.
+
+**Why these batches.** The changed score is read only by the HIDE-DB greedy for two or more sensitive patterns, and it
+changes nothing when every pattern has distinct items (a mask at a vital position then lowers each support by one). The
+batches of generation 8 are therefore the repeated-item cells, at |𝒮| = 5, 10, 20, of: the method batches of SC3
+(`g3-sc3-s5` … `s20`), the refinement batch (`g3-sc3-refine`), the reduced-optimum batch (`g3-sc3opt`), the g⁻ > 0
+batches (`g4-gap-s5` … `s20`), the timed batch at |𝒮| = 10 (`g4-sc6`), lot F (`g7-rob-s5` … `s20`) and lot C
+(`g7-rep-s5`, `g7-rep-s10`), each cell for cell with the same options. Their earlier files move to
+`results-invariant/superseded/g8-hidedb-exactdrop/` (and `results/superseded/…` for the timed files) before the run, kept
+and read by no tool. The stop-at-threshold rivals, the lower bounds, every cell with one sensitive pattern, every
+distinct-item cell and every HIDE-SEQ cell stand.
+
+**What is reported.** H2-R, H4b-R, the tables of pairs and the ratio to the lower bound at |𝒮| > 1, H6-R, the refinement,
+the reduced optimum, the running time at |𝒮| = 10, lots C, D, E and F are read from the files of generation 8 where it
+reran them. Their thresholds and tests are unchanged.
+
+### 23.10 Lever 1 of lot F: hiding under a wider gap constraint (decision of the author, 2026-11-18, before any run)
+
+**Why.** Lot F found that after CUT-HIDE, 71–100% of the sensitive patterns are frequent again once the miner widens g⁺
+by one step: CUT-HIDE stops exactly at σ − 1. The non-overlapping support does not decrease when g⁺ grows (every
+occurrence under [g⁻, g⁺] is one under [g⁻, g′⁺] for g′⁺ ≥ g⁺, so a largest family of disjoint occurrences can only grow),
+hence a set hidden under a wider constraint is hidden under every narrower one.
+
+**Runs.** `g8-wide-2x` and `g8-wide-inf`: the 54 cells of `sc3-s1` (|𝒮| = 1), scenario `SC3WIDE`, methods
+`cut-hide-rw-ls`, `hha`, `dbsh`, `sbsh-r1`, `sbsh-rmax`, epsilon 0.5, every method hiding under [g⁻, 2g⁺] and under
+[g⁻, ∞] (`--hideGmax`). Lost, SupDist and HF are counted under the gap of the run, as in SC3; |R|* (min_masks) is the
+optimum under the hiding constraint. A method left with a sensitive support at or above σ under the hiding constraint
+gets the status "not hidden at the hiding gap".
+
+**Checks.** CUT-HIDE is at |R|* under the hiding constraint on every instance (an instance where it is not stops the
+analysis); every row has HF = 0 under the gap of the run.
+
+**Reported, descriptive, no test**, per scope, hiding constraint and method, on the instances of lot A: the median and
+quartiles of |R| under the hiding constraint over |R| of the same method in SC3; the median change of Lost_rel against
+SC3; the table of pairs (|R|, Lost) of CUT-HIDE against each baseline under the same hiding constraint.
+
+**Unchanged:** all of sections 1–22 and 23.1–23.8.

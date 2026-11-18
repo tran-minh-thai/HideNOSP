@@ -75,6 +75,15 @@ under a scenario prefix of its own so that no table of SC3 or SC4 reads its rows
     g7-sens-constants  lot B: SC3SENS, cut-hide-rw-ls and eight one-constant variants, cells of sc3-s1
     g7-sens-epsilon    lot B: SC3SENS, cut-hide-rw-ls at epsilon 0.25 and 1.0, cells of sc3-s1
 
+Generation 8 (preregistration sections 23.9 and 23.10), run with --generation=8: after the HIDE-DB greedy of CUT-HIDE
+scores by the exact drop, the repeated-item cells, cell for cell, of every batch whose CUT-HIDE rows come from that
+greedy (their earlier files move to results-invariant/superseded/g8-hidedb-exactdrop/ first); and SC3WIDE.
+
+    g8-sc3-s5 .. s20, g8-sc3-refine, g8-sc3opt, g8-gap-s5 .. s20, g8-sc6 (|S| = 10), g8-rob-s5 .. s20, g8-rep-s5, s10
+                       the repeated-item cells of g3-sc3-*, g3-sc3-refine, g3-sc3opt, g4-gap-*, g4-sc6, g7-rob-*, g7-rep-*
+    g8-wide-2x, g8-wide-inf
+                       SC3WIDE on the cells of sc3-s1, every method hiding under [g-, 2 g+] or [g-, infinity]
+
 A cell is done when results-invariant/ holds a complete file of its scenario whose run stamp names
 THIS machine and whose options line names the cell (SC1 writes no options line: scenario, machine and
 seed). Files of other machines never count, so a new machine reruns everything. A cell whose run
@@ -131,7 +140,7 @@ CLOSURE_OPTION = ("closure", "necessary")
 # earlier rule: it runs with --closure=subsequence and is done only by a file whose "# closure" header line is
 # subsequence or absent (files written before the rule existed carry no such line).
 CLOSURE_SCENARIOS = ("SC3", "SC3LOST", "SC3CERT", "SC3OPT", "SC6", "SC4", "SC4LOST",
-                     "SC3SENS", "SC3ROB", "SC3REP", "SC4R")
+                     "SC3SENS", "SC3ROB", "SC3REP", "SC4R", "SC3WIDE")
 EARLIER_RULE = "subsequence"
 HEADER_RULE = "# closure "
 BATCHES = ("sc1", "sc2", "sc3-s1", "sc3-s5", "sc3-s10", "sc3-s20", "sc3-degenerate", "sc3-refine",
@@ -182,6 +191,18 @@ G7_BATCHES = ("g7-sens-uniform", "g7-rep-sc2", "g7-rep-s1", "g7-rep-s5", "g7-rep
               "g7-rob-s10", "g7-rob-s20", "g7-sens-constants", "g7-sens-epsilon")
 BATCHES = BATCHES + G7_BATCHES
 GENERATION.update({b: "7" for b in G7_BATCHES})
+# Generation 8 (preregistration sections 23.9 and 23.10): the repeated-item cells, cell for cell, of every batch whose
+# CUT-HIDE rows come from the HIDE-DB greedy for several patterns, after that greedy scores by the exact drop (their earlier
+# files move to results-invariant/superseded/g8-hidedb-exactdrop/ first); and SC3WIDE, hiding under a wider constraint.
+G8_SOURCES = {"g8-sc3-s5": "g3-sc3-s5", "g8-sc3-s10": "g3-sc3-s10", "g8-sc3-s20": "g3-sc3-s20",
+              "g8-sc3-refine": "g3-sc3-refine", "g8-sc3opt": "g3-sc3opt", "g8-gap-s5": "g4-gap-s5",
+              "g8-gap-s10": "g4-gap-s10", "g8-gap-s20": "g4-gap-s20", "g8-sc6": "g4-sc6", "g8-rob-s5": "g7-rob-s5",
+              "g8-rob-s10": "g7-rob-s10", "g8-rob-s20": "g7-rob-s20", "g8-rep-s5": "g7-rep-s5", "g8-rep-s10": "g7-rep-s10"}
+WIDE = (("g8-wide-2x", "2x"), ("g8-wide-inf", "inf"))
+G8_BATCHES = tuple(G8_SOURCES) + tuple(b for b, _ in WIDE)
+BATCHES = BATCHES + G8_BATCHES
+GENERATION.update({b: "8" for b in G8_BATCHES})
+RERUNS.update(G8_SOURCES)
 # What a later generation must share with the one before: only the measured code may differ.
 CARRIED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor")
 LOCKED_KEYS = ("machine", "hostname", "java_runtime_version", "java_vendor", "source_tree", "pom")
@@ -308,7 +329,30 @@ def g7_cells(root, batch):
     return None
 
 
+def g8_cells(root, batch):
+    """The cells of generation 8 (preregistration sections 23.9, 23.10), or None for a batch of another generation."""
+    if batch in G8_SOURCES:
+        cells = [c for c in batch_cells(root, G8_SOURCES[batch]) if dict(c["options"]).get("patternKind") == "repeated"]
+        if batch == "g8-sc6":
+            cells = [c for c in cells if dict(c["options"]).get("sensitiveSize") == "10"]
+        return cells
+    for name, width in WIDE:
+        if batch == name:
+            out = []
+            for c in sc3.planned(root, 1):
+                options = {k: c[k] for k in sc3.IDENTITY}
+                options["methods"] = ROB_METHODS
+                hide = "inf" if width == "inf" else str(2 * int(c["gmax"]))
+                out.append(cell("SC3WIDE", options, extra=[("epsilon", "0.5"), ("hideGmax", hide), CLOSURE_OPTION]))
+            return out
+    return None
+
+
 def batch_cells(root, batch):
+    if batch.startswith("g8-"):
+        cells = g8_cells(root, batch)
+        if cells is not None:
+            return cells
     if batch.startswith("g7-"):
         cells = g7_cells(root, batch)
         if cells is not None:
@@ -377,7 +421,7 @@ def label(c):
         return "%s trials=%s" % (c["scenario"], o["trials"])
     parts = [c["scenario"], Path(o["dataset"]).stem, "[%s,%s]" % (o["gmin"], o["gmax"]), "sigma=%s" % o["sigma"]]
     for key, name in (("profile", ""), ("patternKind", ""), ("sensitiveSize", "S="), ("r", "r="), ("rs", "rs="),
-                      ("methods", ""), ("epsilon", "eps="), ("closure", "closure=")):
+                      ("methods", ""), ("epsilon", "eps="), ("hideGmax", "hide="), ("closure", "closure=")):
         if key in o:
             value = o[key]
             if key == "methods":
@@ -920,11 +964,14 @@ def self_test():
     expected.update({"g4-sc1gap": 1, "g4-sc2gap": 72, "g4-sc4-s1": 54 + 17, "g4-sc4-s5": 34,
                      "g4-sc4lost": 54, "g4-sc6": expected["sc6"], "g5-sc4-s5": 34,
                      "g6-sc4-s5": 34})
+    expected.update({"g8-sc3-s5": 20, "g8-sc3-s10": 18, "g8-sc3-s20": 14, "g8-sc3-refine": 52, "g8-sc3opt": 52, "g8-gap-s5": 12,
+                     "g8-gap-s10": 10, "g8-gap-s20": 5, "g8-sc6": 18, "g8-rob-s5": 20, "g8-rob-s10": 18, "g8-rob-s20": 14,
+                     "g8-wide-2x": 54, "g8-wide-inf": 54})
     expected.update({"g7-sens-uniform": 54, "g7-sens-constants": 54, "g7-sens-epsilon": 2 * 54, "g7-rob-s1": 54,
                      "g7-rob-s5": 34, "g7-rob-s10": 27, "g7-rob-s20": 21, "g7-seq3-s1": 54 + 17, "g7-seq3-s5": 34})
     gap_batches = [b for b in G4_BATCHES if b.startswith("g4-gap-")]
     tables_present = all((REPO / name).is_file() for name, _ in sc3.GAP_TABLES)
-    rep_batches = [b for b in G7_BATCHES if b.startswith("g7-rep-")]
+    rep_batches = [b for b in G7_BATCHES if b.startswith("g7-rep-")] + ["g8-rep-s5", "g8-rep-s10"]
     rep_present = all((REPO / name).is_file() for name, _ in REP_TABLES)
     plannable = [b for b in BATCHES if (tables_present or b not in gap_batches) and (rep_present or b not in rep_batches)]
     for b in BATCHES:
@@ -1027,6 +1074,25 @@ def self_test():
           len(seq3) == len(seq2) and all(
               s3["scenario"] == "SC4R" and [kv for kv in s3["options"] if kv[0] != "r"] ==
               [kv for kv in s2["options"] if kv[0] != "r"] and dict(s3["options"])["r"] == "3" for s3, s2 in zip(seq3, seq2)))
+    # Generation 8 (preregistration 23.9, 23.10).
+    for later, earlier in G8_SOURCES.items():
+        if later in rep_batches and not rep_present:
+            continue
+        mine, theirs = batch_cells(REPO, later), batch_cells(REPO, earlier)
+        wanted = [c for c in theirs if dict(c["options"]).get("patternKind") == "repeated"
+                  and (later != "g8-sc6" or dict(c["options"]).get("sensitiveSize") == "10")]
+        check("%s is the repeated-item cells of %s, cell for cell" % (later, earlier),
+              mine == wanted and len(mine) > 0 and all(dict(c["options"])["patternKind"] == "repeated" for c in mine),
+              "%d of %d cells" % (len(mine), len(theirs)))
+    for name, width in WIDE:
+        cells = batch_cells(REPO, name)
+        check("%s is every sc3-s1 cell under SC3WIDE, hiding under %s" % (name, "2 g+" if width == "2x" else "infinity"),
+              len(cells) == len(base[1]) and all(
+                  w["scenario"] == "SC3WIDE" and identity(w) == identity(c) and dict(w["options"])["methods"] == ROB_METHODS
+                  and dict(w["options"])["hideGmax"] == ("inf" if width == "inf" else str(2 * int(dict(c["options"])["gmax"])))
+                  for w, c in zip(cells, base[1])))
+    check("the g8 batches belong to generation 8 and nothing else does",
+          {b for b in BATCHES if GENERATION[b] == "8"} == set(G8_BATCHES))
     check("the g7 batches belong to generation 7 and nothing else does",
           {b for b in BATCHES if GENERATION[b] == "7"} == set(G7_BATCHES))
     # Epsilon names a cell: a file at 0.25 does not stand for the cell at 1.0 or at the default, and an SC3 file

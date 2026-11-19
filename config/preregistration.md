@@ -1448,3 +1448,29 @@ quartiles of |R| under the hiding constraint over |R| of the same method in SC3;
 SC3; the table of pairs (|R|, Lost) of CUT-HIDE against each baseline under the same hiding constraint.
 
 **Unchanged:** all of sections 1–22 and 23.1–23.8.
+
+### 23.11 Lot B extended: the divisor of tau beyond 8 (decision of the author, 2026-11-19, before any run of generation 8)
+
+**Why.** In lot B (section 23.2), the divisor d of tau = max(1, m_Q / d) at 2 raised Lost and at 8 lowered it against the
+default 4, with |R| unchanged everywhere. A probe on the development machine, on 37 of the 54 cells of lot B
+(`doc` folder of the project, not in this repository), gave a minimum between d = 8 and d = 16 and a worse Lost for
+tau = 1. The probe decides nothing: this section fixes what the measuring machine runs and what is reported.
+
+**The method does not change.** CUT-HIDE keeps d = 4 in every hypothesis of sections 12–23. This lot is descriptive; no
+value of d is chosen from it.
+
+**Runs.** `g8-sens-tau`: the 54 cells of `sc3-s1`, scenario `SC3SENS`, methods `cut-hide-rw-ls@tau16`,
+`cut-hide-rw-ls@tau64`, `cut-hide-rw-ls@tau1000000000` (d = 10^9 gives tau = 1 for every margin below 10^9), epsilon 0.5,
+closure rule necessary. The rows at d = 2, 4 and 8 are those of lot B.
+
+**Checks.** |R| equals that of d = 4 on every instance (a difference stops the analysis).
+
+**Reported, descriptive, no test**, per scope, on the instances of lot A, for d = 2, 4, 8, 16, 64 and tau = 1: the total
+Lost, the median and quartiles of Lost_rel, and the number of instances with fewer and with more lost patterns than at
+d = 4.
+
+**Expected from the probe, written before the run:** in both scopes, the total Lost at d = 16 is at most that at d = 4, and
+the total Lost at tau = 1 is at least that at d = 8. If the measuring machine contradicts either, that is the result.
+
+**Unchanged:** all of sections 1–22 and 23.1–23.10.
+

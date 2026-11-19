@@ -83,6 +83,8 @@ greedy (their earlier files move to results-invariant/superseded/g8-hidedb-exact
                        the repeated-item cells of g3-sc3-*, g3-sc3-refine, g3-sc3opt, g4-gap-*, g4-sc6, g7-rob-*, g7-rep-*
     g8-wide-2x, g8-wide-inf
                        SC3WIDE on the cells of sc3-s1, every method hiding under [g-, 2 g+] or [g-, infinity]
+    g8-sens-tau        lot B extended (preregistration section 23.11): SC3SENS, cut-hide-rw-ls with the divisor of tau
+                       at 16, 64 and 10^9 (tau = 1), cells of sc3-s1; the method keeps the divisor 4
 
 A cell is done when results-invariant/ holds a complete file of its scenario whose run stamp names
 THIS machine and whose options line names the cell (SC1 writes no options line: scenario, machine and
@@ -199,7 +201,9 @@ G8_SOURCES = {"g8-sc3-s5": "g3-sc3-s5", "g8-sc3-s10": "g3-sc3-s10", "g8-sc3-s20"
               "g8-gap-s10": "g4-gap-s10", "g8-gap-s20": "g4-gap-s20", "g8-sc6": "g4-sc6", "g8-rob-s5": "g7-rob-s5",
               "g8-rob-s10": "g7-rob-s10", "g8-rob-s20": "g7-rob-s20", "g8-rep-s5": "g7-rep-s5", "g8-rep-s10": "g7-rep-s10"}
 WIDE = (("g8-wide-2x", "2x"), ("g8-wide-inf", "inf"))
-G8_BATCHES = tuple(G8_SOURCES) + tuple(b for b, _ in WIDE)
+# Lot B extended (preregistration section 23.11): the divisor d of tau = max(1, m / d) beyond 2, 4 and 8; 10^9 gives tau = 1.
+TAU_GRID = ",".join("cut-hide-rw-ls@tau%s" % v for v in ("16", "64", "1000000000"))
+G8_BATCHES = tuple(G8_SOURCES) + tuple(b for b, _ in WIDE) + ("g8-sens-tau",)
 BATCHES = BATCHES + G8_BATCHES
 GENERATION.update({b: "8" for b in G8_BATCHES})
 RERUNS.update(G8_SOURCES)
@@ -345,6 +349,13 @@ def g8_cells(root, batch):
                 hide = "inf" if width == "inf" else str(2 * int(c["gmax"]))
                 out.append(cell("SC3WIDE", options, extra=[("epsilon", "0.5"), ("hideGmax", hide), CLOSURE_OPTION]))
             return out
+    if batch == "g8-sens-tau":
+        out = []
+        for c in sc3.planned(root, 1):
+            options = {k: c[k] for k in sc3.IDENTITY}
+            options["methods"] = TAU_GRID
+            out.append(cell("SC3SENS", options, extra=[("epsilon", "0.5"), CLOSURE_OPTION]))
+        return out
     return None
 
 
@@ -426,7 +437,8 @@ def label(c):
             value = o[key]
             if key == "methods":
                 value = {"none": "pareto", sc3.REFINE: "refine", sc3.STOP: "stop", UNIFORM: "uniform",
-                         CONSTANTS: "constants", ROB_METHODS: "robust"}.get(value, "methods")
+                         CONSTANTS: "constants", ROB_METHODS: "robust",
+                         TAU_GRID: "tau-grid"}.get(value, "methods")
             parts.append(name + value)
     return " ".join(parts)
 
@@ -966,7 +978,7 @@ def self_test():
                      "g6-sc4-s5": 34})
     expected.update({"g8-sc3-s5": 20, "g8-sc3-s10": 18, "g8-sc3-s20": 14, "g8-sc3-refine": 52, "g8-sc3opt": 52, "g8-gap-s5": 12,
                      "g8-gap-s10": 10, "g8-gap-s20": 5, "g8-sc6": 18, "g8-rob-s5": 20, "g8-rob-s10": 18, "g8-rob-s20": 14,
-                     "g8-wide-2x": 54, "g8-wide-inf": 54})
+                     "g8-wide-2x": 54, "g8-wide-inf": 54, "g8-sens-tau": 54})
     expected.update({"g7-sens-uniform": 54, "g7-sens-constants": 54, "g7-sens-epsilon": 2 * 54, "g7-rob-s1": 54,
                      "g7-rob-s5": 34, "g7-rob-s10": 27, "g7-rob-s20": 21, "g7-seq3-s1": 54 + 17, "g7-seq3-s5": 34})
     gap_batches = [b for b in G4_BATCHES if b.startswith("g4-gap-")]
@@ -1091,6 +1103,14 @@ def self_test():
                   w["scenario"] == "SC3WIDE" and identity(w) == identity(c) and dict(w["options"])["methods"] == ROB_METHODS
                   and dict(w["options"])["hideGmax"] == ("inf" if width == "inf" else str(2 * int(dict(c["options"])["gmax"])))
                   for w, c in zip(cells, base[1])))
+    tau, constants = batch_cells(REPO, "g8-sens-tau"), batch_cells(REPO, "g7-sens-constants")
+    check("g8-sens-tau is every cell of g7-sens-constants with the tau grid as its only methods",
+          len(tau) == len(constants) == 54 and all(
+              [kv for kv in a["options"] if kv[0] != "methods"] == [kv for kv in b["options"] if kv[0] != "methods"]
+              and dict(a["options"])["methods"] == TAU_GRID for a, b in zip(tau, constants)))
+    fake = [(Path("SC3SENS_x.csv"), "SC3SENS", dict(dict(constants[0]["options"]), **{HEADER_RULE: "necessary"}), "2026")]
+    check("a file of g7-sens-constants does not count as a cell of g8-sens-tau",
+          is_done(constants[0], fake) is not None and is_done(tau[0], fake) is None)
     check("the g8 batches belong to generation 8 and nothing else does",
           {b for b in BATCHES if GENERATION[b] == "8"} == set(G8_BATCHES))
     check("the g7 batches belong to generation 7 and nothing else does",

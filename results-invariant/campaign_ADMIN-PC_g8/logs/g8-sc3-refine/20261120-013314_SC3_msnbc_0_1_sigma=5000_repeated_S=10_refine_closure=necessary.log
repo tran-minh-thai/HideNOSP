@@ -1,0 +1,38 @@
+# cell SC3 msnbc [0,1] sigma=5000 repeated S=10 refine closure=necessary
+# machine ADMIN-PC
+# exit 0 after 397 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 02ebbdec2537
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3 main comparison on HIDE-DB: Lost, Ghost, SupDist, |R| and HF against the baselines
+# run 20261120-013317-057_ADMIN-PC_02ebbdec2537_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 10, repeated-item pool 64 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 12 -> 4, p30: 13 -> 4, p50: 13 -> 4, p70: 13 -> 4, p90: 13 -> 4
+set 0  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 1088  lost    0 (0.0000)  supDist 0.0121  10.6 s
+set 1  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 1137  lost    0 (0.0000)  supDist 0.0126  11.1 s
+set 2  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 1022  lost    0 (0.0000)  supDist 0.0106  11.9 s
+set 3  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 1153  lost    0 (0.0000)  supDist 0.0109  11.6 s
+set 4  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 3972  lost    4 (0.0421)  supDist 0.0416  12.4 s
+set 5  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 4736  lost    4 (0.0421)  supDist 0.0399  11.8 s
+set 6  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 4377  lost    3 (0.0316)  supDist 0.0324  13.0 s
+set 7  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 4596  lost    5 (0.0526)  supDist 0.0365  13.5 s
+set 8  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 5699  lost    8 (0.0860)  supDist 0.0682  13.9 s
+set 9  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 5975  lost    7 (0.0753)  supDist 0.0655  13.3 s
+set 10  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 5957  lost   10 (0.1064)  supDist 0.0738  13.5 s
+set 11  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 5502  lost    9 (0.0957)  supDist 0.0674  14.0 s
+set 12  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 12370  lost    8 (0.0952)  supDist 0.1127  17.7 s
+set 13  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 11914  lost    8 (0.0952)  supDist 0.1075  18.8 s
+set 14  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 12406  lost   12 (0.1395)  supDist 0.1321  18.4 s
+set 15  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 13257  lost   10 (0.1190)  supDist 0.1278  18.4 s
+set 16  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 50445  lost   13 (0.1781)  supDist 0.2061  37.0 s
+set 17  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 39438  lost   26 (0.3333)  supDist 0.2359  38.2 s
+set 18  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 56297  lost   15 (0.2308)  supDist 0.2375  43.2 s
+set 19  CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase] |R| 29074  lost   17 (0.2099)  supDist 0.1831  32.5 s
+done in 394.3 s

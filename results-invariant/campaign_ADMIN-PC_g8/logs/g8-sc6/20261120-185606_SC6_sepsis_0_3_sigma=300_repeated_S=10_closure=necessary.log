@@ -1,0 +1,64 @@
+# cell SC6 sepsis [0,3] sigma=300 repeated S=10 closure=necessary
+# machine ADMIN-PC
+# exit 0 after 517 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 4dea403ef203
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC6 running time of every method and cost of the index, one set per stratum
+# run 20261120-185609-027_ADMIN-PC_4dea403ef203_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 10, repeated-item pool 140 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 28 -> 4, p30: 28 -> 4, p50: 28 -> 4, p70: 28 -> 4, p90: 28 -> 4
+mining F_sigma(D): 455 patterns,     1859.7 ms +- 8.7 (10 repetitions)
+p10 cut-hide             1009.5 ms +- 6.1 (10 repetitions)
+p10 cut-hide-rw          1015.0 ms +- 10.7 (10 repetitions)
+p10 cut-hide-rw-ls       1017.0 ms +- 9.0 (10 repetitions)
+p10 hha                    64.3 ms +- 1.3 (15 repetitions)
+p10 dbsh                   39.3 ms +- 2.0 (15 repetitions)
+p10 sbsh-r1               522.0 ms +- 7.8 (15 repetitions)
+p10 sbsh-rmax             519.8 ms +- 5.3 (15 repetitions)
+p10 occurrence             19.8 ms +- 0.6 (15 repetitions)
+p10 hha-stop               80.2 ms +- 2.9 (15 repetitions)
+p30 cut-hide             1028.7 ms +- 6.6 (10 repetitions)
+p30 cut-hide-rw          1028.4 ms +- 6.8 (10 repetitions)
+p30 cut-hide-rw-ls       1029.2 ms +- 13.1 (10 repetitions)
+p30 hha                    67.2 ms +- 0.7 (15 repetitions)
+p30 dbsh                   37.7 ms +- 1.3 (15 repetitions)
+p30 sbsh-r1               569.5 ms +- 8.6 (15 repetitions)
+p30 sbsh-rmax             568.9 ms +- 4.2 (15 repetitions)
+p30 occurrence             22.3 ms +- 0.6 (15 repetitions)
+p30 hha-stop               77.4 ms +- 1.0 (15 repetitions)
+p50 cut-hide             1621.0 ms +- 10.3 (10 repetitions)
+p50 cut-hide-rw          1620.3 ms +- 9.6 (10 repetitions)
+p50 cut-hide-rw-ls       1622.5 ms +- 11.0 (10 repetitions)
+p50 hha                    69.9 ms +- 1.2 (15 repetitions)
+p50 dbsh                   40.2 ms +- 0.5 (15 repetitions)
+p50 sbsh-r1               564.2 ms +- 5.3 (15 repetitions)
+p50 sbsh-rmax             568.0 ms +- 9.4 (15 repetitions)
+p50 occurrence             27.1 ms +- 0.3 (15 repetitions)
+p50 hha-stop               85.2 ms +- 1.1 (15 repetitions)
+p70 cut-hide             2146.6 ms +- 18.8 (10 repetitions)
+p70 cut-hide-rw          2145.4 ms +- 13.6 (10 repetitions)
+p70 cut-hide-rw-ls       2148.1 ms +- 9.5 (10 repetitions)
+p70 hha                    75.4 ms +- 1.6 (15 repetitions)
+p70 dbsh                   44.4 ms +- 0.5 (15 repetitions)
+p70 sbsh-r1               553.0 ms +- 5.5 (15 repetitions)
+p70 sbsh-rmax             553.1 ms +- 6.3 (15 repetitions)
+p70 occurrence             36.3 ms +- 0.3 (15 repetitions)
+p70 hha-stop               93.9 ms +- 2.7 (15 repetitions)
+p90 cut-hide             4195.5 ms +- 16.1 (10 repetitions)
+p90 cut-hide-rw          4191.6 ms +- 15.9 (10 repetitions)
+p90 cut-hide-rw-ls       4204.1 ms +- 11.8 (10 repetitions)
+p90 hha                    97.7 ms +- 1.0 (15 repetitions)
+p90 dbsh                   61.9 ms +- 0.6 (15 repetitions)
+p90 sbsh-r1               596.1 ms +- 6.7 (15 repetitions)
+p90 sbsh-rmax             594.4 ms +- 6.2 (15 repetitions)
+p90 occurrence             60.4 ms +- 0.9 (15 repetitions)
+p90 hha-stop              122.3 ms +- 2.7 (15 repetitions)
+done in 514.1 s

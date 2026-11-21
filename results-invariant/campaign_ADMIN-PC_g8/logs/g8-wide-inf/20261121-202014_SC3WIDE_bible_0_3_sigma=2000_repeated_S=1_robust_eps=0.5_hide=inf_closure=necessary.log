@@ -1,0 +1,114 @@
+# cell SC3WIDE bible [0,3] sigma=2000 repeated S=1 robust eps=0.5 hide=inf closure=necessary
+# machine ADMIN-PC
+# exit 0 after 681 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = b02b5977cc69
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3WIDE the comparison of SC3 with every method hiding under a wider gap constraint
+# run 20261121-202016-775_ADMIN-PC_b02b5977cc69_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, repeated-item pool 19 candidates, 19 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 3 -> 3, p30: 4 -> 4, p50: 4 -> 4, p70: 4 -> 4, p90: 4 -> 4
+WARNING: the pool gives 19 distinct sets, not 20; the cell runs with these and the result file header says so. No set is repeated to make up the number.
+set 0  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 6684  lost    7 (0.0625)  supDist 0.0643  7.7 s
+set 0  HHA                                |R| 6687  lost    8 (0.0714)  supDist 0.0607  0.1 s
+set 0  DBSH                               |R| 6772  lost   10 (0.0893)  supDist 0.0638  0.2 s
+set 0  SBSH-r1                            |R| 7225  lost    8 (0.0714)  supDist 0.0692  0.9 s
+set 0  SBSH-r3                            |R| 7225  lost    8 (0.0714)  supDist 0.0692  0.9 s
+set 1  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 12134  lost    5 (0.0446)  supDist 0.0540  13.6 s
+set 1  HHA                                |R| 12135  lost    6 (0.0536)  supDist 0.0499  0.1 s
+set 1  DBSH                               |R| 12578  lost    6 (0.0536)  supDist 0.0464  0.2 s
+set 1  SBSH-r1                            |R| 12786  lost    6 (0.0536)  supDist 0.0472  1.1 s
+set 1  SBSH-r3                            |R| 12786  lost    6 (0.0536)  supDist 0.0472  1.0 s
+set 2  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 7214  lost   10 (0.0893)  supDist 0.0714  7.1 s
+set 2  HHA                                |R| 7266  lost    9 (0.0804)  supDist 0.0650  0.2 s
+set 2  DBSH                               |R| 7374  lost    9 (0.0804)  supDist 0.0707  0.2 s
+set 2  SBSH-r1                            |R| 7422  lost   10 (0.0893)  supDist 0.0753  0.8 s
+set 2  SBSH-r4                            |R| 7457  lost   10 (0.0893)  supDist 0.0757  0.9 s
+set 3  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 5615  lost    9 (0.0804)  supDist 0.0656  5.8 s
+set 3  HHA                                |R| 5615  lost    7 (0.0625)  supDist 0.0549  0.1 s
+set 3  DBSH                               |R| 5763  lost    9 (0.0804)  supDist 0.0583  0.1 s
+set 3  SBSH-r1                            |R| 5794  lost    9 (0.0804)  supDist 0.0618  0.8 s
+set 3  SBSH-r4                            |R| 5794  lost    9 (0.0804)  supDist 0.0618  0.8 s
+set 4  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 7146  lost   10 (0.0893)  supDist 0.0707  6.9 s
+set 4  HHA                                |R| 7156  lost   12 (0.1071)  supDist 0.0734  0.2 s
+set 4  DBSH                               |R| 7337  lost    9 (0.0804)  supDist 0.0713  0.2 s
+set 4  SBSH-r1                            |R| 7387  lost   10 (0.0893)  supDist 0.0757  0.9 s
+set 4  SBSH-r4                            |R| 7387  lost   10 (0.0893)  supDist 0.0757  0.9 s
+set 5  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 3268  lost    0 (0.0000)  supDist 0.0066  4.1 s
+set 5  HHA                                |R| 3268  lost    0 (0.0000)  supDist 0.0068  0.1 s
+set 5  DBSH                               |R| 3268  lost    0 (0.0000)  supDist 0.0068  0.1 s
+set 5  SBSH-r1                            |R| 3268  lost    0 (0.0000)  supDist 0.0064  0.4 s
+set 5  SBSH-r2                            |R| 3268  lost    0 (0.0000)  supDist 0.0064  0.4 s
+set 6  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 7137  lost    4 (0.0357)  supDist 0.0462  6.9 s
+set 6  HHA                                |R| 7139  lost    7 (0.0625)  supDist 0.0445  0.1 s
+set 6  DBSH                               |R| 7531  lost    9 (0.0804)  supDist 0.0443  0.1 s
+set 6  SBSH-r1                            |R| 7794  lost    8 (0.0714)  supDist 0.0471  0.8 s
+set 6  SBSH-r3                            |R| 7794  lost    8 (0.0714)  supDist 0.0471  0.8 s
+set 7  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 7614  lost    6 (0.0536)  supDist 0.0495  7.3 s
+set 7  HHA                                |R| 7669  lost    7 (0.0625)  supDist 0.0565  0.1 s
+set 7  DBSH                               |R| 7874  lost   10 (0.0893)  supDist 0.0507  0.1 s
+set 7  SBSH-r1                            |R| 8065  lost   11 (0.0982)  supDist 0.0538  0.8 s
+set 7  SBSH-r3                            |R| 8598  lost    9 (0.0804)  supDist 0.0514  0.8 s
+set 8  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 9306  lost    9 (0.0804)  supDist 0.0764  8.3 s
+set 8  HHA                                |R| 9307  lost   13 (0.1161)  supDist 0.0904  0.1 s
+set 8  DBSH                               |R| 9481  lost   14 (0.1250)  supDist 0.0906  0.1 s
+set 8  SBSH-r1                            |R| 9683  lost   13 (0.1161)  supDist 0.0946  1.0 s
+set 8  SBSH-r3                            |R| 9683  lost   13 (0.1161)  supDist 0.0946  0.9 s
+set 9  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 8851  lost   10 (0.0901)  supDist 0.0838  7.9 s
+set 9  HHA                                |R| 8852  lost   10 (0.0901)  supDist 0.0778  0.1 s
+set 9  DBSH                               |R| 8994  lost   11 (0.0991)  supDist 0.0810  0.1 s
+set 9  SBSH-r1                            |R| 9101  lost   10 (0.0901)  supDist 0.0852  0.9 s
+set 9  SBSH-r3                            |R| 9101  lost   10 (0.0901)  supDist 0.0852  0.9 s
+set 10  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 7943  lost    9 (0.0804)  supDist 0.0736  7.6 s
+set 10  HHA                                |R| 7945  lost   11 (0.0982)  supDist 0.0773  0.2 s
+set 10  DBSH                               |R| 8169  lost   13 (0.1161)  supDist 0.0804  0.1 s
+set 10  SBSH-r1                            |R| 8371  lost   12 (0.1071)  supDist 0.0845  0.9 s
+set 10  SBSH-r4                            |R| 8371  lost   12 (0.1071)  supDist 0.0845  0.9 s
+set 11  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 8661  lost    7 (0.0625)  supDist 0.0574  8.3 s
+set 11  HHA                                |R| 8668  lost   10 (0.0893)  supDist 0.0583  0.1 s
+set 11  DBSH                               |R| 9168  lost   12 (0.1071)  supDist 0.0587  0.1 s
+set 11  SBSH-r1                            |R| 10000  lost   11 (0.0982)  supDist 0.0619  0.9 s
+set 11  SBSH-r3                            |R| 10000  lost   11 (0.0982)  supDist 0.0619  0.9 s
+set 12  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 17198  lost   19 (0.1696)  supDist 0.1357  14.8 s
+set 12  HHA                                |R| 17202  lost   20 (0.1786)  supDist 0.1375  0.2 s
+set 12  DBSH                               |R| 17202  lost   20 (0.1786)  supDist 0.1375  0.2 s
+set 12  SBSH-r1                            |R| 17198  lost   20 (0.1786)  supDist 0.1398  1.1 s
+set 12  SBSH-r3                            |R| 17198  lost   20 (0.1786)  supDist 0.1398  1.1 s
+set 13  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 12147  lost   11 (0.0991)  supDist 0.0942  11.0 s
+set 13  HHA                                |R| 12181  lost   14 (0.1261)  supDist 0.0966  0.1 s
+set 13  DBSH                               |R| 12277  lost   15 (0.1351)  supDist 0.1000  0.1 s
+set 13  SBSH-r1                            |R| 13341  lost   15 (0.1351)  supDist 0.1111  1.0 s
+set 13  SBSH-r3                            |R| 12467  lost   15 (0.1351)  supDist 0.1053  1.0 s
+set 14  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 12733  lost    7 (0.0636)  supDist 0.0829  10.8 s
+set 14  HHA                                |R| 12736  lost   12 (0.1091)  supDist 0.0972  0.1 s
+set 14  DBSH                               |R| 12736  lost   12 (0.1091)  supDist 0.0972  0.1 s
+set 14  SBSH-r1                            |R| 12733  lost   12 (0.1091)  supDist 0.0991  0.8 s
+set 14  SBSH-r2                            |R| 12733  lost   12 (0.1091)  supDist 0.0991  0.8 s
+set 15  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 13908  lost    6 (0.0536)  supDist 0.0465  12.3 s
+set 15  HHA                                |R| 13909  lost    9 (0.0804)  supDist 0.0557  0.1 s
+set 15  DBSH                               |R| 13909  lost    9 (0.0804)  supDist 0.0557  0.1 s
+set 15  SBSH-r1                            |R| 13908  lost    9 (0.0804)  supDist 0.0525  0.8 s
+set 15  SBSH-r2                            |R| 13908  lost    9 (0.0804)  supDist 0.0525  0.8 s
+set 16  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 9696  lost    9 (0.0818)  supDist 0.0782  8.7 s
+set 16  HHA                                |R| 9702  lost   11 (0.1000)  supDist 0.0783  0.1 s
+set 16  DBSH                               |R| 9942  lost   12 (0.1091)  supDist 0.0841  0.1 s
+set 16  SBSH-r1                            |R| 10085  lost   12 (0.1091)  supDist 0.0855  1.0 s
+set 16  SBSH-r3                            |R| 10085  lost   12 (0.1091)  supDist 0.0855  0.9 s
+set 17  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 14859  lost   13 (0.1204)  supDist 0.1169  14.0 s
+set 17  HHA                                |R| 14886  lost   14 (0.1296)  supDist 0.1183  0.2 s
+set 17  DBSH                               |R| 15152  lost   16 (0.1481)  supDist 0.1138  0.1 s
+set 17  SBSH-r1                            |R| 15442  lost   15 (0.1389)  supDist 0.1173  1.0 s
+set 17  SBSH-r3                            |R| 15442  lost   15 (0.1389)  supDist 0.1173  1.0 s
+set 18  CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers) |R| 32474  lost   19 (0.1827)  supDist 0.1938  39.0 s
+set 18  HHA                                |R| 32481  lost   22 (0.2115)  supDist 0.2060  0.2 s
+set 18  DBSH                               |R| 32481  lost   22 (0.2115)  supDist 0.2060  0.2 s
+set 18  SBSH-r1                            |R| 32474  lost   22 (0.2115)  supDist 0.2068  1.1 s
+set 18  SBSH-r2                            |R| 32474  lost   22 (0.2115)  supDist 0.2068  1.1 s
+done in 678.6 s

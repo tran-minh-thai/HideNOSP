@@ -1,9 +1,9 @@
 {
  "_meta": {
   "command": "python tools/paper_numbers.py ",
-  "commit": "5f9b5bd0dc425f1e295a0fd6cf4388e1272d83de",
+  "commit": "fbf379600300773532b1a3c7e1f4866d112212a6",
   "tree": "clean",
-  "tool_sha256": "7927733a228c",
+  "tool_sha256": "dc91ec91dbc6",
   "python": "3.14.6",
   "machine": "ADMIN-PC",
   "small_machine": "ADMIN-PC",
@@ -5545,7 +5545,7 @@
    "source": "dataset_sensitivity.py --machine=ADMIN-PC"
   },
   "sentence_checks.passed": {
-   "value": 41,
+   "value": 43,
    "source": "sentence_checks in paper_numbers.py"
   },
   "seqlost.base.above.max.distinct": {
@@ -5627,6 +5627,10 @@
   "seqlost.skipped.repeated": {
    "value": 369,
    "source": "lost_optimum_table.py --machine=ADMIN-PC --scenario=SC4LOST"
+  },
+  "seqlost.three_same.n": {
+   "value": 2103,
+   "source": "SC4LOST files of ADMIN-PC, per instance"
   },
   "several.same.n": {
    "value": 2531,
@@ -13565,6 +13569,99 @@
     }
    ],
    "source": "reduced_optimum_table.py --machine=ADMIN-PC"
+  },
+  "pairs_split": {
+   "columns": [
+    "scope",
+    "method"
+   ],
+   "rows": [
+    {
+     "scope": "distinct",
+     "method": "dbsh",
+     "ours_more_lt": 0,
+     "ours_more_eq": 0,
+     "ours_more_gt": 0
+    },
+    {
+     "scope": "distinct",
+     "method": "hha",
+     "ours_more_lt": 0,
+     "ours_more_eq": 0,
+     "ours_more_gt": 0
+    },
+    {
+     "scope": "distinct",
+     "method": "hha-stop",
+     "ours_more_lt": 0,
+     "ours_more_eq": 0,
+     "ours_more_gt": 0
+    },
+    {
+     "scope": "distinct",
+     "method": "occurrence",
+     "ours_more_lt": 0,
+     "ours_more_eq": 0,
+     "ours_more_gt": 0
+    },
+    {
+     "scope": "distinct",
+     "method": "sbsh-r1",
+     "ours_more_lt": 0,
+     "ours_more_eq": 0,
+     "ours_more_gt": 0
+    },
+    {
+     "scope": "distinct",
+     "method": "sbsh-rmax",
+     "ours_more_lt": 0,
+     "ours_more_eq": 0,
+     "ours_more_gt": 0
+    },
+    {
+     "scope": "repeated",
+     "method": "dbsh",
+     "ours_more_lt": 0,
+     "ours_more_eq": 0,
+     "ours_more_gt": 1
+    },
+    {
+     "scope": "repeated",
+     "method": "hha",
+     "ours_more_lt": 6,
+     "ours_more_eq": 3,
+     "ours_more_gt": 6
+    },
+    {
+     "scope": "repeated",
+     "method": "hha-stop",
+     "ours_more_lt": 14,
+     "ours_more_eq": 3,
+     "ours_more_gt": 7
+    },
+    {
+     "scope": "repeated",
+     "method": "occurrence",
+     "ours_more_lt": 23,
+     "ours_more_eq": 4,
+     "ours_more_gt": 6
+    },
+    {
+     "scope": "repeated",
+     "method": "sbsh-r1",
+     "ours_more_lt": 0,
+     "ours_more_eq": 0,
+     "ours_more_gt": 1
+    },
+    {
+     "scope": "repeated",
+     "method": "sbsh-rmax",
+     "ours_more_lt": 0,
+     "ours_more_eq": 0,
+     "ours_more_gt": 1
+    }
+   ],
+   "source": "reopened_analysis.py --machine=ADMIN-PC"
   },
   "per_dataset": {
    "columns": [

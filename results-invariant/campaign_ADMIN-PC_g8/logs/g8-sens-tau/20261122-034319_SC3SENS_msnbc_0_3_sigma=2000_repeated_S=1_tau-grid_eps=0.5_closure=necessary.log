@@ -1,0 +1,78 @@
+# cell SC3SENS msnbc [0,3] sigma=2000 repeated S=1 tau-grid eps=0.5 closure=necessary
+# machine ADMIN-PC
+# exit 0 after 1101 s; outcome done; removed .partial: 0
+java: openjdk version "25.0.4.1" 2026-08-18 LTS  [C:\Program Files\Eclipse Adoptium\jdk-25.0.4.101-hotspot\bin\java.exe]
+keep-awake: on until this run ends
+HIDENOSP_REVISION = 10fff0476bb9
+HIDENOSP_CPU = Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+SC3SENS the comparison of SC3 for the stage ablation and the sensitivity of the constants of CUT-HIDE
+# run 20261122-034322-132_ADMIN-PC_10fff0476bb9_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+sensitive sets: size 1, repeated-item pool 362 candidates, 20 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 72 -> 4, p30: 72 -> 4, p50: 73 -> 4, p70: 72 -> 4, p90: 73 -> 4
+set 0  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R|  173  lost    1 (0.0018)  supDist 0.0021  15.7 s
+set 0  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R|  173  lost    1 (0.0018)  supDist 0.0021  14.8 s
+set 0  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R|  173  lost    1 (0.0018)  supDist 0.0021  14.8 s
+set 1  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R|  158  lost    0 (0.0000)  supDist 0.0012  15.1 s
+set 1  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R|  158  lost    0 (0.0000)  supDist 0.0012  15.1 s
+set 1  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R|  158  lost    0 (0.0000)  supDist 0.0012  15.1 s
+set 2  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R|   65  lost    0 (0.0000)  supDist 0.0004  13.6 s
+set 2  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R|   65  lost    0 (0.0000)  supDist 0.0004  13.6 s
+set 2  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R|   65  lost    0 (0.0000)  supDist 0.0004  13.6 s
+set 3  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R|    2  lost    0 (0.0000)  supDist 0.0000  14.8 s
+set 3  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R|    2  lost    0 (0.0000)  supDist 0.0000  14.8 s
+set 3  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R|    2  lost    0 (0.0000)  supDist 0.0000  14.8 s
+set 4  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R|  215  lost    1 (0.0018)  supDist 0.0022  14.3 s
+set 4  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R|  215  lost    1 (0.0018)  supDist 0.0022  14.3 s
+set 4  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R|  215  lost    1 (0.0018)  supDist 0.0022  14.2 s
+set 5  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R|  296  lost    3 (0.0054)  supDist 0.0025  14.3 s
+set 5  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R|  296  lost    3 (0.0054)  supDist 0.0025  14.2 s
+set 5  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R|  296  lost    3 (0.0054)  supDist 0.0025  14.2 s
+set 6  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R|  181  lost    1 (0.0018)  supDist 0.0024  14.8 s
+set 6  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R|  181  lost    1 (0.0018)  supDist 0.0024  14.8 s
+set 6  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R|  181  lost    1 (0.0018)  supDist 0.0024  14.8 s
+set 7  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R|  274  lost    1 (0.0018)  supDist 0.0013  14.6 s
+set 7  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R|  274  lost    1 (0.0018)  supDist 0.0013  14.5 s
+set 7  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R|  274  lost    1 (0.0018)  supDist 0.0013  14.4 s
+set 8  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R|  944  lost    3 (0.0054)  supDist 0.0053  14.8 s
+set 8  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R|  944  lost    3 (0.0054)  supDist 0.0053  14.6 s
+set 8  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R|  944  lost    3 (0.0054)  supDist 0.0053  14.5 s
+set 9  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R|  723  lost    2 (0.0036)  supDist 0.0034  15.8 s
+set 9  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R|  723  lost    2 (0.0036)  supDist 0.0034  15.5 s
+set 9  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R|  723  lost    2 (0.0036)  supDist 0.0034  15.4 s
+set 10  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R| 1454  lost    5 (0.0090)  supDist 0.0121  17.8 s
+set 10  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R| 1454  lost    6 (0.0108)  supDist 0.0123  17.1 s
+set 10  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R| 1454  lost    6 (0.0108)  supDist 0.0123  16.9 s
+set 11  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R| 1926  lost    6 (0.0108)  supDist 0.0086  17.0 s
+set 11  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R| 1926  lost    6 (0.0108)  supDist 0.0086  16.7 s
+set 11  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R| 1926  lost    6 (0.0108)  supDist 0.0086  16.5 s
+set 12  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R| 1780  lost    3 (0.0054)  supDist 0.0117  18.2 s
+set 12  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R| 1780  lost    3 (0.0054)  supDist 0.0117  17.7 s
+set 12  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R| 1780  lost    3 (0.0054)  supDist 0.0117  17.7 s
+set 13  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R| 1051  lost    3 (0.0054)  supDist 0.0060  14.8 s
+set 13  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R| 1051  lost    3 (0.0054)  supDist 0.0060  14.7 s
+set 13  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R| 1051  lost    3 (0.0054)  supDist 0.0060  14.6 s
+set 14  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R| 3269  lost    7 (0.0127)  supDist 0.0147  19.5 s
+set 14  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R| 3269  lost    8 (0.0145)  supDist 0.0154  18.7 s
+set 14  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R| 3269  lost    8 (0.0145)  supDist 0.0154  18.6 s
+set 15  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R| 1430  lost    4 (0.0072)  supDist 0.0127  17.2 s
+set 15  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R| 1430  lost    4 (0.0072)  supDist 0.0127  17.0 s
+set 15  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R| 1430  lost    4 (0.0072)  supDist 0.0126  16.8 s
+set 16  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R| 8228  lost   21 (0.0378)  supDist 0.0574  30.2 s
+set 16  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R| 8228  lost   22 (0.0396)  supDist 0.0573  28.7 s
+set 16  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R| 8228  lost   22 (0.0396)  supDist 0.0573  28.5 s
+set 17  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R| 4746  lost   10 (0.0180)  supDist 0.0355  22.3 s
+set 17  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R| 4746  lost   11 (0.0198)  supDist 0.0354  21.7 s
+set 17  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R| 4746  lost   11 (0.0198)  supDist 0.0354  21.6 s
+set 18  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R| 5251  lost   12 (0.0218)  supDist 0.0339  22.2 s
+set 18  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R| 5251  lost   11 (0.0200)  supDist 0.0338  21.5 s
+set 18  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R| 5251  lost   13 (0.0236)  supDist 0.0334  21.3 s
+set 19  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 16.0)) + local search (50 passes, 30 receivers) |R| 8362  lost   24 (0.0436)  supDist 0.0526  28.3 s
+set 19  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 64.0)) + local search (50 passes, 30 receivers) |R| 8362  lost   24 (0.0436)  supDist 0.0529  27.5 s
+set 19  CUT-HIDE adaptive weight (6 iterations; tau = max(1, m / 1.0E9)) + local search (50 passes, 30 receivers) |R| 8362  lost   25 (0.0454)  supDist 0.0527  27.2 s
+done in 1098.1 s

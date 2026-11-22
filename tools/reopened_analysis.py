@@ -240,6 +240,26 @@ def lot_d(rows, groups, scope, write, label="SC3"):
     return out
 
 
+def pairs_cross(rows, stop, scope, write):
+    """Masks x lost of CUT-HIDE against each baseline and each stopping rival on every main-group instance of SC3: the
+    split of the column "CUT-HIDE more" of the pairs table (fewer, same, more lost). Descriptive, no test."""
+    main = in_group(by_scope(rows + stop, scope), groups_of("SC3", "zero", scope))
+    out = {}
+    for m in BASELINES + RIVALS:
+        bins = pa.pair_up(main, m, "lost_rel")
+        cross = defaultdict(int)
+        for name in ("tested", "baseline more", "ours more"):
+            for _, _, ours, theirs in bins[name]:
+                masks = "fewer" if ours["mask_count"] < theirs["mask_count"] else (
+                    "same" if ours["mask_count"] == theirs["mask_count"] else "more")
+                lost = "fewer" if ours["lost"] < theirs["lost"] else ("same" if ours["lost"] == theirs["lost"] else "more")
+                cross["%s/%s" % (masks, lost)] += 1
+        out[m] = {"cross": dict(cross), "excluded": len(bins["excluded"]), "n": sum(cross.values())}
+        write("   %-8s %-10s n %5d  " % (scope, m, out[m]["n"]) + ", ".join(
+            "%s %d" % (k, cross.get(k, 0)) for k in sorted(cross)))
+    return out
+
+
 # ---------------------------------------------------------------- lot E
 
 def ratio_rows(rows, groups, scope, group, method, size=1):
@@ -698,14 +718,20 @@ def run(machine, write, directory=RESULTS, numbers_path=NUMBERS):
     with io.open(numbers_path, encoding="utf-8") as f:
         numbers = json.load(f)
     loaded = reproduce(machine, numbers, write, directory)
-    rows, _ = loaded[("SC3", "zero")]
-    result = {"machine": machine, "lot_d": {}, "lot_e": None}
+    rows, stop = loaded[("SC3", "zero")]
+    result = {"machine": machine, "lot_d": {}, "lot_e": None, "pairs_cross": {}}
     write("")
     write("=" * 78)
     write("Lot D (preregistration section 23.4), fixed after the main comparison on these files")
     write("=" * 78)
     for scope in ("distinct", "repeated"):
         result["lot_d"][scope] = lot_d(rows, groups_of("SC3", "zero", scope), scope, write)
+    write("")
+    write("=" * 78)
+    write("Masks x lost against every baseline and stopping rival (the split of the pairs table), descriptive")
+    write("=" * 78)
+    for scope in ("distinct", "repeated"):
+        result["pairs_cross"][scope] = pairs_cross(rows, stop, scope, write)
     write("")
     write("=" * 78)
     write("Lot E (preregistration section 23.5)")

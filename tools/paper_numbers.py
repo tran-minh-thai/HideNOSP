@@ -508,6 +508,30 @@ def lot_c(nums, machine):
     nums.table("lotc_h4ar", ["method"], rows, src)
 
 
+SEQ_SAME = ("hha", "occurrence", "hha-stop")
+SEQ_KEY = ("dataset", "gap", "sigma", "pattern_kind", "sensitive_set", "stratum", "drop", "r", "instance_sigma", "sequences",
+           "carrying_windows")
+
+
+def seq_three_same(nums, machine):
+    """HIDE-SEQ with r = 1 on the small instances: HHA, OCC and HHA-stop give the same masks and the same Lost on every
+    instance, which the text states as one shared row. Read per instance from the SC4LOST files, not from the totals."""
+    by = defaultdict(dict)
+    for path in files(INV, "SC4LOST", machine):
+        for r in rows_of(path):
+            if r["method_key"] in SEQ_SAME:
+                k = tuple(r[c] for c in SEQ_KEY)
+                if r["method_key"] in by[k]:
+                    raise Missing("SC4LOST: two rows of %s on %s" % (r["method_key"], k))
+                by[k][r["method_key"]] = (r["mask_count"], r["lost"], r["status"], r["r"])
+    compared = [m for m in by.values() if len(m) == len(SEQ_SAME)]
+    differ = [m for m in compared if len(set(m.values())) != 1]
+    if not compared or differ or any(v[3] != "1" for m in compared for v in m.values()):
+        raise Missing("SC4LOST: HHA, OCC and HHA-stop compared on %d instances, %d differ (or r is not 1); the text gives one "
+                      "row" % (len(compared), len(differ)))
+    nums.put("seqlost.three_same.n", len(compared), "SC4LOST files of %s, per instance" % machine)
+
+
 def seq_lost(nums, machine):
     """SC4LOST: the exact Lost optimum under HIDE-SEQ on small instances (preregistration 22.2), descriptive."""
     text = run_tool(["lost_optimum_table.py", "--machine=%s" % machine, "--scenario=SC4LOST"], "lost_optimum_table SC4LOST")
@@ -1150,6 +1174,7 @@ def reopened(nums, machine):
     nums.put("tests.families", len(e["families"]), src)
     nums.put("tests.equivalence", sum(f["equivalence"] for f in e["families"]), src)
     reopened_lots(nums, data, src)
+    pairs_split(nums, data, src)
 
 
 LOT_A_PAIRS = {"cut-hide-uniform - cut-hide": "uniform_fw", "cut-hide - cut-hide-rw": "fw_aw",
@@ -1172,6 +1197,30 @@ def gap_name(gap):
     if not m or m.group(1) != "0":
         raise Missing("lot F: gap %r not of the form [0,g]" % gap)
     return "g" + m.group(2)
+
+
+def pairs_split(nums, data, src):
+    """The split of "CUT-HIDE more" in the pairs table, checked cell by cell against that table (two loadings)."""
+    h2 = {(r["scope"], r["method"]): r for r in nums.tables["h2"]["rows"]}
+    rows = []
+    for scope, by_method in sorted((data.get("pairs_cross") or {}).items()):
+        for m, v in by_method.items():
+            c = v["cross"]
+            g = lambda k: c.get(k, 0)
+            t = h2.get((scope, m))
+            if t is None:
+                raise Missing("pairs split: no pairs-table row for %s %s" % (scope, m))
+            want = {"same_lt": g("same/fewer"), "same_eq": g("same/same"), "same_gt": g("same/more"),
+                    "more_lt": g("fewer/fewer"), "more_eq": g("fewer/same"), "more_gt": g("fewer/more"),
+                    "ours_more": g("more/fewer") + g("more/same") + g("more/more"), "instances": v["n"]}
+            off = {k: (t[k], w) for k, w in want.items() if t[k] != w}
+            if off:
+                raise Missing("pairs split %s %s disagrees with the pairs table: %s" % (scope, m, off))
+            rows.append({"scope": scope, "method": m, "ours_more_lt": g("more/fewer"), "ours_more_eq": g("more/same"),
+                         "ours_more_gt": g("more/more")})
+    if len(rows) != 2 * (len(BASELINES) + len(RIVALS)):
+        raise Missing("pairs split: %d rows, expected %d" % (len(rows), 2 * (len(BASELINES) + len(RIVALS))))
+    nums.table("pairs_split", ["scope", "method"], rows, src)
 
 
 def reopened_lots(nums, data, src):
@@ -1534,7 +1583,7 @@ def build(machine, small_machine):
                  lambda: lost_optimum(nums, small_machine), lambda: certified(nums, machine, small_machine),
                  lambda: timing(nums, machine), lambda: platform(nums, machine),
                  # HIDE-SEQ and g- > 0 were run under the corrected rule only (preregistration 22).
-                 ] + ([lambda: seq_lost(nums, small_machine), lambda: sc1gap(nums, machine),
+                 ] + ([lambda: seq_lost(nums, small_machine), lambda: seq_three_same(nums, small_machine), lambda: sc1gap(nums, machine),
                        lambda: sc4_rows(nums, machine)] + [
                      (lambda m=m: analysis_mode(nums, machine, *m)) for m in NEW_MODES] +
                     [lambda: reopened(nums, machine), lambda: lot_c(nums, machine)] if RULE[0] == "necessary" else []):
@@ -1732,7 +1781,7 @@ def sentence_checks(nums):
     nums.put("sentence_checks.passed", 27 + REOPENED_SENTENCE_CHECKS, "sentence_checks in paper_numbers.py")
 
 
-REOPENED_SENTENCE_CHECKS = 14
+REOPENED_SENTENCE_CHECKS = 16
 
 
 def reopened_sentence_checks(nums):
@@ -1801,6 +1850,21 @@ def reopened_sentence_checks(nums):
         if v(k + ".rejected") or v(k + ".equivalent_lost") != 4 or v(k + ".equivalent_supdist") != 4:
             raise Missing("%s: rejected %s, equivalent %s / %s; the text says none rejected, equivalence with all four for both"
                           % (k, v(k + ".rejected"), v(k + ".equivalent_lost"), v(k + ".equivalent_supdist")))
+    # (14) HIDE-SEQ, r = 1, small instances: the three rows of HHA, OCC and HHA-stop agree cell by cell in both scopes.
+    seq = {(r["scope"], r["method"]): r for r in tab("seqlost")}
+    for scope in ("distinct", "repeated"):
+        cells = {tuple(seq[(scope, m)][c] for c in ("at_R", "opt", "excess")) for m in SEQ_SAME}
+        if len(cells) != 1:
+            raise Missing("HIDE-SEQ small instances %s: HHA, OCC and HHA-stop rows differ %s; the text gives one row" % (scope, cells))
+    # (15) Over the instances of the pairs table, CUT-HIDE has the lowest median Lost_rel and SupDist in both scopes, with
+    # one and with 5 to 20 sensitive patterns (strictly below every other method).
+    for scope in ("distinct", "repeated"):
+        for size in ("1", "5-20"):
+            b = {r["method"]: r for r in tab("levels") if (r["scope"], r["size"]) == (scope, size)}
+            for field in ("median", "sup_dist"):
+                low = [m for m in b if m != OURS and not b[OURS][field] < b[m][field]]
+                if low:
+                    raise Missing("levels %s |S|=%s: %s of CUT-HIDE not below %s; the text says lowest" % (scope, size, field, low))
     # (13) Lot G, r = 3, five repeated-item patterns: HHA is the only baseline with fewer masks than CUT-HIDE somewhere.
     fewer = sorted(r["method"] for r in tab("h5r3s5") if r["scope"] == "repeated" and r["ours_more"])
     if fewer != ["hha"]:
@@ -1959,6 +2023,40 @@ def self_test():
         n2 = Numbers()
         reopened_lots(n2, d, "t")
         return n2
+    # seq_three_same on planted rows: equal rows pass, one differing Lost stops, r other than 1 stops.
+    def three(edit=None):
+        base = {c: "x" for c in SEQ_KEY}
+        rs = [dict(base, method_key=m, mask_count="3", lost="1", status="", r="1") for m in SEQ_SAME]
+        if edit:
+            edit(rs)
+        saved = (globals()["files"], globals()["rows_of"])
+        globals()["files"], globals()["rows_of"] = (lambda tree, scenario, machine: ["planted"]), (lambda path: rs)
+        try:
+            n2 = Numbers()
+            seq_three_same(n2, "X")
+            return n2
+        finally:
+            globals()["files"], globals()["rows_of"] = saved
+    if three().values["seqlost.three_same.n"]["value"] != 1:
+        failures.append("seq_three_same misreads equal planted rows")
+    expect_stop("SC4LOST: OCC loses one more pattern", lambda: three(lambda rs: rs[1].__setitem__("lost", "2")))
+    expect_stop("SC4LOST: rows with r = 2", lambda: three(lambda rs: [r.__setitem__("r", "2") for r in rs]))
+    # pairs_split: a split that agrees with the pairs table passes; one cell off stops.
+    def split(edit=None):
+        n2 = Numbers()
+        n2.tables["h2"] = {"rows": [{"scope": sc, "method": m, "same_lt": 1, "same_eq": 1, "same_gt": 0, "more_lt": 2, "more_eq": 0,
+                                     "more_gt": 0, "ours_more": 1, "instances": 5} for sc in ("distinct", "repeated")
+                                    for m in BASELINES + RIVALS]}
+        d = {"pairs_cross": {sc: {m: {"n": 5, "cross": {"same/fewer": 1, "same/same": 1, "fewer/fewer": 2, "more/more": 1}}
+                                  for m in BASELINES + RIVALS} for sc in ("distinct", "repeated")}}
+        if edit:
+            edit(d)
+        pairs_split(n2, d, "t")
+        return n2
+    if len(split().tables["pairs_split"]["rows"]) != 2 * len(BASELINES + RIVALS):
+        failures.append("pairs_split misreads an agreeing split")
+    expect_stop("pairs split: one cell off the pairs table",
+                lambda: split(lambda d: d["pairs_cross"]["repeated"]["hha"]["cross"].__setitem__("more/more", 2)))
     expect_stop("SC1: a named check absent from the file", lambda: sc1_named(set(SC1_NAMED[1:])))
     try:
         sc1_named(set(SC1_NAMED))
@@ -2147,6 +2245,9 @@ def self_test():
             ("several patterns: a baseline at the median ratio of CUT-HIDE",
              setr("bound", "median", 1.3003, scope="distinct", size=5, method="sbsh-r1")),
             ("lot D: a median difference of zero", setv("noninf.repeated.median.min", 0.0)),
+            ("HIDE-SEQ small instances: OCC differs from HHA", setr("seqlost", "opt", 999, scope="repeated", method="occurrence")),
+            ("levels: a rival ties CUT-HIDE on SupDist", setr("levels", "sup_dist", 0.0711, scope="repeated", size="5-20",
+                                                              method="hha")),
             ("lot A: a stage pair not rejected", setr("lota", "p_holm", 0.2, scope="repeated", pair="aw_ls")),
             ("lot A: local search loses more once", setr("lota", "neg", 1, scope="distinct", pair="aw_ls")),
             ("lot B: a variant changes |R|", setr("lotb", "masks_differ", 1, scope="distinct", key="d64")),
@@ -2182,7 +2283,7 @@ def self_test():
           "above |R|*, rank-biserial on d - delta_L in a new family, rank-biserial vs pairs table, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
           "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty, "
           "one-pattern components, equal-count check (good, two patterns, empty), refinement check (good, masks, component), "
-          "sentence checks on the exported numbers and 48 faults")
+          "sentence checks on the exported numbers and 50 faults")
     return 1 if failures else 0
 
 

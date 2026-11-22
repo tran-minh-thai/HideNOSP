@@ -1,0 +1,35 @@
+# run 20261121-195608-044_ADMIN-PC_b012af5ed120_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3WIDE
+# options {machine=ADMIN-PC, dataset=datasets/dna_mt745584.txt, format=SPMF, sigma=4000, gmin=0, gmax=3, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=distinct, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,hha,dbsh,sbsh-r1,sbsh-rmax, epsilon=0.5, hideGmax=inf, closure=necessary}
+# sensitive sets: size 1, pool 4 candidates, 4 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+# closure necessary
+# hide gap [0,inf]
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[3, 4]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.153846,0,0.041929,0.035340,1252,1252,1.000000,0,0,0,,14,13,11,2,0.153846,0.035340,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[3, 4]]",p30,hha,HHA,,0.000000,2,0.153846,0,0.041929,0.032304,1252,1252,1.000000,0,0,0,,14,13,11,2,0.153846,0.032304,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[3, 4]]",p30,dbsh,DBSH,,0.000000,1,0.076923,0,0.043135,0.030336,1288,1252,1.028754,0,0,0,,14,13,12,1,0.076923,0.030336,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[3, 4]]",p30,sbsh-r1,SBSH-r1,,0.000000,1,0.076923,0,0.043034,0.030258,1285,1252,1.026358,0,0,0,,14,13,12,1,0.076923,0.030258,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[3, 4]]",p30,sbsh-rmax,SBSH-r2,,0.000000,1,0.076923,0,0.043034,0.030258,1285,1252,1.026358,0,0,0,,14,13,12,1,0.076923,0.030258,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[4, 3]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.153846,0,0.041025,0.031845,1225,1225,1.000000,0,0,0,,14,13,11,2,0.153846,0.031845,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[4, 3]]",p50,hha,HHA,,0.000000,2,0.153846,0,0.041293,0.040540,1233,1225,1.006531,0,0,0,,14,13,11,2,0.153846,0.040540,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[4, 3]]",p50,dbsh,DBSH,,0.000000,1,0.076923,0,0.041996,0.029473,1254,1225,1.023673,0,0,0,,14,13,12,1,0.076923,0.029473,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[4, 3]]",p50,sbsh-r1,SBSH-r1,,0.000000,1,0.076923,0,0.041728,0.029303,1246,1225,1.017143,0,0,0,,14,13,12,1,0.076923,0.029303,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[4, 3]]",p50,sbsh-rmax,SBSH-r2,,0.000000,1,0.076923,0,0.041728,0.029303,1246,1225,1.017143,0,0,0,,14,13,12,1,0.076923,0.029303,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[1, 4]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,6,0.461538,0,0.098292,0.139180,2935,2935,1.000000,0,0,0,,14,13,7,6,0.461538,0.139180,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[1, 4]]",p70,hha,HHA,,0.000000,4,0.307692,0,0.098560,0.140344,2943,2935,1.002726,0,0,0,,14,13,9,4,0.307692,0.140344,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[1, 4]]",p70,dbsh,DBSH,,0.000000,5,0.384615,0,0.104387,0.151897,3117,2935,1.062010,0,0,0,,14,13,8,5,0.384615,0.151897,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[1, 4]]",p70,sbsh-r1,SBSH-r1,,0.000000,5,0.384615,0,0.104186,0.151659,3111,2935,1.059966,0,0,0,,14,13,8,5,0.384615,0.151659,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[1, 4]]",p70,sbsh-rmax,SBSH-r2,,0.000000,5,0.384615,0,0.104186,0.151659,3111,2935,1.059966,0,0,0,,14,13,8,5,0.384615,0.151659,13,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[4, 1]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.166667,0,0.096082,0.110673,2869,2869,1.000000,0,0,0,,14,12,10,2,0.166667,0.110673,12,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[4, 1]]",p90,hha,HHA,,0.000000,4,0.333333,0,0.096082,0.128875,2869,2869,1.000000,0,0,0,,14,12,8,4,0.333333,0.128875,12,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[4, 1]]",p90,dbsh,DBSH,,0.000000,4,0.333333,0,0.102344,0.134713,3056,2869,1.065180,0,0,0,,14,12,8,4,0.333333,0.134713,12,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[4, 1]]",p90,sbsh-r1,SBSH-r1,,0.000000,4,0.333333,0,0.102043,0.134392,3047,2869,1.062043,0,0,0,,14,12,8,4,0.333333,0.134392,12,
+datasets/dna_mt745584.txt,"N=498,len=29860","[0,3]",4000,"[[4, 1]]",p90,sbsh-rmax,SBSH-r2,,0.000000,4,0.333333,0,0.102043,0.134392,3047,2869,1.062043,0,0,0,,14,12,8,4,0.333333,0.134392,12,

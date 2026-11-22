@@ -1,0 +1,40 @@
+# run 20261121-155617-259_ADMIN-PC_9f4707b0c99e_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3WIDE
+# options {machine=ADMIN-PC, dataset=datasets/protein_sdb4.txt, format=SPMF, sigma=900, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,hha,dbsh,sbsh-r1,sbsh-rmax, epsilon=0.5, hideGmax=2, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 5 candidates, 5 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 1 -> 1, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+# closure necessary
+# hide gap [0,2]
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[17, 17]]",p10,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.016129,0,0.003473,0.003700,380,380,1.000000,0,0,0,,63,62,61,1,0.016129,0.003700,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[17, 17]]",p10,hha,HHA,,0.000000,1,0.016129,0,0.004542,0.005924,497,380,1.307895,0,0,0,,63,62,61,1,0.016129,0.005924,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[17, 17]]",p10,dbsh,DBSH,,0.000000,1,0.016129,0,0.004825,0.006237,528,380,1.389474,0,0,0,,63,62,61,1,0.016129,0.006237,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[17, 17]]",p10,sbsh-r1,SBSH-r1,,0.000000,1,0.016129,0,0.004789,0.005931,524,380,1.378947,0,0,0,,63,62,61,1,0.016129,0.005931,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[17, 17]]",p10,sbsh-rmax,SBSH-r2,,0.000000,1,0.016129,0,0.004789,0.005931,524,380,1.378947,0,0,0,,63,62,61,1,0.016129,0.005931,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[2, 2]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.002833,0.003260,310,310,1.000000,0,0,0,,63,62,62,0,0.000000,0.003260,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[2, 2]]",p30,hha,HHA,,0.000000,0,0.000000,0,0.004058,0.005362,444,310,1.432258,0,0,0,,63,62,62,0,0.000000,0.005362,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[2, 2]]",p30,dbsh,DBSH,,0.000000,0,0.000000,0,0.004414,0.005867,483,310,1.558065,0,0,0,,63,62,62,0,0.000000,0.005867,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[2, 2]]",p30,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.004405,0.005810,482,310,1.554839,0,0,0,,63,62,62,0,0.000000,0.005810,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[2, 2]]",p30,sbsh-rmax,SBSH-r2,,0.000000,0,0.000000,0,0.004405,0.005810,482,310,1.554839,0,0,0,,63,62,62,0,0.000000,0.005810,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[9, 9]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.032258,0,0.006936,0.009225,759,759,1.000000,0,0,0,,63,62,60,2,0.032258,0.009225,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[9, 9]]",p50,hha,HHA,,0.000000,3,0.048387,0,0.008481,0.015616,928,759,1.222661,0,0,0,,63,62,59,3,0.048387,0.015616,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[9, 9]]",p50,dbsh,DBSH,,0.000000,3,0.048387,0,0.009513,0.017945,1041,759,1.371542,0,0,0,,63,62,59,3,0.048387,0.017945,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[9, 9]]",p50,sbsh-r1,SBSH-r1,,0.000000,3,0.048387,0,0.009504,0.017510,1040,759,1.370224,0,0,0,,63,62,59,3,0.048387,0.017510,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[9, 9]]",p50,sbsh-rmax,SBSH-r2,,0.000000,3,0.048387,0,0.009504,0.017510,1040,759,1.370224,0,0,0,,63,62,59,3,0.048387,0.017510,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[5, 5]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.032258,0,0.005684,0.006372,622,622,1.000000,0,0,0,,63,62,60,2,0.032258,0.006372,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[5, 5]]",p70,hha,HHA,,0.000000,3,0.048387,0,0.006818,0.010704,746,622,1.199357,0,0,0,,63,62,59,3,0.048387,0.010704,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[5, 5]]",p70,dbsh,DBSH,,0.000000,4,0.064516,0,0.007567,0.011849,828,622,1.331190,0,0,0,,63,62,58,4,0.064516,0.011849,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[5, 5]]",p70,sbsh-r1,SBSH-r1,,0.000000,4,0.064516,0,0.007512,0.011465,822,622,1.321543,0,0,0,,63,62,58,4,0.064516,0.011465,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[5, 5]]",p70,sbsh-rmax,SBSH-r2,,0.000000,4,0.064516,0,0.007512,0.011465,822,622,1.321543,0,0,0,,63,62,58,4,0.064516,0.011465,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[0, 0]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,1,0.016129,0,0.011232,0.013678,1229,1229,1.000000,0,0,0,,63,62,61,1,0.016129,0.013678,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[0, 0]]",p90,hha,HHA,,0.000000,4,0.064516,0,0.012931,0.019353,1415,1229,1.151343,0,0,0,,63,62,58,4,0.064516,0.019353,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[0, 0]]",p90,dbsh,DBSH,,0.000000,5,0.080645,0,0.015198,0.024033,1663,1229,1.353133,0,0,0,,63,62,57,5,0.080645,0.024033,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[0, 0]]",p90,sbsh-r1,SBSH-r1,,0.000000,5,0.080645,0,0.015097,0.023769,1652,1229,1.344182,0,0,0,,63,62,57,5,0.080645,0.023769,62,
+datasets/protein_sdb4.txt,"N=590,len=109424","[0,1]",900,"[[0, 0]]",p90,sbsh-rmax,SBSH-r2,,0.000000,5,0.080645,0,0.015097,0.023769,1652,1229,1.344182,0,0,0,,63,62,57,5,0.080645,0.023769,62,

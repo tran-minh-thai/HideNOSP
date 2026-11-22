@@ -1,0 +1,35 @@
+# run 20261121-195623-538_ADMIN-PC_8ca94cd98868_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3WIDE
+# options {machine=ADMIN-PC, dataset=datasets/bible.txt, format=SPMF, sigma=2000, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=1, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-rw-ls,hha,dbsh,sbsh-r1,sbsh-rmax, epsilon=0.5, hideGmax=inf, closure=necessary}
+# sensitive sets: size 1, repeated-item pool 4 candidates, 4 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 0 -> 0, p30: 1 -> 1, p50: 1 -> 1, p70: 1 -> 1, p90: 1 -> 1
+# closure necessary
+# hide gap [0,inf]
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 31, 10]]",p30,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,2,0.025974,0,0.011004,0.036083,8661,8661,1.000000,0,0,0,,78,77,75,2,0.025974,0.036083,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 31, 10]]",p30,hha,HHA,,0.000000,2,0.025974,0,0.011013,0.038225,8668,8661,1.000808,0,0,0,,78,77,75,2,0.025974,0.038225,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 31, 10]]",p30,dbsh,DBSH,,0.000000,3,0.038961,0,0.011648,0.036173,9168,8661,1.058538,0,0,0,,78,77,74,3,0.038961,0.036173,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 31, 10]]",p30,sbsh-r1,SBSH-r1,,0.000000,3,0.038961,0,0.011727,0.037657,9230,8661,1.065697,0,0,0,,78,77,74,3,0.038961,0.037657,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 31, 10]]",p30,sbsh-rmax,SBSH-r3,,0.000000,3,0.038961,0,0.011727,0.037657,9230,8661,1.065697,0,0,0,,78,77,74,3,0.038961,0.037657,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[356, 356]]",p50,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,0,0.000000,0,0.004152,0.007554,3268,3268,1.000000,0,0,0,,78,77,77,0,0.000000,0.007554,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[356, 356]]",p50,hha,HHA,,0.000000,0,0.000000,0,0.004152,0.007422,3268,3268,1.000000,0,0,0,,78,77,77,0,0.000000,0.007422,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[356, 356]]",p50,dbsh,DBSH,,0.000000,0,0.000000,0,0.004152,0.007422,3268,3268,1.000000,0,0,0,,78,77,77,0,0.000000,0.007422,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[356, 356]]",p50,sbsh-r1,SBSH-r1,,0.000000,0,0.000000,0,0.004152,0.007216,3268,3268,1.000000,0,0,0,,78,77,77,0,0.000000,0.007216,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[356, 356]]",p50,sbsh-rmax,SBSH-r2,,0.000000,0,0.000000,0,0.004152,0.007216,3268,3268,1.000000,0,0,0,,78,77,77,0,0.000000,0.007216,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[46, 10, 46]]",p70,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,4,0.051948,0,0.012319,0.049864,9696,9696,1.000000,0,0,0,,78,77,73,4,0.051948,0.049864,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[46, 10, 46]]",p70,hha,HHA,,0.000000,3,0.038961,0,0.012327,0.051382,9702,9696,1.000619,0,0,0,,78,77,74,3,0.038961,0.051382,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[46, 10, 46]]",p70,dbsh,DBSH,,0.000000,4,0.051948,0,0.012632,0.055129,9942,9696,1.025371,0,0,0,,78,77,73,4,0.051948,0.055129,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[46, 10, 46]]",p70,sbsh-r1,SBSH-r1,,0.000000,4,0.051948,0,0.012836,0.055057,10103,9696,1.041976,0,0,0,,78,77,73,4,0.051948,0.055057,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[46, 10, 46]]",p70,sbsh-rmax,SBSH-r3,,0.000000,4,0.051948,0,0.012836,0.055057,10103,9696,1.041976,0,0,0,,78,77,73,4,0.051948,0.055057,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 46, 10]]",p90,cut-hide-rw-ls,"CUT-HIDE adaptive weight (6 iterations) + local search (50 passes, 30 receivers)",,0.000000,5,0.064935,0,0.018879,0.075886,14859,14859,1.000000,0,0,0,,78,77,72,5,0.064935,0.075886,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 46, 10]]",p90,hha,HHA,,0.000000,8,0.103896,0,0.018913,0.081673,14886,14859,1.001817,0,0,0,,78,77,69,8,0.103896,0.081673,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 46, 10]]",p90,dbsh,DBSH,,0.000000,6,0.077922,0,0.019251,0.081235,15152,14859,1.019719,0,0,0,,78,77,71,6,0.077922,0.081235,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 46, 10]]",p90,sbsh-r1,SBSH-r1,,0.000000,5,0.064935,0,0.019735,0.082755,15533,14859,1.045360,0,0,0,,78,77,72,5,0.064935,0.082755,77,
+datasets/bible.txt,"N=36369,len=787066","[0,1]",2000,"[[10, 46, 10]]",p90,sbsh-rmax,SBSH-r3,,0.000000,5,0.064935,0,0.019735,0.082755,15533,14859,1.045360,0,0,0,,78,77,72,5,0.064935,0.082755,77,

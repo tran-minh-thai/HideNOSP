@@ -1,0 +1,19 @@
+# run 20261120-001442-202_ADMIN-PC_b71056b45b66_s2026
+# host ADMIN-PC
+# jdk 25.0.4.1 OpenJDK 64-Bit Server VM
+# heap_max_bytes 8589934592
+# seed 2026
+# cpu Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+# logical_processors 12
+# ram_bytes 68452814848
+# kind INVARIANT
+# scenario SC3
+# options {machine=ADMIN-PC, dataset=datasets/sepsis.txt, format=SPMF, sigma=300, gmin=0, gmax=1, maxPatternLength=4, setsPerStratum=4, sensitiveSize=5, patternKind=repeated, pareto=false, timeLimit=1800, methods=cut-hide-refine, closure=necessary}
+# sensitive sets: size 5, repeated-item pool 25 candidates, 5 of 20 requested sets drawn; per stratum (percentile: candidates -> sets) p10: 5 -> 1, p30: 5 -> 1, p50: 5 -> 1, p70: 5 -> 1, p90: 5 -> 1
+# closure necessary
+dataset,shape,gap,sigma,sensitive_set,stratum,method_key,method,method_seed,hf,lost,lost_rel,ghost,dist_r,sup_dist,mask_count,min_masks,mask_ratio,certified_pairs,total_pairs,lower_bound,achieved_ratio,frequent_before,nonsensitive_before,frequent_after,lost_subseq,lost_rel_subseq,sup_dist_subseq,nonsensitive_before_subseq,status
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 9, 9], [1, 2, 2], [9, 9, 9, 2], [2, 2, 9, 9], [1, 9, 2, 9]]",p10,cut-hide-refine,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase]",,0.000000,0,0.000000,0,0.002038,0.010406,31,0,,0,0,0,,95,90,90,0,0.000000,0.010226,89,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[1, 2, 9, 2], [2, 2, 2], [9, 9, 2, 2], [2, 2, 9, 2], [2, 9, 2, 2]]",p30,cut-hide-refine,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase]",,0.000000,3,0.033333,0,0.003747,0.019660,57,0,,0,0,0,,95,90,87,3,0.033333,0.019660,90,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 2, 9, 9], [9, 9, 2, 9], [9, 9, 9], [9, 2, 2, 9], [2, 9, 9, 2]]",p50,cut-hide-refine,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase]",,0.000000,3,0.034091,0,0.015446,0.057260,235,0,,0,0,0,,95,88,85,3,0.034091,0.057260,88,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[2, 9, 2, 9], [2, 2, 9], [9, 2, 9, 2], [9, 2, 2], [2, 9, 9]]",p70,cut-hide-refine,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase]",,0.000000,6,0.073171,0,0.031550,0.076592,480,0,,0,0,0,,95,82,76,6,0.073171,0.076592,82,
+datasets/sepsis.txt,"N=1050,len=15214","[0,1]",300,"[[9, 9, 2], [2, 2], [2, 9, 2], [9, 2, 9], [9, 9]]",p90,cut-hide-refine,"CUT-HIDE CutHide[VITAL_NODE, refineLambda=true, DYNAMIC_PROGRAM, FRONTIER_DP, refineSeveral, exactDropDatabase]",,0.000000,1,0.014286,0,0.066452,0.070271,1011,0,,0,0,0,,95,70,69,1,0.014286,0.070271,70,

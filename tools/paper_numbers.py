@@ -1305,11 +1305,19 @@ def rows_tsv(path):
 
 
 def datasets_table(nums):
-    groups = defaultdict(lambda: {"distinct": Counter(), "repeated": Counter(), "configs": set()})
-    for scope, name in (("distinct", "configuration_groups.tsv"), ("repeated", "configuration_groups_repeated.tsv")):
+    groups = defaultdict(lambda: {"distinct": Counter(), "repeated": Counter(), "configs": set(), "role": set()})
+    # The main study, and lot C (preregistration section 23.3): BIKE, a dataset used for the replication only.
+    for role, scope, name in (("main", "distinct", "configuration_groups.tsv"),
+                              ("main", "repeated", "configuration_groups_repeated.tsv"),
+                              ("replication", "distinct", "configuration_groups_rep.tsv"),
+                              ("replication", "repeated", "configuration_groups_rep_repeated.tsv")):
         for r in rows_tsv(ROOT / "config" / name):
             groups[r["dataset"]][scope][r["group"]] += 1
             groups[r["dataset"]]["configs"].add((r["gap"], r["sigma"]))
+            groups[r["dataset"]]["role"].add(role)
+    both = [d for d, g in groups.items() if len(g["role"]) != 1]
+    if both:
+        raise Missing("datasets in both the main study and the replication: %s" % both)
     rows = []
     for name in sorted(groups):
         path = ROOT / "datasets" / ("%s.txt" % name)
@@ -1328,7 +1336,7 @@ def datasets_table(nums):
         rows.append({"dataset": name, "sequences": seqs, "mean_length": events / seqs, "items": len(items),
                      "gaps": sorted({c[0] for c in g["configs"]}), "sigmas": sorted({int(c[1]) for c in g["configs"]}),
                      "distinct": dict(g["distinct"]), "repeated": dict(g["repeated"]),
-                     "file_sha256": sha12(path)})
+                     "role": next(iter(g["role"])), "file_sha256": sha12(path)})
     nums.table("datasets", ["dataset"], rows, "datasets/*.txt and the two locked group tables")
 
 
@@ -1704,7 +1712,84 @@ def sentence_checks(nums):
                    and r["n_diff"] > 0)
     if sorted(named) != shown or v("h2r.equal.datasets") != len(shown):
         raise Missing("H2-R datasets named %s, the per-dataset table shows %s" % (named, shown))
-    nums.put("sentence_checks.passed", 27, "sentence_checks in paper_numbers.py")
+    reopened_sentence_checks(nums)
+    nums.put("sentence_checks.passed", 27 + REOPENED_SENTENCE_CHECKS, "sentence_checks in paper_numbers.py")
+
+
+REOPENED_SENTENCE_CHECKS = 13
+
+
+def reopened_sentence_checks(nums):
+    """The sentences on lots A, B, C (BIKE), F, SC3WIDE and G (r = 3), checked as relations on the exported values."""
+    v = lambda k: nums.values[k]["value"]
+    tab = lambda name: nums.tables[name]["rows"]
+    above, near, delta = locked_constants()
+    import preregistered_analysis as pa
+    # (1) Lot A: all three null hypotheses rejected in both scopes.
+    kept = [(r["scope"], r["pair"]) for r in tab("lota") if not r["p_holm"] < pa.LOCKED.ALPHA]
+    if kept or len(tab("lota")) != 6:
+        raise Missing("lot A: not rejected for %s (of %d rows); the text says all three in both scopes" % (kept, len(tab("lota"))))
+    # (2) Lot A: neither adaptive weights nor local search loses more than the stage before it on any instance.
+    worse = [(r["scope"], r["pair"], r["neg"]) for r in tab("lota") if r["pair"] in ("fw_aw", "aw_ls") and r["neg"]]
+    if worse:
+        raise Missing("lot A: a later stage loses more on some instance %s; the text says on none" % worse)
+    # (3) Lot B: no change of a constant changes the number of masks.
+    if any(r["masks_differ"] for r in tab("lotb")) or not tab("lotb"):
+        raise Missing("lot B: a variant changes |R|; the text says none does")
+    # (4) Lot B: doubling K_rw and halving or doubling the two limits of the local search leave Lost unchanged everywhere.
+    same = ("krw12", "passes25", "passes100", "recv15", "recv60")
+    moved = [(r["scope"], r["key"]) for r in tab("lotb") if r["key"] in same and (r["lost_more"] or r["lost_fewer"])]
+    if moved or len([r for r in tab("lotb") if r["key"] in same]) != 2 * len(same):
+        raise Missing("lot B: %s change Lost; the text says these five leave it unchanged on every instance" % moved)
+    # (5) Lot B: over the divisor of tau the total Lost is lowest at 16 and rises again toward tau = 1 (64, then tau = 1).
+    for scope in ("distinct", "repeated"):
+        t = {d: v("lotb.%s.%s.lost_total" % (scope, d)) for d in ("d2", "d4", "d8", "d16", "d64", "tau1")}
+        if min(t, key=t.get) != "d16" or sorted(t.values()).count(t["d16"]) != 1 or not t["d16"] < t["d64"] <= t["tau1"]:
+            raise Missing("lot B %s: totals %s; the text says lowest at 16, rising toward tau = 1" % (scope, t))
+    # (6) BIKE groups: the distinct-item scope degenerate everywhere; the repeated-item scope main under [0,3] only.
+    dg = {(r["gap"], r["group"]) for r in rows_tsv(ROOT / "config" / "configuration_groups_rep.tsv")}
+    rg = {(r["gap"], r["group"]) for r in rows_tsv(ROOT / "config" / "configuration_groups_rep_repeated.tsv")}
+    if {g for _, g in dg} != {"degenerate"} or {gap for gap, g in rg if g == "main"} != {"[0,3]"}:
+        raise Missing("BIKE groups %s / %s; the text says distinct degenerate, repeated main under [0,3] only" % (dg, rg))
+    # (7) BIKE, degenerate group: the median ratio of every baseline equals that of HHA.
+    med = {r["method"]: r["median"] for r in tab("lotc_ratio") if r["scope"] == "distinct" and r["group"] == "degenerate"
+           and r["method"] in BASELINES}
+    if sorted(med) != sorted(BASELINES) or len(set(med.values())) != 1:
+        raise Missing("BIKE degenerate medians %s; the text gives one value for every baseline" % med)
+    # (8) BIKE pairs: every baseline uses more masks on every instance, no instance has equal counts, CUT-HIDE loses more on
+    # none (in the pairs table and in the non-inferiority cross table).
+    bad = [r["method"] for r in tab("lotc_pairs") if r["base_more"] != r["instances"] or r["same"] or r["more_gt"]]
+    bad += [r["method"] for r in tab("lotc_noninf") if r["cross_fewer_more"] + r["cross_same_more"] + r["cross_more_more"]]
+    if bad or len(tab("lotc_pairs")) != 4 or len({r["instances"] for r in tab("lotc_pairs")}) != 1:
+        raise Missing("BIKE pairs: %s; the text says every baseline masks more everywhere and CUT-HIDE loses more nowhere" % bad)
+    # (9) BIKE: the non-inferiority null hypothesis rejected for all four baselines.
+    kept = [r["method"] for r in tab("lotc_noninf") if r["verdict"] != "H0 rejected"]
+    if kept or len(tab("lotc_noninf")) != 4:
+        raise Missing("BIKE non-inferiority: not rejected for %s; the text says all four" % kept)
+    # (10) BIKE: the medians of OCC and HHA-stop below the upper threshold of H3, so H4a-R does not hold.
+    high = [r["method"] for r in tab("lotc_h4ar") if not r["median"] < above]
+    if high or len(tab("lotc_h4ar")) != 2:
+        raise Missing("BIKE H4a-R: %s at or above %.2f; the text says both below" % (high, above))
+    # (11) Lot F: one more unit of gap brings back more distinct-item patterns hidden under [0,1] after CUT-HIDE than after
+    # HHA; and after CUT-HIDE most patterns (more than half) come back after one step in every cell (the conclusion).
+    if not v("lotf.%s.distinct.g1.g2.share" % OURS) > v("lotf.hha.distinct.g1.g2.share"):
+        raise Missing("lot F: HHA comes back at least as often as CUT-HIDE at [0,1] -> [0,2]; the text says less")
+    step = {"[0,1]": "[0,2]", "[0,3]": "[0,4]", "[0,10]": "[0,11]"}
+    few = [(r["scope"], r["gap"], r["share"]) for r in tab("lotf") if r["method"] == OURS and step.get(r["gap"]) == r["constraint"]
+           and not r["share"] > 0.5]
+    if few or len([r for r in tab("lotf") if r["method"] == OURS and step.get(r["gap"]) == r["constraint"]]) != 6:
+        raise Missing("lot F: after CUT-HIDE at most half come back after one step in %s; the conclusion says most" % few)
+    # (12) Lot G, r = 3, one pattern: no null hypothesis rejected; equivalence with all four baselines for both measures.
+    for scope in ("distinct", "repeated"):
+        k = "h5r3.%s" % scope
+        if v(k + ".rejected") or v(k + ".equivalent_lost") != 4 or v(k + ".equivalent_supdist") != 4:
+            raise Missing("%s: rejected %s, equivalent %s / %s; the text says none rejected, equivalence with all four for both"
+                          % (k, v(k + ".rejected"), v(k + ".equivalent_lost"), v(k + ".equivalent_supdist")))
+    # (13) Lot G, r = 3, five repeated-item patterns: HHA is the only baseline with fewer masks than CUT-HIDE somewhere.
+    fewer = sorted(r["method"] for r in tab("h5r3s5") if r["scope"] == "repeated" and r["ours_more"])
+    if fewer != ["hha"]:
+        raise Missing("lot G, five repeated-item patterns: fewer masks than CUT-HIDE for %s; the text names HHA only" % fewer)
+
 
 
 def git(*args):
@@ -2040,6 +2125,25 @@ def self_test():
             ("H2-R: a dataset named without equal-count instances", setv("names.h2r.equal", "bible, bpi2012, msnbc and sepsis")),
             ("several patterns: a baseline at the median ratio of CUT-HIDE",
              setr("bound", "median", 1.3003, scope="distinct", size=5, method="sbsh-r1")),
+            ("lot A: a stage pair not rejected", setr("lota", "p_holm", 0.2, scope="repeated", pair="aw_ls")),
+            ("lot A: local search loses more once", setr("lota", "neg", 1, scope="distinct", pair="aw_ls")),
+            ("lot B: a variant changes |R|", setr("lotb", "masks_differ", 1, scope="distinct", key="d64")),
+            ("lot B: doubling K_rw changes Lost", setr("lotb", "lost_fewer", 1, scope="repeated", key="krw12")),
+            ("lot B: the lowest total at 8", setv("lotb.distinct.d8.lost_total", 800)),
+            ("lot B: tau = 1 below 64", setv("lotb.repeated.tau1.lost_total", 3250)),
+            ("BIKE: two degenerate medians differ", setr("lotc_ratio", "median", 1.0196, scope="distinct",
+                                                         group="degenerate", method="dbsh")),
+            ("BIKE: one equal-count instance", setr("lotc_pairs", "same", 1, method="sbsh-r1")),
+            ("BIKE: CUT-HIDE loses more once", setr("lotc_noninf", "cross_fewer_more", 1, method="hha")),
+            ("BIKE: one non-inferiority test kept", setr("lotc_noninf", "verdict", "not rejected", method="dbsh")),
+            ("BIKE: OCC at the more-masks threshold", setr("lotc_h4ar", "median", 1.10, method="occurrence")),
+            ("lot F: HHA back as often as CUT-HIDE", setv("lotf.hha.distinct.g1.g2.share", 1.0)),
+            ("lot F: half come back after one step", setr("lotf", "share", 0.5, method=OURS, scope="repeated", gap="[0,10]",
+                                                         constraint="[0,11]")),
+            ("lot G: one rejected null hypothesis at r = 3", setv("h5r3.distinct.rejected", 1)),
+            ("lot G: three equivalence verdicts", setv("h5r3.repeated.equivalent_supdist", 3)),
+            ("lot G: DBSH with fewer masks, five repeated-item patterns", setr("h5r3s5", "ours_more", 1, scope="repeated",
+                                                                               method="dbsh")),
         ]
         for name, edit in faults:
             try:
@@ -2056,7 +2160,7 @@ def self_test():
           "above |R|*, rank-biserial on d - delta_L in a new family, rank-biserial vs pairs table, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
           "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty, "
           "one-pattern components, equal-count check (good, two patterns, empty), refinement check (good, masks, component), "
-          "sentence checks on the exported numbers and 31 faults")
+          "sentence checks on the exported numbers and 47 faults")
     return 1 if failures else 0
 
 

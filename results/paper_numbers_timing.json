@@ -1,10 +1,10 @@
 {
  "_meta": {
-  "command": "python tools/paper_numbers.py --machine=ADMIN-PC",
-  "commit": "5cd875ae11420524cffad36d506b8c338616f83a",
+  "command": "python tools/paper_numbers.py ",
+  "commit": "73df5ee4adb76bbbe0c89a68c48a8a0e89f45d04",
   "tree": "clean",
-  "tool_sha256": "1b1c83970d71",
-  "python": "3.13.16",
+  "tool_sha256": "a7ceb5e40fbb",
+  "python": "3.14.6",
   "machine": "ADMIN-PC",
   "small_machine": "ADMIN-PC",
   "closure": "necessary"
@@ -12,7 +12,7 @@
  "values": {
   "platform.cpu": {
    "value": "Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz",
-   "source": "results-invariant/campaign_ADMIN-PC_g6/ENV_LOCK.json"
+   "source": "results-invariant/campaign_ADMIN-PC_g8/ENV_LOCK.json"
   },
   "platform.heap_bytes.sc3": {
    "value": 8589934592,
@@ -24,38 +24,38 @@
   },
   "platform.hostname": {
    "value": "ADMIN-PC",
-   "source": "results-invariant/campaign_ADMIN-PC_g6/ENV_LOCK.json"
+   "source": "results-invariant/campaign_ADMIN-PC_g8/ENV_LOCK.json"
   },
   "platform.java_runtime_version": {
    "value": "25.0.4.1+1-LTS",
-   "source": "results-invariant/campaign_ADMIN-PC_g6/ENV_LOCK.json"
+   "source": "results-invariant/campaign_ADMIN-PC_g8/ENV_LOCK.json"
   },
   "platform.java_vendor": {
    "value": "Eclipse Adoptium",
-   "source": "results-invariant/campaign_ADMIN-PC_g6/ENV_LOCK.json"
+   "source": "results-invariant/campaign_ADMIN-PC_g8/ENV_LOCK.json"
   },
   "platform.lock": {
-   "value": "campaign_ADMIN-PC_g6/ENV_LOCK.json",
-   "source": "results-invariant/campaign_ADMIN-PC_g6/ENV_LOCK.json"
+   "value": "campaign_ADMIN-PC_g8/ENV_LOCK.json",
+   "source": "results-invariant/campaign_ADMIN-PC_g8/ENV_LOCK.json"
   },
   "platform.logical_processors": {
    "value": "12",
-   "source": "results-invariant/campaign_ADMIN-PC_g6/ENV_LOCK.json"
+   "source": "results-invariant/campaign_ADMIN-PC_g8/ENV_LOCK.json"
   },
   "platform.n_locks": {
-   "value": 6,
+   "value": 8,
    "source": "results-invariant/campaign_ADMIN-PC*/ENV_LOCK.json"
   },
   "platform.os": {
    "value": "Windows-11-10.0.26300-SP0",
-   "source": "results-invariant/campaign_ADMIN-PC_g6/ENV_LOCK.json"
+   "source": "results-invariant/campaign_ADMIN-PC_g8/ENV_LOCK.json"
   },
   "platform.ram_bytes": {
    "value": "68452814848",
-   "source": "results-invariant/campaign_ADMIN-PC_g6/ENV_LOCK.json"
+   "source": "results-invariant/campaign_ADMIN-PC_g8/ENV_LOCK.json"
   },
   "sc6.cv.median": {
-   "value": 0.01651801227846635,
+   "value": 0.015587529976019187,
    "source": "SC6 files of ADMIN-PC: wall_ms_sd / wall_ms_mean"
   },
   "sc6.holm.ms.s1.max": {
@@ -67,7 +67,7 @@
    "source": "timing_table.py --machine=ADMIN-PC"
   },
   "sc6.holm.ms.s10.max": {
-   "value": 617.137,
+   "value": 615.644,
    "source": "timing_table.py --machine=ADMIN-PC"
   },
   "sc6.holm.ms.s10.min": {
@@ -75,7 +75,7 @@
    "source": "timing_table.py --machine=ADMIN-PC"
   },
   "sc6.index.build_ms.max": {
-   "value": 284.736,
+   "value": 285.275,
    "source": "timing_table.py --machine=ADMIN-PC"
   },
   "sc6.index.build_ms.min": {
@@ -99,11 +99,15 @@
    "source": "timing_table.py --machine=ADMIN-PC"
   },
   "sc6.mine.ms.s10.max": {
-   "value": 10864.209,
+   "value": 10802.886,
    "source": "timing_table.py --machine=ADMIN-PC"
   },
   "sc6.mine.ms.s10.min": {
    "value": 10618.108,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.mine_over_ours.min": {
+   "value": 1.040361101467336,
    "source": "timing_table.py --machine=ADMIN-PC"
   },
   "sc6.n_cells": {
@@ -123,11 +127,27 @@
    "source": "timing_table.py --machine=ADMIN-PC"
   },
   "sc6.ours.ms.s10.max": {
-   "value": 5054.57,
+   "value": 10383.785,
    "source": "timing_table.py --machine=ADMIN-PC"
   },
   "sc6.ours.ms.s10.min": {
    "value": 1656.619,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.ratio.fast.s1.max": {
+   "value": 333.720202874049,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.ratio.fast.s1.min": {
+   "value": 88.91553856222659,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.ratio.fast.s10.max": {
+   "value": 44.829382331227954,
+   "source": "timing_table.py --machine=ADMIN-PC"
+  },
+  "sc6.ratio.fast.s10.min": {
+   "value": 8.243977327580629,
    "source": "timing_table.py --machine=ADMIN-PC"
   },
   "sc6.ratio.ours_hha.max": {
@@ -422,7 +442,7 @@
      "method": "cut-hide-rw-ls",
      "reads_frequent": true,
      "n": 90,
-     "median_ms": 5054.57
+     "median_ms": 10383.785
     },
     {
      "scope": "repeated",
@@ -430,7 +450,7 @@
      "method": "cut-hide-rw",
      "reads_frequent": true,
      "n": 90,
-     "median_ms": 5044.369
+     "median_ms": 10396.544
     },
     {
      "scope": "repeated",
@@ -438,7 +458,7 @@
      "method": "cut-hide",
      "reads_frequent": true,
      "n": 90,
-     "median_ms": 5030.15
+     "median_ms": 10345.51
     },
     {
      "scope": "repeated",
@@ -446,7 +466,7 @@
      "method": "hha",
      "reads_frequent": false,
      "n": 90,
-     "median_ms": 563.621
+     "median_ms": 555.394
     },
     {
      "scope": "repeated",
@@ -454,7 +474,7 @@
      "method": "hha-stop",
      "reads_frequent": false,
      "n": 90,
-     "median_ms": 617.137
+     "median_ms": 615.644
     },
     {
      "scope": "repeated",
@@ -462,7 +482,7 @@
      "method": "dbsh",
      "reads_frequent": false,
      "n": 90,
-     "median_ms": 300.461
+     "median_ms": 297.21
     },
     {
      "scope": "repeated",
@@ -470,7 +490,7 @@
      "method": "sbsh-r1",
      "reads_frequent": true,
      "n": 90,
-     "median_ms": 2176.035
+     "median_ms": 2166.855
     },
     {
      "scope": "repeated",
@@ -478,7 +498,7 @@
      "method": "sbsh-rmax",
      "reads_frequent": true,
      "n": 90,
-     "median_ms": 2178.294
+     "median_ms": 2181.591
     },
     {
      "scope": "repeated",
@@ -486,7 +506,7 @@
      "method": "occurrence",
      "reads_frequent": false,
      "n": 90,
-     "median_ms": 235.552
+     "median_ms": 231.629
     },
     {
      "scope": "repeated",
@@ -494,14 +514,14 @@
      "method": "mine F_sigma",
      "reads_frequent": false,
      "n": 18,
-     "median_ms": 10864.209
+     "median_ms": 10802.886
     },
     {
      "scope": "repeated",
      "size": 10,
      "method": "index",
-     "build_ms": 284.736,
-     "rebuild_over_incremental": 1.4509
+     "build_ms": 285.275,
+     "rebuild_over_incremental": 1.34
     }
    ],
    "source": "timing_table.py --machine=ADMIN-PC"

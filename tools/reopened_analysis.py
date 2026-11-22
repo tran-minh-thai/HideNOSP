@@ -382,20 +382,17 @@ def same_as_sc3(rows, sc3, key_of=lambda r: r["method_key"], skip=()):
     return compared, differ
 
 
-def lot_a(machine, write, directory=RESULTS):
+def lot_a_instances(machine, directory=RESULTS):
+    """{scope: (complete, excluded, missing)} of lot A, or None before its files exist. complete maps an instance
+    (dataset, gap, sigma, sensitive set) to its four rows; the later descriptive lots (B extended, SC3WIDE) report on
+    these same instances, as preregistration sections 23.10 and 23.11 say."""
     files = [f for f in load_plain("SC3SENS", machine, directory) if f[1].get("methods") == "cut-hide-uniform"]
-    write("")
-    write("=" * 78)
-    write("Lot A (preregistration section 23.1): uniform weights, CH-FW, CH-AW and CUT-HIDE at |R|*, |S| = 1")
-    write("=" * 78)
     if not files:
-        write("   no SC3SENS file of methods cut-hide-uniform for machine %s yet" % machine)
         return None
     quiet = []
     uniform = pa.merge_reruns([r for f in files for r in f[3]], quiet.append)
     rows, _ = load("SC3", machine, "zero", directory)
     rows = [r for r in of_size(rows, 1) if r["method_key"] in ("cut-hide", "cut-hide-rw", OURS)] + uniform
-    pairs = (("cut-hide-uniform", "cut-hide"), ("cut-hide", "cut-hide-rw"), ("cut-hide-rw", OURS))
     out = {}
     for scope in ("distinct", "repeated"):
         main = in_group(by_scope(rows, scope), groups_of("SC3", "zero", scope))
@@ -414,6 +411,28 @@ def lot_a(machine, write, directory=RESULTS):
                 raise Failed("lot A: %s not at |R|* on %s; an implementation error stops the analysis" % (off, k))
             complete[k] = m
         missing = sum(1 for m in by_instance.values() if len(m) != 4)
+        out[scope] = (complete, excluded, missing)
+    return out
+
+
+def raw_instance(r):
+    """The instance key of a row as read, in the form of lot_a_instances."""
+    return (pa.dataset_name(r["dataset"]), r["gap"], int(r["sigma"]), r["sensitive_set"])
+
+
+def lot_a(machine, write, directory=RESULTS):
+    write("")
+    write("=" * 78)
+    write("Lot A (preregistration section 23.1): uniform weights, CH-FW, CH-AW and CUT-HIDE at |R|*, |S| = 1")
+    write("=" * 78)
+    instances = lot_a_instances(machine, directory)
+    if instances is None:
+        write("   no SC3SENS file of methods cut-hide-uniform for machine %s yet" % machine)
+        return None
+    pairs = (("cut-hide-uniform", "cut-hide"), ("cut-hide", "cut-hide-rw"), ("cut-hide-rw", OURS))
+    out = {}
+    for scope in ("distinct", "repeated"):
+        complete, excluded, missing = instances[scope]
         write("")
         write("-- %s-item scope: %d instances with the four rows (%d excluded: status or HF > 0; %d without the four rows)"
               % (scope, len(complete), excluded, missing))
@@ -468,6 +487,7 @@ def lot_b(machine, write, directory=RESULTS):
                 continue
             variants.append((label, r))
     groups = {s: groups_of("SC3", "zero", s) for s in ("distinct", "repeated")}
+    lot_a_sets = lot_a_instances(machine, directory) or {}
     out = []
     for label in sorted({v[0] for v in variants}):
         for scope in ("distinct", "repeated"):
@@ -478,21 +498,62 @@ def lot_b(machine, write, directory=RESULTS):
                 continue
             lost_rel = [float(r["lost_rel"]) for r in rs if r["lost_rel"] != ""]
             more = fewer = masks = 0
+            total = total_default = 0
             for r in rs:
                 base = sc3[(pa.dataset_name(r["dataset"]), r["gap"], r["sigma"], r["sensitive_set"], OURS)]
                 if r["lost"] != "" and base["lost"] != "":
                     more += int(r["lost"]) > int(base["lost"])
                     fewer += int(r["lost"]) < int(base["lost"])
+                    total += int(r["lost"])
+                    total_default += int(base["lost"])
                 masks += r["mask_count"] != base["mask_count"]
+            # Preregistration section 23.11: a divisor of tau changes no mask count; one difference stops the analysis.
+            if label.startswith(OURS + "@tau") and masks:
+                raise Failed("lot B: %s changes |R| on %d %s-item instances; preregistration section 23.11 stops the analysis"
+                             % (label, masks, scope))
+            # The instances must be those of lot A (sections 23.2 and 23.11): say how many are not.
+            keys = {raw_instance(r) for r in rs}
+            lot_a_keys = set(lot_a_sets[scope][0]) if scope in lot_a_sets else set()
+            outside, absent = len(keys - lot_a_keys), len(lot_a_keys - keys)
             empty = sum(1 for r in rs if "B_eps empty" in r["method"])
             q = np.percentile(lost_rel, [25, 50, 75]) if lost_rel else [float("nan")] * 3
             rec = {"variant": label, "scope": scope, "n": len(rs), "q1": float(q[0]), "median": float(q[1]),
-                   "q3": float(q[2]), "lost_more": more, "lost_fewer": fewer, "masks_differ": masks, "empty_band": empty}
+                   "q3": float(q[2]), "lost_more": more, "lost_fewer": fewer, "masks_differ": masks, "empty_band": empty,
+                   "lost_total": total, "lost_total_default": total_default, "outside_lot_a": outside,
+                   "lot_a_absent": absent}
             out.append(rec)
-            write("   %-28s %-8s n %4d  Lost_rel median %.4f [%.4f, %.4f]  Lost more %3d fewer %3d  |R| differs %3d%s"
-                  % (label, scope, len(rs), rec["median"], rec["q1"], rec["q3"], more, fewer, masks,
-                     "  empty band %d" % empty if "eps0.25" in label else ""))
+            write("   %-28s %-8s n %4d  Lost_rel median %.4f [%.4f, %.4f]  Lost more %3d fewer %3d  |R| differs %3d"
+                  "  total Lost %5d (default %5d)%s%s"
+                  % (label, scope, len(rs), rec["median"], rec["q1"], rec["q3"], more, fewer, masks, total, total_default,
+                     "  empty band %d" % empty if "eps0.25" in label else "",
+                     "  NOT the lot A instances: %d outside, %d absent" % (outside, absent) if outside or absent else ""))
+    tau_lines(out, write)
     return out
+
+
+TAU_DIVISORS = (("2", OURS + "@tau2"), ("4", OURS), ("8", OURS + "@tau8"), ("16", OURS + "@tau16"),
+                ("64", OURS + "@tau64"), ("tau=1", OURS + "@tau1000000000"))
+
+
+def tau_lines(records, write):
+    """Preregistration section 23.11: the grid of the divisor d of tau, d = 4 being the default (its row is that of SC3), and the two
+    expectations written before the run, each stated as held or contradicted."""
+    by = {(r["variant"], r["scope"]): r for r in records}
+    for scope in ("distinct", "repeated"):
+        present = [(d, key) for d, key in TAU_DIVISORS if key == OURS or (key, scope) in by]
+        if len(present) < len(TAU_DIVISORS):
+            write("   tau grid %s: %d of %d divisors present; the grid is not reported" % (scope, len(present), len(TAU_DIVISORS)))
+            continue
+        default = {r["lost_total_default"] for k, r in by.items() if k[1] == scope and k[0].startswith(OURS + "@tau")}
+        if len(default) != 1:
+            raise Failed("lot B: the tau variants of the %s scope cover different instances (default totals %s)"
+                         % (scope, sorted(default)))
+        total = {d: (by[(key, scope)]["lost_total"] if key != OURS else default.copy().pop()) for d, key in TAU_DIVISORS}
+        write("   tau grid %-8s total Lost: %s" % (scope, ", ".join("d=%s %d" % (d, total[d]) if d != "tau=1"
+                                                                   else "tau=1 %d" % total[d] for d, _ in TAU_DIVISORS)))
+        write("      expectation 1 (d=16 <= d=4): %s; expectation 2 (tau=1 >= d=8): %s"
+              % ("held" if total["16"] <= total["4"] else "CONTRADICTED",
+                 "held" if total["tau=1"] >= total["8"] else "CONTRADICTED"))
 
 
 def lot_f(machine, write, directory=RESULTS):
@@ -535,6 +596,102 @@ def lot_f(machine, write, directory=RESULTS):
     return out
 
 
+def wide_constraint(options):
+    """'2x' or 'inf' for the hiding constraint of an SC3WIDE file, from its options; anything else stops."""
+    g, h = options.get("gmax"), options.get("hideGmax")
+    if h == "inf":
+        return "inf"
+    if g is not None and h is not None and h.isdigit() and int(h) == 2 * int(g):
+        return "2x"
+    raise Failed("SC3WIDE: hiding constraint hideGmax=%s with gmax=%s is neither 2g+ nor infinity" % (h, g))
+
+
+def cross_pair(ours, other):
+    """'masks/lost' of CUT-HIDE against one baseline on one instance: fewer, same or more for CUT-HIDE."""
+    def cmp(a, b):
+        return "fewer" if a < b else "same" if a == b else "more"
+    return "%s/%s" % (cmp(int(ours["mask_count"]), int(other["mask_count"])), cmp(int(ours["lost"]), int(other["lost"])))
+
+
+def lot_wide(machine, write, directory=RESULTS):
+    """Preregistration section 23.10: every method hides under [g-, 2g+] and under [g-, inf], |S| = 1, descriptive."""
+    write("")
+    write("=" * 78)
+    write("SC3WIDE (preregistration section 23.10): hiding under a wider gap constraint, descriptive")
+    write("=" * 78)
+    files = load_plain("SC3WIDE", machine, directory)
+    if not files:
+        write("   no SC3WIDE file for machine %s yet" % machine)
+        return None
+    instances = lot_a_instances(machine, directory)
+    if instances is None:
+        raise Failed("SC3WIDE: the lot A files are missing; the instances of lot A cannot be formed")
+    sc3 = sc3_plain(machine, directory)
+    rows = defaultdict(dict)  # (constraint, instance) -> method -> row
+    for name, options, _, rs in files:
+        constraint = wide_constraint(options)
+        for r in rs:
+            k = (constraint, raw_instance(r))
+            if r["method_key"] in rows[k]:
+                raise Failed("SC3WIDE: two rows of %s on %s (%s)" % (r["method_key"], k, name))
+            rows[k][r["method_key"]] = r
+    methods = (OURS,) + BASELINES
+    # The two checks of preregistration section 23.10, over every row read (not only the lot A instances).
+    checked = off = hf = 0
+    for k, m in rows.items():
+        for key, r in m.items():
+            checked += 1
+            hf += r["hf"] == "" or float(r["hf"]) > 0
+            if key == OURS:
+                off += r["mask_count"] != r["min_masks"]
+    write("   checks: %d rows; CUT-HIDE off |R|* under the hiding constraint on %d; HF > 0 or missing on %d"
+          % (checked, off, hf))
+    if not checked or off or hf:
+        raise Failed("SC3WIDE: %d rows, %d CUT-HIDE rows off |R|*, %d rows with HF > 0; preregistration section 23.10 stops the analysis"
+                     % (checked, off, hf))
+    out = []
+    for scope in ("distinct", "repeated"):
+        keys = set(instances[scope][0])
+        for constraint in ("2x", "inf"):
+            here = {k[1]: m for k, m in rows.items() if k[0] == constraint and k[1] in keys}
+            not_hidden = sum(1 for m in here.values() for r in m.values() if r["status"])
+            incomplete = sum(1 for m in here.values() if set(m) != set(methods))
+            write("")
+            write("-- %s-item scope, hiding under %s: %d of %d lot A instances have rows (%d without every method; "
+                  "%d rows with a status)" % (scope, "[g-, 2g+]" if constraint == "2x" else "[g-, inf]",
+                                              len(here), len(keys), incomplete, not_hidden))
+            for method in methods:
+                ratio, change = [], []
+                for inst, m in here.items():
+                    if method not in m or m[method]["status"]:
+                        continue
+                    base = sc3.get(inst[:1] + (inst[1], str(inst[2]), inst[3], method))
+                    if base is None:
+                        raise Failed("SC3WIDE: no SC3 row of %s on %s" % (method, inst))
+                    ratio.append(int(m[method]["mask_count"]) / int(base["mask_count"]))
+                    change.append(float(m[method]["lost_rel"]) - float(base["lost_rel"]))
+                q = np.percentile(ratio, [25, 50, 75]) if ratio else [float("nan")] * 3
+                rec = {"scope": scope, "constraint": constraint, "method": method, "n": len(ratio),
+                       "ratio_q1": float(q[0]), "ratio_median": float(q[1]), "ratio_q3": float(q[2]),
+                       "lost_rel_change_median": float(np.median(change)) if change else None,
+                       "lost_rel_median": float(np.median([float(here[i][method]["lost_rel"]) for i in here
+                                                           if method in here[i] and not here[i][method]["status"]]))
+                       if ratio else None}
+                if method != OURS:
+                    cross = defaultdict(int)
+                    for m in here.values():
+                        if OURS in m and method in m and not m[OURS]["status"] and not m[method]["status"]:
+                            cross[cross_pair(m[OURS], m[method])] += 1
+                    rec["cross"] = dict(cross)
+                out.append(rec)
+                write("   %-15s n %4d  |R| / |R| in SC3: median %.3f [%.3f, %.3f]  Lost_rel median %.4f, change %+.4f%s"
+                      % (method, rec["n"], rec["ratio_median"], rec["ratio_q1"], rec["ratio_q3"],
+                         rec["lost_rel_median"], rec["lost_rel_change_median"],
+                         "" if method == OURS else "  CUT-HIDE masks/lost vs it: " + ", ".join(
+                             "%s %d" % kv for kv in sorted(rec["cross"].items()))))
+    return out
+
+
 # ---------------------------------------------------------------- main
 
 def run(machine, write, directory=RESULTS, numbers_path=NUMBERS):
@@ -557,6 +714,7 @@ def run(machine, write, directory=RESULTS, numbers_path=NUMBERS):
     result["lot_a"] = lot_a(machine, write, directory)
     result["lot_b"] = lot_b(machine, write, directory)
     result["lot_f"] = lot_f(machine, write, directory)
+    result["lot_wide"] = lot_wide(machine, write, directory)
     return result
 
 
@@ -655,6 +813,52 @@ def self_test():
     # The smallest attainable p (rule of preregistration section 23.3): 2^-n without zeros for small n.
     check("the smallest p of 7 differences without zeros is 2^-7", abs(smallest_p(7, 0) - 2 ** -7) < 1e-12)
     check("a zero makes the smallest p larger", smallest_p(7, 1) > smallest_p(7, 0))
+    # Preregistration sections 23.10 and 23.11: one planted row must stop each new lot, and the clean files must pass.
+    real_load_plain = load_plain
+
+    def stops(fn, scenario, edit):
+        def patched(sc, machine, directory=RESULTS, closure="necessary"):
+            got = real_load_plain(sc, machine, directory, closure)
+            if sc == scenario:
+                got = copy.deepcopy(got)
+                edit(got)
+            return got
+        globals()["load_plain"] = patched
+        try:
+            fn("ADMIN-PC", [].append)
+            return False
+        except Failed:
+            return True
+        finally:
+            globals()["load_plain"] = real_load_plain
+
+    def first_row(files, method, options=None):
+        return next(r for f in files if all(f[1].get(k) == v for k, v in (options or {}).items())
+                    for r in f[3] if r["method_key"] == method)
+
+    try:
+        lot_wide("ADMIN-PC", [].append)
+        lot_b("ADMIN-PC", [].append)
+        clean_new = True
+    except Failed as e:
+        clean_new = False
+        print("  clean run of lot B or SC3WIDE failed: %s" % e)
+    check("lot B and SC3WIDE pass on the files of the paper", clean_new)
+    check("a CUT-HIDE row off |R|* in SC3WIDE is caught",
+          stops(lot_wide, "SC3WIDE", lambda f: first_row(f, OURS).__setitem__(
+              "mask_count", str(int(first_row(f, OURS)["mask_count"]) + 1))))
+    check("an SC3WIDE row with HF > 0 is caught",
+          stops(lot_wide, "SC3WIDE", lambda f: first_row(f, "hha").__setitem__("hf", "0.010000")))
+    check("a duplicated SC3WIDE row is caught",
+          stops(lot_wide, "SC3WIDE", lambda f: f[0][3].append(dict(f[0][3][0]))))
+    check("an SC3WIDE file whose hiding gap is neither 2g+ nor infinity is caught",
+          stops(lot_wide, "SC3WIDE", lambda f: f[0][1].__setitem__("hideGmax", "5")))
+    check("a tau divisor that changes |R| is caught",
+          stops(lot_b, "SC3SENS", lambda f: first_row(f, OURS + "@tau16").__setitem__(
+              "mask_count", str(int(first_row(f, OURS + "@tau16")["mask_count"]) + 1))))
+    check("the same change on a non-tau variant is reported, not stopped",
+          not stops(lot_b, "SC3SENS", lambda f: first_row(f, OURS + "@krw3").__setitem__(
+              "mask_count", str(int(first_row(f, OURS + "@krw3")["mask_count"]) + 1))))
     print("%d checks, %d failed" % (len(counted), len(failures)))
     return 2 if failures else 0
 

@@ -1283,8 +1283,20 @@ def sc1(nums, machine):
         elif r["kind"] == "observation" and "deletion raised" in r["check"]:
             nums.put("sc1.ghost.n", int(r["mismatches"]), src)
             nums.put("sc1.ghost.of", int(r["instances"]), src)
+    sc1_named(seen)
     nums.put("sc1.n_checks", checks, src)
     nums.put("sc1.n_instances", instances, src)
+
+
+# The SC1 sentence names these checks; each must be in the file (a renamed or dropped check would leave the text unsupported).
+SC1_NAMED = ("P5a masking never raises sup_NO", "incremental update equals rebuild", "F_sigma pruning equals enumeration",
+             "L0 flow equals brute force")
+
+
+def sc1_named(seen):
+    absent = [c for c in SC1_NAMED if c not in seen]
+    if absent:
+        raise Missing("SC1: the checks %s named by the text are not in the file" % absent)
 
 
 def sc2(nums):
@@ -1692,6 +1704,10 @@ def sentence_checks(nums):
     if kept or len(tab("noninf")) != 8:
         raise Missing("lot D: not rejected for %s (of %d rows); the text says rejected for every baseline in both scopes"
                       % (kept, len(tab("noninf"))))
+    # The text says "with positive median differences" for every baseline in both scopes.
+    for scope in ("distinct", "repeated"):
+        if not v("noninf.%s.median.min" % scope) > 0:
+            raise Missing("lot D %s: smallest median difference %s; the text says positive" % (scope, v("noninf.%s.median.min" % scope)))
     few = [(r["scope"], r["method"], r["cross_fewer_fewer"], r["n"]) for r in tab("noninf")
            if not 2 * r["cross_fewer_fewer"] > r["n"]]
     if few:
@@ -1716,7 +1732,7 @@ def sentence_checks(nums):
     nums.put("sentence_checks.passed", 27 + REOPENED_SENTENCE_CHECKS, "sentence_checks in paper_numbers.py")
 
 
-REOPENED_SENTENCE_CHECKS = 13
+REOPENED_SENTENCE_CHECKS = 14
 
 
 def reopened_sentence_checks(nums):
@@ -1943,6 +1959,11 @@ def self_test():
         n2 = Numbers()
         reopened_lots(n2, d, "t")
         return n2
+    expect_stop("SC1: a named check absent from the file", lambda: sc1_named(set(SC1_NAMED[1:])))
+    try:
+        sc1_named(set(SC1_NAMED))
+    except Missing:
+        failures.append("SC1: the named checks are refused although all are present")
     got = lots().values
     if got["lotb.distinct.d16.lost_total"]["value"] != 3 or got["lotf.%s.distinct.g1.ginf.share" % OURS]["value"] != 1.0 \
             or got["wide.distinct.2x.hha.ours_fewer_masks"]["value"] != 2 or got["lotb.repeated.d4.lost_total"]["value"] != 4:
@@ -2125,6 +2146,7 @@ def self_test():
             ("H2-R: a dataset named without equal-count instances", setv("names.h2r.equal", "bible, bpi2012, msnbc and sepsis")),
             ("several patterns: a baseline at the median ratio of CUT-HIDE",
              setr("bound", "median", 1.3003, scope="distinct", size=5, method="sbsh-r1")),
+            ("lot D: a median difference of zero", setv("noninf.repeated.median.min", 0.0)),
             ("lot A: a stage pair not rejected", setr("lota", "p_holm", 0.2, scope="repeated", pair="aw_ls")),
             ("lot A: local search loses more once", setr("lota", "neg", 1, scope="distinct", pair="aw_ls")),
             ("lot B: a variant changes |R|", setr("lotb", "masks_differ", 1, scope="distinct", key="d64")),
@@ -2160,7 +2182,7 @@ def self_test():
           "above |R|*, rank-biserial on d - delta_L in a new family, rank-biserial vs pairs table, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
           "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty, "
           "one-pattern components, equal-count check (good, two patterns, empty), refinement check (good, masks, component), "
-          "sentence checks on the exported numbers and 47 faults")
+          "sentence checks on the exported numbers and 48 faults")
     return 1 if failures else 0
 
 

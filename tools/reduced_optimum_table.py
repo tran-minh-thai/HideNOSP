@@ -64,9 +64,12 @@ def main(argv):
         directories = [REPO / "results-invariant"]
     files = []
     partial = []
+    below = 0
     for d in directories:
-        files += sorted(glob.glob(str(d / "**" / "SC3OPT_*.csv"), recursive=True))
-        partial += sorted(glob.glob(str(d / "**" / "SC3OPT_*.csv.partial"), recursive=True))
+        # The top level only: a subfolder holds files set aside (superseded/...), which no table reads.
+        files += sorted(glob.glob(str(d / "SC3OPT_*.csv")))
+        partial += sorted(glob.glob(str(d / "SC3OPT_*.csv.partial")))
+        below += len(glob.glob(str(d / "**" / "SC3OPT_*.csv"), recursive=True)) - len(glob.glob(str(d / "SC3OPT_*.csv")))
     files, machine, refusal = one_machine(files, machine, "--machine", "SC3OPT")
     files, found = closure_rule.keep(files, rule)
     if refusal:
@@ -88,6 +91,8 @@ def main(argv):
             groups[g].append(r)
 
     lines = [closure_rule.describe("SC3OPT", rule, files, found), "SC3OPT files: %d, machine %s" % (len(files), machine)]
+    if below:
+        lines.append("SC3OPT files in subfolders, not read: %d" % below)
     for g in sorted(set(groups) | set(skipped)):
         rows = groups[g]
         lines.append("")

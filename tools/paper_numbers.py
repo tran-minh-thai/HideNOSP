@@ -315,7 +315,10 @@ def parse_pairs_only(part, family, prefix, scope):
         same = int(one(r"into Wilcoxon \(same \|R\|\)\s+(\d+) instances", block, prefix + name))
         more = int(one(r"baseline uses more masks\s+(\d+) instances", block, prefix + name))
         ours = int(one(r"CUT-HIDE uses more masks\s+(\d+) instances", block, prefix + name))
-        if "not enough pairs for a test" not in block:
+        # A test run on pairs whose differences are all zero (rank-biserial undefined) carries no information, so the
+        # family stays descriptive; any other test means the family is testable and is read with parse_family.
+        if "not enough pairs for a test" not in block and \
+                not re.search(r"^   rank-biserial \(raw differences\)\s+[+-]?nan\s*$", block, re.M):
             raise Missing("%s %s: a test was run on %d pairs; read this family with parse_family" % (prefix, name, same))
         pairs = one(r"^  %s\s+(\d+) \|\s+(\d+)\s+(\d+)\s+(\d+) \|\s+(\d+)\s+(\d+)\s+(\d+) \|\s+(\d+)\s+(\d+)/(\d+)\s*$"
                     % re.escape(name), part, "%s pairs line of %s" % (prefix, name))
@@ -351,7 +354,10 @@ def parse_ratio_block(part, scope):
 NEW_MODES = (("h5", "SC4", "zero", "1", True, ("H5b", "H5b-R")),
              ("h5s5", "SC4", "zero", "5", False, ("H5b", "H5b-R")),
              ("h6", "SC3", "positive", "1", True, ("H6", "H6-R")),
-             ("h6sev", "SC3", "positive", "several", False, ("H6", "H6-R")))
+             ("h6sev", "SC3", "positive", "several", False, ("H6", "H6-R")),
+             # Lot G (preregistration section 23.7): HIDE-SEQ at r = 3, read as SC4.
+             ("h5r3", "SC4R", "zero", "1", True, ("H5b (r = 3)", "H5b-R (r = 3)")),
+             ("h5r3s5", "SC4R", "zero", "5", False, ("H5b (r = 3)", "H5b-R (r = 3)")))
 
 
 def mode_report(machine, key, scenario, gaps, sizes):
@@ -445,6 +451,61 @@ def parse_mode(nums, text, src, key, scenario, sizes, tested, labels):
             nums.put("%s.ratio.%s.median.max" % (key, scope), max(r["median"] for r in main), src)
             if any(r["verdict"] for r in main):  # a descriptive block carries no verdict
                 nums.put("%s.ratio.%s.above" % (key, scope), sum(r["verdict"] == "above 1" for r in main), src)
+
+
+def lot_c(nums, machine):
+    """Lot C (preregistration section 23.3), BIKE: the report exits 1 by design when H2 has no main group (BIKE is
+    degenerate in the distinct-item scope), so it is run here and that exit is accepted only with its stated cause."""
+    cmd = [sys.executable, str(TOOLS / "preregistered_analysis.py"), "--sc3", "results-invariant", "--sc2",
+           "results-invariant", "--machine=%s" % machine, "--scenario=SC3REP", "--closure=" + RULE[0]]
+    p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"))
+    text, src = p.stdout, "preregistered_analysis.py --machine=%s --scenario=SC3REP" % machine
+    if p.returncode not in (0, 1) or not text.strip():
+        raise Missing("lot C: preregistered_analysis exited %d: %s" % (p.returncode, (p.stderr or text)[-500:]))
+    if p.returncode == 1 and "H2 (replication) NOT TESTED: the exit code is 1." not in text:
+        raise Missing("lot C: exit 1 without the stated cause (no main group for H2 on BIKE)")
+    locked = re.findall(r"^  (\d+) configurations, all as locked\.$", text, re.M)
+    if len(locked) != 2:
+        raise Missing("lot C: %d group checks passed, expected 2" % len(locked))
+    i_rep = text.index("Scope: repeated-item sensitive patterns")
+    i_stop = text.index(", distinct-item scope: competitors that stop at the threshold")
+    distinct, repeated, stop = text[:i_rep], text[i_rep:i_stop], text[i_stop:]
+    # H3 (replication) on the degenerate distinct-item group, and |R|/|R|* in the repeated-item scope (descriptive).
+    ratios = parse_ratio_block(distinct[distinct.index("H3 (replication)"):], "distinct")
+    ratios += parse_ratio_block(repeated[repeated.index("r = |R|/|R|* per method"):], "repeated")
+    for r in ratios:
+        if r["method"] in BASELINES:
+            k = "lotc.ratio.%s.%s.%s" % (r["scope"], r["group"], r["method"])
+            nums.put(k + ".median", r["median"], src)
+            nums.put(k + ".max", r["max"], src)
+            nums.put("lotc.ratio.%s.%s.n" % (r["scope"], r["group"]), r["n"], src)
+        if r["method"] == OURS and (r["median"], r["max"]) != (1.0, 1.0):
+            raise Missing("lot C: CUT-HIDE not at |R|* (%s, %s)" % (r["scope"], r["group"]))
+    nums.table("lotc_ratio", ["scope", "group", "method"], ratios, src)
+    # The pairs (|R|, Lost) of the repeated-item scope against the four baselines, and the testable n.
+    rows = []
+    for name in BASELINES:
+        line = one(r"^  %s\s+(\d+) \|\s+(\d+)\s+(\d+)\s+(\d+) \|\s+(\d+)\s+(\d+)\s+(\d+) \|\s+(\d+)\s+(\d+)/(\d+)\s*$"
+                   % re.escape(name), repeated, "lot C pairs line of %s" % name)
+        v = [int(x) for x in line]
+        rows.append({"method": name, "instances": v[0], "same": v[1] + v[2] + v[3], "same_lt": v[1], "same_eq": v[2],
+                     "same_gt": v[3], "base_more": v[4] + v[5] + v[6], "more_lt": v[4], "more_eq": v[5], "more_gt": v[6],
+                     "ours_more": v[7], "no_worse_both": v[8]})
+        for f in ("instances", "same", "base_more", "ours_more", "no_worse_both"):
+            nums.put("lotc.pairs.%s.%s" % (name, f), rows[-1][f], src)
+    nums.table("lotc_pairs", ["method"], rows, src)
+    # H4a-R (replication): the stop-at-threshold competitors.
+    rows = []
+    for name in RIVALS:
+        m = re.search(r"^H4a-R \(replication\).*?^  %s\s+(\d+)\s+([\d.]+)\s+([\d.]+)\s+(\d+)\s+(.+?)\s*$" % re.escape(name),
+                      stop, re.M | re.S)
+        if not m:
+            raise Missing("lot C: no H4a-R line of %s" % name)
+        rows.append({"method": name, "n": int(m.group(1)), "median": float(m.group(2)), "max": float(m.group(3)),
+                     "fewer": int(m.group(4)), "verdict": m.group(5)})
+        for f in ("n", "median", "fewer", "verdict"):
+            nums.put("lotc.h4ar.%s.%s" % (name, f), rows[-1][f], src)
+    nums.table("lotc_h4ar", ["method"], rows, src)
 
 
 def seq_lost(nums, machine):
@@ -1088,6 +1149,118 @@ def reopened(nums, machine):
     nums.put("tests.total", sum(f["tests"] for f in e["families"]), src)
     nums.put("tests.families", len(e["families"]), src)
     nums.put("tests.equivalence", sum(f["equivalence"] for f in e["families"]), src)
+    reopened_lots(nums, data, src)
+
+
+LOT_A_PAIRS = {"cut-hide-uniform - cut-hide": "uniform_fw", "cut-hide - cut-hide-rw": "fw_aw",
+               "cut-hide-rw - cut-hide-rw-ls": "aw_ls"}
+TAU_LABELS = {OURS + "@tau2": "d2", OURS: "d4", OURS + "@tau8": "d8", OURS + "@tau16": "d16", OURS + "@tau64": "d64",
+              OURS + "@tau1000000000": "tau1"}
+
+
+def variant_name(label):
+    """The key part of a lot B variant: krw3, passes25, eps025, d16, tau1, ..."""
+    if label in TAU_LABELS:
+        return TAU_LABELS[label]
+    name = label.split("@", 1)[1]
+    return name.replace(".", "")
+
+
+def gap_name(gap):
+    """[0,1] -> g1, [0,inf] -> ginf: a key part without brackets."""
+    m = re.match(r"^\[(\d+),(\d+|inf)\]$", gap)
+    if not m or m.group(1) != "0":
+        raise Missing("lot F: gap %r not of the form [0,g]" % gap)
+    return "g" + m.group(2)
+
+
+def reopened_lots(nums, data, src):
+    """Lots A, B (with the tau grid of preregistration section 23.11), F and SC3WIDE, from the same report as lots D and E."""
+    for name in ("lot_a", "lot_b", "lot_f", "lot_wide"):
+        if not data.get(name):
+            raise Missing("reopened_analysis: %s has no files of the measuring machine" % name)
+    # Lot A: the three stage pairs per scope.
+    rows = []
+    for scope, v in sorted(data["lot_a"].items()):
+        nums.put("lota.%s.n" % scope, v["instances"], src)
+        nums.put("lota.%s.excluded" % scope, v["excluded"], src)
+        if sorted(v["pairs"]) != sorted(LOT_A_PAIRS):
+            raise Missing("lot A %s: pairs %s" % (scope, sorted(v["pairs"])))
+        for pair, r in v["pairs"].items():
+            k = "lota.%s.%s" % (scope, LOT_A_PAIRS[pair])
+            for field in ("pos", "zero", "neg"):
+                nums.put("%s.%s" % (k, field), r[field], src)
+            nums.put(k + ".p_holm", r["p_holm"], src)
+            rows.append(dict(r, scope=scope, pair=LOT_A_PAIRS[pair]))
+        for m, x in v["sup_dist"].items():
+            nums.put("lota.%s.supdist.%s" % (scope, m), x, src)
+    nums.table("lota", ["scope", "pair"], rows, src)
+    # Lot B: every variant per scope, and the tau grid.
+    rows = []
+    for r in data["lot_b"]:
+        k = "lotb.%s.%s" % (r["scope"], variant_name(r["variant"]))
+        for field in ("n", "lost_more", "lost_fewer", "masks_differ", "lost_total", "lost_total_default"):
+            nums.put("%s.%s" % (k, field), r[field], src)
+        nums.put(k + ".median", r["median"], src)
+        if r["outside_lot_a"] or r["lot_a_absent"]:
+            raise Missing("lot B %s: not the lot A instances (%d outside, %d absent)" % (k, r["outside_lot_a"],
+                                                                                          r["lot_a_absent"]))
+        rows.append(dict(r, key=variant_name(r["variant"])))
+    for scope in ("distinct", "repeated"):
+        rs = [r for r in rows if r["scope"] == scope]
+        nums.put("lotb.%s.masks_differ.max" % scope, max(r["masks_differ"] for r in rs), src)
+        defaults = {r["lost_total_default"] for r in rs}
+        if len(defaults) != 1:
+            raise Missing("lot B %s: the variants are summed over different instances (%s)" % (scope, sorted(defaults)))
+        nums.put("lotb.%s.d4.lost_total" % scope, defaults.pop(), src)
+    nums.table("lotb", ["scope", "key"], rows, src)
+    # Lot F: the share of sensitive patterns back at or above sigma, per method, scope, gap and wider constraint.
+    rows = []
+    for r in data["lot_f"]:
+        k = "lotf.%s.%s.%s.%s" % (r["method"], r["scope"], gap_name(r["gap"]), gap_name(r["constraint"]))
+        nums.put(k + ".share", r["share"], src)
+        nums.put(k + ".patterns", r["patterns"], src)
+        rows.append(r)
+    nums.table("lotf", ["method", "scope", "gap", "constraint"], rows, src)
+    # SC3WIDE: |R| over that of SC3, the change of Lost_rel, and CUT-HIDE against each baseline.
+    rows = []
+    for r in data["lot_wide"]:
+        k = "wide.%s.%s.%s" % (r["scope"], r["constraint"], r["method"])
+        nums.put(k + ".n", r["n"], src)
+        nums.put(k + ".ratio.median", r["ratio_median"], src)
+        nums.put(k + ".lost_rel.median", r["lost_rel_median"], src)
+        nums.put(k + ".lost_rel_change.median", r["lost_rel_change_median"], src)
+        flat = dict(r)
+        if "cross" in r:
+            c = r["cross"]
+            nums.put(k + ".ours_fewer_masks", sum(v for x, v in c.items() if x.startswith("fewer/")), src)
+            nums.put(k + ".ours_more_masks", sum(v for x, v in c.items() if x.startswith("more/")), src)
+            nums.put(k + ".ours_fewer_lost", sum(v for x, v in c.items() if x.endswith("/fewer")), src)
+            nums.put(k + ".ours_more_lost", sum(v for x, v in c.items() if x.endswith("/more")), src)
+            del flat["cross"]
+            flat.update({"cross_" + x.replace("/", "_"): c.get(x, 0) for x in
+                         ("fewer/fewer", "fewer/same", "fewer/more", "same/fewer", "same/same", "same/more",
+                          "more/fewer", "more/same", "more/more")})
+        rows.append(flat)
+    if any(r.get("cross_more_fewer", 0) + r.get("cross_more_same", 0) + r.get("cross_more_more", 0) for r in rows):
+        raise Missing("SC3WIDE: CUT-HIDE uses more masks than a baseline on some instance, while it is at |R|*")
+    nums.table("wide", ["scope", "constraint", "method"], rows, src)
+    # Lot D on BIKE (lot C): the non-inferiority test without the equal-mask filter, repeated-item scope.
+    rows = []
+    by_method = data.get("lot_c_d") or {}
+    if sorted(by_method) != sorted(BASELINES):
+        raise Missing("lot D on BIKE: baselines %s" % sorted(by_method))
+    for m, v in by_method.items():
+        c = v["cross"]
+        k = "lotc.noninf.%s" % m
+        for f in ("n", "median", "p_holm", "verdict"):
+            nums.put("%s.%s" % (k, f), v[f], src)
+        nums.put(k + ".ours_more_lost", sum(x for y, x in c.items() if y.endswith("/more")), src)
+        rows.append({"method": m, "n": v["n"], "median": v["median"], "p_holm": v["p_holm"], "verdict": v["verdict"],
+                     **{"cross_" + y.replace("/", "_"): c.get(y, 0) for y in
+                        ("fewer/fewer", "fewer/same", "fewer/more", "same/fewer", "same/same", "same/more",
+                         "more/fewer", "more/same", "more/more")}})
+    nums.table("lotc_noninf", ["method"], rows, src)
 
 
 # ---------------------------------------------------------------- SC1, SC2, datasets
@@ -1207,6 +1380,22 @@ def timing(nums, machine):
         ratios.append(b[OURS]["median_ms"] / b["hha"]["median_ms"])
     nums.put("sc6.ratio.ours_hha.min", min(ratios), src)
     nums.put("sc6.ratio.ours_hha.max", max(ratios), src)
+    # CUT-HIDE over each method that does not read F_sigma(D) (HHA, DBSH and the two stopping rivals), per size, over
+    # both scopes: the factor the text states for |S| = 1 and |S| = 10.
+    for size in (1, 10):
+        fast = []
+        for (scope, sz) in sorted(blocks):
+            if sz != size:
+                continue
+            b = {r["method"]: r for r in rows if (r["scope"], r["size"]) == (scope, sz)}
+            fast += [b[OURS]["median_ms"] / b[m]["median_ms"] for m in ("hha", "dbsh") + RIVALS]
+        nums.put("sc6.ratio.fast.s%d.min" % size, min(fast), src)
+        nums.put("sc6.ratio.fast.s%d.max" % size, max(fast), src)
+    # How much longer the mining is than CUT-HIDE on one set, the smallest margin over the four blocks.
+    nums.put("sc6.mine_over_ours.min", min(
+        next(r for r in rows if (r["scope"], r["size"], r["method"]) == (sc, sz, "mine F_sigma"))["median_ms"] /
+        next(r for r in rows if (r["scope"], r["size"], r["method"]) == (sc, sz, OURS))["median_ms"]
+        for (sc, sz) in blocks), src)
     index = [r for r in rows if r["method"] == "index"]
     if len(index) != 4:
         raise Missing("timing_table: %d index lines, expected 4" % len(index))
@@ -1328,7 +1517,7 @@ def build(machine, small_machine):
                  ] + ([lambda: seq_lost(nums, small_machine), lambda: sc1gap(nums, machine),
                        lambda: sc4_rows(nums, machine)] + [
                      (lambda m=m: analysis_mode(nums, machine, *m)) for m in NEW_MODES] +
-                    [lambda: reopened(nums, machine)] if RULE[0] == "necessary" else []):
+                    [lambda: reopened(nums, machine), lambda: lot_c(nums, machine)] if RULE[0] == "necessary" else []):
         step()
     # The same quantity read from two tools must agree.
     for scope, key in (("distinct", "h2.n"), ("repeated", "h2r.n")):
@@ -1596,6 +1785,15 @@ def self_test():
         failures.append("good family block misread: %s" % rows[0])
     expect_stop("pairs disagree with test block",
                 lambda: parse_family(good.replace("      4      6      0 |", "      4      5      0 |"), ("hha",), "T", Numbers(), "d"))
+    zero = ("-- hha\n   into Wilcoxon (same |R|)   2 instances\n   baseline uses more masks   5 instances  (r)\n"
+            "   CUT-HIDE uses more masks   0 instances  (a)\n   excluded   0 instances\n"
+            "   Wilcoxon-Pratt one-sided, H1 > 0.02  W = 0.0, p = 1, n = 2 (0 differences of 0)\n"
+            "   rank-biserial (raw differences)      +nan\n\n"
+            "  hha               7 |      0      2      0 |      5      0      0 |         0      7/7\n")
+    if parse_pairs_only(zero, ("hha",), "T", "d")[0]["same"] != 2:
+        failures.append("a family tested on all-zero differences is misread")
+    expect_stop("a descriptive family with a real test",
+                lambda: parse_pairs_only(zero.replace("+nan", "-0.500"), ("hha",), "T", "d"))
     expect_stop("Holm line missing", lambda: parse_family(good.replace("not rejected", "maybe"), ("hha",), "T", Numbers(), "d"))
     expect_stop("equivalence line missing",
                 lambda: parse_family(good.replace("-- sup_dist", "-- other"), ("hha",), "T", Numbers(), "d"))
@@ -1638,6 +1836,41 @@ def self_test():
         if changed == text:
             failures.append("%s: the injection changed nothing" % name)
         return changed
+
+    # Lots A, B, F, SC3WIDE and lot D on BIKE: a minimal report is read, and each planted fault stops.
+    def lots(edit=None):
+        b_row = {"n": 2, "lost_more": 0, "lost_fewer": 1, "masks_differ": 0, "lost_total": 3, "lost_total_default": 4,
+                 "median": 0.0, "outside_lot_a": 0, "lot_a_absent": 0}
+        d = {"lot_a": {sc: {"instances": 2, "excluded": 0, "sup_dist": {OURS: 0.1},
+                            "pairs": {k: {"n": 2, "pos": 1, "zero": 1, "neg": 0, "p_holm": 0.01} for k in LOT_A_PAIRS}}
+                       for sc in ("distinct", "repeated")},
+             "lot_b": [dict(b_row, variant=v, scope=sc) for v in (OURS + "@tau16", OURS + "@krw3")
+                       for sc in ("distinct", "repeated")],
+             "lot_f": [{"method": OURS, "scope": "distinct", "gap": "[0,1]", "constraint": "[0,inf]", "patterns": 4,
+                        "back": 4, "share": 1.0}],
+             "lot_wide": [{"scope": "distinct", "constraint": "2x", "method": m, "n": 2, "ratio_median": 1.5,
+                           "lost_rel_median": 0.1, "lost_rel_change_median": 0.0,
+                           **({} if m == OURS else {"cross": {"fewer/fewer": 2}})} for m in (OURS, "hha")],
+             "lot_c_d": {b: {"n": 2, "median": 0.01, "p_holm": 0.01, "verdict": "H0 rejected", "cross": {"fewer/fewer": 2}}
+                         for b in BASELINES}}
+        if edit:
+            edit(d)
+        n2 = Numbers()
+        reopened_lots(n2, d, "t")
+        return n2
+    got = lots().values
+    if got["lotb.distinct.d16.lost_total"]["value"] != 3 or got["lotf.%s.distinct.g1.ginf.share" % OURS]["value"] != 1.0 \
+            or got["wide.distinct.2x.hha.ours_fewer_masks"]["value"] != 2 or got["lotb.repeated.d4.lost_total"]["value"] != 4:
+        failures.append("the minimal report of the reopened lots is misread")
+    expect_stop("lots: a lot without files", lambda: lots(lambda d: d.__setitem__("lot_wide", None)))
+    expect_stop("lot B: instances outside lot A", lambda: lots(lambda d: d["lot_b"][0].__setitem__("outside_lot_a", 1)))
+    expect_stop("lot B: variants summed over different instances",
+                lambda: lots(lambda d: d["lot_b"][2].__setitem__("lost_total_default", 5)))
+    expect_stop("lot F: a gap that is not [0,g]", lambda: lots(lambda d: d["lot_f"][0].__setitem__("gap", "[1,3]")))
+    expect_stop("SC3WIDE: CUT-HIDE with more masks than a baseline",
+                lambda: lots(lambda d: d["lot_wide"][1]["cross"].__setitem__("more/fewer", 1)))
+    expect_stop("lot A: a stage pair missing", lambda: lots(lambda d: d["lot_a"]["distinct"]["pairs"].popitem()))
+    expect_stop("lot D on BIKE: a baseline missing", lambda: lots(lambda d: d["lot_c_d"].pop("hha")))
 
     machine = "ADMIN-PC"
     mode = {m[0]: m for m in NEW_MODES}

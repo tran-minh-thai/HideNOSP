@@ -532,6 +532,27 @@ def seq_three_same(nums, machine):
     nums.put("seqlost.three_same.n", len(compared), "SC4LOST files of %s, per instance" % machine)
 
 
+DIAGNOSTIC = INV / "hha-mask-diagnostic-2026-11-23" / "instances.tsv"
+
+
+def hha_diagnostic(nums):
+    """Post hoc run (tools/hha_mask_diagnostic.py, commit f8e721b6): the greedy with w = 0 (cut-hide-uniform) on the
+    HIDE-SEQ instances with five sensitive patterns where HHA uses fewer masks than CUT-HIDE. Read per instance."""
+    if not DIAGNOSTIC.exists():
+        raise Missing("no %s; run tools/hha_mask_diagnostic.py report on its directory" % DIAGNOSTIC)
+    count = Counter()
+    for r in rows_tsv(DIAGNOSTIC):
+        k = "diag.r%s.%s" % (r["r"], r["scope"])
+        u, h, o = int(r["masks_w0"]), int(r["masks_hha"]), int(r["masks_cut_hide"])
+        if h >= o:
+            raise Missing("%s: an instance where HHA does not use fewer masks than CUT-HIDE" % DIAGNOSTIC.name)
+        count[k + ".n"] += 1
+        count[k + ".w0_more_hha"] += u > h
+        count[k + ".w0_more_ours"] += u > o
+    for k, v in sorted(count.items()):
+        nums.put(k, v, "results-invariant/hha-mask-diagnostic-2026-11-23/instances.tsv")
+
+
 def seq_lost(nums, machine):
     """SC4LOST: the exact Lost optimum under HIDE-SEQ on small instances (preregistration 22.2), descriptive."""
     text = run_tool(["lost_optimum_table.py", "--machine=%s" % machine, "--scenario=SC4LOST"], "lost_optimum_table SC4LOST")
@@ -1584,6 +1605,7 @@ def build(machine, small_machine):
                  lambda: timing(nums, machine), lambda: platform(nums, machine),
                  # HIDE-SEQ and g- > 0 were run under the corrected rule only (preregistration 22).
                  ] + ([lambda: seq_lost(nums, small_machine), lambda: seq_three_same(nums, small_machine), lambda: sc1gap(nums, machine),
+                       lambda: hha_diagnostic(nums),
                        lambda: sc4_rows(nums, machine)] + [
                      (lambda m=m: analysis_mode(nums, machine, *m)) for m in NEW_MODES] +
                     [lambda: reopened(nums, machine), lambda: lot_c(nums, machine)] if RULE[0] == "necessary" else []):
@@ -1781,7 +1803,7 @@ def sentence_checks(nums):
     nums.put("sentence_checks.passed", 27 + REOPENED_SENTENCE_CHECKS, "sentence_checks in paper_numbers.py")
 
 
-REOPENED_SENTENCE_CHECKS = 16
+REOPENED_SENTENCE_CHECKS = 17
 
 
 def reopened_sentence_checks(nums):
@@ -1869,6 +1891,16 @@ def reopened_sentence_checks(nums):
     fewer = sorted(r["method"] for r in tab("h5r3s5") if r["scope"] == "repeated" and r["ours_more"])
     if fewer != ["hha"]:
         raise Missing("lot G, five repeated-item patterns: fewer masks than CUT-HIDE for %s; the text names HHA only" % fewer)
+    # (17) Post hoc diagnostic: "Setting the weight to zero does not remove these instances: the greedy rule with w = 0 uses
+    # more masks than CUT-HIDE on most of them". These instances are the repeated-item ones where HHA uses fewer masks, r = 2
+    # and r = 3; "most" is a strict majority, and "does not remove" is a strict majority with more masks than HHA.
+    for r, mode in (("2", "h5s5"), ("3", "h5r3s5")):
+        n = v("diag.r%s.repeated.n" % r)
+        if n != v("%s.repeated.hha.ours_more" % mode):
+            raise Missing("diagnostic r = %s: %d instances, the pairs table counts %d" % (r, n, v("%s.repeated.hha.ours_more" % mode)))
+        for what in ("w0_more_ours", "w0_more_hha"):
+            if not 2 * v("diag.r%s.repeated.%s" % (r, what)) > n:
+                raise Missing("diagnostic r = %s: %s on %d of %d; the text says most" % (r, what, v("diag.r%s.repeated.%s" % (r, what)), n))
 
 
 
@@ -2265,6 +2297,8 @@ def self_test():
                                                          constraint="[0,11]")),
             ("lot G: one rejected null hypothesis at r = 3", setv("h5r3.distinct.rejected", 1)),
             ("lot G: three equivalence verdicts", setv("h5r3.repeated.equivalent_supdist", 3)),
+            ("diagnostic: w = 0 above CUT-HIDE on only half, r = 2", setv("diag.r2.repeated.w0_more_ours", 24)),
+            ("diagnostic: w = 0 removes most instances, r = 3", setv("diag.r3.repeated.w0_more_hha", 22)),
             ("lot G: DBSH with fewer masks, five repeated-item patterns", setr("h5r3s5", "ours_more", 1, scope="repeated",
                                                                                method="dbsh")),
         ]

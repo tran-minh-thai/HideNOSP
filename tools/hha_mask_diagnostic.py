@@ -117,7 +117,7 @@ def summarise(selection, new_rows):
         new[(x["r"], key(x))][x["method_key"]] = x
     summary, inst, problems = [], [], []
     for (r, scope), fewer in sorted(selection.items()):
-        n = no_more = equal = fewer_u = more_u = same_as_ours = 0
+        n = no_more = equal = fewer_u = more_u = same_as_ours = more_than_ours = 0
         for k, m in sorted(fewer.items()):
             got = new.get((r, k))
             if not got or any(x not in got for x in (UNIFORM, OURS, BASE)):
@@ -137,12 +137,13 @@ def summarise(selection, new_rows):
             fewer_u += u < h
             more_u += u > h
             same_as_ours += u == o
+            more_than_ours += u > o
             inst.append({"r": r, "scope": scope, "dataset": k[0], "gap": k[1], "sigma": k[2], "sensitive_set": k[3],
                          "masks_hha": h, "masks_cut_hide": o, "masks_w0": u,
                          "lost_hha": got[BASE]["lost"], "lost_cut_hide": got[OURS]["lost"], "lost_w0": got[UNIFORM]["lost"]})
         summary.append({"r": r, "scope": scope, "selected": len(fewer), "compared": n, "w0_no_more_than_hha": no_more,
                         "w0_fewer_than_hha": fewer_u, "w0_equal_hha": equal, "w0_more_than_hha": more_u,
-                        "w0_equal_cut_hide": same_as_ours})
+                        "w0_equal_cut_hide": same_as_ours, "w0_more_than_cut_hide": more_than_ours})
     return summary, inst, problems
 
 
@@ -162,7 +163,7 @@ def do_report(directory):
     for s in summary:
         print("r = %(r)d, %(scope)s-item: selected %(selected)d, compared %(compared)d; w = 0 uses no more masks than "
               "HHA on %(w0_no_more_than_hha)d (fewer %(w0_fewer_than_hha)d, equal %(w0_equal_hha)d), more on "
-              "%(w0_more_than_hha)d; w = 0 equals CUT-HIDE on %(w0_equal_cut_hide)d" % s)
+              "%(w0_more_than_hha)d; w = 0 equals CUT-HIDE on %(w0_equal_cut_hide)d, uses more on %(w0_more_than_cut_hide)d" % s)
     for p in problems:
         print("PROBLEM: " + p)
     if problems or not inst:

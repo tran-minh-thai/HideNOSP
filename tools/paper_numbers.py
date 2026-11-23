@@ -2317,7 +2317,7 @@ def self_test():
           "above |R|*, rank-biserial on d - delta_L in a new family, rank-biserial vs pairs table, tested read as untestable and back, one untestable baseline tested, good SC4LOST text, SC4LOST "
           "problem, CUT-HIDE below |R|*_SEQ, a baseline with less excess, good SC1GAP rows, SC1GAP mismatch, SC1GAP empty, "
           "one-pattern components, equal-count check (good, two patterns, empty), refinement check (good, masks, component), "
-          "sentence checks on the exported numbers and 50 faults")
+          "sentence checks on the exported numbers and %d planted faults" % len(faults))
     return 1 if failures else 0
 
 
